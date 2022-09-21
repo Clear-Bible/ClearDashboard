@@ -410,8 +410,8 @@
             Margin="0,0,5,2"
             Interval="1"
             Maximum="100"
-            Minimum="1"
-            Value="{Binding VerseRange, Mode=TwoWay}" />
+            Minimum="0"
+            Value="{Binding VerseOffsetRange, Mode=TwoWay}" />
 
     </Grid>
 </UserControl>
