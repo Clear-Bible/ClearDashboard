@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Utils;
+﻿using System.Collections.ObjectModel;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Notes;
@@ -12,15 +13,15 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
 
-        private readonly ICollection<Label> labels_;
-        public IEnumerable<Label> Labels { get { return labels_; } }
+        private readonly ObservableCollection<Label> labels_;
+        public ObservableCollection<Label> Labels { get { return labels_; } }
 
         private readonly ICollection<IId> domainEntityIds_;
         public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
 
         public Note()
         {
-            labels_ = new HashSet<Label>(new NoteLabelComparer());
+            labels_ = new ObservableCollection<Label>();
             domainEntityIds_ = new HashSet<IId>(new IIdEquatableComparer());
         }
         internal Note(NoteId noteId, string text, string? abbreviatedText, ICollection<Label> labels, ICollection<IId> domainEntityIds)
@@ -28,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             NoteId = noteId;
             Text = text;
             AbbreviatedText = abbreviatedText;
-            labels_ = new HashSet<Label>(labels, new NoteLabelComparer()); ;
+            labels_ = new ObservableCollection<Label>(labels); ;
             domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEquatableComparer());
         }
 

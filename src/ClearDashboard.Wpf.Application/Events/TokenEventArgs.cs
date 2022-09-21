@@ -5,6 +5,6 @@ namespace ClearDashboard.Wpf.Application.Events
 {
     public class TokenEventArgs : RoutedEventArgs
     {
-        public TokenDisplay TokenDisplay { get; set; }
+        public TokenDisplayViewModel TokenDisplayViewModel { get; set; }
     }
 }

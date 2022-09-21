@@ -2,16 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
-using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplay" /> instances.
+    /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
     public partial class VerseDisplay : UserControl
     {
@@ -290,6 +287,178 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(true));
 
         #endregion Static DependencyProperties
+        #region Private event handlers
+
+        private void CalculateItemsPanelTemplate(bool wrap)
+        {
+            ItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            CalculateItemsPanelTemplate(Wrap);
+        }
+
+        private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+            RaiseEvent(new TokenEventArgs
+            {
+                RoutedEvent = routedEvent,
+                TokenDisplayViewModel = tokenDisplay
+            });
+        }
+
+        private void OnTokenClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenClickedEvent, e);
+        }
+
+        private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenDoubleClickedEvent, e);
+        }
+
+        private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenLeftButtonDownEvent, e);
+        }
+
+        private void OnTokenLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenRightButtonUpEvent, e);
+        }
+        private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenRightButtonDownEvent, e);
+        }
+
+        private void OnTokenRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenRightButtonUpEvent, e);
+        }
+
+        private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenMouseEnterEvent, e);
+        }
+
+        private void OnTokenMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenMouseLeaveEvent, e);
+        }
+
+        private void OnTokenMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenMouseWheelEvent, e);
+        }
+
+        private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as TokenDisplay;
+            RaiseEvent(new TranslationEventArgs
+            {
+                RoutedEvent = routedEvent,
+                TokenDisplayViewModel = control?.TokenDisplayViewModel,
+                Translation = control?.TokenDisplayViewModel?.Translation
+            });
+        }
+
+        private void OnTranslationClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationClickedEvent, e);
+        }
+
+        private void OnTranslationDoubleClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationDoubleClickedEvent, e);
+        }
+
+        private void OnTranslationLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationLeftButtonDownEvent, e);
+        }
+
+        private void OnTranslationLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationRightButtonUpEvent, e);
+        }
+        private void OnTranslationRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationRightButtonDownEvent, e);
+        }
+
+        private void OnTranslationRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationRightButtonUpEvent, e);
+        }
+
+        private void OnTranslationMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationMouseEnterEvent, e);
+        }
+
+        private void OnTranslationMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationMouseLeaveEvent, e);
+        }
+
+        private void OnTranslationMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEvent(TranslationMouseWheelEvent, e);
+        }
+
+        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as TokenDisplay;
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = routedEvent,
+                //TokenDisplayViewModel = control?.TokenDisplayViewModel
+            });
+        }
+
+        private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteLeftButtonDownEvent, e);
+        }
+
+        private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+        }
+        private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonDownEvent, e);
+        }
+
+        private void OnNoteRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+        }
+
+        private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseEnterEvent, e);
+        }
+
+        private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseLeaveEvent, e);
+        }
+
+        private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteMouseWheelEvent, e);
+        }
+
+        private void OnNoteCreate(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteCreateEvent, e);
+        }
+
+        #endregion
         #region Public events
 
         /// <summary>
@@ -527,179 +696,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion
-        #region Private event handlers
-
-        private void CalculateItemsPanelTemplate(bool wrap)
-        {
-            ItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            CalculateItemsPanelTemplate(Wrap);
-        }
-
-        private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
-        {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplay;
-            RaiseEvent(new TokenEventArgs
-            {
-                RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay
-            });
-        }
-
-        private void OnTokenClicked(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenClickedEvent, e);
-        }
-
-        private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenDoubleClickedEvent, e);
-        }
-
-        private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenLeftButtonDownEvent, e);
-        }
-
-        private void OnTokenLeftButtonUp(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenRightButtonUpEvent, e);
-        }
-        private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenRightButtonDownEvent, e);
-        }
-
-        private void OnTokenRightButtonUp(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenRightButtonUpEvent, e);
-        }
-
-        private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenMouseEnterEvent, e);
-        }
-
-        private void OnTokenMouseLeave(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenMouseLeaveEvent, e);
-        }
-
-        private void OnTokenMouseWheel(object sender, RoutedEventArgs e)
-        {
-            RaiseTokenEvent(TokenMouseWheelEvent, e);
-        }
-
-        private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
-        {
-            var control = e.Source as TokenDisplayControl;
-            RaiseEvent(new TranslationEventArgs
-            {
-                RoutedEvent = routedEvent,
-                TokenDisplay = control?.TokenDisplay,
-                Translation = control?.TokenDisplay?.Translation
-            });
-        }
-
-        private void OnTranslationClicked(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationClickedEvent, e);
-        }
-
-        private void OnTranslationDoubleClicked(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationDoubleClickedEvent, e);
-        }
-
-        private void OnTranslationLeftButtonDown(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationLeftButtonDownEvent, e);
-        }
-
-        private void OnTranslationLeftButtonUp(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationRightButtonUpEvent, e);
-        }
-        private void OnTranslationRightButtonDown(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationRightButtonDownEvent, e);
-        }
-
-        private void OnTranslationRightButtonUp(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationRightButtonUpEvent, e);
-        }
-
-        private void OnTranslationMouseEnter(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationMouseEnterEvent, e);
-        }
-
-        private void OnTranslationMouseLeave(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationMouseLeaveEvent, e);
-        }
-
-        private void OnTranslationMouseWheel(object sender, RoutedEventArgs e)
-        {
-            RaiseTranslationEvent(TranslationMouseWheelEvent, e);
-        }
-
-        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
-        {
-            var control = e.Source as TokenDisplayControl;
-            RaiseEvent(new NoteEventArgs
-            {
-                RoutedEvent = routedEvent,
-                TokenDisplay = control?.TokenDisplay
-            });
-        }
-
-        private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteLeftButtonDownEvent, e);
-        }
-
-        private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
-        }
-        private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteRightButtonDownEvent, e);
-        }
-
-        private void OnNoteRightButtonUp(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
-        }
-
-        private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteMouseEnterEvent, e);
-        }
-
-        private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteMouseLeaveEvent, e);
-        }
-
-        private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteMouseWheelEvent, e);
-        }
-
-        private void OnNoteCreate(object sender, RoutedEventArgs e)
-        {
-            RaiseNoteEvent(NoteCreateEvent, e);
-        }
-
-        #endregion
-
+        #region Public properties
         /// <summary>
         /// Gets or sets the title to be displayed for the verse.
         /// </summary>
@@ -777,7 +774,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplay"/> objects to display in the control.
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects to display in the control.
         /// </summary>
         public IEnumerable Tokens
         {
@@ -789,7 +786,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
-        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplay.PaddingBefore"/> and <see cref="TokenDisplay.PaddingAfter"/> values.
+        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplayViewModel.PaddingBefore"/> and <see cref="TokenDisplayViewModel.PaddingAfter"/> values.
         /// </remarks>
         public double HorizontalSpacing
         {
@@ -868,6 +865,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (bool)GetValue(ShowNoteIndicatorsProperty);
             set => SetValue(ShowNoteIndicatorsProperty, value);
         }
+        #endregion Public properties
 
         public VerseDisplay()
         {
