@@ -269,6 +269,7 @@
             <userControls:NoteCollectionDisplay Visibility="{Binding NoteControlVisibility}"
                                        Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
                                        EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
+                                       InnerMargin="0,0,0,30"
                                        Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

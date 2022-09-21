@@ -92,6 +92,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(2, 2, 2, 2)));
 
         /// <summary>
+        /// Identifies the InnerMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty InnerMarginProperty = DependencyProperty.Register("InnerMargin", typeof(Thickness), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 10)));
+
+        /// <summary>
         /// Identifies the TimestampFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TimestampFontSizeProperty = DependencyProperty.Register("TimestampFontSize", typeof(double), typeof(NoteCollectionDisplay),
@@ -222,6 +228,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Thickness)GetValue(NoteMarginProperty);
             set => SetValue(NoteMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin for individual note instances.
+        /// </summary>
+        public Thickness InnerMargin
+        {
+            get => (Thickness)GetValue(InnerMarginProperty);
+            set => SetValue(InnerMarginProperty, value);
         }
 
         /// <summary>
