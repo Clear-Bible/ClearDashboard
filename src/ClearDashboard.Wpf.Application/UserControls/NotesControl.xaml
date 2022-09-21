@@ -23,7 +23,7 @@
                 LabelFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
                 LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
                 NoteAdded="OnNoteAdded" NoteUpdated="OnNoteUpdated" NoteDeleted="OnNoteDeleted"
-                LabelSelected="OnLabelSelected" LabelAdded="OnLabelAdded" AddMode="True"
+                LabelSelected="OnLabelSelected" LabelAdded="OnLabelAdded"
             />
         </DataTemplate>
         <ItemsPanelTemplate x:Key="NotesPanelTemplate">

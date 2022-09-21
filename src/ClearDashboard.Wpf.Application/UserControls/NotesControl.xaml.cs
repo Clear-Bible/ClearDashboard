@@ -135,13 +135,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Private event handlers
 
-        private void RaiseNoteEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        private void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
         {
             RaiseEvent(new NoteEventArgs()
             {
                 RoutedEvent = routedEvent,
-                //Note = e.Note,
-                //EntityId = e.EntityId
+                Note = e.Note,
+                EntityId = e.EntityId
             });
         }
 
@@ -162,17 +162,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteAdded(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteAddedEvent, e);
+            RaiseNoteEvent(NoteAddedEvent, e as NoteEventArgs);
         }
 
         private void OnNoteUpdated(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteUpdatedEvent, e);
+            RaiseNoteEvent(NoteUpdatedEvent, e as NoteEventArgs);
         }
 
         private void OnNoteDeleted(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteDeletedEvent, e);
+            RaiseNoteEvent(NoteDeletedEvent, e as NoteEventArgs);
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
