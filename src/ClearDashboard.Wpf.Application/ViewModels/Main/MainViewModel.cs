@@ -779,36 +779,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         }
 
-        //public void DeleteLayout(LayoutFile layoutFile)
-        //{
-        //    if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
-        //    {
-        //        return;
-        //    }
+        public void DeleteLayout(LayoutFile layoutFile)
+        {
+            if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
+            {
+                return;
+            }
 
-        //    try
-        //    {
-        //        File.Delete(layoutFile.LayoutPath);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.LogError(e.Message);
-        //        return;
-        //    }
+            try
+            {
+                File.Delete(layoutFile.LayoutPath);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+                return;
+            }
 
-        //    FileLayouts.Remove(layoutFile);
-        //    ReBuildMenu();
-        //}
+            FileLayouts.Remove(layoutFile);
+            RebuildMenu();
+        }
 
         public void CancelSave()
         {
             GridIsVisible = Visibility.Collapsed;
         }
 
-        //public void CancelDelete()
-        //{
-        //    DeleteGridIsVisible = Visibility.Collapsed;
-        //}
+        public void CancelDelete()
+        {
+            DeleteGridIsVisible = Visibility.Collapsed;
+        }
 
         //private void WorkSpaceViewModel_ThemeChanged()
         //{
