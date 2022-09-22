@@ -405,162 +405,176 @@
 
 
         <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="15" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ContentControl Grid.Column="0">
-                <ListView
-                    x:Name="ListView"
-                    ItemsSource="{Binding VersesDisplay}"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.IsDeferredScrollingEnabled="True"
-                    VirtualizingStackPanel.IsVirtualizing="True"
-                    VirtualizingStackPanel.VirtualizationMode="Recycling">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Height" Value="Auto" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Vertical">
+            <ListView
+                x:Name="ListView"
+                Grid.Row="0"
+                Grid.Column="0"
+                ItemsSource="{Binding VersesDisplay}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.IsDeferredScrollingEnabled="True"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Height" Value="Auto" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
 
-                                <!--  Row 0  -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding Row0Visibility}">
-                                    <StackPanel Orientation="Vertical">
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
-                                        </Button>
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
-                                        </Button>
-                                    </StackPanel>
+                            <!--  Row 0  -->
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Row0Visibility}">
+                                <StackPanel Orientation="Vertical">
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                    </Button>
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    </Button>
+                                </StackPanel>
 
-                                    <userControls:VerseDisplay
-                                        Title="{Binding Row0Title}"
-                                        cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
-                                        FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        IsEnabled="True"
-                                        NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                        ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Tokens="{Binding Row0Tokens}"
-                                        TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                        TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                        <!--<userControls:VerseDisplay.Tokens>
+                                <userControls:VerseDisplay
+                                    Title="{Binding Row0Title}"
+                                    cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
+                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="True"
+                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
+                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Tokens="{Binding Row0Tokens}"
+                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                    <!--<userControls:VerseDisplay.Tokens>
                                         <MultiBinding Converter="{StaticResource TokensTextRowMultiValueConvertor}">
                                             <Binding Path="." />
                                             <Binding ElementName="MainGrid" Path="DataContext.TokenizationType" />
                                         </MultiBinding>
                                     </userControls:VerseDisplay.Tokens>-->
-                                    </userControls:VerseDisplay>
-                                </StackPanel>
-
-                                <!--  Row 1  -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding Row1Visibility}">
-                                    <StackPanel Orientation="Vertical">
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
-                                        </Button>
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
-                                        </Button>
-                                    </StackPanel>
-
-                                    <userControls:VerseDisplay
-                                        Title="{Binding Row1Title}"
-                                        cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
-                                        FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        IsEnabled="True"
-                                        NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                        ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Tokens="{Binding Row1Tokens}"
-                                        TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                        TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-
-                                <!--  Row 2  -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding Row2Visibility}">
-                                    <StackPanel Orientation="Vertical">
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
-                                        </Button>
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
-                                        </Button>
-                                    </StackPanel>
-
-                                    <userControls:VerseDisplay
-                                        Title="{Binding Row2Title}"
-                                        cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
-                                        FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        IsEnabled="True"
-                                        NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                        ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Tokens="{Binding Row2Tokens}"
-                                        TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                        TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-
-                                <!--  Row 3  -->
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding Row3Visibility}">
-                                    <StackPanel Orientation="Vertical">
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
-                                        </Button>
-                                        <Button>
-                                            <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
-                                        </Button>
-                                    </StackPanel>
-
-                                    <userControls:VerseDisplay
-                                        Title="{Binding Row3Title}"
-                                        cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
-                                        FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        IsEnabled="True"
-                                        NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                        ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                        TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Tokens="{Binding Row3Tokens}"
-                                        TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                        TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-
+                                </userControls:VerseDisplay>
                             </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </ContentControl>
+
+                            <!--  Row 1  -->
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Row1Visibility}">
+                                <StackPanel Orientation="Vertical">
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                    </Button>
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    </Button>
+                                </StackPanel>
+
+                                <userControls:VerseDisplay
+                                    Title="{Binding Row1Title}"
+                                    cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
+                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="True"
+                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
+                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Tokens="{Binding Row1Tokens}"
+                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <!--  Row 2  -->
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Row2Visibility}">
+                                <StackPanel Orientation="Vertical">
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                    </Button>
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    </Button>
+                                </StackPanel>
+
+                                <userControls:VerseDisplay
+                                    Title="{Binding Row2Title}"
+                                    cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
+                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="True"
+                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
+                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Tokens="{Binding Row2Tokens}"
+                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                            <!--  Row 3  -->
+                            <StackPanel Orientation="Horizontal" Visibility="{Binding Row3Visibility}">
+                                <StackPanel Orientation="Vertical">
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                    </Button>
+                                    <Button>
+                                        <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    </Button>
+                                </StackPanel>
+
+                                <userControls:VerseDisplay
+                                    Title="{Binding Row3Title}"
+                                    cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"
+                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    IsEnabled="True"
+                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
+                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Tokens="{Binding Row3Tokens}"
+                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{Binding Message}"
+                FontSize="15" />
 
             <ProgressBar
+                Grid.Row="0"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 Width="75"
                 Height="75"
