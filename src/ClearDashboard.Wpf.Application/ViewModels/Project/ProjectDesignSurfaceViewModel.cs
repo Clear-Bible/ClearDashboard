@@ -1029,6 +1029,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             TokenizationType: corpusNodeMenuItem.Tokenizer,
                             CorpusId: corpusId,
                             TokenizedTextCorpusId: tokenizationId,
+                            corpusNodeViewModel.CorpusType,
                             IsNewWindow: showInNewWindow));
                     break;
                 case "PropertiesId":

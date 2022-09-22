@@ -1,4 +1,5 @@
-﻿using ClearBible.Engine.Utils;
+﻿using System.Collections.ObjectModel;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Notes;
@@ -12,15 +13,15 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
 
-        private readonly ICollection<Label> labels_;
-        public IEnumerable<Label> Labels { get { return labels_; } }
+        private readonly ObservableCollection<Label> labels_;
+        public ObservableCollection<Label> Labels { get { return labels_; } }
 
         private readonly ICollection<IId> domainEntityIds_;
         public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
 
         public Note()
         {
-            labels_ = new HashSet<Label>(new NoteLabelComparer());
+            labels_ = new ObservableCollection<Label>();
             domainEntityIds_ = new HashSet<IId>(new IIdEquatableComparer());
         }
         internal Note(NoteId noteId, string text, string? abbreviatedText, ICollection<Label> labels, ICollection<IId> domainEntityIds)
@@ -28,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             NoteId = noteId;
             Text = text;
             AbbreviatedText = abbreviatedText;
-            labels_ = new HashSet<Label>(labels, new NoteLabelComparer()); ;
+            labels_ = new ObservableCollection<Label>(labels.DistinctBy(l => l.LabelId)); ;
             domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEquatableComparer());
         }
 
@@ -71,7 +72,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public async Task AssociateLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
-            if (labels_.Contains(label))
+            if (labels_.Any(l => l.LabelId == label.LabelId))
             {
                 return;
             }
@@ -100,7 +101,8 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public async Task DetachLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
-            if (!labels_.Contains(label))
+            var labelMatch = labels_.FirstOrDefault(l => l.LabelId == label.LabelId);
+            if (labelMatch is null)
             {
                 return;
             }
@@ -119,7 +121,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var result = await mediator.Send(command, token);
             if (result.Success)
             {
-                labels_.Remove(label);
+                labels_.Remove(labelMatch);
             }
             else
             {
@@ -256,23 +258,6 @@ namespace ClearDashboard.DAL.Alignment.Notes
             {
                 throw new MediatorErrorEngineException(result.Message);
             }
-        }
-
-        private class NoteLabelComparer : IEqualityComparer<Label>
-        {
-            public bool Equals(Label? x, Label? y)
-            {
-                if (ReferenceEquals(x, y)) return true;
-                if (x is null || y is null) return false;
-
-                // A note cannot be associated with a Label that hasn't
-                // been 'Create'd (that has an Id):
-                return x.LabelId!.Id == y.LabelId!.Id;
-            }
-
-            // A note cannot be associated with a Label that hasn't
-            // been 'Create'd (that has an Id):
-            public int GetHashCode(Label label) => label.LabelId!.Id.GetHashCode();
         }
     }
 }

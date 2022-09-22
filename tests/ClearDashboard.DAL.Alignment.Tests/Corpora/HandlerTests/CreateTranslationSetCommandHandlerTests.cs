@@ -94,8 +94,16 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.NotNull(translationSetDb);
 
             Assert.Equal(translationSet.ParallelCorpusId.Id, translationSetDb!.ParallelCorpusId);
-            Assert.Equal(translationSet.GetTranslationModel().Count, translationSetDb!.TranslationModel.Count);
             Assert.Empty(translationSetDb!.Translations);
+            Assert.True(translationModel.Keys.Count > 3);
+            var tm = await translationSet.GetTranslationModelEntryForToken(new Token(new TokenId(1, 1, 1, 1, 1), "surface", translationModel.Keys.Skip(3).First()));
+            Assert.NotNull(tm);
+
+            Output.WriteLine($"Translation model entry for {translationModel.Keys.Skip(3).First()}");
+            foreach (var kvp in tm)
+            {
+                Output.WriteLine($"\tTarget text: {kvp.Key} / score: {kvp.Value}");
+            }
         }
         finally
         {
@@ -191,6 +199,54 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 { "moo", 0.11 },
                 { "maa", 0.001 }
             });
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+//    [Fact]
+    [Trait("Category", "Handlers")]
+    public async Task AlignmentSet__ManuscriptZZSur()
+    {
+        try
+        {
+            var engineParallelTextCorpus = await BuildSampleManuscriptToZZSurEngineParallelTextCorpus();
+            var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(),
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+        }
+        finally
+        {
+//            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async Task AlignmentSet__SmallSample()
+    {
+        try
+        {
+            var engineParallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
+            var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(),
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
         }
         finally
         {
@@ -302,6 +358,21 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
     }
 
+    private async Task<EngineParallelTextCorpus> BuildSampleManuscriptToZZSurEngineParallelTextCorpus()
+    {
+        var sourceCorpus = await Corpus.Create(Mediator!, true, "Manuscript", "LanguageX", "Standard", Guid.NewGuid().ToString());
+        var sourceTokenizedTextCorpus = await TestDataHelpers.GetManuscript()
+            .Create(Mediator!, sourceCorpus.CorpusId, "Source TC", "");
+
+        var targetCorpus = await Corpus.Create(Mediator!, true, "zz_SUR", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
+        var targetTokenizedTextCorpus = await TestDataHelpers.GetZZSurCorpus()
+            .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+        var engineParallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+        return engineParallelTextCorpus;
+    }
+
     private async Task<EngineParallelTextCorpus> BuildSampleEngineParallelTextCorpus()
     {
         var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
@@ -312,9 +383,9 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
             .Create(Mediator!, targetCorpus.CorpusId, "Target TC", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
 
-        var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+        var engineParallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
 
-        return parallelTextCorpus;
+        return engineParallelTextCorpus;
     }
 
     private async Task<EngineParallelTextCorpus> BuildSampleEngineParallelTextCorpusWithComposite()
@@ -348,6 +419,27 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 SymmetrizationHeuristic.GrowDiagFinalAnd);
 
             return smtWordAlignmentModel.GetTranslationTable();
+        }
+        catch (EngineException eex)
+        {
+            Output.WriteLine(eex.ToString());
+            throw eex;
+        }
+    }
+
+    private async Task<IEnumerable<AlignedTokenPairs>> BuildSampleAlignmentModel(EngineParallelTextCorpus parallelTextCorpus)
+    {
+        try
+        {
+            var translationCommandable = new TranslationCommands();
+
+            using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
+                SmtModelType.FastAlign,
+                parallelTextCorpus,
+                null,
+                SymmetrizationHeuristic.GrowDiagFinalAnd);
+
+            return translationCommandable.PredictAllAlignedTokenIdPairs(smtWordAlignmentModel, parallelTextCorpus).ToList();
         }
         catch (EngineException eex)
         {

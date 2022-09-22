@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,6 @@ using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-
 //using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.UserControls;
 using MediatR;
@@ -30,6 +30,7 @@ using SIL.Scripture;
 using CorpusClass = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using ClearDashboard.Wpf.Application.Events;
+using Dapper;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -58,12 +59,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         public string? Message { get; set; }
-        public IEnumerable<TokenDisplay>? Verse1 { get; set; }
-        public TokenDisplay CurrentTokenDisplay { get; set; }
+        public IEnumerable<TokenDisplayViewModel>? Verse1 { get; set; }
+        public Note CurrentNote { get; set; }
+        public TokenDisplayViewModel CurrentTokenDisplayViewModel { get; set; }
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
         public TranslationOption CurrentTranslationOption { get; set; }
 
         public IEnumerable<Label> SampleLabels { get; set; }
+        public IEnumerable<Label> LabelSuggestions { get; set; }
 
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
@@ -79,30 +82,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenDoubleClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) double-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            if (e.TokenDisplay.HasNote)
+            if (e.TokenDisplayViewModel.HasNote)
             {
-                DisplayNote(e.TokenDisplay);
+                DisplayNote(e.TokenDisplayViewModel);
             }
 
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -114,7 +117,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenMouseWheel(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) mouse wheel";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -158,48 +161,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteDoubleClicked(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) double-clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteRightButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) right-clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) hovered";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseLeave(NoteEventArgs e)
         {
-            Message = string.Empty;
+            //Message = string.Empty;
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseWheel(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) mouse wheel";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteCreate(NoteEventArgs e)
         {
-            DisplayNote(e.TokenDisplay);
+            //DisplayNote(e.TokenDisplayViewModel);
         }
 
         public void TranslationApplied(TranslationEventArgs e)
         {
-            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             NotifyOfPropertyChange(nameof(Message));
 
             TranslationControlVisibility = Visibility.Hidden;
@@ -215,23 +218,52 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }        
         
-        public void NoteApplied(NoteEventArgs e)
+        public void NoteAdded(NoteEventArgs e)
         {
-            Message = $"Note '{e.TokenDisplay.Note}' applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
             NoteControlVisibility = Visibility.Hidden;
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
-        public void NoteCancelled(RoutedEventArgs e)
+        public void NoteUpdated(NoteEventArgs e)
         {
-            Message = "Note cancelled.";
+            Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
             NoteControlVisibility = Visibility.Hidden;
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
+
+        public void NoteDeleted(NoteEventArgs e)
+        {
+            Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+        public void LabelSelected(LabelEventArgs e)
+        {
+            Message = $"Label '{e.Label.Text}' selected for token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void LabelAdded(LabelEventArgs e)
+        {
+            Message = $"Label '{e.Label.Text}' added for token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void CloseRequested(RoutedEventArgs args)
+        {
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+
         // ReSharper restore UnusedMember.Global
 
         #endregion
@@ -239,7 +271,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            CreateLabels();
+            GetLabelSuggestions();
+            GetLabels();
 
             await base.OnActivateAsync(cancellationToken);
             await LoadFiles();
@@ -247,19 +280,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             //await RetrieveTokensViaCorpusClass();
         }
 
-        private void CreateLabels()
+        private ObservableCollection<Label> GetLabels()
         {
-            var labels = new List<Label>();
-            for (var i = 1; i <= 5; i++)
+            var labelSuggestions = LabelSuggestions.ToList();
+            var labelTexts = new List<string>();
+            var numLabels = new Random().Next(4);
+
+            for (var i = 0; i <= numLabels; i++)
             {
-                labels.Add(new Label { Text = $"Label{i}" });
+                var labelIndex = new Random().Next(LabelSuggestions.Count());
+                if (!labelTexts.Contains(labelSuggestions[labelIndex].Text))
+                {
+                    labelTexts.Add(labelSuggestions[labelIndex].Text);
+                }
             }
 
-            SampleLabels = labels;
+            return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt).Select(lt => new Label {Text = lt}));
+        }        
+        
+        private void GetLabelSuggestions()
+        {
+            var labels = new List<Label>
+            {
+                new Label {Text="alfa"},
+                new Label {Text="bravo"},
+                new Label {Text="charlie"},
+                new Label {Text="delta"},
+                new Label {Text="echo"}
+            };
+
+            LabelSuggestions = labels;
+            NotifyOfPropertyChange(nameof(LabelSuggestions));
         }
 
-
-        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foo", "foodie", "fingle", "boing", "la" };
+        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
 
         private string RandomTranslationOriginatedFrom()
         {
@@ -326,32 +380,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return result.OrderByDescending(to => to.Probability);
         }
 
-        private List<TokenDisplay> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
+        private List<TokenDisplayViewModel> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
         {
-            var tokenDisplays = new List<TokenDisplay>();
+            var tokenDisplays = new List<TokenDisplayViewModel>();
 
             var tokens = GetTokens(corpus, BBBCCCVVV);
             if (tokens != null)
             {
                 tokenDisplays.AddRange(from token in tokens 
                     let translation = GetTranslation(token.token) 
-                    select new TokenDisplay { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
+                    select new TokenDisplayViewModel { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
             }
 
             return tokenDisplays;
         }
-
-        //private List<Note> GetNotesForEntity(TokenId id)
-        //{
-        //    var noteIds = GetAllNoteDomainEntityAssociationsQuery.Where()
-        //}
-
-        //private void Foo()
-        //{
-        //    Dictionary<NoteId, Note> dictionary_;
-            
-        //    List<>
-        //}
 
         public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
 
@@ -359,35 +401,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             TranslationControlVisibility = Visibility.Visible;
 
-            CurrentTokenDisplay = e.TokenDisplay;
+            CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
             TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
 
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
             NotifyOfPropertyChange(nameof(TranslationOptions));
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
         }
 
         public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
-        private void DisplayNote(TokenDisplay tokenDisplay)
+        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
         {
             NoteControlVisibility = Visibility.Visible;
-            CurrentTokenDisplay = tokenDisplay;
+            CurrentTokenDisplayViewModel = tokenDisplayViewModel;
         
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplay));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
         }
 
         private async Task LoadFiles()
         {
-            var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
+            IEnumerable<TokensTextRow> corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
 
             Verse1 = GetTokenDisplays(corpus, 40001001);
-            Verse1.First().Note = "This is a note";
-            Verse1.Skip(3).First().Note = "Here's another note.";
+
+            CurrentNote = new Note
+            {
+                Text = "This is a note",
+                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                //Labels = GetLabels()
+            };
+
+            var note2 = new Note
+            {
+                Text = "Here's another note",
+                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                //Labels = GetLabels()
+            };
+
+            Verse1.First().Notes.Add(CurrentNote); 
+            Verse1.First().Notes.Add(note2); 
             
             NotifyOfPropertyChange(nameof(Verse1));
+            NotifyOfPropertyChange(nameof(CurrentNote));
         }
 
         private async Task MockProjectAndUser()

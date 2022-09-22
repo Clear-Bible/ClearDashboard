@@ -8,25 +8,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public static class ParallelCorpusExtensions
     {
-        public static async Task<ParallelCorpus> Update(
-            this ParallelCorpus parallelCorpus, 
-            IMediator mediator)
-        {
-            var command = new UpdateParallelCorpusCommand(
-                parallelCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"), 
-                parallelCorpus.ParallelCorpusId);
-
-            var result = await mediator.Send(command);
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
-
         /// <summary>
         /// 
         /// </summary>

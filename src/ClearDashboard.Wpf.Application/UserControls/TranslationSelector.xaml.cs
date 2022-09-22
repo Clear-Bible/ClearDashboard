@@ -8,36 +8,36 @@ using ClearDashboard.Wpf.Application.ViewModels.Display;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// Interaction logic for TranslationControl.xaml
+    /// A user control that suggests translation options and allows the user to select or enter one.
     /// </summary>
-    public partial class TranslationControl : UserControl
+    public partial class TranslationSelector : UserControl
     {
         /// <summary>
         /// Identifies the TranslationApplied routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationAppliedEvent = EventManager.RegisterRoutedEvent
-            ("TranslationApplied", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationControl));
+            ("TranslationApplied", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationSelector));
 
         /// <summary>
         /// Identifies the TranslationCancelled routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationCancelledEvent = EventManager.RegisterRoutedEvent
-            ("TranslationCancelled", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationControl));
+            ("TranslationCancelled", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationSelector));
 
         /// <summary>
         /// Identifies the TokenDisplayProperty dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenDisplayProperty = DependencyProperty.Register("TokenDisplay", typeof(TokenDisplay), typeof(TranslationControl));
+        public static readonly DependencyProperty TokenDisplayViewModelProperty = DependencyProperty.Register("TokenDisplayViewModel", typeof(TokenDisplayViewModel), typeof(TranslationSelector));
 
         /// <summary>
         /// Identifies the TranslationOptions dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationOptionsProperty = DependencyProperty.Register("TranslationOptions", typeof(IEnumerable), typeof(TranslationControl));
+        public static readonly DependencyProperty TranslationOptionsProperty = DependencyProperty.Register("TranslationOptions", typeof(IEnumerable), typeof(TranslationSelector));
 
         /// <summary>
         /// Identifies the SelectedItem dependency property.
         /// </summary>
-        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(TranslationOption), typeof(TranslationControl));
+        public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.Register("SelectedItem", typeof(TranslationOption), typeof(TranslationSelector));
 
         /// <summary>
         /// Occurs when a translation is applied.
@@ -67,16 +67,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="TokenDisplay"/> token display information to display in this control.
+        /// Gets or sets the <see cref="TokenDisplayViewModel"/> token display information to display in this control.
         /// </summary>
-        public TokenDisplay TokenDisplay
+        public TokenDisplayViewModel TokenDisplayViewModel
         {
-            get => (TokenDisplay)GetValue(TokenDisplayProperty);
-            set => SetValue(TokenDisplayProperty, value);
+            get => (TokenDisplayViewModel)GetValue(TokenDisplayViewModelProperty);
+            set => SetValue(TokenDisplayViewModelProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplay"/> objects to display in the control.
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects to display in the control.
         /// </summary>
         public IEnumerable TranslationOptions
         {
@@ -84,7 +84,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationOptionsProperty, value);
         }
 
-        public TranslationControl()
+        public TranslationSelector()
         {
             InitializeComponent();
         }
@@ -94,8 +94,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = TranslationAppliedEvent,
-                TokenDisplay = TokenDisplay,
-                Translation = new Translation(TokenDisplay.Token, TranslationValue.Text, "Assigned"),
+                TokenDisplayViewModel = TokenDisplayViewModel,
+                Translation = new Translation(TokenDisplayViewModel.Token, TranslationValue.Text, "Assigned"),
                 TranslationActionType = ApplyAllCheckbox != null && (bool) ApplyAllCheckbox.IsChecked ? "PutPropagate" : "PutNoPropagate"
             });
         }

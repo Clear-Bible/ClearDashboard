@@ -11,8 +11,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetTranslationSetByTranslationSetIdQueryHandler : ProjectDbContextQueryHandler<
         GetTranslationSetByTranslationSetIdQuery,
-        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>,
-        (TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>
+        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>,
+        (TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
     {
 
         public GetTranslationSetByTranslationSetIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationSetByTranslationSetIdQueryHandler> logger) 
@@ -20,20 +20,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
         }
 
-        protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
         {
             var translationSet = ProjectDbContext.TranslationSets
                 .Include(ts => ts.ParallelCorpus)
                     .ThenInclude(pc => pc!.SourceTokenizedCorpus)
                 .Include(ts => ts.ParallelCorpus)
                     .ThenInclude(pc => pc!.TargetTokenizedCorpus)
-                .Include(ts => ts.TranslationModel)
-                    .ThenInclude(tme => tme.TargetTextScores)
                 .Where(ts => ts.Id == request.TranslationSetId.Id)
                 .FirstOrDefault();
             if (translationSet == null)
             {
-                return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>
+                return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
                 (
                     success: false,
                     message: $"TranslationSet not found for TranslationSetId '{request.TranslationSetId.Id}'"
@@ -43,16 +41,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            var translationModelData = 
-                translationSet.TranslationModel
-                    .ToDictionary(tme => tme.SourceText!, tme => tme.TargetTextScores
-                        .ToDictionary(tts => tts.Text!, tts => tts.Score));
-
-            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>
+            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
             ((
                 ModelHelper.BuildTranslationSetId(translationSet),
-                ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!),
-                translationModelData
+                ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!)
             ));
         }
     }

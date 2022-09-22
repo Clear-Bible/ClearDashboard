@@ -15,7 +15,7 @@ public class TokensTextRowValueConvertor : IValueConverter
     public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
     {
 
-        var list = new List<TokenDisplay>();
+        var list = new List<TokenDisplayViewModel>();
         if (value == null)
         {
             return list;
@@ -27,7 +27,7 @@ public class TokensTextRowValueConvertor : IValueConverter
         if (tokensTextRow.Tokens != null && tokensTextRow.Tokens.Any())
         {
             var tokensWithPadding = detokenizer.Detokenize(tokensTextRow.Tokens);
-            return tokensWithPadding.Select(t => new TokenDisplay { Token = t.token, PaddingAfter = t.paddingAfter, PaddingBefore = t.paddingBefore });
+            return tokensWithPadding.Select(t => new TokenDisplayViewModel { Token = t.token, PaddingAfter = t.paddingAfter, PaddingBefore = t.paddingBefore });
         }
         return list;
     
