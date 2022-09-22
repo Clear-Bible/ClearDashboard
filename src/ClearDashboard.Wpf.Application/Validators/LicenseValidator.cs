@@ -1,11 +1,11 @@
-﻿using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
-    public class LicenseUserValidator : AbstractValidator<AppLicenseUser>
+    public class LicenseUserValidator : AbstractValidator<LicenseUser>
     {
         ILogger _logger;
         public LicenseUserValidator(ILogger<LicenseUserValidator> logger)
