@@ -1,10 +1,9 @@
+using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
-using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
-using MediatR;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,11 +14,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using Newtonsoft.Json;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
@@ -78,7 +74,7 @@ public class DashboardProjectManager : ProjectManager
 
     private bool _licenseCleared = false;
 
-    public DashboardProjectManager(IMediator mediator, IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, ProjectDbContextFactory projectNameDbContextFactory, IWindowManager windowManager, INavigationService navigationService) : base(mediator, paratextProxy, logger, projectNameDbContextFactory)
+    public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
         EventAggregator = eventAggregator;
         _windowManager = windowManager;

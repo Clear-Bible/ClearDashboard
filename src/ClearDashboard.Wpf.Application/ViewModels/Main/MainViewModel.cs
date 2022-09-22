@@ -39,6 +39,7 @@ using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -516,7 +517,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async void Init()
         {
             RebuildMenu();
-            
+
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
             var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
@@ -622,10 +623,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // get the project layouts
-            if (ProjectManager?.CurrentDashboardProject?.TargetProject != null)
+            if (ProjectManager.CurrentParatextProject.DirectoryPath != null)
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
-                path = Path.Combine(ProjectManager?.CurrentDashboardProject?.TargetProject?.DirectoryPath, "shared");
+                path = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath, "shared");
                 if (Directory.Exists(path))
                 {
                     var files = Directory.GetFiles(path, "*.Layout.config");
@@ -755,7 +756,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <summary>
         /// Save the layout
         /// </summary>
-        public void OkSave()
+        public async void OkSave()
         {
             var filePath = string.Empty;
             if (SelectedLayout == null)
@@ -763,13 +764,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // create a new layout
                 if (SelectedLayoutText != string.Empty)
                 {
-                    // TODO this isn't working right as CurrentDashboardProject isn't always filled in
-
-
-                    // get the project layouts
-                    // ReSharper disable once PossibleNullReferenceException
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    filePath = Path.Combine(ProjectManager.CurrentDashboardProject.TargetProject.DirectoryPath, "shared");
+                    filePath = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath, "shared");
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
                 }
             }
@@ -799,36 +794,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         }
 
-        //public void DeleteLayout(LayoutFile layoutFile)
-        //{
-        //    if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
-        //    {
-        //        return;
-        //    }
+        public void DeleteLayout(LayoutFile layoutFile)
+        {
+            if (layoutFile.LayoutType == LayoutFile.eLayoutType.Standard)
+            {
+                return;
+            }
 
-        //    try
-        //    {
-        //        File.Delete(layoutFile.LayoutPath);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Logger.LogError(e.Message);
-        //        return;
-        //    }
+            try
+            {
+                File.Delete(layoutFile.LayoutPath);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+                return;
+            }
 
-        //    FileLayouts.Remove(layoutFile);
-        //    ReBuildMenu();
-        //}
+            FileLayouts.Remove(layoutFile);
+            RebuildMenu();
+        }
 
         public void CancelSave()
         {
             GridIsVisible = Visibility.Collapsed;
         }
 
-        //public void CancelDelete()
-        //{
-        //    DeleteGridIsVisible = Visibility.Collapsed;
-        //}
+        public void CancelDelete()
+        {
+            DeleteGridIsVisible = Visibility.Collapsed;
+        }
 
         //private void WorkSpaceViewModel_ThemeChanged()
         //{

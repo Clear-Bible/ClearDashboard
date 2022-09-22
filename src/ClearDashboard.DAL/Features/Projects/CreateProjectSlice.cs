@@ -24,7 +24,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
         {
             try
             {
-                var projectAssets = await ProjectNameDbContextFactory.Get(request.ProjectName);
+                var projectAssets = await ProjectNameDbContextFactory.Get(request.ProjectName, true);
 
 
                 if (projectAssets.ProjectDbContext != null)
