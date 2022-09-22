@@ -1317,84 +1317,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (success)
             {
+                // get TranslationSet , etc form the dialogViewModel
+                var translationSet = dialogViewModel.TranslationSet;
 
-                IsBusy = true;
-                CancellationTokenSource = new CancellationTokenSource();
-                var cancellationToken = CancellationTokenSource.Token;
-
-                var parallelCorpus = dialogViewModel.ParallelCorpus;
-
-                _ = await Task.Factory.StartNew(async () =>
-                {
-                    try
-                    {
-                          _logger.LogInformation($"Retrieving tokenized source and target corpora for '{parallelCorpus.DisplayName}'.");
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                        {
-                            Name = "ParallelCorpus",
-                            Description = $"Retrieving tokenized source and target corpora for '{parallelCorpus.DisplayName}'...",
-                            StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
-                        }), cancellationToken);
-
-
-                        var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
-                        var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
-
-                        _logger.LogInformation($"Aligning rows between target and source corpora");
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                        {
-                            Name = "ParallelCorpus",
-                            Description = $"Aligning rows for '{parallelCorpus.DisplayName}' between target and source corpora...",
-                            StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
-                        }), cancellationToken);
-                        var parallelTextCorpus = await Task.Run(async () => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new List<VerseMapping>()), cancellationToken);
-
-
-                        _logger.LogInformation($"Creating the ParallelCorpus '{parallelCorpus.DisplayName}'");
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                        {
-                            Name = "ParallelCorpus",
-                            Description = $"Creating  ParallelCorpus '{parallelCorpus.DisplayName}'...",
-                            StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
-                        }), cancellationToken);
-                        var parallelTokenizedCorpus = await parallelTextCorpus.Create(parallelCorpus.DisplayName, Mediator!);
-
-
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                        {
-                            Name = "ParallelCorpus",
-                            Description =  $"Completed creation of  ParallelCorpus '{parallelCorpus.DisplayName}'.",
-                            StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
-                        }), cancellationToken);
-                        _logger.LogInformation($"Completed creating the ParallelCorpus '{parallelCorpus.DisplayName}'");
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, $"An unexpected error occurred while creating the ParallelCorpus.");
-                        if (!cancellationToken.IsCancellationRequested)
-                        {
-                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                                new BackgroundTaskStatus
-                                {
-                                    Name = "ParallelCorpus",
-                                    EndTime = DateTime.Now,
-                                    ErrorMessage = $"{ex}",
-                                    TaskStatus = StatusEnum.Error
-                                }), cancellationToken);
-                        }
-                    }
-                    finally
-                    {
-                        CancellationTokenSource.Dispose();
-                        LongProcessRunning = false;
-                        IsBusy = false;
-                    }
-
-                }, cancellationToken);
             }
         }
 

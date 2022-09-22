@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
@@ -75,8 +76,29 @@ public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewMod
 
     public async void Add()
     {
-        await ParentViewModel.AddAlignmentSet(AlignmentSetDisplayName);
+        try {
+            var processStatus = await ParentViewModel!.AddAlignmentSet(AlignmentSetDisplayName);
 
-        ParentViewModel.Ok();
+            switch (processStatus)
+            {
+                case ProcessStatus.Completed:
+                    ParentViewModel.Ok();
+                    break;
+                case ProcessStatus.Failed:
+                    ParentViewModel.Cancel();
+                    break;
+                case ProcessStatus.NotStarted:
+                    break;
+                case ProcessStatus.Running:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ParentViewModel!.Cancel();
+        }
     }
 }

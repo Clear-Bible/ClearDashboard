@@ -71,22 +71,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public async void Create()
         {
-            var status = await ParentViewModel?.AddParallelCorpus()!;
-
-            switch (status)
+            try 
             {
-                case ProcessStatus.Completed:
-                    await MoveForwards();
-                    break;
-                case ProcessStatus.Failed:
-                    ParentViewModel.Cancel();
-                    break;
-                case ProcessStatus.NotStarted:
-                    break;
-                case ProcessStatus.Running:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                var status = await ParentViewModel?.AddParallelCorpus()!;
+
+                switch (status)
+                {
+                    case ProcessStatus.Completed:
+                        await MoveForwards();
+                        break;
+                    case ProcessStatus.Failed:
+                        ParentViewModel.Cancel();
+                        break;
+                    case ProcessStatus.NotStarted:
+                        break;
+                    case ProcessStatus.Running:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            catch (Exception ex)
+            {
+                ParentViewModel!.Cancel();
             }
         }
 

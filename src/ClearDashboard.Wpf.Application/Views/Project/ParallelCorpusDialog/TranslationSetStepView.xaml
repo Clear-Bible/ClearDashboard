@@ -195,7 +195,7 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
 
-            <Button
+            <!--<Button
                 x:Name="MoveBackwards"
                 Margin="5,5,5,5"
                 cm:Message.Attach="MoveBackwards"
@@ -206,6 +206,11 @@
             <Button
                 x:Name="MoveForwards"
                 Content="{helpers:Localization Next}" 
+                IsDefault="True"
+                Style="{StaticResource TransparentStyle}"/>-->
+            <Button
+                x:Name="Add"
+                Content="{helpers:Localization Add}" 
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}"/>
         </StackPanel>

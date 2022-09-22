@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Threading;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -57,16 +58,27 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<P
     {
         try
         {
-            await ParentViewModel!.TrainSmtModel();
-            await MoveForwards();
+            var processStatus =  await ParentViewModel!.TrainSmtModel();
+
+            switch (processStatus)
+            {
+                case ProcessStatus.Completed:
+                    await MoveForwards();
+                    break;
+                case ProcessStatus.Failed:
+                    ParentViewModel.Cancel();
+                    break;
+                case ProcessStatus.NotStarted:
+                    break;
+                case ProcessStatus.Running:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
         catch (Exception ex)
         {
             ParentViewModel!.Cancel();
         }
-        
-
-
-
     }
 }

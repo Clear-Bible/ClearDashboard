@@ -7,6 +7,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Threading;
+using SIL.Machine.Utils;
+using System;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -48,9 +50,30 @@ public class TranslationSetStepViewModel : DashboardApplicationWorkflowStepViewM
 
     public async void Add()
     {
-        await ParentViewModel!.AddTranslationSet(TranslationSetDisplayName);
+        try
+        {
+            var processStatus = await ParentViewModel!.AddTranslationSet(TranslationSetDisplayName);
 
-        ParentViewModel!.Ok();
+            switch (processStatus)
+            {
+                case ProcessStatus.Completed:
+                    ParentViewModel.Ok();
+                    break;
+                case ProcessStatus.Failed:
+                    ParentViewModel.Cancel();
+                    break;
+                case ProcessStatus.NotStarted:
+                    break;
+                case ProcessStatus.Running:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        catch (Exception ex)
+        {
+            ParentViewModel!.Cancel();
+        }
 
     }
 
