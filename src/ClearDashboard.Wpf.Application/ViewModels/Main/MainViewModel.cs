@@ -1482,9 +1482,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public Task HandleAsync(NewProjectPickerMessage message, CancellationToken cancellationToken)
         {
-            
-            //update properties here
-            throw new NotImplementedException();
+            ProjectName = message.project.ProjectName;
+            return Task.CompletedTask;
         }
     }
 

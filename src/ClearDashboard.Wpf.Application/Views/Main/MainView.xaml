@@ -47,8 +47,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
+        <Label Grid.Row="2" Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
 
         <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
             <Menu.ItemContainerStyle>
@@ -68,8 +70,6 @@
                         Text="{Binding Header}" />
                 </HierarchicalDataTemplate>
             </Menu.ItemTemplate>
-
-            <!--<Label Grid.Column="2" Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />-->
         </Menu>
 
         <Grid Grid.Row="1">
