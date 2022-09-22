@@ -23,6 +23,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
+using System.Transactions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -43,7 +46,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private string? _tokenizationType;
         private TokenizedTextCorpus? _currentTokenizedTextCorpus;
         private Visibility? _progressBarVisibility = Visibility.Visible;
-        private ObservableCollection<TokensTextRow>? _verses;
         private string? _message;
         private BookInfo? _currentBook;
         
@@ -212,6 +214,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        private ObservableCollection<VersesDisplay> _verseDisplay = new();
+        public ObservableCollection<VersesDisplay> VerseDisplay
+        {
+            get => _verseDisplay;
+            set => Set(ref _verseDisplay, value);
+        }
+
+        
+        private ObservableCollection<TokensTextRow>? _verses;
         public ObservableCollection<TokensTextRow>? Verses
         {
             get => _verses;
@@ -252,7 +263,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             DisplayName = "Enhanced View";
             TokensTextRows = new ObservableCollection<TokensTextRow>();
-            Verses = new ObservableCollection<TokensTextRow>();
             return base.OnInitializeAsync(cancellationToken);
         }
 
@@ -862,7 +872,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             if (e.TokenDisplayViewModel.HasNote)
             {
-                // DisplayNote(e);
+                DisplayNote(e.TokenDisplayViewModel);
             }
 
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
@@ -883,7 +893,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TranslationClicked(TranslationEventArgs e)
         {
-            // DisplayTranslation(e);
+            DisplayTranslation(e);
 
             Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
@@ -921,38 +931,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteDoubleClicked(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteRightButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseLeave(NoteEventArgs e)
         {
-            Message = string.Empty;
+            //Message = string.Empty;
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseWheel(NoteEventArgs e)
         {
-            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
+            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void NoteCreate(NoteEventArgs e)
+        {
+            //DisplayNote(e.TokenDisplayViewModel);
         }
 
         public void TranslationApplied(TranslationEventArgs e)
@@ -973,28 +988,121 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }
 
-        public void NoteApplied(NoteEventArgs e)
+        public void NoteAdded(NoteEventArgs e)
         {
-            Message = $"Note '{e.Note.Text}' applied to token ({e.EntityId})";
+            Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
-            // NoteControlVisibility = Visibility.Hidden;
-            // NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
-        public void NoteCancelled(RoutedEventArgs e)
+        public void NoteUpdated(NoteEventArgs e)
         {
-            Message = "Note cancelled.";
+            Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
-            // NoteControlVisibility = Visibility.Hidden;
-            // NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
+
+        public void NoteDeleted(NoteEventArgs e)
+        {
+            Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+        public void LabelSelected(LabelEventArgs e)
+        {
+            Message = $"Label '{e.Label.Text}' selected for token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void LabelAdded(LabelEventArgs e)
+        {
+            Message = $"Label '{e.Label.Text}' added for token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public void CloseRequested(RoutedEventArgs args)
+        {
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        }
+
+
         // ReSharper restore UnusedMember.Global
 
         #endregion
 
+        public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
+        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
+        {
+            NoteControlVisibility = Visibility.Visible;
+            CurrentTokenDisplayViewModel = tokenDisplayViewModel;
 
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
+        }
+
+        public Note CurrentNote { get; set; }
+        public TokenDisplayViewModel CurrentTokenDisplayViewModel { get; set; }
+
+
+        public IEnumerable<TranslationOption> TranslationOptions { get; set; }
+        public TranslationOption CurrentTranslationOption { get; set; }
+        private void DisplayTranslation(TranslationEventArgs e)
+        {
+            TranslationControlVisibility = Visibility.Visible;
+
+            CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
+            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
+
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
+            NotifyOfPropertyChange(nameof(TranslationOptions));
+            NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+        }
+
+        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        {
+            var result = new List<TranslationOption>();
+
+            var random = new Random();
+            var optionCount = random.Next(4) + 2;     // 2-5 options
+            var remainingPercentage = 100d;
+
+            var basePercentage = random.NextDouble() * remainingPercentage;
+            result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
+            remainingPercentage -= basePercentage;
+
+            for (var i = 1; i < optionCount - 1; i++)
+            {
+                var percentage = random.NextDouble() * remainingPercentage;
+                result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
+                remainingPercentage -= percentage;
+            }
+
+            result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
+
+            return result.OrderByDescending(to => to.Probability);
+        }
+
+        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
+
+
+        private static int mockOogaWordsIndexer_;
+
+        private string GetMockOogaWord()
+        {
+            var result = MockOogaWords[mockOogaWordsIndexer_++];
+            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+            return result;
+        }
     }
 
 
