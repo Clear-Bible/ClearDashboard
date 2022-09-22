@@ -351,10 +351,26 @@
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
                                 <Button IsEnabled="False">
-                                    <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="3" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowUpDropCircle" />
                                 </Button>
                                 <Button>
-                                    <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="0" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowDownDropCircle" />
                                 </Button>
                             </StackPanel>
 
@@ -362,7 +378,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row0Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border0, Converter={converters:WidthSubtraction}, ConverterParameter='60'}"
+                                    Width="{Binding ActualWidth, ElementName=border0, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row0Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -417,11 +433,27 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button>
-                                    <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                <Button IsEnabled="True">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="3" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowUpDropCircle" />
                                 </Button>
                                 <Button>
-                                    <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="0" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowDownDropCircle" />
                                 </Button>
                             </StackPanel>
 
@@ -429,7 +461,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row1Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border1, Converter={converters:WidthSubtraction}, ConverterParameter='60'}"
+                                    Width="{Binding ActualWidth, ElementName=border1, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row1Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -484,11 +516,27 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button>
-                                    <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                <Button IsEnabled="True">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="3" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowUpDropCircle" />
                                 </Button>
                                 <Button>
-                                    <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="0" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowDownDropCircle" />
                                 </Button>
                             </StackPanel>
 
@@ -496,7 +544,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row2Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border2, Converter={converters:WidthSubtraction}, ConverterParameter='60'}"
+                                    Width="{Binding ActualWidth, ElementName=border2, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row2Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -551,11 +599,27 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button>
-                                    <materialDesign:PackIcon Kind="ArrowUpDropCircle" />
+                                <Button IsEnabled="True">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="3" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowUpDropCircle" />
                                 </Button>
                                 <Button>
-                                    <materialDesign:PackIcon Kind="ArrowDownDropCircle" />
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
+                                            <Setter Property="Padding" Value="0" />
+                                        </Style>
+                                    </Button.Style>
+                                    <materialDesign:PackIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="ArrowDownDropCircle" />
                                 </Button>
                             </StackPanel>
 
@@ -563,7 +627,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row3Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border3, Converter={converters:WidthSubtraction}, ConverterParameter='60'}"
+                                    Width="{Binding ActualWidth, ElementName=border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row3Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
