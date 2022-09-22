@@ -62,6 +62,12 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="translation"></param>
+        /// <param name="translationActionType">Valid values are:  "PutPropagate", "PutNoPropagate"</param>
+        /// <exception cref="MediatorErrorEngineException"></exception>
         public async void PutTranslation(Translation translation, string translationActionType)
         {
             var result = await mediator_.Send(new PutTranslationSetTranslationCommand(TranslationSetId, translation, translationActionType));
@@ -112,6 +118,39 @@ namespace ClearDashboard.DAL.Alignment.Translation
             else
             {
                 throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="translationModel"></param>
+        /// <param name="parallelCorpusId"></param>
+        /// <param name="mediator"></param>
+        /// <returns></returns>
+        /// <exception cref="MediatorErrorEngineException"></exception>
+        public static async Task<TranslationSet> Create(
+            Dictionary<string, Dictionary<string, double>> translationModel,
+            string? displayName,
+            string smtModel,
+            Dictionary<string, object> metadata,
+            ParallelCorpusId parallelCorpusId,
+            IMediator mediator)
+        {
+            var createTranslationSetCommandResult = await mediator.Send(new CreateTranslationSetCommand(
+                translationModel,
+                displayName,
+                smtModel,
+                metadata,
+                parallelCorpusId));
+
+            if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
+            {
+                return createTranslationSetCommandResult.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(createTranslationSetCommandResult.Message);
             }
         }
 

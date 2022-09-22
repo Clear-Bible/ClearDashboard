@@ -31,7 +31,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public IEnumerable<AlignedTokenPairs> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)
         {
-            throw new NotImplementedException();
+            return parallelCorpus.SelectMany(row => PredictParallelMappedVersesAlignedTokenIdPairs(wordAligner, (row as EngineParallelTextRow)!));
         }
 
         public IEnumerable<AlignedTokenPairs> PredictParallelMappedVersesAlignedTokenIdPairs(

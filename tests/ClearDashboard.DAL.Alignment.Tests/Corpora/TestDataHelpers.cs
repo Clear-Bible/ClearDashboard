@@ -1,4 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
@@ -41,6 +42,19 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
             return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, GreekNTUsfmFullTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
                 .Transform<IntoTokensTextRowProcessor>();
+        }
+
+        public static ITextCorpus GetManuscript()
+        {
+            var syntaxTree = new SyntaxTrees();
+            return new SyntaxTreeFileTextCorpus(syntaxTree);
+        }
+
+        public static ITextCorpus GetZZSurCorpus()
+        {
+            return new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
+                 .Tokenize<LatinWordTokenizer>()
+                 .Transform<IntoTokensTextRowProcessor>();
         }
     }
 }

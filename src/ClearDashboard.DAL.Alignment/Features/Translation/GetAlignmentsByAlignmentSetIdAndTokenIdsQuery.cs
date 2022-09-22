@@ -4,6 +4,6 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
-    public record GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId AlignmentSetId, IEnumerable<TokenId> TokenIds) : 
+    public record GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId AlignmentSetId, IEnumerable<EngineParallelTextRow> EngineParallelTextRows) : 
         ProjectRequestQuery<IEnumerable<Alignment.Translation.Alignment>>;
 }
