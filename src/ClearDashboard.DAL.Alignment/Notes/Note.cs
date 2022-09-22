@@ -13,8 +13,19 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
 
+#if DEBUG
+        private ObservableCollection<Label> labels_;
+#else
         private readonly ObservableCollection<Label> labels_;
-        public ObservableCollection<Label> Labels { get { return labels_; } }
+#endif
+
+        public ObservableCollection<Label> Labels
+        {
+            get { return labels_; }
+#if DEBUG
+            set { labels_ = value; }
+#endif
+        }
 
         private readonly ICollection<IId> domainEntityIds_;
         public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
