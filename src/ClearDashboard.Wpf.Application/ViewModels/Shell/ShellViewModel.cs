@@ -285,9 +285,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-#if RELEASE
-            //ProjectManager.CheckLicense(IoC.Get<RegistrationDialogViewModel>());
-#endif
             return base.OnInitializeAsync(cancellationToken);
         }
 

@@ -41,7 +41,7 @@ namespace ClearDashboard.DataAccessLayer
         public User CurrentUser { get; set; }
 
         public Project CurrentProject { get; set;}
-    public ParatextProject CurrentParatextProject { get; set; }
+        public ParatextProject CurrentParatextProject { get; set; }
         public bool HasCurrentProject => CurrentProject != null;
         public bool HasCurrentParatextProject => CurrentParatextProject != null;
 
