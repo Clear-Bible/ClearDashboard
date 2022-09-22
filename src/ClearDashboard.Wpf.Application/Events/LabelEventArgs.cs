@@ -4,10 +4,9 @@ using ClearDashboard.DAL.Alignment.Notes;
 
 namespace ClearDashboard.Wpf.Application.Events
 {
-    public class NoteEventArgs : RoutedEventArgs
+    public class LabelEventArgs : RoutedEventArgs
     {
         public IId? EntityId { get; set; }
-
-        public Note Note { get; set; }
+        public Label Label { get; set; }
     }
 }

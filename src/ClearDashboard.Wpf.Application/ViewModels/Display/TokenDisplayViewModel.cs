@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
@@ -8,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.
     /// </summary>
-    public class TokenDisplay
+    public class TokenDisplayViewModel
     {
         /// <summary>
         /// The token itself.
@@ -45,8 +48,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// </summary>
         public string TranslationState => Translation?.TranslationOriginatedFrom;
 
-        public string? Note { get; set; }
+        public List<Note> Notes { get; set; } = new();
 
-        public bool HasNote => !String.IsNullOrEmpty(Note);
+        public bool HasNote => Notes.Any();
     }
 }

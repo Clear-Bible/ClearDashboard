@@ -22,6 +22,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -50,6 +51,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
+
+        public List<TokenProject> _tokenProjects = new();
+
+        
         #endregion //Member Variables
 
         #region Public Properties
@@ -69,11 +74,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 if (value == true)
                 {
-                    // TODO do we return back the control to what Paratext is showing
-                    // or do we change Paratext to this new verse?  currently set to 
-                    // change Paratext to this new verse
-                    _ = Task.Run(() =>
-                        ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                    // update Paratext with the verseId
+                    //_ = Task.Run(() =>
+                    //    ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+
+                    // update this window with the Paratext verse
+                    CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+
+                    //TODO regenerate the verses to display
+                    
                 }
 
                 _paratextSync = value;
@@ -103,14 +112,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private int _verseRange = 1;
-        public int VerseRange
+        private int _verseOffsetRange = 0;
+        public int VerseOffsetRange
         {
-            get => _verseRange;
+            get => _verseOffsetRange;
             set
             {
-                _verseRange = value;
-                NotifyOfPropertyChange(() => _verseRange);
+                if (value != _verseOffsetRange)
+                {
+                    _verseOffsetRange = value;
+                    NotifyOfPropertyChange(() => _verseOffsetRange);
+                }
             }
         }
 
@@ -330,6 +342,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
+            // we don't want this as it was for demonstration
+            
+            return;
+
 
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
@@ -421,12 +437,267 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            //BcvInit(message.ParatextProjectId);
-
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
+            
+            ProgressBarVisibility = Visibility.Visible;
+
+            TokenProject? project = null;
+            // check if we have this already
+            try
+            {
+                if (_tokenProjects.Count > 0)
+                {
+                    project = _tokenProjects.First(p =>
+                    {
+                        return p.ParatextProjectId == message.ParatextProjectId
+                               && p.TokenizationType == message.TokenizationType;
+                    }) ?? null;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
+            
+            // existing project
+            if (project is not null)
+            {
+                await Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+                        var metadata = project.Metadata;
+
+                        CurrentTokenizedTextCorpus = project.TokenizedTextCorpus;
+                        TokenizationType = project.TokenizationType;
+                        CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
+
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Getting book '{CurrentBook?.Code}'...",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Working
+                            }), cancellationToken);
+
+                        // get the rows for the current book and chapter
+                        var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                            .GetRows()
+                            .WithCancellation(localCancellationToken)
+                            .Cast<TokensTextRow>()
+                            .Where(ttr => ttr
+                                .Tokens
+                                .Count(t => t
+                                    .TokenId
+                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                            .ToList();
+
+
+                        // get the row for the current verse
+                        int index = 0;
+                        for (int i = 0; i < tokensTextRows.Count; i++)
+                        {
+                            var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+
+                            if (verseRef.VerseNum == CurrentBcv.VerseNum)
+                            {
+                                index = i;
+                                break;
+                            }
+                        }
+
+                        var lowEnd = index - VerseOffsetRange;
+                        if (lowEnd < 0)
+                            lowEnd = 0;
+
+                        var upperEnd = index + VerseOffsetRange;
+
+                        // filter down to only these verses
+                        var offset = upperEnd - lowEnd + 1;
+                        var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
+
+
+                        OnUIThread(() =>
+                        {
+                            Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                            ProgressBarVisibility = Visibility.Collapsed;
+                        });
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Completed
+                            }), cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!localCancellationToken.IsCancellationRequested)
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                                new BackgroundTaskStatus
+                                {
+                                    Name = "Fetch Book",
+                                    EndTime = DateTime.Now,
+                                    ErrorMessage = $"{ex}",
+                                    TaskStatus = StatusEnum.Error
+                                }), cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _handleAsyncRunning = false;
+                        _cancellationTokenSource.Dispose();
+                    }
+                }, cancellationToken);
+            }
+            else
+            {
+                // current project
+                await Task.Factory.StartNew(async () =>
+                {
+                    try
+                    {
+                        ParatextProjectMetadata metadata;
+
+                        if (message.ParatextProjectId == _projectManager?.ManuscriptGuid.ToString())
+                        {
+                            // our fake Manuscript corpus
+                            var bookInfo = new BookInfo();
+                            var books = bookInfo.GenerateScriptureBookList();
+
+                            metadata = new ParatextProjectMetadata
+                            {
+                                Id = _projectManager.ManuscriptGuid.ToString(),
+                                CorpusType = CorpusType.Manuscript,
+                                Name = "Manuscript",
+                                AvailableBooks = books,
+                            };
+
+                        }
+                        else
+                        {
+                            // regular Paratext corpus
+                            var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                            if (result.Success && result.HasData)
+                            {
+                                metadata = result.Data.FirstOrDefault(b =>
+                                               b.Id == message.ParatextProjectId.Replace("-", "")) ??
+                                           throw new InvalidOperationException();
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException(result.Message);
+                            }
+
+                        }
+
+                        CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+
+                        TokenizationType = message.TokenizationType;
+
+                        CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
+
+                        // add this corpus to our master list
+                        _tokenProjects.Add(new TokenProject
+                        {
+                            ParatextProjectId = message.ParatextProjectId,
+                            ProjectName = message.ProjectName,
+                            TokenizationType = message.TokenizationType,
+                            CorpusId = message.CorpusId,
+                            TokenizedTextCorpusId = message.TokenizedTextCorpusId,
+                            Metadata = metadata,
+                            TokenizedTextCorpus = CurrentTokenizedTextCorpus,
+                        });
+
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Getting book '{CurrentBook?.Code}'...",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Working
+                            }), cancellationToken);
+
+                        // get the rows for the current book and chapter
+                        var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                            .GetRows()
+                            .WithCancellation(localCancellationToken)
+                            .Cast<TokensTextRow>()
+                            .Where(ttr => ttr
+                                .Tokens
+                                .Count(t => t
+                                    .TokenId
+                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                            .ToList();
+
+
+                        // get the row for the current verse
+                        int index = 0;
+                        for (int i = 0; i < tokensTextRows.Count; i++)
+                        {
+                            var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+
+                            if (verseRef.VerseNum == CurrentBcv.VerseNum)
+                            {
+                                index = i;
+                                break;
+                            }
+                        }
+
+                        var lowEnd = index - VerseOffsetRange;
+                        if (lowEnd < 0)
+                            lowEnd = 0;
+
+                        var upperEnd = index + VerseOffsetRange;
+
+                        // filter down to only these verses
+                        var offset = upperEnd - lowEnd + 1;
+                        var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
+
+
+                        OnUIThread(() =>
+                        {
+                            Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                            ProgressBarVisibility = Visibility.Collapsed;
+                        });
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                                StartTime = DateTime.Now,
+                                TaskStatus = StatusEnum.Completed
+                            }), cancellationToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!localCancellationToken.IsCancellationRequested)
+                        {
+                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                                new BackgroundTaskStatus
+                                {
+                                    Name = "Fetch Book",
+                                    EndTime = DateTime.Now,
+                                    ErrorMessage = $"{ex}",
+                                    TaskStatus = StatusEnum.Error
+                                }), cancellationToken);
+                        }
+                    }
+                    finally
+                    {
+                        _handleAsyncRunning = false;
+                        _cancellationTokenSource.Dispose();
+                    }
+                }, cancellationToken);
+            }
+
+
 
             ProgressBarVisibility = Visibility.Visible;
 
@@ -457,7 +728,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
                         if (result.Success && result.HasData)
                         {
-                            metadata = result.Data.FirstOrDefault(b => b.Id == message.ParatextProjectId.Replace("-", "")) ?? throw new InvalidOperationException();
+                            metadata = result.Data.FirstOrDefault(b =>
+                                           b.Id == message.ParatextProjectId.Replace("-", "")) ??
+                                       throw new InvalidOperationException();
                         }
                         else
                         {
@@ -466,11 +739,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     }
 
-                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(_projectManager.Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
 
                     TokenizationType = message.TokenizationType;
 
-                    CurrentBook = metadata?.AvailableBooks.First();
+                    CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
@@ -481,21 +754,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             TaskStatus = StatusEnum.Working
                         }), cancellationToken);
 
-                    var tokensTextRows =
-                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
-                            .GetRows()
-                            .WithCancellation(localCancellationToken)
-                            .Cast<TokensTextRow>()
-                            .Where(ttr => ttr
-                                .Tokens
-                                .Count(t => t
-                                    .TokenId
-                                    .ChapterNumber == CurrentBook?.Number) > 0)
-                            .ToList();
+                    // get the rows for the current book and chapter
+                    var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                        .GetRows()
+                        .WithCancellation(localCancellationToken)
+                        .Cast<TokensTextRow>()
+                        .Where(ttr => ttr
+                            .Tokens
+                            .Count(t => t
+                                .TokenId
+                                .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                        .ToList();
+
+
+                    // get the row for the current verse
+                    int index = 0;
+                    for (int i = 0; i < tokensTextRows.Count; i++)
+                    {
+                        var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+
+                        if (verseRef.VerseNum == CurrentBcv.VerseNum)
+                        {
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    var lowEnd = index - VerseOffsetRange;
+                    if (lowEnd < 0)
+                        lowEnd = 0;
+
+                    var upperEnd = index + VerseOffsetRange;
+
+                    // filter down to only these verses
+                    var offset = upperEnd - lowEnd + 1;
+                    var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
+
 
                     OnUIThread(() =>
                     {
-                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                        Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -544,30 +842,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenDoubleClicked(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) double-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            if (e.TokenDisplay.HasNote)
+            if (e.TokenDisplayViewModel.HasNote)
             {
                 // DisplayNote(e);
             }
 
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -579,7 +877,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenMouseWheel(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) mouse wheel";
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -623,25 +921,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteDoubleClicked(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) double-clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteRightButtonDown(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) right-clicked";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) hovered";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -653,13 +951,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteMouseWheel(NoteEventArgs e)
         {
-            Message = $"'{e.TokenDisplay.Note}' note for token ({e.TokenDisplay.Token.TokenId}) mouse wheel";
+            Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TranslationApplied(TranslationEventArgs e)
         {
-            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             NotifyOfPropertyChange(nameof(Message));
 
             TranslationControlVisibility = Visibility.Hidden;
@@ -677,7 +975,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteApplied(NoteEventArgs e)
         {
-            Message = $"Note '{e.TokenDisplay.Note}' applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
+            Message = $"Note '{e.Note.Text}' applied to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
             // NoteControlVisibility = Visibility.Hidden;

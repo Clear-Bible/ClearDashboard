@@ -1,10 +1,13 @@
 ﻿using Autofac;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
+using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
@@ -50,7 +53,7 @@ namespace ClearDashboard.Wpf.Application
 
             builder.RegisterType<ParallelCorpusStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
-                .WithMetadata("Order", 1); 
+                .WithMetadata("Order", 1);
 
             //builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
             //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
@@ -65,7 +68,6 @@ namespace ClearDashboard.Wpf.Application
             //    .WithMetadata("Order", 4);
 
         }
-
     }
 
 
@@ -73,6 +75,15 @@ namespace ClearDashboard.Wpf.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
+
+            //serviceCollection.AddScoped<ProjectDbContext>();
+            //serviceCollection.AddScoped<ProjectDbContextFactory>();
+            //serviceCollection.AddScoped<SqliteDatabaseConnectionInterceptor>();
+
+            builder.RegisterType<ProjectDbContext>().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectDbContextFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<SqliteDatabaseConnectionInterceptor>().InstancePerLifetimeScope();
+
             builder.OverrideFoundationDependencies();
             builder.RegisterValidationDependencies();
             builder.RegisterLocalizationDependencies();
