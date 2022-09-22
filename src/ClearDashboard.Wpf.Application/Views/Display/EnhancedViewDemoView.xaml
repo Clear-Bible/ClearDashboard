@@ -56,7 +56,7 @@
                                    Margin="50,10"
                                    Title="Latin -> Ooga word translation (interlinear gloss)"
                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   Tokens="{Binding Verse1}" 
+                                   Tokens="{Binding VerseTokens}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -260,17 +260,17 @@
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="7" Orientation="Vertical">
             <userControls:TranslationSelector Visibility="{Binding TranslationControlVisibility}"
-                                             TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
+                                             TokenDisplayViewModel="{Binding CurrentToken}"
                                              TranslationOptions="{Binding TranslationOptions}"
                                              SelectedItem="{Binding CurrentTranslationOption}"
                                              cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
 
             <userControls:NoteCollectionDisplay Visibility="{Binding NoteControlVisibility}"
-                                       Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
-                                       EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
+                                       Title="{Binding CurrentToken.SurfaceText}"
+                                       EntityId="{Binding CurrentToken.Token.TokenId}"
                                        InnerMargin="0,0,0,30"
-                                       Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
+                                       Notes="{Binding CurrentToken.Notes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelSuggestions="{Binding LabelSuggestions}"

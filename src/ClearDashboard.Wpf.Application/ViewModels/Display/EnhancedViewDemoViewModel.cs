@@ -1,72 +1,149 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
-using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Autofac;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Notes;
+using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-//using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.UserControls;
+using Autofac;
+using Caliburn.Micro;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
-using CorpusClass = ClearDashboard.DAL.Alignment.Corpora.Corpus;
-using EngineToken = ClearBible.Engine.Corpora.Token;
-using ClearDashboard.Wpf.Application.Events;
-using Dapper;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
-
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
+        #region Mock data
+
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
-        private static readonly string _greekNtUsfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "nestle1904");
-
-        private static ITextCorpus GetSampleEnglishTextCorpus()
+        private static IEnumerable<TokensTextRow>? _mockCorpus;
+        private static IEnumerable<TokensTextRow>? MockCorpus => _mockCorpus ??= new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _usfmTestProjectPath)
+                                                                                                        .Tokenize<LatinWordTokenizer>()
+                                                                                                        .Transform<IntoTokensTextRowProcessor>()
+                                                                                                        .Transform<SetTrainingBySurfaceTokensTextRowProcessor>()
+                                                                                                        .Cast<TokensTextRow>();
+        // ReSharper disable once InconsistentNaming
+        private static TokensTextRow? MockVerseTextRow(int BBBCCCVVV)
         {
-            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _usfmTestProjectPath)
-                .Tokenize<LatinWordTokenizer>()
-                .Transform<IntoTokensTextRowProcessor>()
-                .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
+            return MockCorpus?.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
         }
 
-        private static ITextCorpus GetSampleGreekTextCorpus()
+        private static readonly List<string> _mockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
+        private static int _mockTranslationWordIndexer;
+        private static string MockTranslationWord
         {
-            return new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _greekNtUsfmTestProjectPath)
-                .Tokenize<LatinWordTokenizer>()
-                .Transform<IntoTokensTextRowProcessor>();
+            get
+            {
+                var result = _mockOogaWords[_mockTranslationWordIndexer++];
+                if (_mockTranslationWordIndexer == _mockOogaWords.Count) _mockTranslationWordIndexer = 0;
+                return result;
+            }
         }
 
-        public string? Message { get; set; }
-        public IEnumerable<TokenDisplayViewModel>? Verse1 { get; set; }
-        public Note CurrentNote { get; set; }
-        public TokenDisplayViewModel CurrentTokenDisplayViewModel { get; set; }
+        private static string MockTranslationStatus => new Random().Next(3) switch
+                                                            {
+                                                                0 => "FromTranslationModel",
+                                                                1 => "FromOther",
+                                                                _ => "Assigned"
+                                                            };
+
+        private static ObservableCollection<Label> MockLabelSuggestions => new()
+                                                            {
+                                                                new Label { Text = "alfa" },
+                                                                new Label { Text = "bravo" },
+                                                                new Label { Text = "charlie" },
+                                                                new Label { Text = "delta" },
+                                                                new Label { Text = "echo" }
+                                                            };
+
+        #endregion
+
+        private ObservableCollection<Label> GetLabelSuggestions()
+        {
+            return MockLabelSuggestions;
+        }
+
+        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(TokensTextRow textRow)
+        {
+            var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+            return detokenizer.Detokenize(textRow.Tokens);
+        }
+
+        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(IEnumerable<TokensTextRow>? corpus, int BBBCCCVVV)
+        {
+            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
+            if (textRow != null)
+            {
+                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+                return detokenizer.Detokenize(textRow.Tokens);
+            }
+
+            return null;
+        }
+
+        private async Task LoadFiles()
+        {
+            var corpus = MockCorpus;
+
+            VerseTokens = GetTokenDisplays(corpus, 40001001);
+            NotifyOfPropertyChange(nameof(VerseTokens));
+
+            var note1 = new Note
+            {
+                Text = "This is a note",
+                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                //Labels = GetLabels()
+            };
+
+            var note2 = new Note
+            {
+                Text = "Here's another note",
+                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                //Labels = GetLabels()
+            };
+
+            VerseTokens.First().Notes.Add(note1);
+            VerseTokens.First().Notes.Add(note2);
+
+            //NotifyOfPropertyChange(nameof(CurrentNote));
+        }
+
+        private Visibility _translationControlVisibility = Visibility.Collapsed;
+
+
+        public IEnumerable<TokenDisplayViewModel>? VerseTokens { get; set; }
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
+        public IEnumerable<Label> LabelSuggestions { get; set; }
+        public TokenDisplayViewModel CurrentToken { get; set; }
         public TranslationOption CurrentTranslationOption { get; set; }
 
-        public IEnumerable<Label> SampleLabels { get; set; }
-        public IEnumerable<Label> LabelSuggestions { get; set; }
+        public string? Message { get; set; }
+
+        public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
+
+        public Visibility TranslationControlVisibility
+        {
+            get => _translationControlVisibility;
+            set => _translationControlVisibility = value;
+        }
+
 
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
@@ -102,7 +179,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             if (e.TokenDisplayViewModel.HasNote)
             {
-                DisplayNote(e.TokenDisplayViewModel);
+                DisplayNotePane(e.TokenDisplayViewModel);
             }
 
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
@@ -123,7 +200,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TranslationClicked(TranslationEventArgs e)
         {
-            DisplayTranslation(e);
+            DisplayTranslationPane(e);
 
             Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
             NotifyOfPropertyChange(nameof(Message));
@@ -263,22 +340,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
-
-        // ReSharper restore UnusedMember.Global
-
-        #endregion
-
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            GetLabelSuggestions();
+            LabelSuggestions = GetLabelSuggestions();
             GetLabels();
 
             await base.OnActivateAsync(cancellationToken);
             await LoadFiles();
-            //await MockProjectAndUser();
-            //await RetrieveTokensViaCorpusClass();
         }
+
+
+        // ReSharper restore UnusedMember.Global
+
+        #endregion
 
         private ObservableCollection<Label> GetLabels()
         {
@@ -298,64 +372,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt).Select(lt => new Label {Text = lt}));
         }        
         
-        private void GetLabelSuggestions()
-        {
-            var labels = new List<Label>
-            {
-                new Label {Text="alfa"},
-                new Label {Text="bravo"},
-                new Label {Text="charlie"},
-                new Label {Text="delta"},
-                new Label {Text="echo"}
-            };
-
-            LabelSuggestions = labels;
-            NotifyOfPropertyChange(nameof(LabelSuggestions));
-        }
-
-        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
-
-        private string RandomTranslationOriginatedFrom()
-        {
-            switch (new Random().Next(3))
-            {
-                case 0: return "FromTranslationModel";
-                case 1: return "FromOther";
-                default: return "Assigned";
-            }
-        }
-
-        private static int mockOogaWordsIndexer_;
-
-        private string GetMockOogaWord()
-        {
-            var result = MockOogaWords[mockOogaWordsIndexer_++];
-            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
-            return result;
-        }
-
         private Translation GetTranslation(Token token)
         {
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
-                ? GetMockOogaWord()
+                ? MockTranslationWord
                 : String.Empty;
-            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
+            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: MockTranslationStatus);
             
             return translation;
         }
         
-        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
-        {
-            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
-            if (textRow != null)
-            {
-                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                return detokenizer.Detokenize(textRow.Tokens);
-            }
-
-            return null;
-        }
-
         private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
         {
             var result = new List<TranslationOption>();
@@ -371,20 +397,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             for (var i = 1; i < optionCount - 1; i++)
             {
                 var percentage = random.NextDouble() * remainingPercentage;
-                result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
+                result.Add(new TranslationOption { Word = MockTranslationWord, Probability = percentage });
                 remainingPercentage -= percentage;
             }
 
-            result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
+            result.Add(new TranslationOption { Word = MockTranslationWord, Probability = remainingPercentage });
 
             return result.OrderByDescending(to => to.Probability);
         }
 
-        private List<TokenDisplayViewModel> GetTokenDisplays(IEnumerable<TokensTextRow> corpus, int BBBCCCVVV)
+        private List<TokenDisplayViewModel> GetTokenDisplays(IEnumerable<TokensTextRow>? corpus, int BBBCCCVVV)
         {
             var tokenDisplays = new List<TokenDisplayViewModel>();
 
-            var tokens = GetTokens(corpus, BBBCCCVVV);
+            var tokens = GetPaddedTokens(corpus, BBBCCCVVV);
             if (tokens != null)
             {
                 tokenDisplays.AddRange(from token in tokens 
@@ -395,90 +421,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return tokenDisplays;
         }
 
-        public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
-
-        private void DisplayTranslation(TranslationEventArgs e)
+        private void SetCurrentToken(TokenDisplayViewModel viewModel)
         {
-            TranslationControlVisibility = Visibility.Visible;
-
-            CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
-            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
-            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
-
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
-            NotifyOfPropertyChange(nameof(TranslationOptions));
-            NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+            CurrentToken = viewModel;
+            NotifyOfPropertyChange(nameof(CurrentToken));
         }
 
-        public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
-        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
+        private void DisplayTranslationPane(TranslationEventArgs e)
+        {
+            SetCurrentToken(e.TokenDisplayViewModel);
+
+            TranslationControlVisibility = Visibility.Visible;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+
+            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+            NotifyOfPropertyChange(nameof(TranslationOptions));
+
+            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
+            NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+
+        }
+
+        private void DisplayNotePane(TokenDisplayViewModel tokenDisplayViewModel)
         {
             NoteControlVisibility = Visibility.Visible;
-            CurrentTokenDisplayViewModel = tokenDisplayViewModel;
-        
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
-        }
 
-        private async Task LoadFiles()
-        {
-            var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
-
-            Verse1 = GetTokenDisplays(corpus, 40001001);
-
-            CurrentNote = new Note
-            {
-                Text = "This is a note",
-                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                //Labels = GetLabels()
-            };
-
-            var note2 = new Note
-            {
-                Text = "Here's another note",
-                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                //Labels = GetLabels()
-            };
-
-            Verse1.First().Notes.Add(CurrentNote); 
-            Verse1.First().Notes.Add(note2); 
-            
-            NotifyOfPropertyChange(nameof(Verse1));
-            NotifyOfPropertyChange(nameof(CurrentNote));
-        }
-
-        private async Task MockProjectAndUser()
-        {
-            //ProjectManager.CurrentProject = new DataAccessLayer.Models.Project
-            //{
-            //    Id = Guid.Parse("13A06172-71F1-44AD-97EF-BB473A7B84BD"),
-            //    ProjectName = "Alignment"
-            //};
-            //ProjectManager.CurrentUser = new User
-            //{
-            //    Id = Guid.Parse("75413790-4A32-482B-9A11-36BFBBC0AF9C"),
-            //    FirstName = "Test",
-            //    LastName = "User"
-            //};
-            //await ProjectManager.CreateNewProject("Alignment");
-        }
-
-        public async Task RetrieveTokensViaCorpusClass()
-        {
-            //try
-            //{
-            //    var corpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedCorpusId(Guid.Parse("1C641B25-DE5E-4F37-B0EE-3EE43AC79E10")));
-            //    var book = corpus.Where(row => ((VerseRef)row.Ref).BookNum == 40);
-            //    var chapter = book.Where(row => ((VerseRef)row.Ref).ChapterNum == 1);
-            //    var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as TokensTextRow;
-            //    DatabaseVerseTokens = new VerseTokens("40", "1", verse.Tokens.Where(t => t.TokenId.BookNumber == 40), true);
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //    throw;
-            //}
+            SetCurrentToken(tokenDisplayViewModel);
         }
     }
 }
