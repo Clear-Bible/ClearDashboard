@@ -49,8 +49,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow)
         {
-//            var sourceCompositeTokenIds = engineParallelTextRow.Select(e => e.SourceTokens.Where(st => st.GetType() == typeof(CompositeToken)).SelectMany(t => t.TokenId));
-            var sourceTokenIds = engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId));
+            return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)));
+        }
+
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds)
+        {
             var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds));
             if (result.Success && result.Data != null)
             {
