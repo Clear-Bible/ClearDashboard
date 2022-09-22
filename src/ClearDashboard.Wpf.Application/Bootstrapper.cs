@@ -81,6 +81,9 @@ namespace ClearDashboard.Wpf.Application
 
         protected override async Task NavigateToMainWindow()
         {
+            //EnsureApplicationMainWindowVisible();
+            //NavigateToViewModel<EnhancedViewDemoViewModel>();
+
             await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }
 
