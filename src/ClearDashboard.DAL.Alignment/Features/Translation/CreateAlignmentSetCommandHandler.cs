@@ -11,7 +11,9 @@ using Microsoft.Extensions.Logging;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ModelVerificationType = ClearDashboard.DataAccessLayer.Models.AlignmentVerification;
 using ModelOriginatedType = ClearDashboard.DataAccessLayer.Models.AlignmentOriginatedFrom;
-
+using System.Data.Common;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Text.Json;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -142,6 +144,70 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     success: false,
                     message: e.Message
                 );
+            }
+        }
+
+        private DbCommand CreateAlignmentInsertCommand()
+        {
+            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId" };
+
+            ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
+
+            return command;
+        }
+
+        private static async Task InsertAlignmentAsync(Models.Alignment alignment, DbCommand command, CancellationToken cancellationToken)
+        {
+            command.Parameters["@Id"].Value = alignment.Id;
+            command.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
+            command.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
+            command.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification.ToString();
+            command.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom.ToString();
+            command.Parameters["@Score"].Value = alignment.Score;
+            command.Parameters["@AlignmentSetId"].Value = alignment.AlignmentSetId;
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        private DbCommand CreateAlignmentSetInsertCommand()
+        {
+            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "Metadata", "UserId", "Created" };
+
+            ApplyColumnsToCommand(command, typeof(Models.TokenizedCorpus), columns);
+
+            return command;
+        }
+
+        private async Task InsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, DbCommand command, CancellationToken cancellationToken)
+        {
+            var converter = new DateTimeOffsetToBinaryConverter();
+
+            command.Parameters["@Id"].Value = (Guid.Empty != alignmentSet.Id) ? alignmentSet.Id : Guid.NewGuid();
+            command.Parameters["@ParallelCorpusId"].Value = alignmentSet.ParallelCorpusId;
+            command.Parameters["@DisplayName"].Value = alignmentSet.DisplayName;
+            command.Parameters["@SmtModel"].Value = alignmentSet.SmtModel;
+            command.Parameters["@IsSyntaxTreeAlignerRefined"].Value = alignmentSet.IsSyntaxTreeAlignerRefined;
+            command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(alignmentSet.Metadata);
+            command.Parameters["@UserId"].Value = Guid.Empty != alignmentSet.UserId ? alignmentSet.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
+            command.Parameters["@Created"].Value = converter.ConvertToProvider(alignmentSet.Created);
+
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        {
+            command.CommandText =
+            $@"
+                INSERT INTO {type.Name} ({string.Join(", ", columns)})
+                VALUES ({string.Join(", ", columns.Select(c => "@" + c))})
+            ";
+
+            foreach (var column in columns)
+            {
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = $"@{column}";
+                command.Parameters.Add(parameter);
             }
         }
     }
