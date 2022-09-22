@@ -24,5 +24,10 @@ namespace ClearDashboard.Wpf.Application.Views.Startup
         {
             InitializeComponent();
         }
+
+        private void ProjectSetupView_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ProjectName.Focus();
+        }
     }
 }

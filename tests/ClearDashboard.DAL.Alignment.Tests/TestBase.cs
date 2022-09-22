@@ -55,7 +55,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {ProjectName}");
-            var assets = await factory?.Get(ProjectName)!;
+            var assets = await factory?.Get(ProjectName, true)!;
             ProjectDbContext= assets.ProjectDbContext;
 
 

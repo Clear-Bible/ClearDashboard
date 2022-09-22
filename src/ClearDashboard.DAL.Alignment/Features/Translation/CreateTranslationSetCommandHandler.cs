@@ -66,7 +66,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 return new RequestResult<TranslationSet>(new TranslationSet(
                     ModelHelper.BuildTranslationSetId(translationSetModel),
                     ModelHelper.BuildParallelCorpusId(translationSetModel.ParallelCorpus!),
-                    request.TranslationModel,
                     _mediator));
 
             }
