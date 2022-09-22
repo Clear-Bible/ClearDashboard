@@ -26,6 +26,14 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using System.Transactions;
+using System.Windows.Documents;
+using SIL.Scripture;
+using SIL.Spelling;
+using Microsoft.EntityFrameworkCore;
+using ClearBible.Engine.Tokenization;
+using SIL.Machine.Tokenization;
+using EngineToken = ClearBible.Engine.Corpora.Token;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -214,11 +222,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private ObservableCollection<VersesDisplay> _verseDisplay = new();
-        public ObservableCollection<VersesDisplay> VerseDisplay
+        private VersesDisplay _versesDisplay = new();
+        public VersesDisplay VersesDisplay
         {
-            get => _verseDisplay;
-            set => Set(ref _verseDisplay, value);
+            get => _versesDisplay;
+            set => Set(ref _versesDisplay, value);
         }
 
         
@@ -607,10 +615,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         }
 
+                        // get the entirety of text for this corpus
                         CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
-
                         TokenizationType = message.TokenizationType;
-
                         CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
                         // add this corpus to our master list
@@ -651,7 +658,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         int index = 0;
                         for (int i = 0; i < tokensTextRows.Count; i++)
                         {
-                            var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+                            var verseRef = (VerseRef)tokensTextRows[i].Ref;
 
                             if (verseRef.VerseNum == CurrentBcv.VerseNum)
                             {
@@ -670,10 +677,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var offset = upperEnd - lowEnd + 1;
                         var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
 
+                        // combine verse list into one TokensTextRow
+                        ObservableCollection<List<TokenDisplayViewModel>> verses = new();
+                        
+                        foreach (var verseRangeRow in verseRangeRows)
+                        {
+                            var verseRef = (VerseRef)verseRangeRow.Ref;
+                            List<TokensTextRow> corpus = new List<TokensTextRow>();
+                            corpus.Add(verseRangeRow);
+
+                            var tokens = GetTokens(corpus, verseRef.BBBCCCVVV);
+                            if (tokens != null)
+                            {
+                                var tokenDisplays = new List<TokenDisplayViewModel>();
+                                tokenDisplays.AddRange(from token in tokens
+                                    let translation = GetTranslation(token.token)
+                                    select new TokenDisplayViewModel { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
+                                verses.Add(tokenDisplays);
+                            }
+                        }
+
+                        
 
                         OnUIThread(() =>
                         {
                             Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                            VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
+                            VersesDisplay.Row0Verses = verses;
+                            VersesDisplay.Row0Visibility = Visibility.Visible;
+                            
                             ProgressBarVisibility = Visibility.Collapsed;
                         });
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -837,6 +869,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }, cancellationToken);
 
         }
+
+        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int BBBCCCVVV)
+        {
+            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
+            if (textRow != null)
+            {
+                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+                return detokenizer.Detokenize(textRow.Tokens);
+            }
+
+            return null;
+        }
+
+
+        private Translation GetTranslation(EngineToken token)
+        {
+            var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
+                ? GetMockOogaWord()
+                : String.Empty;
+            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
+
+            return translation;
+        }
+
+        private string RandomTranslationOriginatedFrom()
+        {
+            switch (new Random().Next(3))
+            {
+                case 0: return "FromTranslationModel";
+                case 1: return "FromOther";
+                default: return "Assigned";
+            }
+        }
+
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {

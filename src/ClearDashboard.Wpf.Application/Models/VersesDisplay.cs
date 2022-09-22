@@ -37,8 +37,8 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
         
-        private ObservableCollection<TokenDisplayViewModel>? _row0Verses = new();
-        public ObservableCollection<TokenDisplayViewModel>? Row0Verses
+        private ObservableCollection<List<TokenDisplayViewModel>>? _row0Verses = new();
+        public ObservableCollection<List<TokenDisplayViewModel>>? Row0Verses
         {
             get => _row0Verses;
             set => Set(ref _row0Verses, value);
@@ -72,8 +72,8 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
-        private ObservableCollection<TokenDisplayViewModel>? _row1Verses = new();
-        public ObservableCollection<TokenDisplayViewModel>? Row1Verses
+        private ObservableCollection<List<TokenDisplayViewModel>>? _row1Verses = new();
+        public ObservableCollection<List<TokenDisplayViewModel>>? Row1Verses
         {
             get => _row1Verses;
             set => Set(ref _row1Verses, value);
@@ -107,8 +107,8 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
-        private ObservableCollection<TokenDisplayViewModel>? _row2Verses = new();
-        public ObservableCollection<TokenDisplayViewModel>? Row2Verses
+        private ObservableCollection<List<TokenDisplayViewModel>>? _row2Verses = new();
+        public ObservableCollection<List<TokenDisplayViewModel>>? Row2Verses
         {
             get => _row2Verses;
             set => Set(ref _row2Verses, value);
@@ -142,8 +142,8 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
-        private ObservableCollection<TokenDisplayViewModel>? _row3Verses;
-        public ObservableCollection<TokenDisplayViewModel>? Row3Verses
+        private ObservableCollection<List<TokenDisplayViewModel>>? _row3Verses;
+        public ObservableCollection<List<TokenDisplayViewModel>>? Row3Verses
         {
             get => _row3Verses;
             set => Set(ref _row3Verses, value);
