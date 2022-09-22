@@ -1,0 +1,108 @@
+﻿using ClearBible.Engine.Persistence;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using SIL.Extensions;
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+using ModelVerificationType = ClearDashboard.DataAccessLayer.Models.AlignmentVerification;
+using ModelOriginatedType = ClearDashboard.DataAccessLayer.Models.AlignmentOriginatedFrom;
+
+namespace ClearDashboard.DAL.Alignment.Features.Translation
+{
+    public class PutAlignmentSetAlignmentCommandHandler : ProjectDbContextCommandHandler<PutAlignmentSetAlignmentCommand,
+        RequestResult<object>, object>
+    {
+        private readonly IMediator _mediator;
+
+        public PutAlignmentSetAlignmentCommandHandler(IMediator mediator,
+            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
+            ILogger<PutAlignmentSetAlignmentCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            logger)
+        {
+            _mediator = mediator;
+        }
+
+        protected override async Task<RequestResult<object>> SaveDataAsync(PutAlignmentSetAlignmentCommand request,
+            CancellationToken cancellationToken)
+        {
+            var alignmentSet = ProjectDbContext!.AlignmentSets
+                .Include(ts => ts.ParallelCorpus)
+                .FirstOrDefault(ts => ts.Id == request.AlignmentSetId.Id);
+
+            if (alignmentSet == null)
+            {
+                return new RequestResult<object>
+                (
+                    success: false,
+                    message: $"Invalid AlignmentSetId '{request.AlignmentSetId.Id}' found in request"
+                );
+            }
+
+            if (!Enum.TryParse(request.Alignment.Verification, out ModelVerificationType verificationType))
+            {
+                return new RequestResult<object>
+                (
+                    success: false,
+                    message: $"Invalid alignment verification type '{request.Alignment.Verification}' found in request"
+                );
+            }
+
+            if (!Enum.TryParse(request.Alignment.OriginatedFrom, out ModelOriginatedType originatedType))
+            {
+                return new RequestResult<object>
+                (
+                    success: false,
+                    message: $"Invalid alignment originated from type '{request.Alignment.OriginatedFrom}' found in request"
+                );
+            }
+
+            if (!ProjectDbContext!.TokenComponents
+                .Where(tc => tc.TokenizationId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
+                .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id))
+            {
+                return new RequestResult<object>
+                (
+                    success: false,
+                    message: $"Request alignment token pair source token id '{request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id}' not found in alignment set parallel corpus"
+                );
+            }
+
+            if (!ProjectDbContext!.TokenComponents
+                .Where(tc => tc.TokenizationId == alignmentSet!.ParallelCorpus!.TargetTokenizedCorpusId)
+                .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id))
+            {
+                return new RequestResult<object>
+                (
+                    success: false,
+                    message: $"Request alignment token pair target token id '{request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id}' not found in alignment set parallel corpus"
+                );
+            }
+
+            var alignmentsToRemove = ProjectDbContext!.Alignments
+                .Where(tr => tr.AlignmentSetId == alignmentSet.Id)
+                .Where(tr => tr.SourceTokenComponent!.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id ||
+                             tr.TargetTokenComponent!.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id);
+
+            ProjectDbContext!.Remove(alignmentsToRemove);
+
+            alignmentSet.Alignments.Add(new Models.Alignment
+            {
+                SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id,
+                TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id,
+                Score = request.Alignment.AlignedTokenPair.Score,
+                AlignmentVerification = verificationType,
+                AlignmentOriginatedFrom = originatedType
+            });
+
+            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            return new RequestResult<object>(null);
+        }
+    }
+}
