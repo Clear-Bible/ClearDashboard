@@ -404,10 +404,10 @@
 
 
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="15" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="25" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -565,6 +565,7 @@
             </ListView>
 
             <Label
+                Background="CadetBlue"
                 Grid.Row="1"
                 Grid.Column="0"
                 HorizontalAlignment="Center"
@@ -588,6 +589,8 @@
 
 
             <controls:SidebarExpander
+                Grid.Row="0"
+                Grid.RowSpan="2"
                 Grid.Column="1"
                 mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
@@ -623,7 +626,7 @@
                         TranslationOptions="{Binding TranslationOptions}"
                         Visibility="{Binding TranslationControlVisibility}" />
 
-                    <userControls:NoteCollectionDisplay
+                    <!--<userControls:NoteCollectionDisplay
                         Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
                         cm:Message.Attach="[Event CloseRequested] = [Action CloseRequested($eventArgs)];                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];"
                         EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
@@ -668,7 +671,7 @@
                                 <Binding ElementName="LabelBottomPaddingSlider" Path="Value" />
                             </MultiBinding>
                         </userControls:NoteCollectionDisplay.LabelPadding>
-                    </userControls:NoteCollectionDisplay>
+                    </userControls:NoteCollectionDisplay>-->
                 </StackPanel>
             </controls:SidebarExpander>
 
