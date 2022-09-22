@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -72,7 +73,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the Notes dependency property.
         /// </summary>
-        public static readonly DependencyProperty NotesProperty = DependencyProperty.Register("Notes", typeof(List<Note>), typeof(NoteCollectionDisplay));
+        public static readonly DependencyProperty NotesProperty = DependencyProperty.Register("Notes", typeof(ObservableCollection<Note>), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the LabelBackground dependency property.
@@ -216,9 +217,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets the collection of <see cref="Note"/>s that this control is operating on..
         /// </summary>
-        public List<Note> Notes
+        public ObservableCollection<Note> Notes
         {
-            get => (List<Note>)GetValue(NotesProperty);
+            get => (ObservableCollection<Note>)GetValue(NotesProperty);
             set => SetValue(NotesProperty, value);
         }
 

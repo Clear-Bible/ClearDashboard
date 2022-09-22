@@ -20,8 +20,10 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Utils;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using QuickGraph.Algorithms.RandomWalks;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
@@ -111,6 +113,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
+        private ObservableCollection<Note> MockNotes
+        {
+            get
+            {
+                var result = new ObservableCollection<Note>();
+                var random = new Random().NextDouble();
+                if (random < 0.1)
+                {
+                    result.Add(new Note
+                    {
+                        Text = "This is a note",
+                        //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                        Labels = MockLabels
+                    });
+                }
+
+                if (random < 0.05)
+                {
+                    result.Add(new Note
+                    {
+                        Text = "Here's another note",
+                        //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
+                        Labels = MockLabels
+                    });
+                }
+                return result;
+            }
+        }
+
         private static ObservableCollection<Label> MockLabelSuggestions => new()
                                                             {
                                                                 new Label { Text = "alfa" },
@@ -134,7 +165,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(TokensTextRow textRow)
         {
-            var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
+            var detokenizer = new EngineStringDetokenizer(Detokenizer);
             return detokenizer.Detokenize(textRow.Tokens);
         }
 
@@ -150,6 +181,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
         }
 
+        private ObservableCollection<Note> GetNotes(Token token)
+        {
+#if MOCK
+            return MockNotes;
+#else
+            return new ObservableCollection<Note>(NotesDictionary[token.TokenId]);
+#endif
+        }
+
         private List<TokenDisplayViewModel> GetTokenDisplayViewModels(TokensTextRow tokensTextRow)
         {
             var tokenDisplays = new List<TokenDisplayViewModel>();
@@ -159,12 +199,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 tokenDisplays.AddRange(from token in tokens
                     let translation = GetTranslation(token.token)
+                    let notes = GetNotes(token.token)
                     select new TokenDisplayViewModel
                     {
                         Token = token.token, 
                         PaddingBefore = token.paddingBefore, 
                         PaddingAfter = token.paddingAfter, 
-                        Translation = translation
+                        Translation = translation,
+                        Notes = notes
                     });
             }
 
@@ -178,34 +220,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
 #if !MOCK
             CurrentTranslations = await CurrentTranslationSet.GetTranslations(VerseTokens.Select(t => t.Token.TokenId));
+            NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
 #endif
         }
 
         private async Task LoadFiles()
         {
+#if MOCK
             SetTextRow(MockVerseTextRow(40001001));
+#endif
 
-            var note1 = new Note
-            {
-                Text = "This is a note",
-                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                //Labels = MockLabels()
-            };
-            var note2 = new Note
-            {
-                Text = "Here's another note",
-                //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                //Labels = MockLabels()
-            };
-
-            VerseTokens.First().Notes.Add(note1);
-            VerseTokens.First().Notes.Add(note2);
         }
 
         public IEnumerable<TokenDisplayViewModel>? VerseTokens { get; set; }
         public TokenDisplayViewModel CurrentToken { get; set; }
+        public IDetokenizer<string, string>? Detokenizer { get; set; } = new LatinWordDetokenizer();
         public TranslationOption CurrentTranslationOption { get; set; }
         public TranslationSet CurrentTranslationSet { get; set; }
+        public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
         public IEnumerable<Translation> CurrentTranslations { get; set; }
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
         public IEnumerable<Label> LabelSuggestions { get; set; }
