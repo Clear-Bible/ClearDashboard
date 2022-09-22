@@ -176,7 +176,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             VerseTokens = GetTokenDisplayViewModels(textRow);
             NotifyOfPropertyChange(nameof(VerseTokens));
 
+#if !MOCK
             CurrentTranslations = await CurrentTranslationSet.GetTranslations(VerseTokens.Select(t => t.Token.TokenId));
+#endif
         }
 
         private async Task LoadFiles()
@@ -231,18 +233,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenDoubleClicked(TokenEventArgs e)
-        {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) double-clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void TokenRightButtonDown(TokenEventArgs e)
-        {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
         public void TokenMouseEnter(TokenEventArgs e)
         {
             if (e.TokenDisplayViewModel.HasNote)
@@ -260,35 +250,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenMouseWheel(TokenEventArgs e)
-        {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) mouse wheel";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
         public void TranslationClicked(TranslationEventArgs e)
         {
             DisplayTranslationPane(e);
 
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void TranslationDoubleClicked(TranslationEventArgs e)
-        {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) double-clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void TranslationRightButtonDown(TranslationEventArgs e)
-        {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) right-clicked";
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} clicked";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TranslationMouseEnter(TranslationEventArgs e)
         {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) hovered";
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
@@ -298,51 +270,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TranslationMouseWheel(TranslationEventArgs e)
-        {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) mouse wheel";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void NoteLeftButtonDown(NoteEventArgs e)
-        {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void NoteDoubleClicked(NoteEventArgs e)
-        {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void NoteRightButtonDown(NoteEventArgs e)
-        {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
-            NotifyOfPropertyChange(nameof(Message));
-        }
+            DisplayNotePane(e.TokenDisplayViewModel);
 
-        public void NoteMouseLeave(NoteEventArgs e)
-        {
-            //Message = string.Empty;
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void NoteMouseWheel(NoteEventArgs e)
-        {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
+            Message = $"'Note indicator for token {e.EntityId} hovered";
             NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteCreate(NoteEventArgs e)
         {
-            //DisplayNote(e.TokenDisplayViewModel);
+            DisplayNotePane(e.TokenDisplayViewModel);
+
+            Message = $"Opening new note panel for token {e.EntityId}";
+            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TranslationApplied(TranslationEventArgs e)
