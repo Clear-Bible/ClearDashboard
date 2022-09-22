@@ -1,14 +1,16 @@
 ﻿namespace ClearDashboard.Wpf.Application.Models
 {
+    public enum SmtAlgorithm
+    {
+        FastAlign,
+        IBM4,
+        IBM1,
+        HMM,
+    }
+
     public class AlignmentPlan
     {
-        public enum SMT
-        {
-            FastAlign,
-            IBM4,
-            IBM1,
-            HMM,
-        }
+        
 
         public string Target { get; set; } = "";
         public string TargetID { get; set; } = "";
@@ -18,6 +20,6 @@
         public double CleanUsfmProgress { get; set; } = 0;
         public bool IsAlignmentComplete { get; set; } = false;
         public double AlignmentProgress { get; set; } = 0;
-        public SMT AlignmentSMT { get; set; } = SMT.FastAlign;
+        public SmtAlgorithm SmtAlgorithm { get; set; } = SmtAlgorithm.FastAlign;
     }
 }

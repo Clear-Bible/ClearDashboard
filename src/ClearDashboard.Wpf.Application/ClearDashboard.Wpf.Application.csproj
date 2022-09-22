@@ -79,7 +79,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearApplicationFoundation" Version="1.0.26" />
+    <PackageReference Include="ClearApplicationFoundation" Version="1.0.27" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
@@ -290,6 +290,9 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\Shell\ShellView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\Project\SmtModelDialog\SmtModelStepView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
