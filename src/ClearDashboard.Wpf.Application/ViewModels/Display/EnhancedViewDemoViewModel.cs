@@ -1,4 +1,7 @@
-﻿using System;
+﻿// Use mock data
+#define MOCK
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -63,6 +66,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                                                                 1 => "FromOther",
                                                                 _ => "Assigned"
                                                             };
+        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        {
+            var result = new List<TranslationOption>();
+
+            var random = new Random();
+            var optionCount = random.Next(4) + 2;     // 2-5 options
+            var remainingPercentage = 100d;
+
+            var basePercentage = random.NextDouble() * remainingPercentage;
+            result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
+            remainingPercentage -= basePercentage;
+
+            for (var i = 1; i < optionCount - 1; i++)
+            {
+                var percentage = random.NextDouble() * remainingPercentage;
+                result.Add(new TranslationOption { Word = MockTranslationWord, Probability = percentage });
+                remainingPercentage -= percentage;
+            }
+
+            result.Add(new TranslationOption { Word = MockTranslationWord, Probability = remainingPercentage });
+
+            return result.OrderByDescending(to => to.Probability);
+        }
+
+        private ObservableCollection<Label> MockLabels
+        {
+            get
+            {
+                var labelSuggestions = LabelSuggestions.ToList();
+                var labelTexts = new List<string>();
+                var numLabels = new Random().Next(4);
+
+                for (var i = 0; i <= numLabels; i++)
+                {
+                    var labelIndex = new Random().Next(LabelSuggestions.Count());
+                    if (!labelTexts.Contains(labelSuggestions[labelIndex].Text))
+                    {
+                        labelTexts.Add(labelSuggestions[labelIndex].Text);
+                    }
+                }
+
+                return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt).Select(lt => new Label { Text = lt }));
+            }
+        }
 
         private static ObservableCollection<Label> MockLabelSuggestions => new()
                                                             {
@@ -75,9 +122,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         #endregion
 
-        private ObservableCollection<Label> GetLabelSuggestions()
+        private async Task<ObservableCollection<Label>> GetLabelSuggestions()
         {
+#if MOCK
             return MockLabelSuggestions;
+#else
+            var labels = await Label.GetAll(Mediator);
+            return new ObservableCollection<Label>(labels);
+#endif
         }
 
         private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(TokensTextRow textRow)
@@ -86,64 +138,80 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return detokenizer.Detokenize(textRow.Tokens);
         }
 
-        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(IEnumerable<TokensTextRow>? corpus, int BBBCCCVVV)
+        private Translation GetTranslation(Token token)
         {
-            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
-            if (textRow != null)
+#if MOCK
+            var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
+                ? MockTranslationWord
+                : String.Empty;
+            return new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: MockTranslationStatus);
+#else
+            return CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId == token.TokenId);
+#endif
+        }
+
+        private List<TokenDisplayViewModel> GetTokenDisplayViewModels(TokensTextRow tokensTextRow)
+        {
+            var tokenDisplays = new List<TokenDisplayViewModel>();
+            var tokens = GetPaddedTokens(tokensTextRow);
+            
+            if (tokens != null)
             {
-                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                return detokenizer.Detokenize(textRow.Tokens);
+                tokenDisplays.AddRange(from token in tokens
+                    let translation = GetTranslation(token.token)
+                    select new TokenDisplayViewModel
+                    {
+                        Token = token.token, 
+                        PaddingBefore = token.paddingBefore, 
+                        PaddingAfter = token.paddingAfter, 
+                        Translation = translation
+                    });
             }
 
-            return null;
+            return tokenDisplays;
+        }
+
+        private async Task SetTextRow(TokensTextRow textRow)
+        {
+            VerseTokens = GetTokenDisplayViewModels(textRow);
+            NotifyOfPropertyChange(nameof(VerseTokens));
+
+            CurrentTranslations = await CurrentTranslationSet.GetTranslations(VerseTokens.Select(t => t.Token.TokenId));
         }
 
         private async Task LoadFiles()
         {
-            var corpus = MockCorpus;
-
-            VerseTokens = GetTokenDisplays(corpus, 40001001);
-            NotifyOfPropertyChange(nameof(VerseTokens));
+            SetTextRow(MockVerseTextRow(40001001));
 
             var note1 = new Note
             {
                 Text = "This is a note",
                 //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                //Labels = GetLabels()
+                //Labels = MockLabels()
             };
-
             var note2 = new Note
             {
                 Text = "Here's another note",
                 //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                //Labels = GetLabels()
+                //Labels = MockLabels()
             };
 
             VerseTokens.First().Notes.Add(note1);
             VerseTokens.First().Notes.Add(note2);
-
-            //NotifyOfPropertyChange(nameof(CurrentNote));
         }
 
-        private Visibility _translationControlVisibility = Visibility.Collapsed;
-
-
         public IEnumerable<TokenDisplayViewModel>? VerseTokens { get; set; }
-        public IEnumerable<TranslationOption> TranslationOptions { get; set; }
-        public IEnumerable<Label> LabelSuggestions { get; set; }
         public TokenDisplayViewModel CurrentToken { get; set; }
         public TranslationOption CurrentTranslationOption { get; set; }
+        public TranslationSet CurrentTranslationSet { get; set; }
+        public IEnumerable<Translation> CurrentTranslations { get; set; }
+        public IEnumerable<TranslationOption> TranslationOptions { get; set; }
+        public IEnumerable<Label> LabelSuggestions { get; set; }
 
         public string? Message { get; set; }
 
-        public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
-
-        public Visibility TranslationControlVisibility
-        {
-            get => _translationControlVisibility;
-            set => _translationControlVisibility = value;
-        }
-
+        public Visibility NotePaneVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility TranslationPaneVisibility { get; set; } = Visibility.Collapsed;
 
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
@@ -155,7 +223,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
         }
 
-        #region Event Handlers
+#region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
@@ -282,8 +350,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             NotifyOfPropertyChange(nameof(Message));
 
-            TranslationControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+            TranslationPaneVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
         }
 
         public void TranslationCancelled(RoutedEventArgs e)
@@ -291,8 +359,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = "Translation cancelled.";
             NotifyOfPropertyChange(nameof(Message));
 
-            TranslationControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+            TranslationPaneVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
         }        
         
         public void NoteAdded(NoteEventArgs e)
@@ -300,8 +368,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NotePaneVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
         public void NoteUpdated(NoteEventArgs e)
@@ -309,8 +377,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NotePaneVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
         public void NoteDeleted(NoteEventArgs e)
@@ -318,8 +386,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NotePaneVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
         public void LabelSelected(LabelEventArgs e)
@@ -336,14 +404,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void CloseRequested(RoutedEventArgs args)
         {
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            NotePaneVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            LabelSuggestions = GetLabelSuggestions();
-            GetLabels();
+            LabelSuggestions = await GetLabelSuggestions();
+            //MockLabels();
 
             await base.OnActivateAsync(cancellationToken);
             await LoadFiles();
@@ -352,74 +420,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         // ReSharper restore UnusedMember.Global
 
-        #endregion
+#endregion
 
-        private ObservableCollection<Label> GetLabels()
-        {
-            var labelSuggestions = LabelSuggestions.ToList();
-            var labelTexts = new List<string>();
-            var numLabels = new Random().Next(4);
-
-            for (var i = 0; i <= numLabels; i++)
-            {
-                var labelIndex = new Random().Next(LabelSuggestions.Count());
-                if (!labelTexts.Contains(labelSuggestions[labelIndex].Text))
-                {
-                    labelTexts.Add(labelSuggestions[labelIndex].Text);
-                }
-            }
-
-            return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt).Select(lt => new Label {Text = lt}));
-        }        
         
-        private Translation GetTranslation(Token token)
-        {
-            var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
-                ? MockTranslationWord
-                : String.Empty;
-            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: MockTranslationStatus);
-            
-            return translation;
-        }
-        
-        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
-        {
-            var result = new List<TranslationOption>();
-
-            var random = new Random();
-            var optionCount = random.Next(4) + 2;     // 2-5 options
-            var remainingPercentage = 100d;
-
-            var basePercentage = random.NextDouble() * remainingPercentage;
-            result.Add(new TranslationOption {Word = sourceTranslation, Probability = basePercentage});
-            remainingPercentage -= basePercentage;
-
-            for (var i = 1; i < optionCount - 1; i++)
-            {
-                var percentage = random.NextDouble() * remainingPercentage;
-                result.Add(new TranslationOption { Word = MockTranslationWord, Probability = percentage });
-                remainingPercentage -= percentage;
-            }
-
-            result.Add(new TranslationOption { Word = MockTranslationWord, Probability = remainingPercentage });
-
-            return result.OrderByDescending(to => to.Probability);
-        }
-
-        private List<TokenDisplayViewModel> GetTokenDisplays(IEnumerable<TokensTextRow>? corpus, int BBBCCCVVV)
-        {
-            var tokenDisplays = new List<TokenDisplayViewModel>();
-
-            var tokens = GetPaddedTokens(corpus, BBBCCCVVV);
-            if (tokens != null)
-            {
-                tokenDisplays.AddRange(from token in tokens 
-                    let translation = GetTranslation(token.token) 
-                    select new TokenDisplayViewModel { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
-            }
-
-            return tokenDisplays;
-        }
 
         private void SetCurrentToken(TokenDisplayViewModel viewModel)
         {
@@ -431,23 +434,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             SetCurrentToken(e.TokenDisplayViewModel);
 
-            TranslationControlVisibility = Visibility.Visible;
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+            TranslationPaneVisibility = Visibility.Visible;
+            NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
 
             TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
             NotifyOfPropertyChange(nameof(TranslationOptions));
 
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
-
         }
 
         private void DisplayNotePane(TokenDisplayViewModel tokenDisplayViewModel)
         {
-            NoteControlVisibility = Visibility.Visible;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
-
             SetCurrentToken(tokenDisplayViewModel);
+
+            NotePaneVisibility = Visibility.Visible;
+            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
     }
 }
