@@ -15,7 +15,7 @@ namespace ClearDashboard.Wpf.Application.Models
     {
         #region Row0
 
-        private Visibility _Row0Visiblity = Visibility.Visible;
+        private Visibility _Row0Visiblity = Visibility.Collapsed;
         public Visibility Row0Visibility
         {
             get => _Row0Visiblity;

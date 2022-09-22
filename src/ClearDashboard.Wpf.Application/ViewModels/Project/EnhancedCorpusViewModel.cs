@@ -705,7 +705,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
                             VersesDisplay.Row0Verses = verses;
                             VersesDisplay.Row0Visibility = Visibility.Visible;
-                            
+                            NotifyOfPropertyChange(() => VersesDisplay);
+
                             ProgressBarVisibility = Visibility.Collapsed;
                         });
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
