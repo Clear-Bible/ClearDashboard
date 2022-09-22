@@ -1,5 +1,8 @@
-﻿using ClearDashboard.DataAccessLayer.Data.Models;
+﻿using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data.Interceptors;
+using ClearDashboard.DataAccessLayer.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -7,11 +10,11 @@ namespace ClearDashboard.DataAccessLayer.Data
 {
     public interface IProjectNameDbContextFactory<TDbContext> where TDbContext : DbContext
     {
-        Task<ProjectAssets> Get(string projectName);
-        Task<TDbContext> GetDatabaseContext(string projectName);
+        Task<ProjectAssets> Get(string projectName, bool migrate = false);
+        Task<TDbContext> GetDatabaseContext(string projectName, bool migrate = false);
     }
 
-    public class ProjectDbContextFactory : IProjectNameDbContextFactory<ProjectDbContext>
+    public class ProjectDbContextFactory : IProjectNameDbContextFactory<ProjectDbContext>, IDisposable
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<ProjectDbContextFactory>? _logger;
@@ -24,7 +27,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             _logger = logger;
         }
 
-        public async Task<ProjectAssets> Get(string projectName)
+        public async Task<ProjectAssets> Get(string projectName, bool migrate = false)
         {
             projectName = projectName.Replace(" ", "_");
             ProjectAssets = new ProjectAssets
@@ -33,19 +36,27 @@ namespace ClearDashboard.DataAccessLayer.Data
                 ProjectDirectory = EnsureProjectDirectory(projectName),
             };
 
-            ProjectAssets.ProjectDbContext = await GetProjectDbContext(ProjectAssets.DataContextPath);
+            ProjectAssets.ProjectDbContext = await GetProjectDbContext(ProjectAssets.DataContextPath, migrate);
             return ProjectAssets;
-
         }
 
-        public async Task<ProjectDbContext> GetDatabaseContext(string projectName)
+        public async Task<ProjectDbContext> GetDatabaseContext(string projectName, bool migrate = false)
         {
-           return await GetProjectDbContext(EnsureProjectDirectory(projectName));
+           return await GetProjectDbContext(EnsureProjectDirectory(projectName), migrate);
         }
 
-        private async Task<ProjectDbContext> GetProjectDbContext(string fullPath)
+        private async Task<ProjectDbContext> GetProjectDbContext(string fullPath, bool migrate = false)
         {
             var context = _serviceProvider.GetService<ProjectDbContext>();
+
+            //var userProvider = _serviceProvider.GetService<IUserProvider>();
+            //var sqliteDatabaseInterceptorLogger =
+            //    _serviceProvider.GetService<ILogger<SqliteDatabaseConnectionInterceptor>>();
+            //var connectionInterceptor = new SqliteDatabaseConnectionInterceptor(sqliteDatabaseInterceptorLogger, this);
+
+            //var dcContextLogger = _serviceProvider.GetService<ILogger<ProjectDbContext>>();
+            //var context = new ProjectDbContext(dcContextLogger, userProvider, connectionInterceptor);
+
             if (context != null)
             {
                 try
@@ -55,7 +66,11 @@ namespace ClearDashboard.DataAccessLayer.Data
                     //    _logger.LogInformation($"Attempting to create or migrate '{fullPath}'");
                     //}
                     context.DatabasePath = fullPath;
-                    await context.Migrate();
+
+                    if (migrate)
+                    {
+                        await context.Migrate();
+                    }
                 }
                 catch (Exception? ex)
                 {
@@ -87,6 +102,24 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
 
             return directoryPath;
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            // TODO release unmanaged resources here
+            ProjectAssets?.ProjectDbContext?.Dispose();
+
+        }
+
+        public void Dispose()
+        {
+            ReleaseUnmanagedResources();
+            GC.SuppressFinalize(this);
+        }
+
+        ~ProjectDbContextFactory()
+        {
+            ReleaseUnmanagedResources();
         }
     }
 }

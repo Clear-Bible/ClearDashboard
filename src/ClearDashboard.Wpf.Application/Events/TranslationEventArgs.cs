@@ -6,7 +6,7 @@ namespace ClearDashboard.Wpf.Application.Events
 {
     public class TranslationEventArgs : RoutedEventArgs
     {
-        public TokenDisplay TokenDisplay { get; set; }
+        public TokenDisplayViewModel TokenDisplayViewModel { get; set; }
 
         public Translation Translation { get; set; }
         public string TranslationActionType { get; set; }
