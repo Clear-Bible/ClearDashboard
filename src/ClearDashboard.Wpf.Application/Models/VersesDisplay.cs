@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -15,14 +16,25 @@ namespace ClearDashboard.Wpf.Application.Models
     {
         #region Row0
 
-        private Visibility _Row0Visiblity = Visibility.Collapsed;
+        private Visibility _row0Visiblity = Visibility.Collapsed;
         public Visibility Row0Visibility
         {
-            get => _Row0Visiblity;
+            get => _row0Visiblity;
             set
             {
-                _Row0Visiblity = value;
+                _row0Visiblity = value;
                 NotifyOfPropertyChange(() => Row0Visibility);
+            }
+        }
+
+        private Brush _row0BorderColor = Brushes.Blue;
+        public Brush Row0BorderColor
+        {
+            get => _row0BorderColor;
+            set
+            {
+                _row0BorderColor = value;
+                NotifyOfPropertyChange(() => Row0BorderColor);
             }
         }
 
@@ -61,6 +73,17 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
+        private Brush _row1BorderColor = Brushes.Blue;
+        public Brush Row1BorderColor
+        {
+            get => _row1BorderColor;
+            set
+            {
+                _row1BorderColor = value;
+                NotifyOfPropertyChange(() => Row1BorderColor);
+            }
+        }
+
         private Visibility _Row1Visiblity = Visibility.Collapsed;
         public Visibility Row1Visibility
         {
@@ -93,6 +116,17 @@ namespace ClearDashboard.Wpf.Application.Models
             {
                 _Row2Visiblity = value;
                 NotifyOfPropertyChange(() => Row2Visibility);
+            }
+        }
+
+        private Brush _row2BorderColor = Brushes.Blue;
+        public Brush Row2BorderColor
+        {
+            get => _row2BorderColor;
+            set
+            {
+                _row2BorderColor = value;
+                NotifyOfPropertyChange(() => Row2BorderColor);
             }
         }
 
@@ -131,6 +165,17 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
+        private Brush _row3BorderColor = Brushes.Blue;
+        public Brush Row3BorderColor
+        {
+            get => _row3BorderColor;
+            set
+            {
+                _row3BorderColor = value;
+                NotifyOfPropertyChange(() => Row3BorderColor);
+            }
+        }
+
         private string _row3title = string.Empty;
         public string Row3Title
         {
@@ -142,7 +187,7 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
-        private ObservableCollection<List<TokenDisplayViewModel>>? _row3Verses;
+        private ObservableCollection<List<TokenDisplayViewModel>>? _row3Verses = new();
         public ObservableCollection<List<TokenDisplayViewModel>>? Row3Verses
         {
             get => _row3Verses;

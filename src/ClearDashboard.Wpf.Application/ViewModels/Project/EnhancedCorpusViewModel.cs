@@ -27,6 +27,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Display;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using System.Transactions;
 using System.Windows.Documents;
+using System.Windows.Media;
 using SIL.Scripture;
 using SIL.Spelling;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private Visibility? _progressBarVisibility = Visibility.Visible;
         private string? _message;
         private BookInfo? _currentBook;
-        
+
         private bool InComingChangesStarted { get; set; }
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
@@ -64,7 +65,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public List<TokenProject> _tokenProjects = new();
 
-        
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -92,7 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
 
                     //TODO regenerate the verses to display
-                    
+
                 }
 
                 _paratextSync = value;
@@ -171,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     NotifyOfPropertyChange(() => VerseChange);
                 }
             }
-        }   
+        }
 
 
 
@@ -188,7 +189,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _tokensTextRows;
             set => Set(ref _tokensTextRows, value);
         }
-        
+
         private string _currentCorpusName = string.Empty;
         public string CurrentCorpusName
         {
@@ -229,7 +230,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _versesDisplay, value);
         }
 
-        
+
         private ObservableCollection<TokensTextRow>? _verses;
         public ObservableCollection<TokensTextRow>? Verses
         {
@@ -245,7 +246,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #endregion //Observable Properties
 
-        
+
         #region Constructor
 
         public EnhancedCorpusViewModel()
@@ -361,7 +362,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
             // we don't want this as it was for demonstration
-            
+
             return;
 
 
@@ -459,7 +460,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
-            
+
             ProgressBarVisibility = Visibility.Visible;
 
             TokenProject? project = null;
@@ -479,271 +480,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 _logger.LogError(e.Message);
             }
-            
+
+            ProgressBarVisibility = Visibility.Visible;
             // existing project
             if (project is not null)
             {
-                await Task.Factory.StartNew(async () =>
-                {
-                    try
-                    {
-                        var metadata = project.Metadata;
-
-                        CurrentTokenizedTextCorpus = project.TokenizedTextCorpus;
-                        TokenizationType = project.TokenizationType;
-                        CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
-
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                            new BackgroundTaskStatus
-                            {
-                                Name = "Fetch Book",
-                                Description = $"Getting book '{CurrentBook?.Code}'...",
-                                StartTime = DateTime.Now,
-                                TaskStatus = StatusEnum.Working
-                            }), cancellationToken);
-
-                        // get the rows for the current book and chapter
-                        var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
-                            .GetRows()
-                            .WithCancellation(localCancellationToken)
-                            .Cast<TokensTextRow>()
-                            .Where(ttr => ttr
-                                .Tokens
-                                .Count(t => t
-                                    .TokenId
-                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
-                            .ToList();
-
-
-                        // get the row for the current verse
-                        int index = 0;
-                        for (int i = 0; i < tokensTextRows.Count; i++)
-                        {
-                            var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
-
-                            if (verseRef.VerseNum == CurrentBcv.VerseNum)
-                            {
-                                index = i;
-                                break;
-                            }
-                        }
-
-                        var lowEnd = index - VerseOffsetRange;
-                        if (lowEnd < 0)
-                            lowEnd = 0;
-
-                        var upperEnd = index + VerseOffsetRange;
-
-                        // filter down to only these verses
-                        var offset = upperEnd - lowEnd + 1;
-                        var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
-
-
-                        OnUIThread(() =>
-                        {
-                            Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
-                            ProgressBarVisibility = Visibility.Collapsed;
-                        });
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                            new BackgroundTaskStatus
-                            {
-                                Name = "Fetch Book",
-                                Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
-                                StartTime = DateTime.Now,
-                                TaskStatus = StatusEnum.Completed
-                            }), cancellationToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!localCancellationToken.IsCancellationRequested)
-                        {
-                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                                new BackgroundTaskStatus
-                                {
-                                    Name = "Fetch Book",
-                                    EndTime = DateTime.Now,
-                                    ErrorMessage = $"{ex}",
-                                    TaskStatus = StatusEnum.Error
-                                }), cancellationToken);
-                        }
-                    }
-                    finally
-                    {
-                        _handleAsyncRunning = false;
-                        _cancellationTokenSource.Dispose();
-                    }
-                }, cancellationToken);
+                await ShowExistingCorpusTokens(message, cancellationToken, project, localCancellationToken);
             }
             else
             {
-                // current project
-                await Task.Factory.StartNew(async () =>
-                {
-                    try
-                    {
-                        ParatextProjectMetadata metadata;
-
-                        if (message.ParatextProjectId == _projectManager?.ManuscriptGuid.ToString())
-                        {
-                            // our fake Manuscript corpus
-                            var bookInfo = new BookInfo();
-                            var books = bookInfo.GenerateScriptureBookList();
-
-                            metadata = new ParatextProjectMetadata
-                            {
-                                Id = _projectManager.ManuscriptGuid.ToString(),
-                                CorpusType = CorpusType.Manuscript,
-                                Name = "Manuscript",
-                                AvailableBooks = books,
-                            };
-
-                        }
-                        else
-                        {
-                            // regular Paratext corpus
-                            var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
-                            if (result.Success && result.HasData)
-                            {
-                                metadata = result.Data.FirstOrDefault(b =>
-                                               b.Id == message.ParatextProjectId.Replace("-", "")) ??
-                                           throw new InvalidOperationException();
-                            }
-                            else
-                            {
-                                throw new InvalidOperationException(result.Message);
-                            }
-
-                        }
-
-                        // get the entirety of text for this corpus
-                        CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
-                        TokenizationType = message.TokenizationType;
-                        CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
-
-                        // add this corpus to our master list
-                        _tokenProjects.Add(new TokenProject
-                        {
-                            ParatextProjectId = message.ParatextProjectId,
-                            ProjectName = message.ProjectName,
-                            TokenizationType = message.TokenizationType,
-                            CorpusId = message.CorpusId,
-                            TokenizedTextCorpusId = message.TokenizedTextCorpusId,
-                            Metadata = metadata,
-                            TokenizedTextCorpus = CurrentTokenizedTextCorpus,
-                        });
-
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                            new BackgroundTaskStatus
-                            {
-                                Name = "Fetch Book",
-                                Description = $"Getting book '{CurrentBook?.Code}'...",
-                                StartTime = DateTime.Now,
-                                TaskStatus = StatusEnum.Working
-                            }), cancellationToken);
-
-                        // get the rows for the current book and chapter
-                        var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
-                            .GetRows()
-                            .WithCancellation(localCancellationToken)
-                            .Cast<TokensTextRow>()
-                            .Where(ttr => ttr
-                                .Tokens
-                                .Count(t => t
-                                    .TokenId
-                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
-                            .ToList();
-
-
-                        // get the row for the current verse
-                        int index = 0;
-                        for (int i = 0; i < tokensTextRows.Count; i++)
-                        {
-                            var verseRef = (VerseRef)tokensTextRows[i].Ref;
-
-                            if (verseRef.VerseNum == CurrentBcv.VerseNum)
-                            {
-                                index = i;
-                                break;
-                            }
-                        }
-
-                        var lowEnd = index - VerseOffsetRange;
-                        if (lowEnd < 0)
-                            lowEnd = 0;
-
-                        var upperEnd = index + VerseOffsetRange;
-
-                        // filter down to only these verses
-                        var offset = upperEnd - lowEnd + 1;
-                        var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
-
-                        // combine verse list into one TokensTextRow
-                        ObservableCollection<List<TokenDisplayViewModel>> verses = new();
-                        
-                        foreach (var verseRangeRow in verseRangeRows)
-                        {
-                            var verseRef = (VerseRef)verseRangeRow.Ref;
-                            List<TokensTextRow> corpus = new List<TokensTextRow>();
-                            corpus.Add(verseRangeRow);
-
-                            var tokens = GetTokens(corpus, verseRef.BBBCCCVVV);
-                            if (tokens != null)
-                            {
-                                var tokenDisplays = new List<TokenDisplayViewModel>();
-                                tokenDisplays.AddRange(from token in tokens
-                                    let translation = GetTranslation(token.token)
-                                    select new TokenDisplayViewModel { Token = token.token, PaddingBefore = token.paddingBefore, PaddingAfter = token.paddingAfter, Translation = translation });
-                                verses.Add(tokenDisplays);
-                            }
-                        }
-
-                        
-
-                        OnUIThread(() =>
-                        {
-                            Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
-                            VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
-                            VersesDisplay.Row0Verses = verses;
-                            VersesDisplay.Row0Visibility = Visibility.Visible;
-                            NotifyOfPropertyChange(() => VersesDisplay);
-
-                            ProgressBarVisibility = Visibility.Collapsed;
-                        });
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                            new BackgroundTaskStatus
-                            {
-                                Name = "Fetch Book",
-                                Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
-                                StartTime = DateTime.Now,
-                                TaskStatus = StatusEnum.Completed
-                            }), cancellationToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (!localCancellationToken.IsCancellationRequested)
-                        {
-                            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                                new BackgroundTaskStatus
-                                {
-                                    Name = "Fetch Book",
-                                    EndTime = DateTime.Now,
-                                    ErrorMessage = $"{ex}",
-                                    TaskStatus = StatusEnum.Error
-                                }), cancellationToken);
-                        }
-                    }
-                    finally
-                    {
-                        _handleAsyncRunning = false;
-                        _cancellationTokenSource.Dispose();
-                    }
-                }, cancellationToken);
+                await ShowNewCorpusTokens(message, cancellationToken, localCancellationToken);
             }
 
+        }
 
-
-            ProgressBarVisibility = Visibility.Visible;
-
+        private async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
+            CancellationToken localCancellationToken)
+        {
+            // current project
             await Task.Factory.StartNew(async () =>
             {
                 try
@@ -763,7 +517,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Manuscript",
                             AvailableBooks = books,
                         };
-
                     }
                     else
                     {
@@ -779,13 +532,149 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             throw new InvalidOperationException(result.Message);
                         }
-
                     }
 
-                    CurrentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
-
+                    // get the entirety of text for this corpus
+                    CurrentTokenizedTextCorpus =
+                        await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
                     TokenizationType = message.TokenizationType;
+                    CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
+                    // add this corpus to our master list
+                    _tokenProjects.Add(new TokenProject
+                    {
+                        ParatextProjectId = message.ParatextProjectId,
+                        ProjectName = message.ProjectName,
+                        TokenizationType = message.TokenizationType,
+                        CorpusId = message.CorpusId,
+                        TokenizedTextCorpusId = message.TokenizedTextCorpusId,
+                        Metadata = metadata,
+                        TokenizedTextCorpus = CurrentTokenizedTextCorpus,
+                    });
+
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Getting book '{CurrentBook?.Code}'...",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Working
+                        }), cancellationToken);
+
+                    // get the rows for the current book and chapter
+                    var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                        .GetRows()
+                        .WithCancellation(localCancellationToken)
+                        .Cast<TokensTextRow>()
+                        .Where(ttr => ttr
+                            .Tokens
+                            .Count(t => t
+                                .TokenId
+                                .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                        .ToList();
+
+
+                    // get the row for the current verse
+                    int index = 0;
+                    for (int i = 0; i < tokensTextRows.Count; i++)
+                    {
+                        var verseRef = (VerseRef)tokensTextRows[i].Ref;
+
+                        if (verseRef.VerseNum == CurrentBcv.VerseNum)
+                        {
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    var lowEnd = index - VerseOffsetRange;
+                    if (lowEnd < 0)
+                        lowEnd = 0;
+
+                    var upperEnd = index + VerseOffsetRange;
+
+                    // filter down to only these verses
+                    var offset = upperEnd - lowEnd + 1;
+                    var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
+
+                    // combine verse list into one TokensTextRow
+                    ObservableCollection<List<TokenDisplayViewModel>> verses = new();
+
+                    foreach (var verseRangeRow in verseRangeRows)
+                    {
+                        var verseRef = (VerseRef)verseRangeRow.Ref;
+                        List<TokensTextRow> corpus = new List<TokensTextRow>();
+                        corpus.Add(verseRangeRow);
+
+                        var tokens = GetTokens(corpus, verseRef.BBBCCCVVV);
+                        if (tokens != null)
+                        {
+                            var tokenDisplays = new List<TokenDisplayViewModel>();
+                            tokenDisplays.AddRange(from token in tokens
+                                                   let translation = GetTranslation(token.token)
+                                                   select new TokenDisplayViewModel
+                                                   {
+                                                       Token = token.token,
+                                                       PaddingBefore = token.paddingBefore,
+                                                       PaddingAfter = token.paddingAfter,
+                                                       Translation = translation
+                                                   });
+                            verses.Add(tokenDisplays);
+                        }
+                    }
+
+
+                    OnUIThread(() =>
+                    {
+                        Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                        
+                        UpdateVersesDisplay(message, verses);
+                        NotifyOfPropertyChange(() => VersesDisplay);
+
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    });
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                            StartTime = DateTime.Now,
+                            TaskStatus = StatusEnum.Completed
+                        }), cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    if (!localCancellationToken.IsCancellationRequested)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                EndTime = DateTime.Now,
+                                ErrorMessage = $"{ex}",
+                                TaskStatus = StatusEnum.Error
+                            }), cancellationToken);
+                    }
+                }
+                finally
+                {
+                    _handleAsyncRunning = false;
+                    _cancellationTokenSource.Dispose();
+                }
+            }, cancellationToken);
+        }
+
+        private async Task ShowExistingCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
+            TokenProject project, CancellationToken localCancellationToken)
+        {
+            await Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    var metadata = project.Metadata;
+
+                    CurrentTokenizedTextCorpus = project.TokenizedTextCorpus;
+                    TokenizationType = project.TokenizationType;
                     CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -833,10 +722,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var offset = upperEnd - lowEnd + 1;
                     var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
 
+                    // combine verse list into one TokensTextRow
+                    ObservableCollection<List<TokenDisplayViewModel>> verses = new();
+
+                    foreach (var verseRangeRow in verseRangeRows)
+                    {
+                        var verseRef = (VerseRef)verseRangeRow.Ref;
+                        List<TokensTextRow> corpus = new List<TokensTextRow>();
+                        corpus.Add(verseRangeRow);
+
+                        var tokens = GetTokens(corpus, verseRef.BBBCCCVVV);
+                        if (tokens != null)
+                        {
+                            var tokenDisplays = new List<TokenDisplayViewModel>();
+                            tokenDisplays.AddRange(from token in tokens
+                                                   let translation = GetTranslation(token.token)
+                                                   select new TokenDisplayViewModel
+                                                   {
+                                                       Token = token.token,
+                                                       PaddingBefore = token.paddingBefore,
+                                                       PaddingAfter = token.paddingAfter,
+                                                       Translation = translation
+                                                   });
+                            verses.Add(tokenDisplays);
+                        }
+                    }
+
 
                     OnUIThread(() =>
                     {
                         Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+
+                        UpdateVersesDisplay(message, verses);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -868,7 +785,62 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _cancellationTokenSource.Dispose();
                 }
             }, cancellationToken);
+        }
 
+        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses)
+        {
+            // same color as defined in SharedVisualTemplates.xaml
+            Brush brush = Brushes.Blue;
+            switch (message.CorpusType)
+            {
+                case CorpusType.Standard:
+                    var converter = new BrushConverter();
+                    brush = (Brush)converter.ConvertFromString("#7FC9FF");
+                    break;
+                case CorpusType.BackTranslation:
+                    brush = Brushes.Orange;
+                    break;
+                case CorpusType.Resource:
+                    brush = Brushes.PaleGoldenrod;
+                    break;
+                case CorpusType.Unknown:
+                    brush = Brushes.Silver;
+                    break;
+                case CorpusType.Manuscript:
+                    brush = Brushes.MediumOrchid;
+                    break;
+            }
+
+            if (VersesDisplay.Row0Verses.Count == 0)
+            {
+                VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
+                VersesDisplay.Row0Verses = verses;
+                VersesDisplay.Row0Visibility = Visibility.Visible;
+                VersesDisplay.Row0BorderColor = brush;
+            }
+            else if (VersesDisplay.Row1Verses.Count == 0)
+            {
+                VersesDisplay.Row1Title = message.ProjectName + " - " + message.TokenizationType;
+                VersesDisplay.Row1Verses = verses;
+                VersesDisplay.Row1Visibility = Visibility.Visible;
+                VersesDisplay.Row1BorderColor = brush;
+            }
+            else if (VersesDisplay.Row2Verses.Count == 0)
+            {
+                VersesDisplay.Row2Title = message.ProjectName + " - " + message.TokenizationType;
+                VersesDisplay.Row2Verses = verses;
+                VersesDisplay.Row2Visibility = Visibility.Visible;
+                VersesDisplay.Row2BorderColor = brush;
+            }
+            else
+            {
+                VersesDisplay.Row3Title = message.ProjectName + " - " + message.TokenizationType;
+                VersesDisplay.Row3Verses = verses;
+                VersesDisplay.Row3Visibility = Visibility.Visible;
+                VersesDisplay.Row3BorderColor = brush;
+            }
+
+            NotifyOfPropertyChange(() => VersesDisplay);
         }
 
         private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int BBBCCCVVV)
