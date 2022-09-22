@@ -1,39 +1,34 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Features.Bcv;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
-using Note = ClearDashboard.DAL.Alignment.Notes.Note;
-using System.Transactions;
-using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
-using SIL.Scripture;
-using SIL.Spelling;
-using Microsoft.EntityFrameworkCore;
-using ClearBible.Engine.Tokenization;
-using SIL.Machine.Tokenization;
 using EngineToken = ClearBible.Engine.Corpora.Token;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -45,6 +40,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>
     {
+
+        #region Commands
+
+        public ICommand MoveCorpusDownRow0 { get; set; }
+        public ICommand MoveCorpusDownRow1 { get; set; }
+        public ICommand MoveCorpusDownRow2 { get; set; }
+
+        public ICommand MoveCorpusUpRow1 { get; set; }
+        public ICommand MoveCorpusUpRow2 { get; set; }
+        public ICommand MoveCorpusUpRow3 { get; set; }
+
+
+
+        #endregion
+
 
         #region Member Variables
         private readonly ILogger<EnhancedCorpusViewModel> _logger;
@@ -266,6 +276,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             //BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
+
+
+            MoveCorpusDownRow0 = new RelayCommand(MoveCorpusDown0);
+            MoveCorpusDownRow1 = new RelayCommand(MoveCorpusDown1);
+            MoveCorpusDownRow2 = new RelayCommand(MoveCorpusDown2);
+
+            MoveCorpusUpRow1 = new RelayCommand(MoveCorpusUp1);
+            MoveCorpusUpRow2 = new RelayCommand(MoveCorpusUp2);
+            MoveCorpusUpRow3 = new RelayCommand(MoveCorpusUp3);
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -627,7 +646,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     OnUIThread(() =>
                     {
                         Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
-                        
+
                         UpdateVersesDisplay(message, verses);
                         NotifyOfPropertyChange(() => VersesDisplay);
 
@@ -873,6 +892,153 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case 0: return "FromTranslationModel";
                 case 1: return "FromOther";
                 default: return "Assigned";
+            }
+        }
+
+        private void MoveCorpusDown0(object obj)
+        {
+            SwitchCorpusRowsDown(0);
+        }
+        private void MoveCorpusDown1(object obj)
+        {
+            SwitchCorpusRowsDown(1);
+        }
+        private void MoveCorpusDown2(object obj)
+        {
+            SwitchCorpusRowsDown(2);
+        }
+
+        private void MoveCorpusUp1(object obj)
+        {
+            SwitchCorpusRowsUp(1);
+        }
+
+        private void MoveCorpusUp2(object obj)
+        {
+            SwitchCorpusRowsUp(2);
+        }
+
+        private void MoveCorpusUp3(object obj)
+        {
+            SwitchCorpusRowsUp(3);
+        }
+
+        private void SwitchCorpusRowsUp(int i)
+        {
+            ObservableCollection<List<TokenDisplayViewModel>> temp;
+            Brush tmpBrush;
+            string tmpTitle;
+
+            switch (i)
+            {
+                case 1:
+                    temp = VersesDisplay.Row0Verses;
+                    tmpBrush = VersesDisplay.Row0BorderColor;
+                    tmpTitle = VersesDisplay.Row0Title;
+
+                    VersesDisplay.Row0Verses = VersesDisplay.Row1Verses;
+                    VersesDisplay.Row0BorderColor = VersesDisplay.Row1BorderColor;
+                    VersesDisplay.Row0Title = VersesDisplay.Row1Title;
+
+                    VersesDisplay.Row1Verses = temp;
+                    VersesDisplay.Row1BorderColor = tmpBrush;
+                    VersesDisplay.Row1Title = tmpTitle;
+                    NotifyOfPropertyChange(() => VersesDisplay);
+                    break;
+                case 2:
+                    temp = VersesDisplay.Row1Verses;
+                    tmpBrush = VersesDisplay.Row1BorderColor;
+                    tmpTitle = VersesDisplay.Row1Title;
+
+                    VersesDisplay.Row1Verses = VersesDisplay.Row2Verses;
+                    VersesDisplay.Row1BorderColor = VersesDisplay.Row2BorderColor;
+                    VersesDisplay.Row1Title = VersesDisplay.Row2Title;
+
+                    VersesDisplay.Row2Verses = temp;
+                    VersesDisplay.Row2BorderColor = tmpBrush;
+                    VersesDisplay.Row2Title = tmpTitle;
+                    NotifyOfPropertyChange(() => VersesDisplay);
+                    break;
+
+                case 3:
+                    temp = VersesDisplay.Row2Verses;
+                    tmpBrush = VersesDisplay.Row2BorderColor;
+                    tmpTitle = VersesDisplay.Row2Title;
+
+                    VersesDisplay.Row2Verses = VersesDisplay.Row3Verses;
+                    VersesDisplay.Row2BorderColor = VersesDisplay.Row3BorderColor;
+                    VersesDisplay.Row2Title = VersesDisplay.Row3Title;
+
+                    VersesDisplay.Row3Verses = temp;
+                    VersesDisplay.Row3BorderColor = tmpBrush;
+                    VersesDisplay.Row3Title = tmpTitle;
+                    NotifyOfPropertyChange(() => VersesDisplay);
+                    break;
+            }
+        }
+
+
+        private void SwitchCorpusRowsDown(int i)
+        {
+            ObservableCollection<List<TokenDisplayViewModel>> temp;
+            Brush tmpBrush;
+            string tmpTitle;
+
+            switch (i)
+            {
+                case 0:
+
+                    if (VersesDisplay.Row1Verses.Count > 0)
+                    {
+                        temp = VersesDisplay.Row0Verses;
+                        tmpBrush = VersesDisplay.Row0BorderColor;
+                        tmpTitle = VersesDisplay.Row0Title;
+
+                        VersesDisplay.Row0Verses = VersesDisplay.Row1Verses;
+                        VersesDisplay.Row0BorderColor = VersesDisplay.Row1BorderColor;
+                        VersesDisplay.Row0Title = VersesDisplay.Row1Title;
+
+                        VersesDisplay.Row1Verses = temp;
+                        VersesDisplay.Row1BorderColor = tmpBrush;
+                        VersesDisplay.Row1Title = tmpTitle;
+                        NotifyOfPropertyChange(() => VersesDisplay);
+                    }
+                    break;
+                case 1:
+                    if (VersesDisplay.Row2Verses.Count > 0)
+                    {
+                        temp = VersesDisplay.Row1Verses;
+                        tmpBrush = VersesDisplay.Row1BorderColor;
+                        tmpTitle = VersesDisplay.Row1Title;
+
+                        VersesDisplay.Row1Verses = VersesDisplay.Row2Verses;
+                        VersesDisplay.Row1BorderColor = VersesDisplay.Row2BorderColor;
+                        VersesDisplay.Row1Title = VersesDisplay.Row2Title;
+
+                        VersesDisplay.Row2Verses = temp;
+                        VersesDisplay.Row2BorderColor = tmpBrush;
+                        VersesDisplay.Row2Title = tmpTitle;
+                        NotifyOfPropertyChange(() => VersesDisplay);
+                    }
+                    break;
+
+                case 2:
+                    if (VersesDisplay.Row3Verses.Count > 0)
+                    {
+                        temp = VersesDisplay.Row2Verses;
+                        tmpBrush = VersesDisplay.Row2BorderColor;
+                        tmpTitle = VersesDisplay.Row2Title;
+
+                        VersesDisplay.Row2Verses = VersesDisplay.Row3Verses;
+                        VersesDisplay.Row2BorderColor = VersesDisplay.Row3BorderColor;
+                        VersesDisplay.Row2Title = VersesDisplay.Row3Title;
+
+                        VersesDisplay.Row3Verses = temp;
+                        VersesDisplay.Row3BorderColor = tmpBrush;
+                        VersesDisplay.Row3Title = tmpTitle;
+                        NotifyOfPropertyChange(() => VersesDisplay);
+                    }
+                    break;
             }
         }
 

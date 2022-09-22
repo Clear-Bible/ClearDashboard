@@ -1,19 +1,18 @@
 ﻿<UserControl
     x:Class="ClearDashboard.Wpf.Application.Views.Project.EnhancedCorpusView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     d:DataContext="{d:DesignInstance Type=project:EnhancedCorpusViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -337,7 +336,7 @@
 
                     <!--  Row 0  -->
                     <Border
-                        x:Name="border0"
+                        x:Name="Border0"
                         Margin="2"
                         Padding="3"
                         BorderBrush="{Binding VersesDisplay.Row0BorderColor}"
@@ -361,7 +360,7 @@
                                         Height="20"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
-                                <Button>
+                                <Button Command="{Binding MoveCorpusDownRow0}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
@@ -378,7 +377,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row0Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border0, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                    Width="{Binding ActualWidth, ElementName=Border0, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row0Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -420,7 +419,7 @@
 
                     <!--  Row 1  -->
                     <Border
-                        x:Name="border1"
+                        x:Name="Border1"
                         Margin="2"
                         Padding="3"
                         BorderBrush="{Binding VersesDisplay.Row1BorderColor}"
@@ -433,7 +432,7 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button IsEnabled="True">
+                                <Button Command="{Binding MoveCorpusUpRow1}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
@@ -444,7 +443,7 @@
                                         Height="20"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
-                                <Button>
+                                <Button Command="{Binding MoveCorpusDownRow1}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
@@ -461,7 +460,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row1Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border1, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                    Width="{Binding ActualWidth, ElementName=Border1, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row1Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -503,7 +502,7 @@
 
                     <!--  Row 2  -->
                     <Border
-                        x:Name="border2"
+                        x:Name="Border2"
                         Margin="2"
                         Padding="3"
                         BorderBrush="{Binding VersesDisplay.Row2BorderColor}"
@@ -516,7 +515,7 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button IsEnabled="True">
+                                <Button Command="{Binding MoveCorpusUpRow2}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
@@ -527,7 +526,7 @@
                                         Height="20"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
-                                <Button>
+                                <Button Command="{Binding MoveCorpusDownRow2}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
@@ -544,7 +543,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row2Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border2, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                    Width="{Binding ActualWidth, ElementName=Border2, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row2Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -586,7 +585,7 @@
 
                     <!--  Row 3  -->
                     <Border
-                        x:Name="border3"
+                        x:Name="Border3"
                         Margin="2"
                         Padding="3"
                         BorderBrush="{Binding VersesDisplay.Row3BorderColor}"
@@ -599,7 +598,7 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button IsEnabled="True">
+                                <Button Command="{Binding MoveCorpusUpRow3}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
@@ -610,7 +609,7 @@
                                         Height="20"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
-                                <Button>
+                                <Button IsEnabled="False">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
@@ -627,7 +626,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row3Title}" />
 
                                 <ListView
-                                    Width="{Binding ActualWidth, ElementName=border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                    Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row3Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                     ScrollViewer.IsDeferredScrollingEnabled="True"
