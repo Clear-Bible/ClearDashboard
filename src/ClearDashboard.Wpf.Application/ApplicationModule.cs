@@ -7,7 +7,6 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
@@ -36,6 +35,14 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();
         }
 
+        public static void RegisterDatabaseDependencies(this ContainerBuilder builder)
+        {
+            builder.RegisterType<ProjectDbContext>().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectDbContextFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<SqliteDatabaseConnectionInterceptor>().InstancePerLifetimeScope();
+
+        }
+
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)
         {
 
@@ -48,6 +55,13 @@ namespace ClearDashboard.Wpf.Application
                 .WithMetadata("Order", 2); 
         }
 
+        //public static void RegisterSmtModelDialogDependencies(this ContainerBuilder builder)
+        //{
+        //    builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
+        //        .Keyed<IWorkflowStepViewModel>("SmtModelDialog")
+        //        .WithMetadata("Order", 1);
+        //}
+
         public static void RegisterParallelCorpusDialogDependencies(this ContainerBuilder builder)
         {
 
@@ -55,13 +69,13 @@ namespace ClearDashboard.Wpf.Application
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
                 .WithMetadata("Order", 1);
 
-            //builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
-            //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
-            //    .WithMetadata("Order", 2);
+            builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+                .WithMetadata("Order", 2);
 
-            //builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
-            //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
-            //    .WithMetadata("Order", 3);
+            builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+                .WithMetadata("Order", 3);
 
             //builder.RegisterType<AlignmentSetStepViewModel>().As<IWorkflowStepViewModel>()
             //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
@@ -80,15 +94,13 @@ namespace ClearDashboard.Wpf.Application
             //serviceCollection.AddScoped<ProjectDbContextFactory>();
             //serviceCollection.AddScoped<SqliteDatabaseConnectionInterceptor>();
 
-            builder.RegisterType<ProjectDbContext>().InstancePerLifetimeScope();
-            builder.RegisterType<ProjectDbContextFactory>().InstancePerLifetimeScope();
-            builder.RegisterType<SqliteDatabaseConnectionInterceptor>().InstancePerLifetimeScope();
-
+            builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
             builder.RegisterValidationDependencies();
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
             builder.RegisterParallelCorpusDialogDependencies();
+            //builder.RegisterSmtModelDialogDependencies();
         }
 
     }

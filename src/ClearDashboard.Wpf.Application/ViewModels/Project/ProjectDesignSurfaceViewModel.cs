@@ -31,6 +31,7 @@ using System.Windows.Controls;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog;
 using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
 
 // ReSharper disable once CheckNamespace
@@ -1257,6 +1258,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public async void TrainSmtModel()
+        {
+            var dialogViewModel = IoC.Get<SmtModelDialogViewModel>();
+
+            if (dialogViewModel is IDialog dialog)
+            {
+                dialog.DialogMode = DialogMode.Add;
+            }
+
+            var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+        }
+
         public async Task AddParallelCorpus(ConnectionViewModel newConnection)
         {
             //await _projectManager.InvokeDialog<ParallelCorpusDialogViewModel>(
@@ -1288,8 +1301,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             var dialogViewModel = IoC.Get<ParallelCorpusDialogViewModel>();
+            dialogViewModel.ConnectionViewModel = newConnection;
+            dialogViewModel.SourceCorpusNodeViewModel = sourceCorpusNode;
+            dialogViewModel.TargetCorpusNodeViewModel = targetCorpusNode;
 
-            dialogViewModel.ParallelCorpus.DisplayName = $"{sourceCorpusNode.Name} - {targetCorpusNode.Name}";
+          
 
             if (dialogViewModel is IDialog dialog)
             {

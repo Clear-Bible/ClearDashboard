@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
@@ -12,6 +13,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
 {
+    private bool _canTrain;
 
     public SmtModelStepViewModel()
     {
@@ -27,6 +29,15 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<P
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
+        CanTrain = true;
+    }
+
+
+    public bool CanTrain
+
+    {
+        get => _canTrain;
+        set => Set(ref _canTrain, value);
     }
 
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -40,5 +51,22 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<P
         ParentViewModel.CurrentStepTitle =
             LocalizationStrings.Get("ParallelCorpusDialog_TrainSmtModel", Logger);
         return base.OnActivateAsync(cancellationToken);
+    }
+
+    public async void Train()
+    {
+        try
+        {
+            await ParentViewModel!.TrainSmtModel();
+            await MoveForwards();
+        }
+        catch (Exception ex)
+        {
+            ParentViewModel!.Cancel();
+        }
+        
+
+
+
     }
 }

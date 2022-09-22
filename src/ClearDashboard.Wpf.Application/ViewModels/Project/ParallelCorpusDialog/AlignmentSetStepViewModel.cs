@@ -30,6 +30,22 @@ public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewMod
         CanOk = true;
         EnableControls = true;
 
+        CanAdd = true;
+
+    }
+
+    private bool _canAdd;
+    public bool CanAdd
+    {
+        get => _canAdd;
+        set => Set(ref _canAdd, value);
+    }
+
+    private string _alignmentSetDisplayName;
+    public string AlignmentSetDisplayName
+    {
+        get => _alignmentSetDisplayName;
+        set => Set(ref _alignmentSetDisplayName, value);
     }
 
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -55,5 +71,12 @@ public class AlignmentSetStepViewModel : DashboardApplicationWorkflowStepViewMod
     public void Ok()
     {
        ParentViewModel?.Ok();
+    }
+
+    public async void Add()
+    {
+        await ParentViewModel.AddAlignmentSet(AlignmentSetDisplayName);
+
+        ParentViewModel.Ok();
     }
 }

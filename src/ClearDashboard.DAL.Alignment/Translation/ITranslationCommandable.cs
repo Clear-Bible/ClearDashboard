@@ -6,14 +6,16 @@ using SIL.Machine.Utils;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
+    public enum SmtModelType
+    {
+        FastAlign,
+        IBM4,
+        Hmm
+    }
+
     public interface ITranslationCommandable
     {
-        public enum SmtModelType
-        {
-            FastAlign,
-            IBM4,
-            Hmm
-        }
+        
 
         /// <summary>
         /// Used to obtain a trained SMT model from which either alignments can be obtained, or subsequently used to build a syntax tree model from which 

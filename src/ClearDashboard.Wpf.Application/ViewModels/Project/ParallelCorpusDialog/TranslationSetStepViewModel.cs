@@ -12,6 +12,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 public class TranslationSetStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
 {
+    private bool _canAdd;
+    private string _translationSetDisplayName;
 
     public TranslationSetStepViewModel()
     {
@@ -27,6 +29,28 @@ public class TranslationSetStepViewModel : DashboardApplicationWorkflowStepViewM
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
+        CanAdd = true;
+
+    }
+
+    public bool CanAdd
+    {
+        get => _canAdd;
+        set => Set(ref _canAdd, value);
+    }
+
+    public string TranslationSetDisplayName
+    {
+        get => _translationSetDisplayName;
+        set => Set(ref _translationSetDisplayName, value);
+    }
+
+
+    public async void Add()
+    {
+        await ParentViewModel!.AddTranslationSet(TranslationSetDisplayName);
+
+        ParentViewModel!.Ok();
 
     }
 
