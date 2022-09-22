@@ -415,7 +415,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                //TokenDisplayViewModel = control?.TokenDisplayViewModel
+                TokenDisplayViewModel = control?.TokenDisplayViewModel
             });
         }
 
