@@ -14,10 +14,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public AlignmentSetId AlignmentSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
-        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRow)
+        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows)
         {
-            var sourceTokenIds = engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId));
-            var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, sourceTokenIds));
+            var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows));
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -41,9 +40,30 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
-        public async void Update()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sourceTrainingText"></param>
+        /// <returns>an enumerable of 
+        /// unique trainingTargetText surfaceTargetText combinations representing one of the target words sourceTrainingText aligned to, and for each
+        /// (A) an enumerable of tokens that comprise the targetVerseMap and (B) the indexes of the tokens with the trainingTargetText and surfaceTargetText</returns>
+        public async Task<IEnumerable<(string trainingTargetText, string surfaceTargetText, IEnumerable<(IEnumerable<Token>, IEnumerable<int>)>)>> GetAlignedTokensAndContext(string sourceTrainingText)
+        {
+            var result = await mediator_.Send(new GetAlignedTokensAndContextQuery(sourceTrainingText));
+            if (result.Success)
+            {
+                return result.Data!;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public async Task Update()
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
+            throw new NotImplementedException();
         }
 
         public static async Task<IEnumerable<(AlignmentSetId alignmentSetId, ParallelCorpusId parallelCorpusId, UserId userId)>> 
@@ -78,6 +98,33 @@ namespace ClearDashboard.DAL.Alignment.Translation
             else
             {
                 throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public static async Task<AlignmentSet> Create(
+                IEnumerable<AlignedTokenPairs> alignedTokenPairs,
+                string? displayName,
+                string smtModel,
+                bool isSyntaxTreeAlignerRefined,
+                Dictionary<string, object> metadata,
+                ParallelCorpusId parallelCorpusId,
+                IMediator mediator)
+        {
+            var createTranslationSetCommandResult = await mediator.Send(new CreateAlignmentSetCommand(
+                alignedTokenPairs.Select(a => new Alignment(a, "Unverified", "FromAlignmentModel")),
+                displayName,
+                smtModel,
+                isSyntaxTreeAlignerRefined,
+                metadata,
+                parallelCorpusId));
+
+            if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
+            {
+                return createTranslationSetCommandResult.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(createTranslationSetCommandResult.Message);
             }
         }
 

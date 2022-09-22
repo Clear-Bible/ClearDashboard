@@ -1,4 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
@@ -23,9 +24,21 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-        public async void Update()
+        public async Task Update(IMediator mediator)
         {
-            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
+            var command = new UpdateParallelCorpusCommand(
+                VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
+                ParallelCorpusId);
+
+            var result = await mediator.Send(command);
+            if (result.Success && result.Data != null)
+            {
+                return;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
         }
 
         public static async Task<ParallelCorpus> Get(

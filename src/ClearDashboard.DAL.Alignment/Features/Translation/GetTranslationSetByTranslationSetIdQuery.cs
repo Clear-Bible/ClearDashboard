@@ -5,5 +5,5 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public record GetTranslationSetByTranslationSetIdQuery(TranslationSetId TranslationSetId) : 
-        ProjectRequestQuery<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, Dictionary<string, Dictionary<string, double>> translationModel)>;
+        ProjectRequestQuery<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>;
 }
