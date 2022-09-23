@@ -22,6 +22,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.Extensions.Logging;
 using SIL.ObjectModel;
 
@@ -683,9 +684,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private bool FiterTerms(object item)
         {
-            return item is PinsDataTable itemDt &&
-                   (itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) ||
-                    itemDt.Notes.Contains(_filterString));
+            var itemDt = (PinsDataTable)item;
+
+            if (itemDt.Gloss is null)
+            {
+                return itemDt.Source.Contains(_filterString) || itemDt.Notes.Contains(_filterString);
+            }
+
+            return itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) ||
+                   itemDt.Notes.Contains(_filterString);
+
         }
 
         /// <summary>

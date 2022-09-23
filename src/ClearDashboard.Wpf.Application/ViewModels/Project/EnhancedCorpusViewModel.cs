@@ -179,12 +179,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
 
                     _verseChange = value;
+
+                    VerseChangeRerender();
                     NotifyOfPropertyChange(() => VerseChange);
                 }
             }
         }
-
-
 
         #endregion BCV
 
@@ -663,6 +663,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 catch (Exception ex)
                 {
+                    ProgressBarVisibility = Visibility.Collapsed;
                     if (!localCancellationToken.IsCancellationRequested)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -804,6 +805,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _cancellationTokenSource.Dispose();
                 }
             }, cancellationToken);
+        }
+
+        private void VerseChangeRerender()
+        {
+            var localCancellationToken = _cancellationTokenSource.Token;
+
+            foreach (var tokenProject in _tokenProjects)
+            {
+
+            }
         }
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses)
