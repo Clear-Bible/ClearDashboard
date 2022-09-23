@@ -190,7 +190,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public async void Delete(IMediator mediator, CancellationToken token = default)
+        public async Task Delete(IMediator mediator, CancellationToken token = default)
         {
             if (NoteId == null)
             {
