@@ -56,6 +56,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         $"TargetTokenizedCorpus not found for TokenizedCorpusId '{request.TargetTokenizedCorpusId.Id}'"
                 );
             }
+#if DEBUG
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert ParallelCorpus '{request.DisplayName}' [verse mapping count: {request.VerseMappings.Count()}]");
+            sw.Restart();
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (BEFORE INSERT): {proc.PrivateMemorySize64}");
+#endif
 
             // Create and Save the Parallel Corpus Model
             // + with Verse Mappings
@@ -143,6 +151,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             await ProjectDbContext.SaveChangesAsync();
 
 #if DEBUG
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (AFTER INSERT): {proc.PrivateMemorySize64}");
+
             sw.Stop();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Parallel corpus save (end)");
             sw.Restart();

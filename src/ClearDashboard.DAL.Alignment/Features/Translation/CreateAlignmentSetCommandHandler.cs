@@ -43,16 +43,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var sourceTokenIds = request.Alignments.Select(al => al.AlignedTokenPair.SourceToken.TokenId.Id);
             var targetTokenIds = request.Alignments.Select(al => al.AlignedTokenPair.TargetToken.TokenId.Id);
 
-#if DEBUG
-            sw.Stop();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Query parallel corpus (with {sourceTokenIds.Count()} source tokens) (start)");
-            sw.Restart();
-            Process proc = Process.GetCurrentProcess();
-
-            proc.Refresh();
-            Logger.LogInformation($"Private memory usage (BEFORE PARALLELCORPUS + TOKENS QUERY): {proc.PrivateMemorySize64}");
-#endif
-
             var parallelCorpus = ProjectDbContext!.ParallelCorpa
                 .Include(pc => pc.User)
                 .Include(pc => pc.SourceTokenizedCorpus)
@@ -73,11 +63,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .FirstOrDefault(c => c.Id == request.ParallelCorpusId.Id);
 
 #if DEBUG
-            proc.Refresh();
-            Logger.LogInformation($"Private memory usage (AFTER PARALLELCORPUS + TOKENS QUERY):  {proc.PrivateMemorySize64}");
-
             sw.Stop();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Query parallel corpus (end)");
 #endif
 
             if (parallelCorpus == null)
@@ -88,10 +74,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     message: $"Invalid ParallelCorpusId '{request.ParallelCorpusId.Id}' found in request"
                 );
             }
-
-#if DEBUG
-            //sw.Restart();
-#endif
 
             //var notFoundSourceTokens = sourceTokenIds
             //    .Except(parallelCorpus!.SourceTokenizedCorpus!.TokenComponents
@@ -120,9 +102,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             //}
 
 #if DEBUG
-            //sw.Stop();
-            //Logger.LogInformation($"Elapsed={sw.Elapsed} - Check source/target tokens (end)");
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert AlignmentSet '{request.DisplayName}' and alignments (start) [token counts - source: {sourceTokenIds.Count()}, target: {targetTokenIds.Count()}]");
             sw.Restart();
+            Process proc = Process.GetCurrentProcess();
 
             proc.Refresh();
             Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
@@ -163,7 +145,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             try
             {
-                var alignmentSetModel = new Models.AlignmentSet
+                var alignmentSet = new Models.AlignmentSet
                 {
                     ParallelCorpusId = request.ParallelCorpusId.Id,
                     DisplayName = request.DisplayName,
@@ -191,7 +173,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 using var alignmentInsertCommand = CreateAlignmentInsertCommand();
 
                 var alignmentSetId = await InsertAlignmentSetAsync(
-                    alignmentSetModel, 
+                    alignmentSet, 
                     alignmentSetInsertCommand, 
                     alignmentInsertCommand, 
                     cancellationToken);
