@@ -49,7 +49,7 @@
                 <TextBox.Text>
                     <Binding
                     Mode="TwoWay"
-                    Path="ParentViewModel.ParallelCorpus.DisplayName"
+                    Path="ParallelCorpusDisplayName"
                     UpdateSourceTrigger="PropertyChanged"
                     ValidatesOnDataErrors="True" />
                 </TextBox.Text>
@@ -232,7 +232,7 @@
                     Style="{StaticResource TransparentStyle}"
                     Content="{helpers:Localization Create}" 
                     IsDefault="True"
-                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}">
+                    >
                 <!--<Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Grid>

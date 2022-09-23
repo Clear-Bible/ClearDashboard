@@ -55,6 +55,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<P
 
     public async void Train()
     {
+        CanTrain = false;
         ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {

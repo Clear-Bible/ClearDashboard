@@ -1318,6 +1318,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // get TranslationSet , etc from the dialogViewModel
                 var translationSet = dialogViewModel.TranslationSet;
             }
+            else
+            {
+                CancellationTokenSource.Cancel();
+            }
         }
 
         /// <summary>

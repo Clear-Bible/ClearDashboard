@@ -35,8 +35,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             CanMoveForwards = false;
             CanMoveBackwards = false;
             EnableControls = true;
-            CanOk = true;
-            CanCreate = true;
+            CanOk = false;
+            CanCreate = false;
 
         }
 
@@ -48,6 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             {
                 Set(ref _parallelCorpusDisplayName, value);
                 ValidationResult = Validator.Validate(this);
+                CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
             }
         }
 
@@ -55,6 +56,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         {
             ParentViewModel.CurrentStepTitle =
                 LocalizationStrings.Get("ParallelCorpusDialog_AddParallelRelationship", Logger);
+
+            ParallelCorpusDisplayName =
+                $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name}";
             return base.OnActivateAsync(cancellationToken);
         }
 
@@ -80,6 +84,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public async void Create()
         {
+            CanCreate = false;
             ParentViewModel!.CreateCancellationTokenSource();
             _ = await Task.Factory.StartNew(async () =>
             {

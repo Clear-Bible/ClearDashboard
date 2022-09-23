@@ -33,7 +33,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
         CanOk = true;
         EnableControls = true;
 
-        CanAdd = true;
+        CanAdd = false;
 
     }
 
@@ -52,6 +52,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
         {
             Set(ref _alignmentSetDisplayName, value);
             ValidationResult = Validator.Validate(this);
+            CanAdd = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
         }
     }
 
@@ -82,6 +83,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
 
     public async void Add()
     {
+        CanAdd = false;
         ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {

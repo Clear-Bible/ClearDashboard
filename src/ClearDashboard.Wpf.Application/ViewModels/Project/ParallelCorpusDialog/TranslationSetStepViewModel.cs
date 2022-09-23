@@ -34,7 +34,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
-        CanAdd = true;
+        CanAdd = false;
 
     }
 
@@ -51,12 +51,14 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
         {
             Set(ref _translationSetDisplayName, value);
             ValidationResult = Validator.Validate(this);
+            CanAdd = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
         }
     }
 
 
     public async void Add()
     {
+        CanAdd = false;
         ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {
