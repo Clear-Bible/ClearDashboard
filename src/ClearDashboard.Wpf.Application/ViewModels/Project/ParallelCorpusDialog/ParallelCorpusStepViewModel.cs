@@ -15,11 +15,11 @@ using Microsoft.Extensions.Logging;
 using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
-    
-    public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<ParallelCorpusDialogViewModel, ParallelCorpus>
+
+    public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<ParallelCorpusDialogViewModel, ParallelCorpusStepViewModel>
     {
 
-       
+
 
         public ParallelCorpusStepViewModel()
         {
@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public ParallelCorpusStepViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ParallelCorpusStepViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpus> validator)
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpusStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             CanMoveForwards = false;
@@ -40,7 +40,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         }
 
-     
+        private string _parallelCorpusDisplayName;
+        public string ParallelCorpusDisplayName
+        {
+            get => _parallelCorpusDisplayName;
+            set
+            {
+                Set(ref _parallelCorpusDisplayName, value);
+                ValidationResult = Validator.Validate(this);
+            }
+        }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -71,35 +80,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public async void Create()
         {
-            try 
+            ParentViewModel!.CreateCancellationTokenSource();
+            _ = await Task.Factory.StartNew(async () =>
             {
-                var status = await ParentViewModel?.AddParallelCorpus()!;
-
-                switch (status)
+                try
                 {
-                    case ProcessStatus.Completed:
-                        await MoveForwards();
-                        break;
-                    case ProcessStatus.Failed:
-                        ParentViewModel.Cancel();
-                        break;
-                    case ProcessStatus.NotStarted:
-                        break;
-                    case ProcessStatus.Running:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    var status = await ParentViewModel?.AddParallelCorpus(ParallelCorpusDisplayName)!;
+
+                    switch (status)
+                    {
+                        case ProcessStatus.Completed:
+                            await MoveForwards();
+                            break;
+                        case ProcessStatus.Failed:
+                            ParentViewModel.Cancel();
+                            break;
+                        case ProcessStatus.NotStarted:
+                            break;
+                        case ProcessStatus.Running:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                ParentViewModel!.Cancel();
-            }
+                catch (Exception ex)
+                {
+                    ParentViewModel!.Cancel();
+                }
+            }, ParentViewModel!.CancellationTokenSource!.Token);
         }
 
         protected override ValidationResult? Validate()
         {
-            throw new System.NotImplementedException();
+            return (!string.IsNullOrEmpty(ParallelCorpusDisplayName)) ? Validator.Validate(this) : null;
         }
     }
 }

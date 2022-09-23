@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -11,5 +12,29 @@ namespace ClearDashboard.Wpf.Application.Validators
             RuleFor(x => x.SelectedProject).NotNull();
         }
 
+    }
+
+    public class TranslationSetStepViewModelValidator : AbstractValidator<TranslationSetStepViewModel>
+    {
+        public TranslationSetStepViewModelValidator()
+        {
+            RuleFor(x => x.TranslationSetDisplayName).NotNull();
+        }
+    }
+
+    public class AlignmentSetStepViewModelValidator : AbstractValidator<AlignmentSetStepViewModel>
+    {
+        public AlignmentSetStepViewModelValidator()
+        {
+            RuleFor(x => x.AlignmentSetDisplayName).NotNull();
+        }
+    }
+
+    public class ParallelCorpusStepViewModelValidator : AbstractValidator<ParallelCorpusStepViewModel>
+    {
+        public ParallelCorpusStepViewModelValidator()
+        {
+            RuleFor(x => x.ParallelCorpusDisplayName).NotNull();
+        }
     }
 }

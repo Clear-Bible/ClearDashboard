@@ -43,7 +43,9 @@
                      materialDesign:HintAssist.FloatingScale="0.60"
                      materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                      materialDesign:HintAssist.Hint="{helpers:Localization ParallelCorpusDialog_SmtAlgorithm}"
-                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0">
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
                     Mode="TwoWay"
@@ -71,7 +73,9 @@
                      materialDesign:HintAssist.FloatingScale="0.60"
                      materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                      materialDesign:HintAssist.Hint="{helpers:Localization DisplayName}"
-                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0">
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -103,7 +107,9 @@
                  materialDesign:HintAssist.FloatingScale="0.60"
                  materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                  materialDesign:HintAssist.Hint="{helpers:Localization ParallelCorpusDialog_JSON_Metadata}"
-                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0">
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                 Foreground="{DynamicResource MaterialDesignBody}"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
                     Mode="TwoWay"
@@ -133,6 +139,8 @@
                      materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                      materialDesign:HintAssist.Hint="{helpers:Localization CreatedBy}"
                      materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                    Foreground="{DynamicResource MaterialDesignBody}"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      Visibility="{Binding ParentViewModel.DialogMode, Converter={StaticResource DialogModeToVisibilityConverter}}">
                 <TextBox.Text>
                     <Binding
@@ -163,6 +171,8 @@
                      materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                      materialDesign:HintAssist.Hint="{helpers:Localization Created}"
                      materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                      Visibility="{Binding ParentViewModel.DialogMode, Converter={StaticResource DialogModeToVisibilityConverter}}">
                 <TextBox.Text>
                     <Binding
@@ -212,7 +222,8 @@
                 x:Name="Add"
                 Content="{helpers:Localization Add}" 
                 IsDefault="True"
-                Style="{StaticResource TransparentStyle}"/>
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                Style="{StaticResource TransparentStyle}" />
         </StackPanel>
 
     </Grid>

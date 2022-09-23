@@ -640,7 +640,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Name = "Corpus",
                         Description = $"Tokenizing and transforming '{metadata.Name}' corpus...",
                         StartTime = DateTime.Now,
-                        TaskStatus = StatusEnum.Working
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                     }), cancellationToken);
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -648,7 +648,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Name = "Corpus",
                         Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
                         StartTime = DateTime.Now,
-                        TaskStatus = StatusEnum.Working
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                     }), cancellationToken);
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
@@ -661,7 +661,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Name = "Corpus",
                         Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
                         StartTime = DateTime.Now,
-                        TaskStatus = StatusEnum.Completed
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                     }), cancellationToken);
 
                     _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
@@ -685,7 +685,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Corpus",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -761,7 +761,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Corpus",
                                 Description = $"Creating corpus '{metadata.Name}'...",
                                 StartTime = DateTime.Now,
-                                TaskStatus = StatusEnum.Working
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                             }), cancellationToken);
 
 
@@ -792,7 +792,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Corpus",
                             Description = $"Tokenizing and transforming '{metadata.Name}' corpus...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                         ITextCorpus textCorpus;
@@ -826,7 +826,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Corpus",
                             Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
 #pragma warning disable CS8604
@@ -840,7 +840,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Corpus",
                             Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
 
                         _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
@@ -863,7 +863,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     Name = "Corpus",
                                     EndTime = DateTime.Now,
                                     ErrorMessage = $"{ex}",
-                                    TaskStatus = StatusEnum.Error
+                                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                                 }), cancellationToken);
                         }
                     }
@@ -1273,8 +1273,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task AddParallelCorpus(ConnectionViewModel newConnection)
         {
-            //await _projectManager.InvokeDialog<ParallelCorpusDialogViewModel>(
-            //    DashboardProjectManager.NewProjectDialogSettings, (Func<ParallelCorpusDialogViewModel, Task>)Callback, DialogMode.Add);
             var sourceCorpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == newConnection.SourceConnector.ParentNode.Id);
             if (sourceCorpusNode == null)
             {
@@ -1317,9 +1315,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (success)
             {
-                // get TranslationSet , etc form the dialogViewModel
+                // get TranslationSet , etc from the dialogViewModel
                 var translationSet = dialogViewModel.TranslationSet;
-
             }
         }
 
@@ -1526,13 +1523,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == "Corpus" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            if (incomingMessage.Name == "Corpus" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
             {
                 CancellationTokenSource?.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);

@@ -468,7 +468,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Name = "Corpus",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
             }
 
