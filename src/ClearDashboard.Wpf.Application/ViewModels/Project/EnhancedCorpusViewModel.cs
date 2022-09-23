@@ -74,7 +74,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         public List<TokenProject> _tokenProjects = new();
-
+        public List<ShowTokenizationWindowMessage> _projectMessages = new();
 
         #endregion //Member Variables
 
@@ -142,6 +142,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if (value != _verseOffsetRange)
                 {
                     _verseOffsetRange = value;
+                    VerseChangeRerender();
                     NotifyOfPropertyChange(() => _verseOffsetRange);
                 }
             }
@@ -265,11 +266,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         public EnhancedCorpusViewModel(INavigationService navigationService, ILogger<EnhancedCorpusViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
-            base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
+            ILifetimeScope? lifetimeScope, CancellationTokenSource? cancellationTokenSource) :
+            base(navigationService: navigationService, logger: logger, projectManager: projectManager,
+                eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
             _logger = logger;
             _projectManager = projectManager;
+            _cancellationTokenSource = cancellationTokenSource;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedCorpus", Logger);
             this.ContentId = "ENHANCEDCORPUS";
@@ -571,6 +575,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TokenizedTextCorpus = CurrentTokenizedTextCorpus,
                     });
 
+                    // add in the message so we can get it later
+                    _projectMessages.Add(message);
+
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -807,13 +814,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }, cancellationToken);
         }
 
-        private void VerseChangeRerender()
+        private async Task VerseChangeRerender()
         {
             var localCancellationToken = _cancellationTokenSource.Token;
 
-            foreach (var tokenProject in _tokenProjects)
+            for (int i = 0; i < _tokenProjects.Count; i++)
             {
-
+                await ShowExistingCorpusTokens(_projectMessages[i], localCancellationToken, _tokenProjects[i], localCancellationToken);
             }
         }
 
