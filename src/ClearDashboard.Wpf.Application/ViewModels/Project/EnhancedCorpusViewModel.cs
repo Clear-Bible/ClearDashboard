@@ -693,7 +693,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private async Task ShowExistingCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
             TokenProject project, CancellationToken localCancellationToken)
         {
-            await Task.Factory.StartNew(async () =>
+            _logger.LogInformation("ShowExistingCorpusTokens: {0} {1}", message.CorpusId, message.ProjectName);
+
+            await Task.Run(async () =>
             {
                 try
                 {
@@ -815,11 +817,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task VerseChangeRerender()
         {
-            var localCancellationToken = _cancellationTokenSource.Token;
-
             for (int i = 0; i < _tokenProjects.Count; i++)
             {
-                await ShowExistingCorpusTokens(_projectMessages[i], localCancellationToken, _tokenProjects[i], localCancellationToken);
+                _cancellationTokenSource = new CancellationTokenSource();
+
+                await ShowExistingCorpusTokens(_projectMessages[i], _cancellationTokenSource.Token, _tokenProjects[i],
+                    _cancellationTokenSource.Token).ConfigureAwait(false);
             }
         }
 
@@ -847,34 +850,85 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
             }
 
-            if (VersesDisplay.Row0Verses.Count == 0)
+            int index = 0;
+            for (int i = 0; i < 4; i++)
             {
-                VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
-                VersesDisplay.Row0Verses = verses;
-                VersesDisplay.Row0Visibility = Visibility.Visible;
-                VersesDisplay.Row0BorderColor = brush;
+                if (VersesDisplay.Row0Verses.Count == 0 ||
+                    VersesDisplay.Row0CorpusId == message.CorpusId)
+                {
+                    VersesDisplay.Row0CorpusId = message.CorpusId;
+                    VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row0Verses = verses;
+                    VersesDisplay.Row0Visibility = Visibility.Visible;
+                    VersesDisplay.Row0BorderColor = brush;
+                    break;
+                } else if (VersesDisplay.Row1Verses.Count == 0 || 
+                           VersesDisplay.Row1CorpusId == message.CorpusId)
+                {
+                    VersesDisplay.Row1CorpusId = message.CorpusId;
+                    VersesDisplay.Row1Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row1Verses = verses;
+                    VersesDisplay.Row1Visibility = Visibility.Visible;
+                    VersesDisplay.Row1BorderColor = brush;
+                    break;
+                }
+                else if (VersesDisplay.Row2Verses.Count == 0 ||
+                         VersesDisplay.Row2CorpusId == message.CorpusId )
+                {
+                    VersesDisplay.Row2CorpusId = message.CorpusId;
+                    VersesDisplay.Row2Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row2Verses = verses;
+                    VersesDisplay.Row2Visibility = Visibility.Visible;
+                    VersesDisplay.Row2BorderColor = brush;
+                    break;
+                }
+                else
+                {
+                    VersesDisplay.Row3CorpusId = message.CorpusId;
+                    VersesDisplay.Row3Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row3Verses = verses;
+                    VersesDisplay.Row3Visibility = Visibility.Visible;
+                    VersesDisplay.Row3BorderColor = brush;
+                    break;
+                }
             }
-            else if (VersesDisplay.Row1Verses.Count == 0)
-            {
-                VersesDisplay.Row1Title = message.ProjectName + " - " + message.TokenizationType;
-                VersesDisplay.Row1Verses = verses;
-                VersesDisplay.Row1Visibility = Visibility.Visible;
-                VersesDisplay.Row1BorderColor = brush;
-            }
-            else if (VersesDisplay.Row2Verses.Count == 0)
-            {
-                VersesDisplay.Row2Title = message.ProjectName + " - " + message.TokenizationType;
-                VersesDisplay.Row2Verses = verses;
-                VersesDisplay.Row2Visibility = Visibility.Visible;
-                VersesDisplay.Row2BorderColor = brush;
-            }
-            else
-            {
-                VersesDisplay.Row3Title = message.ProjectName + " - " + message.TokenizationType;
-                VersesDisplay.Row3Verses = verses;
-                VersesDisplay.Row3Visibility = Visibility.Visible;
-                VersesDisplay.Row3BorderColor = brush;
-            }
+            
+            //if (VersesDisplay.Row0Verses.Count == 0)
+            //{
+            //    VersesDisplay.Row0ProjectGuid = message.ParatextProjectId;
+            //    VersesDisplay.Row0Tokenization = message.TokenizationType;
+            //    VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
+            //    VersesDisplay.Row0Verses = verses;
+            //    VersesDisplay.Row0Visibility = Visibility.Visible;
+            //    VersesDisplay.Row0BorderColor = brush;
+            //}
+            //else if (VersesDisplay.Row1Verses.Count == 0)
+            //{
+            //    VersesDisplay.Row1ProjectGuid = message.ParatextProjectId;
+            //    VersesDisplay.Row1Tokenization = message.TokenizationType;
+            //    VersesDisplay.Row1Title = message.ProjectName + " - " + message.TokenizationType;
+            //    VersesDisplay.Row1Verses = verses;
+            //    VersesDisplay.Row1Visibility = Visibility.Visible;
+            //    VersesDisplay.Row1BorderColor = brush;
+            //}
+            //else if (VersesDisplay.Row2Verses.Count == 0)
+            //{
+            //    VersesDisplay.Row2ProjectGuid = message.ParatextProjectId;
+            //    VersesDisplay.Row2Tokenization = message.TokenizationType;
+            //    VersesDisplay.Row2Title = message.ProjectName + " - " + message.TokenizationType;
+            //    VersesDisplay.Row2Verses = verses;
+            //    VersesDisplay.Row2Visibility = Visibility.Visible;
+            //    VersesDisplay.Row2BorderColor = brush;
+            //}
+            //else
+            //{
+            //    VersesDisplay.Row3ProjectGuid = message.ParatextProjectId;
+            //    VersesDisplay.Row3Tokenization = message.TokenizationType;
+            //    VersesDisplay.Row3Title = message.ProjectName + " - " + message.TokenizationType;
+            //    VersesDisplay.Row3Verses = verses;
+            //    VersesDisplay.Row3Visibility = Visibility.Visible;
+            //    VersesDisplay.Row3BorderColor = brush;
+            //}
 
             NotifyOfPropertyChange(() => VersesDisplay);
         }
