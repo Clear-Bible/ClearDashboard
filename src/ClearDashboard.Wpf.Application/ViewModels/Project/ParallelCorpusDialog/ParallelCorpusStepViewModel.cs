@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
@@ -35,6 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             CanMoveBackwards = false;
             EnableControls = true;
             CanOk = true;
+            CanCreate = true;
 
         }
 
@@ -57,6 +59,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public void Ok()
         {
             ParentViewModel?.Ok();
+        }
+
+
+        private bool _canCreate;
+        public bool CanCreate
+        {
+            get => _canCreate;
+            set => Set(ref _canCreate, value);
+        }
+
+        public async void Create()
+        {
+            try 
+            {
+                var status = await ParentViewModel?.AddParallelCorpus()!;
+
+                switch (status)
+                {
+                    case ProcessStatus.Completed:
+                        await MoveForwards();
+                        break;
+                    case ProcessStatus.Failed:
+                        ParentViewModel.Cancel();
+                        break;
+                    case ProcessStatus.NotStarted:
+                        break;
+                    case ProcessStatus.Running:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+            catch (Exception ex)
+            {
+                ParentViewModel!.Cancel();
+            }
         }
 
         protected override ValidationResult? Validate()

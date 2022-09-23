@@ -216,11 +216,27 @@
                 Content="{helpers:Localization Next}" 
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}"/>-->
-            <Button
+            <!--<Button
                 x:Name="Ok"
                 Content="{helpers:Localization Ok}" 
                 IsDefault="True"
-                Style="{StaticResource TransparentStyle}"/>
-        </StackPanel>
+                Style="{StaticResource TransparentStyle}"/>-->
+            <!--<Button
+                x:Name="Ok"
+                Content="{helpers:Localization Create}" 
+                IsDefault="True"
+                Style="{StaticResource TransparentStyle}"/>-->
+            <Button x:Name="Create"  Style="{StaticResource TransparentStyle}"
+                    Content="{helpers:Localization Create}" >
+                <!--<Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            --><!--<ProgressBar Value="10" Maximum="20" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>--><!--
+                            <Label Content="{helpers:Localization Create}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Button.Template>-->
+            </Button>
+</StackPanel>
     </Grid>
 </UserControl>
