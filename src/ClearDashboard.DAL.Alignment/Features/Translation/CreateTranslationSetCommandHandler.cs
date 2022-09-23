@@ -5,6 +5,7 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -37,6 +38,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 );
             }
 
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
+
             try
             {
                 var translationSetModel = new Models.TranslationSet
@@ -62,6 +69,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 ProjectDbContext.TranslationSets.Add(translationSetModel);
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
 
                 return new RequestResult<TranslationSet>(new TranslationSet(
                     ModelHelper.BuildTranslationSetId(translationSetModel),

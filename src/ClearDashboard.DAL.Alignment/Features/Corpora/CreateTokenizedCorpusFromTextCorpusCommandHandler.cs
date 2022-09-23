@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 
@@ -49,6 +50,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     message: $"Invalid CorpusId '{request.CorpusId.Id}' found in request"
                 );
             }
+
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
+#endif
 
             var tokenizedCorpus = new TokenizedCorpus
             {
@@ -151,7 +162,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     _mediator,
                     bookIds);
 
- //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+                //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+
+#if DEBUG
+                proc.Refresh();
+                Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
+
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
 
                 return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
             }

@@ -11,6 +11,7 @@ using SIL.Extensions;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -30,6 +31,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override async Task<RequestResult<ParallelCorpus>> SaveDataAsync(CreateParallelCorpusCommand request,
             CancellationToken cancellationToken)
         {
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
+
             //DB Impl notes:
             //1. Create a new record in ParallelCorpus, save ParallelCorpusId
             //2. Create VerseMappings with verses
@@ -135,7 +142,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             ProjectDbContext.ParallelCorpa.Add(parallelCorpusModel);
             await ProjectDbContext.SaveChangesAsync();
 
+#if DEBUG
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Parallel corpus save (end)");
+            sw.Restart();
+#endif
+
             var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(parallelCorpusModel.Id));
+
+#if DEBUG
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
 
             return new RequestResult<ParallelCorpus>(parallelCorpus);
         }
