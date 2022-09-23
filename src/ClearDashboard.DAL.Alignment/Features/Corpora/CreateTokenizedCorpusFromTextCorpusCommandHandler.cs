@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 
@@ -37,10 +38,21 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override async Task<RequestResult<TokenizedTextCorpus>> SaveDataAsync(
             CreateTokenizedCorpusFromTextCorpusCommand request, CancellationToken cancellationToken)
         {
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
+
             //DB Impl notes:
             // 1. creates a new associated TokenizedCorpus (associated with the parent CorpusId provided in the request),
             // 2. then iterates through command.TextCorpus, casting to TokensTextRow, extracting tokens, and inserting associated to TokenizedCorpus into the Tokens table.
             var corpus = ProjectDbContext!.Corpa.FirstOrDefault(c => c.Id == request.CorpusId.Id);
+
+#if DEBUG
+            sw.Stop();
+#endif
+
             if (corpus == null)
             {
                 return new RequestResult<TokenizedTextCorpus>
@@ -49,6 +61,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     message: $"Invalid CorpusId '{request.CorpusId.Id}' found in request"
                 );
             }
+
+#if DEBUG
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert Tokenized corpus '{request.DisplayName}'");
+            sw.Restart();
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
+#endif
 
             var tokenizedCorpus = new TokenizedCorpus
             {
@@ -88,6 +109,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
                 tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
 
+                var tokenCount = 0;
+
                 foreach (var bookId in bookIds)
                 {
                     var bookTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
@@ -96,6 +119,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         {
                             if (token is CompositeToken compositeToken)
                             {
+                                tokenCount++;
                                 return new TokenComposite
                                 {
                                     Id = compositeToken.TokenId.Id,
@@ -103,23 +127,28 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     TrainingText = compositeToken.TrainingText,
                                     EngineTokenId = compositeToken.TokenId.ToString(),
                                     Tokens = compositeToken.GetPositionalSortedBaseTokens()
-                                        .Select(childToken => new Models.Token
+                                        .Select(childToken =>
                                         {
-                                            Id = childToken.TokenId.Id,
-                                            TokenizationId = tokenizationId,
-                                            TrainingText = childToken.TrainingText,
-                                            EngineTokenId = childToken.TokenId.ToString(),
-                                            BookNumber = childToken.TokenId.BookNumber,
-                                            ChapterNumber = childToken.TokenId.ChapterNumber,
-                                            VerseNumber = childToken.TokenId.VerseNumber,
-                                            WordNumber = childToken.TokenId.WordNumber,
-                                            SubwordNumber = childToken.TokenId.SubWordNumber,
-                                            SurfaceText = childToken.SurfaceText
+                                            tokenCount++;
+                                            return new Models.Token
+                                            {
+                                                Id = childToken.TokenId.Id,
+                                                TokenizationId = tokenizationId,
+                                                TrainingText = childToken.TrainingText,
+                                                EngineTokenId = childToken.TokenId.ToString(),
+                                                BookNumber = childToken.TokenId.BookNumber,
+                                                ChapterNumber = childToken.TokenId.ChapterNumber,
+                                                VerseNumber = childToken.TokenId.VerseNumber,
+                                                WordNumber = childToken.TokenId.WordNumber,
+                                                SubwordNumber = childToken.TokenId.SubWordNumber,
+                                                SurfaceText = childToken.SurfaceText
+                                            };
                                         }).ToList()
                                 };
                             }
                             else
                             {
+                                tokenCount++;
                                 return new Models.Token
                                 {
                                     Id = token.TokenId.Id,
@@ -151,7 +180,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     _mediator,
                     bookIds);
 
- //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+                //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+
+#if DEBUG
+                proc.Refresh();
+                Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
+
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [token count: {tokenCount}]");
+#endif
 
                 return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
             }

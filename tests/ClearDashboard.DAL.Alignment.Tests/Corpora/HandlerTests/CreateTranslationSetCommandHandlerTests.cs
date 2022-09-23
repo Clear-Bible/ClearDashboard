@@ -206,7 +206,33 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
     }
 
-//    [Fact]
+    //[Fact]
+    [Trait("Category", "Handlers")]
+    public async Task TranslationSet__ManuscriptZZSur()
+    {
+        try
+        {
+            var engineParallelTextCorpus = await BuildSampleManuscriptToZZSurEngineParallelTextCorpus();
+            var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
+
+            var translationModel = await BuildSampleTranslationModel(parallelCorpus);
+
+            var translationSet = await translationModel.Create(
+                "manuscript to zz_sur",
+                "fastalign",
+                new() { { "size", "lage" } }, 
+                parallelCorpus.ParallelCorpusId, 
+                Mediator!);
+
+            Assert.NotNull(translationSet);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    //[Fact]
     [Trait("Category", "Handlers")]
     public async Task AlignmentSet__ManuscriptZZSur()
     {
@@ -223,10 +249,12 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     new Dictionary<string, object>(),
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
+
+            Assert.NotNull(alignmentSet);
         }
         finally
         {
-//            await DeleteDatabaseContext();
+            await DeleteDatabaseContext();
         }
     }
 

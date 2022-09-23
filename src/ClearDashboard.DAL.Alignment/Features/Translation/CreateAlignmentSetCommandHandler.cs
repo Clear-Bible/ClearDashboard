@@ -14,6 +14,7 @@ using ModelOriginatedType = ClearDashboard.DataAccessLayer.Models.AlignmentOrigi
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -33,15 +34,38 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<AlignmentSet>> SaveDataAsync(CreateAlignmentSetCommand request,
             CancellationToken cancellationToken)
         {
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
+
             var sourceTokenIds = request.Alignments.Select(al => al.AlignedTokenPair.SourceToken.TokenId.Id);
             var targetTokenIds = request.Alignments.Select(al => al.AlignedTokenPair.TargetToken.TokenId.Id);
 
             var parallelCorpus = ProjectDbContext!.ParallelCorpa
+                .Include(pc => pc.User)
                 .Include(pc => pc.SourceTokenizedCorpus)
-                    .ThenInclude(stc => stc!.TokenComponents.Where(tc => sourceTokenIds.Contains(tc.Id)))
+                    .ThenInclude(tc => tc!.User)
                 .Include(pc => pc.TargetTokenizedCorpus)
-                    .ThenInclude(ttc => ttc!.TokenComponents.Where(tc => targetTokenIds.Contains(tc.Id)))
+                    .ThenInclude(tc => tc!.User)
+                // -------------------------------------------------------
+                // For manuscript -> zz_sur, including the tokens in this
+                // query was making it take upward of 15 minutes.
+                // Removing this means we are unable to validate that all
+                // alignment tokens are actually in the given parallel 
+                // corpus (as source or target tokens, respectively).
+                // -------------------------------------------------------
+                //.Include(pc => pc.SourceTokenizedCorpus)
+                //    .ThenInclude(stc => stc!.TokenComponents /*.Where(tc => sourceTokenIds.Contains(tc.Id)) */)
+                //.Include(pc => pc.TargetTokenizedCorpus)
+                //    .ThenInclude(ttc => ttc!.TokenComponents /*.Where(tc => targetTokenIds.Contains(tc.Id)) */)
                 .FirstOrDefault(c => c.Id == request.ParallelCorpusId.Id);
+
+#if DEBUG
+            sw.Stop();
+#endif
+
             if (parallelCorpus == null)
             {
                 return new RequestResult<AlignmentSet>
@@ -51,29 +75,40 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 );
             }
 
-            var notFoundSourceTokens = sourceTokenIds
-                .Except(parallelCorpus!.SourceTokenizedCorpus!.TokenComponents
-                    .Select(tc => tc.Id));
-            if (notFoundSourceTokens.Any())
-            {
-                return new RequestResult<AlignmentSet>
-                (
-                    success: false,
-                    message: $"Requested alignment token pair source Id(s) not found in parallel corpus: '{string.Join(",", notFoundSourceTokens)}'"
-                );
-            }
+            //var notFoundSourceTokens = sourceTokenIds
+            //    .Except(parallelCorpus!.SourceTokenizedCorpus!.TokenComponents
+            //        .Select(tc => tc.Id));
 
-            var notFoundTargetTokens = targetTokenIds
-                .Except(parallelCorpus!.TargetTokenizedCorpus!.TokenComponents
-                    .Select(tc => tc.Id));
-            if (notFoundTargetTokens.Any())
-            {
-                return new RequestResult<AlignmentSet>
-                (
-                    success: false,
-                    message: $"Requested alignment token pair target Id(s) not found in parallel corpus: '{string.Join(",", notFoundTargetTokens)}'"
-                );
-            }
+            //if (notFoundSourceTokens.Any())
+            //{
+            //    return new RequestResult<AlignmentSet>
+            //    (
+            //        success: false,
+            //        message: $"Requested alignment token pair source Id(s) not found in parallel corpus: '{string.Join(",", notFoundSourceTokens)}'"
+            //    );
+            //}
+
+            //var notFoundTargetTokens = targetTokenIds
+            //    .Except(parallelCorpus!.TargetTokenizedCorpus!.TokenComponents
+            //        .Select(tc => tc.Id));
+
+            //if (notFoundTargetTokens.Any())
+            //{
+            //    return new RequestResult<AlignmentSet>
+            //    (
+            //        success: false,
+            //        message: $"Requested alignment token pair target Id(s) not found in parallel corpus: '{string.Join(",", notFoundTargetTokens)}'"
+            //    );
+            //}
+
+#if DEBUG
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert AlignmentSet '{request.DisplayName}' and alignments (start) [token counts - source: {sourceTokenIds.Count()}, target: {targetTokenIds.Count()}]");
+            sw.Restart();
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
+#endif
 
             var verificationTypes = new Dictionary<string, ModelVerificationType>();
             var originatedTypes = new Dictionary<string, ModelOriginatedType>();
@@ -106,9 +141,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
             }
 
+            await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
             try
             {
-                var alignmentSetModel = new Models.AlignmentSet
+                var alignmentSet = new Models.AlignmentSet
                 {
                     ParallelCorpusId = request.ParallelCorpusId.Id,
                     DisplayName = request.DisplayName,
@@ -128,12 +165,38 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         }).ToList()
                 };
 
-                ProjectDbContext.AlignmentSets.Add(alignmentSetModel);
-                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
+                // mostly using database connection-level functions, commands, paramters etc.
+                using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
+
+                using var alignmentSetInsertCommand = CreateAlignmentSetInsertCommand();
+                using var alignmentInsertCommand = CreateAlignmentInsertCommand();
+
+                var alignmentSetId = await InsertAlignmentSetAsync(
+                    alignmentSet, 
+                    alignmentSetInsertCommand, 
+                    alignmentInsertCommand, 
+                    cancellationToken);
+
+                await transaction.CommitAsync(cancellationToken);
+
+#if DEBUG
+                proc.Refresh();
+                Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
+
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
+
+                var alignmentSetFromDb = ProjectDbContext!.AlignmentSets
+                    .Include(ast => ast.User)
+                    .First(ast => ast.Id == alignmentSetId);
+
+                var parallelCorpusId = ModelHelper.BuildParallelCorpusId(parallelCorpus);
 
                 return new RequestResult<AlignmentSet>(new AlignmentSet(
-                    ModelHelper.BuildAlignmentSetId(alignmentSetModel),
-                    ModelHelper.BuildParallelCorpusId(alignmentSetModel.ParallelCorpus!),
+                    ModelHelper.BuildAlignmentSetId(alignmentSetFromDb, parallelCorpusId, alignmentSetFromDb.User!),
+                    parallelCorpusId,
                     _mediator));
 
             }
@@ -145,28 +208,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     message: e.Message
                 );
             }
-        }
-
-        private DbCommand CreateAlignmentInsertCommand()
-        {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId" };
-
-            ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
-
-            return command;
-        }
-
-        private static async Task InsertAlignmentAsync(Models.Alignment alignment, DbCommand command, CancellationToken cancellationToken)
-        {
-            command.Parameters["@Id"].Value = alignment.Id;
-            command.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
-            command.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
-            command.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification.ToString();
-            command.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom.ToString();
-            command.Parameters["@Score"].Value = alignment.Score;
-            command.Parameters["@AlignmentSetId"].Value = alignment.AlignmentSetId;
-            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            finally
+            {
+                await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+            }
         }
 
         private DbCommand CreateAlignmentSetInsertCommand()
@@ -174,25 +219,60 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
             var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "Metadata", "UserId", "Created" };
 
-            ApplyColumnsToCommand(command, typeof(Models.TokenizedCorpus), columns);
+            ApplyColumnsToCommand(command, typeof(Models.AlignmentSet), columns);
 
             return command;
         }
 
-        private async Task InsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, DbCommand command, CancellationToken cancellationToken)
+        private async Task<Guid> InsertAlignmentSetAsync(Models.AlignmentSet alignmentSet, DbCommand alignmentSetCommand, DbCommand alignmentCommand, CancellationToken cancellationToken)
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 
-            command.Parameters["@Id"].Value = (Guid.Empty != alignmentSet.Id) ? alignmentSet.Id : Guid.NewGuid();
-            command.Parameters["@ParallelCorpusId"].Value = alignmentSet.ParallelCorpusId;
-            command.Parameters["@DisplayName"].Value = alignmentSet.DisplayName;
-            command.Parameters["@SmtModel"].Value = alignmentSet.SmtModel;
-            command.Parameters["@IsSyntaxTreeAlignerRefined"].Value = alignmentSet.IsSyntaxTreeAlignerRefined;
-            command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(alignmentSet.Metadata);
-            command.Parameters["@UserId"].Value = Guid.Empty != alignmentSet.UserId ? alignmentSet.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
-            command.Parameters["@Created"].Value = converter.ConvertToProvider(alignmentSet.Created);
+            var alignmentSetId = (Guid.Empty != alignmentSet.Id) ? alignmentSet.Id : Guid.NewGuid();
 
-            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            alignmentSetCommand.Parameters["@Id"].Value = alignmentSetId;
+            alignmentSetCommand.Parameters["@ParallelCorpusId"].Value = alignmentSet.ParallelCorpusId;
+            alignmentSetCommand.Parameters["@DisplayName"].Value = alignmentSet.DisplayName;
+            alignmentSetCommand.Parameters["@SmtModel"].Value = alignmentSet.SmtModel;
+            alignmentSetCommand.Parameters["@IsSyntaxTreeAlignerRefined"].Value = alignmentSet.IsSyntaxTreeAlignerRefined;
+            alignmentSetCommand.Parameters["@Metadata"].Value = JsonSerializer.Serialize(alignmentSet.Metadata);
+            alignmentSetCommand.Parameters["@UserId"].Value = Guid.Empty != alignmentSet.UserId ? alignmentSet.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
+            alignmentSetCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignmentSet.Created);
+
+            _ = await alignmentSetCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+            foreach (var alignment in alignmentSet.Alignments)
+            {
+                await InsertAlignmentAsync(alignment, alignmentSetId, alignmentCommand, cancellationToken);
+            }
+
+            return alignmentSetId;
+        }
+
+        private DbCommand CreateAlignmentInsertCommand()
+        {
+            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId", "UserId", "Created" };
+
+            ApplyColumnsToCommand(command, typeof(Models.Alignment), columns);
+
+            return command;
+        }
+
+        private async Task InsertAlignmentAsync(Models.Alignment alignment, Guid alignmentSetId, DbCommand alignmentCommand, CancellationToken cancellationToken)
+        {
+            var converter = new DateTimeOffsetToBinaryConverter();
+
+            alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
+            alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
+            alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
+            alignmentCommand.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification.ToString();
+            alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom.ToString();
+            alignmentCommand.Parameters["@Score"].Value = alignment.Score;
+            alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
+            alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
+            alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
+            _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
         private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
