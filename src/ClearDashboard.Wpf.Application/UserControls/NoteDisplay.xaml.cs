@@ -204,7 +204,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 EntityId = EntityId,
-                Label = args?.Label
+                Label = args?.Label,
+                Note = Note
             });
         }
 

@@ -158,6 +158,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new LabelEventArgs()
             {
                 RoutedEvent = routedEvent,
+                Note = e.Note,
                 Label = e.Label,
                 EntityId = e.EntityId
             });
