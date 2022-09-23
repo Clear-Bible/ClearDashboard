@@ -16,6 +16,17 @@ namespace ClearDashboard.Wpf.Application.Models
     {
         #region Row0
 
+        private Guid _row0CorpusId;
+        public Guid Row0CorpusId
+        {
+            get => _row0CorpusId;
+            set
+            {
+                _row0CorpusId = value;
+                NotifyOfPropertyChange(() => Row0CorpusId);
+            }
+        }
+
         private Visibility _row0Visiblity = Visibility.Collapsed;
         public Visibility Row0Visibility
         {
@@ -61,6 +72,17 @@ namespace ClearDashboard.Wpf.Application.Models
 
 
         #region Row1
+
+        private Guid _row1CorpusId;
+        public Guid Row1CorpusId
+        {
+            get => _row1CorpusId;
+            set
+            {
+                _row1CorpusId = value;
+                NotifyOfPropertyChange(() => Row1CorpusId);
+            }
+        }
 
         private string _row1title = string.Empty;
         public string Row1Title
@@ -108,6 +130,17 @@ namespace ClearDashboard.Wpf.Application.Models
 
         #region Row2
 
+        private Guid _row2CorpusId;
+        public Guid Row2CorpusId
+        {
+            get => _row2CorpusId;
+            set
+            {
+                _row2CorpusId = value;
+                NotifyOfPropertyChange(() => Row2CorpusId);
+            }
+        }
+
         private Visibility _Row2Visiblity = Visibility.Collapsed;
         public Visibility Row2Visibility
         {
@@ -153,6 +186,17 @@ namespace ClearDashboard.Wpf.Application.Models
 
 
         #region Row3
+
+        private Guid _row3CorpusId;
+        public Guid Row3CorpusId
+        {
+            get => _row3CorpusId;
+            set
+            {
+                _row3CorpusId = value;
+                NotifyOfPropertyChange(() => Row3CorpusId);
+            }
+        }
 
         private Visibility _Row3Visiblity = Visibility.Collapsed;
         public Visibility Row3Visibility
