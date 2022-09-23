@@ -9,6 +9,7 @@ using SIL.Extensions;
 
 using ModelCorpusType = ClearDashboard.DataAccessLayer.Models.CorpusType;
 using ModelCorpus = ClearDashboard.DataAccessLayer.Models.Corpus;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -28,6 +29,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override async Task<RequestResult<Corpus>> SaveDataAsync(
             CreateCorpusCommand request, CancellationToken cancellationToken)
         {
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
             //DB Impl notes:
             // 1. creates a new Corpus
 
@@ -53,7 +59,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // NB:  passing in the cancellation token to SaveChangesAsync.
             await ProjectDbContext.SaveChangesAsync(cancellationToken);
 
+#if DEBUG
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Save corpus (end)");
+            sw.Restart();
+#endif
+
             var corpus = await Corpus.Get(_mediator, ModelHelper.BuildCorpusId(modelCorpus));
+
+#if DEBUG
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
 
             return new RequestResult<Corpus>(corpus);
         }

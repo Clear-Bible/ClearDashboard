@@ -129,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 CheckBoxVisibility = Visibility.Collapsed,
                 TextBoxVisibility = Visibility.Collapsed,
                 NameTimeVisibility = Visibility.Collapsed,
-                DeleteButtonVisibility = Visibility.Collapsed,
+                DeleteButtonVisibility = Visibility.Hidden,
                 TextBlockVisibility = Visibility.Collapsed,
                 MenuLevel = MenuItemNest.ClockMenuLevel.Group,
                 UtcComboVisibility = Visibility.Collapsed,
