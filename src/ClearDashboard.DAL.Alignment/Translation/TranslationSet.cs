@@ -71,7 +71,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <param name="translation"></param>
         /// <param name="translationActionType">Valid values are:  "PutPropagate", "PutNoPropagate"</param>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public async void PutTranslation(Translation translation, string translationActionType)
+        public async Task PutTranslation(Translation translation, string translationActionType)
         {
             var result = await mediator_.Send(new PutTranslationSetTranslationCommand(TranslationSetId, translation, translationActionType));
             if (result.Success)
