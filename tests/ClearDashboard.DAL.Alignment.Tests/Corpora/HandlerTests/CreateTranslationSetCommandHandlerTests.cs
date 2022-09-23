@@ -206,7 +206,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
     }
 
-//    [Fact]
+    [Fact]
     [Trait("Category", "Handlers")]
     public async Task AlignmentSet__ManuscriptZZSur()
     {
