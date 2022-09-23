@@ -49,7 +49,7 @@ namespace ClearDashboard.Wpf.Application
             var selectedLanguage = Settings.Default.language_code;
             if (string.IsNullOrEmpty(selectedLanguage))
             {
-                selectedLanguage = "en";
+                selectedLanguage = "enUS";
             }
 
             var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));

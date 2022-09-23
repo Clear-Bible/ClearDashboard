@@ -923,7 +923,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // save the layout
             //var layoutSerializer = new XmlLayoutSerializer(this._dockingManager);
-            layoutSerializer.Serialize(filePath);
+            //layoutSerializer.Serialize(filePath);
         }
 
         /// <summary>
