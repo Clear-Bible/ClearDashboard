@@ -270,7 +270,7 @@
                                        LabelBackground="BlanchedAlmond"
                                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                       cal:Message.Attach="[Event CloseRequested] = [Action CloseRequested($eventArgs)];
+                                       cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)];
                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];
                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];

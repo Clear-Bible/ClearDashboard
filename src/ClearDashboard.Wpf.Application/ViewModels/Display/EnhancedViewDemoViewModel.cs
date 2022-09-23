@@ -119,7 +119,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 var result = new ObservableCollection<Note>();
                 var random = new Random().NextDouble();
-                if (random < 0.1)
+                if (random < 0.2)
                 {
                     result.Add(new Note
                     {
@@ -129,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     });
                 }
 
-                if (random < 0.05)
+                if (random < 0.1)
                 {
                     result.Add(new Note
                     {
@@ -215,21 +215,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task SetTextRow(TokensTextRow textRow)
         {
+            LabelSuggestions = await GetLabelSuggestions();
             VerseTokens = GetTokenDisplayViewModels(textRow);
             NotifyOfPropertyChange(nameof(VerseTokens));
-
 #if !MOCK
             CurrentTranslations = await CurrentTranslationSet.GetTranslations(VerseTokens.Select(t => t.Token.TokenId));
             NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
 #endif
-        }
-
-        private async Task LoadFiles()
-        {
-#if MOCK
-            SetTextRow(MockVerseTextRow(40001001));
-#endif
-
         }
 
         public IEnumerable<TokenDisplayViewModel>? VerseTokens { get; set; }
@@ -257,7 +249,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
         }
 
-#region Event Handlers
+        #region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
@@ -318,8 +310,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TranslationApplied(TranslationEventArgs e)
+        public async Task TranslationApplied(TranslationEventArgs e)
         {
+            await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
+
             Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             NotifyOfPropertyChange(nameof(Message));
 
@@ -336,8 +330,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
         }        
         
-        public void NoteAdded(NoteEventArgs e)
+        public async Task NoteAdded(NoteEventArgs e)
         {
+#if !MOCK
+            await e.Note.CreateOrUpdate(Mediator);
+            await e.Note.AssociateDomainEntity(Mediator, e.TokenDisplayViewModel.Token.TokenId);
+            foreach (var label in e.Note.Labels)
+            {
+                if (label.LabelId == null)
+                {
+                    await label.CreateOrUpdate(Mediator);
+                }
+                await e.Note.AssociateLabel(Mediator, label);
+            }
+#endif
             Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
@@ -345,8 +351,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
-        public void NoteUpdated(NoteEventArgs e)
+        public async Task NoteUpdated(NoteEventArgs e)
         {
+#if !MOCK
+            await e.Note.CreateOrUpdate(Mediator);
+#endif
             Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
@@ -354,8 +363,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
-        public void NoteDeleted(NoteEventArgs e)
+        public async Task NoteDeleted(NoteEventArgs e)
         {
+#if !MOCK
+            await e.Note.Delete(Mediator);
+#endif
             Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
@@ -363,19 +375,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
-        public void LabelSelected(LabelEventArgs e)
+        public async Task LabelSelected(LabelEventArgs e)
         {
-            Message = $"Label '{e.Label.Text}' selected for token ({e.EntityId})";
+#if !MOCK
+            // If this is a new note, we'll handle the labels when the note is added.
+            if (e.Note.NoteId != null)
+            {
+                await e.Note.AssociateLabel(Mediator, e.Label);
+            }
+#endif
+            Message = $"Label '{e.Label.Text}' selected for note on token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void LabelAdded(LabelEventArgs e)
+        public async Task LabelAdded(LabelEventArgs e)
         {
-            Message = $"Label '{e.Label.Text}' added for token ({e.EntityId})";
+#if !MOCK
+            // If this is a new note, we'll handle the labels when the note is added.
+            if (e.Note.NoteId != null)
+            {
+                e.Label = await e.Note.CreateAssociateLabel(Mediator, e.Label.Text);
+            }
+#endif
+            Message = $"Label '{e.Label.Text}' added for note on token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void CloseRequested(RoutedEventArgs args)
+        public void CloseNotePaneRequested(RoutedEventArgs args)
         {
             NotePaneVisibility = Visibility.Hidden;
             NotifyOfPropertyChange(nameof(NotePaneVisibility));
@@ -383,19 +409,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            LabelSuggestions = await GetLabelSuggestions();
-            //MockLabels();
-
             await base.OnActivateAsync(cancellationToken);
-            await LoadFiles();
+#if MOCK
+            await SetTextRow(MockVerseTextRow(40001001));
+#endif
         }
-
-
         // ReSharper restore UnusedMember.Global
 
 #endregion
-
-        
 
         private void SetCurrentToken(TokenDisplayViewModel viewModel)
         {
