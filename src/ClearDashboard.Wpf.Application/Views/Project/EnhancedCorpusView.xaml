@@ -286,8 +286,6 @@
                         <Label VerticalAlignment="Center">Wrap Lines</Label>
                     </StackPanel>
                 </Grid>
-
-
             </materialDesign:DrawerHost.TopDrawerContent>
 
             <Grid Background="LightGray">
@@ -393,6 +391,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
                                                 <userControls:VerseDisplay
+                                                    TranslationClicked="{Binding TranslationClickedCommand}"
                                                     Title=""
                                                     FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -407,7 +406,8 @@
                                                     TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                     />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
