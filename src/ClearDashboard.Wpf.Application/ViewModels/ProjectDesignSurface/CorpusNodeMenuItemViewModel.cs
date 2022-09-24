@@ -4,17 +4,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<ParallelCorpusConnectionMenuItemViewModel>
     {
+        private ConnectionViewModel? _connectionViewModel;
+        public ConnectionViewModel? ConnectionViewModel
+        {
+            get => _connectionViewModel;
+            set => Set(ref _connectionViewModel, value);
+
+        }
+
         protected override void Execute()
         {
-            
+            ProjectDesignSurfaceViewModel?.ExecuteCorpusNodeMenuCommand(this);
         }
     }
 
     public class CorpusNodeMenuItemViewModel : MenuItemViewModel<CorpusNodeMenuItemViewModel>
     {
-
-       
-
         private CorpusNodeViewModel? _corpusNodeViewModel;
         public CorpusNodeViewModel? CorpusNodeViewModel
         {

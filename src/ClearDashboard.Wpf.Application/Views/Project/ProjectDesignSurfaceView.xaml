@@ -307,18 +307,40 @@
                         Stroke="{StaticResource connectionBrush}"
                         StrokeThickness="3">
                         <viewModels:CurvedArrow.ContextMenu>
-                            <ContextMenu Name="ContextMenu">
-                                <MenuItem
-                                    Command="{StaticResource Commands.ConnectionProperties}"
-                                    CommandParameter="{Binding}"
-                                    Header="{helpers:Localization Pds_PropertiesMenu}"
-                                    ToolTip="View the corpus properties" />
-                                <!--
-                                    Command="{StaticResource Commands.Properties}"
-                                    cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
-                                    CommandParameter="{Binding ElementName=nodeRectangle}"
-                                -->
+                            <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
+                                <ContextMenu.Resources>
 
+                                    <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:CorpusNodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconPicolIcons
+                                                Width="15"
+                                                Height="15"
+                                                Margin="5,5,0,0"
+                                                VerticalAlignment="Center"
+                                                Kind="{Binding IconKind}" />
+                                            <TextBlock
+                                                Margin="5,5,0,0"
+                                                VerticalAlignment="Center"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                Text="{Binding Header}" />
+                                        </StackPanel>
+                                    </HierarchicalDataTemplate>
+
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Command" Value="{Binding Command}" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="{x:Type MenuItem}">
+                                                            <Separator />
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContextMenu.Resources>
                             </ContextMenu>
                         </viewModels:CurvedArrow.ContextMenu>
                     </viewModels:CurvedArrow>
