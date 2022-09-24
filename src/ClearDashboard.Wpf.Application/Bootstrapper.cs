@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using ClearApplicationFoundation;
-using ClearApplicationFoundation.Framework;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -49,7 +48,7 @@ namespace ClearDashboard.Wpf.Application
             var selectedLanguage = Settings.Default.language_code;
             if (string.IsNullOrEmpty(selectedLanguage))
             {
-                selectedLanguage = "en";
+                selectedLanguage = "enUS";
             }
 
             var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));

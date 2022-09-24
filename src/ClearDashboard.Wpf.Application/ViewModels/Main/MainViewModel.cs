@@ -29,6 +29,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Autofac;
+using Autofac.Core.Lifetime;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using Microsoft.Xaml.Behaviors.Core;
+using SIL.Reporting;
 using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
@@ -46,6 +52,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<UiLanguageChangedMessage>,
                 IHandle<ActiveDocumentMessage>
     {
+        private ILifetimeScope LifetimeScope { get; }
+        private IWindowManager WindowManager { get; }
 #nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
@@ -163,12 +171,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     DeleteGridIsVisible = Visibility.Visible;
                     GridIsVisible = Visibility.Collapsed;
-                }
-                else if (value == "NewID")
-                {
-#pragma warning disable CS4014
-                    StartDashboardAsync();
-#pragma warning restore CS4014
                 }
                 else
                 {
@@ -330,6 +332,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             set => Set(ref _message, value);
         }
 
+        private string _projectName;
+        public string ProjectName
+        {
+            get => _projectName;
+            set
+            {
+                _projectName = value;
+                NotifyOfPropertyChange(nameof(ProjectName));
+            }
+        }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -345,9 +358,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
         // ReSharper disable once UnusedMember.Global
-        public MainViewModel(ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
-
+        public MainViewModel(INavigationService navigationService, ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IWindowManager windowManager, ILifetimeScope lifetimeScope)
         {
+            LifetimeScope = lifetimeScope;
+            WindowManager = windowManager;
             EventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
@@ -427,6 +441,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     await ProjectManager.LoadProject(Parameter.ProjectName);
                 }
+                ProjectName = ProjectManager.CurrentProject.ProjectName;
             }
 
 
@@ -514,7 +529,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Items.Clear();
 
             // documents
-            await ActivateItemAsync<EnhancedCorpusViewModel>();
+            await ActivateItemAsync<EnhancedViewModel>();
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
@@ -720,7 +735,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
                         
                         // Enhanced Corpus
-                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedCorpus", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedView", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
                         
                         // PINS
                         new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
@@ -900,7 +915,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         switch (type)
                         {
 
-                            case EnhancedCorpusViewModel:
+                            case EnhancedViewModel:
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
@@ -940,7 +955,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     switch (type)
                     {
-                        case EnhancedCorpusViewModel:
+                        case EnhancedViewModel:
                             return (PaneViewModel)t;
                     }
                 }
@@ -948,6 +963,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             return (PaneViewModel)Items[0];
         }
+
 
         /// <summary>
         /// return the correct existing vm from Items list - TOOLS
@@ -1332,8 +1348,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     // there is only one doc window open, so we can just add to it
                     var enhancedCorpusViewModels =
-                        Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as
-                            EnhancedCorpusViewModel;
+                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
+                            EnhancedViewModel;
                     if (enhancedCorpusViewModels is not null)
                     {
                         await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
@@ -1345,17 +1361,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // more than one enhanced corpus window is open and active
                 foreach (var document in dockableWindows)
                 {
-                    if (document.IsActive && document.Content is EnhancedCorpusViewModel)
+                    if (document.IsActive && document.Content is EnhancedViewModel)
                     {
-                        var vm = document.Content as EnhancedCorpusViewModel;
+                        var vm = document.Content as EnhancedViewModel;
                         // ReSharper disable once PossibleNullReferenceException
                         var guid = vm.Guid;
 
                         var enhancedCorpusViewModels =
-                            Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel))
+                            Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
                                     // ReSharper disable once UsePatternMatching
-                                    .First(item => ((EnhancedCorpusViewModel)item).Guid == guid) as
-                                EnhancedCorpusViewModel;
+                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
+                                EnhancedViewModel;
                         if (enhancedCorpusViewModels is not null)
                         {
                             await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
@@ -1377,7 +1393,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 
-            EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
@@ -1416,7 +1432,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
+        public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
+        {
+            switch (menuItem.Id)
+            {
+                case "NewID":
+                    //var startupDialogViewModel = IoC.Get<StartupDialogViewModel>();
+                    var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
+                    startupDialogViewModel.MimicParatextConnection = true;
+                    var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
+                    if (result.HasValue && result.Value)
+                    {
+                        var dashboardProject = startupDialogViewModel.ExtraData as DashboardProject;
+                        if (dashboardProject.IsNew)
+                        {
+                            await ProjectManager.CreateNewProject(dashboardProject.ProjectName);
+                        }
+                        else
+                        {
+                            await ProjectManager.LoadProject(dashboardProject.ProjectName);
+                        }
 
+                        ProjectName = dashboardProject.ProjectName;
+                    }
+                    break;
+            }
+        }
+
+        #endregion // Methods
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
@@ -1426,7 +1469,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 .OfType<LayoutDocument>();
             foreach (var pane in dockableWindows)
             {
-                var content = pane.Content as EnhancedCorpusViewModel;
+                var content = pane.Content as EnhancedViewModel;
                 // ReSharper disable once PossibleNullReferenceException
                 if (content.Guid != guid)
                 {
@@ -1436,8 +1479,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             return Task.CompletedTask;
         }
-
-        #endregion // Methods
     }
 
     public static class WorkspaceLayoutNames

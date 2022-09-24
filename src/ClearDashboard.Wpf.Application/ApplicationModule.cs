@@ -45,14 +45,17 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)
         {
+            builder.RegisterType<RegistrationViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("Startup")
+                .WithMetadata("Order", 1);
 
             builder.RegisterType<ProjectPickerViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
-                .WithMetadata("Order", 1); 
+                .WithMetadata("Order", 2); 
 
             builder.RegisterType<ProjectSetupViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("Startup")
-                .WithMetadata("Order", 2); 
+                .WithMetadata("Order", 3); 
         }
 
         //public static void RegisterSmtModelDialogDependencies(this ContainerBuilder builder)

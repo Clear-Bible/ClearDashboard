@@ -9,8 +9,15 @@ using System.Windows.Input;
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Windows;
+using System.Windows.Navigation;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using ClearDashboard.Wpf.Application.Views.Startup;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Menus
 {
@@ -43,7 +50,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
                 NotifyOfPropertyChange(() => IsChecked);
             }
         }
-        
+
 
         private Icon _icon;
         public Icon Icon
@@ -101,13 +108,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
                 return _command;
             }
         }
+        
 
-        private void Execute()
+        private async void Execute()
         {
+            if (Id == "NewID")
+            {
+                await ViewModel.ExecuteMenuCommand(this);
+                return;
+            }
             if (ViewModel != null)
             {
                 ViewModel.WindowIdToLoad = Id;
             }
+
+
         }
     }
 }

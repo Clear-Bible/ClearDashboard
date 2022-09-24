@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             //   DOCUMENTS
             // ====================
 
-            if (item is EnhancedCorpusViewModel)
+            if (item is EnhancedViewModel)
             {
                 return DocumentStyle;
             }
