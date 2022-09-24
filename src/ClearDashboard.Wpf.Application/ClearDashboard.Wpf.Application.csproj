@@ -289,6 +289,14 @@
     <Page Update="Views\MirrorView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+    <Page Update="Views\Startup\RegistrationDialogView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Startup\RegistrationView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Shell\ShellView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
@@ -296,5 +304,8 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="Views\DesignSurface\" />
+    <Folder Include="Views\PopUps\" />
+  </ItemGroup>
 </Project>

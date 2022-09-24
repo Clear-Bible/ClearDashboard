@@ -132,9 +132,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 ;Source: "windowsdesktop-runtime-6.0.5-win-x64.exe"; Flags: dontcopy noencryption
 Source: "windowsdesktop-runtime-6.0.6-win-x64.exe"; Flags: dontcopy noencryption
 
-Source: "..\src\ClearDashboard.Wpf.Application\bin\Debug\net6.0-windows\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\ClearDashboard.Wpf.Application\bin\Debug\net6.0-windows\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\src\ClearDashboard.Wpf.Application\bin\Debug\net6.0-windows\ClearDashboard.Wpf.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\publish\ClearDashboard.Wpf.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf_Secure\ClearDashboard.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf_Secure\ClearDashboard.Wpf.deps.json"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\src\ClearDashboard.WPF\bin\Debug\net6.0-windows\ClearDashboard.Wpf_Secure\ClearDashboard.Wpf.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion

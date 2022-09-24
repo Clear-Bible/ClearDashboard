@@ -39,7 +39,7 @@
         </Style>
 
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -49,7 +49,7 @@
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <Label Content="{helpers:Localization ParallelCorpusDialog_SmtAlgorithm}" />
             <ComboBox
-                Margin="30,0,0,0"
+                Margin="30,0,30,0"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type translation:SmtModelType}}}"
                 SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
@@ -91,9 +91,11 @@
 
             <Button
                 x:Name="Train"
-                Content="{helpers:Localization ParallelCorpusDialog_TrainSmtModel}" 
+                Content="{helpers:Localization ParallelCorpusDialog_Train}" 
                 IsDefault="True"
-                Style="{StaticResource TransparentStyle}"/>
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                Style="{StaticResource TransparentStyle}"
+                 />
         </StackPanel>
 
     </Grid>

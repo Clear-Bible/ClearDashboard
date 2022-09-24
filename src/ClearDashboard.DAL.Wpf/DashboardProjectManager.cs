@@ -227,6 +227,8 @@ public class DashboardProjectManager : ProjectManager
 
         return project;
     }
+    
+    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
 
     public void CheckLicense<TViewModel>(TViewModel viewModel)
     {
@@ -286,8 +288,7 @@ public class DashboardProjectManager : ProjectManager
         var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
         _licenseCleared = true;
     }
-
-    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+    
 
     private static dynamic CreateNewProjectDialogSettings()
     {

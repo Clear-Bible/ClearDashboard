@@ -33,7 +33,7 @@
             <Setter Property="FontSize" Value="24" />
         </Style>
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -49,7 +49,7 @@
                 <TextBox.Text>
                     <Binding
                     Mode="TwoWay"
-                    Path="ParentViewModel.ParallelCorpus.DisplayName"
+                    Path="ParallelCorpusDisplayName"
                     UpdateSourceTrigger="PropertyChanged"
                     ValidatesOnDataErrors="True" />
                 </TextBox.Text>
@@ -78,7 +78,8 @@
                  materialDesign:HintAssist.FloatingScale="0.60"
                  materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                  materialDesign:HintAssist.Hint="{helpers:Localization ParallelCorpusDialog_JSON_Metadata}"
-                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0">
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                 Visibility="{Binding ParentViewModel.DialogMode, Converter={StaticResource DialogModeToVisibilityConverter}}">
                 <TextBox.Text>
                     <Binding
                     Mode="TwoWay"
@@ -112,7 +113,8 @@
                  materialDesign:HintAssist.FloatingScale="0.60"
                  materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                  materialDesign:HintAssist.Hint="{helpers:Localization ParallelCorpusDialog_VerseMappings}"
-                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0">
+                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                 Visibility="{Binding ParentViewModel.DialogMode, Converter={StaticResource DialogModeToVisibilityConverter}}">
                 <TextBox.Text>
                     <Binding
                     Mode="TwoWay"
@@ -226,8 +228,11 @@
                 Content="{helpers:Localization Create}" 
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}"/>-->
-            <Button x:Name="Create"  Style="{StaticResource TransparentStyle}"
-                    Content="{helpers:Localization Create}" >
+            <Button x:Name="Create"  
+                    Style="{StaticResource TransparentStyle}"
+                    Content="{helpers:Localization Create}" 
+                    IsDefault="True"
+                    >
                 <!--<Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Grid>

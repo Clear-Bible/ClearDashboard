@@ -21,6 +21,7 @@ using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
-    public class EnhancedCorpusViewModel : PaneViewModel,
+    public class EnhancedViewModel : PaneViewModel,
         IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
@@ -57,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         #region Member Variables
-        private readonly ILogger<EnhancedCorpusViewModel> _logger;
+        private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager _projectManager;
 
         private CancellationTokenSource? _cancellationTokenSource;
@@ -260,12 +261,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Constructor
 
-        public EnhancedCorpusViewModel()
+        public EnhancedViewModel()
         {
             // required by design-time binding
         }
 
-        public EnhancedCorpusViewModel(INavigationService navigationService, ILogger<EnhancedCorpusViewModel> logger,
+        public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
@@ -274,8 +275,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _logger = logger;
             _projectManager = projectManager;
 
-            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedCorpus", Logger);
-            this.ContentId = "ENHANCEDCORPUS";
+            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
+            this.ContentId = "ENHANCEDVIEW";
 
             //BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
@@ -320,7 +321,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Name = "Fetch Book",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
             }
             return base.OnDeactivateAsync(close, cancellationToken);
@@ -406,7 +407,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     var tokensTextRows =
@@ -432,7 +433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -445,7 +446,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -461,13 +462,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
             {
                 _cancellationTokenSource?.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
@@ -583,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     // get the rows for the current book and chapter
@@ -622,6 +623,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var offset = upperEnd - lowEnd + 1;
                     var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
 
+                    // set the title to include the verse range
+                    string title = message.ProjectName + " - " + message.TokenizationType;
+                    if (verseRangeRows.Count == 1)
+                    {
+                        title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})";
+                    }
+                    else
+                    {
+                        var startNum = (VerseRef)verseRangeRows[0].Ref;
+                        var endNum = (VerseRef)verseRangeRows[^1].Ref;
+                        title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{startNum.VerseNum} - {endNum.VerseNum})";
+                    }
+
+
+
                     // combine verse list into one TokensTextRow
                     ObservableCollection<List<TokenDisplayViewModel>> verses = new();
 
@@ -653,7 +669,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
-                        UpdateVersesDisplay(message, verses);
+                        UpdateVersesDisplay(message, verses, title);
                         NotifyOfPropertyChange(() => VersesDisplay);
 
                         ProgressBarVisibility = Visibility.Collapsed;
@@ -664,7 +680,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -678,7 +694,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -711,7 +727,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     // get the rows for the current book and chapter
@@ -750,6 +766,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var offset = upperEnd - lowEnd + 1;
                     var verseRangeRows = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
 
+                    // set the title to include the verse range
+                    string title = message.ProjectName + " - " + message.TokenizationType;
+                    if (verseRangeRows.Count == 1)
+                    {
+                        title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})";
+                    }
+                    else
+                    {
+                        var startNum = (VerseRef)verseRangeRows[0].Ref;
+                        var endNum = (VerseRef)verseRangeRows[^1].Ref;
+                        title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{startNum.VerseNum} - {endNum.VerseNum})";
+                    }
+
+
                     // combine verse list into one TokensTextRow
                     ObservableCollection<List<TokenDisplayViewModel>> verses = new();
 
@@ -781,7 +811,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
-                        UpdateVersesDisplay(message, verses);
+                        UpdateVersesDisplay(message, verses, title);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -790,7 +820,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -803,7 +833,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -826,7 +856,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses)
+        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title)
         {
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.Blue;
@@ -857,7 +887,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row0CorpusId == message.CorpusId)
                 {
                     VersesDisplay.Row0CorpusId = message.CorpusId;
-                    VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row0Title = title;
                     VersesDisplay.Row0Verses = verses;
                     VersesDisplay.Row0Visibility = Visibility.Visible;
                     VersesDisplay.Row0BorderColor = brush;
@@ -866,7 +896,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                            VersesDisplay.Row1CorpusId == message.CorpusId)
                 {
                     VersesDisplay.Row1CorpusId = message.CorpusId;
-                    VersesDisplay.Row1Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row1Title = title;
                     VersesDisplay.Row1Verses = verses;
                     VersesDisplay.Row1Visibility = Visibility.Visible;
                     VersesDisplay.Row1BorderColor = brush;
@@ -876,7 +906,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                          VersesDisplay.Row2CorpusId == message.CorpusId )
                 {
                     VersesDisplay.Row2CorpusId = message.CorpusId;
-                    VersesDisplay.Row2Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row2Title = title;
                     VersesDisplay.Row2Verses = verses;
                     VersesDisplay.Row2Visibility = Visibility.Visible;
                     VersesDisplay.Row2BorderColor = brush;
@@ -885,7 +915,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 else
                 {
                     VersesDisplay.Row3CorpusId = message.CorpusId;
-                    VersesDisplay.Row3Title = message.ProjectName + " - " + message.TokenizationType;
+                    VersesDisplay.Row3Title = title;
                     VersesDisplay.Row3Verses = verses;
                     VersesDisplay.Row3Visibility = Visibility.Visible;
                     VersesDisplay.Row3BorderColor = brush;
@@ -893,43 +923,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
             }
             
-            //if (VersesDisplay.Row0Verses.Count == 0)
-            //{
-            //    VersesDisplay.Row0ProjectGuid = message.ParatextProjectId;
-            //    VersesDisplay.Row0Tokenization = message.TokenizationType;
-            //    VersesDisplay.Row0Title = message.ProjectName + " - " + message.TokenizationType;
-            //    VersesDisplay.Row0Verses = verses;
-            //    VersesDisplay.Row0Visibility = Visibility.Visible;
-            //    VersesDisplay.Row0BorderColor = brush;
-            //}
-            //else if (VersesDisplay.Row1Verses.Count == 0)
-            //{
-            //    VersesDisplay.Row1ProjectGuid = message.ParatextProjectId;
-            //    VersesDisplay.Row1Tokenization = message.TokenizationType;
-            //    VersesDisplay.Row1Title = message.ProjectName + " - " + message.TokenizationType;
-            //    VersesDisplay.Row1Verses = verses;
-            //    VersesDisplay.Row1Visibility = Visibility.Visible;
-            //    VersesDisplay.Row1BorderColor = brush;
-            //}
-            //else if (VersesDisplay.Row2Verses.Count == 0)
-            //{
-            //    VersesDisplay.Row2ProjectGuid = message.ParatextProjectId;
-            //    VersesDisplay.Row2Tokenization = message.TokenizationType;
-            //    VersesDisplay.Row2Title = message.ProjectName + " - " + message.TokenizationType;
-            //    VersesDisplay.Row2Verses = verses;
-            //    VersesDisplay.Row2Visibility = Visibility.Visible;
-            //    VersesDisplay.Row2BorderColor = brush;
-            //}
-            //else
-            //{
-            //    VersesDisplay.Row3ProjectGuid = message.ParatextProjectId;
-            //    VersesDisplay.Row3Tokenization = message.TokenizationType;
-            //    VersesDisplay.Row3Title = message.ProjectName + " - " + message.TokenizationType;
-            //    VersesDisplay.Row3Verses = verses;
-            //    VersesDisplay.Row3Visibility = Visibility.Visible;
-            //    VersesDisplay.Row3BorderColor = brush;
-            //}
-
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 
@@ -948,6 +941,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private Translation GetTranslation(EngineToken token)
         {
+            //Debug.WriteLine(token + " " + token.PropertiesJson);
+
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
                 ? GetMockOogaWord()
                 : String.Empty;
