@@ -1,6 +1,6 @@
-﻿namespace ClearDashboard.Wpf.Application.Models
+﻿namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization
 {
-    public class NodeTokenization
+    public class SerializedTokenization
     {
         public string TokenizationFriendlyName { get; set; } = string.Empty;
         public string TokenizationName { get; set; } = string.Empty;
