@@ -533,7 +533,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
 
                     // add in the menu
-                    CreateNodeMenu(node);
+                    CreateCorpusNodeMenu(node);
                 }
 
                 // restore the connections
@@ -926,7 +926,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ProjectDesignSurface?.InvalidateVisual();
                 }
 
-                CreateNodeMenu(corpusNode);
+                CreateCorpusNodeMenu(corpusNode);
             }
         }
 
@@ -936,7 +936,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         /// <param name="corpusNode"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void CreateNodeMenu(CorpusNodeViewModel corpusNode)
+        private void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode)
         {
             // initiate the menu system
             corpusNode.MenuItems.Clear();
@@ -1318,6 +1318,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 // get TranslationSet , etc from the dialogViewModel
                 var translationSet = dialogViewModel.TranslationSet;
+                await SaveCanvas();
             }
             else
             {
@@ -1519,7 +1520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // rerender the context menus
             foreach (var corpusNode in DesignSurface.CorpusNodes)
             {
-                CreateNodeMenu(corpusNode);
+                CreateCorpusNodeMenu(corpusNode);
             }
         }
 
@@ -1649,7 +1650,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // rerender the context menus
             foreach (var corpusNode in DesignSurface.CorpusNodes)
             {
-                CreateNodeMenu(corpusNode);
+                CreateCorpusNodeMenu(corpusNode);
             }
 
 
