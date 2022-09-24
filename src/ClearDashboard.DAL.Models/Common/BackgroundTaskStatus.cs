@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public enum StatusEnum
+    public enum LongRunningProcessStatus
     {
         Working,
         Completed,
@@ -25,13 +25,13 @@ namespace ClearDashboard.DataAccessLayer.Models
             }
         }
 
-        private StatusEnum _taskStatus = StatusEnum.Working;
-        public StatusEnum TaskStatus
+        private LongRunningProcessStatus _taskLongRunningProcessStatus = LongRunningProcessStatus.Working;
+        public LongRunningProcessStatus TaskLongRunningProcessStatus
         {
-            get => _taskStatus;
+            get => _taskLongRunningProcessStatus;
             set
             {
-                _taskStatus = value;
+                _taskLongRunningProcessStatus = value;
                 OnPropertyChanged();
             }
         }
@@ -47,8 +47,8 @@ namespace ClearDashboard.DataAccessLayer.Models
             }
         }
 
-        private string _description = "";
-        public string Description
+        private string? _description = "";
+        public string? Description
         {
             get => _description;
             set
@@ -58,8 +58,8 @@ namespace ClearDashboard.DataAccessLayer.Models
             }
         }
 
-        private string _errorMessage = "";
-        public string ErrorMessage
+        private string? _errorMessage = "";
+        public string? ErrorMessage
         {
             get => _errorMessage;
             set
