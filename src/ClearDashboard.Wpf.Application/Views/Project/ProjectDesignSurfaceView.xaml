@@ -308,17 +308,7 @@
                         StrokeThickness="3">
                         <projectDesignSurface:CurvedArrow.ContextMenu>
                             <ContextMenu Name="ContextMenu">
-                                <MenuItem
-                                    Command="{StaticResource Commands.ConnectionProperties}"
-                                    CommandParameter="{Binding}"
-                                    Header="{helpers:Localization Pds_PropertiesMenu}"
-                                    ToolTip="View the corpus properties" />
-                                <!--
-                                    Command="{StaticResource Commands.Properties}"
-                                    cm:Message.Attach="[Event Click] = [Action ShowCorpusProperties($this)]"
-                                    CommandParameter="{Binding ElementName=nodeRectangle}"
-                                -->
-
+                                <ContextMenu.Resources>
                                     <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:CorpusNodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconPicolIcons
