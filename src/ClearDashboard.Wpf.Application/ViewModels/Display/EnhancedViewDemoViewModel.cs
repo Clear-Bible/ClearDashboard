@@ -1,5 +1,5 @@
 ﻿// Use mock data
-#define MOCK
+//#define MOCK
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +21,9 @@ using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
 using QuickGraph.Algorithms.RandomWalks;
 using SIL.Machine.Corpora;
@@ -412,11 +414,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             await base.OnActivateAsync(cancellationToken);
 #if MOCK
             await SetTextRow(MockVerseTextRow(40001001));
+#else
+            await ProjectManager.LoadProject("EnhancedViewDemo");
+            var row = await VerseTextRow(40001001);
 #endif
         }
         // ReSharper restore UnusedMember.Global
 
-#endregion
+        #endregion
 
         private void SetCurrentToken(TokenDisplayViewModel viewModel)
         {
@@ -444,6 +449,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
             NotePaneVisibility = Visibility.Visible;
             NotifyOfPropertyChange(nameof(NotePaneVisibility));
+        }
+
+        public async Task<EngineParallelTextRow> VerseTextRow(int BBBCCCVVV)
+        {
+            try
+            {
+                var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
+                var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First());
+                var book = corpus.Where(row => ((VerseRef)row.Ref).BookNum == 40);
+                var chapter = book.Where(row => ((VerseRef)row.Ref).ChapterNum == 1);
+                var verse = chapter.First(row => ((VerseRef)row.Ref).VerseNum == 1) as EngineParallelTextRow;
+
+                return verse;
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
