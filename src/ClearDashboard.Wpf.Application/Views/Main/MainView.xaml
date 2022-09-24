@@ -118,7 +118,7 @@
 
                         <panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
                             <DataTemplate>
-                                <local:EnhancedCorpusView />
+                                <local:EnhancedView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
 
