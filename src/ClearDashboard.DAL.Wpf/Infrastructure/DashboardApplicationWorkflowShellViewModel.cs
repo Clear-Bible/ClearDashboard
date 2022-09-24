@@ -1,8 +1,12 @@
-﻿using Autofac;
+﻿using System;
+using System.Threading;
+using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
 {
@@ -42,6 +46,20 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
                 Set(ref _currentStepTitle, value);
                 Title = $"{DisplayName} - {_currentStepTitle}";
             }
+        }
+
+        protected async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? ex = null)
+        {
+
+            var backgroundTaskStatus = new BackgroundTaskStatus
+            {
+                Name = name,
+                EndTime = DateTime.Now,
+                Description = !string.IsNullOrEmpty(description) ? description : null,
+                ErrorMessage = ex != null ? $"{ex}" : null,
+                TaskLongRunningProcessStatus = status
+            };
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
 
 
