@@ -71,7 +71,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             if (MimicParatextConnection)
             {
-                var vm = Steps[0] as ProjectPickerViewModel;
+                var vm = CurrentStep as ProjectPickerViewModel;
                 vm.Connected = true;
             }
 

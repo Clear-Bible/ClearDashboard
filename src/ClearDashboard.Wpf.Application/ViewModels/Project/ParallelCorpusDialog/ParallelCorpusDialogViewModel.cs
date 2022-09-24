@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System;
 using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using SIL.Machine.Translation;
 using SIL.Machine.Utils;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
@@ -56,6 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken,
             string? description = null, Exception? ex = null);
+        List<IWorkflowStepViewModel> Steps { get; }
 
         void Ok();
         void Cancel();
