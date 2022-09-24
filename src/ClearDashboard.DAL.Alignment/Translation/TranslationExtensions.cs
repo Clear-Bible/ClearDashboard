@@ -23,21 +23,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 ParallelCorpusId parallelCorpusId, 
                 IMediator mediator)
         {
-            var createTranslationSetCommandResult = await mediator.Send(new CreateTranslationSetCommand(
-                translationModel,
-                displayName,
-                smtModel,
-                metadata,
-                parallelCorpusId));
-
-            if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
-            {
-                return createTranslationSetCommandResult.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(createTranslationSetCommandResult.Message);
-            }
+            return await TranslationSet.Create(translationModel, displayName, smtModel, metadata, parallelCorpusId, mediator);
         }
     }
 }

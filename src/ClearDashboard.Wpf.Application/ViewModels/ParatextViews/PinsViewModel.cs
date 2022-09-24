@@ -22,6 +22,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.Extensions.Logging;
 using SIL.ObjectModel;
 
@@ -172,7 +173,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                 Name = _taskName,
                 Description = "Loading PINS data...",
                 StartTime = DateTime.Now,
-                TaskStatus = StatusEnum.Working
+                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
             }));
 
             // ReSharper disable once MethodSupportsCancellation
@@ -197,7 +198,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                     Name = _taskName,
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }));
             }
             return base.OnDeactivateAsync(close, cancellationToken);
@@ -237,7 +238,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                             Name = _taskName,
                             EndTime = DateTime.Now,
                             ErrorMessage = "Paratext is not installed",
-                            TaskStatus = StatusEnum.Error
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                         }));
 
                     Logger.LogError("Paratext Not Installed in PINS viewmodel");
@@ -518,7 +519,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                         Name = _taskName,
                         EndTime = DateTime.Now,
                         Description = "Loading PINS data...Complete",
-                        TaskStatus = StatusEnum.Completed
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                     }));
             }
             catch (Exception ex)
@@ -531,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels
                             Name = _taskName,
                             EndTime = DateTime.Now,
                             ErrorMessage = $"{ex}",
-                            TaskStatus = StatusEnum.Error
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                         }));
                 }
             }
@@ -683,9 +684,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels
 
         private bool FiterTerms(object item)
         {
-            return item is PinsDataTable itemDt &&
-                   (itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) ||
-                    itemDt.Notes.Contains(_filterString));
+            var itemDt = (PinsDataTable)item;
+
+            if (itemDt.Gloss is null)
+            {
+                return itemDt.Source.Contains(_filterString) || itemDt.Notes.Contains(_filterString);
+            }
+
+            return itemDt.Source.Contains(_filterString) || itemDt.Gloss.Contains(_filterString) ||
+                   itemDt.Notes.Contains(_filterString);
+
         }
 
         /// <summary>
@@ -775,13 +783,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == _taskName && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
             {
                 _cancellationTokenSource.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));

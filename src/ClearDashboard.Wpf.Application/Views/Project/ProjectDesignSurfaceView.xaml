@@ -790,6 +790,13 @@
                         Content="Paratext"
                         Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />
+                    <!--<Button
+                        x:Name="TrainSmtModel"
+                        Margin="10,0,10,10"
+                        cm:Message.Attach="TrainSmtModel()"
+                        Content="Paratext"
+                        Style="{StaticResource BigParatextButton}"
+                        Tag=" ScriptTextOutline" />-->
                 </WrapPanel>
             </StackPanel>
         </materialDesign:Card>

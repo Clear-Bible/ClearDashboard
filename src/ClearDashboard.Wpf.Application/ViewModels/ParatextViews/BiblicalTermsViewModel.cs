@@ -586,7 +586,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     Name = _taskName,
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }));
             }
             return base.OnDeactivateAsync(close, cancellationToken);
@@ -1044,7 +1044,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 Name = _taskName,
                 Description = "Requesting BiblicalTerms data...",
                 StartTime = DateTime.Now,
-                TaskStatus = StatusEnum.Working
+                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
             }));
 
             try
@@ -1075,7 +1075,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Name = _taskName,
                             Description = "BiblicalTerms Loaded",
                             EndTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }));
                     }
 
@@ -1123,13 +1123,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == _taskName && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
             {
                 _cancellationTokenSource.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));

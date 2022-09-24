@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             NoteId = noteId;
             Text = text;
             AbbreviatedText = abbreviatedText;
-            labels_ = new ObservableCollection<Label>(labels); ;
+            labels_ = new ObservableCollection<Label>(labels.DistinctBy(l => l.LabelId)); ;
             domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEquatableComparer());
         }
 
@@ -72,7 +72,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public async Task AssociateLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
-            if (labels_.Contains(label))
+            if (labels_.Any(l => l.LabelId == label.LabelId))
             {
                 return;
             }
@@ -101,7 +101,8 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public async Task DetachLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
-            if (!labels_.Contains(label))
+            var labelMatch = labels_.FirstOrDefault(l => l.LabelId == label.LabelId);
+            if (labelMatch is null)
             {
                 return;
             }
@@ -120,7 +121,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var result = await mediator.Send(command, token);
             if (result.Success)
             {
-                labels_.Remove(label);
+                labels_.Remove(labelMatch);
             }
             else
             {
@@ -257,23 +258,6 @@ namespace ClearDashboard.DAL.Alignment.Notes
             {
                 throw new MediatorErrorEngineException(result.Message);
             }
-        }
-
-        private class NoteLabelComparer : IEqualityComparer<Label>
-        {
-            public bool Equals(Label? x, Label? y)
-            {
-                if (ReferenceEquals(x, y)) return true;
-                if (x is null || y is null) return false;
-
-                // A note cannot be associated with a Label that hasn't
-                // been 'Create'd (that has an Id):
-                return x.LabelId!.Id == y.LabelId!.Id;
-            }
-
-            // A note cannot be associated with a Label that hasn't
-            // been 'Create'd (that has an Id):
-            public int GetHashCode(Label label) => label.LabelId!.Id.GetHashCode();
         }
     }
 }

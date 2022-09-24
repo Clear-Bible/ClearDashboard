@@ -19,7 +19,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <returns></returns>
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<AlignmentSet> Create(
-            this IEnumerable<Alignment> alignments, 
+            this IEnumerable<AlignedTokenPairs> alignTokenPairs, 
                 string? displayName,
                 string smtModel,
                 bool isSyntaxTreeAlignerRefined,
@@ -27,22 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 ParallelCorpusId parallelCorpusId, 
                 IMediator mediator)
         {
-            var createTranslationSetCommandResult = await mediator.Send(new CreateAlignmentSetCommand(
-                alignments,
-                displayName,
-                smtModel,
-                isSyntaxTreeAlignerRefined,
-                metadata,
-                parallelCorpusId));
-
-            if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
-            {
-                return createTranslationSetCommandResult.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(createTranslationSetCommandResult.Message);
-            }
+            return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, metadata, parallelCorpusId, mediator);
         }
     }
 }

@@ -423,7 +423,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task LoadFiles()
         {
-            var corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
+            IEnumerable<TokensTextRow> corpus = GetSampleEnglishTextCorpus().Cast<TokensTextRow>();
 
             Verse1 = GetTokenDisplays(corpus, 40001001);
 

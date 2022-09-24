@@ -256,7 +256,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 Name = "Background Task 1",
                 Description = "Something longer that goes in here that is pretty darn long",
                 StartTime = DateTime.Now,
-                TaskStatus = StatusEnum.Working
+                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
             });
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
@@ -264,7 +264,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 Description = "Something longer that goes in here",
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
-                TaskStatus = StatusEnum.Error
+                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
             });
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
@@ -272,14 +272,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 Description = "Something longer that goes in here",
                 StartTime = DateTime.Now,
                 EndTime = DateTime.Now,
-                TaskStatus = StatusEnum.Completed
+                TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
             });
             BackgroundTaskStatuses.Add(new BackgroundTaskStatus
             {
                 Name = "Background Task 4",
                 Description = "Something longer that goes in here which is also pretty darn long",
                 StartTime = DateTime.Now,
-                TaskStatus = StatusEnum.Working
+                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
             });
         }
 
@@ -391,7 +391,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 TimeSpan ts = presentTime - _backgroundTaskStatuses[i].EndTime;
 
                 // if completed task remove it
-                if (_backgroundTaskStatuses[i].TaskStatus == StatusEnum.Completed && ts.TotalSeconds > _completedRemovalSeconds)
+                if (_backgroundTaskStatuses[i].TaskLongRunningProcessStatus == LongRunningProcessStatus.Completed && ts.TotalSeconds > _completedRemovalSeconds)
                 {
                     OnUIThread(() =>
                     {
@@ -442,7 +442,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var taskToCancel = _backgroundTaskStatuses.FirstOrDefault(t => t.Name == task.Name);
             if (taskToCancel != null)
             {
-                taskToCancel.TaskStatus = StatusEnum.CancelTaskRequested;
+                taskToCancel.TaskLongRunningProcessStatus = LongRunningProcessStatus.CancelTaskRequested;
                 taskToCancel.EndTime = DateTime.Now;
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
             }
@@ -457,7 +457,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 Name = "BOGUS TASK TO CANCEL",
                 Description = "Try cancelling me",
                 StartTime = DateTime.Now,
-                TaskStatus = StatusEnum.Working
+                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
             }));
         }
 
@@ -495,11 +495,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     bFound = true;
 
                     status.Description = incomingMessage.Description;
-                    if (incomingMessage.TaskStatus == StatusEnum.Error)
+                    if (incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.Error)
                     {
                         status.Description = incomingMessage.ErrorMessage;
                     }
-                    status.TaskStatus = incomingMessage.TaskStatus;
+                    status.TaskLongRunningProcessStatus = incomingMessage.TaskLongRunningProcessStatus;
 
                     NotifyOfPropertyChange(() => BackgroundTaskStatuses);
                     break;
@@ -513,7 +513,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
 
             // check to see if all are completed so we can turn off spinner
-            var runningTasks = BackgroundTaskStatuses.Where(p => p.TaskStatus == StatusEnum.Working).ToList();
+            var runningTasks = BackgroundTaskStatuses.Where(p => p.TaskLongRunningProcessStatus == LongRunningProcessStatus.Working).ToList();
             if (runningTasks.Count > 0)
             {
                 ShowSpinner = Visibility.Visible;
@@ -525,11 +525,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
 
             // check if the message is for the bogus task
-            if (incomingMessage.Name == "BOGUS TASK TO CANCEL" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            if (incomingMessage.Name == "BOGUS TASK TO CANCEL" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
             {
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));

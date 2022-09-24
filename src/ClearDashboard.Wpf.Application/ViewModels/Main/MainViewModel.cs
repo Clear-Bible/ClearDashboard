@@ -483,7 +483,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Name = "Corpus",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
             }
 
@@ -529,7 +529,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Items.Clear();
 
             // documents
-            await ActivateItemAsync<EnhancedCorpusViewModel>();
+            await ActivateItemAsync<EnhancedViewModel>();
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
@@ -735,7 +735,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
                         
                         // Enhanced Corpus
-                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedCorpus", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedView", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
                         
                         // PINS
                         new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
@@ -915,7 +915,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         switch (type)
                         {
 
-                            case EnhancedCorpusViewModel:
+                            case EnhancedViewModel:
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
@@ -955,7 +955,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     switch (type)
                     {
-                        case EnhancedCorpusViewModel:
+                        case EnhancedViewModel:
                             return (PaneViewModel)t;
                     }
                 }
@@ -1348,8 +1348,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     // there is only one doc window open, so we can just add to it
                     var enhancedCorpusViewModels =
-                        Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as
-                            EnhancedCorpusViewModel;
+                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
+                            EnhancedViewModel;
                     if (enhancedCorpusViewModels is not null)
                     {
                         await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
@@ -1361,17 +1361,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // more than one enhanced corpus window is open and active
                 foreach (var document in dockableWindows)
                 {
-                    if (document.IsActive && document.Content is EnhancedCorpusViewModel)
+                    if (document.IsActive && document.Content is EnhancedViewModel)
                     {
-                        var vm = document.Content as EnhancedCorpusViewModel;
+                        var vm = document.Content as EnhancedViewModel;
                         // ReSharper disable once PossibleNullReferenceException
                         var guid = vm.Guid;
 
                         var enhancedCorpusViewModels =
-                            Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel))
+                            Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
                                     // ReSharper disable once UsePatternMatching
-                                    .First(item => ((EnhancedCorpusViewModel)item).Guid == guid) as
-                                EnhancedCorpusViewModel;
+                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
+                                EnhancedViewModel;
                         if (enhancedCorpusViewModels is not null)
                         {
                             await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
@@ -1393,7 +1393,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 
-            EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
@@ -1469,7 +1469,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 .OfType<LayoutDocument>();
             foreach (var pane in dockableWindows)
             {
-                var content = pane.Content as EnhancedCorpusViewModel;
+                var content = pane.Content as EnhancedViewModel;
                 // ReSharper disable once PossibleNullReferenceException
                 if (content.Guid != guid)
                 {
