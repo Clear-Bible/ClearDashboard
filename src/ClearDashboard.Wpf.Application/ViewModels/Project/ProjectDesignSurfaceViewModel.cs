@@ -6,14 +6,17 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using System;
@@ -28,11 +31,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.Exceptions;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog;
-using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -523,8 +521,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
 
-                    var node =CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
-                    node.NodeTokenizations = corpusNode.NodeTokenizations;
+                    var corpusNodeViewModel =CreateCorpusNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
+                    corpusNodeViewModel.NodeTokenizations = corpusNode.NodeTokenizations;
                     
                     if (corpusNode.CorpusType == CorpusType.Manuscript)
                     {
@@ -532,7 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     
                     // add in the menu
-                    CreateNodeMenu(node);
+                    CreateNodeMenu(corpusNodeViewModel);
                 }
 
                 // restore the connections
@@ -625,14 +623,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() => Corpora.Add(corpus));
 
-                    CorpusNodeViewModel node = new();
+                    CorpusNodeViewModel corpusNodeViewModel = new();
 
                     OnUIThread(() =>
                     {
                         // figure out some offset based on the number of nodes already in the network
                         // so we don't overlap
                         var point = GetFreeSpot();
-                        node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
+                        corpusNodeViewModel = CreateCorpusNode(corpus, point, Tokenizer.WhitespaceTokenizer);
                     });
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -670,7 +668,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
+                        UpdateNodeTokenization(corpusNodeViewModel, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
                     });
 
                 }
@@ -719,32 +717,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
            
             
             await _projectManager.InvokeDialog<AddParatextCorpusDialogViewModel>(
-                DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
+                DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task>)Callback);
 
-            async Task<bool> Callback(AddParatextCorpusDialogViewModel viewModel)
+            async Task Callback(AddParatextCorpusDialogViewModel viewModel)
             {
                 IsBusy = true;
-                var metadata = viewModel.SelectedProject;
+                var selectedProject = viewModel.SelectedProject;
 
                 _ = await Task.Factory.StartNew(async () =>
                 {
                     try
                     {
                         DAL.Alignment.Corpora.Corpus? corpus = null;
-                        CorpusNodeViewModel node = new();
+                        CorpusNodeViewModel corpusNodeViewModel = new();
                         // is this corpus already made for a different tokenization
                         foreach (var corpusNode in Corpora)
                         {
-                            if (corpusNode.ParatextGuid == metadata.Id)
+                            if (corpusNode.ParatextGuid == selectedProject.Id)
                             {
                                 corpus = corpusNode;
 
                                 // find the node on the design surface
-                                foreach (var designSurfaceCorpusNode in DesignSurface.CorpusNodes)
+                                foreach (var designSurfaceCorpusNodeViewModel in DesignSurface.CorpusNodes)
                                 {
-                                    if (designSurfaceCorpusNode.ParatextProjectId == metadata.Id)
+                                    if (designSurfaceCorpusNodeViewModel.ParatextProjectId == selectedProject.Id)
                                     {
-                                        node = designSurfaceCorpusNode;
+                                        corpusNodeViewModel = designSurfaceCorpusNodeViewModel;
                                         break;
                                     }
                                 }
@@ -759,7 +757,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                             {
                                 Name = "Corpus",
-                                Description = $"Creating corpus '{metadata.Name}'...",
+                                Description = $"Creating corpus '{selectedProject.Name}'...",
                                 StartTime = DateTime.Now,
                                 TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                             }), cancellationToken);
@@ -768,11 +766,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8604
                             corpus = await DAL.Alignment.Corpora.Corpus.Create(
                                 mediator: Mediator,
-                                IsRtl: metadata.IsRtl, 
-                                Name: metadata.Name, 
-                                Language: metadata.LanguageName,
-                                CorpusType: metadata.CorpusTypeDisplay, 
-                                ParatextId: metadata.Id, 
+                                IsRtl: selectedProject.IsRtl, 
+                                Name: selectedProject.Name, 
+                                Language: selectedProject.LanguageName,
+                                CorpusType: selectedProject.CorpusTypeDisplay, 
+                                ParatextId: selectedProject.Id, 
                                 token: cancellationToken);
 #pragma warning restore CS8604
                             OnUIThread(() => Corpora.Add(corpus));
@@ -783,14 +781,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 // figure out some offset based on the number of nodes already in the network
                                 // so we don't overlap
                                 var point = GetFreeSpot();
-                                node = CreateNode(corpus, point, viewModel.SelectedTokenizer);
+                                corpusNodeViewModel = CreateCorpusNode(corpus, point, viewModel.SelectedTokenizer);
                             });
                         }
 
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                         {
                             Name = "Corpus",
-                            Description = $"Tokenizing and transforming '{metadata.Name}' corpus...",
+                            Description = $"Tokenizing and transforming '{selectedProject.Name}' corpus...",
                             StartTime = DateTime.Now,
                             TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
@@ -800,22 +798,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         switch (viewModel.SelectedTokenizer)
                         {
                             case Tokenizer.LatinWordTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, selectedProject.Id!, cancellationToken))
                                     .Tokenize<LatinWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             case Tokenizer.WhitespaceTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, selectedProject.Id!, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             case Tokenizer.ZwspWordTokenizer:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, selectedProject.Id!, cancellationToken))
                                     .Tokenize<ZwspWordTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
                             default:
-                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
+                                textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, selectedProject.Id!, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
                                     .Transform<IntoTokensTextRowProcessor>();
                                 break;
@@ -824,37 +822,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                         {
                             Name = "Corpus",
-                            Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
+                            Description = $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...",
                             StartTime = DateTime.Now,
                             TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                            metadata.Name, viewModel.SelectedTokenizer.ToString(), cancellationToken);
+                            selectedProject.Name, viewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
 
 
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                         {
                             Name = "Corpus",
-                            Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
+                            Description = $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...Completed",
                             StartTime = DateTime.Now,
                             TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
 
-                        _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
+                        //_logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
                         //await EventAggregator.PublishOnCurrentThreadAsync(
                         //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, viewModel.SelectedTokenizer.ToString(), metadata), cancellationToken);
 
                         OnUIThread(() =>
                         {
-                            UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
+                            UpdateNodeTokenization(corpusNodeViewModel, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
                         });
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                        _logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
                         if (!cancellationToken.IsCancellationRequested)
                         {
                             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -876,8 +874,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }, cancellationToken);
 
 
-                // We don't want to navigate anywhere.
-                return false;
+                //// We don't want to navigate anywhere.
+                //return false;
             }
         }
 
@@ -1399,7 +1397,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// <summary>
         /// Create a node and add it to the view-model.
         /// </summary>
-        private CorpusNodeViewModel CreateNode(DAL.Alignment.Corpora.Corpus corpus, Point nodeLocation, 
+        private CorpusNodeViewModel CreateCorpusNode(DAL.Alignment.Corpora.Corpus corpus, Point nodeLocation, 
             Tokenizer tokenizer)
         {
             var node = new CorpusNodeViewModel(corpus.Name ?? string.Empty, _eventAggregator, _projectManager)
