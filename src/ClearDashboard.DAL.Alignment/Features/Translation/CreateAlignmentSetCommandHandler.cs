@@ -252,7 +252,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         private DbCommand CreateAlignmentInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId", "UserId", "Created" };
+            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId" };
 
             ApplyColumnsToCommand(command, typeof(Models.Alignment), columns);
 
@@ -270,8 +270,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom.ToString();
             alignmentCommand.Parameters["@Score"].Value = alignment.Score;
             alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
-            alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
-            alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
             _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 

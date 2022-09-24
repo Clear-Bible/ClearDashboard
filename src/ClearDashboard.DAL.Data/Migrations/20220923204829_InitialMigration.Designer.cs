@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220921000809_InitialMigration")]
+    [Migration("20220923204829_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,9 +71,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("AlignmentVerification")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
                     b.Property<double>("Score")
                         .HasColumnType("REAL");
 
@@ -89,9 +86,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid?>("TargetTokenId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AlignmentSetId");
@@ -99,8 +93,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("SourceTokenId");
 
                     b.HasIndex("TargetTokenId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Alignment");
                 });
@@ -615,9 +607,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
                     b.Property<Guid>("SourceTokenComponentId")
                         .HasColumnType("TEXT");
 
@@ -633,16 +622,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("TranslationState")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("SourceTokenId");
 
                     b.HasIndex("TranslationSetId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Translation");
                 });
@@ -882,6 +866,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<int>("ChapterNumber")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("PropertiesJson")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("SubwordNumber")
                         .HasColumnType("INTEGER");
 
@@ -970,19 +957,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany("TargetAlignments")
                         .HasForeignKey("TargetTokenId");
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("AlignmentSet");
 
                     b.Navigation("SourceTokenComponent");
 
                     b.Navigation("TargetTokenComponent");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
@@ -1239,17 +1218,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("SourceTokenComponent");
 
                     b.Navigation("TranslationSet");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationModelEntry", b =>

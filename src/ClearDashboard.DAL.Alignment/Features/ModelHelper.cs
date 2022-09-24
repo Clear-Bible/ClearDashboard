@@ -33,7 +33,10 @@ namespace ClearDashboard.DAL.Alignment.Features
                 return new Token(
                     ModelHelper.BuildTokenId(token),
                     token.SurfaceText ?? string.Empty,
-                    token.TrainingText ?? string.Empty);
+                    token.TrainingText ?? string.Empty)
+                {
+                    PropertiesJson = token.PropertiesJson
+                };
             }
         }
         public static TokenId BuildTokenId(Models.TokenComponent tokenComponent)

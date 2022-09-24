@@ -141,7 +141,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                                 VerseNumber = childToken.TokenId.VerseNumber,
                                                 WordNumber = childToken.TokenId.WordNumber,
                                                 SubwordNumber = childToken.TokenId.SubWordNumber,
-                                                SurfaceText = childToken.SurfaceText
+                                                SurfaceText = childToken.SurfaceText,
+                                                PropertiesJson = childToken.PropertiesJson
                                             };
                                         }).ToList()
                                 };
@@ -160,7 +161,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     VerseNumber = token.TokenId.VerseNumber,
                                     WordNumber = token.TokenId.WordNumber,
                                     SubwordNumber = token.TokenId.SubWordNumber,
-                                    SurfaceText = token.SurfaceText
+                                    SurfaceText = token.SurfaceText,
+                                    PropertiesJson = token.PropertiesJson
                                 } as TokenComponent;
                             }
                         });
@@ -212,7 +214,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private DbCommand CreateTokenComponentInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "TokenizationId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "TokenCompositeId" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "TokenizationId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "PropertiesJson", "TokenCompositeId" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
 
@@ -253,6 +255,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@WordNumber"].Value = token.WordNumber;
             componentCmd.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
             componentCmd.Parameters["@SurfaceText"].Value = token.SurfaceText;
+            componentCmd.Parameters["@PropertiesJson"].Value = (token.PropertiesJson != null) ? token.PropertiesJson : DBNull.Value;
             componentCmd.Parameters["@TokenCompositeId"].Value = (tokenCompositeId != null) ? tokenCompositeId : DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -269,6 +272,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@WordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SubwordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SurfaceText"].Value = DBNull.Value;
+            componentCmd.Parameters["@PropertiesJson"].Value = DBNull.Value;
             componentCmd.Parameters["@TokenCompositeId"].Value = DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }

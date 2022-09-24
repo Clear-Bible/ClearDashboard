@@ -367,6 +367,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     WordNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     SubwordNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     SurfaceText = table.Column<string>(type: "TEXT", nullable: true),
+                    PropertiesJson = table.Column<string>(type: "TEXT", nullable: true),
                     TokenCompositeId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -546,9 +547,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Score = table.Column<double>(type: "REAL", nullable: false),
                     SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: true),
                     TargetTokenId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    AlignmentSetId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
+                    AlignmentSetId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -569,12 +568,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         column: x => x.TargetTokenId,
                         principalTable: "TokenComponent",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Alignment_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -586,9 +579,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     TargetText = table.Column<string>(type: "TEXT", nullable: true),
                     TranslationState = table.Column<int>(type: "INTEGER", nullable: false),
                     TranslationSetId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: true),
-                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Created = table.Column<long>(type: "INTEGER", nullable: false)
+                    SourceTokenId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -602,12 +593,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         name: "FK_Translation_TranslationSet_TranslationSetId",
                         column: x => x.TranslationSetId,
                         principalTable: "TranslationSet",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Translation_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -750,11 +735,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_Alignment_TargetTokenId",
                 table: "Alignment",
                 column: "TargetTokenId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Alignment_UserId",
-                table: "Alignment",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AlignmentSet_EngineWordAlignmentId",
@@ -935,11 +915,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 name: "IX_Translation_TranslationSetId",
                 table: "Translation",
                 column: "TranslationSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Translation_UserId",
-                table: "Translation",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TranslationModelEntry_TranslationSetId_SourceText",

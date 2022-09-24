@@ -321,7 +321,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Name = "Fetch Book",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
             }
             return base.OnDeactivateAsync(close, cancellationToken);
@@ -407,7 +407,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     var tokensTextRows =
@@ -433,7 +433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -446,7 +446,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -462,13 +462,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
             {
                 _cancellationTokenSource?.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
@@ -584,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     // get the rows for the current book and chapter
@@ -680,7 +680,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -694,7 +694,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -727,7 +727,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     // get the rows for the current book and chapter
@@ -820,7 +820,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -833,7 +833,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }

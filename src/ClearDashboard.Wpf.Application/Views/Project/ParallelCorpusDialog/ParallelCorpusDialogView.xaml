@@ -14,9 +14,9 @@
       d:DesignHeight="450" d:DesignWidth="800"
       helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
       AllowsTransparency="True"
-      Background="{DynamicResource Transparent}"
       FlowDirection="{Binding WindowFlowDirection}"
       FontFamily="{DynamicResource MaterialDesignFont}"
+      Background="{DynamicResource MaterialDesignPaper}"
       Foreground="{DynamicResource MaterialDesignPaper}"
       ShowInTaskbar="False"
       ShowCloseButton="True"
@@ -35,14 +35,9 @@
       d:DataContext="{d:DesignInstance Type=parallelCorpusDialog:ParallelCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}">
    
-    <Border
-        Padding="6"
-        Background="{DynamicResource MaterialDesignLightBackground}"
-        BorderBrush="{DynamicResource MaterialDesignDarkBackground}"
-        BorderThickness="0"
-        CornerRadius="0">
-    <Grid>
+  
+    <Grid Margin="30, 0">
         <ContentControl cm:View.Model="{Binding ActiveItem}" />
     </Grid>
-        </Border>
+
 </controls:DialogWindow>

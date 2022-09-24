@@ -11,6 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int SubwordNumber { get; set; }
 
         public string? SurfaceText { get; set; }
+        public string? PropertiesJson { get; set; }
 
         public virtual Adornment? Adornment { get; set; }
 
