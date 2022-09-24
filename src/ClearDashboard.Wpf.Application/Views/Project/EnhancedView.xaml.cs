@@ -18,9 +18,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
     /// <summary>
     /// Interaction logic for EnhancedCorpusView.xaml
     /// </summary>
-    public partial class EnhancedCorpusView : UserControl
+    public partial class EnhancedView : UserControl
     {
-        public EnhancedCorpusView()
+        public EnhancedView()
         {
             InitializeComponent();
         }
