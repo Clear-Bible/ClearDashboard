@@ -15,7 +15,7 @@ using FluentValidation.Results;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
-public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<ParallelCorpusDialogViewModel, TranslationSetStepViewModel>
+public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, TranslationSetStepViewModel>
 {
     private bool _canAdd;
     private string _translationSetDisplayName;

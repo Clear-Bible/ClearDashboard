@@ -48,7 +48,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
             }
         }
 
-        protected async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? ex = null)
+        public async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? ex = null)
         {
 
             var backgroundTaskStatus = new BackgroundTaskStatus
