@@ -1,7 +1,7 @@
-﻿using ClearDashboard.Wpf.Application.Helpers;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using LicenseUser = ClearDashboard.Wpf.Application.Models.LicenseUser;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {

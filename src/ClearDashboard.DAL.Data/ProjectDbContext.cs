@@ -93,7 +93,9 @@ namespace ClearDashboard.DataAccessLayer.Data
                 // https://stackoverflow.com/questions/38238043/how-and-where-to-call-database-ensurecreated-and-database-migrate
                 _logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
 
-                if ( (await Database.GetPendingMigrationsAsync()).Any())
+                //todo comment out the if to allow migration for FileNew Projects
+                //await Database.GetPendingMigrationsAsync();
+                if ((await Database.GetPendingMigrationsAsync()).Any())
                 {
                     _logger?.LogInformation("Migration required, migrating...");
                     await Database.MigrateAsync();
