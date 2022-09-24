@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Controls.Utils;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
@@ -53,6 +55,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         }
 
         public Guid Id { get; set; } = Guid.NewGuid();
+        
+        private ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> _menuItems = new();
+        public ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> MenuItems
+        {
+            get => _menuItems;
+            set
+            {
+                _menuItems = value;
+                NotifyOfPropertyChange(() => MenuItems);
+            }
+        }
 
         /// <summary>
         /// The source connector the connection is attached to.
