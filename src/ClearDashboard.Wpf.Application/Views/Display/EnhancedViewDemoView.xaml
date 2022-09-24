@@ -57,7 +57,7 @@
 
         <userControls:VerseDisplay Grid.Row="1" Grid.Column="0"
                                    Margin="50,10"
-                                   Title="Latin -> Ooga word translation (interlinear gloss)"
+                                   Title="Word translation (interlinear gloss)"
                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    Tokens="{Binding VerseTokens}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
