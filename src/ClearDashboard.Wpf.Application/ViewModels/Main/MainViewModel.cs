@@ -591,7 +591,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void AddNewEnhancedView()
         {
-            throw new NotImplementedException();
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                Content = viewModel,
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
         }
 
         private Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
