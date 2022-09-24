@@ -1,17 +1,16 @@
-﻿using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
-using ClearDashboard.Wpf.Controls.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Controls.Utils;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a node in the view-model.
@@ -90,8 +89,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels
         }
 
 
-        private List<NodeTokenization> _nodeTokenizations = new();
-        public List<NodeTokenization> NodeTokenizations
+        private List<SerializedTokenization> _nodeTokenizations = new();
+        public List<SerializedTokenization> NodeTokenizations
         {
             get => _nodeTokenizations;
             set

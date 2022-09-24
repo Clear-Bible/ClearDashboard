@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Controls.Utils;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a connection between two connectors (aka connection points) of two nodes.
