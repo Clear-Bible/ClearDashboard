@@ -255,9 +255,9 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Background="{StaticResource MaterialDesignPaper}"
-            BorderBrush="{StaticResource SecondaryHueMidBrush}"
-            BorderThickness="2"
-            CornerRadius="3"
+            BorderBrush="{StaticResource MaterialDesignBody}"
+            BorderThickness="1"
+            CornerRadius="1"
             Visibility="{Binding ShowTaskView}">
             <Border.Style>
                 <Style TargetType="{x:Type Border}">
@@ -401,6 +401,7 @@
                 <TextBlock
                     Margin="5,0,0,0"
                     VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
                     FontSize="16"
                     Text="{helpers:Localization ShellView_NoBackGroundTasks}">
                     <TextBlock.Style>
