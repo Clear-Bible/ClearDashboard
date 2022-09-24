@@ -34,7 +34,7 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
-    public class EnhancedCorpusViewModel : PaneViewModel,
+    public class EnhancedViewModel : PaneViewModel,
         IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         #region Member Variables
-        private readonly ILogger<EnhancedCorpusViewModel> _logger;
+        private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager _projectManager;
 
         private CancellationTokenSource? _cancellationTokenSource;
@@ -261,12 +261,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Constructor
 
-        public EnhancedCorpusViewModel()
+        public EnhancedViewModel()
         {
             // required by design-time binding
         }
 
-        public EnhancedCorpusViewModel(INavigationService navigationService, ILogger<EnhancedCorpusViewModel> logger,
+        public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
@@ -275,8 +275,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _logger = logger;
             _projectManager = projectManager;
 
-            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedCorpus", Logger);
-            this.ContentId = "ENHANCEDCORPUS";
+            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
+            this.ContentId = "ENHANCEDVIEW";
 
             //BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
@@ -321,7 +321,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Name = "Fetch Book",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
             }
             return base.OnDeactivateAsync(close, cancellationToken);
@@ -407,7 +407,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     var tokensTextRows =
@@ -433,7 +433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -446,7 +446,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -462,13 +462,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskStatus == StatusEnum.CancelTaskRequested)
+            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
             {
                 _cancellationTokenSource?.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskStatus = StatusEnum.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
@@ -584,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     // get the rows for the current book and chapter
@@ -680,7 +680,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -694,7 +694,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }
@@ -727,7 +727,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Getting book '{CurrentBook?.Code}'...",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Working
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
                         }), cancellationToken);
 
                     // get the rows for the current book and chapter
@@ -820,7 +820,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Name = "Fetch Book",
                             Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
-                            TaskStatus = StatusEnum.Completed
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
                 }
                 catch (Exception ex)
@@ -833,7 +833,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Name = "Fetch Book",
                                 EndTime = DateTime.Now,
                                 ErrorMessage = $"{ex}",
-                                TaskStatus = StatusEnum.Error
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
                 }

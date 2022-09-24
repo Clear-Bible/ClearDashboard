@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using ClearApplicationFoundation;
-using ClearApplicationFoundation.Framework;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;

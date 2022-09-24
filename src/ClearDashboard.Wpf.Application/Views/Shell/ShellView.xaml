@@ -316,19 +316,19 @@
                                                 <Setter Property="Padding" Value="0" />
 
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Working}">
+                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Working}">
                                                         <Setter Property="Foreground" Value="Orange" />
                                                         <Setter Property="Kind" Value="Autorenew" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Completed}">
+                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Completed}">
                                                         <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
                                                         <Setter Property="Kind" Value="CheckboxMarkedCircle" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Error}">
+                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Error}">
                                                         <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
                                                         <Setter Property="Kind" Value="AlertCircle" />
                                                     </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.CancelTaskRequested}">
+                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.CancelTaskRequested}">
                                                         <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
                                                         <Setter Property="Kind" Value="CloseCircleOutline" />
                                                     </DataTrigger>
@@ -344,7 +344,7 @@
                                         Margin="4"
                                         Padding="0"
                                         cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
-                                        IsEnabled="{Binding TaskStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
+                                        IsEnabled="{Binding TaskLongRunningProcessStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
                                         ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
                                         <Button.Style>
                                             <Style TargetType="Button">
@@ -382,7 +382,7 @@
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding TaskStatus}" Value="{x:Static models:StatusEnum.Error}">
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Error}">
                                                             <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
