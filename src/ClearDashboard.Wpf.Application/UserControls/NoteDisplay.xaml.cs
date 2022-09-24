@@ -127,6 +127,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty AddModeProperty = DependencyProperty.Register("AddMode", typeof(bool), typeof(NoteDisplay),
             new PropertyMetadata(false, OnAddModeChanged));
 
+        /// <summary>
+        /// Identifies the Watermark dependency property.
+        /// </summary>
+        public static readonly DependencyProperty WatermarkProperty = DependencyProperty.Register("Watermark", typeof(string), typeof(NoteDisplay));
+
         #endregion
         #region Private event handlers
 
@@ -199,7 +204,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 EntityId = EntityId,
-                Label = args?.Label
+                Label = args?.Label,
+                Note = Note
             });
         }
 
@@ -390,6 +396,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
             set => SetValue(LabelSuggestionsProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the watermark to display for new notes.
+        /// </summary>
+        public string Watermark
+        {
+            get => (string)GetValue(WatermarkProperty);
+            set => SetValue(WatermarkProperty, value);
         }
 
         /// <summary>
