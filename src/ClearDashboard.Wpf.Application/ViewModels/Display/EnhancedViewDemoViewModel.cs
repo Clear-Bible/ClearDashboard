@@ -179,7 +179,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 : String.Empty;
             return new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: MockTranslationStatus);
 #else
-            return CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId == token.TokenId);
+            var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
+            return translation;
 #endif
         }
 
@@ -188,7 +189,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
             return MockNotes;
 #else
-            return new ObservableCollection<Note>(NotesDictionary[token.TokenId]);
+            return NotesDictionary.ContainsKey(token.TokenId) ? new ObservableCollection<Note>(NotesDictionary[token.TokenId])
+                                                              : new ObservableCollection<Note>();
 #endif
         }
 
@@ -258,7 +260,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             VerseTokens = GetTokenDisplayViewModels(row.Tokens);
 #else
                 await ProjectManager.LoadProject("EnhancedViewDemo");
-                var row = await VerseTextRow(40001001);
+                var row = await VerseTextRow(01001001);
                 NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
                 CurrentTranslationSet = await GetTranslationSet();
                 CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
