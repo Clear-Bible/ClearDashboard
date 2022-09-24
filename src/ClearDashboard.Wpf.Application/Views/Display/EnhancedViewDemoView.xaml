@@ -29,6 +29,7 @@
         <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
         <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
         <userControls:ThicknessConverter x:Key="ThicknessConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -74,6 +75,7 @@
             ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
             ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
             TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+            TitleVisibility="{Binding ElementName=ShowTitleCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
             TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             Tokens="{Binding Verse1}"
             TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
@@ -107,13 +109,25 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Label
+            <!--<Label
                 Grid.Row="0"
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 FontWeight="Bold">
                 Verse Title:
-            </Label>
+            </Label>-->
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="0"
+                Orientation="Horizontal">
+                <Label VerticalAlignment="Center" FontWeight="Bold">Verse Title:</Label>
+                <CheckBox
+                    Name="ShowTitleCheckbox"
+                    Margin="22,0,0,0"
+                    VerticalAlignment="Center"
+                    IsChecked="True" />
+            </StackPanel>
+
             <StackPanel
                 Grid.Row="0"
                 Grid.Column="1"

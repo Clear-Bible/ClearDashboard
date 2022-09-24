@@ -172,6 +172,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     DeleteGridIsVisible = Visibility.Visible;
                     GridIsVisible = Visibility.Collapsed;
                 }
+                else if (value == "NewEnhancedCorpusID")
+                {
+                    AddNewEnhancedView();
+                }
                 else
                 {
                     switch (value)
@@ -206,6 +210,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 NotifyOfPropertyChange(() => WindowIdToLoad);
             }
         }
+
+
 
         private async Task StartDashboardAsync(int secondsToWait = 10)
         {
@@ -583,6 +589,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Methods
 
+        private void AddNewEnhancedView()
+        {
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                Content = viewModel,
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+        }
+
         private Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
             IsBusy = true;
@@ -731,6 +758,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = LocalizationStrings.Get("MainView_Windows", Logger), Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
+                        // Enhanced Corpus
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsNewEnhancedView", Logger), Id = "NewEnhancedCorpusID", ViewModel = this, },
+
+                        // separator
+                        new() { Header = "---------------------------------", Id = "SeparatorID", ViewModel = this, },
+
                         // Biblical Terms
                         new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
                         

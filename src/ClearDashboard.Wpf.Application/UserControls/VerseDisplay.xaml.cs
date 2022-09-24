@@ -177,6 +177,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the Title Visibiilty dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register("TitleVisibility", typeof(Visibility), typeof(VerseDisplay), new PropertyMetadata(Visibility.Visible));
+
+
+        /// <summary>
         /// Identifies the TitlePadding dependency property.
         /// </summary>
         public static readonly DependencyProperty TitlePaddingProperty = DependencyProperty.Register("TitlePadding", typeof(Thickness), typeof(VerseDisplay),
@@ -705,6 +711,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (string)GetValue(TitleProperty);
             set => SetValue(TitleProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets the title to be displayed for the verse.
+        /// </summary>
+        public Visibility TitleVisibility
+        {
+            get => (Visibility)GetValue(TitleVisibilityProperty);
+            set => SetValue(TitleVisibilityProperty, value);
+        }
+
 
         /// <summary>
         /// Gets or sets the padding of the title to be displayed for the verse.
