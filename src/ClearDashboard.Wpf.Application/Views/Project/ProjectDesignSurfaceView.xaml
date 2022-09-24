@@ -68,7 +68,7 @@
             <!--
                 This graphic is used to indicate that a connection cannot be made between two particular connectors.
             -->
-            <DataTemplate DataType="{x:Type viewModels:ConnectionBadIndicator}">
+            <DataTemplate DataType="{x:Type projectDesignSurface:ConnectionBadIndicator}">
                 <Grid Width="80">
                     <Image
                         Width="32"
@@ -81,7 +81,7 @@
             <!--
                 This graphic is used to indicate that a connection can be made between two particular connectors.
             -->
-            <DataTemplate DataType="{x:Type viewModels:ConnectionOkIndicator}">
+            <DataTemplate DataType="{x:Type projectDesignSurface:ConnectionOkIndicator}">
                 <Grid Width="80">
                     <Image
                         Width="32"
@@ -285,7 +285,7 @@
                 
                 In this sample a curved arrow represents connections between nodes.
             -->
-            <DataTemplate DataType="{x:Type viewModels:ConnectionViewModel}">
+            <DataTemplate DataType="{x:Type projectDesignSurface:ConnectionViewModel}">
 
                 <!--
                     An adorned control is used, to represent the connection.
@@ -298,7 +298,7 @@
                     VerticalAdornerPlacement="Mouse">
 
                     <!--  The connection is represented by a curved arrow.  -->
-                    <viewModels:CurvedArrow
+                    <projectDesignSurface:CurvedArrow
                         ConnectionId="{Binding Path=Id}"
                         Fill="{StaticResource connectionBrush}"
                         NodeSource="{Binding Path=SourceConnector}"
@@ -306,7 +306,7 @@
                         Points="{Binding Points}"
                         Stroke="{StaticResource connectionBrush}"
                         StrokeThickness="3">
-                        <viewModels:CurvedArrow.ContextMenu>
+                        <projectDesignSurface:CurvedArrow.ContextMenu>
                             <ContextMenu Name="ContextMenu">
                                 <MenuItem
                                     Command="{StaticResource Commands.ConnectionProperties}"
@@ -320,8 +320,8 @@
                                 -->
 
                             </ContextMenu>
-                        </viewModels:CurvedArrow.ContextMenu>
-                    </viewModels:CurvedArrow>
+                        </projectDesignSurface:CurvedArrow.ContextMenu>
+                    </projectDesignSurface:CurvedArrow>
 
                     <controls:AdornedControl.AdornerContent>
 
@@ -359,7 +359,7 @@
             </DataTemplate>
 
             <!--  Define a data-template for the 'NodeViewModel' class.  -->
-            <DataTemplate x:Name="NodeViewModelTemplate" DataType="{x:Type viewModels:CorpusNodeViewModel}">
+            <DataTemplate x:Name="NodeViewModelTemplate" DataType="{x:Type projectDesignSurface:CorpusNodeViewModel}">
 
                 <!--
                     An adorned control is used, to represent the node.

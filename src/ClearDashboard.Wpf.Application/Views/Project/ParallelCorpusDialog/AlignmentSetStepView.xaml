@@ -75,6 +75,7 @@
                      materialDesign:HintAssist.Hint="{helpers:Localization DisplayName}"
                      materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                      Foreground="{DynamicResource MaterialDesignBody}"
+                     Margin="0, 10"
                      Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
