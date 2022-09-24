@@ -29,6 +29,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Autofac;
+using Autofac.Core.Lifetime;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using Microsoft.Xaml.Behaviors.Core;
+using SIL.Reporting;
 using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
@@ -46,6 +52,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<UiLanguageChangedMessage>,
                 IHandle<ActiveDocumentMessage>
     {
+        private ILifetimeScope LifetimeScope { get; }
+        private IWindowManager WindowManager { get; }
 #nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
@@ -163,12 +171,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     DeleteGridIsVisible = Visibility.Visible;
                     GridIsVisible = Visibility.Collapsed;
-                }
-                else if (value == "NewID")
-                {
-#pragma warning disable CS4014
-                    StartDashboardAsync();
-#pragma warning restore CS4014
                 }
                 else
                 {
@@ -330,6 +332,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             set => Set(ref _message, value);
         }
 
+        private string _projectName;
+        public string ProjectName
+        {
+            get => _projectName;
+            set
+            {
+                _projectName = value;
+                NotifyOfPropertyChange(nameof(ProjectName));
+            }
+        }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -345,9 +358,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
         // ReSharper disable once UnusedMember.Global
-        public MainViewModel(ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator)
-
+        public MainViewModel(INavigationService navigationService, ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IWindowManager windowManager, ILifetimeScope lifetimeScope)
         {
+            LifetimeScope = lifetimeScope;
+            WindowManager = windowManager;
             EventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
@@ -427,6 +441,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     await ProjectManager.LoadProject(Parameter.ProjectName);
                 }
+                ProjectName = ProjectManager.CurrentProject.ProjectName;
             }
 
 
@@ -949,6 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return (PaneViewModel)Items[0];
         }
 
+
         /// <summary>
         /// return the correct existing vm from Items list - TOOLS
         /// </summary>
@@ -1416,7 +1432,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
+        public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
+        {
+            switch (menuItem.Id)
+            {
+                case "NewID":
+                    //var startupDialogViewModel = IoC.Get<StartupDialogViewModel>();
+                    var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
+                    startupDialogViewModel.MimicParatextConnection = true;
+                    var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
+                    if (result.HasValue && result.Value)
+                    {
+                        var dashboardProject = startupDialogViewModel.ExtraData as DashboardProject;
+                        if (dashboardProject.IsNew)
+                        {
+                            await ProjectManager.CreateNewProject(dashboardProject.ProjectName);
+                        }
+                        else
+                        {
+                            await ProjectManager.LoadProject(dashboardProject.ProjectName);
+                        }
 
+                        ProjectName = dashboardProject.ProjectName;
+                    }
+                    break;
+            }
+        }
+
+        #endregion // Methods
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
@@ -1436,8 +1479,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             return Task.CompletedTask;
         }
-
-        #endregion // Methods
     }
 
     public static class WorkspaceLayoutNames
