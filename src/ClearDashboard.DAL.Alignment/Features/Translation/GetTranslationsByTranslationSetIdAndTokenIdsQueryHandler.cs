@@ -63,7 +63,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 //        return tc;
                 //    }).ToList();
 
-                // FIXME:  ToLower should be ToLowerInvariant().  How does Sqlite do ToLower?
                 var translationModelEntries = ProjectDbContext!.TranslationModelEntries
                     .Include(tm => tm.TargetTextScores)
                     .Join(
@@ -71,7 +70,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                             .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                             .Where(tc => tokenGuidsNotFound.Contains(tc.Id)),
                         tm => tm.SourceText,
-                        tc => (tc.TrainingText ?? "").ToLower(),
+                        tc => tc.TrainingText ?? "",
                         (tm, tc) => new { tm, tc })
                     .Where(tmtc => tmtc.tm.TranslationSetId == request.TranslationSetId.Id)
                     .Select(tmtc => new Alignment.Translation.Translation(
@@ -89,7 +88,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 if (tokensIdsNotFound.Any())
                 {
-                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
+                    combined.AddRange(ProjectDbContext.TokenComponents
+                        .Where(tc => tokensIdsNotFound.Contains(tc.Id))
+                        .Select(tc => new Alignment.Translation.Translation(
+                            ModelHelper.BuildToken(tc),
+                            null,
+                            "FromTranslationModel")));
+//                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
                 }
 
                 return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(

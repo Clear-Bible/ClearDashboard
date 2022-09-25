@@ -8,4 +8,4 @@ namespace ClearDashboard.DAL.Alignment.Translation;
 /// <param name="SourceToken"></param>
 /// <param name="TargetTranslationText"></param>
 /// <param name="TranslationOriginatedFrom">Valid values are:  "FromOther", "Assigned" only</param>
-public record Translation(Token SourceToken, string TargetTranslationText, string TranslationOriginatedFrom);
+public record Translation(Token SourceToken, string? TargetTranslationText, string TranslationOriginatedFrom);
