@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels.Project;
+using System;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
@@ -11,6 +12,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             set => Set(ref _connectionViewModel, value);
 
         }
+
+        public string TranslationSetId { get; set; } = string.Empty;
+
+        public Guid ConnectionId { get; set; }
 
         protected override void Execute()
         {
