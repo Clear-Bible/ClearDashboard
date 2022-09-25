@@ -60,8 +60,8 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
         
-        private ObservableCollection<List<TokenDisplayViewModel>>? _row0Verses = new();
-        public ObservableCollection<List<TokenDisplayViewModel>>? Row0Verses
+        private ObservableCollection<List<TokenDisplayViewModel>> _row0Verses = new();
+        public ObservableCollection<List<TokenDisplayViewModel>> Row0Verses
         {
             get => _row0Verses;
             set => Set(ref _row0Verses, value);

@@ -21,7 +21,6 @@ using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -102,9 +101,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     // update this window with the Paratext verse
                     CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
-
-                    //TODO regenerate the verses to display
-
                 }
 
                 _paratextSync = value;
@@ -557,9 +553,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                     }
 
+
+
+
+                    //var verseData = await _projectManager?.ExecuteRequest(new GetByVerseRange
+                    //{
+                    //    ParatextProjectId = message.ParatextProjectId,
+                    //    TokenizationType = message.TokenizationType,
+                    //    Books = metadata.AvailableBooks
+                    //}, cancellationToken);
+
+
+
+
+
+
                     // get the entirety of text for this corpus
                     CurrentTokenizedTextCorpus =
                         await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+
+                    
                     TokenizationType = message.TokenizationType;
                     CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
@@ -647,6 +660,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         List<TokensTextRow> corpus = new List<TokensTextRow>();
                         corpus.Add(verseRangeRow);
 
+                        // add in the gloss
                         var tokens = GetTokens(corpus, verseRef.BBBCCCVVV);
                         if (tokens != null)
                         {
@@ -878,9 +892,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case CorpusType.Manuscript:
                     brush = Brushes.MediumOrchid;
                     break;
+                default:
+                    brush = Brushes.Blue;
+                    break;
             }
 
-            int index = 0;
             for (int i = 0; i < 4; i++)
             {
                 if (VersesDisplay.Row0Verses.Count == 0 ||
@@ -890,7 +906,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row0Title = title;
                     VersesDisplay.Row0Verses = verses;
                     VersesDisplay.Row0Visibility = Visibility.Visible;
+#pragma warning disable CS8601
                     VersesDisplay.Row0BorderColor = brush;
+#pragma warning restore CS8601
                     break;
                 } else if (VersesDisplay.Row1Verses.Count == 0 || 
                            VersesDisplay.Row1CorpusId == message.CorpusId)
@@ -899,7 +917,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row1Title = title;
                     VersesDisplay.Row1Verses = verses;
                     VersesDisplay.Row1Visibility = Visibility.Visible;
+#pragma warning disable CS8601
                     VersesDisplay.Row1BorderColor = brush;
+#pragma warning restore CS8601
                     break;
                 }
                 else if (VersesDisplay.Row2Verses.Count == 0 ||
@@ -909,7 +929,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row2Title = title;
                     VersesDisplay.Row2Verses = verses;
                     VersesDisplay.Row2Visibility = Visibility.Visible;
+#pragma warning disable CS8601
                     VersesDisplay.Row2BorderColor = brush;
+#pragma warning restore CS8601
                     break;
                 }
                 else
@@ -918,7 +940,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row3Title = title;
                     VersesDisplay.Row3Verses = verses;
                     VersesDisplay.Row3Visibility = Visibility.Visible;
+#pragma warning disable CS8601
                     VersesDisplay.Row3BorderColor = brush;
+#pragma warning restore CS8601
                     break;
                 }
             }
