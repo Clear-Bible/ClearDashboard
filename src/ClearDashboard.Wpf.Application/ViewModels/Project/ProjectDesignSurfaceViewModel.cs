@@ -1004,7 +1004,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         /// <param name="connection"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void CreateConnectionMenu(ConnectionViewModel connection)
+        public void CreateConnectionMenu(ConnectionViewModel connection)
         {
             // initiate the menu system
             connection.MenuItems.Clear();
@@ -1064,6 +1064,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //});
 
             connection.MenuItems = connectionMenuItems;
+        }
+
+        public async Task ExecuteConnectionMenuCommand(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var connectionViewModel = connectionMenuItem.ConnectionViewModel;
+            switch (connectionMenuItem.Id)
+            {
+//                case "AddTokenizationId":
+//                    // kick off the add new tokenization dialog
+//                    AddParatextCorpus(connectionViewModel.ParatextProjectId);
+//                    break;
+//                case "SeparatorId":
+//                    // no-op
+//                    break;
+
+//                case "AddToEnhancedViewId":
+//                case "ShowVerseId":
+//                    // ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
+//                    var tokenization = connectionViewModel.NodeTokenizations.FirstOrDefault(b => b.TokenizationName == connectionMenuItem.Tokenizer);
+//                    if (tokenization == null)
+//                    {
+//                        return;
+//                    }
+
+//                    bool showInNewWindow = connectionMenuItem.Id == "ShowVerseId";
+
+//                    var corpusId = Guid.Parse(tokenization.CorpusId);
+//                    var tokenizationId = Guid.Parse(tokenization.TokenizedTextCorpusId);
+//                    await EventAggregator.PublishOnUIThreadAsync(
+//                        new ShowTokenizationWindowMessage(ParatextProjectId: connectionViewModel.ParatextProjectId,
+//                            ProjectName: connectionViewModel.Name,
+//                            TokenizationType: connectionMenuItem.Tokenizer,
+//                            CorpusId: corpusId,
+//                            TokenizedTextCorpusId: tokenizationId,
+//                            connectionViewModel.CorpusType,
+//                            IsNewWindow: showInNewWindow));
+//                    break;
+//                case "PropertiesId":
+//                    // node properties
+//                    SelectedConnection = connectionViewModel;
+//                    break;
+//                case "TokenizerPropertiesId":
+//                    // get the selected tokenizer
+//                    var nodeTokenization =
+//                        connectionViewModel.NodeTokenizations.FirstOrDefault(b =>
+//                            b.TokenizationName == connectionMenuItem.Tokenizer);
+//#pragma warning disable CS8601
+//                    SelectedConnection = nodeTokenization;
+//#pragma warning restore CS8601
+//                    break;
+            }
         }
 
         public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
@@ -1386,6 +1437,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 // get TranslationSet , etc from the dialogViewModel
                 var translationSet = dialogViewModel.TranslationSet;
+                newConnection.TranslationSet.Add(translationSet);
+
+                CreateConnectionMenu(newConnection);
                 await SaveCanvas();
             }
             else
