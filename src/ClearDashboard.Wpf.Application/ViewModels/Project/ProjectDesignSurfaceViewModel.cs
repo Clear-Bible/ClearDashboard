@@ -1049,14 +1049,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         new ParallelCorpusConnectionMenuItemViewModel
                         {
                             // Add Verses to focused enhanced view
-                            Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), 
+                            Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", _logger), 
                             Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentTextAdd", 
                         },
                         new ParallelCorpusConnectionMenuItemViewModel
                         {
                             // Show Verses in New Windows
-                            Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), 
+                            Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger), 
                             Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this, 
                             IconKind = "DocumentText",
                         },
@@ -1065,7 +1065,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 });
             }
 
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
