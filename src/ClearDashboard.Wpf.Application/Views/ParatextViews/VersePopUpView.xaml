@@ -9,11 +9,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Panes"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
+    xmlns:popUps="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.PopUps"
     x:Name="window"
     Title="VersePopUpView"
     Width="800"
     Height="400"
-    d:DataContext="{d:DesignInstance Type=viewModels:VersePopUpViewModel,
+    d:DataContext="{d:DesignInstance Type=popUps:VersePopUpViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -29,7 +30,7 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.DataContext>
-        <viewModels:VersePopUpViewModel />
+        <popUps:VersePopUpViewModel />
     </Window.DataContext>
 
     <Window.Resources>

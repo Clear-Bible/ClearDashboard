@@ -1,13 +1,13 @@
 ﻿using System;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     /// <summary>
     /// Defines an arrow that has multiple points.

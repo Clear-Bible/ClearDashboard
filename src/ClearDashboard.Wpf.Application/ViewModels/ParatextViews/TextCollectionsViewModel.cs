@@ -1,25 +1,25 @@
-﻿using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
-using System.Collections.Generic;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     // ReSharper disable once ClassNeverInstantiated.Global
     public class TextCollectionsViewModel : ToolViewModel, IHandle<TextCollectionChangedMessage>,

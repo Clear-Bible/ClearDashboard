@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
-public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<ParallelCorpusDialogViewModel>
+public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<IParallelCorpusDialogViewModel>
 {
     private bool _canTrain;
 
