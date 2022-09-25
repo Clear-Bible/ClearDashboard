@@ -145,7 +145,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             foreach (var exampleTranslation in exampleTranslations)
             {
-                translationSet.PutTranslation(
+                await translationSet.PutTranslation(
                     exampleTranslation,
                     TranslationActionType.PutNoPropagate.ToString());
             }
@@ -166,7 +166,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             }
 
             // FIXME:  quick test of PutPropagate.  Need better tests of this
-            translationSet.PutTranslation(
+            await translationSet.PutTranslation(
                     new Alignment.Translation.Translation(exampleTranslations[1].SourceToken!, $"toobedoo", "Assigned"),
                     TranslationActionType.PutNoPropagate.ToString());
 
@@ -176,11 +176,14 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     exampleTranslations[1].SourceToken!.TokenId.ChapterNumber,
                     exampleTranslations[1].SourceToken!.TokenId.VerseNumber,
                     5,
-                    exampleTranslations[1].SourceToken!.TokenId.SubWordNumber),
+                    exampleTranslations[1].SourceToken!.TokenId.SubWordNumber)
+                {
+                    Id = exampleTranslations[1].SourceToken.TokenId.Id
+                },
                 exampleTranslations[1].SourceToken!.SurfaceText,
                 exampleTranslations[1].SourceToken!.TrainingText);
 
-            translationSet.PutTranslation(
+            await translationSet.PutTranslation(
                     new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
                     TranslationActionType.PutPropagate.ToString());
 
@@ -208,23 +211,42 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
     //[Fact]
     [Trait("Category", "Handlers")]
-    public async Task TranslationSet__ManuscriptZZSur()
+    public async Task TranslationAlignmentSets__ManuscriptZZSur()
     {
         try
         {
             var engineParallelTextCorpus = await BuildSampleManuscriptToZZSurEngineParallelTextCorpus();
             var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
 
-            var translationModel = await BuildSampleTranslationModel(parallelCorpus);
+            var translationCommandable = new TranslationCommands();
 
+            using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
+                SmtModelType.FastAlign,
+                parallelCorpus,
+                null,
+                SymmetrizationHeuristic.GrowDiagFinalAnd);
+
+            var translationModel = smtWordAlignmentModel.GetTranslationTable();
             var translationSet = await translationModel.Create(
                 "manuscript to zz_sur",
                 "fastalign",
-                new() { { "size", "lage" } }, 
+                new() { { "size", "large" }, { "how large", "huge" } }, 
                 parallelCorpus.ParallelCorpusId, 
                 Mediator!);
 
             Assert.NotNull(translationSet);
+            
+            var alignmentModel = translationCommandable.PredictAllAlignedTokenIdPairs(smtWordAlignmentModel, parallelCorpus).ToList();
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(),
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+
+            Assert.NotNull(alignmentSet);
+
         }
         finally
         {
@@ -232,7 +254,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
     }
 
-    //[Fact]
+//    [Fact]
     [Trait("Category", "Handlers")]
     public async Task AlignmentSet__ManuscriptZZSur()
     {
@@ -321,7 +343,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                         if (sourceToken.TokenId.ToString()[..15].CompareTo("040001004004001") >= 0 && sourceToken.TokenId.ToString()[..15].CompareTo("040002002004001") <= 0)
                         {
                             Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
-                            translationSet.PutTranslation(
+                            await translationSet.PutTranslation(
                                 new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
                                 TranslationActionType.PutNoPropagate.ToString());
 
