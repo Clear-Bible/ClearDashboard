@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Controls.Utils;
 
@@ -178,8 +179,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         }
 
 
-        public List<TranslationSet> TranslationSet { get; set; } = new();
-
+        public List<TranslationSetInfo> TranslationSetInfo { get; set; } = new();
 
         /// <summary>
         /// Event fired when the connection has changed.
