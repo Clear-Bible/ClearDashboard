@@ -1115,7 +1115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (connection is not null)
                     {
                         // kick off the add new tokenization dialog
-                        AddParallelCorpus(connectionViewModel);
+                        AddParallelCorpus(connection);
                     }
                     else
                     {
@@ -1125,42 +1125,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case "SeparatorId":
                     // no-op
                     break;
-
-                    //                case "AddToEnhancedViewId":
-                    //                case "ShowVerseId":
-                    //                    // ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
-                    //                    var tokenization = connectionViewModel.NodeTokenizations.FirstOrDefault(b => b.TokenizationName == connectionMenuItem.Tokenizer);
-                    //                    if (tokenization == null)
-                    //                    {
-                    //                        return;
-                    //                    }
-
-                    //                    bool showInNewWindow = connectionMenuItem.Id == "ShowVerseId";
-
-                    //                    var corpusId = Guid.Parse(tokenization.CorpusId);
-                    //                    var tokenizationId = Guid.Parse(tokenization.TokenizedTextCorpusId);
-                    //                    await EventAggregator.PublishOnUIThreadAsync(
-                    //                        new ShowTokenizationWindowMessage(ParatextProjectId: connectionViewModel.ParatextProjectId,
-                    //                            ProjectName: connectionViewModel.Name,
-                    //                            TokenizationType: connectionMenuItem.Tokenizer,
-                    //                            CorpusId: corpusId,
-                    //                            TokenizedTextCorpusId: tokenizationId,
-                    //                            connectionViewModel.CorpusType,
-                    //                            IsNewWindow: showInNewWindow));
-                    //                    break;
-                    //                case "PropertiesId":
-                    //                    // node properties
-                    //                    SelectedConnection = connectionViewModel;
-                    //                    break;
-                    //                case "TokenizerPropertiesId":
-                    //                    // get the selected tokenizer
-                    //                    var nodeTokenization =
-                    //                        connectionViewModel.NodeTokenizations.FirstOrDefault(b =>
-                    //                            b.TokenizationName == connectionMenuItem.Tokenizer);
-                    //#pragma warning disable CS8601
-                    //                    SelectedConnection = nodeTokenization;
-                    //#pragma warning restore CS8601
-                    //                    break;
+                case "PropertiesId":
+                    // node properties
+                    SelectedConnection = connectionViewModel;
+                    break;
+                default:
+                    
+                    break;
             }
         }
 
