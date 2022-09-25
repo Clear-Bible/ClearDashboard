@@ -607,7 +607,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree);
+            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree)
+                .Transform<SetTrainingByTrainingLowercase>();
 
             BookInfo bookInfo = new BookInfo();
             var books = bookInfo.GenerateScriptureBookList();
@@ -816,22 +817,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             case Tokenizer.LatinWordTokenizer:
                                 textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<LatinWordTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>();
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>();
                                 break;
                             case Tokenizer.WhitespaceTokenizer:
                                 textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>();
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>();
                                 break;
                             case Tokenizer.ZwspWordTokenizer:
                                 textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<ZwspWordTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>();
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>();
                                 break;
                             default:
                                 textCorpus = (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
                                     .Tokenize<WhitespaceTokenizer>()
-                                    .Transform<IntoTokensTextRowProcessor>();
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>();
                                 break;
                         }
 
