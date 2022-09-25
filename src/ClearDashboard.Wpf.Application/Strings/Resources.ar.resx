@@ -70,8 +70,8 @@
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>جوشوا</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>مزامير</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>أضف مجموعة ترجمة جديدة</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>عرض محسن</value>
@@ -238,8 +238,8 @@
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>لوحة القيادة</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>عرض جديد محسّن</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>شخص</value>
@@ -419,7 +419,7 @@
     <value>الكتاب</value>
   </data>
   <data name="ProperCase_Romans" xml:space="preserve">
-    <value>رومية</value>
+    <value>الرومان</value>
   </data>
   <data name="EPH" xml:space="preserve">
     <value>EPH</value>
@@ -769,6 +769,9 @@
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>يرجى ادخال الاسم الاول</value>
   </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>حساب نموذج ترجمة جديد</value>
+  </data>
   <data name="Pds_MarbleResource" xml:space="preserve">
     <value>مربى</value>
   </data>
@@ -853,6 +856,9 @@
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
     <value>الحيوانات</value>
   </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>عرض جديد محسّن</value>
+  </data>
   <data name="2CO" xml:space="preserve">
     <value>2CO</value>
   </data>
@@ -928,9 +934,6 @@
   <data name="ProperCase_1_Samuel" xml:space="preserve">
     <value>1 صموئيل</value>
   </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>كلمة</value>
   </data>
@@ -943,14 +946,17 @@
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>تعيينات الآية</value>
   </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>قطار</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>أضف إلى وجهة نظر محسنة مركزة</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
     <value>تخطيطات قياسية</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>كولوسي</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>قطار</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>زيفانيا</value>
@@ -1035,6 +1041,9 @@
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>الفاكهة</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>مزامير</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>PRO</value>

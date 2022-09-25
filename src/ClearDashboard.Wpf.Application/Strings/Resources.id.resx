@@ -70,8 +70,8 @@
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Mazmur</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>Tambahkan set terjemahan baru</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>Tampilan yang ditingkatkan</value>
@@ -238,8 +238,8 @@
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>DASBOR</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Tampilan baru yang disempurnakan</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>orang</value>
@@ -769,6 +769,9 @@
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Harap masukkan nama depan Anda</value>
   </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>Hitung model terjemahan baru</value>
+  </data>
   <data name="Pds_MarbleResource" xml:space="preserve">
     <value>Marbleresource</value>
   </data>
@@ -853,6 +856,9 @@
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
     <value>Hewan</value>
   </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>Tampilan baru yang disempurnakan</value>
+  </data>
   <data name="2CO" xml:space="preserve">
     <value>2CO</value>
   </data>
@@ -928,9 +934,6 @@
   <data name="ProperCase_1_Samuel" xml:space="preserve">
     <value>1 Samuel</value>
   </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>Kata</value>
   </data>
@@ -943,14 +946,17 @@
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Pemetaan ayat</value>
   </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>Kereta</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>Tambahkan ke tampilan yang ditingkatkan fokus</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
     <value>Tata letak standar</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>Kolose</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>Kereta</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zephaniah</value>
@@ -1035,6 +1041,9 @@
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>buah</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Mazmur</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>PRO</value>
