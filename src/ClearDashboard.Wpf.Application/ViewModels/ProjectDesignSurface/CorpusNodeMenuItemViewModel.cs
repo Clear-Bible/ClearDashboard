@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         protected override void Execute()
         {
-            //ProjectDesignSurfaceViewModel?.CreateConnectionMenu(this);
+            ProjectDesignSurfaceViewModel?.ExecuteConnectionMenuCommand(this);
         }
     }
 

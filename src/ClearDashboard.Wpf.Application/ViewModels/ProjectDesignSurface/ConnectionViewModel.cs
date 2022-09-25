@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Controls.Utils;
 
@@ -174,6 +176,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
                 NotifyOfPropertyChange(() => Points);
             }
         }
+
+
+        public List<TranslationSet> TranslationSet { get; set; } = new();
+
 
         /// <summary>
         /// Event fired when the connection has changed.
