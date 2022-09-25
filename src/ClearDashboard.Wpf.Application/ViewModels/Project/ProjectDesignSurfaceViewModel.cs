@@ -607,7 +607,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree).Transform<SetTrainingBySurfaceLowercase>();
+            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree)
+                .Transform<SetTrainingByTrainingLowercase>();
 
             BookInfo bookInfo = new BookInfo();
             var books = bookInfo.GenerateScriptureBookList();

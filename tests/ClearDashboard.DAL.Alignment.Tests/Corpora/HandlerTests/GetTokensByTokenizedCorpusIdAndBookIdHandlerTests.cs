@@ -184,7 +184,7 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
         var textCorpus = new ParatextTextCorpus("C:\\My Paratext 9 Projects\\zz_SUR")
             .Tokenize<LatinWordTokenizer>()
             .Transform<IntoFakeCompositeTokensTextRowProcessor>()
-            .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
+            .Transform<SetTrainingBySurfaceLowercase>();
 
         return textCorpus;
     }

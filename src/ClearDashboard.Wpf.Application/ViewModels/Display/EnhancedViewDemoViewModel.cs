@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _usfmTestProjectPath)
                 .Tokenize<LatinWordTokenizer>()
                 .Transform<IntoTokensTextRowProcessor>()
-                .Transform<SetTrainingBySurfaceTokensTextRowProcessor>()
+                .Transform<SetTrainingBySurfaceLowercase>()
                 .Cast<TokensTextRow>();
 
         // ReSharper disable once InconsistentNaming
