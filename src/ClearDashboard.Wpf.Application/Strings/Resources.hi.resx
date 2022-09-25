@@ -70,8 +70,8 @@
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>यहोशू</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>स्तोत्र</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>नया अनुवाद सेट जोड़ें</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>बढ़ाया दृश्य</value>
@@ -238,8 +238,8 @@
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>धूर्तता</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>नया उन्नत दृश्य</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>व्यक्ति</value>
@@ -769,6 +769,9 @@
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>कृपया अपना प्रथम नाम प्रविष्ट करें</value>
   </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>नए अनुवाद मॉडल की गणना करें</value>
+  </data>
   <data name="Pds_MarbleResource" xml:space="preserve">
     <value>मार्बलरसोर्स</value>
   </data>
@@ -853,6 +856,9 @@
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
     <value>जानवरों</value>
   </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>नया उन्नत दृश्य</value>
+  </data>
   <data name="2CO" xml:space="preserve">
     <value>2CO</value>
   </data>
@@ -928,9 +934,6 @@
   <data name="ProperCase_1_Samuel" xml:space="preserve">
     <value>1 शमूएल</value>
   </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>शब्द</value>
   </data>
@@ -943,14 +946,17 @@
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>पद्य मैपिंग</value>
   </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>रेल गाडी</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>ध्यान केंद्रित दृश्य में जोड़ें</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
     <value>मानक लेआउट</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>कुलुस्सियों</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>रेल गाडी</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>सपन्याह</value>
@@ -1035,6 +1041,9 @@
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>फल</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>स्तोत्र</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>PRO</value>
