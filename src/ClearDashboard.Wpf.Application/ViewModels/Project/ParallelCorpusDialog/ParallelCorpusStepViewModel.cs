@@ -16,7 +16,7 @@ using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
 
-    public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<ParallelCorpusDialogViewModel, ParallelCorpusStepViewModel>
+    public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, ParallelCorpusStepViewModel>
     {
 
 

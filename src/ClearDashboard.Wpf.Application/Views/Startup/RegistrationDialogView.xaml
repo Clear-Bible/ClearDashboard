@@ -1,0 +1,55 @@
+﻿<userControls:CustomWindow
+    x:Class="ClearDashboard.Wpf.Application.Views.Startup.RegistrationDialogView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    Title="{Binding Title}"
+    Width="600"
+    Height="300"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="White"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Foreground="Black"
+    ShowInTaskbar="False"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d">
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <ContentControl
+            x:Name="ActiveItem"
+            Grid.Column="0"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="0,0"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <Button
+                x:Name="Register"
+                Margin="5,5,5,5"
+                Content="{helpers:Localization RegistrationDialogView_Register}" />
+            <Button
+                x:Name="Cancel"
+                Margin="5,5,5,5"
+                Content="{helpers:Localization RegistrationDialogView_CloseApplication}" />
+        </StackPanel>
+
+    </Grid>
+</userControls:CustomWindow>

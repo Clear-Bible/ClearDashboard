@@ -13,7 +13,8 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
 
     public class CreateProjectCommandHandler : ProjectDbContextCommandHandler<CreateProjectCommand, RequestResult<Models.Project>, Models.Project>
     {
-        public CreateProjectCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateProjectCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
+        public CreateProjectCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateProjectCommandHandler> logger) 
+            : base(projectNameDbContextFactory, projectProvider, logger)
         {
             ProjectNameDbContextFactory = projectNameDbContextFactory ?? throw new ArgumentNullException(nameof(projectNameDbContextFactory));
             Logger = logger;

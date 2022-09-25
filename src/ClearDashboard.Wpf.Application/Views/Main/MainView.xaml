@@ -15,7 +15,6 @@
     xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Application.Views.Panes"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
-    xmlns:paratextViews1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     Title="WorkSpaceView"
@@ -118,7 +117,7 @@
 
                         <panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
                             <DataTemplate>
-                                <local:EnhancedCorpusView />
+                                <local:EnhancedView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
 
@@ -132,7 +131,7 @@
 
                         <panes:PanesTemplateSelector.WordMeaningsViewTemplate>
                             <DataTemplate>
-                                <paratextViews1:WordMeaningsView />
+                                <paratextViews:WordMeaningsView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
 

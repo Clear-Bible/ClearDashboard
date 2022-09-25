@@ -3,7 +3,7 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Controls.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a network of nodes and connections between the nodes.

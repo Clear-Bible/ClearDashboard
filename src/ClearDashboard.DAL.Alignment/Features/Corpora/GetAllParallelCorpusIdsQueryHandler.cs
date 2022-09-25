@@ -27,6 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var parallelCorpusIds = ProjectDbContext.ParallelCorpa
                 .Include(pc => pc.SourceTokenizedCorpus)
                 .Include(pc => pc.TargetTokenizedCorpus)
+                .Include(pc => pc.User)
                 .Select(pc => ModelHelper.BuildParallelCorpusId(pc));
 
             return Task.FromResult(new RequestResult<IEnumerable<ParallelCorpusId>>(parallelCorpusIds));

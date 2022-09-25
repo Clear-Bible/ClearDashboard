@@ -34,7 +34,7 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
-    public class EnhancedCorpusViewModel : PaneViewModel,
+    public class EnhancedViewModel : PaneViewModel,
         IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         #region Member Variables
-        private readonly ILogger<EnhancedCorpusViewModel> _logger;
+        private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager _projectManager;
 
         private CancellationTokenSource? _cancellationTokenSource;
@@ -261,12 +261,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Constructor
 
-        public EnhancedCorpusViewModel()
+        public EnhancedViewModel()
         {
             // required by design-time binding
         }
 
-        public EnhancedCorpusViewModel(INavigationService navigationService, ILogger<EnhancedCorpusViewModel> logger,
+        public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
@@ -275,8 +275,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _logger = logger;
             _projectManager = projectManager;
 
-            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedCorpus", Logger);
-            this.ContentId = "ENHANCEDCORPUS";
+            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
+            this.ContentId = "ENHANCEDVIEW";
 
             //BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
@@ -386,7 +386,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             // we don't want this as it was for demonstration
 
-            return;
+            //return;
 
 
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");

@@ -10,6 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\DesignSurface\**" />
+    <Compile Remove="Views\PopUps\**" />
+    <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="Views\PopUps\**" />
+    <None Remove="Views\DesignSurface\**" />
+    <None Remove="Views\PopUps\**" />
+    <Page Remove="Views\DesignSurface\**" />
+    <Page Remove="Views\PopUps\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
   </ItemGroup>
 
@@ -289,6 +300,14 @@
     <Page Update="Views\MirrorView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
+    <Page Update="Views\Startup\RegistrationDialogView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Startup\RegistrationView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Shell\ShellView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
@@ -296,5 +315,4 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
-
 </Project>
