@@ -433,7 +433,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             }))
             .Tokenize<LatinWordTokenizer>()
             .Transform<IntoFakeCompositeTokensTextRowProcessor>()
-            .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
+            .Transform<SetTrainingBySurfaceLowercase>();
 
         return textCorpus;
     }
