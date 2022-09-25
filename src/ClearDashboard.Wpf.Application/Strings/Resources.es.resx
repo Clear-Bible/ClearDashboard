@@ -70,8 +70,8 @@
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Joshua</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Salmos</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>Agregar nuevo conjunto de traducción</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>Vista mejorada</value>
@@ -238,8 +238,8 @@
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>TABLERO</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Nueva vista mejorada</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>persona</value>
@@ -769,6 +769,9 @@
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Por favor, introduzca su nombre de pila</value>
   </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>Calcule el nuevo modelo de traducción</value>
+  </data>
   <data name="Pds_MarbleResource" xml:space="preserve">
     <value>Marqueource</value>
   </data>
@@ -853,6 +856,9 @@
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
     <value>animales</value>
   </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>Nueva vista mejorada</value>
+  </data>
   <data name="2CO" xml:space="preserve">
     <value>2CO</value>
   </data>
@@ -928,9 +934,6 @@
   <data name="ProperCase_1_Samuel" xml:space="preserve">
     <value>1 Samuel</value>
   </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>Palabra</value>
   </data>
@@ -943,14 +946,17 @@
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Mapas de versos</value>
   </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>Tren</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>Agregar a la vista mejorada enfocada</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
     <value>Diseños estándar</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>Colosenses</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>Tren</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Zephanías</value>
@@ -1035,6 +1041,9 @@
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>frutas</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Salmos</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>PRO</value>

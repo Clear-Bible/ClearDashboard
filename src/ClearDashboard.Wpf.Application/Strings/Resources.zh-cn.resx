@@ -70,8 +70,8 @@
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>                      约书亚记</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>诗篇</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>添加新的翻译集</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>增强的视图</value>
@@ -238,8 +238,8 @@
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>仪表板</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>新的增强视图</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>人</value>
@@ -769,6 +769,9 @@
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>请输入您的名字</value>
   </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>计算新的翻译模型</value>
+  </data>
   <data name="Pds_MarbleResource" xml:space="preserve">
     <value>Marbleresource</value>
   </data>
@@ -853,6 +856,9 @@
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
     <value>动物</value>
   </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>新的增强视图</value>
+  </data>
   <data name="2CO" xml:space="preserve">
     <value>2CO</value>
   </data>
@@ -928,9 +934,6 @@
   <data name="ProperCase_1_Samuel" xml:space="preserve">
     <value>                      撒母耳记上</value>
   </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>单词</value>
   </data>
@@ -943,14 +946,17 @@
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>经文映射</value>
   </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>火车</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>添加到集中的增强视图</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
     <value>标准布局</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>歌罗西人</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>火车</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>西番雅书</value>
@@ -1035,6 +1041,9 @@
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>水果</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>诗篇</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>PRO</value>

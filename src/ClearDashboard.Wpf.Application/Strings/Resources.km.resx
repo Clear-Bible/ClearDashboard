@@ -70,8 +70,8 @@
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>យ៉ូស្វេ</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>ទំនុកតម្លាវ</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>បន្ថែមសំណុំការបកប្រែថ្មី</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>ទិដ្ឋភាពដែលបានធ្វើឱ្យប្រសើរឡើង</value>
@@ -238,8 +238,8 @@
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>របដាប់ខ</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>ទិដ្ឋភាពប្រសើរថ្មី</value>
+  <data name="JOL" xml:space="preserve">
+    <value>JOL</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>មនុសស</value>
@@ -769,6 +769,9 @@
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>សូមបញ្ចូលឈ្មោះដំបូងរបស់អ្នក</value>
   </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>គណនាគំរូការបកប្រែថ្មី</value>
+  </data>
   <data name="Pds_MarbleResource" xml:space="preserve">
     <value>Marbleresource</value>
   </data>
@@ -853,6 +856,9 @@
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
     <value>កយម្ផកា</value>
   </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>ទិដ្ឋភាពប្រសើរថ្មី</value>
+  </data>
   <data name="2CO" xml:space="preserve">
     <value>2CO</value>
   </data>
@@ -928,9 +934,6 @@
   <data name="ProperCase_1_Samuel" xml:space="preserve">
     <value>1 សាំយូអែល</value>
   </data>
-  <data name="JOL" xml:space="preserve">
-    <value>JOL</value>
-  </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>ហក្យ</value>
   </data>
@@ -943,14 +946,17 @@
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Mappings ខ</value>
   </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>រថភ្លើង</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>បន្ថែមលើការផ្តោតអារម្មណ៍ដែលផ្តោតអារម្មណ៍</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
     <value>ប្លង់ស្តង់ដារ</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>កូល៉ុស</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>រថភ្លើង</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>សេផានា</value>
@@ -1035,6 +1041,9 @@
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>ផ្លែឈើ</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>ទំនុកតម្លាវ</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>PRO</value>

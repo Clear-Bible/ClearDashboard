@@ -70,8 +70,8 @@
   <data name="ProperCase_Joshua" xml:space="preserve">
     <value>Иисус Навин</value>
   </data>
-  <data name="ProperCase_Psalms" xml:space="preserve">
-    <value>Псалтирь</value>
+  <data name="Pds_AddNewTranslationSetMenu" xml:space="preserve">
+    <value>Добавить новый набор перевода</value>
   </data>
   <data name="MainView_WindowsEnhancedView" xml:space="preserve">
     <value>Усовершенствованный вид</value>
@@ -238,8 +238,8 @@
   <data name="Windows_Dashboard" xml:space="preserve">
     <value>ПРИБОРНАЯ ДОСКА</value>
   </data>
-  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
-    <value>Новый улучшенный вид</value>
+  <data name="JOL" xml:space="preserve">
+    <value>Иоил.</value>
   </data>
   <data name="BiblicalTermsDomains_Person" xml:space="preserve">
     <value>человек</value>
@@ -769,6 +769,9 @@
   <data name="RegistrationView_FirstName" xml:space="preserve">
     <value>Пожалуйста, введите ваше имя</value>
   </data>
+  <data name="Pds_CalculateNewTranslationModel" xml:space="preserve">
+    <value>Рассчитайте новую модель перевода</value>
+  </data>
   <data name="Pds_MarbleResource" xml:space="preserve">
     <value>Marbleresource</value>
   </data>
@@ -853,6 +856,9 @@
   <data name="BiblicalTermsDomains_Animals" xml:space="preserve">
     <value>животные</value>
   </data>
+  <data name="MainView_WindowsNewEnhancedView" xml:space="preserve">
+    <value>Новый улучшенный вид</value>
+  </data>
   <data name="2CO" xml:space="preserve">
     <value>2Кор.</value>
   </data>
@@ -928,9 +934,6 @@
   <data name="ProperCase_1_Samuel" xml:space="preserve">
     <value>1 Царств</value>
   </data>
-  <data name="JOL" xml:space="preserve">
-    <value>Иоил.</value>
-  </data>
   <data name="Pins_Word" xml:space="preserve">
     <value>Слово</value>
   </data>
@@ -943,14 +946,17 @@
   <data name="ParallelCorpusDialog_VerseMappings" xml:space="preserve">
     <value>Сопоставления стихов</value>
   </data>
-  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
-    <value>Тренироваться</value>
+  <data name="Pds_AddConnectionToEnhancedViewMenu" xml:space="preserve">
+    <value>Добавить к целенаправленному расширенному представлению</value>
   </data>
   <data name="MainView_LayoutsStandardLayouts" xml:space="preserve">
     <value>Стандартные макеты</value>
   </data>
   <data name="ProperCase_Colossians" xml:space="preserve">
     <value>Колоссянам</value>
+  </data>
+  <data name="ParallelCorpusDialog_Train" xml:space="preserve">
+    <value>Тренироваться</value>
   </data>
   <data name="ProperCase_Zephaniah" xml:space="preserve">
     <value>Софония</value>
@@ -1035,6 +1041,9 @@
   </data>
   <data name="BiblicalTermsDomains_Fruits" xml:space="preserve">
     <value>фрукты</value>
+  </data>
+  <data name="ProperCase_Psalms" xml:space="preserve">
+    <value>Псалтирь</value>
   </data>
   <data name="PRO" xml:space="preserve">
     <value>Прит.</value>
