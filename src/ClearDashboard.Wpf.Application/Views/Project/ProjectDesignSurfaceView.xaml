@@ -307,9 +307,9 @@
                         Stroke="{StaticResource connectionBrush}"
                         StrokeThickness="3">
                         <projectDesignSurface:CurvedArrow.ContextMenu>
-                            <ContextMenu Name="ContextMenu">
+                            <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
                                 <ContextMenu.Resources>
-                                    <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:CorpusNodeMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
+                                    <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:ParallelCorpusConnectionMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconPicolIcons
                                                 Width="15"

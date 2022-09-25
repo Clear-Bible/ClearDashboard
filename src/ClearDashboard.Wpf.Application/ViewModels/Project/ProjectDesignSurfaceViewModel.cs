@@ -4,16 +4,21 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using System;
@@ -28,12 +33,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.Exceptions;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog;
-using VerseMapping = ClearBible.Engine.Corpora.VerseMapping;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -433,10 +432,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // save all the connections
             foreach (var connection in DesignSurface.Connections)
             {
+                List<TranslationSetInfo> serializedTranslationSet = new();
+                foreach (var translationSet in connection.TranslationSetInfo)
+                {
+                    serializedTranslationSet.Add(new TranslationSetInfo
+                    {
+                        DisplayName = translationSet.DisplayName ?? string.Empty,
+                        TranslationSetId = translationSet.TranslationSetId,
+                    });
+                }
+
                 surface.Connections.Add(new SerializedConnection
                 {
                     SourceConnectorId = connection.SourceConnector.ParatextID,
-                    TargetConnectorId = connection.DestinationConnector.ParatextID
+                    TargetConnectorId = connection.DestinationConnector.ParatextID,
+                    TranslationSetInfo = serializedTranslationSet,
                 });
             }
 
@@ -549,9 +559,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var connection = new ConnectionViewModel
                         {
                             SourceConnector = sourceNode.OutputConnectors[0],
-                            DestinationConnector = targetNode.InputConnectors[0]
+                            DestinationConnector = targetNode.InputConnectors[0],
+                            TranslationSetInfo = deserializedConnection.TranslationSetInfo,
                         };
                         DesignSurface.Connections.Add(connection);
+                        // add in the context menu
+                        CreateConnectionMenu(connection);
                     }
                 }
 
@@ -947,8 +960,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             if (corpusNode.CorpusType != CorpusType.Manuscript)
             {
                 // Add new tokenization
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", _logger), Id = "AddTokenizationId", IconKind = "BookTextAdd", ProjectDesignSurfaceViewModel = this, CorpusNodeViewModel = corpusNode, });
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+                {
+                    Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", _logger), 
+                    Id = "AddTokenizationId",
+                    IconKind = "BookTextAdd", 
+                    ProjectDesignSurfaceViewModel = this, 
+                    CorpusNodeViewModel = corpusNode,
+                });
+                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+                    { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
             }
 
             foreach (var nodeTokenization in corpusNode.NodeTokenizations)
@@ -963,27 +984,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         new CorpusNodeMenuItemViewModel
                         {
                             // Add Verses to focused enhanced view
-                            Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
+                            Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), 
+                            Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentTextAdd", CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new CorpusNodeMenuItemViewModel
                         {
                             // Show Verses in New Windows
-                            Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this, IconKind = "DocumentText",
-                            CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
+                            Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), 
+                            Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this, 
+                            IconKind = "DocumentText",
+                            CorpusNodeViewModel = corpusNode, 
+                            Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new CorpusNodeMenuItemViewModel
                         {
                             // Properties
-                            Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger), Id = "TokenizerPropertiesId", ProjectDesignSurfaceViewModel = this, IconKind = "Settings",
-                            CorpusNodeViewModel = corpusNode, Tokenizer = nodeTokenization.TokenizationName,
+                            Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger), 
+                            Id = "TokenizerPropertiesId", 
+                            ProjectDesignSurfaceViewModel = this, 
+                            IconKind = "Settings",
+                            CorpusNodeViewModel = corpusNode, 
+                            Tokenizer = nodeTokenization.TokenizationName,
                         }
                     }
                 });
             }
 
-            nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+            {
+                Header = "", 
+                Id = "SeparatorId", 
+                ProjectDesignSurfaceViewModel = this, 
+                IsSeparator = true
+            });
 
             nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
             {
@@ -1004,66 +1039,100 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         /// <param name="connection"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void CreateConnectionMenu(ConnectionViewModel connection)
+        public void CreateConnectionMenu(ConnectionViewModel connection)
         {
             // initiate the menu system
             connection.MenuItems.Clear();
 
             ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems = new();
 
-            //// restrict the ability of Manuscript to add new tokenizers
-            //if (connection.CorpusType != CorpusType.Manuscript)
-            //{
-            //    // Add new tokenization
-            //    connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel { Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", _logger), Id = "AddTokenizationId", IconKind = "BookTextAdd", ProjectDesignSurfaceViewModel = this, CorpusNodeViewModel = connection, });
-            //    connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
-            //}
+            // Add new tokenization
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            {
+                Header = LocalizationStrings.Get("Pds_AddNewTranslationSetMenu", _logger), Id = "AddTranslationSetId",
+                IconKind = "BookTextAdd", ProjectDesignSurfaceViewModel = this,
+                ConnectionId = connection.Id
+            });
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
-            //foreach (var nodeTokenization in connection.NodeTokenizations)
-            //{
-            //    connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            //    {
-            //        Header = nodeTokenization.TokenizationFriendlyName,
-            //        Id = nodeTokenization.TokenizedTextCorpusId,
-            //        IconKind = "Relevance",
-            //        MenuItems = new ObservableCollection<ParallelCorpusConnectionMenuItemViewModel>
-            //        {
-            //            new ParallelCorpusConnectionMenuItemViewModel
-            //            {
-            //                // Add Verses to focused enhanced view
-            //                Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
-            //                IconKind = "DocumentTextAdd", CorpusNodeViewModel = connection,
-            //                Tokenizer = nodeTokenization.TokenizationName,
-            //            },
-            //            new ParallelCorpusConnectionMenuItemViewModel
-            //            {
-            //                // Show Verses in New Windows
-            //                Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this, IconKind = "DocumentText",
-            //                ConnectionViewModel = connection, Tokenizer = nodeTokenization.TokenizationName,
-            //            },
-            //            new ParallelCorpusConnectionMenuItemViewModel
-            //            {
-            //                // Properties
-            //                Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger), Id = "TokenizerPropertiesId", ProjectDesignSurfaceViewModel = this, IconKind = "Settings",
-            //                ConnectionViewModel = connection, Tokenizer = nodeTokenization.TokenizationName,
-            //            }
-            //        }
-            //    });
-            //}
 
-            //connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            foreach (var info in connection.TranslationSetInfo)
+            {
+                connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                {
+                    Header = info.DisplayName,
+                    Id = info.TranslationSetId,
+                    IconKind = "Relevance",
+                    MenuItems = new ObservableCollection<ParallelCorpusConnectionMenuItemViewModel>
+                    {
+                        new ParallelCorpusConnectionMenuItemViewModel
+                        {
+                            // Add Verses to focused enhanced view
+                            Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", _logger),
+                            Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
+                            IconKind = "DocumentTextAdd",
+                            TranslationSetId = info.TranslationSetId
+                        },
+                        new ParallelCorpusConnectionMenuItemViewModel
+                        {
+                            // Show Verses in New Windows
+                            Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger),
+                            Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
+                            IconKind = "DocumentText",
+                            TranslationSetId = info.TranslationSetId
+                        },
 
-            //connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            //{
-            //    // Properties
-            //    Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger),
-            //    Id = "PropertiesId",
-            //    IconKind = "Settings",
-            //    ConnectionViewModel = connection,
-            //    ProjectDesignSurfaceViewModel = this
-            //});
+                    }
+                });
+            }
+
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            {
+                // Properties
+                Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger),
+                Id = "PropertiesId",
+                IconKind = "Settings",
+                ConnectionViewModel = connection,
+                ProjectDesignSurfaceViewModel = this
+            });
 
             connection.MenuItems = connectionMenuItems;
+        }
+
+        public async Task ExecuteConnectionMenuCommand(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var connectionViewModel = connectionMenuItem.ConnectionViewModel;
+            switch (connectionMenuItem.Id)
+            {
+                case "AddTranslationSetId":
+                    // find the right connection to send
+                    var connection = DesignSurface.Connections.First(c => c.Id == connectionMenuItem.ConnectionId);
+
+                    if (connection is not null)
+                    {
+                        // kick off the add new tokenization dialog
+                        AddParallelCorpus(connection);
+                    }
+                    else
+                    {
+                        _logger.LogError("Could not find connection with id {0}", connectionMenuItem.ConnectionId);
+                    }
+                    break;
+                case "SeparatorId":
+                    // no-op
+                    break;
+                case "PropertiesId":
+                    // node properties
+                    SelectedConnection = connectionViewModel;
+                    break;
+                default:
+                    
+                    break;
+            }
         }
 
         public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
@@ -1386,6 +1455,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 // get TranslationSet , etc from the dialogViewModel
                 var translationSet = dialogViewModel.TranslationSet;
+                newConnection.TranslationSetInfo.Add(new TranslationSetInfo
+                {
+                    DisplayName = translationSet.TranslationSetId.DisplayName,
+                    TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
+                });
+
+                CreateConnectionMenu(newConnection);
                 await SaveCanvas();
             }
             else
