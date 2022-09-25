@@ -50,7 +50,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ProgressBarMessage>,
                 IHandle<ShowTokenizationWindowMessage>,
                 IHandle<UiLanguageChangedMessage>,
-                IHandle<ActiveDocumentMessage>
+                IHandle<ActiveDocumentMessage>,
+                IHandle<ShowParallelTranslationWindowMessage>
     {
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
@@ -1527,6 +1528,85 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ShowParallelTranslationWindowMessage message, CancellationToken cancellationToken)
+        {
+            // the user wants to add to the currently active window
+            if (message.IsNewWindow == false)
+            {
+                var dockableWindows = _dockingManager.Layout.Descendents()
+                    .OfType<LayoutDocument>().ToList();
+                if (dockableWindows.Count == 1)
+                {
+                    // there is only one doc window open, so we can just add to it
+                    var enhancedCorpusViewModels =
+                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
+                            EnhancedViewModel;
+                    if (enhancedCorpusViewModels is not null)
+                    {
+                        await enhancedCorpusViewModels.ShowParallelTranslationTokens(message, cancellationToken);
+                    }
+
+                    return;
+                }
+
+                // more than one enhanced corpus window is open and active
+                foreach (var document in dockableWindows)
+                {
+                    if (document.IsActive && document.Content is EnhancedViewModel)
+                    {
+                        var vm = document.Content as EnhancedViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
+                        var guid = vm.Guid;
+
+                        var enhancedCorpusViewModels =
+                            Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
+                                    // ReSharper disable once UsePatternMatching
+                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
+                                EnhancedViewModel;
+                        if (enhancedCorpusViewModels is not null)
+                        {
+                            await enhancedCorpusViewModels.ShowParallelTranslationTokens(message, cancellationToken);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // unactivate any other doc windows before we add in the new one
+            var docWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+            foreach (var document in docWindows)
+            {
+                document.IsActive = false;
+            }
+
+
+
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
+            //viewModel.CurrentCorpusName = message.ProjectName;
+            viewModel.Title = message.DisplayName;
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                ContentId = message.TranslationSetId,
+                Content = viewModel,
+                Title = message.DisplayName,
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+
+            await viewModel.ShowParallelTranslationTokens(message, cancellationToken);
         }
     }
 

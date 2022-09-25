@@ -14,7 +14,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         }
 
         public string TranslationSetId { get; set; } = string.Empty;
-
+        public string DisplayName { get; set; } = string.Empty;
+        public string ParallelCorpusId { get; set; } = string.Empty;
+        public string? ParallelCorpusDisplayName { get; set; } = string.Empty;
         public Guid ConnectionId { get; set; }
 
         protected override void Execute()
