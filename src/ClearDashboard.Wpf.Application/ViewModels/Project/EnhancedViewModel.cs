@@ -386,7 +386,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             // we don't want this as it was for demonstration
 
-            return;
+            //return;
 
 
             _logger?.LogInformation("Received TokenizedTextCorpusMessage.");

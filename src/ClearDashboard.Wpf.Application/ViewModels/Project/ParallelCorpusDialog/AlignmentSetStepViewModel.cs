@@ -13,7 +13,7 @@ using FluentValidation.Results;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
-public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<ParallelCorpusDialogViewModel, AlignmentSetStepViewModel>
+public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, AlignmentSetStepViewModel>
 {
 
 

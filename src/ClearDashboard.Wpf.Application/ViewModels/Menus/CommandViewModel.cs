@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.Menus
 {
     public class CommandViewModel : ICommand
     {

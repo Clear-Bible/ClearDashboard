@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System;
 using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using SIL.Machine.Translation;
 using SIL.Machine.Utils;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
@@ -34,7 +35,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         Failed,
         Completed,
     }
-    public class ParallelCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel
+
+    public interface IParallelCorpusDialogViewModel
+    {
+        CorpusNodeViewModel SourceCorpusNodeViewModel { get; set; }
+        CorpusNodeViewModel TargetCorpusNodeViewModel { get; set; }
+        ConnectionViewModel ConnectionViewModel { get; set; }
+        SmtModelType SelectedSmtAlgorithm { get; set; }
+        IWordAlignmentModel WordAlignmentModel { get; set; }
+        DAL.Alignment.Corpora.ParallelCorpus ParallelTokenizedCorpus { get; set; }
+        EngineParallelTextCorpus ParallelTextCorpus { get; set; }
+        TranslationSet TranslationSet { get; set; }
+        IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
+        AlignmentSet AlignmentSet { get; set; }
+        string? CurrentStepTitle { get; set; }
+        CancellationTokenSource CreateCancellationTokenSource();
+        Task<ProcessStatus> AddParallelCorpus(string parallelCorpusDisplayName);
+        Task<ProcessStatus> TrainSmtModel();
+        Task<ProcessStatus> AddTranslationSet(string translationSetDisplayName);
+        Task<ProcessStatus> AddAlignmentSet(string alignmentSetDisplayName);
+
+        Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken,
+            string? description = null, Exception? ex = null);
+        List<IWorkflowStepViewModel> Steps { get; }
+
+        void Ok();
+        void Cancel();
+        CancellationTokenSource? CancellationTokenSource { get; }
+
+    }
+
+    public class ParallelCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParallelCorpusDialogViewModel
     {
 
         public ParallelCorpusDialogViewModel()
@@ -144,7 +175,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public EngineParallelTextCorpus ParallelTextCorpus { get; set; }
 
         // ReSharper disable once RedundantDefaultMemberInitializer
-        public CancellationTokenSource? CancellationTokenSource = null;
+        public CancellationTokenSource? CancellationTokenSource { get; private set; }
         public bool LongProcessRunning;
         private ConnectionViewModel _connectionViewModel;
 

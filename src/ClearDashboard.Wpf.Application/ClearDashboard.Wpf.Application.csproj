@@ -10,6 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\DesignSurface\**" />
+    <Compile Remove="Views\PopUps\**" />
+    <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="Views\PopUps\**" />
+    <None Remove="Views\DesignSurface\**" />
+    <None Remove="Views\PopUps\**" />
+    <Page Remove="Views\DesignSurface\**" />
+    <Page Remove="Views\PopUps\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
   </ItemGroup>
 
@@ -303,9 +314,5 @@
     <Page Update="Views\Project\SmtModelDialog\SmtModelStepView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\DesignSurface\" />
-    <Folder Include="Views\PopUps\" />
   </ItemGroup>
 </Project>

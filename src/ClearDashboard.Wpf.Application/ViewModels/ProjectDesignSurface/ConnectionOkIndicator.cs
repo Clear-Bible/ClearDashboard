@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClearDashboard.Wpf.Application.ViewModels
+﻿namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     /// <summary>
     /// This class is just a place holder for showing a 'connection ok' indicator in the graph.

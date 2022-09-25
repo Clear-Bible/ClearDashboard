@@ -12,7 +12,8 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
-    d:DataContext="{d:DesignInstance Type=viewModels:TextCollectionsViewModel,
+    xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
+    d:DataContext="{d:DesignInstance Type=paratextViews:TextCollectionsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"

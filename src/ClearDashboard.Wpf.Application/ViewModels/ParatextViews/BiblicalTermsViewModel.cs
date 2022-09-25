@@ -26,6 +26,7 @@ using System.Windows.Media;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Point = System.Windows.Point;
 using Autofac;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {

@@ -1,11 +1,11 @@
-﻿using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Controls.Utils;
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Controls.Utils;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a connector (aka connection point) that can be attached to a node and is used to connect the node to another node.
