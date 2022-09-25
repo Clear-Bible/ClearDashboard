@@ -136,7 +136,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     {
                         Text = "This is a note",
                         //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                        Labels = MockLabels
+                        //Labels = MockLabels
                     });
                 }
 
@@ -146,7 +146,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     {
                         Text = "Here's another note",
                         //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                        Labels = MockLabels
+                        //Labels = MockLabels
                     });
                 }
 
@@ -178,8 +178,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(
             IEnumerable<Token> tokens)
         {
-            var detokenizer = new EngineStringDetokenizer(Detokenizer);
-            return detokenizer.Detokenize(tokens);
+            return Detokenizer.Detokenize(tokens);
         }
 
         private Translation GetTranslation(Token token)
