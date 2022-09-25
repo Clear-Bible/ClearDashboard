@@ -67,6 +67,15 @@ namespace ClearDashboard.Wpf.Application.Models
             set => Set(ref _row0Verses, value);
         }
 
+        private bool _row0ShowTranslation;
+
+        public bool Row0ShowTranslation
+        {
+            get => _row0ShowTranslation;
+            set => Set(ref _row0ShowTranslation, value);
+        }
+
+
         #endregion Row0
 
 
@@ -122,6 +131,14 @@ namespace ClearDashboard.Wpf.Application.Models
         {
             get => _row1Verses;
             set => Set(ref _row1Verses, value);
+        }
+
+        private bool _row1ShowTranslation;
+
+        public bool Row1ShowTranslation
+        {
+            get => _row1ShowTranslation;
+            set => Set(ref _row1ShowTranslation, value);
         }
 
         #endregion Row1
@@ -181,6 +198,14 @@ namespace ClearDashboard.Wpf.Application.Models
             set => Set(ref _row2Verses, value);
         }
 
+        private bool _row2ShowTranslation;
+
+        public bool Row2ShowTranslation
+        {
+            get => _row2ShowTranslation;
+            set => Set(ref _row2ShowTranslation, value);
+        }
+
         #endregion Row2
 
 
@@ -238,6 +263,14 @@ namespace ClearDashboard.Wpf.Application.Models
             set => Set(ref _row3Verses, value);
         }
 
+        private bool _row3ShowTranslation;
+
+        public bool Row3ShowTranslation
+        {
+            get => _row3ShowTranslation;
+            set => Set(ref _row3ShowTranslation, value);
+        }
+        
         #endregion Row3
     }
 }

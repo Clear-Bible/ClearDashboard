@@ -10,6 +10,7 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -373,8 +374,13 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row0Title}" />
+                                <CheckBox
+                                    x:Name="checkRow0"
+                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
+                                    x:Name="ListView0"
                                     Width="{Binding ActualWidth, ElementName=Border0, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row0Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -400,7 +406,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow0, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -459,6 +465,10 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row1Title}" />
+                                <CheckBox
+                                    x:Name="checkRow1"
+                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
                                     Width="{Binding ActualWidth, ElementName=Border1, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
@@ -484,7 +494,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow1, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -543,6 +553,10 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row2Title}" />
+                                <CheckBox
+                                    x:Name="checkRow2"
+                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
                                     Width="{Binding ActualWidth, ElementName=Border2, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
@@ -568,7 +582,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow2, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -627,6 +641,10 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row3Title}" />
+                                <CheckBox
+                                    x:Name="checkRow3"
+                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
                                     Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
@@ -652,7 +670,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow3, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

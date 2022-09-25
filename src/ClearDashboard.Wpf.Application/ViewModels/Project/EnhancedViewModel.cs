@@ -569,21 +569,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                     }
 
-
-
-
-                    //var verseData = await _projectManager?.ExecuteRequest(new GetByVerseRange
-                    //{
-                    //    ParatextProjectId = message.ParatextProjectId,
-                    //    TokenizationType = message.TokenizationType,
-                    //    Books = metadata.AvailableBooks
-                    //}, cancellationToken);
-
-
-
-
-
-
                     // get the entirety of text for this corpus
                     CurrentTokenizedTextCorpus =
                         await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
@@ -699,7 +684,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
-                        UpdateVersesDisplay(message, verses, title);
+                        UpdateVersesDisplay(message, verses, title, false);
                         NotifyOfPropertyChange(() => VersesDisplay);
 
                         ProgressBarVisibility = Visibility.Collapsed;
@@ -841,7 +826,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
-                        UpdateVersesDisplay(message, verses, title);
+                        UpdateVersesDisplay(message, verses, title, false);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -886,7 +871,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title)
+        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool ShowTranslations)
         {
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.Blue;
@@ -922,6 +907,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row0Title = title;
                     VersesDisplay.Row0Verses = verses;
                     VersesDisplay.Row0Visibility = Visibility.Visible;
+                    VersesDisplay.Row0ShowTranslation = ShowTranslations;
 #pragma warning disable CS8601
                     VersesDisplay.Row0BorderColor = brush;
 #pragma warning restore CS8601
@@ -933,6 +919,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row1Title = title;
                     VersesDisplay.Row1Verses = verses;
                     VersesDisplay.Row1Visibility = Visibility.Visible;
+                    VersesDisplay.Row1ShowTranslation = ShowTranslations;
 #pragma warning disable CS8601
                     VersesDisplay.Row1BorderColor = brush;
 #pragma warning restore CS8601
@@ -945,6 +932,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row2Title = title;
                     VersesDisplay.Row2Verses = verses;
                     VersesDisplay.Row2Visibility = Visibility.Visible;
+                    VersesDisplay.Row2ShowTranslation = ShowTranslations;
 #pragma warning disable CS8601
                     VersesDisplay.Row2BorderColor = brush;
 #pragma warning restore CS8601
@@ -956,6 +944,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     VersesDisplay.Row3Title = title;
                     VersesDisplay.Row3Verses = verses;
                     VersesDisplay.Row3Visibility = Visibility.Visible;
+                    VersesDisplay.Row3ShowTranslation = ShowTranslations;
 #pragma warning disable CS8601
                     VersesDisplay.Row3BorderColor = brush;
 #pragma warning restore CS8601
@@ -981,10 +970,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private Translation GetTranslation(EngineToken token)
         {
-            //Debug.WriteLine(token + " " + token.PropertiesJson);
-
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
-                ? GetMockOogaWord()
+                ? ""
                 : String.Empty;
             var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
 
