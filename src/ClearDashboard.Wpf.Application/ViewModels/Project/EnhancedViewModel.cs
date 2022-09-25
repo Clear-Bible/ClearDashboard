@@ -262,12 +262,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // required by design-time binding
         }
 
+
+        //private ICommand? _itemDoubleClickCommand;
+
+        //private void ItemDoubleClickCommandHandler()
+        //{
+        //    MessageBox.Show("ItemDoubleClick");
+        //}
+
+        //private void ItemDoubleClickCommandHandler(object obj)
+        //{
+        //    MessageBox.Show("ItemDoubleClick Parameter");
+        //}
+
+
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
+            //_itemDoubleClickCommand = new RelayCommand(ItemDoubleClickCommandHandler);
+
             _logger = logger;
             _projectManager = projectManager;
 

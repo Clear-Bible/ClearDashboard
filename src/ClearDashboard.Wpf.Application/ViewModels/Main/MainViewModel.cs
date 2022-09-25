@@ -416,9 +416,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// </summary>
         /// <typeparam name="TViewModel"></typeparam>
         /// <returns></returns>
-        private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default) where TViewModel : class, IScreen
+        //private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default) where TViewModel : class, IScreen
+        //{
+        //    var viewModel = IoC.Get<TViewModel>();
+        //    var view = ViewLocator.LocateForModel(viewModel, null, null);
+        //    ViewModelBinder.Bind(viewModel, view, null);
+        //    await ActivateItemAsync(viewModel, cancellationToken);
+        //}
+
+        private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
+            where TViewModel : Screen
         {
+
+            // NOTE:  This is the hack to get OnViewAttached and OnViewReady methods to be called on conducted ViewModels.  Also note
+            //   OnViewLoaded is not called.
+
             var viewModel = IoC.Get<TViewModel>();
+            viewModel.Parent = this;
+            viewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
@@ -1361,6 +1376,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             OnUIThread(() => Message = message.Message);
             await Task.CompletedTask;
         }
+
 
         /// <summary>
         /// Pop open a new Corpus Tokization window and pass in the current corpus

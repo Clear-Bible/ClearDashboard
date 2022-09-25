@@ -1090,6 +1090,7 @@
             ShowAdvancedOptions="False"
             ShowHorizontalScrollBar="True"
             ShowSummary="False"
-            UpdateTextBoxSourceOnEnterKey="True" />
+            UpdateTextBoxSourceOnEnterKey="True"
+            Visibility="Collapsed" />
     </Grid>
 </UserControl>

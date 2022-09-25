@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
@@ -15,7 +16,6 @@
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -400,8 +400,8 @@
 
                 <TextBlock
                     Margin="5,0,0,0"
-                    VerticalAlignment="Center"
                     HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
                     FontSize="16"
                     Text="{helpers:Localization ShellView_NoBackGroundTasks}">
                     <TextBlock.Style>
@@ -464,8 +464,8 @@
             <StatusBarItem>
                 <Button
                     x:Name="BackgroundTasks"
-                    Padding="0"
                     Margin="0"
+                    Padding="0"
                     BorderThickness="0"
                     Style="{StaticResource TransparentButton}"
                     ToolTip="{helpers:Localization ShellView_ShowBackgroundTasksTooltip}">
