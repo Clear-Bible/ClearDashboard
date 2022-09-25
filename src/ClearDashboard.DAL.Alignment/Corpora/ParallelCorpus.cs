@@ -1,8 +1,10 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
+using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -21,6 +23,22 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             else
             {
                 throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+
+        public EngineStringDetokenizer Detokenizer
+        {
+            get
+            {
+                var detokenizerName = ParallelCorpusId?.SourceTokenizedCorpusId?.TokenizationFunction;
+                return detokenizerName switch
+                {
+                    "LatinWordTokenizer" => new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                    "WhitespaceTokenizer" => new EngineStringDetokenizer(new WhitespaceDetokenizer()),
+                    "ZwspWordTokenizer" => new EngineStringDetokenizer(new ZwspWordDetokenizer()),
+                    _ => throw new NotSupportedException($"'{detokenizerName}' is not a valid tokenizer name")
+                };
             }
         }
 
