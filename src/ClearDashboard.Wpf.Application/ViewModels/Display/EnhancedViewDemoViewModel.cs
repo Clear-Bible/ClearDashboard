@@ -181,6 +181,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return Detokenizer.Detokenize(tokens);
         }
 
+        private async Task<IEnumerable<TranslationOption>> GetTranslationOptions(Translation translation)
+        {
+#if MOCK
+            return GetMockTranslationOptions(translation.TargetTranslationText);
+#else
+            var translationModelEntry = await CurrentTranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
+            var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
+                .Select(option => new TranslationOption { Word = option.Key, Probability = option.Value })
+                .Take(4)
+                .ToList();
+            return translationOptions;
+#endif
+        }
         private Translation GetTranslation(Token token)
         {
 #if MOCK
@@ -332,14 +345,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(CurrentToken));
         }
 
-        private void DisplayTranslationPane(TranslationEventArgs e)
+        private async Task DisplayTranslationPane(TranslationEventArgs e)
         {
             SetCurrentToken(e.TokenDisplayViewModel);
 
             TranslationPaneVisibility = Visibility.Visible;
             NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
 
-            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+            TranslationOptions = await GetTranslationOptions(e.Translation);
             NotifyOfPropertyChange(nameof(TranslationOptions));
 
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
@@ -354,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
-        #region Event Handlers
+#region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
@@ -519,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
         // ReSharper restore UnusedMember.Global
 
-        #endregion
+#endregion
 
         // ReSharper disable UnusedMember.Global
         public EnhancedViewDemoViewModel()
