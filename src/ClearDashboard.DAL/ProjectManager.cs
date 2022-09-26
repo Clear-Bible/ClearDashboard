@@ -327,10 +327,12 @@ namespace ClearDashboard.DataAccessLayer
             var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
             var projectAssets = await projectDbContextFactory.Get(project.ProjectName);
 
-            Logger.LogInformation($"Saving the design surface layout for {CurrentProject.ProjectName}");
+            Logger.LogInformation($"Saving the design surface layout for project '{CurrentProject.ProjectName}'");
             projectAssets.ProjectDbContext.Attach(project);
 
             await projectAssets.ProjectDbContext.SaveChangesAsync();
+
+            Logger.LogInformation($"Saved the design surface layout for project '{CurrentProject.ProjectName}'");
         }
     }
 }
