@@ -601,26 +601,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 try
                 {
-                    //await ProjectManager.LoadProject("SUR");
-                    var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
-                    NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-                    CurrentTranslationSet = await GetTranslationSet();
-                    CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-                    var VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
-                    LabelSuggestions = await GetLabelSuggestions();
-                    ObservableCollection<List<TokenDisplayViewModel>> verseOut =
-                        new ObservableCollection<List<TokenDisplayViewModel>>();
-                    verseOut.Add(VerseTokens);
-
-
-
-                    OnUIThread(() =>
-                    {
-                        UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
-                        NotifyOfPropertyChange(() => VersesDisplay);
-
-                        ProgressBarVisibility = Visibility.Collapsed;
-                    });
+                    var VerseTokens = await BuildTokenDisplayViewModels(message);
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -651,6 +632,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _cancellationTokenSource.Dispose();
                 }
             }, cancellationToken);
+        }
+
+        private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
+        {
+            //await ProjectManager.LoadProject("SUR");
+            var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
+            NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
+            CurrentTranslationSet = await GetTranslationSet();
+            CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
+            var VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
+            LabelSuggestions = await GetLabelSuggestions();
+            ObservableCollection<List<TokenDisplayViewModel>> verseOut =
+                new ObservableCollection<List<TokenDisplayViewModel>>();
+            verseOut.Add(VerseTokens);
+
+
+            OnUIThread(() =>
+            {
+                UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
+                NotifyOfPropertyChange(() => VersesDisplay);
+
+                ProgressBarVisibility = Visibility.Collapsed;
+            });
+            return VerseTokens;
         }
 
         public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV, ShowParallelTranslationWindowMessage message)
@@ -1515,9 +1520,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task TranslationAppliedAsync(TranslationEventArgs e)
         {
-            await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
+            try
+            {
+                ProgressBarVisibility = Visibility.Visible;
+                await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
+                await VerseChangeRerender();
+                HideTranslation();
+            }
+            finally
+            {
+                ProgressBarVisibility = Visibility.Collapsed;
+            }
 
-            HideTranslation();
         }
 
         public void TranslationCancelled(object sender, RoutedEventArgs e)
