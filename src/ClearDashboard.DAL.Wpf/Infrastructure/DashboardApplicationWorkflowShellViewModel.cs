@@ -48,15 +48,22 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
             }
         }
 
-        public async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? ex = null)
+        private string? _message;
+        public string? Message
         {
+            get => _message;
+            set => Set(ref _message, value);
+        }
 
+        public async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? exception = null)
+        {
+            Message = !string.IsNullOrEmpty(description) ? description : null;
             var backgroundTaskStatus = new BackgroundTaskStatus
             {
                 Name = name,
                 EndTime = DateTime.Now,
                 Description = !string.IsNullOrEmpty(description) ? description : null,
-                ErrorMessage = ex != null ? $"{ex}" : null,
+                ErrorMessage = exception != null ? $"{exception}" : null,
                 TaskLongRunningProcessStatus = status
             };
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);

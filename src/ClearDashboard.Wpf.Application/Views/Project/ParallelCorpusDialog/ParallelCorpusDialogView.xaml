@@ -10,6 +10,7 @@
       xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
       xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -36,8 +37,58 @@
                                      IsDesignTimeCreatable=True}">
    
   
-    <Grid Margin="30, 0">
-        <ContentControl cm:View.Model="{Binding ActiveItem}" />
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" ></RowDefinition>
+            <RowDefinition Height="40" ></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <ContentControl Grid.Row="0" cm:View.Model="{Binding ActiveItem}" />
+        <StatusBar Grid.Row="1" 
+            Background="{DynamicResource MaterialDesignPaper}"
+            Foreground="{DynamicResource MaterialDesignDarkForeground}">
+        <StatusBar.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </ItemsPanelTemplate>
+        </StatusBar.ItemsPanel>
+        <StatusBarItem>
+            <Button
+                    x:Name="BackgroundTasks"
+                    Margin="0"
+                    Padding="0"
+                    BorderThickness="0"
+                    Style="{StaticResource TransparentButton}"
+                    ToolTip="{helpers:Localization ShellView_ShowBackgroundTasksTooltip}">
+                <Grid>
+                    <materialDesign:PackIcon
+                            Width="36"
+                            Height="36"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="TooltipOutline" />
+                    <ProgressBar
+                            Width="15"
+                            Height="15"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="{StaticResource GreenMidBrush}"
+                            IsIndeterminate="True"
+                            Style="{StaticResource MaterialDesignCircularProgressBar}"
+                            Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Value="60" />
+                </Grid>
+            </Button>
+        </StatusBarItem>
+      <StatusBarItem Grid.Column="1">
+            <Label x:Name="Message" FontSize="14" Content="{Binding Message}"></Label>
+        </StatusBarItem>
+      
+        </StatusBar>
     </Grid>
 
 </controls:DialogWindow>
