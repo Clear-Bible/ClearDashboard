@@ -1546,6 +1546,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task NoteAddedAsync(NoteEventArgs e)
         {
+            HideNote();
+
             await e.Note.CreateOrUpdate(Mediator);
             await e.Note.AssociateDomainEntity(Mediator, e.EntityId);
             foreach (var label in e.Note.Labels)
@@ -1557,21 +1559,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await e.Note.AssociateLabel(Mediator, label);
             }
 
-            HideNote();
+            
         }
 
         public async Task NoteUpdated(object sender, NoteEventArgs e)
         {
-            await e.Note.CreateOrUpdate(Mediator);
-
             HideNote();
+
+            await e.Note.CreateOrUpdate(Mediator);
         }
 
         public async Task NoteDeleted(object sender, NoteEventArgs e)
         {
-            await e.Note.Delete(Mediator);
-
             HideNote();
+
+            await e.Note.Delete(Mediator);
         }
 
         public async Task LabelSelected(object sender, LabelEventArgs e)
@@ -1592,7 +1594,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
+        public void CloseNotePaneRequested(object sender, NoteEventArgs args)
         {
             HideNote();
         }
@@ -1612,7 +1614,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
         private void HideNote()
         {
-            NoteControlVisibility = Visibility.Hidden;
+            NoteControlVisibility = Visibility.Collapsed;
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
@@ -1648,7 +1650,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private void HideTranslation()
         {
-            TranslationControlVisibility = Visibility.Hidden;
+            TranslationControlVisibility = Visibility.Collapsed;
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }
 
