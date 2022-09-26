@@ -472,7 +472,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             JsonSerializerOptions options = new()
             {
                 IncludeFields = true,
-                WriteIndented = true
+                WriteIndented = false
             };
             _projectManager.CurrentProject.DesignSurfaceLayout = JsonSerializer.Serialize(surface, options);
 
