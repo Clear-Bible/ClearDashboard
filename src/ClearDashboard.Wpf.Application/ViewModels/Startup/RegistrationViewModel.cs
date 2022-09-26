@@ -1,6 +1,11 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
+using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,24 +13,18 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models;
-using FluentValidation;
-using FluentValidation.Results;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<AppLicenseUser>
+    public class RegistrationViewModel : ValidatingWorkflowStepViewModel<LicenseUser>
     {
         #region Member Variables
         private RegistrationDialogViewModel _parent;
         #endregion
 
         #region Observable Objects
-        private AppLicenseUser _licenseUser;
-        public AppLicenseUser LicenseUser
+        private LicenseUser _licenseUser;
+        public LicenseUser LicenseUser
         {
             get { return _licenseUser; }
             set { _licenseUser = value; }
@@ -79,10 +78,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IEventAggregator? eventAggregator,
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
-            IValidator<AppLicenseUser> licenseValidator)
+            IValidator<LicenseUser> licenseValidator)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
-            LicenseUser = new AppLicenseUser();
+            LicenseUser = new LicenseUser();
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -129,7 +128,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
                 var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
 
-                DalLicenseUser givenLicenseUser = new DalLicenseUser();
+                LicenseUser givenLicenseUser = new LicenseUser();
                 givenLicenseUser.FirstName = FirstName;//_registrationViewModel.FirstName;
                 givenLicenseUser.LastName = LastName;//_registrationViewModel.LastName;
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid

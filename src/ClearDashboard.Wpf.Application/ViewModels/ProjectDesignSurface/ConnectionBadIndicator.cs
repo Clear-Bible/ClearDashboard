@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.Wpf.Application.ViewModels
+﻿namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     /// <summary>
     /// This class is just a place holder for showing a 'bad connection' indicator in the graph.

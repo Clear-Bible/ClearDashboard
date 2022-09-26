@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using Xunit;
 using Xunit.Abstractions;
+using Serilog.Events;
+using Serilog;
+using Microsoft.Extensions.Logging;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
@@ -27,12 +31,14 @@ namespace ClearDashboard.DAL.Alignment.Tests
         protected ProjectDbContext? ProjectDbContext { get; set; }
         protected string? ProjectName { get; set; }
         protected bool DeleteDatabase { get; set; } = true;
+        protected ILogger Logger { get; set; }
 
         protected TestBase(ITestOutputHelper output)
         {
             Output = output;
             // ReSharper disable once VirtualMemberCallInConstructor
             SetupDependencyInjection();
+            SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboardTests.log"));
             SetupTests();
         }
 
@@ -55,7 +61,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {ProjectName}");
-            var assets = await factory?.Get(ProjectName)!;
+            var assets = await factory?.Get(ProjectName, true)!;
             ProjectDbContext= assets.ProjectDbContext;
 
 
@@ -96,6 +102,22 @@ namespace ClearDashboard.DAL.Alignment.Tests
             context.Projects.Add(testProject);
             await context.SaveChangesAsync();
             return testProject;
+        }
+
+        protected void SetupLogging(string logPath, LogEventLevel logLevel = LogEventLevel.Information, string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] [{SourceContext}] {Message}{NewLine}{Exception}")
+        {
+#if DEBUG
+            logLevel = LogEventLevel.Verbose;
+#endif
+            var log = new LoggerConfiguration()
+                .MinimumLevel.Is(logLevel)
+                .WriteTo.File(logPath, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
+                .WriteTo.Debug(outputTemplate: outputTemplate)
+                .CreateLogger();
+            var loggerFactory = ServiceProvider.GetService<ILoggerFactory>();
+            loggerFactory.AddSerilog(log);
+            Logger = ServiceProvider.GetService<ILogger<TestBase>>()!;
+            Logger.LogDebug($"Test logging has been configured.  Writing logs to '{logPath}'");
         }
     }
 }

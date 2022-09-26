@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
@@ -14,11 +15,11 @@ using Microsoft.Extensions.Logging;
 using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
-    
-    public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<ParallelCorpusDialogViewModel, ParallelCorpus>
+
+    public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, ParallelCorpusStepViewModel>
     {
 
-       
+
 
         public ParallelCorpusStepViewModel()
         {
@@ -28,22 +29,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public ParallelCorpusStepViewModel(DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ParallelCorpusStepViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpus> validator)
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpusStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             CanMoveForwards = false;
             CanMoveBackwards = false;
             EnableControls = true;
-            CanOk = true;
+            CanOk = false;
+            CanCreate = false;
 
         }
 
-     
+        private string _parallelCorpusDisplayName;
+        public string ParallelCorpusDisplayName
+        {
+            get => _parallelCorpusDisplayName;
+            set
+            {
+                Set(ref _parallelCorpusDisplayName, value);
+                ValidationResult = Validator.Validate(this);
+                CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+            }
+        }
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             ParentViewModel.CurrentStepTitle =
                 LocalizationStrings.Get("ParallelCorpusDialog_AddParallelRelationship", Logger);
+
+            ParallelCorpusDisplayName =
+                $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name}";
             return base.OnActivateAsync(cancellationToken);
         }
 
@@ -59,9 +74,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             ParentViewModel?.Ok();
         }
 
+
+        private bool _canCreate;
+        public bool CanCreate
+        {
+            get => _canCreate;
+            set => Set(ref _canCreate, value);
+        }
+
+        public async void Create()
+        {
+            CanCreate = false;
+            ParentViewModel!.CreateCancellationTokenSource();
+            _ = await Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    var status = await ParentViewModel?.AddParallelCorpus(ParallelCorpusDisplayName)!;
+
+                    switch (status)
+                    {
+                        case ProcessStatus.Completed:
+                            await MoveForwards();
+                            break;
+                        case ProcessStatus.Failed:
+                            ParentViewModel.Cancel();
+                            break;
+                        case ProcessStatus.NotStarted:
+                            break;
+                        case ProcessStatus.Running:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ParentViewModel!.Cancel();
+                }
+            }, ParentViewModel!.CancellationTokenSource!.Token);
+        }
+
         protected override ValidationResult? Validate()
         {
-            throw new System.NotImplementedException();
+            return (!string.IsNullOrEmpty(ParallelCorpusDisplayName)) ? Validator.Validate(this) : null;
         }
     }
 }

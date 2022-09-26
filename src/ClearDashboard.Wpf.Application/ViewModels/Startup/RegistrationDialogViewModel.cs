@@ -85,7 +85,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
             var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
             var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
 
-            DalLicenseUser givenLicenseUser = new DalLicenseUser();
+            LicenseUser givenLicenseUser = new LicenseUser();
             givenLicenseUser.FirstName = _registrationViewModel.FirstName;
             givenLicenseUser.LastName = _registrationViewModel.LastName;
             //givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid

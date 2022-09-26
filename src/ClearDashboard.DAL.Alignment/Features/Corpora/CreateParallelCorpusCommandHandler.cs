@@ -11,6 +11,7 @@ using SIL.Extensions;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using System.Diagnostics;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -30,6 +31,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override async Task<RequestResult<ParallelCorpus>> SaveDataAsync(CreateParallelCorpusCommand request,
             CancellationToken cancellationToken)
         {
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
+
             //DB Impl notes:
             //1. Create a new record in ParallelCorpus, save ParallelCorpusId
             //2. Create VerseMappings with verses
@@ -49,6 +56,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         $"TargetTokenizedCorpus not found for TokenizedCorpusId '{request.TargetTokenizedCorpusId.Id}'"
                 );
             }
+#if DEBUG
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert ParallelCorpus '{request.DisplayName}' [verse mapping count: {request.VerseMappings.Count()}]");
+            sw.Restart();
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (BEFORE INSERT): {proc.PrivateMemorySize64}");
+#endif
 
             // Create and Save the Parallel Corpus Model
             // + with Verse Mappings
@@ -135,7 +150,21 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             ProjectDbContext.ParallelCorpa.Add(parallelCorpusModel);
             await ProjectDbContext.SaveChangesAsync();
 
+#if DEBUG
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (AFTER INSERT): {proc.PrivateMemorySize64}");
+
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Parallel corpus save (end)");
+            sw.Restart();
+#endif
+
             var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(parallelCorpusModel.Id));
+
+#if DEBUG
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
 
             return new RequestResult<ParallelCorpus>(parallelCorpus);
         }

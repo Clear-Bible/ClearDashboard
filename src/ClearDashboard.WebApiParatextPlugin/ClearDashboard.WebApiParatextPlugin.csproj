@@ -84,7 +84,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="call $(ProjectDir)postbuild.bat" />
+    <Exec Command="call $(ProjectDir)postbuild$(ConfigurationName).bat" />
   </Target>
 
 </Project>

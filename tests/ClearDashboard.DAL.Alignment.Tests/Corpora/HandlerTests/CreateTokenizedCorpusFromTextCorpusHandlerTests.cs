@@ -198,14 +198,6 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             Assert.NotNull(tokenizedTextCorpus2);
 
-            var tokenizationFunction3 = ".Tokenize<LineSegmentTokenizer>().Transform<IntoTokensTextRowProcessor>()";
-            var tokenizedTextCorpus3 = await nonTokenizedTextCorpus
-                .Tokenize<LineSegmentTokenizer>()
-                .Transform<IntoTokensTextRowProcessor>()
-                .Create(Mediator!, corpus.CorpusId, "Unit Test, c", tokenizationFunction3);
-
-            Assert.NotNull(tokenizedTextCorpus3);
-
             ProjectDbContext!.ChangeTracker.Clear();
 
             var corpusDB = ProjectDbContext!.Corpa
@@ -218,14 +210,13 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             Assert.Equal("NameX", corpusDB.Name);
             Assert.Equal("LanguageX", corpusDB.Language);
             Assert.Equal("Standard", corpusDB.CorpusType.ToString());
-            Assert.True(corpusDB!.TokenizedCorpora.Count == 3);
+            Assert.True(corpusDB!.TokenizedCorpora.Count == 2);
 
             var tokenizedCorpora = corpusDB.TokenizedCorpora.OrderBy(tc => tc.Created).ToList();
 
             Assert.NotNull(tokenizedCorpora);
             Assert.Equal(tokenizationFunction1, tokenizedCorpora[0].TokenizationFunction);
             Assert.Equal(tokenizationFunction2, tokenizedCorpora[1].TokenizationFunction);
-            Assert.Equal(tokenizationFunction3, tokenizedCorpora[2].TokenizationFunction);
 
             tokenizedCorpora.ForEach(tc =>
                 {
@@ -442,7 +433,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             }))
             .Tokenize<LatinWordTokenizer>()
             .Transform<IntoFakeCompositeTokensTextRowProcessor>()
-            .Transform<SetTrainingBySurfaceTokensTextRowProcessor>();
+            .Transform<SetTrainingBySurfaceLowercase>();
 
         return textCorpus;
     }

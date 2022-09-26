@@ -8,6 +8,7 @@
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cal="http://www.caliburnproject.org"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Display"
     Title="AlignmentSample"
@@ -28,6 +29,7 @@
         <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter"/>
         <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter"/>
         <userControls:ThicknessConverter x:Key="ThicknessConverter"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Page.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -38,7 +40,8 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="250" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Button
@@ -54,9 +57,9 @@
 
         <userControls:VerseDisplay Grid.Row="1" Grid.Column="0"
                                    Margin="50,10"
-                                   Title="Latin -> Ooga word translation (interlinear gloss)"
+                                   Title="Word translation (interlinear gloss)"
                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                   Tokens="{Binding Verse1}" 
+                                   Tokens="{Binding VerseTokens}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -69,30 +72,20 @@
                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                                       [Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];
-                                                       [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];
                                                        [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
                                                        [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                       [Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];
                                                        [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];
-                                                       [Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];
-                                                       [Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];
                                                        [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
                                                        [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
                                                        [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];
-                                                       [Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];
-                                                       [Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];
-                                                       [Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];
                                                        [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
-                                                       [Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];
-                                                       [Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];
                                                        [Event NoteCreate] = [Action NoteCreate($eventArgs)]
                                    "
                                    />
 
         <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Content="{Binding Message}" FontSize="15" />
-
-        <Grid Grid.Row="3">
+        <CheckBox Grid.Row="3" x:Name="ShowVisualControlsCheckbox">Show Visual Controls</CheckBox>
+        <Grid Grid.Row="4" Visibility="{Binding ElementName=ShowVisualControlsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="275"/>
@@ -259,25 +252,25 @@
         </Grid>
 
         <StackPanel Grid.Column="1" Grid.Row="1" Grid.RowSpan="7" Orientation="Vertical">
-            <userControls:TranslationSelector Visibility="{Binding TranslationControlVisibility}"
-                                             TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
+            <userControls:TranslationSelector Visibility="{Binding TranslationPaneVisibility}"
+                                             TokenDisplayViewModel="{Binding CurrentToken}"
                                              TranslationOptions="{Binding TranslationOptions}"
                                              SelectedItem="{Binding CurrentTranslationOption}"
                                              cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
 
-            <userControls:NoteCollectionDisplay Visibility="{Binding NoteControlVisibility}"
-                                       Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
-                                       EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
+            <userControls:NoteCollectionDisplay Visibility="{Binding NotePaneVisibility}"
+                                       Title="{Binding CurrentToken.SurfaceText}"
+                                       EntityId="{Binding CurrentToken.Token.TokenId}"
                                        InnerMargin="0,0,0,30"
-                                       Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
+                                       Notes="{Binding CurrentToken.Notes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelSuggestions="{Binding LabelSuggestions}"
                                        LabelBackground="BlanchedAlmond"
                                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                       cal:Message.Attach="[Event CloseRequested] = [Action CloseRequested($eventArgs)];
+                                       cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)];
                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];
                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];

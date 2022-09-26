@@ -1,5 +1,7 @@
 set ProjectName="ClearDashboardWebApiPlugin"
-set TargetPath=.\bin\Debug\net48
+
+rem set TargetPath=.\bin\Debug\net48
+set TargetPath=.\bin\%ConfigurationName%\net48
 
 if exist "%ParatextInstallDir%\plugins\%ProjectName%"\ (
   del /F /Q "%ParatextInstallDir%\plugins\%ProjectName%"\*.*

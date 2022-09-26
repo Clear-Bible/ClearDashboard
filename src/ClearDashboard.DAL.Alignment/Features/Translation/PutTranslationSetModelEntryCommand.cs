@@ -6,6 +6,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public record PutTranslationSetModelEntryCommand(
         TranslationSetId TranslationSetId,
-        string sourceText, 
-        Dictionary<string, double> targetTranslationTextScores) : ProjectRequestCommand<object>;
+        string SourceText, 
+        Dictionary<string, double> TargetTranslationTextScores) : ProjectRequestCommand<object>;
 }

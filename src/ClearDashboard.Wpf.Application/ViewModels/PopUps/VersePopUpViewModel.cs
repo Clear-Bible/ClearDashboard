@@ -1,16 +1,16 @@
-﻿using Caliburn.Micro;
+﻿using System.Data;
+using System.Windows;
+using System.Windows.Controls;
+using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
-using Microsoft.Extensions.Logging;
-using System.Data;
-using System.Windows;
-using System.Windows.Controls;
-using MediatR;
-using Autofac;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.ViewModels
+namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
     public class VersePopUpViewModel : DashboardApplicationScreen
     {

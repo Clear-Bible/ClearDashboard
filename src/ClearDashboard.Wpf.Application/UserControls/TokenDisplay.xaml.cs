@@ -652,7 +652,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                //TokenDisplayViewModel = tokenDisplayViewModel
+                TokenDisplayViewModel = tokenDisplay
             });
         }
 
@@ -899,10 +899,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingBefore.Length * HorizontalSpacing : 0;
             var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingAfter.Length * HorizontalSpacing : 0;
+            var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(rightMargin, HorizontalSpacing) : 0;
 
             TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
             NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
-            TranslationMargin = new Thickness(leftMargin, 0, rightMargin, TranslationVerticalSpacing);
+            TranslationMargin = new Thickness(leftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
 

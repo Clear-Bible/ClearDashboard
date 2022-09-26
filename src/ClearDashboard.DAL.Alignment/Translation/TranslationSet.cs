@@ -13,23 +13,29 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public TranslationSetId TranslationSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
-        private Dictionary<string, Dictionary<string, double>> TranslationModel { get; set; }
 
-        public Dictionary<string, Dictionary<string, double>> GetTranslationModel()
-        {
-            return TranslationModel;
-        }
-
-        public async void PutTranslationModel(Dictionary<string, Dictionary<string, double>> translationModel, string smtModel)
+        private async void PutTranslationModel(Dictionary<string, Dictionary<string, double>> translationModel, string smtModel)
         {
             // Put the model (save to db and set the TranslationModel property)
             // Put the smtModel property on the ID and update
+            throw new NotImplementedException();
+        }
+
+        public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token)
+        {
+            var result = await mediator_.Send(new GetTranslationSetModelEntryQuery(TranslationSetId, token.TrainingText));
+            if (result.Success)
+            {
+                return result.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
         }
 
         public async void PutTranslationModelEntry(string sourceText, Dictionary<string, double> targetTranslationTextScores)
         {
-            TranslationModel[sourceText] = targetTranslationTextScores;
-
             var result = await mediator_.Send(new PutTranslationSetModelEntryCommand(TranslationSetId, sourceText, targetTranslationTextScores));
             if (result.Success)
             {
@@ -43,8 +49,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow)
         {
-//            var sourceCompositeTokenIds = engineParallelTextRow.Select(e => e.SourceTokens.Where(st => st.GetType() == typeof(CompositeToken)).SelectMany(t => t.TokenId));
-            var sourceTokenIds = engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId));
+            return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)));
+        }
+
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds)
+        {
             var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds));
             if (result.Success && result.Data != null)
             {
@@ -56,7 +65,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
-        public async void PutTranslation(Translation translation, string translationActionType)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="translation"></param>
+        /// <param name="translationActionType">Valid values are:  "PutPropagate", "PutNoPropagate"</param>
+        /// <exception cref="MediatorErrorEngineException"></exception>
+        public async Task PutTranslation(Translation translation, string translationActionType)
         {
             var result = await mediator_.Send(new PutTranslationSetTranslationCommand(TranslationSetId, translation, translationActionType));
             if (result.Success)
@@ -101,7 +116,6 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 return new TranslationSet(
                     data.translationSetId,
                     data.parallelCorpusId,
-                    data.translationModel,
                     mediator);
             }
             else
@@ -110,17 +124,48 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="translationModel"></param>
+        /// <param name="parallelCorpusId"></param>
+        /// <param name="mediator"></param>
+        /// <returns></returns>
+        /// <exception cref="MediatorErrorEngineException"></exception>
+        public static async Task<TranslationSet> Create(
+            Dictionary<string, Dictionary<string, double>> translationModel,
+            string? displayName,
+            string smtModel,
+            Dictionary<string, object> metadata,
+            ParallelCorpusId parallelCorpusId,
+            IMediator mediator)
+        {
+            var createTranslationSetCommandResult = await mediator.Send(new CreateTranslationSetCommand(
+                translationModel,
+                displayName,
+                smtModel,
+                metadata,
+                parallelCorpusId));
+
+            if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
+            {
+                return createTranslationSetCommandResult.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(createTranslationSetCommandResult.Message);
+            }
+        }
+
         internal TranslationSet(
             TranslationSetId translationSetId,
             ParallelCorpusId parallelCorpusId,
-            Dictionary<string, Dictionary<string, double>> translationModel,
             IMediator mediator)
         {
             mediator_ = mediator;
 
             TranslationSetId = translationSetId;
             ParallelCorpusId = parallelCorpusId;
-            TranslationModel = translationModel;
         }
     }
 }

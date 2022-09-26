@@ -15,14 +15,6 @@ using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
-    public static class TranslationCommandExtensions
-    {
-        public static string ToSmtTrainingText(this string text)
-        {
-            return text.ToLowerInvariant();
-        }
-    }
-
     public class TranslationCommands : ITranslationCommandable
     {
         public TranslationCommands()
@@ -31,7 +23,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public IEnumerable<AlignedTokenPairs> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)
         {
-            throw new NotImplementedException();
+            return parallelCorpus.SelectMany(row => PredictParallelMappedVersesAlignedTokenIdPairs(wordAligner, (row as EngineParallelTextRow)!));
         }
 
         public IEnumerable<AlignedTokenPairs> PredictParallelMappedVersesAlignedTokenIdPairs(
@@ -68,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                         Heuristic = symmetrizationHeuristic ?? SymmetrizationHeuristic.None // should never be null
                     };
 
-                    using var trainer = symmetrizedModel.CreateTrainer(parallelCorpus.Lowercase());
+                    using var trainer = symmetrizedModel.CreateTrainer(parallelCorpus);
                     trainer.Train(progress);
                     await trainer.SaveAsync();
 

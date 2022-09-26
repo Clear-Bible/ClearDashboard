@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
@@ -48,7 +49,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// </summary>
         public string TranslationState => Translation?.TranslationOriginatedFrom;
 
-        public List<Note> Notes { get; set; } = new();
+        /// <summary>
+        /// A list of <see cref="Note"/>s for the token.
+        /// </summary>
+        public ObservableCollection<Note> Notes { get; set; } = new();
 
         public bool HasNote => Notes.Any();
     }

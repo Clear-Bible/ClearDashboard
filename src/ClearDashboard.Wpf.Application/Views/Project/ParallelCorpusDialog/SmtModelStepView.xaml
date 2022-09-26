@@ -8,6 +8,8 @@
              xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
              xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
+             xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
+             xmlns:translation="clr-namespace:ClearDashboard.DAL.Alignment.Translation;assembly=ClearDashboard.DAL.Alignment"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -30,14 +32,36 @@
             <Setter Property="Margin" Value="20,10" />
             <Setter Property="FontSize" Value="24" />
         </Style>
+
+        <Style BasedOn="{StaticResource MaterialDesignComboBox}" TargetType="ComboBox">
+            <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
+            <Setter Property="Foreground" Value="Black" />
+        </Style>
+
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="SmtModel" />
+        
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <Label Content="{helpers:Localization ParallelCorpusDialog_SmtAlgorithm}" />
+            <ComboBox
+                Margin="30,0,30,0"
+                VerticalAlignment="Top"
+                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type translation:SmtModelType}}}"
+                SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontSize="18" Text="{Binding .}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
 
         <StackPanel
             Grid.Row="2"
@@ -46,7 +70,7 @@
             HorizontalAlignment="Right"
             Orientation="Horizontal">
 
-            <Button
+            <!--<Button
                 x:Name="MoveBackwards"
                 Margin="5,5,5,5"
                 cm:Message.Attach="MoveBackwards"
@@ -58,7 +82,20 @@
                 x:Name="MoveForwards"
                 Content="{helpers:Localization Next}" 
                 IsDefault="True"
-                Style="{StaticResource TransparentStyle}"/>
+                Style="{StaticResource TransparentStyle}"/>-->
+            <!--<Button
+                x:Name="Ok"
+                Content="{helpers:Localization Ok}" 
+                IsDefault="True"
+                Style="{StaticResource TransparentStyle}"/>-->
+
+            <Button
+                x:Name="Train"
+                Content="{helpers:Localization ParallelCorpusDialog_Train}" 
+                IsDefault="True"
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                Style="{StaticResource TransparentStyle}"
+                 />
         </StackPanel>
 
     </Grid>

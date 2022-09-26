@@ -1,7 +1,10 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
+using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
+using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -23,9 +26,37 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-        public async void Update()
+
+        public EngineStringDetokenizer Detokenizer
         {
-            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
+            get
+            {
+                var detokenizerName = ParallelCorpusId?.SourceTokenizedCorpusId?.TokenizationFunction;
+                return detokenizerName switch
+                {
+                    "LatinWordTokenizer" => new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                    "WhitespaceTokenizer" => new EngineStringDetokenizer(new WhitespaceDetokenizer()),
+                    "ZwspWordTokenizer" => new EngineStringDetokenizer(new ZwspWordDetokenizer()),
+                    _ => throw new NotSupportedException($"'{detokenizerName}' is not a valid tokenizer name")
+                };
+            }
+        }
+
+        public async Task Update(IMediator mediator)
+        {
+            var command = new UpdateParallelCorpusCommand(
+                VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
+                ParallelCorpusId);
+
+            var result = await mediator.Send(command);
+            if (result.Success && result.Data != null)
+            {
+                return;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
         }
 
         public static async Task<ParallelCorpus> Get(

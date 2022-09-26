@@ -1,20 +1,32 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels.Project;
+using System;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
     public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<ParallelCorpusConnectionMenuItemViewModel>
     {
+        private ConnectionViewModel? _connectionViewModel;
+        public ConnectionViewModel? ConnectionViewModel
+        {
+            get => _connectionViewModel;
+            set => Set(ref _connectionViewModel, value);
+
+        }
+
+        public string TranslationSetId { get; set; } = string.Empty;
+        public string DisplayName { get; set; } = string.Empty;
+        public string ParallelCorpusId { get; set; } = string.Empty;
+        public string? ParallelCorpusDisplayName { get; set; } = string.Empty;
+        public Guid ConnectionId { get; set; }
+
         protected override void Execute()
         {
-            
+            ProjectDesignSurfaceViewModel?.ExecuteConnectionMenuCommand(this);
         }
     }
 
     public class CorpusNodeMenuItemViewModel : MenuItemViewModel<CorpusNodeMenuItemViewModel>
     {
-
-       
-
         private CorpusNodeViewModel? _corpusNodeViewModel;
         public CorpusNodeViewModel? CorpusNodeViewModel
         {

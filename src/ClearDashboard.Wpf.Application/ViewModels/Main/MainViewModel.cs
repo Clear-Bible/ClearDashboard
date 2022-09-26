@@ -51,7 +51,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ShowTokenizationWindowMessage>,
                 IHandle<UiLanguageChangedMessage>,
                 IHandle<ActiveDocumentMessage>,
-                IHandle<NewProjectPickerMessage>
+                IHandle<NewProjectPickerMessage>,
+                IHandle<ShowParallelTranslationWindowMessage>
     {
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
@@ -172,6 +173,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     DeleteGridIsVisible = Visibility.Visible;
                     GridIsVisible = Visibility.Collapsed;
                 }
+                else if (value == "NewEnhancedCorpusID")
+                {
+                    AddNewEnhancedView();
+                }
                 else
                 {
                     switch (value)
@@ -206,6 +211,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 NotifyOfPropertyChange(() => WindowIdToLoad);
             }
         }
+
+
 
         private async Task StartDashboardAsync(int secondsToWait = 10)
         {
@@ -410,9 +417,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// </summary>
         /// <typeparam name="TViewModel"></typeparam>
         /// <returns></returns>
-        private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default) where TViewModel : class, IScreen
+        //private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default) where TViewModel : class, IScreen
+        //{
+        //    var viewModel = IoC.Get<TViewModel>();
+        //    var view = ViewLocator.LocateForModel(viewModel, null, null);
+        //    ViewModelBinder.Bind(viewModel, view, null);
+        //    await ActivateItemAsync(viewModel, cancellationToken);
+        //}
+
+        private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
+            where TViewModel : Screen
         {
+
+            // NOTE:  This is the hack to get OnViewAttached and OnViewReady methods to be called on conducted ViewModels.  Also note
+            //   OnViewLoaded is not called.
+
             var viewModel = IoC.Get<TViewModel>();
+            viewModel.Parent = this;
+            viewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
@@ -483,7 +505,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Name = "Corpus",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskStatus = StatusEnum.Completed
+                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
             }
 
@@ -529,7 +551,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Items.Clear();
 
             // documents
-            await ActivateItemAsync<EnhancedCorpusViewModel>();
+            await ActivateItemAsync<EnhancedViewModel>();
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
@@ -582,6 +604,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         #endregion //Constructor
 
         #region Methods
+
+        private void AddNewEnhancedView()
+        {
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                Content = viewModel,
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+        }
 
         private Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
         {
@@ -731,11 +774,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = LocalizationStrings.Get("MainView_Windows", Logger), Id = "WindowID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
+                        // Enhanced Corpus
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsNewEnhancedView", Logger), Id = "NewEnhancedCorpusID", ViewModel = this, },
+
+                        // separator
+                        new() { Header = "---------------------------------", Id = "SeparatorID", ViewModel = this, },
+
                         // Biblical Terms
                         new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
                         
                         // Enhanced Corpus
-                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedCorpus", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
+                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedView", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
                         
                         // PINS
                         new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
@@ -915,7 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         switch (type)
                         {
 
-                            case EnhancedCorpusViewModel:
+                            case EnhancedViewModel:
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
@@ -938,7 +987,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // save the layout
             //var layoutSerializer = new XmlLayoutSerializer(this._dockingManager);
-            layoutSerializer.Serialize(filePath);
+            //layoutSerializer.Serialize(filePath);
         }
 
         /// <summary>
@@ -955,7 +1004,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     switch (type)
                     {
-                        case EnhancedCorpusViewModel:
+                        case EnhancedViewModel:
                             return (PaneViewModel)t;
                     }
                 }
@@ -1329,6 +1378,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await Task.CompletedTask;
         }
 
+
         /// <summary>
         /// Pop open a new Corpus Tokization window and pass in the current corpus
         /// </summary>
@@ -1348,8 +1398,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     // there is only one doc window open, so we can just add to it
                     var enhancedCorpusViewModels =
-                        Items.First(items => items.GetType() == typeof(EnhancedCorpusViewModel)) as
-                            EnhancedCorpusViewModel;
+                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
+                            EnhancedViewModel;
                     if (enhancedCorpusViewModels is not null)
                     {
                         await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
@@ -1361,17 +1411,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // more than one enhanced corpus window is open and active
                 foreach (var document in dockableWindows)
                 {
-                    if (document.IsActive && document.Content is EnhancedCorpusViewModel)
+                    if (document.IsActive && document.Content is EnhancedViewModel)
                     {
-                        var vm = document.Content as EnhancedCorpusViewModel;
+                        var vm = document.Content as EnhancedViewModel;
                         // ReSharper disable once PossibleNullReferenceException
                         var guid = vm.Guid;
 
                         var enhancedCorpusViewModels =
-                            Items.Where(items => items.GetType() == typeof(EnhancedCorpusViewModel))
+                            Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
                                     // ReSharper disable once UsePatternMatching
-                                    .First(item => ((EnhancedCorpusViewModel)item).Guid == guid) as
-                                EnhancedCorpusViewModel;
+                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
+                                EnhancedViewModel;
                         if (enhancedCorpusViewModels is not null)
                         {
                             await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
@@ -1393,7 +1443,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             string tokenizationType = message.TokenizationType;
             string paratextId = message.ParatextProjectId;
 
-            EnhancedCorpusViewModel viewModel = IoC.Get<EnhancedCorpusViewModel>();
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.CurrentCorpusName = message.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
@@ -1469,7 +1519,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 .OfType<LayoutDocument>();
             foreach (var pane in dockableWindows)
             {
-                var content = pane.Content as EnhancedCorpusViewModel;
+                var content = pane.Content as EnhancedViewModel;
                 // ReSharper disable once PossibleNullReferenceException
                 if (content.Guid != guid)
                 {
@@ -1480,10 +1530,91 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
+
         public Task HandleAsync(NewProjectPickerMessage message, CancellationToken cancellationToken)
         {
             ProjectName = message.project.ProjectName;
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ShowParallelTranslationWindowMessage message, CancellationToken cancellationToken)
+        {
+            // the user wants to add to the currently active window
+            if (message.IsNewWindow == false)
+            {
+                var dockableWindows = _dockingManager.Layout.Descendents()
+                    .OfType<LayoutDocument>().ToList();
+                if (dockableWindows.Count == 1)
+                {
+                    // there is only one doc window open, so we can just add to it
+                    var enhancedCorpusViewModels =
+                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
+                            EnhancedViewModel;
+                    if (enhancedCorpusViewModels is not null)
+                    {
+                        await enhancedCorpusViewModels.ShowParallelTranslationTokens(message, cancellationToken);
+                    }
+
+                    return;
+                }
+
+                // more than one enhanced corpus window is open and active
+                foreach (var document in dockableWindows)
+                {
+                    if (document.IsActive && document.Content is EnhancedViewModel)
+                    {
+                        var vm = document.Content as EnhancedViewModel;
+                        // ReSharper disable once PossibleNullReferenceException
+                        var guid = vm.Guid;
+
+                        var enhancedCorpusViewModels =
+                            Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
+                                    // ReSharper disable once UsePatternMatching
+                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
+                                EnhancedViewModel;
+                        if (enhancedCorpusViewModels is not null)
+                        {
+                            await enhancedCorpusViewModels.ShowParallelTranslationTokens(message, cancellationToken);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // unactivate any other doc windows before we add in the new one
+            var docWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+            foreach (var document in docWindows)
+            {
+                document.IsActive = false;
+            }
+
+
+
+            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
+            //viewModel.CurrentCorpusName = message.ProjectName;
+            viewModel.Title = message.DisplayName;
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                ContentId = message.TranslationSetId,
+                Content = viewModel,
+                Title = message.DisplayName,
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+
+            await viewModel.ShowParallelTranslationTokens(message, cancellationToken);
+
         }
     }
 

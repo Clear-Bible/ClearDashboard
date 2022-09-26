@@ -7,7 +7,22 @@
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
+    <Copyright>Clear Bible, 2022</Copyright>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <Version>0.1.0.0</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\DesignSurface\**" />
+    <Compile Remove="Views\PopUps\**" />
+    <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="Views\PopUps\**" />
+    <None Remove="Views\DesignSurface\**" />
+    <None Remove="Views\PopUps\**" />
+    <Page Remove="Views\DesignSurface\**" />
+    <Page Remove="Views\PopUps\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
@@ -79,7 +94,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearApplicationFoundation" Version="1.0.26" />
+    <PackageReference Include="ClearApplicationFoundation" Version="1.0.27" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
@@ -300,9 +315,8 @@
     <Page Update="Views\Shell\ShellView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\DesignSurface\" />
-    <Folder Include="Views\PopUps\" />
+    <Page Update="Views\Project\SmtModelDialog\SmtModelStepView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
   </ItemGroup>
 </Project>
