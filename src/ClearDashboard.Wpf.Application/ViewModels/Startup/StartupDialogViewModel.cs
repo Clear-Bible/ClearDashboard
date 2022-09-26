@@ -14,14 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using ClearApplicationFoundation.Exceptions;
-using System.Linq;
-using ClearApplicationFoundation.Extensions;
-using System;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
@@ -54,9 +46,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     "There are no dependency inject registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
-#if RELEASE
+//#if RELEASE
             _runRegistration = CheckLicense(IoC.Get<RegistrationDialogViewModel>());
-#endif
+//#endif
 
             foreach (var view in views)
             {

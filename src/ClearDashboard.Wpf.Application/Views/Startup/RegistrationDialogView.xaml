@@ -8,8 +8,6 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Title="{Binding Title}"
-    Width="600"
-    Height="300"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="White"
     FlowDirection="{Binding WindowFlowDirection}"

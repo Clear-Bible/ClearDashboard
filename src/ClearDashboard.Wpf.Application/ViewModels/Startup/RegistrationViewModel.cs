@@ -94,7 +94,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Methods
         protected override ValidationResult Validate()
         {
-
+           
             var ValidationResult = Validator.Validate(LicenseUser);
             if (ValidationResult != null)
             {
