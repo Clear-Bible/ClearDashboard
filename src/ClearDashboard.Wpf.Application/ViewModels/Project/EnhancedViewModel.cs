@@ -1507,9 +1507,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             DisplayNote(e.TokenDisplayViewModel);
         }
 
-        public async Task TranslationApplied(object sender, TranslationEventArgs e)
+        public void TranslationApplied(object sender, TranslationEventArgs e)
         {
-            //await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
+            Task.Run(() => TranslationAppliedAsync(e).GetAwaiter()); 
+
+        }
+
+        public async Task TranslationAppliedAsync(TranslationEventArgs e)
+        {
+            await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
 
             HideTranslation();
         }
@@ -1602,18 +1608,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public IEnumerable<TranslationOption> TranslationOptions { get; set; }
         public TranslationOption CurrentTranslationOption { get; set; }
-        private void DisplayTranslation(TranslationEventArgs e)
+        private async void DisplayTranslation(TranslationEventArgs e)
         {
             TranslationControlVisibility = Visibility.Visible;
 
             CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
-            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+            TranslationOptions = await GetTranslationOptions(e.Translation);
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
 
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
             NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
             NotifyOfPropertyChange(nameof(TranslationOptions));
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+        }
+
+        private async Task<IEnumerable<TranslationOption>> GetTranslationOptions(Translation translation)
+        {
+            var translationModelEntry = await CurrentTranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
+            var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
+                .Select(option => new TranslationOption { Word = option.Key, Probability = option.Value })
+                .Take(4)
+                .ToList();
+            return translationOptions;
         }
 
         private void HideTranslation()
