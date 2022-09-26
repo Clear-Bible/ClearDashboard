@@ -974,7 +974,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             var verses = new List<UsfmVerse>();
             if (project == null)
             {
-                AppendText(Color.Orange, $"Could not find a projectk with Id = '{paratextProjectId}'. Returning an empty list.");
+                AppendText(Color.Orange, $"Could not find a project with Id = '{paratextProjectId}'. Returning an empty list.");
                 return verses;
             }
 

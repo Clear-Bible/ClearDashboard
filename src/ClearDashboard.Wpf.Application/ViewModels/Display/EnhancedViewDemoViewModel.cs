@@ -38,7 +38,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
         #region Mock data
-
+#if DEBUG
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
         private static IEnumerable<TokensTextRow>? _mockCorpus;
@@ -162,8 +162,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             new Label { Text = "delta" },
             new Label { Text = "echo" }
         };
-
-        #endregion
+#endif
+#endregion
 
         private async Task<ObservableCollection<Label>> GetLabelSuggestions()
         {
@@ -352,8 +352,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             TranslationPaneVisibility = Visibility.Visible;
             NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
 
-            TranslationOptions = await GetTranslationOptions(e.Translation);
+#if DEBUG
+            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
             NotifyOfPropertyChange(nameof(TranslationOptions));
+#endif
 
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
