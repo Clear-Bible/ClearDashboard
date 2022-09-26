@@ -82,6 +82,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         public List<TokenProject> _tokenProjects = new();
+        public List<ParallelCorpus> _parallelProjects = new();
         public List<ShowTokenizationWindowMessage> _projectMessages = new();
 
         public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
@@ -592,7 +593,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 try
                 {
                     //await ProjectManager.LoadProject("SUR");
-                    var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV));
+                    var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
                     NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
                     CurrentTranslationSet = await GetTranslationSet();
                     CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
@@ -641,12 +642,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }, cancellationToken);
         }
 
-        public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV)
+        public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV, ShowParallelTranslationWindowMessage message)
         {
             try
             {
                 var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
-                var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First());
+                var guid = Guid.Parse(message.ParallelCorpusId);
+                var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First(p => p.Id == guid));
                 var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), 0, 0);
                 //var verse = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV) as EngineParallelTextRow;
 
@@ -924,7 +926,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                        //Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
                         UpdateVersesDisplay(message, verses, title, false);
                         NotifyOfPropertyChange(() => VersesDisplay);
