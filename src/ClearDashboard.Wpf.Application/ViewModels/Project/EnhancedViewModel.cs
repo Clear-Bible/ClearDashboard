@@ -1484,189 +1484,98 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Event Handlers
 
-        public void TokenClicked(TokenEventArgs e)
-        {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void TokenDoubleClicked(TokenEventArgs e)
-        {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) double-clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void TokenRightButtonDown(TokenEventArgs e)
-        {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
             if (e.TokenDisplayViewModel.HasNote)
             {
                 DisplayNote(e.TokenDisplayViewModel);
             }
-
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void TokenMouseLeave(TokenEventArgs e)
-        {
-            Message = string.Empty;
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void TokenMouseWheel(TokenEventArgs e)
-        {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) mouse wheel";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TranslationClicked(object sender, TranslationEventArgs e)
         {
             DisplayTranslation(e);
-
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) clicked";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TranslationDoubleClicked(TranslationEventArgs e)
+        public void NoteMouseEnter(object sender, NoteEventArgs e)
         {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) double-clicked";
-            NotifyOfPropertyChange(nameof(Message));
+            DisplayNote(e.TokenDisplayViewModel);
         }
 
-        public void TranslationRightButtonDown(TranslationEventArgs e)
+        public void NoteCreate(object sender, NoteEventArgs e)
         {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) right-clicked";
-            NotifyOfPropertyChange(nameof(Message));
+            DisplayNote(e.TokenDisplayViewModel);
         }
 
-        public void TranslationMouseEnter(TranslationEventArgs e)
+        public async Task TranslationApplied(object sender, TranslationEventArgs e)
         {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) hovered";
-            NotifyOfPropertyChange(nameof(Message));
+            //await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
+
+            HideTranslation();
         }
 
-        public void TranslationMouseLeave(TranslationEventArgs e)
+        public void TranslationCancelled(object sender, RoutedEventArgs e)
         {
-            Message = string.Empty;
-            NotifyOfPropertyChange(nameof(Message));
+            HideTranslation();
         }
 
-        public void TranslationMouseWheel(TranslationEventArgs e)
+        public void NoteAdded(object sender, NoteEventArgs e)
         {
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token ({e.Translation.SourceToken.TokenId}) mouse wheel";
-            NotifyOfPropertyChange(nameof(Message));
+            Task.Run(() => NoteAddedAsync(e).GetAwaiter());
         }
 
-        public void NoteLeftButtonDown(NoteEventArgs e)
+        public async Task NoteAddedAsync(NoteEventArgs e)
         {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) clicked";
-            NotifyOfPropertyChange(nameof(Message));
+            await e.Note.CreateOrUpdate(Mediator);
+            await e.Note.AssociateDomainEntity(Mediator, e.EntityId);
+            foreach (var label in e.Note.Labels)
+            {
+                if (label.LabelId == null)
+                {
+                    await label.CreateOrUpdate(Mediator);
+                }
+                await e.Note.AssociateLabel(Mediator, label);
+            }
+
+            HideNote();
         }
 
-        public void NoteDoubleClicked(NoteEventArgs e)
+        public async Task NoteUpdated(object sender, NoteEventArgs e)
         {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) double-clicked";
-            NotifyOfPropertyChange(nameof(Message));
+            await e.Note.CreateOrUpdate(Mediator);
+
+            HideNote();
         }
 
-        public void NoteRightButtonDown(NoteEventArgs e)
+        public async Task NoteDeleted(object sender, NoteEventArgs e)
         {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) right-clicked";
-            NotifyOfPropertyChange(nameof(Message));
+            await e.Note.Delete(Mediator);
+
+            HideNote();
         }
 
-        public void NoteMouseEnter(NoteEventArgs e)
+        public async Task LabelSelected(object sender, LabelEventArgs e)
         {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) hovered";
-            NotifyOfPropertyChange(nameof(Message));
+            // If this is a new note, we'll handle the labels when the note is added.
+            if (e.Note.NoteId != null)
+            {
+                await e.Note.AssociateLabel(Mediator, e.Label);
+            }
         }
 
-        public void NoteMouseLeave(NoteEventArgs e)
+        public async Task LabelAdded(object sender, LabelEventArgs e)
         {
-            //Message = string.Empty;
-            NotifyOfPropertyChange(nameof(Message));
+            // If this is a new note, we'll handle the labels when the note is added.
+            if (e.Note.NoteId != null)
+            {
+                e.Label = await e.Note.CreateAssociateLabel(Mediator, e.Label.Text);
+            }
         }
 
-        public void NoteMouseWheel(NoteEventArgs e)
+        public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
         {
-            //Message = $"'{e.Note.Text}' note for token ({e.EntityId}) mouse wheel";
-            NotifyOfPropertyChange(nameof(Message));
+            HideNote();
         }
-
-        public void NoteCreate(NoteEventArgs e)
-        {
-            //DisplayNote(e.TokenDisplayViewModel);
-        }
-
-        public void TranslationApplied(TranslationEventArgs e)
-        {
-            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            TranslationControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-        }
-
-        public void TranslationCancelled(RoutedEventArgs e)
-        {
-            Message = "Translation cancelled.";
-            NotifyOfPropertyChange(nameof(Message));
-
-            TranslationControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-        }
-
-        public void NoteAdded(NoteEventArgs e)
-        {
-            Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
-        }
-
-        public void NoteUpdated(NoteEventArgs e)
-        {
-            Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
-        }
-
-        public void NoteDeleted(NoteEventArgs e)
-        {
-            Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
-        }
-
-        public void LabelSelected(LabelEventArgs e)
-        {
-            Message = $"Label '{e.Label.Text}' selected for token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void LabelAdded(LabelEventArgs e)
-        {
-            Message = $"Label '{e.Label.Text}' added for token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-        }
-
-        public void CloseRequested(RoutedEventArgs args)
-        {
-            NoteControlVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
-        }
-
 
         // ReSharper restore UnusedMember.Global
 
@@ -1680,6 +1589,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             NotifyOfPropertyChange(nameof(NoteControlVisibility));
             NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
+        }
+        private void HideNote()
+        {
+            NoteControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(NoteControlVisibility));
         }
 
         public Note CurrentNote { get; set; }
@@ -1700,6 +1614,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
             NotifyOfPropertyChange(nameof(TranslationOptions));
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+        }
+
+        private void HideTranslation()
+        {
+            TranslationControlVisibility = Visibility.Hidden;
+            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }
 
         private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
