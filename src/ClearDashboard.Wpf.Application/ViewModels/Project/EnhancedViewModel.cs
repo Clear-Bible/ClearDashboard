@@ -599,25 +599,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
                     var VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
                     LabelSuggestions = await GetLabelSuggestions();
+                    ObservableCollection<List<TokenDisplayViewModel>> verseOut =
+                        new ObservableCollection<List<TokenDisplayViewModel>>();
+                    verseOut.Add(VerseTokens);
 
 
-                    //OnUIThread(() =>
-                    //{
-                    //    Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
-                    //    UpdateVersesDisplay(message, verses, title, false);
-                    //    NotifyOfPropertyChange(() => VersesDisplay);
+                    OnUIThread(() =>
+                    {
+                        UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
+                        NotifyOfPropertyChange(() => VersesDisplay);
 
-                    //    ProgressBarVisibility = Visibility.Collapsed;
-                    //});
-                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    //    new BackgroundTaskStatus
-                    //    {
-                    //        Name = "Fetch Book",
-                    //        Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
-                    //        StartTime = DateTime.Now,
-                    //        TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                    //    }), cancellationToken);
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    });
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Found {VerseTokens.Count} TokensTextRow entities.",
+                            StartTime = DateTime.Now,
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                        }), cancellationToken);
                 }
                 catch (Exception ex)
                 {
@@ -650,7 +652,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var guid = Guid.Parse(message.ParallelCorpusId);
                 var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First(p => p.Id == guid));
                 var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), 0, 0);
-                //var verse = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV) as EngineParallelTextRow;
+
+                // save out the corpus for future use
+                // _parallelProjects
+
+
 
                 return verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
             }
@@ -731,7 +737,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             if (paddedTokens != null)
             {
                 tokenDisplays.AddRange(from paddedToken in paddedTokens
-                    let translation = GetTranslation(paddedToken.token)
+                    let translation = GetParallelTranslation(paddedToken.token)
                     let notes = GetNotes(paddedToken.token)
                     select new TokenDisplayViewModel
                     {
@@ -1199,6 +1205,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 
+        private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool ShowTranslations = true)
+        {
+            // same color as defined in SharedVisualTemplates.xaml
+            Brush brush = Brushes.Blue;
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (VersesDisplay.Row0Verses.Count == 0 ||
+                    VersesDisplay.Row0CorpusId == Guid.Parse(message.ParallelCorpusId))
+                {
+                    VersesDisplay.Row0CorpusId = Guid.Parse(message.ParallelCorpusId);
+                    VersesDisplay.Row0Title = title;
+                    VersesDisplay.Row0Verses = verses;
+                    VersesDisplay.Row0Visibility = Visibility.Visible;
+                    VersesDisplay.Row0ShowTranslation = ShowTranslations;
+#pragma warning disable CS8601
+                    VersesDisplay.Row0BorderColor = brush;
+#pragma warning restore CS8601
+                    break;
+                }
+                else if (VersesDisplay.Row1Verses.Count == 0 ||
+                           VersesDisplay.Row1CorpusId == Guid.Parse(message.ParallelCorpusId))
+                {
+                    VersesDisplay.Row1CorpusId = Guid.Parse(message.ParallelCorpusId);
+                    VersesDisplay.Row1Title = title;
+                    VersesDisplay.Row1Verses = verses;
+                    VersesDisplay.Row1Visibility = Visibility.Visible;
+                    VersesDisplay.Row1ShowTranslation = ShowTranslations;
+#pragma warning disable CS8601
+                    VersesDisplay.Row1BorderColor = brush;
+#pragma warning restore CS8601
+                    break;
+                }
+                else if (VersesDisplay.Row2Verses.Count == 0 ||
+                         VersesDisplay.Row2CorpusId == Guid.Parse(message.ParallelCorpusId))
+                {
+                    VersesDisplay.Row2CorpusId = Guid.Parse(message.ParallelCorpusId);
+                    VersesDisplay.Row2Title = title;
+                    VersesDisplay.Row2Verses = verses;
+                    VersesDisplay.Row2Visibility = Visibility.Visible;
+                    VersesDisplay.Row2ShowTranslation = ShowTranslations;
+#pragma warning disable CS8601
+                    VersesDisplay.Row2BorderColor = brush;
+#pragma warning restore CS8601
+                    break;
+                }
+                else
+                {
+                    VersesDisplay.Row3CorpusId = Guid.Parse(message.ParallelCorpusId);
+                    VersesDisplay.Row3Title = title;
+                    VersesDisplay.Row3Verses = verses;
+                    VersesDisplay.Row3Visibility = Visibility.Visible;
+                    VersesDisplay.Row3ShowTranslation = ShowTranslations;
+#pragma warning disable CS8601
+                    VersesDisplay.Row3BorderColor = brush;
+#pragma warning restore CS8601
+                    break;
+                }
+            }
+
+            NotifyOfPropertyChange(() => VersesDisplay);
+        }
+
         private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int BBBCCCVVV)
         {
             var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
@@ -1219,6 +1288,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 : String.Empty;
             var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
 
+            return translation;
+        }
+
+        private Translation GetParallelTranslation(ClearBible.Engine.Corpora.Token token)
+        {
+            var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
             return translation;
         }
 
