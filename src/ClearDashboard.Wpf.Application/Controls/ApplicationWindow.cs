@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using Microsoft.Win32;
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
@@ -34,10 +35,41 @@ namespace ClearDashboard.Wpf.Application.Controls
 
         protected void RoundCorners()
         {
-            var window = GetWindow(this)!;
-            var hWnd = new WindowInteropHelper(window).EnsureHandle();
-            var preference = DwmWindowCornerPreference.DwmwcpRound;
-            DwmSetWindowAttribute(hWnd, Dwmwindowattribute.DwmwaWindowCornerPreference, ref preference, sizeof(uint));
+            try
+            {
+                var window = GetWindow(this)!;
+                var hWnd = new WindowInteropHelper(window).EnsureHandle();
+                var preference = DwmWindowCornerPreference.DwmwcpRound;
+                DwmSetWindowAttribute(hWnd, Dwmwindowattribute.DwmwaWindowCornerPreference, ref preference,
+                    sizeof(uint));
+            }
+            catch (Exception ex)
+            {
+                // we're not running on Windows11 - swallow the exception
+            }
+               
+
+        }
+
+
+        public bool IsCurrentOSContains(string name)
+        {
+            var reg = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
+            string productName = (string)reg.GetValue("ProductName");
+
+            return productName.Contains(name);
+        }
+
+        /// Check if it's Windows 8.1
+        public bool IsWindows8Dot1()
+        {
+            return IsCurrentOSContains("Windows 8.1");
+        }
+
+        /// Check if it's Windows 10
+        public bool IsWindows10()
+        {
+            return IsCurrentOSContains("Windows 10");
         }
     }
 

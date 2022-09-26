@@ -27,6 +27,10 @@ namespace ClearDashboard.Wpf.Application
         protected override void PreInitialize()
         {
             DashboardApplication.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+#if DEBUG
+            DependencyInjectionLogging = true;
+#endif
             base.PreInitialize();
         }
 

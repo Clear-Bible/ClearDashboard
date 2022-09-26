@@ -1410,7 +1410,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TokenMouseEnter(TokenEventArgs e)
+        public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
             if (e.TokenDisplayViewModel.HasNote)
             {
@@ -1433,7 +1433,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TranslationClicked(TranslationEventArgs e)
+        public void TranslationClicked(object sender, TranslationEventArgs e)
         {
             DisplayTranslation(e);
 
