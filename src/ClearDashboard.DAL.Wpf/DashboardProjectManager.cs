@@ -88,6 +88,7 @@ public class DashboardProjectManager : ProjectManager
     {
         await base.Initialize();
         await ConfigureSignalRClient();
+        CurrentUser = await GetUser();
     }
 
     protected async Task ConfigureSignalRClient()

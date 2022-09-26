@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontSize="16"
@@ -14,78 +15,83 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="60" />
-        </Grid.RowDefinitions>
-        <Label
+    <Border
+        BorderBrush="{DynamicResource MaterialDesignToolForeground}"
+        BorderThickness="1"
+        CornerRadius="3">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="60" />
+            </Grid.RowDefinitions>
+            <Label
             Grid.Row="0"
             HorizontalContentAlignment="Center"
             Content="Translation options for" />
-        <Label
+            <Label
             Grid.Row="1"
             HorizontalContentAlignment="Center"
             Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplayViewModel.SurfaceText}"
             FontSize="20"
             FontWeight="Bold" />
-        <ListView
+            <ListView
             Name="TranslationOptionsList"
             Grid.Row="2"
             ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationOptions}"
             SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedItem}">
-            <ListView.View>
-                <GridView x:Name="TranslationOptionsGrid">
-                    <GridViewColumn Width="150" DisplayMemberBinding="{Binding Path=Word}" />
-                    <GridViewColumn Width="Auto" Header="Probability">
-                        <GridViewColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock
+                <ListView.View>
+                    <GridView x:Name="TranslationOptionsGrid">
+                        <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Word}" />
+                        <GridViewColumn Width="100" Header="Probability">
+                            <GridViewColumn.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock
                                     Margin="-30,0,0,-20"
                                     FontSize="12"
                                     Text="{Binding}"
                                     TextAlignment="Right" />
-                            </DataTemplate>
-                        </GridViewColumn.HeaderTemplate>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
+                                </DataTemplate>
+                            </GridViewColumn.HeaderTemplate>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock
                                     Width="40"
                                     Text="{Binding ProbabilityPercentage}"
                                     TextAlignment="Right" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Label Grid.Row="3">Your Translation:</Label>
-        <TextBox
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Label Grid.Row="3">Your Translation:</Label>
+            <TextBox
             x:Name="TranslationValue"
             Grid.Row="4"
             Margin="10,0"
             Text="{Binding SelectedItem.Word, ElementName=TranslationOptionsList}" />
-        <StackPanel Grid.Row="5" Orientation="Horizontal">
-            <CheckBox
+            <StackPanel Grid.Row="5" Orientation="Horizontal">
+                <CheckBox
                 x:Name="ApplyAllCheckbox"
                 Margin="10,10,0,0"
                 FontSize="13"
                 IsChecked="True">
-                Change all unset occurrences
-                <CheckBox.ToolTip>If checked, this will change all unset occurrences of this word</CheckBox.ToolTip>
-            </CheckBox>
-        </StackPanel>
-        <StackPanel
+                    Change all unset occurrences
+                    <CheckBox.ToolTip>If checked, this will change all unset occurrences of this word</CheckBox.ToolTip>
+                </CheckBox>
+            </StackPanel>
+            <StackPanel
             Grid.Row="6"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
-            <Button Margin="10" Click="ApplyTranslation">Apply</Button>
-            <Button Margin="10" Click="Cancel">Cancel</Button>
-        </StackPanel>
-    </Grid>
+                <Button Margin="10" Click="ApplyTranslation">Apply</Button>
+                <Button Margin="10" Click="Cancel">Cancel</Button>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>

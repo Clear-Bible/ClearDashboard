@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              FontSize="16">
@@ -34,24 +35,29 @@
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
     </UserControl.Resources>
-    <Grid>
-     <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
-     </Grid.RowDefinitions>
-        <Label Grid.Row="0" Content="Notes for" HorizontalContentAlignment="Center" />
-        <Label Grid.Row="1" 
+    <Border
+        BorderBrush="{DynamicResource MaterialDesignToolForeground}"
+        BorderThickness="1"
+        CornerRadius="3"
+        Padding="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Content="Notes for" HorizontalContentAlignment="Center" />
+            <Label Grid.Row="1" 
                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}" 
                HorizontalContentAlignment="Center"
                FontWeight="Bold"
                FontSize="20"/>
-        <StackPanel Grid.Row="2" Orientation="Vertical">
-            <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
+            <StackPanel Grid.Row="2" Orientation="Vertical">
+                <ItemsControl ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" 
                           ItemTemplate="{StaticResource NoteTemplate}" 
                           ItemsPanel="{StaticResource NotesPanelTemplate}" />
-            <local:NoteDisplay x:Name="AddNoteControl"
+                <local:NoteDisplay x:Name="AddNoteControl"
                                AddMode="True"
                                Watermark="Enter a new note"
                                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewNote}"
@@ -70,9 +76,10 @@
                                NoteAdded="OnNoteAdded" NoteUpdated="OnNoteUpdated" NoteDeleted="OnNoteDeleted"
                                LabelSelected="OnLabelSelected" LabelAdded="OnLabelAdded"
             />
-        </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Margin="10" Click="OnCloseRequested">Close</Button>
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Margin="10" Click="OnCloseRequested">Close</Button>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>
