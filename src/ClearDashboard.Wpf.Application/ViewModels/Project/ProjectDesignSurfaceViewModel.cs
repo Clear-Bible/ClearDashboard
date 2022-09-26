@@ -439,6 +439,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         DisplayName = translationSet.DisplayName ?? string.Empty,
                         TranslationSetId = translationSet.TranslationSetId,
+                        ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
+                        ParallelCorpusId = translationSet.ParallelCorpusId,
                     });
                 }
 
@@ -1077,7 +1079,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", _logger),
                             Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentTextAdd",
-                            TranslationSetId = info.TranslationSetId
+                            TranslationSetId = info.TranslationSetId,
+                            DisplayName = info.DisplayName,
+                            ParallelCorpusId = info.ParallelCorpusId,
+                            ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
                         },
                         new ParallelCorpusConnectionMenuItemViewModel
                         {
@@ -1085,9 +1090,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger),
                             Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentText",
-                            TranslationSetId = info.TranslationSetId
+                            TranslationSetId = info.TranslationSetId,
+                            DisplayName = info.DisplayName,
+                            ParallelCorpusId = info.ParallelCorpusId,
+                            ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
                         },
-
                     }
                 });
             }
@@ -1134,6 +1141,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // node properties
                     SelectedConnection = connectionViewModel;
                     break;
+                case "AddToEnhancedViewId":
+                    await EventAggregator.PublishOnUIThreadAsync(
+                        new ShowParallelTranslationWindowMessage(connectionMenuItem.TranslationSetId,
+                            connectionMenuItem.DisplayName, 
+                            connectionMenuItem.ParallelCorpusId,
+                            connectionMenuItem.ParallelCorpusDisplayName,
+                            IsNewWindow: false));
+                    
+                    break;
                 default:
                     
                     break;
@@ -1147,7 +1163,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 case "AddTokenizationId":
                     // kick off the add new tokenization dialog
-                    AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
+                    await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
                     break;
                 case "SeparatorId":
                     // no-op
@@ -1464,6 +1480,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     DisplayName = translationSet.TranslationSetId.DisplayName,
                     TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
+                    ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
+                    ParallelCorpusId= translationSet.ParallelCorpusId.Id.ToString()
                 });
 
                 CreateConnectionMenu(newConnection);

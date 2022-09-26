@@ -21,6 +21,9 @@ namespace ClearDashboard.DataAccessLayer.Wpf;
 
 public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType,
     Guid CorpusId, Guid TokenizedTextCorpusId, CorpusType CorpusType, bool IsNewWindow);
+
+public record ShowParallelTranslationWindowMessage(string TranslationSetId, string DisplayName, string ParallelCorpusId,
+    string? ParallelCorpusDisplayName, bool IsNewWindow);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 public record UiLanguageChangedMessage(string LanguageCode);
 

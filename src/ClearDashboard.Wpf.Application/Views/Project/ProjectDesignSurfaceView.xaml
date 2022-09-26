@@ -771,7 +771,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="200" />
+            <!--<RowDefinition Height="200" />-->
         </Grid.RowDefinitions>
         <materialDesign:Card
             Margin="0"
@@ -1090,6 +1090,7 @@
             ShowAdvancedOptions="False"
             ShowHorizontalScrollBar="True"
             ShowSummary="False"
-            UpdateTextBoxSourceOnEnterKey="True" />
+            UpdateTextBoxSourceOnEnterKey="True"
+            Visibility="Collapsed" />
     </Grid>
 </UserControl>

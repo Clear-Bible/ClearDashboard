@@ -86,6 +86,7 @@ namespace ClearDashboard.Wpf.Application
         {
             //EnsureApplicationMainWindowVisible();
             //NavigateToViewModel<EnhancedViewDemoViewModel>();
+            
             await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }
 

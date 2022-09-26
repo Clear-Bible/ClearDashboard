@@ -307,7 +307,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             var row = MockVerseTextRow(40001001);
             VerseTokens = GetTokenDisplayViewModels(row.Tokens);
 #else
-                await ProjectManager.LoadProject("EnhancedViewDemo");
+                await ProjectManager.LoadProject("SUR");
                 var row = await VerseTextRow(01001001);
                 NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
                 CurrentTranslationSet = await GetTranslationSet();

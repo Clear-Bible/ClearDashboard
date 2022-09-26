@@ -7,14 +7,15 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:projectViews="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls" 
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DataContext="{d:DesignInstance Type=project:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -375,8 +376,13 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row0Title}" />
+                                <CheckBox
+                                    x:Name="checkRow0"
+                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
+                                    x:Name="ListView0"
                                     Width="{Binding ActualWidth, ElementName=Border0, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                     ItemsSource="{Binding VersesDisplay.Row0Verses}"
                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -393,6 +399,7 @@
                                             <StackPanel Orientation="Vertical">
                                                 <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
                                                 <!--  TranslationClicked="{Binding TranslationClickedCommand}"  -->
+                                                <!--  [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];  -->
                                                 <userControls:VerseDisplay
                                                     Title=""
                                                     FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -401,7 +408,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow0, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -412,10 +419,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="NoteCreate">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
@@ -472,6 +479,10 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row1Title}" />
+                                <CheckBox
+                                    x:Name="checkRow1"
+                                    IsChecked="{Binding VersesDisplay.Row1ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
                                     Width="{Binding ActualWidth, ElementName=Border1, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
@@ -497,7 +508,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow1, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -508,10 +519,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="NoteCreate">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
@@ -568,6 +579,10 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row2Title}" />
+                                <CheckBox
+                                    x:Name="checkRow2"
+                                    IsChecked="{Binding VersesDisplay.Row2ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
                                     Width="{Binding ActualWidth, ElementName=Border2, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
@@ -593,7 +608,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow2, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -604,10 +619,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="NoteCreate">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
@@ -664,6 +679,10 @@
 
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding VersesDisplay.Row3Title}" />
+                                <CheckBox
+                                    x:Name="checkRow3"
+                                    IsChecked="{Binding VersesDisplay.Row3ShowTranslation}"
+                                    Visibility="Collapsed" />
 
                                 <ListView
                                     Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
@@ -689,7 +708,7 @@
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    ShowTranslations="{Binding ElementName=checkRow3, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -700,10 +719,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="NoteCreate">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
