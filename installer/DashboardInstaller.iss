@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Clear Dashboard"
-#define MyAppVersion "1.5"
+#define MyAppVersion "0.1.0.0"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -129,8 +129,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-;Source: "windowsdesktop-runtime-6.0.5-win-x64.exe"; Flags: dontcopy noencryption
-Source: "windowsdesktop-runtime-6.0.6-win-x64.exe"; Flags: dontcopy noencryption
+Source: "windowsdesktop-runtime-6.0.9-win-x64.exe"; Flags: dontcopy noencryption
 
 Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -162,11 +161,11 @@ var
 begin
   if IsWin64 then begin
     // install the .NET Runtime
-    if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.6\') then begin
-      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-6.0.6-win-x64.exe') then begin          
-        ExtractTemporaryFile('windowsdesktop-runtime-6.0.6-win-x64.exe');
+    if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.9\') then begin
+      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-6.0.9-win-x64.exe') then begin          
+        ExtractTemporaryFile('windowsdesktop-runtime-6.0.9-win-x64.exe');
       end;
-      Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-6.0.6-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+      Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-6.0.9-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     end;
     Result := true;
   end
