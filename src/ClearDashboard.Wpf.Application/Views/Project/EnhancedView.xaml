@@ -417,6 +417,9 @@
                                                         <i:EventTrigger EventName="TranslationClicked">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
                                                         </i:EventTrigger>
+                                                        <i:EventTrigger EventName="NoteCreate">
+                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
+                                                        </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
                                             </StackPanel>
@@ -509,6 +512,9 @@
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="NoteCreate">
+                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
@@ -603,6 +609,9 @@
                                                         <i:EventTrigger EventName="TranslationClicked">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
                                                         </i:EventTrigger>
+                                                        <i:EventTrigger EventName="NoteCreate">
+                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
+                                                        </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
                                             </StackPanel>
@@ -696,6 +705,9 @@
                                                         <i:EventTrigger EventName="TranslationClicked">
                                                             <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
                                                         </i:EventTrigger>
+                                                        <i:EventTrigger EventName="NoteCreate">
+                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
+                                                        </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
                                             </StackPanel>
@@ -766,15 +778,22 @@
                     Orientation="Vertical">
 
                     <userControls:TranslationSelector
-                        cm:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];"
                         SelectedItem="{Binding CurrentTranslationOption}"
                         TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
                         TranslationOptions="{Binding TranslationOptions}"
-                        Visibility="{Binding TranslationControlVisibility}" />
+                        Visibility="{Binding TranslationControlVisibility}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TranslationApplied">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationApplied"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="TranslationCancelled">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationCancelled"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </userControls:TranslationSelector>
 
-                    <!--<userControls:NoteCollectionDisplay
+                    <userControls:NoteCollectionDisplay
                         Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
-                        cm:Message.Attach="[Event CloseRequested] = [Action CloseRequested($eventArgs)];                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];"
                         EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
                         InnerMargin="0,0,0,30"
                         LabelBackground="BlanchedAlmond"
@@ -785,39 +804,30 @@
                         Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
                         TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         Visibility="{Binding NoteControlVisibility}">
-                        <userControls:NoteCollectionDisplay.NoteMargin>
-                            <MultiBinding Converter="{StaticResource ThicknessConverter}">
-                                <Binding ElementName="NoteLeftMarginSlider" Path="Value" />
-                                <Binding ElementName="NoteTopMarginSlider" Path="Value" />
-                                <Binding ElementName="NoteRightMarginSlider" Path="Value" />
-                                <Binding ElementName="NoteBottomMarginSlider" Path="Value" />
-                            </MultiBinding>
-                        </userControls:NoteCollectionDisplay.NoteMargin>
-                        <userControls:NoteCollectionDisplay.TimestampMargin>
-                            <MultiBinding Converter="{StaticResource ThicknessConverter}">
-                                <Binding ElementName="TimestampLeftMarginSlider" Path="Value" />
-                                <Binding ElementName="TimestampTopMarginSlider" Path="Value" />
-                                <Binding ElementName="TimestampRightMarginSlider" Path="Value" />
-                                <Binding ElementName="TimestampBottomMarginSlider" Path="Value" />
-                            </MultiBinding>
-                        </userControls:NoteCollectionDisplay.TimestampMargin>
-                        <userControls:NoteCollectionDisplay.LabelMargin>
-                            <MultiBinding Converter="{StaticResource ThicknessConverter}">
-                                <Binding ElementName="LabelLeftMarginSlider" Path="Value" />
-                                <Binding ElementName="LabelTopMarginSlider" Path="Value" />
-                                <Binding ElementName="LabelRightMarginSlider" Path="Value" />
-                                <Binding ElementName="LabelBottomMarginSlider" Path="Value" />
-                            </MultiBinding>
-                        </userControls:NoteCollectionDisplay.LabelMargin>
-                        <userControls:NoteCollectionDisplay.LabelPadding>
-                            <MultiBinding Converter="{StaticResource ThicknessConverter}">
-                                <Binding ElementName="LabelLeftPaddingSlider" Path="Value" />
-                                <Binding ElementName="LabelTopPaddingSlider" Path="Value" />
-                                <Binding ElementName="LabelRightPaddingSlider" Path="Value" />
-                                <Binding ElementName="LabelBottomPaddingSlider" Path="Value" />
-                            </MultiBinding>
-                        </userControls:NoteCollectionDisplay.LabelPadding>
-                    </userControls:NoteCollectionDisplay>-->
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="NoteMouseEnter">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteMouseEnter"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteAdded">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteAdded"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteUpdated">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteUpdated"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteDeleted">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteDeleted"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelSelected">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="LabelSelected"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelAdded">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="LabelAdded"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="CloseNotePaneRequested">
+                                <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="CloseNotePaneRequested"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </userControls:NoteCollectionDisplay>
                 </StackPanel>
             </controls:SidebarExpander>
 
