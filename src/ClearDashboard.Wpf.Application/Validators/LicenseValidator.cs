@@ -10,29 +10,40 @@ namespace ClearDashboard.Wpf.Application.Validators
         ILogger _logger;
         public LicenseUserValidator(ILogger<LicenseUserValidator> logger)
         {
-            RuleFor(x => x.FirstName).Custom((firstName, context) => {
+            //RuleFor(x => x.FirstName).Custom((firstName, context) => {
 
-                if (string.IsNullOrEmpty(firstName))
-                {
-                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_FirstMissing",_logger)); ;
-                }
-            });
+            //    if (string.IsNullOrEmpty(firstName))
+            //    {
+            //        context.AddFailure(LocalizationStrings.Get("LicenseValidator_FirstMissing",_logger)); ;
+            //    }
+            //});
 
-            RuleFor(x => x.LastName).Custom((lastName, context) => {
+            //RuleFor(x => x.LastName).Custom((lastName, context) => {
 
-                if (string.IsNullOrEmpty(lastName))
-                {
-                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_LastMissing", _logger)); ;
-                }
-            });
+            //    if (string.IsNullOrEmpty(lastName))
+            //    {
+            //        context.AddFailure(LocalizationStrings.Get("LicenseValidator_LastMissing", _logger)); ;
+            //    }
+            //});
 
-            RuleFor(x => x.LicenseKey).Custom((licenseKey, context) => {
+            //RuleFor(x => x.LicenseKey).Custom((licenseKey, context) => {
 
-                if (string.IsNullOrEmpty(licenseKey))
-                {
-                    context.AddFailure(LocalizationStrings.Get("LicenseValidator_LicenseMissing",_logger)); ;
-                }
-            });
+            //    if (string.IsNullOrEmpty(licenseKey))
+            //    {
+            //        context.AddFailure(LocalizationStrings.Get("LicenseValidator_LicenseMissing", _logger)); ;
+            //    }
+            //});
+
+            RuleFor(x => x.FirstName).NotEmpty()
+                .WithMessage(LocalizationStrings.Get("LicenseValidator_FirstMissing", _logger));
+
+            RuleFor(x => x.LastName).NotEmpty()
+                .WithMessage(LocalizationStrings.Get("LicenseValidator_LastMissing", _logger));
+            RuleFor(x => x.LicenseKey).NotEmpty()
+                .WithMessage(LocalizationStrings.Get("LicenseValidator_LicenseMissing", _logger));
+
+
+         
         }
 
     }
