@@ -162,8 +162,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             new Label { Text = "delta" },
             new Label { Text = "echo" }
         };
-
-        #endregion
+#endif
+#endregion
 
         private async Task<ObservableCollection<Label>> GetLabelSuggestions()
         {
