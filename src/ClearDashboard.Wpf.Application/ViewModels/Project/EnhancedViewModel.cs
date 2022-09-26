@@ -84,6 +84,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public List<TokenProject> _tokenProjects = new();
         public List<ParallelCorpus> _parallelProjects = new();
         public List<ShowTokenizationWindowMessage> _projectMessages = new();
+        public List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
+
 
         public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
         public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
@@ -587,6 +589,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private async Task ShowNewParallelTranslation(ShowParallelTranslationWindowMessage message,
             CancellationToken cancellationToken, CancellationToken localCancellationToken)
         {
+            var msg = _parallelMessages.Where(p =>
+                p.TranslationSetId == message.TranslationSetId && p.ParallelCorpusId == message.ParallelCorpusId).ToList();
+            if (msg.Count == 0)
+            {
+                _parallelMessages.Add(message);
+            }
+
             // current project
             await Task.Factory.StartNew(async () =>
             {
@@ -1119,6 +1128,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await ShowExistingCorpusTokens(_projectMessages[i], _cancellationTokenSource.Token, _tokenProjects[i],
                     _cancellationTokenSource.Token).ConfigureAwait(false);
             }
+
+            for (int i = 0; i < _parallelMessages.Count; i++)
+            {
+                _cancellationTokenSource = new CancellationTokenSource();
+                await ShowNewParallelTranslation(_parallelMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
+            }
+
+            
         }
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool ShowTranslations)
@@ -1208,7 +1225,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool ShowTranslations = true)
         {
             // same color as defined in SharedVisualTemplates.xaml
-            Brush brush = Brushes.Blue;
+            Brush brush = Brushes.SaddleBrown;
 
             for (int i = 0; i < 4; i++)
             {

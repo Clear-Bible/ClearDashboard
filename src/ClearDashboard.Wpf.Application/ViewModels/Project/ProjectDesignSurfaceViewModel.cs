@@ -1147,7 +1147,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             connectionMenuItem.DisplayName, 
                             connectionMenuItem.ParallelCorpusId,
                             connectionMenuItem.ParallelCorpusDisplayName,
-                            IsNewWindow: true));
+                            IsNewWindow: false));
                     
                     break;
                 default:

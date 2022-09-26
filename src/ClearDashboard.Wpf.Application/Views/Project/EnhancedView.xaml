@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,8 +15,7 @@
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:projectViews="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls" 
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DataContext="{d:DesignInstance Type=project:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -419,10 +419,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
@@ -478,7 +478,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row1Title}" />
                                 <CheckBox
                                     x:Name="checkRow1"
-                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    IsChecked="{Binding VersesDisplay.Row1ShowTranslation}"
                                     Visibility="Collapsed" />
 
                                 <ListView
@@ -516,10 +516,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
@@ -575,7 +575,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row2Title}" />
                                 <CheckBox
                                     x:Name="checkRow2"
-                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    IsChecked="{Binding VersesDisplay.Row2ShowTranslation}"
                                     Visibility="Collapsed" />
 
                                 <ListView
@@ -613,10 +613,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
@@ -672,7 +672,7 @@
                                 <TextBlock Text="{Binding VersesDisplay.Row3Title}" />
                                 <CheckBox
                                     x:Name="checkRow3"
-                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
+                                    IsChecked="{Binding VersesDisplay.Row3ShowTranslation}"
                                     Visibility="Collapsed" />
 
                                 <ListView
@@ -710,10 +710,10 @@
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TokenMouseEnter"/>
+                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationClicked"/>
+                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
