@@ -1594,7 +1594,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public void CloseNotePaneRequested(object sender, NoteEventArgs args)
+        public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
         {
             HideNote();
         }
