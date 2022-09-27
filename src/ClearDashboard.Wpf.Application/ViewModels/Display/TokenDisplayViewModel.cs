@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Annotations;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.
     /// </summary>
-    public class TokenDisplayViewModel
+    public class TokenDisplayViewModel : INotifyPropertyChanged
     {
         /// <summary>
         /// The token itself.
@@ -55,5 +58,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public ObservableCollection<Note> Notes { get; set; } = new();
 
         public bool HasNote => Notes.Any();
+
+        public void AddNote(Note note)
+        {
+            Notes.Add(note);
+            OnPropertyChanged(nameof(Notes));
+            OnPropertyChanged(nameof(HasNote));
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
