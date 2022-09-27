@@ -120,88 +120,29 @@ namespace ClearDashboard.DataAccessLayer
         }
 
 
-        /// <summary>
-        /// Taken from LandingViewModel - most likely will be deprecated
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
-        private string GetJsonProjectName(string filePath)
+
+        private Guid TemporaryUserGuid => Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7");
+        public User GetLicensedUser()
         {
-            string line;
-            string project = "";
-
-            // Read the file and display it line by line.  
-            StreamReader file = new StreamReader(filePath);
-            while ((line = file.ReadLine()) != null)
+            var user = LicenseManager.GetUser<User>();
+            if (user == null)
             {
-                if (line.ToLower().Contains("projectname\":"))
+                user = new User
                 {
-                    project = line.Substring(line.IndexOf(':') + 1);
-                    //remove the trailing comma
-                    project = project.Substring(0, project.IndexOf(','));
-                    // remove the double quotes
-                    project = project.Replace("\"", "").Trim();
-                    break;
-                }
+                    Id = TemporaryUserGuid,
+                };
             }
-            file.Close();
 
-            return project;
+            return user;
         }
 
-        public async Task SetupParatext()
+        public async Task<User> UpdateCurrentUserWithParatextUserInformation()
         {
-            // detect if Paratext is installed
-
-            ParatextVisible = ParatextProxy.IsParatextInstalled();
-
-            if (ParatextVisible)
+          
+            if (CurrentUser == null || CurrentUser.Id == TemporaryUserGuid)
             {
-                // get all the Paratext Projects (Projects/Backtranslations)
-                ParatextProjects.Clear();
-                var projects = await ParatextProxy.GetParatextProjectsOrResources(ParatextProxy.FolderType.Projects);
-                try
-                {
-                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
-                    foreach (var project in projects)
-                    {
-                        ParatextProjects.Add(TinyMapper.Map<ParatextProjectViewModel>(project));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, "Unexpected error while initializing");
-                }
-
-                // get all the Paratext Resources (LWC)
-                ParatextResources.Clear();
-                var resources = ParatextProxy.GetParatextResources();
-                try
-                {
-                    TinyMapper.Bind<ParatextProject, ParatextProjectViewModel>();
-                    foreach (var resource in resources)
-                    {
-                        ParatextResources.Add(TinyMapper.Map<ParatextProjectViewModel>(resource));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, "Unexpected error while initializing");
-                }
+                CurrentUser = GetLicensedUser();
             }
-        }
-
-        public async Task<User> GetUser()
-        {
-            // HACK:  Create a place holder User until we figure out
-            //        how to manage Users holistically
-            //        NOTE: every user will have the same GUID for now.
-
-            var user = new User
-            {
-                Id = Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7"),
-
-            };
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
 
@@ -211,24 +152,17 @@ namespace ClearDashboard.DataAccessLayer
             if (result.Success && result.HasData)
             {
                 var paratextUserName = result.Data.Name;
-                user.ParatextUserName = paratextUserName;
-                var userNameParts = paratextUserName.Split(" ");
-
-                if (userNameParts.Length == 2)
-                {
-                    user.FirstName = userNameParts[0];
-                    user.LastName = userNameParts[1];
-
-                }
-                await PublishParatextUser(user);
+                CurrentUser = GetLicensedUser();
+                CurrentUser.ParatextUserName = paratextUserName;
+                await PublishParatextUser(CurrentUser);
             }
             else
             {
-                user.FirstName = string.Empty;
-                user.LastName = string.Empty;
+                CurrentUser.FirstName = string.Empty;
+                CurrentUser.LastName = string.Empty;
             }
 
-            return user;
+            return CurrentUser;
         }
 
         public DashboardProject CurrentDashboardProject { get; set; }
