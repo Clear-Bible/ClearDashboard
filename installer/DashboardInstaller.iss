@@ -27,14 +27,14 @@ DisableProgramGroupPage=yes
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 ;PrivilegesRequired=lowest
 OutputBaseFilename=ClearDashboard
-SetupIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_logo.ico
+SetupIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_Icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64
 UninstallDisplayIcon={uninstallexe}
 Uninstallable=yes
-UninstallIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_logo.ico
+UninstallIconFile=..\src\ClearDashboard.Wpf.Application\Assets\ClearDashboard_Icon.ico
 DisableDirPage=yes
 
 [Languages]
