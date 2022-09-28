@@ -28,17 +28,58 @@ namespace ClearDashboard.WPF.Tests
 
             var originalLicenseUser = new LicenseUser
             {
-                Id = Guid.NewGuid().ToString("N"),
+                Id = Guid.NewGuid(),
                 LicenseKey = Guid.NewGuid().ToString("N"),
                 FirstName = "Bob",
                 LastName = "Smith",
             };
 
-            LicenseManager.EncryptToDirectory(originalLicenseUser, directoryPath);
+            LicenseManager.EncryptToFile(originalLicenseUser, directoryPath);
             var decryptedJson = LicenseManager.DecryptFromFile(filePath);
             var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedJson);
 
             Assert.True(LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
+        }
+
+        [Fact]
+        public async Task EncryptLicenseUserDecryptUserTest()
+        {
+            var directoryPath = "LicenseTest";
+            var filePath = "LicenseTest\\license.txt";
+
+            var originalLicenseUser = new LicenseUser
+            {
+                Id = Guid.NewGuid(),
+                LicenseKey = Guid.NewGuid().ToString("N"),
+                FirstName = "Bob",
+                LastName = "Smith",
+            };
+
+            LicenseManager.EncryptToFile(originalLicenseUser, directoryPath);
+            //var decryptedJson = LicenseManager.DecryptFromFile(filePath);
+            //var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedJson);
+
+            var user = LicenseManager.DecryptFromFile<User>(filePath);
+            Assert.NotNull(user);
+
+            Assert.Equal(user.Id, originalLicenseUser.Id);
+            Assert.Equal(user.FirstName, originalLicenseUser.FirstName);
+            Assert.Equal(user.LastName, originalLicenseUser.LastName);
+            Assert.Equal(user.LicenseKey, originalLicenseUser.LicenseKey);
+            Assert.NotEqual(user.Id.ToString("N"), user.LicenseKey);
+
+            //Assert.True(LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
+        }
+
+        [Fact]
+        public void DecryptFromString()
+        {
+
+            var user = LicenseManager.DecryptFromString<User>(
+                "KJPQAD+QnfioxDbZmFnw9VMkcZyWlMUFmoHUUO9YWzS+j0Ir0ZkXY58OXVvRq6Dji/ou+tuViioXpATAdM0RLNQPqjNUi8FPU7zPbhFbHEBbDTCvgpDMGpdBjcUJBOsBcYBtLq2l+YmtgrlT7HNsq2EDEb4sgrf3PGc/tUTXu2BI/l7uMYvyIObqs7NXTfNsC17KSS9b9H2GA1eJFD7vipZ7aeELfuZIi9B5HsLOFKUOAo8Q85y1WHIBSidLboca");
+            Assert.NotNull(user);
+            Assert.Equal("Michael Gerfen", user.FullName);
+            Assert.NotEqual(user.Id.ToString("N"), user.LicenseKey);
         }
     }
 }

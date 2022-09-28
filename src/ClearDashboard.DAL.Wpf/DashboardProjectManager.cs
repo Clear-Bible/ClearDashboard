@@ -87,8 +87,9 @@ public class DashboardProjectManager : ProjectManager
     public override async Task Initialize()
     {
         await base.Initialize();
+        CurrentUser = GetLicensedUser();
         await ConfigureSignalRClient();
-        CurrentUser = await GetUser();
+        
     }
 
     protected async Task ConfigureSignalRClient()
@@ -110,7 +111,7 @@ public class DashboardProjectManager : ProjectManager
                 HubConnection.Error += HandleSignalRConnectionError;
                 await PublishSignalRConnected(true);
 
-                CurrentUser = await GetUser();
+                CurrentUser = await UpdateCurrentUserWithParatextUserInformation();
 
             }
         }
@@ -252,7 +253,7 @@ public class DashboardProjectManager : ProjectManager
                         {
                             FirstName = decryptedLicenseUser.FirstName,
                             LastName = decryptedLicenseUser.LastName,
-                            Id = Guid.Parse(decryptedLicenseUser.Id)
+                            Id = decryptedLicenseUser.Id
                         };
 
                     }

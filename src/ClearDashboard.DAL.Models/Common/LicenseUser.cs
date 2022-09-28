@@ -10,7 +10,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? LastName { get; set; }
         public string? LicenseKey { get; set; }
         public string FullName => $"{FirstName}, {LastName}";
-        public string? Id { get; set; }
         public string ParatextUserName { get; set; } = null;
     }
 }
