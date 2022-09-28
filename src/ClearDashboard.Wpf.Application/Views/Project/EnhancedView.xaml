@@ -370,7 +370,7 @@
                                         Height="20"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
-                                
+
                                 <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusDownRowCommand}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
@@ -391,7 +391,34 @@
                                 BorderThickness="3"
                                 CornerRadius="4">
                                 <StackPanel>
-                                    <TextBlock Margin="5,0,0,0" Text="{Binding RowTitle}" />
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Button
+                                            VerticalAlignment="Center"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="3 0 0 0"
+                                            Command="{Binding ElementName=OuterListView, Path=DataContext.DeleteCorpusRowCommand}"
+                                            CommandParameter="{Binding}">
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniSecondaryLightButton}" TargetType="{x:Type Button}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                </Style>
+                                            </Button.Style>
+                                            <materialDesign:PackIcon
+                                                Width="20"
+                                                Height="20"
+                                                Foreground="{StaticResource RedDarkBrush}"
+                                                Kind="Close" />
+                                        </Button>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontWeight="Bold"
+                                            Margin="8,0,0,0"
+                                            FontSize="16"
+                                            Text="{Binding RowTitle}" />
+
+                                    </StackPanel>
 
                                     <!--  INNER LISTVIEW  -->
                                     <ListView
@@ -427,7 +454,8 @@
                                                         TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                         TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" 
+                                                        Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}">
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="TokenMouseEnter">
                                                                 <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
