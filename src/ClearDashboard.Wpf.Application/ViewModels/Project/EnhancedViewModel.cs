@@ -1270,134 +1270,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private void MoveCorpusDown(object obj)
+        public void MoveCorpusDown(object obj)
         {
-            SwitchCorpusRowsDown(0);
+            var row = obj as VersesDisplay;
+
+            var index = VersesDisplay.Select((element, index) => new { element, index })
+                .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
+
+            if (index == VersesDisplay.Count)
+            {
+                return;
+            }
+            
+            VersesDisplay.Move(index, index + 1);
         }
-        private void MoveCorpusUp(object obj)
+        public void MoveCorpusUp(object obj)
         {
-            SwitchCorpusRowsUp(1);
+            var row = obj as VersesDisplay;
+
+            var index = VersesDisplay.Select((element, index) => new { element, index })
+                .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
+
+            if (index < 2)
+            {
+                return;
+            }
+
+            VersesDisplay.Move(index, index - 1);
         }
-
-        private void SwitchCorpusRowsUp(int i)
-        {
-            ObservableCollection<List<TokenDisplayViewModel>> temp;
-            Brush tmpBrush;
-            string tmpTitle;
-
-            //switch (i)
-            //{
-            //    case 1:
-            //        temp = VersesDisplay.Verses;
-            //        tmpBrush = VersesDisplay.BorderColor;
-            //        tmpTitle = VersesDisplay.RowTitle;
-
-            //        VersesDisplay.Verses = VersesDisplay.Row1Verses;
-            //        VersesDisplay.BorderColor = VersesDisplay.Row1BorderColor;
-            //        VersesDisplay.RowTitle = VersesDisplay.Row1Title;
-
-            //        VersesDisplay.Row1Verses = temp;
-            //        VersesDisplay.Row1BorderColor = tmpBrush;
-            //        VersesDisplay.Row1Title = tmpTitle;
-            //        NotifyOfPropertyChange(() => VersesDisplay);
-            //        break;
-            //    case 2:
-            //        temp = VersesDisplay.Row1Verses;
-            //        tmpBrush = VersesDisplay.Row1BorderColor;
-            //        tmpTitle = VersesDisplay.Row1Title;
-
-            //        VersesDisplay.Row1Verses = VersesDisplay.Row2Verses;
-            //        VersesDisplay.Row1BorderColor = VersesDisplay.Row2BorderColor;
-            //        VersesDisplay.Row1Title = VersesDisplay.Row2Title;
-
-            //        VersesDisplay.Row2Verses = temp;
-            //        VersesDisplay.Row2BorderColor = tmpBrush;
-            //        VersesDisplay.Row2Title = tmpTitle;
-            //        NotifyOfPropertyChange(() => VersesDisplay);
-            //        break;
-
-            //    case 3:
-            //        temp = VersesDisplay.Row2Verses;
-            //        tmpBrush = VersesDisplay.Row2BorderColor;
-            //        tmpTitle = VersesDisplay.Row2Title;
-
-            //        VersesDisplay.Row2Verses = VersesDisplay.Row3Verses;
-            //        VersesDisplay.Row2BorderColor = VersesDisplay.Row3BorderColor;
-            //        VersesDisplay.Row2Title = VersesDisplay.Row3Title;
-
-            //        VersesDisplay.Row3Verses = temp;
-            //        VersesDisplay.Row3BorderColor = tmpBrush;
-            //        VersesDisplay.Row3Title = tmpTitle;
-            //        NotifyOfPropertyChange(() => VersesDisplay);
-            //        break;
-            //}
-        }
-
-
-        private void SwitchCorpusRowsDown(int i)
-        {
-            ObservableCollection<List<TokenDisplayViewModel>> temp;
-            Brush tmpBrush;
-            string tmpTitle;
-
-            //switch (i)
-            //{
-            //    case 0:
-
-            //        if (VersesDisplay.Row1Verses.Count > 0)
-            //        {
-            //            temp = VersesDisplay.Verses;
-            //            tmpBrush = VersesDisplay.BorderColor;
-            //            tmpTitle = VersesDisplay.RowTitle;
-
-            //            VersesDisplay.Verses = VersesDisplay.Row1Verses;
-            //            VersesDisplay.BorderColor = VersesDisplay.Row1BorderColor;
-            //            VersesDisplay.RowTitle = VersesDisplay.Row1Title;
-
-            //            VersesDisplay.Row1Verses = temp;
-            //            VersesDisplay.Row1BorderColor = tmpBrush;
-            //            VersesDisplay.Row1Title = tmpTitle;
-            //            NotifyOfPropertyChange(() => VersesDisplay);
-            //        }
-            //        break;
-            //    case 1:
-            //        if (VersesDisplay.Row2Verses.Count > 0)
-            //        {
-            //            temp = VersesDisplay.Row1Verses;
-            //            tmpBrush = VersesDisplay.Row1BorderColor;
-            //            tmpTitle = VersesDisplay.Row1Title;
-
-            //            VersesDisplay.Row1Verses = VersesDisplay.Row2Verses;
-            //            VersesDisplay.Row1BorderColor = VersesDisplay.Row2BorderColor;
-            //            VersesDisplay.Row1Title = VersesDisplay.Row2Title;
-
-            //            VersesDisplay.Row2Verses = temp;
-            //            VersesDisplay.Row2BorderColor = tmpBrush;
-            //            VersesDisplay.Row2Title = tmpTitle;
-            //            NotifyOfPropertyChange(() => VersesDisplay);
-            //        }
-            //        break;
-
-            //    case 2:
-            //        if (VersesDisplay.Row3Verses.Count > 0)
-            //        {
-            //            temp = VersesDisplay.Row2Verses;
-            //            tmpBrush = VersesDisplay.Row2BorderColor;
-            //            tmpTitle = VersesDisplay.Row2Title;
-
-            //            VersesDisplay.Row2Verses = VersesDisplay.Row3Verses;
-            //            VersesDisplay.Row2BorderColor = VersesDisplay.Row3BorderColor;
-            //            VersesDisplay.Row2Title = VersesDisplay.Row3Title;
-
-            //            VersesDisplay.Row3Verses = temp;
-            //            VersesDisplay.Row3BorderColor = tmpBrush;
-            //            VersesDisplay.Row3Title = tmpTitle;
-            //            NotifyOfPropertyChange(() => VersesDisplay);
-            //        }
-            //        break;
-            //}
-        }
-
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {

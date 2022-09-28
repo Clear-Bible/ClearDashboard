@@ -332,8 +332,9 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-
+            <!--  OUTER LISTVIEW  -->
             <ListView
+                x:Name="OuterListView"
                 Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                 ItemsSource="{Binding VersesDisplay}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -357,7 +358,8 @@
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button Command="{Binding MoveCorpusUpRow}" CommandParameter="{Binding}">
+
+                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusUpRow}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
@@ -368,7 +370,8 @@
                                         Height="20"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
-                                <Button Command="{Binding MoveCorpusDownRow}" CommandParameter="{Binding}">
+                                
+                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusDownRow}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
@@ -389,9 +392,9 @@
                                 CornerRadius="4">
                                 <StackPanel>
                                     <TextBlock Margin="5,0,0,0" Text="{Binding RowTitle}" />
-                                    <!--<CheckBox x:Name="CheckShowTranslation" Checked="{Binding ShowTranslation}"/>-->
+
+                                    <!--  INNER LISTVIEW  -->
                                     <ListView
-                                        x:Name="InnerListView"
                                         Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                         ItemsSource="{Binding Verses}"
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
