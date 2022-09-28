@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using System.ComponentModel;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
@@ -34,16 +35,15 @@ namespace ClearDashboard.Wpf.Application.Validators
             //    }
             //});
 
-            RuleFor(x => x.FirstName).NotEmpty()
+            RuleFor(x => x.FirstName)
+                .NotEmpty()
                 .WithMessage(LocalizationStrings.Get("LicenseValidator_FirstMissing", _logger));
-
-            RuleFor(x => x.LastName).NotEmpty()
+            RuleFor(x => x.LastName)
+                .NotEmpty()
                 .WithMessage(LocalizationStrings.Get("LicenseValidator_LastMissing", _logger));
-            RuleFor(x => x.LicenseKey).NotEmpty()
+            RuleFor(x => x.LicenseKey)
+                .NotEmpty()
                 .WithMessage(LocalizationStrings.Get("LicenseValidator_LicenseMissing", _logger));
-
-
-         
         }
 
     }

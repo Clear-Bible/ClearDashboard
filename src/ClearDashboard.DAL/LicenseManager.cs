@@ -145,10 +145,28 @@ namespace ClearDashboard.DataAccessLayer
 
         }
 
-        public static bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
+        public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
         {
-            return given.FirstName == decrypted.FirstName && given.LastName == decrypted.LastName;
+            if (given.FirstName == decrypted.FirstName && given.LastName == decrypted.LastName)// &&
+                //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
+            {
+                return LicenseUserMatchType.Match;
+            }
+            else if (given.FirstName != decrypted.FirstName && given.LastName != decrypted.LastName)
+            {
+                return LicenseUserMatchType.BothNameMismatch;
+            }
+            else if (given.FirstName != decrypted.FirstName && given.LastName == decrypted.LastName)
+            {
+                return LicenseUserMatchType.FirstNameMismatch;
+            }
+            else if (given.FirstName == decrypted.FirstName && given.LastName != decrypted.LastName)
+            {
+                return LicenseUserMatchType.LastNameMismatch;
+            }
+
+            return LicenseUserMatchType.Error;
+
         }
     }
-
 }

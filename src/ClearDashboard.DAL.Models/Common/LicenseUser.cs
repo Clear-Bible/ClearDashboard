@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
@@ -11,5 +12,15 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? LicenseKey { get; set; }
         public string FullName => $"{FirstName}, {LastName}";
         public string ParatextUserName { get; set; } = null;
+        public LicenseUserMatchType MatchType { get; set; }
+    }
+
+    public enum LicenseUserMatchType
+    {
+        Match,
+        FirstNameMismatch,
+        LastNameMismatch,
+        BothNameMismatch,
+        Error
     }
 }
