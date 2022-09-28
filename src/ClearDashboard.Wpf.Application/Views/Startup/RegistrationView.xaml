@@ -8,10 +8,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    Width="509"
-    Height="335"
-    d:DesignHeight="212"
-    d:DesignWidth="409"
+    Width="1010"
+    Height="635"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="White"
     Foreground="Black"
@@ -19,41 +19,69 @@
     <!--  d:DataContext="{d:DesignInstance Type=popUps:RegistrationViewModel}"  -->
     <UserControl.Resources>
 
-        <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
-            <Setter Property="Margin" Value="0,8" />
+        <Style BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,20" />
             <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+
+        <Style
+            x:Key="RegistrationTextBox"
+            BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+            TargetType="{x:Type TextBox}">
+            <Setter Property="Margin" Value="0,10" />
+            <Setter Property="Width" Value="500" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
     </UserControl.Resources>
 
 
-    <Grid Height="200">
+    <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Margin="10"
+            Margin="0,0,0,0"
+            Orientation="Horizontal">
+            <Image
+                Width="50"
+                Height="50"
+                Margin="20,0"
+                HorizontalAlignment="Left"
+                Source="../../Assets/ClearDashboard_logo_50.png" />
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="32"
+                Text="{helpers:Localization ProjectPicker_AppName}" />
+
+        </StackPanel>
+        <Label
+            Grid.Row="1"
+            Margin="20,5"
+            Content="{helpers:Localization RegistrationDialogViewModel_Welcome}"
+            FontSize="24" />
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="20,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Orientation="Vertical">
-
             <TextBox
                 x:Name="FirstName"
-                Width="360"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="Black"
                 materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_FirstName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="20"
-                Foreground="Black"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <!--  materialDesign:HintAssist.Hint="Please enter your first name"  -->
+                Style="{DynamicResource RegistrationTextBox}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -63,11 +91,12 @@
                 </TextBox.Text>
                 <Validation.ErrorTemplate>
                     <ControlTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
                             <AdornedElementPlaceholder />
                             <TextBlock
                                 MaxWidth="350"
                                 Margin="0"
+                                HorizontalAlignment="Left"
                                 FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
@@ -81,18 +110,11 @@
 
             <TextBox
                 x:Name="LastName"
-                Width="360"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LastName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="20"
-                Foreground="Black"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <!--  materialDesign:HintAssist.Hint="Please enter your last name"  -->
+                Style="{DynamicResource RegistrationTextBox}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -102,11 +124,12 @@
                 </TextBox.Text>
                 <Validation.ErrorTemplate>
                     <ControlTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
                             <AdornedElementPlaceholder />
                             <TextBlock
                                 MaxWidth="350"
                                 Margin="0"
+                                HorizontalAlignment="Left"
                                 FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
@@ -119,18 +142,13 @@
 
             <TextBox
                 x:Name="LicenseKey"
-                Width="360"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                HorizontalContentAlignment="Left"
                 materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LicenseKey}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="20"
-                Foreground="Black"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <!--  materialDesign:HintAssist.Hint="Please enter your license key"  -->
+                MaxLines="4"
+                Style="{DynamicResource RegistrationTextBox}"
+                TextWrapping="Wrap">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -140,11 +158,12 @@
                 </TextBox.Text>
                 <Validation.ErrorTemplate>
                     <ControlTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
                             <AdornedElementPlaceholder />
                             <TextBlock
                                 MaxWidth="350"
                                 Margin="0"
+                                HorizontalAlignment="Left"
                                 FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
@@ -156,11 +175,28 @@
 
         </StackPanel>
 
+        <TextBlock
+            x:Name="MatchType"
+            Grid.Row="3"
+            Width="500"
+            MaxWidth="350"
+            Margin="20,10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            materialDesign:HintAssist.FloatingScale="0.50"
+            materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+            materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LicenseKey}"
+            materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+            FontSize="16"
+            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+            TextWrapping="Wrap" />
+
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="3"
             Grid.Column="0"
-            Margin="0,0"
+            Margin="0,20"
             HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button
                 x:Name="Cancel"
@@ -174,10 +210,6 @@
                 Style="{StaticResource TransparentStyle}" />
 
         </StackPanel>
-        <!--<userControls:WorkflowFooter Grid.Row="1" Grid.Column="0"/>-->
-        <!--<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,10" >
-            <Button x:Name="MoveBackwards" Content="Back" Margin="5 5 5 5" />
-            <Button x:Name="MoveForwards" Content="Next" Margin="5 5 5 5" />
-        </StackPanel>-->
+
     </Grid>
 </UserControl>

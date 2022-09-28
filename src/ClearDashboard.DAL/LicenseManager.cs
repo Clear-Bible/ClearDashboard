@@ -9,50 +9,64 @@ namespace ClearDashboard.DataAccessLayer
 {
     public static class LicenseManager
     {
+
+        public static string LicenseFilePath =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects",
+                "license.txt");
+
         private static Aes CreateCryptoProvider()
         {
-            var crypt_provider = Aes.Create();
-            crypt_provider.BlockSize = 128;
-            crypt_provider.KeySize = 128;
+            var cryptProvider = Aes.Create();
+            cryptProvider.BlockSize = 128;
+            cryptProvider.KeySize = 128;
 
             byte[] key =
             {
                 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
                 0x09, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16
             };
-            crypt_provider.Key = key;
+            cryptProvider.Key = key;
 
-            crypt_provider.IV = key;
+            cryptProvider.IV = key;
 
-            crypt_provider.Mode = CipherMode.CBC;
-            crypt_provider.Padding = PaddingMode.PKCS7;
-            return crypt_provider;
+            cryptProvider.Mode = CipherMode.CBC;
+            cryptProvider.Padding = PaddingMode.PKCS7;
+            return cryptProvider;
         }
 
-        public static void EncryptToDirectory(LicenseUser licenseUser, string path)
+        public static void EncryptToFile(LicenseUser licenseUser, string path)
         {
-            try
+
+            var str = EncryptToString(licenseUser, path);
+
+            if (!Directory.Exists(path))
             {
-                var crypt_provider = CreateCryptoProvider();
-
-                ICryptoTransform transform = crypt_provider.CreateEncryptor();
-                var serialized = JsonSerializer.Serialize<LicenseUser>(licenseUser);
-
-                var decrypted_bytes = ASCIIEncoding.ASCII.GetBytes(serialized);
-                byte[] encrypted_bytes = transform.TransformFinalBlock(decrypted_bytes, 0, decrypted_bytes.Length);
-                string str = Convert.ToBase64String(encrypted_bytes);
-
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-
-                File.WriteAllText(Path.Combine(path, "license.txt"), str);
+                Directory.CreateDirectory(path);
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
+
+            File.WriteAllText(Path.Combine(path, "license.txt"), str);
+
+        }
+
+        public static string EncryptToString(LicenseUser licenseUser, string path)
+        {
+
+            var cryptProvider = CreateCryptoProvider();
+
+            var transform = cryptProvider.CreateEncryptor();
+            var serialized = JsonSerializer.Serialize(licenseUser);
+
+            var decryptedBytes = Encoding.ASCII.GetBytes(serialized);
+            var encryptedBytes = transform.TransformFinalBlock(decryptedBytes, 0, decryptedBytes.Length);
+            var str = Convert.ToBase64String(encryptedBytes);
+
+            return str;
+
+        }
+
+        public static T? GetUser<T>()
+        {
+            return DecryptFromFile<T>(LicenseFilePath);
         }
 
         public static string DecryptFromFile(string path)
@@ -70,17 +84,23 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
+        public static T? DecryptFromString<T>(string licenseKey)
+        {
+            var json = DecryptFromString(licenseKey);
+            return Decrypt<T>(json);
+        }
+
         public static string DecryptFromString(string str)
         {
             try
             {
-                var crypt_provider = CreateCryptoProvider();
+                var cryptProvider = CreateCryptoProvider();
 
-                ICryptoTransform transform = crypt_provider.CreateDecryptor();
-                byte[] encrypted_bytes = Convert.FromBase64String(str);
-                byte[] decrypted_bytes = transform.TransformFinalBlock(encrypted_bytes, 0, encrypted_bytes.Length);
+                var transform = cryptProvider.CreateDecryptor();
+                var encryptedBytes = Convert.FromBase64String(str);
+                var decryptedBytes = transform.TransformFinalBlock(encryptedBytes, 0, encryptedBytes.Length);
 
-                var serialized = ASCIIEncoding.ASCII.GetString(decrypted_bytes);
+                var serialized = Encoding.ASCII.GetString(decryptedBytes);
 
                 return serialized;
 
@@ -91,39 +111,71 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
+        public static T? Decrypt<T>(string decryptedLicenseKey)
+        {
+            try
+            {
+                var entity = JsonSerializer.Deserialize<T>(decryptedLicenseKey);
+                return entity ?? default(T);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
+
+        public static TUser? DecryptFromFile<TUser>(string path)
+        {
+            try
+            {
+                var json = DecryptFromFile(path);
+
+                return Decrypt<TUser>(json);
+
+            }
+            catch (Exception)
+            {
+                return default;
+            }
+        }
+
         public static LicenseUser DecryptedJsonToLicenseUser(string decryptedLicenseKey)
         {
             try
             {
                 var licenseUser = JsonSerializer.Deserialize<LicenseUser>(decryptedLicenseKey);
-                if (licenseUser != null)
-                {
-                    return licenseUser;
-                }
-                else { 
-                    return new LicenseUser();
-                }
+                return licenseUser ?? new LicenseUser();
             }
             catch (Exception)
             {
-               return new LicenseUser();
+                return new LicenseUser();
             }
 
         }
 
-        public static bool CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
+        public static LicenseUserMatchType CompareGivenUserAndDecryptedUser(LicenseUser given, LicenseUser decrypted)
         {
-            if (given.FirstName == decrypted.FirstName &&
-                given.LastName == decrypted.LastName)// &&
+            if (given.FirstName == decrypted.FirstName && given.LastName == decrypted.LastName)// &&
                 //given.LicenseKey == decrypted.LicenseKey) <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
             {
-                return true;
+                return LicenseUserMatchType.Match;
             }
-            else
+            else if (given.FirstName != decrypted.FirstName && given.LastName != decrypted.LastName)
             {
-                return false;
+                return LicenseUserMatchType.BothNameMismatch;
             }
+            else if (given.FirstName != decrypted.FirstName && given.LastName == decrypted.LastName)
+            {
+                return LicenseUserMatchType.FirstNameMismatch;
+            }
+            else if (given.FirstName == decrypted.FirstName && given.LastName != decrypted.LastName)
+            {
+                return LicenseUserMatchType.LastNameMismatch;
+            }
+
+            return LicenseUserMatchType.Error;
+
         }
     }
-
 }

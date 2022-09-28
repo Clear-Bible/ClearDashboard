@@ -36,13 +36,32 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Content="{helpers:Localization ProjectSetup_Title}" />
+      
+
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0">
+            <Image
+                Width="50"
+                Height="50"
+                HorizontalAlignment="Left"
+                Margin="20,0"
+                Source="../../Assets/ClearDashboard_logo_50.png" />
+            <TextBlock
+                VerticalAlignment="Center"
+                FontSize="32"
+                Text="{helpers:Localization ProjectPicker_AppName}" />
+
+        </StackPanel>
+        <Label Grid.Row="1" Content="{helpers:Localization ProjectSetup_Title}" />
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="0"
             Margin="24,10"
             HorizontalAlignment="Left"
@@ -86,7 +105,7 @@
         </StackPanel>
 
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             Margin="20"
             HorizontalAlignment="Right"
