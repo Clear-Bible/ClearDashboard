@@ -21,7 +21,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         }
 
         protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdsQuery request, CancellationToken cancellationToken)
-        {
+        { //CHRIS: look up TranslationSet.AlignmentSet to get at alignment set.
             var translationSet = ProjectDbContext!.TranslationSets
                 .Include(ts => ts.ParallelCorpus)
                 .FirstOrDefault(ts => ts.Id == request.TranslationSetId.Id);

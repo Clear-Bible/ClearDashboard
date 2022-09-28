@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    [Migration("20220928011638_InitialMigration")]
+    [Migration("20220928204402_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -103,9 +103,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("EngineWordAlignmentId")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsSyntaxTreeAlignerRefined")
                         .HasColumnType("INTEGER");
 
@@ -126,8 +123,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EngineWordAlignmentId");
 
                     b.HasIndex("ParallelCorpusHistoryId");
 
@@ -215,23 +210,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CorpusHistory");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.EngineWordAlignment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool?>("IsClearAligner")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("SmtWordAlignerType")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EngineWordAlignment");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Label", b =>
@@ -671,6 +649,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("AlignmentSetId")
+                        .HasColumnType("TEXT");
+
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
@@ -678,9 +659,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("EngineWordAlignmentId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Metadata")
@@ -693,17 +671,14 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("ParallelCorpusId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SmtModel")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DerivedFromId");
+                    b.HasIndex("AlignmentSetId");
 
-                    b.HasIndex("EngineWordAlignmentId");
+                    b.HasIndex("DerivedFromId");
 
                     b.HasIndex("ParallelCorpusHistoryId");
 
@@ -959,10 +934,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSet", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.EngineWordAlignment", "EngineWordAlignment")
-                        .WithMany()
-                        .HasForeignKey("EngineWordAlignmentId");
-
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpusHistory", null)
                         .WithMany("AlignmentSets")
                         .HasForeignKey("ParallelCorpusHistoryId");
@@ -978,8 +949,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("EngineWordAlignment");
 
                     b.Navigation("ParallelCorpus");
 
@@ -1238,13 +1207,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TranslationSet", b =>
                 {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", "AlignmentSet")
+                        .WithMany()
+                        .HasForeignKey("AlignmentSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationSet", "DerivedFrom")
                         .WithMany()
                         .HasForeignKey("DerivedFromId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.EngineWordAlignment", "EngineWordAlignment")
-                        .WithMany()
-                        .HasForeignKey("EngineWordAlignmentId");
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpusHistory", null)
                         .WithMany("TranslationSets")
@@ -1262,9 +1233,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DerivedFrom");
+                    b.Navigation("AlignmentSet");
 
-                    b.Navigation("EngineWordAlignment");
+                    b.Navigation("DerivedFrom");
 
                     b.Navigation("ParallelCorpus");
 

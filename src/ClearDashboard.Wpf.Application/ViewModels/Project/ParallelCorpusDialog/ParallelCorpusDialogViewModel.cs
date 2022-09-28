@@ -419,8 +419,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 //}), cancellationToken);
 
                 var translationModel = WordAlignmentModel.GetTranslationTable();
-                TranslationSet = await translationModel.Create(translationSetDisplayName,
-                    SelectedSmtAlgorithm.ToString(), new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
+                //MICHAEL TranslationSet = await translationModel.Create(translationSetDisplayName,
+                //    SelectedSmtAlgorithm.ToString(), new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
 
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Completed,

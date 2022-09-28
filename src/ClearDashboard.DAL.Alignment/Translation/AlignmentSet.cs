@@ -60,6 +60,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
+        public IEnumerable<Token> GetTargetTokensBySourceTrainingText(string sourceTrainingText)
+        { //CHRIS
+            throw new NotImplementedException();
+        }
         public async Task Update()
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
