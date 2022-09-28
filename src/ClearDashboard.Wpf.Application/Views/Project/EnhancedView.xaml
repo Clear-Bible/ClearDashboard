@@ -359,7 +359,7 @@
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
 
-                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusUpRow}" CommandParameter="{Binding}">
+                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusUpRowCommand}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
@@ -371,7 +371,7 @@
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
                                 
-                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusDownRow}" CommandParameter="{Binding}">
+                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusDownRowCommand}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />

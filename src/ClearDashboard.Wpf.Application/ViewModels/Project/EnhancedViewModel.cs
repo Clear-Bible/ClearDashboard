@@ -51,8 +51,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Commands
 
-        public ICommand MoveCorpusDownRow { get; set; }
-        public ICommand MoveCorpusUpRow { get; set; }
+        public ICommand MoveCorpusDownRowCommand { get; set; }
+        public ICommand MoveCorpusUpRowCommand { get; set; }
+        public ICommand DeleteCorpusRowCommand { get; set; }
 
 
         #endregion
@@ -292,8 +293,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ProgressBarVisibility = Visibility.Collapsed;
 
 
-            MoveCorpusDownRow = new RelayCommand(MoveCorpusDown);
-            MoveCorpusUpRow = new RelayCommand(MoveCorpusUp);
+            MoveCorpusDownRowCommand = new RelayCommand(MoveCorpusDown);
+            MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
+            DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
+
+
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -1291,13 +1295,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var index = VersesDisplay.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
-            if (index < 2)
+            if (index < 1)
             {
                 return;
             }
 
             VersesDisplay.Move(index, index - 1);
         }
+
+        public void DeleteCorpusRow(object obj)
+        {
+            var row = obj as VersesDisplay;
+
+            var index = VersesDisplay.Select((element, index) => new { element, index })
+                .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
+
+            VersesDisplay.RemoveAt(index);
+        }
+
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {
