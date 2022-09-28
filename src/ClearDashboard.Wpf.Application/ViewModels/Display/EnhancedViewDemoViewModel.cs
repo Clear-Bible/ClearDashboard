@@ -4,9 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,12 +21,8 @@ using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Logging;
-using QuickGraph.Algorithms.RandomWalks;
-using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
@@ -38,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
         #region Mock data
-#if DEBUG
+#if MOCK
         private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
         private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
         private static IEnumerable<TokensTextRow>? _mockCorpus;
@@ -170,15 +165,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
             return MockLabelSuggestions;
 #else
-            var labels = await Label.GetAll(Mediator);
-            return new ObservableCollection<Label>(labels);
+            if (Mediator == null)
+            {
+                Logger?.LogCritical("Mediator is null; could not retrieve label suggestions from database");
+                return new ObservableCollection<Label>();
+            }
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                var labels = await Label.GetAll(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved label suggestions in {stopwatch.ElapsedMilliseconds}ms");
+#endif
+                return new ObservableCollection<Label>(labels);
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
 #endif
         }
 
-        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(
+        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(
             IEnumerable<Token> tokens)
         {
-            return Detokenizer.Detokenize(tokens);
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                var result = Detokenizer.Detokenize(tokens);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved padded tokens from {Detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                return result;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
         }
 
         private async Task<IEnumerable<TranslationOption>> GetTranslationOptions(Translation translation)
@@ -186,15 +219,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
             return GetMockTranslationOptions(translation.TargetTranslationText);
 #else
-            var translationModelEntry = await CurrentTranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
-            var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
-                .Select(option => new TranslationOption { Word = option.Key, Probability = option.Value })
-                .Take(4)
-                .ToList();
-            return translationOptions;
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                var translationModelEntry = await CurrentTranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
+                var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
+                    .Select(option => new TranslationOption { Word = option.Key, Probability = option.Value })
+                    .Take(4)    // FORNOW
+                    .ToList();
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved translation options for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                return translationOptions;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
 #endif
         }
-        private Translation GetTranslation(Token token)
+        private Translation GetTranslationForToken(Token token)
         {
 #if MOCK
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
@@ -207,13 +256,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
         }
 
-        private ObservableCollection<Note> GetNotes(Token token)
+        private ObservableCollection<Note> GetNotesForToken(Token token)
         {
 #if MOCK
             return MockNotes;
 #else
-            return NotesDictionary.ContainsKey(token.TokenId)
-                ? new ObservableCollection<Note>(NotesDictionary[token.TokenId])
+            var matches = NotesDictionary.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
+            return matches.Key != null
+                ? new ObservableCollection<Note>(matches.Value)
                 : new ObservableCollection<Note>();
 #endif
         }
@@ -226,8 +276,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             if (paddedTokens != null)
             {
                 tokenDisplays.AddRange(from paddedToken in paddedTokens
-                    let translation = GetTranslation(paddedToken.token)
-                    let notes = GetNotes(paddedToken.token)
+                    let translation = GetTranslationForToken(paddedToken.token)
+                    let notes = GetNotesForToken(paddedToken.token)
                     select new TokenDisplayViewModel
                     {
                         Token = paddedToken.token,
@@ -241,44 +291,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return tokenDisplays;
         }
 
-        private EngineStringDetokenizer CreateDetokenizer(string tokenizerName)
-        {
-            var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenizerName);
-            return tokenizer switch
-            {
-                Tokenizer.LatinWordTokenizer => new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                Tokenizer.WhitespaceTokenizer => new EngineStringDetokenizer(new WhitespaceDetokenizer()),
-                Tokenizer.ZwspWordTokenizer => new EngineStringDetokenizer(new ZwspWordDetokenizer()),
-                _ => throw new NotSupportedException($"'{tokenizerName}' is not a valid tokenizer name")
-            };
-        }
-
-        public async Task<ParallelCorpus> GetCorpus(ParallelCorpusId? corpusId = null)
-        {
-            if (corpusId == null)
-            {
-                var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
-                corpusId = corpusIds.First();
-            }
-
-            var corpus = await ParallelCorpus.Get(Mediator, corpusId);
-            Detokenizer = corpus.Detokenizer;
-
-            return corpus;
-        }
-
-        public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV, ParallelCorpusId corpusId = null)
+        public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
         {
             try
             {
-                var corpus = await GetCorpus(corpusId);
-                var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), 0, 0);
-
-                return verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                if (corpusId == null)
+                {
+                    var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
+                    corpusId = corpusIds.First();
+                }
+                var corpus = await ParallelCorpus.Get(Mediator, corpusId);
+                Detokenizer = corpus.Detokenizer;
+#if DEBUG
+                stopwatch.Stop();
+                Logger.LogInformation($"Retrieved parallel corpus {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                return corpus;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task<EngineParallelTextRow?> GetVerseTextRow(int BBBCCCVVV, ParallelCorpusId corpusId = null)
+        {
+            try
+            {
+                var corpus = await GetParallelCorpus(corpusId);
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), 0, 0);
+                var row = verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved parallel corpus verse {BBBCCCVVV} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                return row;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
                 throw;
             }
         }
@@ -287,14 +347,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             try
             {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
                 var translationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator);
                 var translationSet = await TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
-
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved translation set {translationSet.TranslationSetId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
                 return translationSet;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task AddNoteToDatabase(Note note, IId entityId)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await note.CreateOrUpdate(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Added note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                stopwatch.Restart();
+#endif
+                await note.AssociateDomainEntity(Mediator, entityId);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Associated note {note.NoteId.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                if (note.Labels.Any())
+                {
+#if DEBUG
+                    stopwatch.Restart();
+#endif
+                    foreach (var label in note.Labels)
+                    {
+                        if (label.LabelId == null)
+                        {
+                            await label.CreateOrUpdate(Mediator);
+                        }
+                        await note.AssociateLabel(Mediator, label);
+                    }
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Associated labels with note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                }
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
                 throw;
             }
         }
@@ -304,11 +416,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             try
             {
 #if MOCK
-            var row = MockVerseTextRow(40001001);
-            VerseTokens = GetTokenDisplayViewModels(row.Tokens);
+                var row = MockVerseTextRow(40001001);
+                VerseTokens = GetTokenDisplayViewModels(row.Tokens);
 #else
-                await ProjectManager.LoadProject("SUR");
-                var row = await VerseTextRow(01001001);
+                await ProjectManager.LoadProject("EnhancedViewDemo");
+                var row = await GetVerseTextRow(01001001);
                 NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
                 CurrentTranslationSet = await GetTranslationSet();
                 CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
@@ -352,10 +464,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             TranslationPaneVisibility = Visibility.Visible;
             NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
 
-#if DEBUG
-            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
+            TranslationOptions = await GetTranslationOptions(e.Translation);
             NotifyOfPropertyChange(nameof(TranslationOptions));
-#endif
 
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
             NotifyOfPropertyChange(nameof(CurrentTranslationOption));
@@ -453,17 +563,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public async Task NoteAdded(NoteEventArgs e)
         {
 #if !MOCK
-            await e.Note.CreateOrUpdate(Mediator);
-            await e.Note.AssociateDomainEntity(Mediator, e.TokenDisplayViewModel.Token.TokenId);
-            foreach (var label in e.Note.Labels)
-            {
-                if (label.LabelId == null)
-                {
-                    await label.CreateOrUpdate(Mediator);
-                }
-                await e.Note.AssociateLabel(Mediator, label);
-            }
+            await AddNoteToDatabase(e.Note, e.EntityId);
 #endif
+            var token = VerseTokens.FirstOrDefault(vt => vt.Token.TokenId == e.EntityId);
+            if (token != null)
+            {
+                token.NoteAdded(e.Note);
+            }
+
             Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
             NotifyOfPropertyChange(nameof(Message));
 
