@@ -642,15 +642,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
-            //await ProjectManager.LoadProject("SUR");
             var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
             NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
             CurrentTranslationSet = await GetTranslationSet();
             CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
             var VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
             LabelSuggestions = await GetLabelSuggestions();
-            ObservableCollection<List<TokenDisplayViewModel>> verseOut =
-                new ObservableCollection<List<TokenDisplayViewModel>>();
+            var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
             verseOut.Add(VerseTokens);
 
 
@@ -671,7 +669,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
                 var guid = Guid.Parse(message.ParallelCorpusId);
                 var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First(p => p.Id == guid));
-                var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), 0, 0);
+                var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
 
                 // save out the corpus for future use
                 // _parallelProjects
