@@ -1282,7 +1282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var index = VersesDisplay.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
-            if (index == VersesDisplay.Count)
+            if (index == VersesDisplay.Count - 1)
             {
                 return;
             }
