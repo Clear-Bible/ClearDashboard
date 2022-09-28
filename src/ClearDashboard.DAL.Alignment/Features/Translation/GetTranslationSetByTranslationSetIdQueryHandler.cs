@@ -11,7 +11,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetTranslationSetByTranslationSetIdQueryHandler : ProjectDbContextQueryHandler<
         GetTranslationSetByTranslationSetIdQuery,
-        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>, //CHRIS? is this right? Why repeated?(next line)
+        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>,
         (TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>
     {
 

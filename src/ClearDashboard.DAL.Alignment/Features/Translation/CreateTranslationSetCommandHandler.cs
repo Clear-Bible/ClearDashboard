@@ -91,7 +91,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                                     Text = tts.Key,
                                     Score = tts.Value
                                 }).ToList()
-                        }).ToList() ?? new() //CHRIS?
+                        }).ToList() ?? new()
                 };
 
                 // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
@@ -136,7 +136,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 return new RequestResult<TranslationSet>(new TranslationSet(
                     ModelHelper.BuildTranslationSetId(translationSetFromDb, parallelCorpusId, translationSetFromDb.User!),
                     parallelCorpusId,
-                    request.alignmentSetId, //CHRIS? okay?
+                    request.alignmentSetId,
                     _mediator));
 
             }
@@ -157,7 +157,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         private DbCommand CreateTranslationSetInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "ParallelCorpusId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", "SmtModel", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "ParallelCorpusId", "AlignmentSetId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", "SmtModel", "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TranslationSet), columns);
 
@@ -172,6 +172,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             translationSetCommand.Parameters["@Id"].Value = translationSetId;
             translationSetCommand.Parameters["@ParallelCorpusId"].Value = translationSet.ParallelCorpusId;
+            translationSetCommand.Parameters["@AlignmentSetId"].Value = translationSet.AlignmentSetId;
             //translationSetCommand.Parameters["@DerivedFrom"].Value = translationSet.DerivedFrom;
             //translationSetCommand.Parameters["@EngineWordAlignmentId"].Value = translationSet.EngineWordAlignmentId;
             translationSetCommand.Parameters["@DisplayName"].Value = translationSet.DisplayName;

@@ -24,7 +24,7 @@ public class TranslationSet :  SynchronizableTimestampedEntity
 
     [ForeignKey("AlignmentSetId")]
     public virtual Guid AlignmentSetId { get; set; }
-    public virtual AlignmentSet? AlignmentSet { get; set; } //CHRIS? how does this work?
+    public virtual AlignmentSet? AlignmentSet { get; set; }
 
     public string? DisplayName { get; set; }
     //public string? SmtModel { get; set; }
