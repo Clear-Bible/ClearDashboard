@@ -21,6 +21,7 @@ using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -781,17 +782,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private ObservableCollection<Note> GetNotes(EngineToken token)
         {
-            return NotesDictionary.ContainsKey(token.TokenId) ? new ObservableCollection<Note>(NotesDictionary[token.TokenId])
+            var matches = NotesDictionary.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
+            return matches.Key != null
+                ? new ObservableCollection<Note>(matches.Value)
                 : new ObservableCollection<Note>();
         }
-
-
-
-
-
-
-
-
 
         private async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
             CancellationToken localCancellationToken)
@@ -1313,6 +1308,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return translation;
         }
 
+        public async Task AddNoteToDatabase(Note note, IId entityId)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await note.CreateOrUpdate(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Added note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                stopwatch.Restart();
+#endif
+                await note.AssociateDomainEntity(Mediator, entityId);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Associated note {note.NoteId.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                if (note.Labels.Any())
+                {
+#if DEBUG
+                    stopwatch.Restart();
+#endif
+                    foreach (var label in note.Labels)
+                    {
+                        if (label.LabelId == null)
+                        {
+                            await label.CreateOrUpdate(Mediator);
+                        }
+                        await note.AssociateLabel(Mediator, label);
+                    }
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Associated labels with note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                }
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+
+
         private Translation GetParallelTranslation(ClearBible.Engine.Corpora.Token token)
         {
             var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
@@ -1539,6 +1581,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             HideTranslation();
         }
 
+
         public void NoteAdded(object sender, NoteEventArgs e)
         {
             Task.Run(() => NoteAddedAsync(e).GetAwaiter());
@@ -1559,7 +1602,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await e.Note.AssociateLabel(Mediator, label);
             }
 
-            
+            await AddNoteToDatabase(e.Note, e.EntityId);
+
+            // TODO: notify the token that a note was added
+            //var token = VerseTokens.FirstOrDefault(vt => vt.Token.TokenId == e.EntityId);
+            //if (token != null)
+            //{
+            //    token.NoteAdded(e.Note);
+            //}
+
+            Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
+            NotifyOfPropertyChange(nameof(Message));
+
+            //e.TokenDisplayViewModel.Notes.Add(e.Note);
         }
 
         public async Task NoteUpdated(object sender, NoteEventArgs e)
