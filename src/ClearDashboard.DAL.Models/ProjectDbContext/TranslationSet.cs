@@ -12,17 +12,22 @@ public class TranslationSet :  SynchronizableTimestampedEntity
         Metadata = new Dictionary<string, object>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
-    [ForeignKey("EngineWordAlignmentId")]
-    public Guid? EngineWordAlignmentId { get; set; }
-    public virtual EngineWordAlignment? EngineWordAlignment { get; set; }
+    //[ForeignKey("EngineWordAlignmentId")]
+    //public Guid? EngineWordAlignmentId { get; set; }
+    //public virtual EngineWordAlignment? EngineWordAlignment { get; set; }
 
     public virtual TranslationSet? DerivedFrom { get; set; }
 
     [ForeignKey("ParallelCorpusId")]
     public virtual Guid ParallelCorpusId { get; set; }
     public virtual ParallelCorpus? ParallelCorpus { get; set; }
+
+    [ForeignKey("AlignmentSetId")]
+    public virtual Guid AlignmentSetId { get; set; }
+    public virtual AlignmentSet? AlignmentSet { get; set; } //CHRIS? how does this work?
+
     public string? DisplayName { get; set; }
-    public string? SmtModel { get; set; }
+    //public string? SmtModel { get; set; }
 
     [Column(TypeName = "jsonb")]
     public Dictionary<string, object> Metadata { get; set; }

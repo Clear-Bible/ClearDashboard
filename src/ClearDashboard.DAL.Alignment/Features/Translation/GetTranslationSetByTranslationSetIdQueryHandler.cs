@@ -11,8 +11,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetTranslationSetByTranslationSetIdQueryHandler : ProjectDbContextQueryHandler<
         GetTranslationSetByTranslationSetIdQuery,
-        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>,
-        (TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
+        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>, //CHRIS? is this right? Why repeated?(next line)
+        (TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>
     {
 
         public GetTranslationSetByTranslationSetIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationSetByTranslationSetIdQueryHandler> logger) 
@@ -20,7 +20,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
         }
 
-        protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
         {
             var translationSet = ProjectDbContext.TranslationSets
                 .Include(ts => ts.ParallelCorpus)
@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .FirstOrDefault();
             if (translationSet == null)
             {
-                return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
+                return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>
                 (
                     success: false,
                     message: $"TranslationSet not found for TranslationSetId '{request.TranslationSetId.Id}'"
@@ -46,10 +46,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
+            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSet)>
             ((
                 ModelHelper.BuildTranslationSetId(translationSet),
-                ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!)
+                ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!),
+                new AlignmentSetId(translationSet.AlignmentSetId!)
             ));
         }
     }
