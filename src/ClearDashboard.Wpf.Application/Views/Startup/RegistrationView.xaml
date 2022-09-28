@@ -8,10 +8,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
     Width="1010"
     Height="635"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     Background="White"
     Foreground="Black"
@@ -24,34 +24,38 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <Style x:Key="RegistrationTextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}" TargetType="{x:Type TextBox}">
+        <Style
+            x:Key="RegistrationTextBox"
+            BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}"
+            TargetType="{x:Type TextBox}">
             <Setter Property="Margin" Value="0,10" />
-            <Setter Property="Width" Value="500"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Width" Value="500" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
     </UserControl.Resources>
 
 
-    <Grid >
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal"
+        <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Margin="0,0,0,0">
+            Margin="0,0,0,0"
+            Orientation="Horizontal">
             <Image
                 Width="50"
                 Height="50"
-                HorizontalAlignment="Left"
                 Margin="20,0"
+                HorizontalAlignment="Left"
                 Source="../../Assets/ClearDashboard_logo_50.png" />
             <TextBlock
                 VerticalAlignment="Center"
@@ -59,7 +63,11 @@
                 Text="{helpers:Localization ProjectPicker_AppName}" />
 
         </StackPanel>
-        <Label Grid.Row="1" FontSize="24" Margin="20,5"  Content="{helpers:Localization RegistrationDialogViewModel_Welcome}"></Label>
+        <Label
+            Grid.Row="1"
+            Margin="20,5"
+            Content="{helpers:Localization RegistrationDialogViewModel_Welcome}"
+            FontSize="24" />
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"
@@ -88,8 +96,8 @@
                             <TextBlock
                                 MaxWidth="350"
                                 Margin="0"
-                                FontSize="16"
                                 HorizontalAlignment="Left"
+                                FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
@@ -121,8 +129,8 @@
                             <TextBlock
                                 MaxWidth="350"
                                 Margin="0"
-                                FontSize="16"
                                 HorizontalAlignment="Left"
+                                FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
@@ -134,13 +142,13 @@
 
             <TextBox
                 x:Name="LicenseKey"
-                MaxLines="4"
-                TextWrapping="Wrap"
-               materialDesign:HintAssist.FloatingScale="0.50"
+                materialDesign:HintAssist.FloatingScale="0.50"
                 materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
                 materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LicenseKey}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                Style="{DynamicResource RegistrationTextBox}">
+                MaxLines="4"
+                Style="{DynamicResource RegistrationTextBox}"
+                TextWrapping="Wrap">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -155,8 +163,8 @@
                             <TextBlock
                                 MaxWidth="350"
                                 Margin="0"
-                                FontSize="16"
                                 HorizontalAlignment="Left"
+                                FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
@@ -166,6 +174,22 @@
             </TextBox>
 
         </StackPanel>
+
+        <TextBlock
+            x:Name="MatchType"
+            Grid.Row="3"
+            Width="500"
+            MaxWidth="350"
+            Margin="20,10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            materialDesign:HintAssist.FloatingScale="0.50"
+            materialDesign:HintAssist.Foreground="{DynamicResource PrimaryHueDarkBrush}"
+            materialDesign:HintAssist.Hint="{helpers:Localization RegistrationView_LicenseKey}"
+            materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+            FontSize="16"
+            Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+            TextWrapping="Wrap" />
 
         <StackPanel
             Grid.Row="3"
@@ -186,6 +210,6 @@
                 Style="{StaticResource TransparentStyle}" />
 
         </StackPanel>
-       
+
     </Grid>
 </UserControl>

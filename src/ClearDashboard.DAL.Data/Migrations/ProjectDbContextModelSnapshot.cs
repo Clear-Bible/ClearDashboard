@@ -75,22 +75,16 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("SourceTokenComponentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("SourceTokenId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("TargetTokenComponentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("TargetTokenId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AlignmentSetId");
 
-                    b.HasIndex("SourceTokenId");
+                    b.HasIndex("SourceTokenComponentId");
 
-                    b.HasIndex("TargetTokenId");
+                    b.HasIndex("TargetTokenComponentId");
 
                     b.ToTable("Alignment");
                 });
@@ -608,9 +602,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<Guid>("SourceTokenComponentId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("SourceTokenId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("TargetText")
                         .HasColumnType("TEXT");
 
@@ -622,7 +613,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SourceTokenId");
+                    b.HasIndex("SourceTokenComponentId");
 
                     b.HasIndex("TranslationSetId");
 
@@ -886,13 +877,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasIndex("ChapterNumber");
 
-                    b.HasIndex("SubwordNumber");
-
                     b.HasIndex("TokenCompositeId");
 
-                    b.HasIndex("VerseNumber");
+                    b.HasIndex("TrainingText");
 
-                    b.HasIndex("WordNumber");
+                    b.HasIndex("VerseNumber");
 
                     b.ToTable("TokenComponent", (string)null);
 
@@ -949,11 +938,15 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "SourceTokenComponent")
                         .WithMany("SourceAlignments")
-                        .HasForeignKey("SourceTokenId");
+                        .HasForeignKey("SourceTokenComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "TargetTokenComponent")
                         .WithMany("TargetAlignments")
-                        .HasForeignKey("TargetTokenId");
+                        .HasForeignKey("TargetTokenComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AlignmentSet");
 
@@ -1208,7 +1201,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "SourceTokenComponent")
                         .WithMany("Translations")
-                        .HasForeignKey("SourceTokenId");
+                        .HasForeignKey("SourceTokenComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TranslationSet", "TranslationSet")
                         .WithMany("Translations")

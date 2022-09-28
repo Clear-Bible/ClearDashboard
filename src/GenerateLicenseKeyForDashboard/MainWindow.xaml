@@ -1,0 +1,193 @@
+﻿<Window
+    x:Class="GenerateLicenseKeyForDashboard.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:GenerateLicenseKeyForDashboard"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Classic"
+    x:Name="TheWindow"
+    Title="License Key Manager"
+    Width="1100"
+    Height="600"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Style x:Key="TextBoxAsLabel" TargetType="{x:Type TextBox}">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="AllowDrop" Value="False" />
+            <Setter Property="FontFamily" Value="Arial" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <themes:ClassicBorderDecorator
+                            x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderStyle="Sunken"
+                            BorderThickness="0">
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                BorderBrush="Transparent"
+                                BorderThickness="0" />
+                        </themes:ClassicBorderDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsReadOnly" Value="true">
+                                <Setter TargetName="Bd" Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="BorderThickness" Value="0,0,0,0" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Width="1000">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" Orientation="Vertical">
+            <TextBlock
+                Margin="10"
+                FontSize="24"
+                Text="GENERATE LICENSE KEY" />
+            <TextBlock
+                Name="FirstNameBlock"
+                Margin="10"
+                Text="First Name" />
+            <TextBox
+                Name="FirstNameBox"
+                Margin="10"
+                materialDesign:HintAssist.Hint="Enter first name here." />
+            <TextBlock
+                Name="LastNameBlock"
+                Margin="10"
+                Text="Last Name" />
+            <TextBox
+                Name="LastNameBox"
+                Margin="10"
+                materialDesign:HintAssist.Hint="Enter last name here." />
+            <Button
+                Margin="10"
+                Click="GenerateLicenseKey_OnClick"
+                Content="Generate license key!" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Name="GeneratedLicenseKeyBlock"
+                    Margin="10"
+                    Text="Generated License Key" />
+                <Button
+                    Name="Copy"
+                    Click="Copy_OnClick"
+                    Content="Copy license key to clipboard." />
+            </StackPanel>
+            <TextBox
+                Name="GeneratedLicenseKeyBox"
+                Margin="10"
+                FontSize="20"
+                Foreground="Gray"
+                IsReadOnly="True"
+                Style="{StaticResource TextBoxAsLabel}"
+                Text="Your license key will appear here." />
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <TextBlock
+                Margin="10"
+                FontSize="24"
+                Text="DECRYPT LICENSE KEY" />
+            <TextBlock
+                Name="LicenseKeyDecryptionBlock"
+                Margin="10"
+                Text="License Key" />
+            <TextBox
+                Name="LicenseKeyDecryptionBox"
+                Margin="10"
+                materialDesign:HintAssist.Hint="Enter license key here." />
+            <Button
+                Margin="10"
+                Click="DecryptLicenseKey_OnClick"
+                Content="Decrypt License Key!" />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Name="DecryptedFirstNameBlock"
+                    Margin="10"
+                    Text="Decrypted First Name" />
+                <Button
+                    Name="CopyDecryptedFirstName"
+                    Click="Copy_OnClick"
+                    Content="Copy first name to clipboard." />
+            </StackPanel>
+            <TextBox
+                Name="DecryptedFirstNameBox"
+                Margin="10"
+                FontSize="20"
+                Foreground="Gray"
+                IsReadOnly="True"
+                Style="{StaticResource TextBoxAsLabel}"
+                Text="Your first name will appear here." />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Name="DecryptedLastNameBlock"
+                    Margin="10"
+                    Text="Decrypted Last Name" />
+                <Button
+                    Name="CopyDecryptedLastName"
+                    Click="Copy_OnClick"
+                    Content="Copy last name to clipboard." />
+            </StackPanel>
+            <TextBox
+                Name="DecryptedLastNameBox"
+                Margin="10"
+                FontSize="20"
+                Foreground="Gray"
+                IsReadOnly="True"
+                Style="{StaticResource TextBoxAsLabel}"
+                Text="Your first name will appear here." />
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock
+                    Name="DecryptedGuidBlock"
+                    Margin="10"
+                    Text="Decrypted User Id" />
+                <Button
+                    Name="CopyDecryptedGuid"
+                    Click="Copy_OnClick"
+                    Content="Copy guid to clipboard." />
+            </StackPanel>
+            <TextBox
+                Name="DecryptedGuidBox"
+                Margin="10"
+                FontSize="20"
+                Foreground="Gray"
+                IsReadOnly="True"
+                Style="{StaticResource TextBoxAsLabel}"
+                Text="Your guid will appear here." />
+        </StackPanel>
+
+
+
+    </Grid>
+</Window>

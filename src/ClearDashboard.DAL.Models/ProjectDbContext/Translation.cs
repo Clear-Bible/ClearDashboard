@@ -12,6 +12,6 @@ public class Translation : IdentifiableEntity
     public Guid TranslationSetId { get; set; }
     public virtual TranslationSet? TranslationSet { get; set; }
 
-    [ForeignKey("SourceTokenId")]
+    [ForeignKey("SourceTokenComponentId")]
     public virtual TokenComponent? SourceTokenComponent { get; set; }
 }

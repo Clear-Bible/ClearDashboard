@@ -20,18 +20,24 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 
     }
 
-    public SmtModelStepViewModel(DashboardProjectManager projectManager,
+    public SmtModelStepViewModel( DialogMode dialogMode,  DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
         IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
-
+        DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
         CanTrain = true;
     }
 
+    private DialogMode _dialogMode;
+    public DialogMode DialogMode
+    {
+        get => _dialogMode;
+        set => Set(ref _dialogMode, value);
+    }
 
     public bool CanTrain
 
