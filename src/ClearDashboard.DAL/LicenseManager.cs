@@ -37,6 +37,20 @@ namespace ClearDashboard.DataAccessLayer
         public static void EncryptToFile(LicenseUser licenseUser, string path)
         {
 
+            var str = EncryptToString(licenseUser, path);
+
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            File.WriteAllText(Path.Combine(path, "license.txt"), str);
+
+        }
+
+        public static string EncryptToString(LicenseUser licenseUser, string path)
+        {
+
             var cryptProvider = CreateCryptoProvider();
 
             var transform = cryptProvider.CreateEncryptor();
@@ -46,12 +60,7 @@ namespace ClearDashboard.DataAccessLayer
             var encryptedBytes = transform.TransformFinalBlock(decryptedBytes, 0, decryptedBytes.Length);
             var str = Convert.ToBase64String(encryptedBytes);
 
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            File.WriteAllText(Path.Combine(path, "license.txt"), str);
+            return str;
 
         }
 
