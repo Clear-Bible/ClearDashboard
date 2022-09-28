@@ -1207,7 +1207,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
 
-            var row = VersesDisplay.First(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
+            var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
             if (row is null)
             {
                 VersesDisplay.Add(new Models.VersesDisplay
