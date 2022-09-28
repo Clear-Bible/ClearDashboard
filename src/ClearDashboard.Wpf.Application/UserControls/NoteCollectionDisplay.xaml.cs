@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 
@@ -18,7 +21,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A user control that displays a collection of <see cref="Note"/> instances.
     /// </summary>
-    public partial class NoteCollectionDisplay : UserControl
+    public partial class NoteCollectionDisplay : UserControl, INotifyPropertyChanged
     {
         #region Static Routed Events
         /// <summary>
@@ -171,7 +174,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteAdded(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteAddedEvent, e as NoteEventArgs);
+            var args = e as NoteEventArgs;
+            Notes.Add(args.Note);
+            NewNote = new Note();
+
+            OnPropertyChanged(nameof(Notes));
+            OnPropertyChanged(nameof(NewNote));
+
+            RaiseNoteEvent(NoteAddedEvent, args);
         }
 
         private void OnNoteUpdated(object sender, RoutedEventArgs e)
@@ -192,6 +202,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelAddedEvent, e as LabelEventArgs);
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         #endregion
@@ -381,11 +397,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(CloseRequestedEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when a property changes.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+
         #endregion
 
         public NoteCollectionDisplay()
         {
             InitializeComponent();
         }
+
     }
 }
