@@ -38,6 +38,7 @@ using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using TranslationSet = ClearDashboard.DataAccessLayer.Models.TranslationSet;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -1307,10 +1308,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var row = obj as VersesDisplay;
 
+            // remove from the display
             var index = VersesDisplay.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
             VersesDisplay.RemoveAt(index);
+
+
+            // remove stored collection
+            var tokenProject  = _tokenProjects.FirstOrDefault(x => x.CorpusId==row.CorpusId);
+            if (tokenProject is not null)
+            {
+                _tokenProjects.Remove(tokenProject);
+            }
+            
+            // remove stored message
+            var tokenMessage = _projectMessages.FirstOrDefault(x => x.CorpusId == row.CorpusId);
+            if (tokenMessage is not null)
+            {
+                _projectMessages.Remove(tokenMessage);
+            }
+            
         }
 
 

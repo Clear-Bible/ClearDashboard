@@ -387,6 +387,7 @@
 
                             <Border
                                 Grid.Column="1"
+                                Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='20'}"
                                 BorderBrush="{Binding BorderColor}"
                                 BorderThickness="3"
                                 CornerRadius="4">
@@ -394,28 +395,29 @@
                                     <StackPanel Orientation="Horizontal">
 
                                         <Button
-                                            VerticalAlignment="Center"
                                             Width="20"
                                             Height="20"
-                                            Margin="3 0 0 0"
+                                            Margin="3,0,0,0"
+                                            VerticalAlignment="Center"
                                             Command="{Binding ElementName=OuterListView, Path=DataContext.DeleteCorpusRowCommand}"
                                             CommandParameter="{Binding}">
                                             <Button.Style>
-                                                <Style BasedOn="{StaticResource MaterialDesignFloatingActionMiniSecondaryLightButton}" TargetType="{x:Type Button}">
+                                                <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
                                                     <Setter Property="Padding" Value="0" />
                                                 </Style>
                                             </Button.Style>
                                             <materialDesign:PackIcon
                                                 Width="20"
                                                 Height="20"
-                                                Foreground="{StaticResource RedDarkBrush}"
-                                                Kind="Close" />
+                                                Foreground="{StaticResource RedVeryDarkBrush}"
+                                                Kind="Close"
+                                                ToolTip="Remove Corpus" />
                                         </Button>
                                         <TextBlock
-                                            VerticalAlignment="Center"
-                                            FontWeight="Bold"
                                             Margin="8,0,0,0"
+                                            VerticalAlignment="Center"
                                             FontSize="16"
+                                            FontWeight="Bold"
                                             Text="{Binding RowTitle}" />
 
                                     </StackPanel>
@@ -440,6 +442,7 @@
                                                     <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
                                                     <userControls:VerseDisplay
                                                         Title=""
+                                                        Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                                         FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         IsEnabled="True"
@@ -454,8 +457,7 @@
                                                         TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                         TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" 
-                                                        Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}">
+                                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="TokenMouseEnter">
                                                                 <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
