@@ -75,23 +75,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             ProcessStatus = ProcessStatus.NotStarted;
         }
 
-        public ParallelCorpusDialogViewModel(DashboardProjectManager? projectManager, INavigationService navigationService, ILogger<ParallelCorpusDialogViewModel> logger,
+        //parameters.Add(new NamedParameter("dialogMode", DialogMode.Add));
+        //parameters.Add(new NamedParameter("connectionViewModel", newConnection));
+        //parameters.Add(new NamedParameter("sourceCorpusNodeViewModel", sourceCorpusNode));
+        //parameters.Add(new NamedParameter("targetCorpusNodeViewModel", targetCorpusNode));
+
+        public ParallelCorpusDialogViewModel(DialogMode dialogMode, ConnectionViewModel connectionViewModel, CorpusNodeViewModel sourceCorpusNodeViewModel, CorpusNodeViewModel targetCorpusNodeViewModel, DashboardProjectManager? projectManager, INavigationService navigationService, ILogger<ParallelCorpusDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             CanOk = true;
             DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger);
 
-            //ParallelCorpus = new ParallelCorpus();
+            DialogMode = dialogMode;
+            ConnectionViewModel = connectionViewModel;
+            SourceCorpusNodeViewModel = sourceCorpusNodeViewModel;
+            TargetCorpusNodeViewModel = targetCorpusNodeViewModel;
+
             ProcessStatus = ProcessStatus.NotStarted;
             SelectedSmtAlgorithm = SmtModelType.FastAlign;
         }
-
-        //private ParallelCorpus _parallelCorpus;
-        //public ParallelCorpus ParallelCorpus
-        //{
-        //    get => _parallelCorpus;
-        //    private init => Set(ref _parallelCorpus, value);
-        //}
 
         public CorpusNodeViewModel SourceCorpusNodeViewModel
         {
@@ -123,12 +125,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            var views = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("ParallelCorpusDialog", "Order").ToArray();
+
+            var parameters = new List<Autofac.Core.Parameter> { new NamedParameter("dialogMode", DialogMode) };
+            var views = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("ParallelCorpusDialog", parameters, "Order").ToArray();
 
             if (views == null || !views.Any())
             {
                 throw new DependencyRegistrationMissingException(
-                    "There are no dependency inject registrations of 'IWorkflowStepViewModel' with the key of 'ParallelCorpusDialog'.  Please check the dependency registration in your bootstrapper implementation.");
+                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'ParallelCorpusDialog'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
             foreach (var view in views)

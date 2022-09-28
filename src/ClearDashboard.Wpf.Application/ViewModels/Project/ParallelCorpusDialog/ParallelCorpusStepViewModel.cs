@@ -27,11 +27,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
 
-        public ParallelCorpusStepViewModel(DashboardProjectManager projectManager,
+        public ParallelCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ParallelCorpusStepViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpusStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
+            DialogMode = dialogMode;
             CanMoveForwards = false;
             CanMoveBackwards = false;
             EnableControls = true;
@@ -60,6 +61,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             ParallelCorpusDisplayName =
                 $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name}";
             return base.OnActivateAsync(cancellationToken);
+        }
+
+        private DialogMode _dialogMode;
+        public DialogMode DialogMode
+        {
+            get => _dialogMode;
+            set => Set(ref _dialogMode, value);
         }
 
         private bool _canOk;

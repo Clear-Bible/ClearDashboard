@@ -15,19 +15,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, AlignmentSetStepViewModel>
 {
-
+   
 
     public AlignmentSetStepViewModel()
     {
 
     }
 
-    public AlignmentSetStepViewModel(DashboardProjectManager projectManager,
+    public AlignmentSetStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<AlignmentSetStepViewModel> logger, IEventAggregator eventAggregator,
         IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<AlignmentSetStepViewModel> validator)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
     {
 
+        DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
         CanOk = true;
@@ -35,6 +36,13 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
 
         CanAdd = false;
 
+    }
+
+    private DialogMode _dialogMode;
+    public DialogMode DialogMode
+    {
+        get => _dialogMode;
+        set => Set(ref _dialogMode, value);
     }
 
     private bool _canAdd;
@@ -70,6 +78,8 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
     }
 
     private bool _canOk;
+    
+
     public bool CanOk
     {
         get => _canOk;
