@@ -75,36 +75,36 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
         System.Windows.Application.Current.Shutdown();
     }
 
-    public async void Register()
-    {
-        try
-        {
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
+    //public async void Register()
+    //{
+    //    try
+    //    {
+    //        var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    //        File.Delete(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"));
 
-            var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
-            var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
+    //        var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
+    //        var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
 
-            LicenseUser givenLicenseUser = new LicenseUser();
-            givenLicenseUser.FirstName = _registrationViewModel.FirstName;
-            givenLicenseUser.LastName = _registrationViewModel.LastName;
-            //givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
+    //        LicenseUser givenLicenseUser = new LicenseUser();
+    //        givenLicenseUser.FirstName = _registrationViewModel.FirstName;
+    //        givenLicenseUser.LastName = _registrationViewModel.LastName;
+    //        //givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
-            bool match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
-            if (match)
-            {
-                File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
-                await TryCloseAsync(true);
-            }
-            else
-            {
-                MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", _logger));
-            }
-        }
+    //        bool match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
+    //        if (match)
+    //        {
+    //            File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
+    //            await TryCloseAsync(true);
+    //        }
+    //        else
+    //        {
+    //            MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", _logger));
+    //        }
+    //    }
 
-        catch (Exception)
-        {
-            MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_FaultyKey", _logger));
-        }
-    }
+    //    catch (Exception)
+    //    {
+    //        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_FaultyKey", _logger));
+    //    }
+    //}
 }

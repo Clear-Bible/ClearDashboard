@@ -72,6 +72,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(nameof(LicenseUser));
             }
         }
+
+        private string _matchType;
+        public string MatchType
+        {
+            get { return _matchType; }
+            set => Set(ref _matchType, value);
+        }
         #endregion
 
         #region Constructor
@@ -139,16 +146,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 };
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
-                bool match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
-                if (match)
+                var match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
+                LicenseUser.MatchType = match;
+
+                ValidationResult validationResult;
+                switch (match)
                 {
-                    await File.WriteAllTextAsync(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
-                    await MoveForwards();
-                    await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
-                }
-                else
-                {
-                    MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", Logger));
+                    case LicenseUserMatchType.Match:
+                        File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
+                        await MoveForwards();
+                        await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
+                        break;
+                    case LicenseUserMatchType.BothNameMismatch:
+                        MatchType = "Both the first name and last name are wrong.";
+                        //validationResult = Validator.Validate(givenLicenseUser);
+                        break;
+                    case LicenseUserMatchType.FirstNameMismatch:
+                        MatchType = "The first name is wrong.";
+                        //validationResult = Validator.Validate(givenLicenseUser);
+                        break;
+                    case LicenseUserMatchType.LastNameMismatch:
+                        MatchType = "The last name is wrong.";
+                        //validationResult = Validator.Validate(givenLicenseUser);
+                        break;
+                    case LicenseUserMatchType.Error:
+                        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", Logger));
+                        break;
+                    default:
+                        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", Logger));
+                        break;
                 }
             }
 
