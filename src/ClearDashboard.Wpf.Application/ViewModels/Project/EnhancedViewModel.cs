@@ -51,14 +51,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Commands
 
-        public ICommand MoveCorpusDownRow0 { get; set; }
-        public ICommand MoveCorpusDownRow1 { get; set; }
-        public ICommand MoveCorpusDownRow2 { get; set; }
-
-        public ICommand MoveCorpusUpRow1 { get; set; }
-        public ICommand MoveCorpusUpRow2 { get; set; }
-        public ICommand MoveCorpusUpRow3 { get; set; }
-
+        public ICommand MoveCorpusDownRow { get; set; }
+        public ICommand MoveCorpusUpRow { get; set; }
 
 
         #endregion
@@ -83,8 +77,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public List<TokenProject> _tokenProjects = new();
         public List<ParallelCorpus> _parallelProjects = new();
-        public List<ShowTokenizationWindowMessage> _projectMessages = new();
-        public List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
+        //public List<ShowTokenizationWindowMessage> _projectMessages = new();
+        //public List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
 
         public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
@@ -311,13 +305,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ProgressBarVisibility = Visibility.Collapsed;
 
 
-            MoveCorpusDownRow0 = new RelayCommand(MoveCorpusDown0);
-            MoveCorpusDownRow1 = new RelayCommand(MoveCorpusDown1);
-            MoveCorpusDownRow2 = new RelayCommand(MoveCorpusDown2);
-
-            MoveCorpusUpRow1 = new RelayCommand(MoveCorpusUp1);
-            MoveCorpusUpRow2 = new RelayCommand(MoveCorpusUp2);
-            MoveCorpusUpRow3 = new RelayCommand(MoveCorpusUp3);
+            MoveCorpusDownRow = new RelayCommand(MoveCorpusDown);
+            MoveCorpusUpRow = new RelayCommand(MoveCorpusUp);
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -1172,16 +1161,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             for (int i = 0; i < 4; i++)
             {
-                if (VersesDisplay.Row0Verses.Count == 0 ||
-                    VersesDisplay.Row0CorpusId == message.CorpusId)
+                if (VersesDisplay.Verses.Count == 0 ||
+                    VersesDisplay.CorpusId == message.CorpusId)
                 {
-                    VersesDisplay.Row0CorpusId = message.CorpusId;
-                    VersesDisplay.Row0Title = title;
-                    VersesDisplay.Row0Verses = verses;
-                    VersesDisplay.Row0Visibility = Visibility.Visible;
-                    VersesDisplay.Row0ShowTranslation = ShowTranslations;
+                    VersesDisplay.CorpusId = message.CorpusId;
+                    VersesDisplay.RowTitle = title;
+                    VersesDisplay.Verses = verses;
+                    VersesDisplay.Visibility = Visibility.Visible;
+                    VersesDisplay.ShowTranslation = ShowTranslations;
 #pragma warning disable CS8601
-                    VersesDisplay.Row0BorderColor = brush;
+                    VersesDisplay.BorderColor = brush;
 #pragma warning restore CS8601
                     break;
                 } else if (VersesDisplay.Row1Verses.Count == 0 || 
@@ -1234,16 +1223,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             for (int i = 0; i < 4; i++)
             {
-                if (VersesDisplay.Row0Verses.Count == 0 ||
-                    VersesDisplay.Row0CorpusId == Guid.Parse(message.ParallelCorpusId))
+                if (VersesDisplay.Verses.Count == 0 ||
+                    VersesDisplay.CorpusId == Guid.Parse(message.ParallelCorpusId))
                 {
-                    VersesDisplay.Row0CorpusId = Guid.Parse(message.ParallelCorpusId);
-                    VersesDisplay.Row0Title = title;
-                    VersesDisplay.Row0Verses = verses;
-                    VersesDisplay.Row0Visibility = Visibility.Visible;
-                    VersesDisplay.Row0ShowTranslation = ShowTranslations;
+                    VersesDisplay.CorpusId = Guid.Parse(message.ParallelCorpusId);
+                    VersesDisplay.RowTitle = title;
+                    VersesDisplay.Verses = verses;
+                    VersesDisplay.Visibility = Visibility.Visible;
+                    VersesDisplay.ShowTranslation = ShowTranslations;
 #pragma warning disable CS8601
-                    VersesDisplay.Row0BorderColor = brush;
+                    VersesDisplay.BorderColor = brush;
 #pragma warning restore CS8601
                     break;
                 }
@@ -1329,32 +1318,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private void MoveCorpusDown0(object obj)
+        private void MoveCorpusDown(object obj)
         {
             SwitchCorpusRowsDown(0);
         }
-        private void MoveCorpusDown1(object obj)
-        {
-            SwitchCorpusRowsDown(1);
-        }
-        private void MoveCorpusDown2(object obj)
-        {
-            SwitchCorpusRowsDown(2);
-        }
-
-        private void MoveCorpusUp1(object obj)
+        private void MoveCorpusUp(object obj)
         {
             SwitchCorpusRowsUp(1);
-        }
-
-        private void MoveCorpusUp2(object obj)
-        {
-            SwitchCorpusRowsUp(2);
-        }
-
-        private void MoveCorpusUp3(object obj)
-        {
-            SwitchCorpusRowsUp(3);
         }
 
         private void SwitchCorpusRowsUp(int i)
@@ -1366,13 +1336,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             switch (i)
             {
                 case 1:
-                    temp = VersesDisplay.Row0Verses;
-                    tmpBrush = VersesDisplay.Row0BorderColor;
-                    tmpTitle = VersesDisplay.Row0Title;
+                    temp = VersesDisplay.Verses;
+                    tmpBrush = VersesDisplay.BorderColor;
+                    tmpTitle = VersesDisplay.RowTitle;
 
-                    VersesDisplay.Row0Verses = VersesDisplay.Row1Verses;
-                    VersesDisplay.Row0BorderColor = VersesDisplay.Row1BorderColor;
-                    VersesDisplay.Row0Title = VersesDisplay.Row1Title;
+                    VersesDisplay.Verses = VersesDisplay.Row1Verses;
+                    VersesDisplay.BorderColor = VersesDisplay.Row1BorderColor;
+                    VersesDisplay.RowTitle = VersesDisplay.Row1Title;
 
                     VersesDisplay.Row1Verses = temp;
                     VersesDisplay.Row1BorderColor = tmpBrush;
@@ -1424,13 +1394,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     if (VersesDisplay.Row1Verses.Count > 0)
                     {
-                        temp = VersesDisplay.Row0Verses;
-                        tmpBrush = VersesDisplay.Row0BorderColor;
-                        tmpTitle = VersesDisplay.Row0Title;
+                        temp = VersesDisplay.Verses;
+                        tmpBrush = VersesDisplay.BorderColor;
+                        tmpTitle = VersesDisplay.RowTitle;
 
-                        VersesDisplay.Row0Verses = VersesDisplay.Row1Verses;
-                        VersesDisplay.Row0BorderColor = VersesDisplay.Row1BorderColor;
-                        VersesDisplay.Row0Title = VersesDisplay.Row1Title;
+                        VersesDisplay.Verses = VersesDisplay.Row1Verses;
+                        VersesDisplay.BorderColor = VersesDisplay.Row1BorderColor;
+                        VersesDisplay.RowTitle = VersesDisplay.Row1Title;
 
                         VersesDisplay.Row1Verses = temp;
                         VersesDisplay.Row1BorderColor = tmpBrush;
