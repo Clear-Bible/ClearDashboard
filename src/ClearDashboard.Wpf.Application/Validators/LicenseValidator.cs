@@ -44,8 +44,6 @@ namespace ClearDashboard.Wpf.Application.Validators
             RuleFor(x => x.LicenseKey)
                 .NotEmpty()
                 .WithMessage(LocalizationStrings.Get("LicenseValidator_LicenseMissing", _logger));
-
-            //RuleFor(x => x.MatchType).NotEqual(LicenseUserMatchType.FirstNameMismatch).WithMessage("First name mismatch.");
         }
 
     }

@@ -148,8 +148,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 var match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
                 LicenseUser.MatchType = match;
-
-                ValidationResult validationResult;
+                
                 switch (match)
                 {
                     case LicenseUserMatchType.Match:
@@ -158,22 +157,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                         await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
                         break;
                     case LicenseUserMatchType.BothNameMismatch:
-                        MatchType = "Both the first name and last name are wrong.";
-                        //validationResult = Validator.Validate(givenLicenseUser);
+                        MatchType = "The license key does not match either name provided.";
                         break;
                     case LicenseUserMatchType.FirstNameMismatch:
-                        MatchType = "The first name is wrong.";
-                        //validationResult = Validator.Validate(givenLicenseUser);
+                        MatchType = "Your first name does not match the license key.";
                         break;
                     case LicenseUserMatchType.LastNameMismatch:
-                        MatchType = "The last name is wrong.";
-                        //validationResult = Validator.Validate(givenLicenseUser);
+                        MatchType = "Your last name does not match the license key.";
                         break;
                     case LicenseUserMatchType.Error:
-                        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", Logger));
+                        MatchType = "There is an unknown issue with your license key.";
                         break;
                     default:
-                        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", Logger));
+                        MatchType = "License key comparison is null.";
                         break;
                 }
             }

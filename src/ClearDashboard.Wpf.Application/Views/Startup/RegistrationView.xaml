@@ -178,8 +178,9 @@
         <TextBlock
             x:Name="MatchType"
             Grid.Row="3"
+            Width="500"
             MaxWidth="350"
-            Margin="0"
+            Margin="20,10"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             materialDesign:HintAssist.FloatingScale="0.50"
