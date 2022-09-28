@@ -25,17 +25,24 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
 
     }
 
-    public TranslationSetStepViewModel(DashboardProjectManager projectManager,
+    public TranslationSetStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<TranslationSetStepViewModel> logger, IEventAggregator eventAggregator,
         IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<TranslationSetStepViewModel> validator)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
     {
-
+        DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
         CanAdd = false;
 
+    }
+
+    private DialogMode _dialogMode;
+    public DialogMode DialogMode
+    {
+        get => _dialogMode;
+        set => Set(ref _dialogMode, value);
     }
 
     public bool CanAdd

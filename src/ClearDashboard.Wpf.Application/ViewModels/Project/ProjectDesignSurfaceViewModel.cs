@@ -472,7 +472,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             JsonSerializerOptions options = new()
             {
                 IncludeFields = true,
-                WriteIndented = true
+                WriteIndented = false
             };
             _projectManager.CurrentProject.DesignSurfaceLayout = JsonSerializer.Serialize(surface, options);
 
@@ -1418,17 +1418,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public async void TrainSmtModel()
-        {
-            var dialogViewModel = IoC.Get<SmtModelDialogViewModel>();
+        //public async void TrainSmtModel()
+        //{
+        //    var dialogViewModel = IoC.Get<SmtModelDialogViewModel>();
 
-            if (dialogViewModel is IDialog dialog)
-            {
-                dialog.DialogMode = DialogMode.Add;
-            }
+        //    if (dialogViewModel is IDialog dialog)
+        //    {
+        //        dialog.DialogMode = DialogMode.Add;
+        //    }
 
-            var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
-        }
+        //    var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+        //}
 
         public async Task AddParallelCorpus(ConnectionViewModel newConnection)
         {
@@ -1458,17 +1458,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     $"Cannot find the target TokenizedTextCorpusId associated to Corpus with Id '{newConnection.DestinationConnector.ParentNode.CorpusId}'.");
             }
 
-            var dialogViewModel = IoC.Get<ParallelCorpusDialogViewModel>();
-            dialogViewModel.ConnectionViewModel = newConnection;
-            dialogViewModel.SourceCorpusNodeViewModel = sourceCorpusNode;
-            dialogViewModel.TargetCorpusNodeViewModel = targetCorpusNode;
-
-
-
-            if (dialogViewModel is IDialog dialog)
+            var parameters = new List<Autofac.Core.Parameter>
             {
-                dialog.DialogMode = DialogMode.Add;
-            }
+                new NamedParameter("dialogMode", DialogMode.Add),
+                new NamedParameter("connectionViewModel", newConnection),
+                new NamedParameter("sourceCorpusNodeViewModel", sourceCorpusNode),
+                new NamedParameter("targetCorpusNodeViewModel", targetCorpusNode)
+            };
+
+            var dialogViewModel = LifetimeScope?.Resolve<ParallelCorpusDialogViewModel>(parameters);
+
+            ////var dialogViewModel = IoC.Get<ParallelCorpusDialogViewModel>();
+            //dialogViewModel.ConnectionViewModel = newConnection;
+            //dialogViewModel.SourceCorpusNodeViewModel = sourceCorpusNode;
+            //dialogViewModel.TargetCorpusNodeViewModel = targetCorpusNode;
+
+
+
+            //if (dialogViewModel is IDialog dialog)
+            //{
+            //    dialog.DialogMode = DialogMode.Add;
+            //}
 
             var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
 

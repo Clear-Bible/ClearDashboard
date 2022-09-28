@@ -1,0 +1,275 @@
+﻿<Application
+    x:Class="GenerateLicenseKeyForDashboard.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:GenerateLicenseKeyForDashboard"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary x:Uid="ResourceDictionary_1">
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme
+                    BaseTheme="Dark"
+                    PrimaryColor="DeepPurple"
+                    SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+
+                <ResourceDictionary x:Uid="ResourceDictionary_6">
+                    <!--  Additional Design Colors - DARK  -->
+                    <Brush x:Key="BlueLightBrush" x:Uid="Brush_1">#9DBFF8</Brush>
+                    <Brush x:Key="BlueMidBrush" x:Uid="Brush_2">#5B8DEE</Brush>
+                    <Brush x:Key="BlueDarkBrush" x:Uid="Brush_3">#0063F8</Brush>
+                    <Brush x:Key="BlueVeryDarkBrush" x:Uid="Brush_4">#002D74</Brush>
+
+                    <Brush x:Key="RedLightBrush" x:Uid="Brush_5">#FE807F</Brush>
+                    <Brush x:Key="RedMidBrush" x:Uid="Brush_6">#FF5C5C</Brush>
+                    <Brush x:Key="RedDarkBrush" x:Uid="Brush_7">#FF3A3B</Brush>
+                    <Brush x:Key="RedVeryDarkBrush" x:Uid="Brush_8">#880000</Brush>
+
+                    <Brush x:Key="GreenLightBrush" x:Uid="Brush_9">#57EBA3</Brush>
+                    <Brush x:Key="GreenMidBrush" x:Uid="Brush_10">#39DA8A</Brush>
+                    <Brush x:Key="GreenDarkBrush" x:Uid="Brush_11">#05C270</Brush>
+                    <Brush x:Key="GreenVeryDarkBrush" x:Uid="Brush_12">#027843</Brush>
+
+                    <Brush x:Key="OrangeLightBrush" x:Uid="Brush_13">#FCCC76</Brush>
+                    <Brush x:Key="OrangeMidBrush" x:Uid="Brush_14">#FDAC41</Brush>
+                    <Brush x:Key="OrangeDarkBrush" x:Uid="Brush_15">#FF8801</Brush>
+                    <Brush x:Key="OrangeVeryDarkBrush" x:Uid="Brush_16">#AE5E00</Brush>
+
+                    <Brush x:Key="YellowLightBrush" x:Uid="Brush_17">#FEED73</Brush>
+                    <Brush x:Key="YellowMidBrush" x:Uid="Brush_18">#FEDD49</Brush>
+                    <Brush x:Key="YellowDarkBrush" x:Uid="Brush_19">#FFCC00</Brush>
+                    <Brush x:Key="YellowVeryDarkBrush" x:Uid="Brush_20">#967800</Brush>
+
+
+                    <Brush x:Key="TealLightBrush" x:Uid="Brush_21">#A9EFF3</Brush>
+                    <Brush x:Key="TealMidBrush" x:Uid="Brush_22">#74E0E6</Brush>
+                    <Brush x:Key="TealDarkBrush" x:Uid="Brush_23">#00CFDD</Brush>
+                    <Brush x:Key="TealVeryDarkBrush" x:Uid="Brush_24">#00737C</Brush>
+
+                    <Brush x:Key="BlueVioletLightBrush" x:Uid="Brush_25">#879BCE</Brush>
+                    <Brush x:Key="BlueVioletMidBrush" x:Uid="Brush_26">#6783C2</Brush>
+                    <Brush x:Key="BlueVioletDarkBrush" x:Uid="Brush_27">#436FB6</Brush>
+
+                    <Brush x:Key="IndigoLightBrush" x:Uid="Brush_28">#6600FF</Brush>
+                    <Brush x:Key="IndigoMidBrush" x:Uid="Brush_29">#5200CC</Brush>
+                    <Brush x:Key="IndigoDarkBrush" x:Uid="Brush_30">#3C0099</Brush>
+
+                    <Brush x:Key="PurpleLightBrush" x:Uid="Brush_31">#DEA5E8</Brush>
+                    <Brush x:Key="PurpleMidBrush" x:Uid="Brush_32">#AC5CD9</Brush>
+                    <Brush x:Key="PurpleDarkBrush" x:Uid="Brush_33">#6500CD</Brush>
+
+                    <Brush x:Key="MauveLightBrush" x:Uid="Brush_34">#AC8BC0</Brush>
+                    <Brush x:Key="MauveMidBrush" x:Uid="Brush_35">#9A6DB0</Brush>
+                    <Brush x:Key="MauveDarkBrush" x:Uid="Brush_36">#8750A1</Brush>
+
+                    <Style
+                        x:Key="RedLightButton"
+                        x:Uid="Style_1"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_1" Property="Background" Value="{DynamicResource RedLightBrush}" />
+                        <Setter x:Uid="Setter_2" Property="BorderBrush" Value="{DynamicResource RedLightBrush}" />
+                        <Setter x:Uid="Setter_3" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="RedMidButton"
+                        x:Uid="Style_2"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_4" Property="Background" Value="{DynamicResource RedMidBrush}" />
+                        <Setter x:Uid="Setter_5" Property="BorderBrush" Value="{DynamicResource RedMidBrush}" />
+                        <Setter x:Uid="Setter_6" Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="RedDarkButton"
+                        x:Uid="Style_3"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_7" Property="Background" Value="{DynamicResource RedDarkBrush}" />
+                        <Setter x:Uid="Setter_8" Property="BorderBrush" Value="{DynamicResource RedDarkBrush}" />
+                        <Setter x:Uid="Setter_9" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="GreenLightButton"
+                        x:Uid="Style_4"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_10" Property="Background" Value="{DynamicResource GreenLightBrush}" />
+                        <Setter x:Uid="Setter_11" Property="BorderBrush" Value="{DynamicResource GreenLightBrush}" />
+                        <Setter x:Uid="Setter_12" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="GreenMidButton"
+                        x:Uid="Style_5"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_13" Property="Background" Value="{DynamicResource GreenMidBrush}" />
+                        <Setter x:Uid="Setter_14" Property="BorderBrush" Value="{DynamicResource GreenMidBrush}" />
+                        <Setter x:Uid="Setter_15" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="GreenDarkButton"
+                        x:Uid="Style_6"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_16" Property="Background" Value="{DynamicResource GreenDarkBrush}" />
+                        <Setter x:Uid="Setter_17" Property="BorderBrush" Value="{DynamicResource GreenDarkBrush}" />
+                        <Setter x:Uid="Setter_18" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="BlueLightButton"
+                        x:Uid="Style_7"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_19" Property="Background" Value="{DynamicResource BlueLightBrush}" />
+                        <Setter x:Uid="Setter_20" Property="BorderBrush" Value="{DynamicResource BlueLightBrush}" />
+                        <Setter x:Uid="Setter_21" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="BlueMidButton"
+                        x:Uid="Style_8"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_22" Property="Background" Value="{DynamicResource BlueMidBrush}" />
+                        <Setter x:Uid="Setter_23" Property="BorderBrush" Value="{DynamicResource BlueMidBrush}" />
+                        <Setter x:Uid="Setter_24" Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="BlueDarkButton"
+                        x:Uid="Style_9"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_25" Property="Background" Value="{DynamicResource BlueDarkBrush}" />
+                        <Setter x:Uid="Setter_26" Property="BorderBrush" Value="{DynamicResource BlueDarkBrush}" />
+                        <Setter x:Uid="Setter_27" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="BlueVeryDarkButton"
+                        x:Uid="Style_10"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_28" Property="Background" Value="{DynamicResource BlueVeryDarkBrush}" />
+                        <Setter x:Uid="Setter_29" Property="BorderBrush" Value="{DynamicResource BlueVeryDarkBrush}" />
+                        <Setter x:Uid="Setter_30" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="OrangeLightButton"
+                        x:Uid="Style_11"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_31" Property="Background" Value="{DynamicResource OrangeLightBrush}" />
+                        <Setter x:Uid="Setter_32" Property="BorderBrush" Value="{DynamicResource OrangeLightBrush}" />
+                        <Setter x:Uid="Setter_33" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="OrangeMidButton"
+                        x:Uid="Style_12"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_34" Property="Background" Value="{DynamicResource OrangeMidBrush}" />
+                        <Setter x:Uid="Setter_35" Property="BorderBrush" Value="{DynamicResource OrangeMidBrush}" />
+                        <Setter x:Uid="Setter_36" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="OrangeDarkButton"
+                        x:Uid="Style_13"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_37" Property="Background" Value="{DynamicResource OrangeDarkBrush}" />
+                        <Setter x:Uid="Setter_38" Property="BorderBrush" Value="{DynamicResource OrangeDarkBrush}" />
+                        <Setter x:Uid="Setter_39" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="YellowLightButton"
+                        x:Uid="Style_14"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_40" Property="Background" Value="{DynamicResource YellowLightBrush}" />
+                        <Setter x:Uid="Setter_41" Property="BorderBrush" Value="{DynamicResource YellowLightBrush}" />
+                        <Setter x:Uid="Setter_42" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="YellowMidButton"
+                        x:Uid="Style_15"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_43" Property="Background" Value="{DynamicResource YellowMidBrush}" />
+                        <Setter x:Uid="Setter_44" Property="BorderBrush" Value="{DynamicResource YellowMidBrush}" />
+                        <Setter x:Uid="Setter_45" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="YellowDarkButton"
+                        x:Uid="Style_16"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_46" Property="Background" Value="{DynamicResource YellowDarkBrush}" />
+                        <Setter x:Uid="Setter_47" Property="BorderBrush" Value="{DynamicResource YellowDarkBrush}" />
+                        <Setter x:Uid="Setter_48" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="TealLightButton"
+                        x:Uid="Style_17"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_49" Property="Background" Value="{DynamicResource TealLightBrush}" />
+                        <Setter x:Uid="Setter_50" Property="BorderBrush" Value="{DynamicResource TealLightBrush}" />
+                        <Setter x:Uid="Setter_51" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="TealMidButton"
+                        x:Uid="Style_18"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_52" Property="Background" Value="{DynamicResource TealMidBrush}" />
+                        <Setter x:Uid="Setter_53" Property="BorderBrush" Value="{DynamicResource TealMidBrush}" />
+                        <Setter x:Uid="Setter_54" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="TealDarkButton"
+                        x:Uid="Style_19"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_55" Property="Background" Value="{DynamicResource TealDarkBrush}" />
+                        <Setter x:Uid="Setter_56" Property="BorderBrush" Value="{DynamicResource TealDarkBrush}" />
+                        <Setter x:Uid="Setter_57" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+
+                    <Style
+                        x:Key="PurpleLightButton"
+                        x:Uid="Style_20"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_58" Property="Background" Value="{DynamicResource PurpleLightBrush}" />
+                        <Setter x:Uid="Setter_59" Property="BorderBrush" Value="{DynamicResource PurpleLightBrush}" />
+                        <Setter x:Uid="Setter_60" Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="PurpleMidButton"
+                        x:Uid="Style_21"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_61" Property="Background" Value="{DynamicResource PurpleMidBrush}" />
+                        <Setter x:Uid="Setter_62" Property="BorderBrush" Value="{DynamicResource PurpleMidBrush}" />
+                        <Setter x:Uid="Setter_63" Property="Foreground" Value="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                    </Style>
+                    <Style
+                        x:Key="PurpleDarkButton"
+                        x:Uid="Style_22"
+                        BasedOn="{StaticResource MaterialDesignRaisedButton}"
+                        TargetType="{x:Type ButtonBase}">
+                        <Setter x:Uid="Setter_64" Property="Background" Value="{DynamicResource PurpleDarkBrush}" />
+                        <Setter x:Uid="Setter_65" Property="BorderBrush" Value="{DynamicResource PurpleDarkBrush}" />
+                        <Setter x:Uid="Setter_66" Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                    </Style>
+                </ResourceDictionary>
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

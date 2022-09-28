@@ -13,11 +13,14 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class RegistrationViewModel : ValidatingWorkflowStepViewModel<LicenseUser>
     {
+        private readonly DashboardProjectManager _dashboardProjectManager;
+
         #region Member Variables
         private RegistrationDialogViewModel _parent;
         #endregion
@@ -69,10 +72,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(nameof(LicenseUser));
             }
         }
+
+        private string _matchType;
+        public string MatchType
+        {
+            get { return _matchType; }
+            set => Set(ref _matchType, value);
+        }
         #endregion
 
         #region Constructor
-        public RegistrationViewModel(
+        public RegistrationViewModel( DashboardProjectManager dashboardProjectManager,
             INavigationService navigationService,
             ILogger<RegistrationViewModel> logger,
             IEventAggregator? eventAggregator,
@@ -81,6 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IValidator<LicenseUser> licenseValidator)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
+            _dashboardProjectManager = dashboardProjectManager;
             LicenseUser = new LicenseUser();
         }
 
@@ -128,21 +139,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 var decryptedLicenseKey = LicenseManager.DecryptFromString(LicenseKey);
                 var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedLicenseKey);
 
-                LicenseUser givenLicenseUser = new LicenseUser();
-                givenLicenseUser.FirstName = FirstName;//_registrationViewModel.FirstName;
-                givenLicenseUser.LastName = LastName;//_registrationViewModel.LastName;
+                var givenLicenseUser = new LicenseUser
+                {
+                    FirstName = FirstName, //_registrationViewModel.FirstName;
+                    LastName = LastName //_registrationViewModel.LastName;
+                };
                 ////givenLicenseUser.LicenseKey = _registrationViewModel.LicenseKey; <-- not the same thing right now.  One is the code that gets decrypted, the other is a Guid
 
-                bool match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
-                if (match)
+                var match = LicenseManager.CompareGivenUserAndDecryptedUser(givenLicenseUser, decryptedLicenseUser);
+                LicenseUser.MatchType = match;
+                
+                switch (match)
                 {
-                    File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
-                    await MoveForwards();
-                    //await TryCloseAsync(true);
-                }
-                else
-                {
-                    MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_MismatchCatch", Logger));
+                    case LicenseUserMatchType.Match:
+                        File.WriteAllText(Path.Combine(documentsPath, "ClearDashboard_Projects", "license.txt"), LicenseKey);
+                        await MoveForwards();
+                        await _dashboardProjectManager.UpdateCurrentUserWithParatextUserInformation();
+                        break;
+                    case LicenseUserMatchType.BothNameMismatch:
+                        MatchType = "The license key does not match either name provided.";
+                        break;
+                    case LicenseUserMatchType.FirstNameMismatch:
+                        MatchType = "Your first name does not match the license key.";
+                        break;
+                    case LicenseUserMatchType.LastNameMismatch:
+                        MatchType = "Your last name does not match the license key.";
+                        break;
+                    case LicenseUserMatchType.Error:
+                        MatchType = "There is an unknown issue with your license key.";
+                        break;
+                    default:
+                        MatchType = "License key comparison is null.";
+                        break;
                 }
             }
 

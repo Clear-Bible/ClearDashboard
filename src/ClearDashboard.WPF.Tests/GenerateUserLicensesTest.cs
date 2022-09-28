@@ -27,9 +27,9 @@ namespace ClearDashboard.WPF.Tests
                 Guid.Parse("82A6D073-BC8C-4A7F-8E33-256BCE61AB18"));
             GenerateLicense("Dirk", "Kaiser", Guid.Parse("928E9B93-E64A-4787-B015-E52FDB11FD4B"),
                 Guid.Parse("9D87E18A-449C-4764-8A82-D303C472E268"));
-            GenerateLicense("Russell", "Morely", Guid.Parse("2105FBD0-DC74-4277-A7C2-2E5C54C6CA99"),
+            GenerateLicense("Russell", "Morley", Guid.Parse("2105FBD0-DC74-4277-A7C2-2E5C54C6CA99"),
                 Guid.Parse("549B2079-98F2-4C44-80CA-EC5B4E9ED72B"));
-            GenerateLicense("Chris", "Morely", Guid.Parse("BAED36ED-9B3D-4A05-8752-DF7ADB2A5567"),
+            GenerateLicense("Chris", "Morley", Guid.Parse("BAED36ED-9B3D-4A05-8752-DF7ADB2A5567"),
                 Guid.Parse("E5CB7858-C056-4C1F-AE19-E7157CD443D2"));
             GenerateLicense("Nifer", "Sims", Guid.Parse("E1EF0079-267B-4601-A467-03EB0E05BA80"),
                 Guid.Parse("6583777B-4C96-4D43-B429-0C4B13BFCF32"));
@@ -46,11 +46,11 @@ namespace ClearDashboard.WPF.Tests
             {
                 FirstName = firstName,
                 LastName = lastName,
-                Id = id.ToString("N"),
+                Id = id,
                 LicenseKey = id.ToString("N"),
             };
 
-            LicenseManager.EncryptToDirectory(licenseUser, filePath);
+            LicenseManager.EncryptToFile(licenseUser, filePath);
         }
     }
 }
