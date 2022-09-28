@@ -29,7 +29,7 @@ namespace ClearDashboard.WPF.Tests
                 Guid.Parse("9D87E18A-449C-4764-8A82-D303C472E268"));
             GenerateLicense("Russell", "Morley", Guid.Parse("2105FBD0-DC74-4277-A7C2-2E5C54C6CA99"),
                 Guid.Parse("549B2079-98F2-4C44-80CA-EC5B4E9ED72B"));
-            GenerateLicense("Chris", "Morlry", Guid.Parse("BAED36ED-9B3D-4A05-8752-DF7ADB2A5567"),
+            GenerateLicense("Chris", "Morley", Guid.Parse("BAED36ED-9B3D-4A05-8752-DF7ADB2A5567"),
                 Guid.Parse("E5CB7858-C056-4C1F-AE19-E7157CD443D2"));
             GenerateLicense("Nifer", "Sims", Guid.Parse("E1EF0079-267B-4601-A467-03EB0E05BA80"),
                 Guid.Parse("6583777B-4C96-4D43-B429-0C4B13BFCF32"));
