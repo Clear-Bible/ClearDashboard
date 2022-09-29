@@ -82,9 +82,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     #endregion //Enums
 
-    public class ProjectDesignSurfaceViewModel : ToolViewModel, IHandle<NodeSelectedChangedMessage>,
-        IHandle<ConnectionSelectedChangedMessage>, IHandle<ProjectLoadCompleteMessage>, IHandle<CorpusDeletedMessage>,
-        IHandle<UiLanguageChangedMessage>
+    public class ProjectDesignSurfaceViewModel : ToolViewModel, 
+        IHandle<NodeSelectedChangedMessage>,
+        IHandle<ConnectionSelectedChangedMessage>, 
+        IHandle<ProjectLoadCompleteMessage>, 
+        IHandle<CorpusDeletedMessage>,
+        IHandle<UiLanguageChangedMessage>, 
+        IHandle<DashboardProjectChangedMessage>,
+        IHandle<BackgroundTaskChangedMessage>
     {
         #region Member Variables
 
@@ -290,6 +295,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public string ProjectName { get; set; }
+
         #endregion //Observable Properties
 
         #region Constructor
@@ -321,6 +328,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<DAL.Alignment.Corpora.Corpus>();
+            ProjectName = _projectManager.CurrentProject.ProjectName;
         }
 
         //protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -489,6 +497,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void LoadCanvas()
         {
+            EventAggregator.PublishOnUIThreadAsync(new DashboardProjectChangedMessage(ProjectManager.CurrentDashboardProject));
             // we have already loaded once
             if (DesignSurface.CorpusNodes.Count > 0)
             {
@@ -1701,7 +1710,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-
+        #endregion // Methods
 
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
@@ -1835,6 +1844,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return Task.CompletedTask;
         }
 
-        #endregion // Methods
+        public Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            ProjectName = message.project.ProjectName;
+            return Task.CompletedTask;
+        }
     }
 }

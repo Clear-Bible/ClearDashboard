@@ -47,7 +47,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
-        IHandle<BCVLoadedMessage>
+        IHandle<BCVLoadedMessage>,
+        IHandle<DashboardProjectChangedMessage>
     {
 
         #region Commands
@@ -1541,6 +1542,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var result = MockOogaWords[mockOogaWordsIndexer_++];
             if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
             return result;
+        }
+
+        public Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            _tokensTextRows = new ObservableCollection<TokensTextRow>();
+            return Task.CompletedTask;
         }
     }
 

@@ -774,12 +774,18 @@
             <!--<RowDefinition Height="200" />-->
         </Grid.RowDefinitions>
         <materialDesign:Card
+            Grid.Row="0"
             Margin="0"
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
             IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}">
-            <StackPanel Grid.Row="0" MinWidth="400">
+            <StackPanel MinWidth="400">
+                <Label
+                    Margin="0,-5,30,-12"
+                    HorizontalContentAlignment="Right"
+                    Content="{Binding ProjectName}"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                 <!--  Add Corpora  -->
                 <Label
                     Margin="5,5,0,5"

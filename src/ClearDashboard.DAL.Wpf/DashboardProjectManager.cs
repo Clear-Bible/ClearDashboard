@@ -44,7 +44,7 @@ public record UserMessage(User User);
 
 public record LogActivityMessage(string Message);
 
-public record NewProjectPickerMessage(DashboardProject project);
+public record DashboardProjectChangedMessage(DashboardProject project);
 
 
 #region ProjectDesignSurfaceMessages

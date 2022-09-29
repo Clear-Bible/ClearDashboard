@@ -262,7 +262,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             if (StartupDialogViewModel.DeleteVisible == Visibility.Collapsed)
             {
-                EventAggregator.PublishOnUIThreadAsync(new NewProjectPickerMessage(project));
+                EventAggregator.PublishOnUIThreadAsync(new DashboardProjectChangedMessage(project));
             }
 
             // Only respond to a Left button click otherwise,

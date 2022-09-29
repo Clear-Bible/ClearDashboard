@@ -12,8 +12,10 @@ using System;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Printing;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
@@ -23,6 +25,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private DashboardProjectManager ProjectManager { get; }
         public bool MimicParatextConnection { get; set; }
         public static Visibility DeleteVisible = Visibility.Visible;
+        public static bool InitialStartup = true;
         private bool _licenseCleared = false;
         private bool _runRegistration = false;
 
@@ -97,6 +100,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public async void Ok()
         {
             DeleteVisible = Visibility.Collapsed;
+            InitialStartup = false;
             await TryCloseAsync(true);
         }
 

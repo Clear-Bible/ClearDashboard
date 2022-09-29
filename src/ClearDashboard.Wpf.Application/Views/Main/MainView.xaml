@@ -49,8 +49,6 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="2" Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
-
         <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
             <Menu.ItemContainerStyle>
                 <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">

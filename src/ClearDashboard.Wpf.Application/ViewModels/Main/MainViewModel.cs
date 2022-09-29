@@ -51,7 +51,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ShowTokenizationWindowMessage>,
                 IHandle<UiLanguageChangedMessage>,
                 IHandle<ActiveDocumentMessage>,
-                IHandle<NewProjectPickerMessage>,
+                IHandle<DashboardProjectChangedMessage>,
                 IHandle<ShowParallelTranslationWindowMessage>
     {
         private ILifetimeScope LifetimeScope { get; }
@@ -463,7 +463,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     await ProjectManager.LoadProject(Parameter.ProjectName);
                 }
-                ProjectName = ProjectManager.CurrentProject.ProjectName;
             }
 
 
@@ -1502,8 +1501,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             await ProjectManager.LoadProject(dashboardProject.ProjectName);
                         }
-
-                        ProjectName = dashboardProject.ProjectName;
                     }
                     break;
             }
@@ -1531,9 +1528,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
 
-        public Task HandleAsync(NewProjectPickerMessage message, CancellationToken cancellationToken)
+        public Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
         {
-            ProjectName = message.project.ProjectName;
             return Task.CompletedTask;
         }
 
