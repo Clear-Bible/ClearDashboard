@@ -1,0 +1,37 @@
+﻿<controls:DialogWindow x:Class="ClearDashboard.Wpf.Application.Views.Interlinear.InterlinearDialogView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Interlinear"
+        xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
+        xmlns:interlinear="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear"
+        xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+        xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+        mc:Ignorable="d"
+        helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+        AllowsTransparency="True"
+        FlowDirection="{Binding WindowFlowDirection}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        Foreground="{DynamicResource MaterialDesignPaper}"
+        ShowInTaskbar="False"
+        ShowCloseButton="True"
+        ShowMinButton="False"
+        ShowMaxRestoreButton="False"
+        TitleCharacterCasing="Normal"
+        Title="{Binding Title}"
+        TextElement.FontSize="13"
+        TextElement.FontWeight="Regular"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        WindowStartupLocation="CenterOwner"
+        Width="600"
+        Height="600"
+        d:DataContext="{d:DesignInstance Type=interlinear:InterlinearDialogViewModel,
+                                     IsDesignTimeCreatable=True}">
+    <Grid>
+        <Label Content="New Interlinear"></Label>
+    </Grid>
+</controls:DialogWindow>

@@ -12,6 +12,7 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
     {
         MenuItems = new ObservableCollection<TMenuItemViewModel>();
         Command = new CommandViewModel(Execute);
+        Enabled = true;
     }
     private bool? _isChecked = false;
     public bool? IsChecked
@@ -47,6 +48,13 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
     {
         get => _id;
         set => Set(ref _id, value);
+    }
+
+    private bool  _enabled;
+    public bool Enabled
+    {
+        get => _enabled;
+        set => Set(ref _enabled, value);
     }
 
 

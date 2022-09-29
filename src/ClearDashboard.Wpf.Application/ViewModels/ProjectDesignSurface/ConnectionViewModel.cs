@@ -181,6 +181,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         public List<TranslationSetInfo> TranslationSetInfo { get; set; } = new();
 
+        public List<AlignmentSetInfo> AlignmentSetInfo { get; set; } = new();
+
         /// <summary>
         /// Event fired when the connection has changed.
         /// </summary>
