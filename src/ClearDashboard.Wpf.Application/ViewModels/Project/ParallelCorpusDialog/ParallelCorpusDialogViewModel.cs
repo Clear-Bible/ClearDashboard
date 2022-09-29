@@ -275,6 +275,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
+            PlaySound.PlaySoundFromResource(null, null);
+
             return ProcessStatus;
         }
 
@@ -341,6 +343,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
+            PlaySound.PlaySoundFromResource(null, null);
+
             return ProcessStatus;
         }
 
@@ -399,6 +403,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
+            PlaySound.PlaySoundFromResource(null, null);
+
             return ProcessStatus;
 
         }
@@ -454,6 +460,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 IsBusy = false;
                 Message = string.Empty;
             }
+
+            PlaySound.PlaySoundFromResource(null, null);
 
             return ProcessStatus;
         }

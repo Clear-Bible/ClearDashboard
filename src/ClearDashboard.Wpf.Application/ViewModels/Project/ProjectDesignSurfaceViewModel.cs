@@ -443,6 +443,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TranslationSetId = translationSet.TranslationSetId,
                         ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
                         ParallelCorpusId = translationSet.ParallelCorpusId,
+                        AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
+                         AlignmentSetId = translationSet.AlignmentSetId,
                     });
                 }
 
@@ -463,7 +465,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     SourceConnectorId = connection.SourceConnector.ParatextID,
                     TargetConnectorId = connection.DestinationConnector.ParatextID,
                     TranslationSetInfo = serializedTranslationSet,
-                    AlignmentSetInfo = serializedAlignmentSet
+                    AlignmentSetInfo = serializedAlignmentSet,
+                    ParallelCorpusDisplayName= connection.ParallelCorpusDisplayName,
+                    ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 });
             }
 
@@ -578,7 +582,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             SourceConnector = sourceNode.OutputConnectors[0],
                             DestinationConnector = targetNode.InputConnectors[0],
                             TranslationSetInfo = deserializedConnection.TranslationSetInfo,
-                            AlignmentSetInfo = deserializedConnection.AlignmentSetInfo
+                            AlignmentSetInfo = deserializedConnection.AlignmentSetInfo,
+                            ParallelCorpusDisplayName = deserializedConnection.ParallelCorpusDisplayName,
+                            ParallelCorpusId = new ParallelCorpusId(Guid.Parse(deserializedConnection.ParallelCorpusId)),
                         };
                         DesignSurface.Connections.Add(connection);
                         // add in the context menu
@@ -1068,7 +1074,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             connection.MenuItems.Clear();
 
             ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems = new();
-
 
             // ALIGNMENT SET
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
@@ -1584,6 +1589,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var dialogViewModel = LifetimeScope?.Resolve<ParallelCorpusDialogViewModel>(parameters);
 
             var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+
+            PlaySound.PlaySoundFromResource(null, null);
 
             if (success)
             {
