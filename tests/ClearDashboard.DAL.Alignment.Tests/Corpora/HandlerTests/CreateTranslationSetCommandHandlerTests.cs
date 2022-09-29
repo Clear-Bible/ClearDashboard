@@ -439,7 +439,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .ToList();
 
             var translations = await translationSet.GetTranslations(filteredEngineParallelTextRows);
-            Assert.Equal(97, translations.Count());
+            Assert.Equal(22, translations.Count());
 
             Output.WriteLine($"Translation count: {translations.Count()}");
             Output.WriteLine("");
