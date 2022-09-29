@@ -1162,7 +1162,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 DisplayName = info.DisplayName,
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                            },
+                            }
+                            /*,
                             new ParallelCorpusConnectionMenuItemViewModel
                             {
                                 // Show Verses in New Windows
@@ -1174,6 +1175,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
                             },
+                            */
                         }
                 });
             }

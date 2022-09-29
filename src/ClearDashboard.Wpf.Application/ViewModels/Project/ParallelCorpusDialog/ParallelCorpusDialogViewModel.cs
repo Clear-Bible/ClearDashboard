@@ -226,30 +226,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
                 var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
 
-                Logger!.LogInformation($"Aligning rows between target and source corpora");
+                Logger!.LogInformation($"Parallelizing source and target corpora");
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Working,
                     cancellationToken,
-                    $"Aligning rows for '{parallelCorpusDisplayName}' between target and source corpora...");
+                    $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'...");
 
                 // TODO:  Ask Chris/Russell how to go from models VerseMapping to Engine VerseMapping
                 ParallelTextCorpus = await Task.Run(async () => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new List<ClearBible.Engine.Corpora.VerseMapping>()), cancellationToken);
 
 
-                Logger!.LogInformation($"Creating the ParallelCorpus '{parallelCorpusDisplayName}'");
+                Logger!.LogInformation($"Saving parallelization '{parallelCorpusDisplayName}'");
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Working,
                     cancellationToken,
-                    $"Creating  ParallelCorpus '{parallelCorpusDisplayName}'...");
+                    $"Saving parallelization '{parallelCorpusDisplayName}'...");
 
                 ParallelTokenizedCorpus = await ParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!);
 
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Completed,
                     cancellationToken,
-                    $"Completed creation of  ParallelCorpus '{parallelCorpusDisplayName}'.");
+                    $"Completed saving parallelization '{parallelCorpusDisplayName}'.");
 
-                Logger.LogInformation($"Completed creating the ParallelCorpus '{parallelCorpusDisplayName}'");
+                Logger.LogInformation($"Completed saving parallelization '{parallelCorpusDisplayName}'");
 
                 ProcessStatus = ProcessStatus.Completed;
             }
@@ -426,7 +426,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Working,
                     cancellationToken,
-                    $"Creating the AlignmentSet '{alignmentSetDisplayName}'...");
+                    $"Aligning corpora and creating the AlignmentSet '{alignmentSetDisplayName}'...");
 
                 AlignedTokenPairs = TranslationCommandable.PredictAllAlignedTokenIdPairs(WordAlignmentModel, ParallelTextCorpus);
                 AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.ToString(),
