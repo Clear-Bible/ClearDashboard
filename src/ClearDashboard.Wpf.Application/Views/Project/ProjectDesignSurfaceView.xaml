@@ -784,7 +784,7 @@
                 <Label
                     Margin="0,-5,30,-12"
                     HorizontalContentAlignment="Right"
-                    Content="{Binding ProjectName}"
+                    Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
                     Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                 <!--  Add Corpora  -->
                 <Label

@@ -539,13 +539,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             RebuildMenu();
 
-            _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
-            var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
-            ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
-            _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
-
-            // force a load to happen as it is getting swallowed up elsewhere
-            _projectDesignSurfaceViewModel.LoadCanvas();
+            SetupProjectDesignSurface();
 
             Items.Clear();
 
@@ -598,6 +592,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // Subscribe to changes of the Book Chapter Verse data object.
             CurrentBcv.PropertyChanged += BcvChanged;
+        }
+
+        private void SetupProjectDesignSurface()
+        {
+            _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
+            var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
+            ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
+            _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
+
+            // force a load to happen as it is getting swallowed up elsewhere
+            _projectDesignSurfaceViewModel.LoadCanvas();
         }
 
         #endregion //Constructor
@@ -1530,6 +1535,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
         {
+            _projectDesignSurfaceViewModel.SaveCanvas();
+            SetupProjectDesignSurface();
             return Task.CompletedTask;
         }
 
