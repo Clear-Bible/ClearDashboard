@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -24,8 +25,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<IEnumerable<Alignment.Translation.Translation>>> GetDataAsync(GetTranslationsByTranslationSetIdAndTokenIdsQuery request, CancellationToken cancellationToken)
         {
             var translationSet = ProjectDbContext!.TranslationSets
-                .Include(ts => ts.ParallelCorpus)
+                .Include(ts => ts.AlignmentSet)
+                    .ThenInclude(ast => ast!.ParallelCorpus)
                 .FirstOrDefault(ts => ts.Id == request.TranslationSetId.Id);
+
+            // need an await to get the compiler to be 'quiet'
+            await Task.CompletedTask;
 
             if (translationSet == null)
             {
@@ -52,22 +57,59 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // For any token ids not found in Translations:
             if (tokenGuidsNotFound.Any())
             {
-                var tokenComponentTrainingTexts = ProjectDbContext!.TokenComponents
-                    .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
-                    .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
-                    .Select(tc => tc.TrainingText)
-                    .Distinct().ToList();
-
-                var translationsFromAlignmentModel = ProjectDbContext!.Alignments
-                    .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
-                    .Where(a => tokenComponentTrainingTexts.Contains(a.SourceTokenComponent!.TrainingText))
-                    .Select(a => new Alignment.Translation.Translation(
-                            ModelHelper.BuildToken(a.SourceTokenComponent!),
-                            a.TargetTokenComponent!.TrainingText ?? string.Empty,
-                            "FromAlignmentModel"));
-
                 var combined = translations.ToList();
-                combined.AddRange(translationsFromAlignmentModel.ToList());
+
+                if (ProjectDbContext!.TranslationModelEntries
+                    .Where(tme => tme.TranslationSetId == request.TranslationSetId.Id).Count() > 0)
+                {
+                    var translationModelEntries = ProjectDbContext!.TranslationModelEntries
+                         .Include(tm => tm.TargetTextScores)
+                         .Join(
+                             ProjectDbContext!.TokenComponents
+                                 .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                                 .Where(tc => tokenGuidsNotFound.Contains(tc.Id)),
+                             tm => tm.SourceText,
+                             tc => tc.TrainingText ?? "",
+                             (tm, tc) => new { tm, tc })
+                         .Where(tmtc => tmtc.tm.TranslationSetId == request.TranslationSetId.Id)
+                         .Select(tmtc => new Alignment.Translation.Translation(
+                             ModelHelper.BuildToken(tmtc.tc),
+                             tmtc.tm.TargetTextScores.OrderByDescending(tts => tts.Score).First().Text ?? string.Empty,
+                             "FromTranslationModel"));
+
+                    combined.AddRange(translationModelEntries);
+                } 
+                else
+                {
+                    var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
+                        .Where(tc => tc.TokenizationId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
+                        .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
+                        .Where(tc => tc.TrainingText != null)
+                        .ToList()
+                        .GroupBy(tc => tc.TrainingText!)
+                        .ToDictionary(g => g.Key, g => g.Select(i => i));
+
+                    var sourceTextToTopTargetTrainingText = ProjectDbContext!.Alignments
+                        .Include(a => a.SourceTokenComponent)
+                        .Include(a => a.TargetTokenComponent)
+                        .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
+                        .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
+                        .ToList()
+                        .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
+                        .ToDictionary(g => g.Key, g => g
+                            .GroupBy(a => a.TargetTokenComponent!.TrainingText)
+                            .OrderByDescending(g => g.Count())
+                            .First().Key);
+
+                    combined.AddRange(sourceTextToTopTargetTrainingText
+                        .SelectMany(kvp => sourceTokenTrainingTexts[kvp.Key]
+                            .Select(s =>
+                                new Alignment.Translation.Translation(
+                                        ModelHelper.BuildToken(s),
+                                        kvp.Value,
+                                        "FromAlignmentModel"))
+                            ));
+                }
 
                 var tokensIdsNotFound = request.TokenIds
                     .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid.Id))
@@ -89,11 +131,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     combined.OrderBy(t => t.SourceToken.TokenId.ToString())
                 );
             }
-
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
-
-            return new RequestResult<IEnumerable<Alignment.Translation.Translation>>( translations.OrderBy(t => t.SourceToken.TokenId.ToString()) );
+            else
+            {
+                return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(translations.OrderBy(t => t.SourceToken.TokenId.ToString()));
+            }
         }
      }
 }
