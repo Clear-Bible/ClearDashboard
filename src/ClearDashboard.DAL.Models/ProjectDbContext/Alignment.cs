@@ -12,9 +12,9 @@ public class Alignment : IdentifiableEntity
 
     public virtual double Score { get; set; }
 
-    [ForeignKey("SourceTokenId")]
+    [ForeignKey("SourceTokenComponentId")]
     public virtual TokenComponent? SourceTokenComponent { get; set; }
-    [ForeignKey("TargetTokenId")]
+    [ForeignKey("TargetTokenComponentId")]
     public virtual TokenComponent? TargetTokenComponent { get; set; }
 
     [ForeignKey("AlignmentSetId")]

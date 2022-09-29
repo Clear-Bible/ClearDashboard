@@ -140,12 +140,11 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<Alignment>()
                 .HasOne(e => e.SourceTokenComponent)
-                .WithMany(e=>e.SourceAlignments);
-              
+                .WithMany(e => e.SourceAlignments);
 
             modelBuilder.Entity<Alignment>()
                 .HasOne(e => e.TargetTokenComponent)
-                .WithMany(e=>e.TargetAlignments);
+                .WithMany(e => e.TargetAlignments);
 
             modelBuilder.Entity<AlignmentSet>()
                 .Property(e => e.Metadata)
@@ -250,8 +249,9 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);
-            modelBuilder.Entity<Token>().HasIndex(e => e.WordNumber);
-            modelBuilder.Entity<Token>().HasIndex(e => e.SubwordNumber);
+            modelBuilder.Entity<Token>().HasIndex(e => e.TrainingText);
+            //modelBuilder.Entity<Token>().HasIndex(e => e.WordNumber);
+            //modelBuilder.Entity<Token>().HasIndex(e => e.SubwordNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.TokenCompositeId);
 
             //modelBuilder.Entity<Token>()

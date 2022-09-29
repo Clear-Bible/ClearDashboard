@@ -60,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
 #if DEBUG
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert TranslationSet '{request.DisplayName}' and model (start) [translation model entry count: {request.TranslationModel.Count()}]");
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert TranslationSet '{request.DisplayName}' and model (start) [translation model entry count: {request.TranslationModel?.Count() ?? 0}]");
             sw.Restart();
             Process proc = Process.GetCurrentProcess();
 
@@ -128,6 +128,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 #endif
 
                 var translationSetFromDb = ProjectDbContext!.TranslationSets
+                    .Include(ts => ts.AlignmentSet)
+                        .ThenInclude(ast => ast!.User)
                     .Include(ts => ts.User)
                     .First(ts => ts.Id == translationSetId);
 
@@ -136,7 +138,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 return new RequestResult<TranslationSet>(new TranslationSet(
                     ModelHelper.BuildTranslationSetId(translationSetFromDb, parallelCorpusId, translationSetFromDb.User!),
                     parallelCorpusId,
-                    request.alignmentSetId,
+                    ModelHelper.BuildAlignmentSetId(translationSetFromDb.AlignmentSet!, parallelCorpusId, translationSetFromDb.AlignmentSet!.User!),
                     _mediator));
 
             }
@@ -157,7 +159,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         private DbCommand CreateTranslationSetInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "ParallelCorpusId", "AlignmentSetId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", "SmtModel", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "ParallelCorpusId", "AlignmentSetId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", /*"SmtModel",*/ "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TranslationSet), columns);
 

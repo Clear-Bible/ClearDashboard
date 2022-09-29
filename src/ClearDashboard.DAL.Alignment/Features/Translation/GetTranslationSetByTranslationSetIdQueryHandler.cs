@@ -23,6 +23,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
         {
             var translationSet = ProjectDbContext.TranslationSets
+                .Include(ts => ts.AlignmentSet)
+                    .ThenInclude(ast => ast!.User)
                 .Include(ts => ts.ParallelCorpus)
                     .ThenInclude(pc => pc!.SourceTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
@@ -30,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .ThenInclude(pc => pc!.TargetTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
                 .Include(ts => ts.ParallelCorpus)
-                    .ThenInclude(pc => pc.User)
+                    .ThenInclude(pc => pc!.User)
                 .Include(ts => ts.User)
                 .Where(ts => ts.Id == request.TranslationSetId.Id)
                 .FirstOrDefault();
@@ -46,11 +48,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSet)>
+            var parallelCorpusId = ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!);
+
+            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId)>
             ((
-                ModelHelper.BuildTranslationSetId(translationSet),
-                ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!),
-                new AlignmentSetId(translationSet.AlignmentSetId!)
+                ModelHelper.BuildTranslationSetId(translationSet, parallelCorpusId, translationSet.User!),
+                parallelCorpusId,
+                ModelHelper.BuildAlignmentSetId(translationSet.AlignmentSet!, parallelCorpusId, translationSet.AlignmentSet!.User!)
             ));
         }
     }
