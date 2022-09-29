@@ -8,6 +8,7 @@
         xmlns:interlinear="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear"
         xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
         xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
         AllowsTransparency="True"
@@ -38,6 +39,36 @@
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Top" Margin="0, 20">
             <Label Content="New Interlinear"></Label>
+            <TextBox x:Name="DisplayName"
+                     materialDesign:HintAssist.FloatingScale="0.60"
+                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                     materialDesign:HintAssist.Hint="{helpers:Localization DisplayName}"
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                <TextBox.Text>
+                    <Binding
+                        Mode="TwoWay"
+                        Path="TranslationSetDisplayName"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                </TextBox.Text>
+                <Validation.ErrorTemplate>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <AdornedElementPlaceholder />
+                            <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Validation.ErrorTemplate>
+
+            </TextBox>
             <ComboBox
                 x:Name="AlignmentSetsComboBox"
                 Padding="15"

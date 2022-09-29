@@ -34,6 +34,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
+using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -1514,7 +1515,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var parameters = new List<Autofac.Core.Parameter>
             {
-                new NamedParameter("parallelCoprusId", connectionMenuItem.ParallelCorpusId)
+                new NamedParameter("parallelCorpusId", connectionMenuItem.ParallelCorpusId)
             };
 
             var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
@@ -1522,7 +1523,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (result.Succeeded)
             {
-
+                var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet,
+                        dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
+                        dialogViewModel.SelectedAlignmentSet.ParallelCorpusId, Mediator);
             }
         }
 

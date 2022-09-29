@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
 {
+
     public abstract class DashboardApplicationScreen : ApplicationScreen
     {
         protected DashboardApplicationScreen() : base()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,12 +10,16 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Validators;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 {
-    public class InterlinearDialogViewModel : DashboardApplicationScreen
+    public class InterlinearDialogViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, InterlinearDialogViewModel>
     {
 
         private TranslationSource? _translationSource;
@@ -29,6 +34,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
         private List<AlignmentSetId>? _alignmentSets;
         private bool _canCreate;
         private bool _canCancel;
+        private string? _translationSetDisplayName;
+
         public List<AlignmentSetId>? AlignmentSets
         {
             get => _alignmentSets;
@@ -36,7 +43,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
         }
 
         public ParallelCorpusId? ParallelCorpusId { get; set; }
-       
+
+        public string TranslationSetDisplayName
+        {
+            get => _translationSetDisplayName;
+            set
+            {
+                Set(ref _translationSetDisplayName, value);
+                ValidationResult = Validator.Validate(this);
+                CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+            }
+        }
 
         public InterlinearDialogViewModel()
         {
@@ -45,8 +62,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
         public InterlinearDialogViewModel(ParallelCorpusId parallelCorpusId, TranslationSource? translationSource, INavigationService navigationService,
             ILogger<InterlinearDialogViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
-            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, IValidator<InterlinearDialogViewModel> validator)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             _translationSource = translationSource;
             ParallelCorpusId = parallelCorpusId;
@@ -61,7 +78,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
             AlignmentSets = tuple.Select(t => t.alignmentSetId).ToList();
             SelectedAlignmentSet = AlignmentSets.FirstOrDefault();
-            CanCreate = true;
+            CanCreate = false;
             CanCancel = true;
         }
 
@@ -80,6 +97,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
         public async void Create()
         {
             await TryCloseAsync(false);
+        }
+
+        protected override ValidationResult? Validate()
+        {
+            return (!string.IsNullOrEmpty(TranslationSetDisplayName)) ? Validator.Validate(this) : null;
         }
     }
 }
