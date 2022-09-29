@@ -139,6 +139,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     ModelHelper.BuildTranslationSetId(translationSetFromDb, parallelCorpusId, translationSetFromDb.User!),
                     parallelCorpusId,
                     ModelHelper.BuildAlignmentSetId(translationSetFromDb.AlignmentSet!, parallelCorpusId, translationSetFromDb.AlignmentSet!.User!),
+                    request.TranslationModel != null ? true : false,
                     _mediator));
 
             }

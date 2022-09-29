@@ -11,11 +11,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
     public class TranslationSet
     {
         private readonly IMediator mediator_;
-
         public TranslationSetId TranslationSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
         public AlignmentSetId AlignmentSetId { get; set; }
+        protected bool UsingTranslationModel { get; }
 
         /*
         private async void PutTranslationModel(Dictionary<string, Dictionary<string, double>> translationModel, string smtModel)
@@ -28,24 +28,28 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token)
         {
-            /*
-            var result = await mediator_.Send(new GetTranslationSetModelEntryQuery(TranslationSetId, token.TrainingText));
-            if (result.Success)
+            if (UsingTranslationModel)
             {
-                return result.Data;
+                var result = await mediator_.Send(new GetTranslationSetModelEntryQuery(TranslationSetId, token.TrainingText));
+                if (result.Success)
+                {
+                    return result.Data;
+                }
+                else
+                {
+                    throw new MediatorErrorEngineException(result.Message);
+                }
             }
             else
             {
-                throw new MediatorErrorEngineException(result.Message);
+                var alignmentSet = await AlignmentSet.Get(AlignmentSetId, mediator_);
+                var matchingTargetTokens = await alignmentSet.GetTargetTokensBySourceTrainingText(token.TrainingText);
+                return matchingTargetTokens
+                    .Select(t => t.TrainingText)
+                    .GroupBy(t => t)
+                    .OrderByDescending(g => g.Count())
+                    .ToDictionary(g => g.Key, g => (double)g.Count());
             }
-            */
-            var alignmentSet = await AlignmentSet.Get(AlignmentSetId, mediator_);
-            var matchingTargetTokens = await alignmentSet.GetTargetTokensBySourceTrainingText(token.TrainingText);
-            return matchingTargetTokens
-                .Select(t => t.TrainingText)
-                .GroupBy(t => t)
-                .OrderByDescending(g => g.Count())
-                .ToDictionary(g => g.Key, g => (double) g.Count());
         }
 
         /*
@@ -133,6 +137,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     data.translationSetId,
                     data.parallelCorpusId,
                     data.alignmentSetId,
+                    data.usingTranslationModel,
                     mediator);
             }
             else
@@ -180,6 +185,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             TranslationSetId translationSetId,
             ParallelCorpusId parallelCorpusId,
             AlignmentSetId alignmentSetId,
+            bool usingTranslationModel,
             IMediator mediator)
         {
             mediator_ = mediator;
@@ -187,6 +193,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             TranslationSetId = translationSetId;
             ParallelCorpusId = parallelCorpusId;
             AlignmentSetId = alignmentSetId;
+            UsingTranslationModel = usingTranslationModel;
         }
     }
 }
