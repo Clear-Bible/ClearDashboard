@@ -40,10 +40,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
             */
             var alignmentSet = await AlignmentSet.Get(AlignmentSetId, mediator_);
-            var matchingTargetTokens = alignmentSet.GetTargetTokensBySourceTrainingText(token.TrainingText);
+            var matchingTargetTokens = await alignmentSet.GetTargetTokensBySourceTrainingText(token.TrainingText);
             return matchingTargetTokens
                 .Select(t => t.TrainingText)
                 .GroupBy(t => t)
+                .OrderByDescending(g => g.Count())
                 .ToDictionary(g => g.Key, g => (double) g.Count());
         }
 

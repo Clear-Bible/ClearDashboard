@@ -70,7 +70,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus2.ParallelCorpusId,
                     Mediator!);
-            var translationSet2 = await TranslationSet.Create(null, alignmentSet2.AlignmentSetId, "display name 1", new(), parallelCorpus1.ParallelCorpusId, Mediator!);
+            var translationSet2 = await TranslationSet.Create(null, alignmentSet2.AlignmentSetId, "display name 1", new(), parallelCorpus2.ParallelCorpusId, Mediator!);
 
             Assert.NotNull(translationSet2);
 
@@ -439,7 +439,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .ToList();
 
             var translations = await translationSet.GetTranslations(filteredEngineParallelTextRows);
-            Assert.Equal(22, translations.Count());
+            Assert.Equal(97, translations.Count());
 
             Output.WriteLine($"Translation count: {translations.Count()}");
             Output.WriteLine("");
