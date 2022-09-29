@@ -1,4 +1,5 @@
-﻿using ClearDashboard.Wpf.Application.ViewModels.Project;
+﻿using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using System;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
@@ -16,7 +17,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public string AlignmentSetId { get; set; } = string.Empty;
         public string TranslationSetId { get; set; } = string.Empty;
         public string DisplayName { get; set; } = string.Empty;
-        public string ParallelCorpusId { get; set; } = string.Empty;
+        public string? ParallelCorpusId { get; set; } = string.Empty;
         public string? ParallelCorpusDisplayName { get; set; } = string.Empty;
         public Guid ConnectionId { get; set; }
 

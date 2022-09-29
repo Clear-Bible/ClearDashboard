@@ -33,6 +33,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -1075,7 +1076,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Id = "CreateAlignmentSetId",
                 IconKind = "BookTextAdd",
                 ProjectDesignSurfaceViewModel = this,
-                ConnectionId = connection.Id
+                ConnectionId = connection.Id,
+                ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
+                ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId1", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
@@ -1212,7 +1215,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // node properties
                     SelectedConnection = connectionViewModel;
                     break;
-                 case "CreateAlignmentSetId":
+                 case "CreateNewInterlinearId":
                      await AddNewInterlinear(connectionMenuItem);
                      break;
                 case "AddToEnhancedViewId":
@@ -1509,7 +1512,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
-            throw new NotImplementedException();
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("parallelCoprusId", connectionMenuItem.ParallelCorpusId)
+            };
+
+            var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
+            var result = _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+
+            if (result.Succeeded)
+            {
+
+            }
         }
 
         public async Task AddParallelCorpus(ConnectionViewModel newConnection)
@@ -1556,25 +1570,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 // get TranslationSet , etc from the dialogViewModel
                 var translationSet = dialogViewModel.TranslationSet;
-                newConnection.TranslationSetInfo.Add(new TranslationSetInfo
+
+                if (translationSet != null)
                 {
-                    DisplayName = translationSet.TranslationSetId.DisplayName,
-                    TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
-                    ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
-                    ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
-                    AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
-                    AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
-                });
+                    newConnection.TranslationSetInfo.Add(new TranslationSetInfo
+                    {
+                        DisplayName = translationSet.TranslationSetId.DisplayName,
+                        TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
+                        ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
+                        ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
+                        AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
+                        AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
+                    });
+                }
 
                 var alignmentSet = dialogViewModel.AlignmentSet;
-                newConnection.AlignmentSetInfo.Add(new AlignmentSetInfo
+                if (alignmentSet != null)
                 {
-                    DisplayName = alignmentSet.AlignmentSetId.DisplayName,
-                    AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
-                    ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
-                    ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString()
-                });
+                    newConnection.AlignmentSetInfo.Add(new AlignmentSetInfo
+                    {
+                        DisplayName = alignmentSet.AlignmentSetId.DisplayName,
+                        AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
+                        ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
+                        ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString()
+                    });
+                }
 
+                newConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
+                newConnection.ParallelCorpusDisplayName =
+                    dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
                 CreateConnectionMenu(newConnection);
                 await SaveCanvas();
             }

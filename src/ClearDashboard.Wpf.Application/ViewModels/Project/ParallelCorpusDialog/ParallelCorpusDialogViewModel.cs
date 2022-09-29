@@ -361,14 +361,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     $"Creating the TranslationSet '{translationSetDisplayName}'...");
 
                 var translationModel = WordAlignmentModel.GetTranslationTable();
-                 //TranslationSet = await translationModel.Create(translationSetDisplayName,
-                 //   SelectedSmtAlgorithm.ToString(), new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
+                //TranslationSet = await translationModel.Create(translationSetDisplayName,
+                //   SelectedSmtAlgorithm.ToString(), new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
 
-                 // RUSSELL - code review
-                 //TranslationSet = await TranslationSet.Create(null, AlignmentSet.AlignmentSetId,
-                 //    translationSetDisplayName, new Dictionary<string, object>(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
+                // RUSSELL - code review
+                TranslationSet = await TranslationSet.Create(null, AlignmentSet.AlignmentSetId,
+                    translationSetDisplayName, new Dictionary<string, object>(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
 
-                
+
 
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Completed,

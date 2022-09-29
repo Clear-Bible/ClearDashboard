@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
@@ -182,6 +183,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public List<TranslationSetInfo> TranslationSetInfo { get; set; } = new();
 
         public List<AlignmentSetInfo> AlignmentSetInfo { get; set; } = new();
+
+        public ParallelCorpusId? ParallelCorpusId { get; set; }
+        public string? ParallelCorpusDisplayName { get; set; }
 
         /// <summary>
         /// Event fired when the connection has changed.
