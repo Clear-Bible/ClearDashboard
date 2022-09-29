@@ -22,13 +22,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Interceptors
             // NB:  Adding "DataSource=" to the connection string is required, otherwise we get an unhelpful error:
             //       "Format of the initialization string does not conform to specification starting at index 0."
             connection.ConnectionString = $"DataSource={_projectDbContextFactory.ProjectAssets.DataContextPath};Pooling=true;Mode=ReadWriteCreate";
-            _logger.LogInformation($"Open database with: {connection.ConnectionString}");
+            _logger.LogDebug($"Open database with: {connection.ConnectionString}");
             return base.ConnectionOpening(connection, eventData, result);
         }
 
         public override void ConnectionClosed(DbConnection connection, ConnectionEndEventData eventData)
         {
-            _logger.LogInformation($"Closing database for '{_projectDbContextFactory.ProjectAssets.ProjectName}'");
+            _logger.LogDebug($"Closing database for '{_projectDbContextFactory.ProjectAssets.ProjectName}'");
             base.ConnectionClosed(connection, eventData);
         }
     }
