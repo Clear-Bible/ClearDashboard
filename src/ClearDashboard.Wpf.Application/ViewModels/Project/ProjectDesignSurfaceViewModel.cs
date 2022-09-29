@@ -1526,6 +1526,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet,
                         dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
                         dialogViewModel.SelectedAlignmentSet.ParallelCorpusId, Mediator);
+
+                if (translationSet != null)
+                {
+                    connectionMenuItem.ConnectionViewModel.TranslationSetInfo.Add(new TranslationSetInfo
+                    {
+                        DisplayName = translationSet.TranslationSetId.DisplayName,
+                        TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
+                        ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
+                        ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
+                        AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
+                        AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
+                    });
+
+                    CreateConnectionMenu(connectionMenuItem.ConnectionViewModel);
+                    await SaveCanvas();
+                }
             }
         }
 
