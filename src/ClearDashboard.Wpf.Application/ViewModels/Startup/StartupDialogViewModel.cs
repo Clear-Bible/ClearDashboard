@@ -43,12 +43,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (views == null || !views.Any())
             {
                 throw new DependencyRegistrationMissingException(
-                    "There are no dependency inject registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
+                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'Startup'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
-//#if RELEASE
             _runRegistration = CheckLicense(IoC.Get<RegistrationDialogViewModel>());
-//#endif
 
             foreach (var view in views)
             {
@@ -117,7 +115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                             {
                                 FirstName = decryptedLicenseUser.FirstName,
                                 LastName = decryptedLicenseUser.LastName,
-                                Id = Guid.Parse(decryptedLicenseUser.Id)
+                                Id = decryptedLicenseUser.Id
                             };
                         }
 

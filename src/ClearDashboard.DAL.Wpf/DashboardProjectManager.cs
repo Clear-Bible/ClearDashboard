@@ -22,7 +22,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf;
 public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType,
     Guid CorpusId, Guid TokenizedTextCorpusId, CorpusType CorpusType, bool IsNewWindow);
 
-public record ShowParallelTranslationWindowMessage(string TranslationSetId, string DisplayName, string ParallelCorpusId,
+public record ShowParallelTranslationWindowMessage(string TranslationSetId, string AlignmentSetId, string DisplayName, string ParallelCorpusId,
     string? ParallelCorpusDisplayName, bool IsNewWindow);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 public record UiLanguageChangedMessage(string LanguageCode);
@@ -87,8 +87,9 @@ public class DashboardProjectManager : ProjectManager
     public override async Task Initialize()
     {
         await base.Initialize();
+        CurrentUser = GetLicensedUser();
         await ConfigureSignalRClient();
-        CurrentUser = await GetUser();
+        
     }
 
     protected async Task ConfigureSignalRClient()
@@ -110,7 +111,7 @@ public class DashboardProjectManager : ProjectManager
                 HubConnection.Error += HandleSignalRConnectionError;
                 await PublishSignalRConnected(true);
 
-                CurrentUser = await GetUser();
+                CurrentUser = await UpdateCurrentUserWithParatextUserInformation();
 
             }
         }
@@ -252,7 +253,7 @@ public class DashboardProjectManager : ProjectManager
                         {
                             FirstName = decryptedLicenseUser.FirstName,
                             LastName = decryptedLicenseUser.LastName,
-                            Id = Guid.Parse(decryptedLicenseUser.Id)
+                            Id = decryptedLicenseUser.Id
                         };
 
                     }

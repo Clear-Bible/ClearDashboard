@@ -9,7 +9,6 @@ using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
-using ClearDashboard.DAL.Alignment.Tests.Tokenization;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
@@ -269,13 +268,6 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, createdTokenizedTextCorpus.TokenizedTextCorpusId);
 
                 Assert.True(tokenizedTextCorpus.Count() > 0);
-
-                OnlyUpToCountTextRowProcessor.Train(2);
-
-                var tokenizedTextCorpusWithOnlyTwoTokens = tokenizedTextCorpus
-                    .Filter<OnlyUpToCountTextRowProcessor>();
-
-                Assert.Equal(2, tokenizedTextCorpusWithOnlyTwoTokens.Count());
             } 
             finally
             {

@@ -332,25 +332,34 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ScrollViewer>
-                <StackPanel Orientation="Vertical">
-
-                    <!--  Row 0  -->
-                    <Border
-                        x:Name="Border0"
-                        Margin="2"
-                        Padding="3"
-                        BorderBrush="{Binding VersesDisplay.Row0BorderColor}"
-                        BorderThickness="2"
-                        CornerRadius="4"
-                        Visibility="{Binding VersesDisplay.Row0Visibility}">
-                        <StackPanel Orientation="Horizontal">
+            <!--  OUTER LISTVIEW  -->
+            <ListView
+                x:Name="OuterListView"
+                Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                ItemsSource="{Binding VersesDisplay}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.IsDeferredScrollingEnabled="True"
+                VirtualizingStackPanel.IsVirtualizing="True"
+                VirtualizingStackPanel.VirtualizationMode="Recycling">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Height" Value="Auto" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition x:Name="DisplayColumn" Width="*" />
+                            </Grid.ColumnDefinitions>
 
                             <StackPanel
                                 Margin="0,0,5,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <Button IsEnabled="False">
+
+                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusUpRowCommand}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
@@ -361,7 +370,8 @@
                                         Height="20"
                                         Kind="ArrowUpDropCircle" />
                                 </Button>
-                                <Button Command="{Binding MoveCorpusDownRow0}" CommandParameter="{Binding}">
+
+                                <Button Command="{Binding ElementName=OuterListView, Path=DataContext.MoveCorpusDownRowCommand}" CommandParameter="{Binding}">
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
@@ -374,382 +384,139 @@
                                 </Button>
                             </StackPanel>
 
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding VersesDisplay.Row0Title}" />
-                                <CheckBox
-                                    x:Name="checkRow0"
-                                    IsChecked="{Binding VersesDisplay.Row0ShowTranslation}"
-                                    Visibility="Collapsed" />
 
-                                <ListView
-                                    x:Name="ListView0"
-                                    Width="{Binding ActualWidth, ElementName=Border0, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                                    ItemsSource="{Binding VersesDisplay.Row0Verses}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                    ScrollViewer.IsDeferredScrollingEnabled="True"
-                                    VirtualizingStackPanel.IsVirtualizing="True"
-                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="Height" Value="Auto" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
-                                                <!--  TranslationClicked="{Binding TranslationClickedCommand}"  -->
-                                                <!--  [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];-->
-                                                <!--cm:Action.Target="{Binding Path=DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=projectViews:EnhancedView}}"
-                                                cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                                [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];
-                                                [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];
-                                                [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];
-                                                [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
-                                                [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
-                                                [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];
-                                                [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
-                                                [Event NoteCreate] = [Action NoteCreate($eventArgs)}"-->
-                                                <userControls:VerseDisplay
-                                                    Title=""
-                                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    IsEnabled="True"
-                                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=checkRow0, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleVisibility="Collapsed"
-                                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Tokens="{Binding .}"
-                                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="NoteCreate">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </userControls:VerseDisplay>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
+                            <Border
+                                Grid.Column="1"
+                                Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='20'}"
+                                BorderBrush="{Binding BorderColor}"
+                                BorderThickness="3"
+                                CornerRadius="4">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
 
-                        </StackPanel>
-                    </Border>
+                                        <Button
+                                            Width="20"
+                                            Height="20"
+                                            Margin="3,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding ElementName=OuterListView, Path=DataContext.DeleteCorpusRowCommand}"
+                                            CommandParameter="{Binding}">
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                </Style>
+                                            </Button.Style>
+                                            <materialDesign:PackIcon
+                                                Width="20"
+                                                Height="20"
+                                                Foreground="{StaticResource RedVeryDarkBrush}"
+                                                Kind="Close"
+                                                ToolTip="Remove Corpus" />
+                                        </Button>
+                                        <TextBlock
+                                            Margin="8,0,0,0"
+                                            VerticalAlignment="Center"
+                                            FontSize="16"
+                                            FontWeight="Bold"
+                                            Text="{Binding RowTitle}" />
 
-                    <!--  Row 1  -->
-                    <Border
-                        x:Name="Border1"
-                        Margin="2"
-                        Padding="3"
-                        BorderBrush="{Binding VersesDisplay.Row1BorderColor}"
-                        BorderThickness="2"
-                        CornerRadius="4"
-                        Visibility="{Binding VersesDisplay.Row1Visibility}">
-                        <StackPanel Orientation="Horizontal">
+                                    </StackPanel>
 
-                            <StackPanel
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <Button Command="{Binding MoveCorpusUpRow1}" CommandParameter="{Binding}">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
-                                            <Setter Property="Padding" Value="3" />
-                                        </Style>
-                                    </Button.Style>
-                                    <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
-                                        Kind="ArrowUpDropCircle" />
-                                </Button>
-                                <Button Command="{Binding MoveCorpusDownRow1}" CommandParameter="{Binding}">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
-                                            <Setter Property="Padding" Value="0" />
-                                        </Style>
-                                    </Button.Style>
-                                    <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
-                                        Kind="ArrowDownDropCircle" />
-                                </Button>
-                            </StackPanel>
+                                    <!--  INNER LISTVIEW  -->
+                                    <ListView
+                                        Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                        ItemsSource="{Binding Verses}"
+                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                        ScrollViewer.IsDeferredScrollingEnabled="True"
+                                        VirtualizingStackPanel.IsVirtualizing="True"
+                                        VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="Height" Value="Auto" />
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Vertical">
 
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding VersesDisplay.Row1Title}" />
-                                <CheckBox
-                                    x:Name="checkRow1"
-                                    IsChecked="{Binding VersesDisplay.Row1ShowTranslation}"
-                                    Visibility="Collapsed" />
+                                                    <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
+                                                    <userControls:VerseDisplay
+                                                        Title=""
+                                                        Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                                        FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        IsEnabled="True"
+                                                        NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
+                                                        ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                        ShowTranslations="{Binding DataContext.ShowTranslation, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                        TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        TitleVisibility="Collapsed"
+                                                        TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        Tokens="{Binding .}"
+                                                        TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                                        TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="TokenMouseEnter">
+                                                                <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                            <i:EventTrigger EventName="TranslationClicked">
+                                                                <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                            <i:EventTrigger EventName="NoteCreate">
+                                                                <i:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </userControls:VerseDisplay>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </StackPanel>
+                            </Border>
 
-                                <ListView
-                                    Width="{Binding ActualWidth, ElementName=Border1, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                                    ItemsSource="{Binding VersesDisplay.Row1Verses}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                    ScrollViewer.IsDeferredScrollingEnabled="True"
-                                    VirtualizingStackPanel.IsVirtualizing="True"
-                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="Height" Value="Auto" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
-                                                <userControls:VerseDisplay
-                                                    Title=""
-                                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    IsEnabled="True"
-                                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=checkRow1, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleVisibility="Collapsed"
-                                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Tokens="{Binding .}"
-                                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="NoteCreate">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </userControls:VerseDisplay>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
 
-                        </StackPanel>
-                    </Border>
+                            <!--<userControls:VerseDisplay
+                                Title=""
+                                Grid.Column="1"
+                                FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                IsEnabled="True"
+                                NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
+                                ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                ShowTranslations="{Binding ElementName=checkRow3, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                TitleVisibility="Collapsed"
+                                TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                Tokens="{Binding VersesDisplay.Verses}"
+                                TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TokenMouseEnter">
+                                        <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="TranslationClicked">
+                                        <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="NoteCreate">
+                                        <i:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </userControls:VerseDisplay>-->
+                        </Grid>
 
-                    <!--  Row 2  -->
-                    <Border
-                        x:Name="Border2"
-                        Margin="2"
-                        Padding="3"
-                        BorderBrush="{Binding VersesDisplay.Row2BorderColor}"
-                        BorderThickness="2"
-                        CornerRadius="4"
-                        Visibility="{Binding VersesDisplay.Row2Visibility}">
-                        <StackPanel Orientation="Horizontal">
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-                            <StackPanel
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <Button Command="{Binding MoveCorpusUpRow2}" CommandParameter="{Binding}">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
-                                            <Setter Property="Padding" Value="3" />
-                                        </Style>
-                                    </Button.Style>
-                                    <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
-                                        Kind="ArrowUpDropCircle" />
-                                </Button>
-                                <Button Command="{Binding MoveCorpusDownRow2}" CommandParameter="{Binding}">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
-                                            <Setter Property="Padding" Value="0" />
-                                        </Style>
-                                    </Button.Style>
-                                    <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
-                                        Kind="ArrowDownDropCircle" />
-                                </Button>
-                            </StackPanel>
 
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding VersesDisplay.Row2Title}" />
-                                <CheckBox
-                                    x:Name="checkRow2"
-                                    IsChecked="{Binding VersesDisplay.Row2ShowTranslation}"
-                                    Visibility="Collapsed" />
 
-                                <ListView
-                                    Width="{Binding ActualWidth, ElementName=Border2, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                                    ItemsSource="{Binding VersesDisplay.Row2Verses}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                    ScrollViewer.IsDeferredScrollingEnabled="True"
-                                    VirtualizingStackPanel.IsVirtualizing="True"
-                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="Height" Value="Auto" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
-                                                <userControls:VerseDisplay
-                                                    Title=""
-                                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    IsEnabled="True"
-                                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=checkRow2, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleVisibility="Collapsed"
-                                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Tokens="{Binding .}"
-                                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="NoteCreate">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </userControls:VerseDisplay>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
 
-                        </StackPanel>
-                    </Border>
-
-                    <!--  Row 3  -->
-                    <Border
-                        x:Name="Border3"
-                        Margin="2"
-                        Padding="3"
-                        BorderBrush="{Binding VersesDisplay.Row3BorderColor}"
-                        BorderThickness="2"
-                        CornerRadius="4"
-                        Visibility="{Binding VersesDisplay.Row3Visibility}">
-                        <StackPanel Orientation="Horizontal">
-
-                            <StackPanel
-                                Margin="0,0,5,0"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <Button Command="{Binding MoveCorpusUpRow3}" CommandParameter="{Binding}">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
-                                            <Setter Property="Padding" Value="3" />
-                                        </Style>
-                                    </Button.Style>
-                                    <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
-                                        Kind="ArrowUpDropCircle" />
-                                </Button>
-                                <Button IsEnabled="False">
-                                    <Button.Style>
-                                        <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
-                                            <Setter Property="Padding" Value="0" />
-                                        </Style>
-                                    </Button.Style>
-                                    <materialDesign:PackIcon
-                                        Width="20"
-                                        Height="20"
-                                        Kind="ArrowDownDropCircle" />
-                                </Button>
-                            </StackPanel>
-
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding VersesDisplay.Row3Title}" />
-                                <CheckBox
-                                    x:Name="checkRow3"
-                                    IsChecked="{Binding VersesDisplay.Row3ShowTranslation}"
-                                    Visibility="Collapsed" />
-
-                                <ListView
-                                    Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                                    ItemsSource="{Binding VersesDisplay.Row3Verses}"
-                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                    ScrollViewer.IsDeferredScrollingEnabled="True"
-                                    VirtualizingStackPanel.IsVirtualizing="True"
-                                    VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="Height" Value="Auto" />
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Vertical">
-                                                <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
-                                                <userControls:VerseDisplay
-                                                    Title=""
-                                                    FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    IsEnabled="True"
-                                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding ElementName=checkRow3, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleVisibility="Collapsed"
-                                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Tokens="{Binding .}"
-                                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="NoteCreate">
-                                                            <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteCreate"/>
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </userControls:VerseDisplay>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </StackPanel>
-
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-
-            </ScrollViewer>
 
             <Label
                 Grid.Row="1"
@@ -801,62 +568,61 @@
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel
-                    Grid.Row="1"
-                    Grid.RowSpan="7"
-                    Grid.Column="1"
-                    Orientation="Vertical">
+                        Grid.Row="1"
+                        Grid.RowSpan="7"
+                        Grid.Column="1"
+                        Orientation="Vertical">
 
                         <userControls:TranslationSelector
                             Margin="2,5"
                             SelectedItem="{Binding CurrentTranslationOption}"
-                        TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
-                        TranslationOptions="{Binding TranslationOptions}"
-                        Visibility="{Binding TranslationControlVisibility}"
-                       >
+                            TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
+                            TranslationOptions="{Binding TranslationOptions}"
+                            Visibility="{Binding TranslationControlVisibility}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TranslationApplied">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationApplied"/>
+                                    <i:CallMethodAction MethodName="TranslationApplied" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="TranslationCancelled">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="TranslationCancelled"/>
+                                    <i:CallMethodAction MethodName="TranslationCancelled" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </userControls:TranslationSelector>
 
                         <userControls:NoteCollectionDisplay
+                            Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
                             Margin="0,5"
-                        Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
-                        EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
-                        InnerMargin="0,0,0,30"
-                        LabelBackground="BlanchedAlmond"
-                        LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                        LabelSuggestions="{Binding LabelSuggestions}"
-                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                        Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
-                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                        Visibility="{Binding NoteControlVisibility}">
+                            EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
+                            InnerMargin="0,0,0,30"
+                            LabelBackground="BlanchedAlmond"
+                            LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                            LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                            LabelSuggestions="{Binding LabelSuggestions}"
+                            NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                            Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
+                            TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                            Visibility="{Binding NoteControlVisibility}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="NoteMouseEnter">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteMouseEnter"/>
+                                    <i:CallMethodAction MethodName="NoteMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="NoteAdded">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteAdded"/>
+                                    <i:CallMethodAction MethodName="NoteAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="NoteUpdated">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteUpdated"/>
+                                    <i:CallMethodAction MethodName="NoteUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="NoteDeleted">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="NoteDeleted"/>
+                                    <i:CallMethodAction MethodName="NoteDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="LabelSelected">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="LabelSelected"/>
+                                    <i:CallMethodAction MethodName="LabelSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="LabelAdded">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="LabelAdded"/>
+                                    <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="CloseRequested">
-                                    <i:CallMethodAction TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" MethodName="CloseNotePaneRequested"/>
+                                <i:EventTrigger EventName="CloseNotePaneRequested">
+                                    <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </userControls:NoteCollectionDisplay>

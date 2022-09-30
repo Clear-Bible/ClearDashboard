@@ -188,7 +188,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 translationSet.Id,
                 parallelCorpusId,
                 translationSet.DisplayName,
-                translationSet.SmtModel,
+                //translationSet.SmtModel,
                 translationSet.Metadata,
                 translationSet.Created,
                 BuildUserId(user));

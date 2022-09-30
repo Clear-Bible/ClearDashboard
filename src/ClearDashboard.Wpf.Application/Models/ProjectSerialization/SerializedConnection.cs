@@ -8,5 +8,8 @@ public class SerializedConnection
 {
     public string SourceConnectorId { get; set; } = string.Empty;
     public string TargetConnectorId { get; set; } = string.Empty;
+    public string ParallelCorpusId { get; set; } = string.Empty;
+    public string? ParallelCorpusDisplayName { get; set; } = string.Empty;
     public List<TranslationSetInfo> TranslationSetInfo { get; set; } = new();
+    public List<AlignmentSetInfo> AlignmentSetInfo { get; set; } = new();
 }

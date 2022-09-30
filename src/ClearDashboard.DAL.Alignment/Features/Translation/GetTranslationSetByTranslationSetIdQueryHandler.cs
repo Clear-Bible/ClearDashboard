@@ -11,8 +11,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class GetTranslationSetByTranslationSetIdQueryHandler : ProjectDbContextQueryHandler<
         GetTranslationSetByTranslationSetIdQuery,
-        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>,
-        (TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
+        RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId, bool usingTranslationModel)>,
+        (TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId, bool usingTranslationModel)>
     {
 
         public GetTranslationSetByTranslationSetIdQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationSetByTranslationSetIdQueryHandler> logger) 
@@ -20,9 +20,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         {
         }
 
-        protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId, bool usingTranslationModel)>> GetDataAsync(GetTranslationSetByTranslationSetIdQuery request, CancellationToken cancellationToken)
         {
             var translationSet = ProjectDbContext.TranslationSets
+                .Include(ts => ts.AlignmentSet)
+                    .ThenInclude(ast => ast!.User)
                 .Include(ts => ts.ParallelCorpus)
                     .ThenInclude(pc => pc!.SourceTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
@@ -30,13 +32,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .ThenInclude(pc => pc!.TargetTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
                 .Include(ts => ts.ParallelCorpus)
-                    .ThenInclude(pc => pc.User)
+                    .ThenInclude(pc => pc!.User)
                 .Include(ts => ts.User)
                 .Where(ts => ts.Id == request.TranslationSetId.Id)
                 .FirstOrDefault();
-            if (translationSet == null)
+
+            var usingTranslationModel = (ProjectDbContext!.TranslationModelEntries
+                .Where(tme => tme.TranslationSetId == request.TranslationSetId.Id).Count() > 0);
+
+                if (translationSet == null)
             {
-                return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
+                return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId, bool UsingTranslationModel)>
                 (
                     success: false,
                     message: $"TranslationSet not found for TranslationSetId '{request.TranslationSetId.Id}'"
@@ -46,10 +52,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId)>
+            var parallelCorpusId = ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!);
+
+            return new RequestResult<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, AlignmentSetId alignmentSetId, bool UsingTranslationModel)>
             ((
-                ModelHelper.BuildTranslationSetId(translationSet),
-                ModelHelper.BuildParallelCorpusId(translationSet.ParallelCorpus!)
+                ModelHelper.BuildTranslationSetId(translationSet, parallelCorpusId, translationSet.User!),
+                parallelCorpusId,
+                ModelHelper.BuildAlignmentSetId(translationSet.AlignmentSet!, parallelCorpusId, translationSet.AlignmentSet!.User!),
+                usingTranslationModel
             ));
         }
     }

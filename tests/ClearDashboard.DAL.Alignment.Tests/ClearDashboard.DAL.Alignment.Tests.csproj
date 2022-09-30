@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearBible.Engine" Version="1.0.23" />
+    <PackageReference Include="ClearBible.Engine" Version="1.0.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
 	<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
@@ -264,6 +264,10 @@
     <None Update="Translation\data\WEB-PT\Settings.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tokenization\" />
   </ItemGroup>
 
 </Project>

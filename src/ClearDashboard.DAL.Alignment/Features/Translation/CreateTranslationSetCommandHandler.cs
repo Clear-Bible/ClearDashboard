@@ -60,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
 #if DEBUG
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert TranslationSet '{request.DisplayName}' and model (start) [translation model entry count: {request.TranslationModel.Count()}]");
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert TranslationSet '{request.DisplayName}' and model (start) [translation model entry count: {request.TranslationModel?.Count() ?? 0}]");
             sw.Restart();
             Process proc = Process.GetCurrentProcess();
 
@@ -75,12 +75,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 var translationSet = new Models.TranslationSet
                 {
                     ParallelCorpusId = request.ParallelCorpusId.Id,
+                    AlignmentSetId = request.alignmentSetId.Id,
                     DisplayName = request.DisplayName,
-                    SmtModel = request.SmtModel,
+                    //SmtModel = request.SmtModel,
                     Metadata = request.Metadata,
                     //DerivedFrom = ,
                     //EngineWordAlignment = ,
-                    TranslationModel = request.TranslationModel
+                    TranslationModel = request.TranslationModel?
                         .Select(tm => new Models.TranslationModelEntry
                         {
                             SourceText = tm.Key,
@@ -90,7 +91,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                                     Text = tts.Key,
                                     Score = tts.Value
                                 }).ToList()
-                        }).ToList()
+                        }).ToList() ?? new()
                 };
 
                 // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
@@ -127,6 +128,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 #endif
 
                 var translationSetFromDb = ProjectDbContext!.TranslationSets
+                    .Include(ts => ts.AlignmentSet)
+                        .ThenInclude(ast => ast!.User)
                     .Include(ts => ts.User)
                     .First(ts => ts.Id == translationSetId);
 
@@ -135,6 +138,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 return new RequestResult<TranslationSet>(new TranslationSet(
                     ModelHelper.BuildTranslationSetId(translationSetFromDb, parallelCorpusId, translationSetFromDb.User!),
                     parallelCorpusId,
+                    ModelHelper.BuildAlignmentSetId(translationSetFromDb.AlignmentSet!, parallelCorpusId, translationSetFromDb.AlignmentSet!.User!),
+                    request.TranslationModel != null ? true : false,
                     _mediator));
 
             }
@@ -155,7 +160,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         private DbCommand CreateTranslationSetInsertCommand()
         {
             var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
-            var columns = new string[] { "Id", "ParallelCorpusId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", "SmtModel", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "ParallelCorpusId", "AlignmentSetId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", /*"SmtModel",*/ "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TranslationSet), columns);
 
@@ -170,10 +175,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             translationSetCommand.Parameters["@Id"].Value = translationSetId;
             translationSetCommand.Parameters["@ParallelCorpusId"].Value = translationSet.ParallelCorpusId;
+            translationSetCommand.Parameters["@AlignmentSetId"].Value = translationSet.AlignmentSetId;
             //translationSetCommand.Parameters["@DerivedFrom"].Value = translationSet.DerivedFrom;
             //translationSetCommand.Parameters["@EngineWordAlignmentId"].Value = translationSet.EngineWordAlignmentId;
             translationSetCommand.Parameters["@DisplayName"].Value = translationSet.DisplayName;
-            translationSetCommand.Parameters["@SmtModel"].Value = translationSet.SmtModel;
+            //translationSetCommand.Parameters["@SmtModel"].Value = translationSet.SmtModel;
             translationSetCommand.Parameters["@Metadata"].Value = JsonSerializer.Serialize(translationSet.Metadata);
             translationSetCommand.Parameters["@UserId"].Value = Guid.Empty != translationSet.UserId ? translationSet.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
             translationSetCommand.Parameters["@Created"].Value = converter.ConvertToProvider(translationSet.Created);

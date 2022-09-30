@@ -60,6 +60,19 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
+        public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText)
+        {
+            var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText));
+            if (result.Success && result.Data != null)
+            {
+                return result.Data;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
         public async Task Update()
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId

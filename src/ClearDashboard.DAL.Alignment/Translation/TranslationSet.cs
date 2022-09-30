@@ -1,4 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Translation;
@@ -10,30 +11,48 @@ namespace ClearDashboard.DAL.Alignment.Translation
     public class TranslationSet
     {
         private readonly IMediator mediator_;
-
         public TranslationSetId TranslationSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
+        public AlignmentSetId AlignmentSetId { get; set; }
+        protected bool UsingTranslationModel { get; }
+
+        /*
         private async void PutTranslationModel(Dictionary<string, Dictionary<string, double>> translationModel, string smtModel)
         {
             // Put the model (save to db and set the TranslationModel property)
             // Put the smtModel property on the ID and update
             throw new NotImplementedException();
         }
+        */
 
         public async Task<Dictionary<string, double>?> GetTranslationModelEntryForToken(Token token)
         {
-            var result = await mediator_.Send(new GetTranslationSetModelEntryQuery(TranslationSetId, token.TrainingText));
-            if (result.Success)
+            if (UsingTranslationModel)
             {
-                return result.Data;
+                var result = await mediator_.Send(new GetTranslationSetModelEntryQuery(TranslationSetId, token.TrainingText));
+                if (result.Success)
+                {
+                    return result.Data;
+                }
+                else
+                {
+                    throw new MediatorErrorEngineException(result.Message);
+                }
             }
             else
             {
-                throw new MediatorErrorEngineException(result.Message);
+                var alignmentSet = await AlignmentSet.Get(AlignmentSetId, mediator_);
+                var matchingTargetTokens = await alignmentSet.GetTargetTokensBySourceTrainingText(token.TrainingText);
+                return matchingTargetTokens
+                    .Select(t => t.TrainingText)
+                    .GroupBy(t => t)
+                    .OrderByDescending(g => g.Count())
+                    .ToDictionary(g => g.Key, g => (double)g.Count());
             }
         }
 
+        /*
         public async void PutTranslationModelEntry(string sourceText, Dictionary<string, double> targetTranslationTextScores)
         {
             var result = await mediator_.Send(new PutTranslationSetModelEntryCommand(TranslationSetId, sourceText, targetTranslationTextScores));
@@ -47,6 +66,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
+        */
         public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow)
         {
             return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)));
@@ -86,7 +106,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
         public async void Update()
         {
-            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
+            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId and also this.AlignmentSetId
         }
 
         public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>> 
@@ -116,6 +136,8 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 return new TranslationSet(
                     data.translationSetId,
                     data.parallelCorpusId,
+                    data.alignmentSetId,
+                    data.usingTranslationModel,
                     mediator);
             }
             else
@@ -133,17 +155,19 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <returns></returns>
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<TranslationSet> Create(
-            Dictionary<string, Dictionary<string, double>> translationModel,
+            Dictionary<string, Dictionary<string, double>>? translationModel,
+            AlignmentSetId alignmentSetId,
             string? displayName,
-            string smtModel,
+            //string smtModel,
             Dictionary<string, object> metadata,
             ParallelCorpusId parallelCorpusId,
             IMediator mediator)
         {
             var createTranslationSetCommandResult = await mediator.Send(new CreateTranslationSetCommand(
                 translationModel,
+                alignmentSetId,
                 displayName,
-                smtModel,
+                //smtModel,
                 metadata,
                 parallelCorpusId));
 
@@ -160,12 +184,16 @@ namespace ClearDashboard.DAL.Alignment.Translation
         internal TranslationSet(
             TranslationSetId translationSetId,
             ParallelCorpusId parallelCorpusId,
+            AlignmentSetId alignmentSetId,
+            bool usingTranslationModel,
             IMediator mediator)
         {
             mediator_ = mediator;
 
             TranslationSetId = translationSetId;
             ParallelCorpusId = parallelCorpusId;
+            AlignmentSetId = alignmentSetId;
+            UsingTranslationModel = usingTranslationModel;
         }
     }
 }

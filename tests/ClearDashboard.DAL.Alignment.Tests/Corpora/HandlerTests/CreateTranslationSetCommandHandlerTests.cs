@@ -16,6 +16,10 @@ using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 using System.Threading.Tasks;
 using System.Text;
 using SIL.Machine.Tokenization;
+using ClearDashboard.DataAccessLayer.Models;
+using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using Token = ClearBible.Engine.Corpora.Token;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -34,17 +38,40 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var parallelTextCorpus1 = await BuildSampleEngineParallelTextCorpus();
             var parallelCorpus1 = await parallelTextCorpus1.Create("pc1", Mediator!);
 
-            var translationModel1 = await BuildSampleTranslationModel(parallelTextCorpus1);
+            var alignmentModel1 = await BuildSampleAlignmentModel(parallelTextCorpus1);
+            var alignmentSet1 = await alignmentModel1.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus1.ParallelCorpusId,
+                    Mediator!);
+            var translationSet1 = await TranslationSet.Create(null, alignmentSet1.AlignmentSetId, "display name 1", new(), parallelCorpus1.ParallelCorpusId, Mediator!);
 
-            var translationSet1 = await translationModel1.Create("display name 1", "smt model 1", new(), parallelCorpus1.ParallelCorpusId, Mediator!);
+
+            //var translationModel1 = await BuildSampleTranslationModel(parallelTextCorpus1);
+            //var translationSet1 = await translationModel1.Create("display name 1", "smt model 1", new(), parallelCorpus1.ParallelCorpusId, Mediator!);
+
             Assert.NotNull(translationSet1);
+
 
             var parallelTextCorpus2 = await BuildSampleEngineParallelTextCorpus();
             var parallelCorpus2 = await parallelTextCorpus2.Create("pc2", Mediator!);
 
-            var translationModel2 = await BuildSampleTranslationModel(parallelTextCorpus2);
+            //var translationModel2 = await BuildSampleTranslationModel(parallelTextCorpus2);
 
-            var translationSet2 = await translationModel2.Create("display name 2", "smt model 2", new(), parallelCorpus2.ParallelCorpusId, Mediator!);
+            //var translationSet2 = await translationModel2.Create("display name 2", "smt model 2", new(), parallelCorpus2.ParallelCorpusId, Mediator!);
+
+            var alignmentModel2 = await BuildSampleAlignmentModel(parallelTextCorpus2);
+            var alignmentSet2 = await alignmentModel2.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus2.ParallelCorpusId,
+                    Mediator!);
+            var translationSet2 = await TranslationSet.Create(null, alignmentSet2.AlignmentSetId, "display name 1", new(), parallelCorpus2.ParallelCorpusId, Mediator!);
+
             Assert.NotNull(translationSet2);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -80,9 +107,20 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
             var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
-            var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
+            //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
-            var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+            //var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
             Assert.NotNull(translationSet);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -95,6 +133,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             Assert.Equal(translationSet.ParallelCorpusId.Id, translationSetDb!.ParallelCorpusId);
             Assert.Empty(translationSetDb!.Translations);
+            /*
             Assert.True(translationModel.Keys.Count > 3);
             var tm = await translationSet.GetTranslationModelEntryForToken(new Token(new TokenId(1, 1, 1, 1, 1), "surface", translationModel.Keys.Skip(3).First()));
             Assert.NotNull(tm);
@@ -104,6 +143,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             {
                 Output.WriteLine($"\tTarget text: {kvp.Key} / score: {kvp.Value}");
             }
+            */
         }
         finally
         {
@@ -120,9 +160,21 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
             var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
-            var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
+            //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
-            var translationSet = await translationModel.Create("display name", "smt model", new() { { "boo", "baa"} }, parallelCorpus.ParallelCorpusId, Mediator!);
+            //var translationSet = await translationModel.Create("display name", "smt model", new() { { "boo", "baa"} }, parallelCorpus.ParallelCorpusId, Mediator!);
+            
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
             Assert.NotNull(translationSet);
 
             var bookId = parallelCorpus.SourceCorpus.Texts.Select(t => t.Id).ToList().First();
@@ -187,6 +239,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
                     TranslationActionTypes.PutPropagate);
 
+            /*
             translationSet.PutTranslationModelEntry("one", new Dictionary<string, double>()
             {
                 { "boo", 0.98 },
@@ -202,6 +255,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 { "moo", 0.11 },
                 { "maa", 0.001 }
             });
+            */
         }
         finally
         {
@@ -226,6 +280,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 null,
                 SymmetrizationHeuristic.GrowDiagFinalAnd);
 
+            /*
             var translationModel = smtWordAlignmentModel.GetTranslationTable();
             var translationSet = await translationModel.Create(
                 "manuscript to zz_sur",
@@ -233,9 +288,8 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 new() { { "size", "large" }, { "how large", "huge" } }, 
                 parallelCorpus.ParallelCorpusId, 
                 Mediator!);
-
-            Assert.NotNull(translationSet);
-            
+            */
+           
             var alignmentModel = translationCommandable.PredictAllAlignedTokenIdPairs(smtWordAlignmentModel, parallelCorpus).ToList();
             var alignmentSet = await alignmentModel.Create(
                     "manuscript to zz_sur",
@@ -246,6 +300,10 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     Mediator!);
 
             Assert.NotNull(alignmentSet);
+
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+            Assert.NotNull(translationSet);
 
         }
         finally
@@ -313,9 +371,20 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
             var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
-            var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
+            //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
-            var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+            //var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
             Assert.NotNull(translationSet);
 
             var initialFilteredEngineParallelTextRows = parallelCorpus.Take(5).Cast<EngineParallelTextRow>();
@@ -400,8 +469,18 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
             // Should throw an exception because of the bogus ParallelCorpusId:
-            await Assert.ThrowsAnyAsync<Exception>(() => translationModel.Create(null, string.Empty, new(), new ParallelCorpusId(new Guid()), Mediator!));
-       }
+            //await Assert.ThrowsAnyAsync<Exception>(() => translationModel.Create(null, string.Empty, new(), new ParallelCorpusId(new Guid()), Mediator!));
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                     new ParallelCorpusId(new Guid()),  //CHRIS is this right?
+                    Mediator!);
+            await Assert.ThrowsAnyAsync<Exception>(() => TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), new ParallelCorpusId(new Guid()), Mediator!));
+        }
         finally
         {
             await DeleteDatabaseContext();
