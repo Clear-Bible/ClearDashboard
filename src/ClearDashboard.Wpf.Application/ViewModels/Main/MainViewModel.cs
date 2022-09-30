@@ -1535,7 +1535,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
         {
-            _projectDesignSurfaceViewModel.SaveCanvas();
+            //_projectDesignSurfaceViewModel.SaveCanvas();
             SetupProjectDesignSurface();
             return Task.CompletedTask;
         }
