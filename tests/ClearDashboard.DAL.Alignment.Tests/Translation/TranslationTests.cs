@@ -53,7 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
                 FunctionWordTextRowProcessor.Train(parallelTextCorpus);
 
                 parallelTextCorpus.SourceCorpus = parallelTextCorpus.SourceCorpus
-                    .Filter<FunctionWordTextRowProcessor>();
+                    .Transform<FunctionWordTextRowProcessor>();
 
                 {
                     var translationCommandable = new TranslationCommands();
