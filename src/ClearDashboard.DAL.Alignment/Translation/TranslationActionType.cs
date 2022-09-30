@@ -6,4 +6,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
         PutPropagate,
         PutNoPropagate
     }
+
+    public static class TranslationActionTypes
+    {
+        public static string PutPropagate = "PutPropagate";
+        public static string PutNoPropagate = "PutNoPropagate";
+    }
 }
