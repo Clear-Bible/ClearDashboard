@@ -24,15 +24,6 @@ using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
-#if MOCK
-// Additional using statements for mock data
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
-using ClearDashboard.DAL.Alignment.Notes;
-using SIL.Machine.Corpora;
-#endif
-
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
