@@ -88,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
 
-        public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
+        public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
         public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
         public IDetokenizer<string, string>? Detokenizer { get; set; } = new LatinWordDetokenizer();
         public IEnumerable<Translation> CurrentTranslations { get; set; }
