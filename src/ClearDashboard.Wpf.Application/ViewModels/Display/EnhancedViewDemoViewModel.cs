@@ -233,13 +233,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             await VerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
 
             Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
-            TranslationPaneVisibility = Visibility.Hidden;
+            TranslationPaneVisibility = Visibility.Collapsed;
         }
 
         public void TranslationCancelled(RoutedEventArgs e)
         {
             Message = "Translation cancelled.";
-            TranslationPaneVisibility = Visibility.Hidden;
+            TranslationPaneVisibility = Visibility.Collapsed;
         }        
         
         public async Task NoteAdded(NoteEventArgs e)
@@ -258,7 +258,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             await VerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityId);
             Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
-            NotePaneVisibility = Visibility.Hidden;
         }
 
         public async Task LabelAdded(LabelEventArgs e)
@@ -282,7 +281,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void CloseNotePaneRequested(RoutedEventArgs args)
         {
-            NotePaneVisibility = Visibility.Hidden;
+            NotePaneVisibility = Visibility.Collapsed;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
