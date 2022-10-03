@@ -424,7 +424,10 @@
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Manuscript}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -789,11 +792,19 @@
                 <WrapPanel>
                     <!--  Manuscript  -->
                     <Button
-                        x:Name="AddManuscriptCorpus"
+                        x:Name="AddManuscriptHebrewCorpus"
                         Margin="10,0,10,10"
-                        cm:Message.Attach="AddManuscriptCorpus()"
-                        Content="{helpers:Localization Pds_Manuscript}"
-                        IsEnabled="{Binding AddManuscriptEnabled}"
+                        cm:Message.Attach="AddManuscriptHebrewCorpus()"
+                        Content="{helpers:Localization Pds_ManuscriptHebrew}"
+                        IsEnabled="{Binding AddManuscriptHebrewEnabled}"
+                        Style="{StaticResource BigButton}"
+                        Tag=" ScriptTextOutline" />
+                    <Button
+                        x:Name="AddManuscriptGreekCorpus"
+                        Margin="10,0,10,10"
+                        cm:Message.Attach="AddManuscriptGreekCorpus()"
+                        Content="{helpers:Localization Pds_ManuscriptGreek}"
+                        IsEnabled="{Binding AddManuscriptGreekEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
                     <Button

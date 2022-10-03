@@ -807,7 +807,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     ParatextProjectMetadata metadata;
 
-                    if (message.ParatextProjectId == _projectManager?.ManuscriptGuid.ToString())
+                    if (message.ParatextProjectId == _projectManager?.ManuscriptHebrewGuid.ToString())
                     {
                         // our fake Manuscript corpus
                         var bookInfo = new BookInfo();
@@ -815,9 +815,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         metadata = new ParatextProjectMetadata
                         {
-                            Id = _projectManager.ManuscriptGuid.ToString(),
-                            CorpusType = CorpusType.Manuscript,
-                            Name = "Manuscript",
+                            Id = _projectManager.ManuscriptHebrewGuid.ToString(),
+                            CorpusType = CorpusType.ManuscriptHebrew,
+                            Name = "Macula Hebrew",
+                            AvailableBooks = books,
+                        };
+                    }
+                    else if (message.ParatextProjectId == _projectManager?.ManuscriptGreekGuid.ToString())
+                    {
+                        // our fake Manuscript corpus
+                        var bookInfo = new BookInfo();
+                        var books = bookInfo.GenerateScriptureBookList();
+
+                        metadata = new ParatextProjectMetadata
+                        {
+                            Id = _projectManager.ManuscriptGreekGuid.ToString(),
+                            CorpusType = CorpusType.ManuscriptGreek,
+                            Name = "Macula Greek",
                             AvailableBooks = books,
                         };
                     }
@@ -1194,7 +1208,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case CorpusType.Unknown:
                     brush = Brushes.Silver;
                     break;
-                case CorpusType.Manuscript:
+                case CorpusType.ManuscriptHebrew:
+                    brush = Brushes.MediumOrchid;
+                    break;
+                case CorpusType.ManuscriptGreek:
                     brush = Brushes.MediumOrchid;
                     break;
                 default:

@@ -34,12 +34,14 @@ public enum CorpusType
     // NB:  CODE REVIEW:  Do we still need this WRT to ParatextProxy lines 264 & 439, CreateNewProjectWorkflowStepViewModel line 315?
     Resource,
     Unknown,
-    Manuscript,
+    ManuscriptGreek,
+    ManuscriptHebrew
 }
 
 public enum CorpusSourceType
 {
-    Manuscript,
+    ManuscriptHebrew,
+    ManuscriptGreek,
     // ReSharper disable once InconsistentNaming
     USFM,
     Paratext
