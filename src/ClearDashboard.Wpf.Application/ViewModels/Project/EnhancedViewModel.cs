@@ -645,6 +645,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             List<TokenDisplayViewModel> VerseTokens = new();
             var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
 
+            List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
+
             var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
 
             if (row is null)
@@ -677,6 +679,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             return VerseTokens;
+        }
+
+        private List<string> GetValidVerseRange(string bbbcccvvv, int offset)
+        {
+            List<string> verseRange = new();
+            verseRange.Add(bbbcccvvv);
+
+            int currentVerse = Convert.ToInt32(bbbcccvvv.Substring(6));
+            
+            // get lower range first
+            int j = 1;
+            while (j <= offset)
+            {
+                // check verse
+                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000")))
+                {
+                    verseRange.Add(bbbcccvvv.Substring(0, 6) + currentVerse.ToString("000"));
+                }
+                
+                j++;
+            }
+
+
+            // get upper range
+
+
+            // sort list
+
+            return verseRange;
         }
 
         public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV, ShowParallelTranslationWindowMessage message)
@@ -1277,7 +1308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     CorpusId = Guid.Parse(message.ParallelCorpusId),
                     BorderColor = brush,
                     ShowTranslation = ShowTranslations,
-                    RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.BookNum}:{CurrentBcv.VerseNum})",
+                    RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})",
                     Verses = verses,
                 });
             }
@@ -1286,7 +1317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.CorpusId = Guid.Parse(message.ParallelCorpusId);
                 row.BorderColor = brush;
                 row.ShowTranslation = ShowTranslations;
-                row.RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.BookNum}:{CurrentBcv.VerseNum})";
+                row.RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})";
                 row.Verses = verses;
             }
 
