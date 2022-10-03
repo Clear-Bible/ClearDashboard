@@ -1277,7 +1277,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     CorpusId = Guid.Parse(message.ParallelCorpusId),
                     BorderColor = brush,
                     ShowTranslation = ShowTranslations,
-                    RowTitle = title,
+                    RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.BookNum}:{CurrentBcv.VerseNum})",
                     Verses = verses,
                 });
             }
@@ -1286,7 +1286,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.CorpusId = Guid.Parse(message.ParallelCorpusId);
                 row.BorderColor = brush;
                 row.ShowTranslation = ShowTranslations;
-                row.RowTitle = title;
+                row.RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.BookNum}:{CurrentBcv.VerseNum})";
                 row.Verses = verses;
             }
 
