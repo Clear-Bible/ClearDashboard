@@ -1566,41 +1566,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }
 
-        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
-        {
-            var result = new List<TranslationOption>();
+        //private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        //{
+        //    var result = new List<TranslationOption>();
 
-            var random = new Random();
-            var optionCount = random.Next(4) + 2;     // 2-5 options
-            var remainingPercentage = 100d;
+        //    var random = new Random();
+        //    var optionCount = random.Next(4) + 2;     // 2-5 options
+        //    var remainingPercentage = 100d;
 
-            var basePercentage = random.NextDouble() * remainingPercentage;
-            result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
-            remainingPercentage -= basePercentage;
+        //    var basePercentage = random.NextDouble() * remainingPercentage;
+        //    result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
+        //    remainingPercentage -= basePercentage;
 
-            for (var i = 1; i < optionCount - 1; i++)
-            {
-                var percentage = random.NextDouble() * remainingPercentage;
-                result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
-                remainingPercentage -= percentage;
-            }
+        //    for (var i = 1; i < optionCount - 1; i++)
+        //    {
+        //        var percentage = random.NextDouble() * remainingPercentage;
+        //        result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
+        //        remainingPercentage -= percentage;
+        //    }
 
-            result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
+        //    result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
 
-            return result.OrderByDescending(to => to.Probability);
-        }
+        //    return result.OrderByDescending(to => to.Probability);
+        //}
 
-        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
+        //private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
 
 
-        private static int mockOogaWordsIndexer_;
+        //private static int mockOogaWordsIndexer_;
 
-        private string GetMockOogaWord()
-        {
-            var result = MockOogaWords[mockOogaWordsIndexer_++];
-            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
-            return result;
-        }
+        //private string GetMockOogaWord()
+        //{
+        //    var result = MockOogaWords[mockOogaWordsIndexer_++];
+        //    if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+        //    return result;
+        //}
     }
 
 
