@@ -645,6 +645,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             List<TokenDisplayViewModel> VerseTokens = new();
             var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
 
+            List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
+
             var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
 
             if (row is null)
@@ -677,6 +679,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             return VerseTokens;
+        }
+
+        private List<string> GetValidVerseRange(string bbbcccvvv, int offset)
+        {
+            List<string> verseRange = new();
+            verseRange.Add(bbbcccvvv);
+
+            int currentVerse = Convert.ToInt32(bbbcccvvv.Substring(6));
+            
+            // get lower range first
+            int j = 1;
+            while (j <= offset)
+            {
+                // check verse
+                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000")))
+                {
+                    verseRange.Add(bbbcccvvv.Substring(0, 6) + currentVerse.ToString("000"));
+                }
+                
+                j++;
+            }
+
+
+            // get upper range
+
+
+            // sort list
+
+            return verseRange;
         }
 
         public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV, ShowParallelTranslationWindowMessage message)
@@ -1277,7 +1308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     CorpusId = Guid.Parse(message.ParallelCorpusId),
                     BorderColor = brush,
                     ShowTranslation = ShowTranslations,
-                    RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.BookNum}:{CurrentBcv.VerseNum})",
+                    RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})",
                     Verses = verses,
                 });
             }
@@ -1286,7 +1317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.CorpusId = Guid.Parse(message.ParallelCorpusId);
                 row.BorderColor = brush;
                 row.ShowTranslation = ShowTranslations;
-                row.RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.BookNum}:{CurrentBcv.VerseNum})";
+                row.RowTitle = title + $"    ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})";
                 row.Verses = verses;
             }
 
@@ -1566,41 +1597,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }
 
-        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
-        {
-            var result = new List<TranslationOption>();
+        //private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        //{
+        //    var result = new List<TranslationOption>();
 
-            var random = new Random();
-            var optionCount = random.Next(4) + 2;     // 2-5 options
-            var remainingPercentage = 100d;
+        //    var random = new Random();
+        //    var optionCount = random.Next(4) + 2;     // 2-5 options
+        //    var remainingPercentage = 100d;
 
-            var basePercentage = random.NextDouble() * remainingPercentage;
-            result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
-            remainingPercentage -= basePercentage;
+        //    var basePercentage = random.NextDouble() * remainingPercentage;
+        //    result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
+        //    remainingPercentage -= basePercentage;
 
-            for (var i = 1; i < optionCount - 1; i++)
-            {
-                var percentage = random.NextDouble() * remainingPercentage;
-                result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
-                remainingPercentage -= percentage;
-            }
+        //    for (var i = 1; i < optionCount - 1; i++)
+        //    {
+        //        var percentage = random.NextDouble() * remainingPercentage;
+        //        result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
+        //        remainingPercentage -= percentage;
+        //    }
 
-            result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
+        //    result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
 
-            return result.OrderByDescending(to => to.Probability);
-        }
+        //    return result.OrderByDescending(to => to.Probability);
+        //}
 
-        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
+        //private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
 
 
-        private static int mockOogaWordsIndexer_;
+        //private static int mockOogaWordsIndexer_;
 
-        private string GetMockOogaWord()
-        {
-            var result = MockOogaWords[mockOogaWordsIndexer_++];
-            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
-            return result;
-        }
+        //private string GetMockOogaWord()
+        //{
+        //    var result = MockOogaWords[mockOogaWordsIndexer_++];
+        //    if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+        //    return result;
+        //}
     }
 
 
