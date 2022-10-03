@@ -661,7 +661,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             else
             {
                 NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-                CurrentTranslationSet = await GetTranslationSet();
+                CurrentTranslationSet = await GetTranslationSet(message);
                 CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
                 VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
                 LabelSuggestions = await GetLabelSuggestions();
@@ -734,12 +734,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet()
+        public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet(ShowParallelTranslationWindowMessage message)
         {
+            DAL.Alignment.Translation.TranslationSet translationSet;
             try
             {
-                var translationSetIds = await DAL.Alignment.Translation.TranslationSet.GetAllTranslationSetIds(Mediator);
-                var translationSet = await DAL.Alignment.Translation.TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
+                if (message.TranslationSetId == "")
+                {
+                    var translationSetIds = await DAL.Alignment.Translation.TranslationSet.GetAllTranslationSetIds(Mediator);
+                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
+                }
+                else
+                {
+                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(message.TranslationSetId)), Mediator);
+                }
 
                 return translationSet;
             }
