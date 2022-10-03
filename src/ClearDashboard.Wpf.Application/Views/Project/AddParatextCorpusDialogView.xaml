@@ -24,7 +24,7 @@
     FontFamily="{DynamicResource MaterialDesignFont}"
     Foreground="{DynamicResource MaterialDesignPaper}"
     ShowInTaskbar="False"
-    Title="Add Paratext Corpus"
+    Title="Import Corpus from Paratext"
     TextElement.FontSize="13"
     TextElement.FontWeight="Regular"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"

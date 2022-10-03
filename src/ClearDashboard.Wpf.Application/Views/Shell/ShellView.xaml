@@ -439,7 +439,7 @@
             Grid.Row="1"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Content="Loading application.  Please wait."
+            Content="Loading..."
             FontSize="40"
             Visibility="{Binding LoadingApplication, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}" />
 

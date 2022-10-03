@@ -643,23 +643,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
-            var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
-            NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-            CurrentTranslationSet = await GetTranslationSet();
-            CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-            var VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
-            LabelSuggestions = await GetLabelSuggestions();
+            List<TokenDisplayViewModel> VerseTokens = new();
             var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
-            verseOut.Add(VerseTokens);
 
+            var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
 
-            OnUIThread(() =>
+            if (row is null)
             {
-                UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
-                NotifyOfPropertyChange(() => VersesDisplay);
 
-                ProgressBarVisibility = Visibility.Collapsed;
-            });
+                OnUIThread(() =>
+                {
+                    UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+
+                    ProgressBarVisibility = Visibility.Collapsed;
+                });
+            }
+            else
+            {
+                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
+                CurrentTranslationSet = await GetTranslationSet(message);
+                CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
+                VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
+                LabelSuggestions = await GetLabelSuggestions();
+                verseOut.Add(VerseTokens);
+
+                OnUIThread(() =>
+                {
+                    UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+
+                    ProgressBarVisibility = Visibility.Collapsed;
+                });
+            }
+
             return VerseTokens;
         }
 
@@ -718,12 +735,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet()
+        public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet(ShowParallelTranslationWindowMessage message)
         {
+            DAL.Alignment.Translation.TranslationSet translationSet;
             try
             {
-                var translationSetIds = await DAL.Alignment.Translation.TranslationSet.GetAllTranslationSetIds(Mediator);
-                var translationSet = await DAL.Alignment.Translation.TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
+                if (message.TranslationSetId == "")
+                {
+                    var translationSetIds = await DAL.Alignment.Translation.TranslationSet.GetAllTranslationSetIds(Mediator);
+                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
+                }
+                else
+                {
+                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(message.TranslationSetId)), Mediator);
+                }
 
                 return translationSet;
             }
@@ -802,7 +827,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     ParatextProjectMetadata metadata;
 
-                    if (message.ParatextProjectId == _projectManager?.ManuscriptGuid.ToString())
+                    if (message.ParatextProjectId == _projectManager?.ManuscriptHebrewGuid.ToString())
                     {
                         // our fake Manuscript corpus
                         var bookInfo = new BookInfo();
@@ -810,9 +835,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         metadata = new ParatextProjectMetadata
                         {
-                            Id = _projectManager.ManuscriptGuid.ToString(),
-                            CorpusType = CorpusType.Manuscript,
-                            Name = "Manuscript",
+                            Id = _projectManager.ManuscriptHebrewGuid.ToString(),
+                            CorpusType = CorpusType.ManuscriptHebrew,
+                            Name = "Macula Hebrew",
+                            AvailableBooks = books,
+                        };
+                    }
+                    else if (message.ParatextProjectId == _projectManager?.ManuscriptGreekGuid.ToString())
+                    {
+                        // our fake Manuscript corpus
+                        var bookInfo = new BookInfo();
+                        var books = bookInfo.GenerateScriptureBookList();
+
+                        metadata = new ParatextProjectMetadata
+                        {
+                            Id = _projectManager.ManuscriptGreekGuid.ToString(),
+                            CorpusType = CorpusType.ManuscriptGreek,
+                            Name = "Macula Greek",
                             AvailableBooks = books,
                         };
                     }
@@ -975,6 +1014,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
+
+                    OnUIThread(() =>
+                    {
+                        UpdateVersesDisplay(message, new ObservableCollection<List<TokenDisplayViewModel>>(),
+                            message.ProjectName + " - " + message.TokenizationType +
+                            "    No verse data in this verse range", false);
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    });
                 }
                 finally
                 {
@@ -1114,6 +1161,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
+
+                    OnUIThread(() =>
+                    {
+                        UpdateVersesDisplay(message, new ObservableCollection<List<TokenDisplayViewModel>>(),
+                            message.ProjectName + " - " + message.TokenizationType +
+                            "    No verse data in this verse range", false);
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    });
+
                 }
                 finally
                 {
@@ -1189,7 +1245,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case CorpusType.Unknown:
                     brush = Brushes.Silver;
                     break;
-                case CorpusType.Manuscript:
+                case CorpusType.ManuscriptHebrew:
+                    brush = Brushes.MediumOrchid;
+                    break;
+                case CorpusType.ManuscriptGreek:
                     brush = Brushes.MediumOrchid;
                     break;
                 default:

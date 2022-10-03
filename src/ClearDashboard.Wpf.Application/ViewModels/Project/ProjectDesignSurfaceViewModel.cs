@@ -281,14 +281,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _selectedConnection, value);
         }
 
-        private bool _addManuscriptEnabled = true;
-        public bool AddManuscriptEnabled
+        private bool _addManuscriptHebrewEnabled = true;
+        public bool AddManuscriptHebrewEnabled
         {
-            get => _addManuscriptEnabled;
+            get => _addManuscriptHebrewEnabled;
             set
             {
-                _addManuscriptEnabled = value;
-                NotifyOfPropertyChange(() => AddManuscriptEnabled);
+                _addManuscriptHebrewEnabled = value;
+                NotifyOfPropertyChange(() => AddManuscriptHebrewEnabled);
+            }
+        }
+
+        private bool _addManuscriptGreekEnabled = true;
+        public bool AddManuscriptGreekEnabled
+        {
+            get => _addManuscriptGreekEnabled;
+            set
+            {
+                _addManuscriptGreekEnabled = value;
+                NotifyOfPropertyChange(() => AddManuscriptGreekEnabled);
             }
         }
 
@@ -558,9 +569,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var node = CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
                     node.NodeTokenizations = corpusNode.NodeTokenizations;
 
-                    if (corpusNode.CorpusType == CorpusType.Manuscript)
+                    if (corpusNode.CorpusType == CorpusType.ManuscriptHebrew)
                     {
-                        AddManuscriptEnabled = false;
+                        AddManuscriptHebrewEnabled = false;
+                    }
+                    else if (corpusNode.CorpusType == CorpusType.ManuscriptGreek)
+                    {
+                        AddManuscriptGreekEnabled = false;
                     }
 
                     // add in the menu
@@ -614,7 +629,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         // ReSharper disable once UnusedMember.Global
-        public async void AddManuscriptCorpus()
+        public async void AddManuscriptHebrewCorpus()
         {
             _logger.LogInformation("AddParatextCorpus called.");
 
@@ -623,7 +638,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //    CorpusType.Manuscript, new Dictionary<string, object>());
 
 
-            AddManuscriptEnabled = false;
+            AddManuscriptHebrewEnabled = false;
 
 
             CancellationTokenSource = new CancellationTokenSource();
@@ -631,17 +646,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree)
+            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
                 .Transform<SetTrainingByTrainingLowercase>();
 
             BookInfo bookInfo = new BookInfo();
-            var books = bookInfo.GenerateScriptureBookList();
+            var books = bookInfo.GenerateScriptureBookList()
+                .Where(bi => sourceCorpus.Texts
+                    .Select(t => t.Id)
+                    .Contains(bi.Code))
+                .ToList();
 
             var metadata = new ParatextProjectMetadata
             {
-                Id = _projectManager.ManuscriptGuid.ToString(),
-                CorpusType = CorpusType.Manuscript,
-                Name = "Manuscript",
+                Id = _projectManager.ManuscriptHebrewGuid.ToString(),
+                CorpusType = CorpusType.ManuscriptHebrew,
+                Name = "Macula Hebrew",
                 AvailableBooks = books,
             };
 
@@ -656,10 +675,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
                         mediator: Mediator,
                         IsRtl: false,
-                        Name: "Manuscript",
-                        Language: "Manuscript",
-                        CorpusType: CorpusType.Manuscript.ToString(),
-                        ParatextId: _projectManager.ManuscriptGuid.ToString(),
+                        Name: "Macula Hebrew",
+                        Language: "Hebrew",
+                        CorpusType: CorpusType.ManuscriptHebrew.ToString(),
+                        ParatextId: _projectManager.ManuscriptHebrewGuid.ToString(),
                         token: cancellationToken);
 
                     OnUIThread(() => Corpora.Add(corpus));
@@ -691,7 +710,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }), cancellationToken);
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
-                        "Manuscript",
+                        "Macula Hebrew",
                         Tokenizer.WhitespaceTokenizer.ToString(),
                         cancellationToken);
 
@@ -739,6 +758,134 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+        public async void AddManuscriptGreekCorpus()
+        {
+            _logger.LogInformation("AddParatextGreekCorpus called.");
+
+            //var corpus = new DAL.Alignment.Corpora.Corpus(corpusId: new CorpusId(Guid.NewGuid()), mediator: null,
+            //    isRtl: false, name: "Manuscript", language: "Manuscript", paratextGuid: _projectManager.ManuscriptGuid,
+            //    CorpusType.Manuscript, new Dictionary<string, object>());
+
+
+            AddManuscriptGreekEnabled = false;
+
+
+            CancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = CancellationTokenSource.Token;
+
+
+            var syntaxTree = new SyntaxTrees();
+            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
+                .Transform<SetTrainingByTrainingLowercase>();
+
+            BookInfo bookInfo = new BookInfo();
+            var books = bookInfo.GenerateScriptureBookList()
+                .Where(bi => sourceCorpus.Texts
+                    .Select(t => t.Id)
+                    .Contains(bi.Code))
+                .ToList();
+
+            var metadata = new ParatextProjectMetadata
+            {
+                Id = _projectManager.ManuscriptGreekGuid.ToString(),
+                CorpusType = CorpusType.ManuscriptGreek,
+                Name = "Macula Greek",
+                AvailableBooks = books,
+            };
+
+
+            _ = await Task.Factory.StartNew(async () =>
+            {
+
+                IsBusy = true;
+
+                try
+                {
+                    var corpus = await DAL.Alignment.Corpora.Corpus.Create(
+                        mediator: Mediator,
+                        IsRtl: false,
+                        Name: "Macula Greek",
+                        Language: "Greek",
+                        CorpusType: CorpusType.ManuscriptGreek.ToString(),
+                        ParatextId: _projectManager.ManuscriptGreekGuid.ToString(),
+                        token: cancellationToken);
+
+                    OnUIThread(() => Corpora.Add(corpus));
+
+                    CorpusNodeViewModel node = new();
+
+                    OnUIThread(() =>
+                    {
+                        // figure out some offset based on the number of nodes already in the network
+                        // so we don't overlap
+                        var point = GetFreeSpot();
+                        node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
+                    });
+
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = "Corpus",
+                        Description = $"Tokenizing and transforming '{metadata.Name}' corpus...",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
+                    }), cancellationToken);
+
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = "Corpus",
+                        Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
+                    }), cancellationToken);
+
+                    var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
+                        "Macula Greek",
+                        Tokenizer.WhitespaceTokenizer.ToString(),
+                        cancellationToken);
+
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = "Corpus",
+                        Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                    }), cancellationToken);
+
+                    _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
+                    //await EventAggregator.PublishOnCurrentThreadAsync(
+                    //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
+
+                    OnUIThread(() =>
+                    {
+                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
+                    });
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                    if (!cancellationToken.IsCancellationRequested)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Corpus",
+                                EndTime = DateTime.Now,
+                                ErrorMessage = $"{ex}",
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
+                            }), cancellationToken);
+                    }
+                }
+                finally
+                {
+                    CancellationTokenSource.Dispose();
+                    LongProcessRunning = false;
+                    IsBusy = false;
+                }
+            }, cancellationToken);
+
+
+        }
         // ReSharper disable UnusedMember.Global
         // ReSharper disable once UnusedMember.Global
         public async void AddParatextCorpus()
@@ -986,7 +1133,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ObservableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
 
             // restrict the ability of Manuscript to add new tokenizers
-            if (corpusNode.CorpusType != CorpusType.Manuscript)
+            if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew || corpusNode.CorpusType != CorpusType.ManuscriptGreek)
             {
                 // Add new tokenization
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
@@ -1084,7 +1231,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ProjectDesignSurfaceViewModel = this,
                 ConnectionId = connection.Id,
                 ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
-                ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName
+                ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId1", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
@@ -1110,17 +1257,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
                             ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
                         },
-                        //new ParallelCorpusConnectionMenuItemViewModel
-                        //{
-                        //    // Show Verses in New Windows
-                        //    Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger),
-                        //    Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
-                        //    IconKind = "DocumentText",
-                        //    TranslationSetId = info.TranslationSetId,
-                        //    DisplayName = info.DisplayName,
-                        //    ParallelCorpusId = info.ParallelCorpusId,
-                        //    ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                        //},
                     }
                 });
             }
@@ -1163,19 +1299,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
                             }
-                            /*,
-                            new ParallelCorpusConnectionMenuItemViewModel
-                            {
-                                // Show Verses in New Windows
-                                Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger),
-                                Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
-                                IconKind = "DocumentText",
-                                TranslationSetId = info.TranslationSetId,
-                                DisplayName = info.DisplayName,
-                                ParallelCorpusId = info.ParallelCorpusId,
-                                ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                            },
-                            */
                         }
                 });
             }
@@ -1931,17 +2054,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //var paratextId = message.paratextId;
             // TODO delete database corpus using the paratextId
 
+            AddManuscriptHebrewEnabled = true;
+            AddManuscriptGreekEnabled = true;
+
 
             foreach (var node in DesignSurface.CorpusNodes)
             {
-                if (node.CorpusType == CorpusType.Manuscript)
+                if (node.CorpusType == CorpusType.ManuscriptHebrew)
                 {
-                    AddManuscriptEnabled = false;
+                    AddManuscriptHebrewEnabled = false;
+                    return Task.CompletedTask;
+                }
+                else if (node.CorpusType == CorpusType.ManuscriptGreek)
+                {
+                    AddManuscriptHebrewEnabled = false;
                     return Task.CompletedTask;
                 }
             }
 
-            AddManuscriptEnabled = true;
             return Task.CompletedTask;
         }
 
