@@ -246,6 +246,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
+        private PaneViewModel _paneViewModel;
+
+        public PaneViewModel ActiveDocument
+        {
+            get => _paneViewModel;
+            set
+            {
+                _paneViewModel = value;
+
+                NotifyOfPropertyChange(() => ActiveDocument);
+            }
+        }
+
+
 
         ObservableCollection<ToolViewModel> _tools = new();
         public ObservableCollection<ToolViewModel> Tools
