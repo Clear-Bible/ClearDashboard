@@ -642,23 +642,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
-            var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
-            NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-            CurrentTranslationSet = await GetTranslationSet();
-            CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-            var VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
-            LabelSuggestions = await GetLabelSuggestions();
+            List<TokenDisplayViewModel> VerseTokens = new();
             var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
-            verseOut.Add(VerseTokens);
 
+            var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
 
-            OnUIThread(() =>
+            if (row is null)
             {
-                UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
-                NotifyOfPropertyChange(() => VersesDisplay);
 
-                ProgressBarVisibility = Visibility.Collapsed;
-            });
+                OnUIThread(() =>
+                {
+                    UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+
+                    ProgressBarVisibility = Visibility.Collapsed;
+                });
+            }
+            else
+            {
+                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
+                CurrentTranslationSet = await GetTranslationSet();
+                CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
+                VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
+                LabelSuggestions = await GetLabelSuggestions();
+                verseOut.Add(VerseTokens);
+
+                OnUIThread(() =>
+                {
+                    UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+
+                    ProgressBarVisibility = Visibility.Collapsed;
+                });
+            }
+
             return VerseTokens;
         }
 
