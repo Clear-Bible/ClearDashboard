@@ -1231,7 +1231,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ProjectDesignSurfaceViewModel = this,
                 ConnectionId = connection.Id,
                 ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
-                ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName
+                ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId1", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
@@ -1257,17 +1257,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
                             ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
                         },
-                        //new ParallelCorpusConnectionMenuItemViewModel
-                        //{
-                        //    // Show Verses in New Windows
-                        //    Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger),
-                        //    Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
-                        //    IconKind = "DocumentText",
-                        //    TranslationSetId = info.TranslationSetId,
-                        //    DisplayName = info.DisplayName,
-                        //    ParallelCorpusId = info.ParallelCorpusId,
-                        //    ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                        //},
                     }
                 });
             }
@@ -1310,19 +1299,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
                             }
-                            /*,
-                            new ParallelCorpusConnectionMenuItemViewModel
-                            {
-                                // Show Verses in New Windows
-                                Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger),
-                                Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
-                                IconKind = "DocumentText",
-                                TranslationSetId = info.TranslationSetId,
-                                DisplayName = info.DisplayName,
-                                ParallelCorpusId = info.ParallelCorpusId,
-                                ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                            },
-                            */
                         }
                 });
             }
