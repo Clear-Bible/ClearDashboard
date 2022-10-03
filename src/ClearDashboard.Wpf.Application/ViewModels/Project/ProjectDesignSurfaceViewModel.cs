@@ -1222,7 +1222,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems = new();
 
-            // ALIGNMENT SET
+            // Add new alignment set
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
                 Header = LocalizationStrings.Get("Pds_CreateNewAlignmentSetMenu", _logger),
@@ -1237,13 +1237,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             { Header = "", Id = "SeparatorId1", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
 
+            // ALIGNMENT SETS
             foreach (var alignmentSetInfo in connection.AlignmentSetInfo)
             {
                 connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
                 {
                     Header = alignmentSetInfo.DisplayName,
                     Id = alignmentSetInfo.AlignmentSetId,
-                    IconKind = "Relevance",
+                    IconKind = "Sitemap",
+                    IsEnabled = false,
                     MenuItems = new ObservableCollection<ParallelCorpusConnectionMenuItemViewModel>
                     {
                         new ParallelCorpusConnectionMenuItemViewModel
@@ -1256,12 +1258,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             DisplayName = alignmentSetInfo.DisplayName,
                             ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
                             ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
+                            IsEnabled = false,
                         },
                     }
                 });
             }
 
             // TRANSLATION SET
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                { Header = "", Id = "SeparatorId2", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
                 { Header = "", Id = "SeparatorId2", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
@@ -1350,13 +1355,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                      await AddNewInterlinear(connectionMenuItem);
                      break;
                 case "AddToEnhancedViewId":
-                    await EventAggregator.PublishOnUIThreadAsync(
-                        new ShowParallelTranslationWindowMessage(connectionMenuItem.TranslationSetId,
-                            connectionMenuItem.AlignmentSetId,
-                            connectionMenuItem.DisplayName,
-                            connectionMenuItem.ParallelCorpusId,
-                            connectionMenuItem.ParallelCorpusDisplayName,
-                            IsNewWindow: false));
+                    if (connectionMenuItem.IsEnabled)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(
+                            new ShowParallelTranslationWindowMessage(connectionMenuItem.TranslationSetId,
+                                connectionMenuItem.AlignmentSetId,
+                                connectionMenuItem.DisplayName,
+                                connectionMenuItem.ParallelCorpusId,
+                                connectionMenuItem.ParallelCorpusDisplayName,
+                                IsNewWindow: false));
+                    }
+                    else
+                    {
+                        
+                    }
+
+
+
+
 
                     break;
                 default:
