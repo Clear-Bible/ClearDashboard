@@ -646,9 +646,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             List<TokenDisplayViewModel> VerseTokens = new();
             var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
 
-            var row = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
+            List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
 
-            if (row is null)
+            var rows = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
+
+            if (rows is null)
             {
 
                 OnUIThread(() =>
@@ -663,14 +665,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
                 CurrentTranslationSet = await GetTranslationSet(message);
-                CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-                VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
-                LabelSuggestions = await GetLabelSuggestions();
-                verseOut.Add(VerseTokens);
+                foreach (var row in rows)
+                {
+                    CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
+                    VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
+                    LabelSuggestions = await GetLabelSuggestions();
+                    verseOut.Add(VerseTokens);
+                }
+
+                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
+                string title = message.ParallelCorpusDisplayName;
+                if (rows.Count == 1)
+                {
+                    // only one verse
+                    bcv.SetVerseFromId(verseRange[0]);
+                    title += $"  ({bcv.BookName} {bcv.ChapterNum}:{bcv.VerseNum})";
+                }
+                else
+                {
+                    // multiple verses
+                    bcv.SetVerseFromId(verseRange[0]);
+                    title += $"  ({bcv.BookName} {bcv.ChapterNum}:{bcv.VerseNum}-";
+                    bcv.SetVerseFromId(verseRange[verseRange.Count - 1]);
+                    title += $"{bcv.VerseNum})";
+                }
 
                 OnUIThread(() =>
                 {
-                    UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName, true);
+                    UpdateParallelCorpusDisplay(message, verseOut, title, true);
                     NotifyOfPropertyChange(() => VersesDisplay);
 
                     ProgressBarVisibility = Visibility.Collapsed;
@@ -680,21 +702,65 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return VerseTokens;
         }
 
-        public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV, ShowParallelTranslationWindowMessage message)
+        private List<string> GetValidVerseRange(string bbbcccvvv, int offset)
+        {
+            List<string> verseRange = new();
+            verseRange.Add(bbbcccvvv);
+
+            int currentVerse = Convert.ToInt32(bbbcccvvv.Substring(6));
+            
+            // get lower range first
+            int j = 1;
+            while (j <= offset)
+            {
+                // check verse
+                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000")))
+                {
+                    verseRange.Add(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000"));
+                }
+                
+                j++;
+            }
+
+
+            // get upper range
+            j = 1;
+            while (j <= offset)
+            {
+                // check verse
+                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse + j).ToString("000")))
+                {
+                    verseRange.Add(bbbcccvvv.Substring(0, 6) + (currentVerse + j).ToString("000"));
+                }
+
+                j++;
+            }
+
+            // sort list
+            verseRange.Sort();
+
+            return verseRange;
+        }
+
+        public async Task<List<EngineParallelTextRow?>> VerseTextRow(int BBBCCCVVV, ShowParallelTranslationWindowMessage message)
         {
             try
             {
                 var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
                 var guid = Guid.Parse(message.ParallelCorpusId);
                 var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First(p => p.Id == guid));
-                var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
+                var verses = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
 
-                // save out the corpus for future use
+                // TODO save out the corpus for future use
                 // _parallelProjects
 
+                List<EngineParallelTextRow?> rows = new();
+                foreach (var verse in verses.parallelTextRows)
+                {
+                    rows.Add(verse as EngineParallelTextRow);
+                }
 
-
-                return verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
+                return rows;  // return verses.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
             }
             catch (Exception e)
             {
@@ -1621,41 +1687,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }
 
-        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
-        {
-            var result = new List<TranslationOption>();
+        //private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        //{
+        //    var result = new List<TranslationOption>();
 
-            var random = new Random();
-            var optionCount = random.Next(4) + 2;     // 2-5 options
-            var remainingPercentage = 100d;
+        //    var random = new Random();
+        //    var optionCount = random.Next(4) + 2;     // 2-5 options
+        //    var remainingPercentage = 100d;
 
-            var basePercentage = random.NextDouble() * remainingPercentage;
-            result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
-            remainingPercentage -= basePercentage;
+        //    var basePercentage = random.NextDouble() * remainingPercentage;
+        //    result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
+        //    remainingPercentage -= basePercentage;
 
-            for (var i = 1; i < optionCount - 1; i++)
-            {
-                var percentage = random.NextDouble() * remainingPercentage;
-                result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
-                remainingPercentage -= percentage;
-            }
+        //    for (var i = 1; i < optionCount - 1; i++)
+        //    {
+        //        var percentage = random.NextDouble() * remainingPercentage;
+        //        result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
+        //        remainingPercentage -= percentage;
+        //    }
 
-            result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
+        //    result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
 
-            return result.OrderByDescending(to => to.Probability);
-        }
+        //    return result.OrderByDescending(to => to.Probability);
+        //}
 
-        private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
+        //private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
 
 
-        private static int mockOogaWordsIndexer_;
+        //private static int mockOogaWordsIndexer_;
 
-        private string GetMockOogaWord()
-        {
-            var result = MockOogaWords[mockOogaWordsIndexer_++];
-            if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
-            return result;
-        }
+        //private string GetMockOogaWord()
+        //{
+        //    var result = MockOogaWords[mockOogaWordsIndexer_++];
+        //    if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+        //    return result;
+        //}
     }
 
 

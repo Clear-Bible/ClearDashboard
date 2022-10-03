@@ -307,10 +307,10 @@
                         Stroke="{StaticResource connectionBrush}"
                         StrokeThickness="3">
                         <projectDesignSurface:CurvedArrow.ContextMenu>
-                            <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}" >
+                            <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
                                 <ContextMenu.Resources>
                                     <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:ParallelCorpusConnectionMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
-                                        <StackPanel Orientation="Horizontal" >
+                                        <StackPanel IsEnabled="{Binding IsEnabled}" Orientation="Horizontal">
                                             <iconPacks:PackIconPicolIcons
                                                 Width="15"
                                                 Height="15"
@@ -320,8 +320,21 @@
                                             <TextBlock
                                                 Margin="5,5,0,0"
                                                 VerticalAlignment="Center"
-                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                Text="{Binding Header}" />
+                                                IsEnabled="{Binding IsEnabled}"
+                                                Text="{Binding Header}">
+                                                <TextBlock.Style>
+                                                    <Style BasedOn="{StaticResource MahApps.Styles.TextBlock}" TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                                <Setter Property="Foreground" Value="{DynamicResource RedDarkBrush}" />
+                                                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <!--  Text="{Binding Header}"  -->
                                         </StackPanel>
                                     </HierarchicalDataTemplate>
 
