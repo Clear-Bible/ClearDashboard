@@ -994,6 +994,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
                             }), cancellationToken);
                     }
+
+                    OnUIThread(() =>
+                    {
+                        UpdateVersesDisplay(message, new ObservableCollection<List<TokenDisplayViewModel>>(),
+                            message.ProjectName + " - " + message.TokenizationType +
+                            "    No verse data in this verse range", false);
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    });
                 }
                 finally
                 {
