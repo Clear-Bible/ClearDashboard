@@ -328,6 +328,7 @@
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding IsEnabled}" Value="False">
                                                                 <Setter Property="Foreground" Value="{DynamicResource RedDarkBrush}" />
+                                                                <Setter Property="TextDecorations" Value="Strikethrough"/>
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
