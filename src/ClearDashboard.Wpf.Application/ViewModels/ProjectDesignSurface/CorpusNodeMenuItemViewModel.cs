@@ -21,6 +21,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public string? ParallelCorpusDisplayName { get; set; } = string.Empty;
         public Guid ConnectionId { get; set; }
 
+        private bool _isEnabled = true;
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                _isEnabled = value;
+                NotifyOfPropertyChange(() => IsEnabled);
+            }
+        }
+
+
         protected override void Execute()
         {
             ProjectDesignSurfaceViewModel?.ExecuteConnectionMenuCommand(this);
