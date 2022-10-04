@@ -128,7 +128,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
 
                 return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(
-                    combined.OrderBy(t => t.SourceToken.TokenId.ToString().ToList())
+                    combined.OrderBy(t => t.SourceToken.TokenId.ToString()).ToList()
                 );
             }
             else
