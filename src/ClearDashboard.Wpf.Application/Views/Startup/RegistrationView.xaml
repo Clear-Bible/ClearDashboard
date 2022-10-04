@@ -198,11 +198,11 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
-            <Button
+            <!--<Button
                 x:Name="Cancel"
                 Margin="5,5,5,5"
                 Content="{helpers:Localization RegistrationDialogView_CloseApplication}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}" />-->
             <Button
                 x:Name="Register"
                 Margin="5,5,5,5"
