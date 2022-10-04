@@ -1,4 +1,6 @@
-﻿using ClearBible.Engine.Utils;
+﻿using ClearBible.Engine.Tokenization;
+using ClearBible.Engine.Utils;
+using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -27,6 +29,19 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public string? DisplayName { get; set; }
         public string? TokenizationFunction { get; }
+        public EngineStringDetokenizer Detokenizer
+        {
+            get
+            {
+                return TokenizationFunction switch
+                {
+                    "WhitespaceTokenizer" => new EngineStringDetokenizer(new WhitespaceDetokenizer()),
+                    "ZwspWordTokenizer" => new EngineStringDetokenizer(new ZwspWordDetokenizer()),
+                    _ => new EngineStringDetokenizer(new LatinWordDetokenizer())
+                };
+            }
+        }
+
         public Dictionary<string, object> Metadata { get; set; }
         public DateTimeOffset? Created { get; }
         public UserId? UserId { get; }
