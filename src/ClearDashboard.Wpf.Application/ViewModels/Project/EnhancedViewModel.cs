@@ -253,12 +253,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        private ObservableCollection<TokensTextRow>? _verses;
-        public ObservableCollection<TokensTextRow>? Verses
-        {
-            get => _verses;
-            set => Set(ref _verses, value);
-        }
+        //private ObservableCollection<TokensTextRow>? _verses;
+        //public ObservableCollection<TokensTextRow>? Verses
+        //{
+        //    get => _verses;
+        //    set => Set(ref _verses, value);
+        //}
 
         public string? Message
         {
@@ -456,7 +456,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                        //Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -672,7 +672,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
-                if (rows.Count == 1)
+                if (rows.Count <= 1)
                 {
                     // only one verse
                     bcv.SetVerseFromId(verseRange[0]);
@@ -1202,7 +1202,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                        //Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
                         UpdateVersesDisplay(message, verses, title, false);
                         ProgressBarVisibility = Visibility.Collapsed;

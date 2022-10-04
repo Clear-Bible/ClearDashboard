@@ -504,9 +504,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 OkSave();
             }
 
-            // save the design surface
-            await _projectDesignSurfaceViewModel.SaveCanvas();
-
             //we need to cancel running background processes
             //check a bool to see if it already cancelled or already completed
             if (_projectDesignSurfaceViewModel.LongProcessRunning)
@@ -524,11 +521,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }), cancellationToken);
             }
 
+            // save the open document windows
+            foreach (var window in Items)
+            {
+                if (window is EnhancedViewModel)
+                {
+                    var enhancedViewModel = (EnhancedViewModel)window;
+                    
+                    // get the displayed contents
+                    var displayName = enhancedViewModel.DisplayName;
+                    var paratextSync = enhancedViewModel.ParatextSync;
+                    var bbbcccvvv = enhancedViewModel.CurrentBcv.BBBCCCVVV;
+                    foreach (var versesDisplay in enhancedViewModel.VersesDisplay)
+                    {
+                        
+                    }
+
+                }
+            }
+
 
 
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
+
+
+            // save the design surface
+            await _projectDesignSurfaceViewModel.SaveCanvas();
+            
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
