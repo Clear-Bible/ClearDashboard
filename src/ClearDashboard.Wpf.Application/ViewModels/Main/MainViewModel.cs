@@ -40,6 +40,10 @@ using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using System.Text.Json;
+using Microsoft.Extensions.Options;
+using System.Text.Json.Serialization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -522,26 +526,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // save the open document windows
+            List<SerializedEnhancedView> serializedEnhancedViews = new List<SerializedEnhancedView>();
             foreach (var window in Items)
             {
                 if (window is EnhancedViewModel)
                 {
                     var enhancedViewModel = (EnhancedViewModel)window;
-                    
-                    // get the displayed contents
-                    var displayName = enhancedViewModel.DisplayName;
-                    var paratextSync = enhancedViewModel.ParatextSync;
-                    var bbbcccvvv = enhancedViewModel.CurrentBcv.BBBCCCVVV;
-                    foreach (var versesDisplay in enhancedViewModel.VersesDisplay)
-                    {
-                        
-                    }
 
+                    if (enhancedViewModel.DisplayOrder.Count > 0)
+                    {
+                        // get the displayed contents
+                        serializedEnhancedViews.Add(new SerializedEnhancedView
+                        {
+                            BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
+                            DisplayOrder = enhancedViewModel.DisplayOrder,
+                            DisplayName = enhancedViewModel.DisplayName,
+                            ParatextSync = enhancedViewModel.ParatextSync,
+                        });
+                    }
                 }
             }
 
+            // save the document window contents
+            JsonSerializerOptions options = new()
+            {
+                IncludeFields = true,
+                WriteIndented = false
+            };
 
+            FileInfo fi = new FileInfo(ProjectManager.CurrentDashboardProject.FullFilePath);
+            var dir = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
 
+            File.WriteAllText(dir, JsonSerializer.Serialize(serializedEnhancedViews, options));
+          
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
@@ -570,6 +587,99 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             await Task.Delay(250);
             Init();
+
+
+            // load the document window contents
+            await LoadDocuments();
+        }
+
+        private async Task LoadDocuments()
+        {
+            // load the document window contents
+            FileInfo fi = new FileInfo(ProjectManager.CurrentDashboardProject.FullFilePath);
+            var path = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
+
+            if (File.Exists(path))
+            {
+                var json = File.ReadAllText(path);
+
+                JsonSerializerOptions options = new()
+                {
+                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                    IncludeFields = true,
+                    WriteIndented = true
+                };
+                List<SerializedEnhancedView> deserialized = JsonSerializer.Deserialize<List<SerializedEnhancedView>>(json, options);
+
+                for (int i = 0; i < deserialized.Count; i++)
+                {
+                    EnhancedViewModel viewModel = null;
+                    if (i == 0)
+                    {
+                        // use the existing on
+                        foreach (var vm in Items)
+                        {
+                            if (vm is EnhancedViewModel)
+                            {
+                                viewModel = (EnhancedViewModel)vm;
+                                break;
+                            }
+                        }
+                    }
+
+                    bool newWindow = false;
+                    if (viewModel is null)
+                    {
+                        // create a new one
+                        viewModel = IoC.Get<EnhancedViewModel>();
+                        newWindow = true;
+                    }
+                        
+                    viewModel.Title = deserialized[i].DisplayName;
+                    viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+                    viewModel.ParatextSync = deserialized[i].ParatextSync;
+                    viewModel.CurrentBcv.SetVerseFromId(deserialized[i].BBBCCCVVV);
+                    viewModel.VerseChange = deserialized[i].BBBCCCVVV;
+
+                    if (newWindow)
+                    {
+                        // add vm to conductor
+                        Items.Add(viewModel);
+
+                        // make a new document for the windows
+                        var windowDockable = new LayoutDocument
+                        {
+                            Content = viewModel,
+                            Title = deserialized[i].DisplayName,
+                        };
+
+                        var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+                        documentPane?.Children.Add(windowDockable);
+                    }
+
+                    foreach (var displayOrder in deserialized[i].DisplayOrder)
+                    {
+                        if (displayOrder.MsgType == DisplayOrder.MessageType.ShowTokenizationWindowMessage)
+                        {
+                            var cancellationToken = new CancellationToken();
+                            try
+                            {
+                                json = displayOrder.Data.ToString();
+                                var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json, options);
+                                if (message is not null)
+                                {
+                                    await viewModel.ShowCorpusTokens(message, cancellationToken);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
+                            
+                        }
+                    }
+                }
+            }
         }
 
         private async void Init()
