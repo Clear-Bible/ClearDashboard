@@ -86,19 +86,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             var remainingPercentage = 100d;
 
             var basePercentage = random.NextDouble() * remainingPercentage;
-            result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
+            result.Add(new TranslationOption { Word = sourceTranslation, Count = basePercentage });
             remainingPercentage -= basePercentage;
 
             for (var i = 1; i < optionCount - 1; i++)
             {
                 var percentage = random.NextDouble() * remainingPercentage;
-                result.Add(new TranslationOption { Word = GetMockTranslationWord(), Probability = percentage });
+                result.Add(new TranslationOption { Word = GetMockTranslationWord(), Count = percentage });
                 remainingPercentage -= percentage;
             }
 
-            result.Add(new TranslationOption { Word = GetMockTranslationWord(), Probability = remainingPercentage });
+            result.Add(new TranslationOption { Word = GetMockTranslationWord(), Count = remainingPercentage });
 
-            return result.OrderByDescending(to => to.Probability);
+            return result.OrderByDescending(to => to.Count);
         }
 
         private static NoteId GetMockNoteId()
@@ -201,12 +201,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         private Dictionary<IId, IEnumerable<Note>>? AllEntityNotes { get; set; }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
+        /// Gets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
         public List<TokenDisplayViewModel> TokenDisplayViewModels { get; private set; } = new();
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="Label"/>s that can be used for auto-completion of labels.
+        /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion of labels.
         /// </summary>
         public ObservableCollection<Label> LabelSuggestions { get; private set; } = new();
         
@@ -390,7 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 }
 
                 var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
-                    .Select(option => new TranslationOption { Word = option.Key, Probability = option.Value })
+                    .Select(option => new TranslationOption { Word = option.Key, Count = option.Value })
                     .Take(4)        // For now, we'll just return the top four options; may be configurable in the future
                     .ToList();
 #if DEBUG
