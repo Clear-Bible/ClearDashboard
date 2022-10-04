@@ -39,7 +39,12 @@ using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Features.Connection;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Serilog.Core;
+using System.Windows.Navigation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -373,7 +378,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ProjectManager = projectManager;
             Logger = logger;
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
-
+            NavigationService = navigationService;
 #pragma warning disable CA1416 // Validate platform compatibility
             Themes = new List<Tuple<string, Theme>>
             {
@@ -409,6 +414,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //                }
             //            }
         }
+
+        public INavigationService NavigationService { get; set; }
 
 
         /// <summary>
@@ -468,6 +475,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
             await base.OnInitializeAsync(cancellationToken);
+
+            Init();
         }
 
         protected override async void OnViewLoaded(object view)
@@ -531,8 +540,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
-            await Task.Delay(250);
-            Init();
+            //await Task.Delay(250);
+            //Init();
         }
 
         private async void Init()
@@ -1491,22 +1500,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             switch (menuItem.Id)
             {
                 case "NewID":
+                    
                     //var startupDialogViewModel = IoC.Get<StartupDialogViewModel>();
                     var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
                     startupDialogViewModel.MimicParatextConnection = true;
                     var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
-                    if (result.HasValue && result.Value)
-                    {
-                        var dashboardProject = startupDialogViewModel.ExtraData as DashboardProject;
-                        if (dashboardProject.IsNew)
-                        {
-                            await ProjectManager.CreateNewProject(dashboardProject.ProjectName);
-                        }
-                        else
-                        {
-                            await ProjectManager.LoadProject(dashboardProject.ProjectName);
-                        }
-                    }
+
+                    //_projectDesignSurfaceViewModel.SaveCanvas();
+                    await OnDeactivateAsync(false, CancellationToken.None);
+                    this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+                    await OnInitializeAsync(CancellationToken.None);
+                    await OnActivateAsync(CancellationToken.None);
+                    await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+                    //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+                    //if (result.HasValue && result.Value)
+                    //{
+                    //    _projectDesignSurfaceViewModel.SaveCanvas();
+
+                    //    //await ExecuteRequest(new CloseConnectionCommand(ProjectManager.CurrentProject.ProjectName), CancellationToken.None);
+                    //    await OnDeactivateAsync(false, CancellationToken.None);
+
+                    //    var dashboardProject = startupDialogViewModel.ExtraData as DashboardProject;
+                    //    if (dashboardProject.IsNew)
+                    //    {
+                    //        await ProjectManager.CreateNewProject(dashboardProject.ProjectName);
+                    //    }
+                    //    else
+                    //    {
+                    //        await ProjectManager.LoadProject(dashboardProject.ProjectName);
+                    //    }
+                    //}
+
+
+
+
+
                     break;
             }
         }
@@ -1536,7 +1566,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
         {
             //_projectDesignSurfaceViewModel.SaveCanvas();
-            SetupProjectDesignSurface();
+            //SetupProjectDesignSurface();
             return Task.CompletedTask;
         }
 
