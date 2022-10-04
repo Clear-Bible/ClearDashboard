@@ -72,8 +72,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
 
             ProjectDbContext = await factory!.GetDatabaseContext(
                 ProjectName,
-                true,
-                Container).ConfigureAwait(false);
+                true).ConfigureAwait(false);
 
             _ = await AddDashboardUser(ProjectDbContext);
             _ = await AddCurrentProject(ProjectDbContext, ProjectName);
