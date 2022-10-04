@@ -60,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Member Variables
         private readonly ILogger<EnhancedViewModel> _logger;
-        private readonly DashboardProjectManager _projectManager;
+        private readonly DashboardProjectManager? _projectManager;
 
         private CancellationTokenSource? _cancellationTokenSource;
         private bool? _handleAsyncRunning;
@@ -280,13 +280,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             MockData();
         }
 
+        // ReSharper disable once UnusedMember.Global
+#pragma warning disable CS8618
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
+#pragma warning restore CS8618
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
-            //_itemDoubleClickCommand = new RelayCommand(ItemDoubleClickCommandHandler);
 
             _logger = logger;
             _projectManager = projectManager;
@@ -294,15 +296,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
             ContentId = "ENHANCEDVIEW";
 
-            //BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
-
 
             MoveCorpusDownRowCommand = new RelayCommand(MoveCorpusDown);
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
-
-
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -314,7 +312,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
-            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            if (_projectManager.CurrentParatextProject.BcvDictionary != null)
+                BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
@@ -422,12 +421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
-            // we don't want this as it was for demonstration
-
-            //return;
-
-
-            _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
+            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -516,7 +510,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task ShowParallelTranslationTokens(ShowParallelTranslationWindowMessage message, CancellationToken cancellationToken)
         {
-            _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
+            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -557,7 +551,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
-            _logger?.LogInformation("Received TokenizedTextCorpusMessage.");
+            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
@@ -606,7 +600,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             // current project
-            await Task.Factory.StartNew(async () =>
+            _ = await Task.Factory.StartNew(async () =>
             {
                 try
                 {
@@ -638,14 +632,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 finally
                 {
                     _handleAsyncRunning = false;
-                    _cancellationTokenSource.Dispose();
+                    if (_cancellationTokenSource != null) 
+                        _cancellationTokenSource.Dispose();
                 }
             }, cancellationToken);
         }
 
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
-            List<TokenDisplayViewModel> VerseTokens = new();
+            List<TokenDisplayViewModel> verseTokens = new();
             var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
 
             List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
@@ -670,13 +665,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 foreach (var row in rows)
                 {
                     CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-                    VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
+                    verseTokens = GetTokenDisplayViewModels(row.SourceTokens);
                     LabelSuggestions = await GetLabelSuggestions();
-                    verseOut.Add(VerseTokens);
+                    verseOut.Add(verseTokens);
                 }
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
-                string title = message.ParallelCorpusDisplayName;
+                string title = message.ParallelCorpusDisplayName ?? string.Empty;
                 if (rows.Count == 1)
                 {
                     // only one verse
@@ -694,14 +689,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 OnUIThread(() =>
                 {
-                    UpdateParallelCorpusDisplay(message, verseOut, title, true);
+                    UpdateParallelCorpusDisplay(message, verseOut, title);
                     NotifyOfPropertyChange(() => VersesDisplay);
 
                     ProgressBarVisibility = Visibility.Collapsed;
                 });
             }
 
-            return VerseTokens;
+            return verseTokens;
         }
 
         private List<string> GetValidVerseRange(string bbbcccvvv, int offset)
@@ -744,7 +739,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return verseRange;
         }
 
-        public async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, ShowParallelTranslationWindowMessage message)
+        private async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, ShowParallelTranslationWindowMessage message)
         {
             try
             {
@@ -864,7 +859,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return tokenDisplays;
         }
 
-        private IEnumerable<(ClearBible.Engine.Corpora.Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(IEnumerable<ClearBible.Engine.Corpora.Token> tokens)
+        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(IEnumerable<EngineToken> tokens)
         {
             var detokenizer = new EngineStringDetokenizer(Detokenizer);
             return detokenizer.Detokenize(tokens);
@@ -1185,8 +1180,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     foreach (var verseRangeRow in verseRangeRows)
                     {
                         var verseRef = (VerseRef)verseRangeRow.Ref;
-                        List<TokensTextRow> corpus = new List<TokensTextRow>();
-                        corpus.Add(verseRangeRow);
+                        List<TokensTextRow> corpus = new() { verseRangeRow };
 
                         var tokens = GetTokens(corpus, verseRef.BBBCCCVVV);
                         if (tokens != null)
@@ -1255,7 +1249,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task VerseChangeRerender()
         {
-            for (int i = 0; i < _tokenProjects.Count; i++)
+            for (var i = 0; i < _tokenProjects.Count; i++)
             {
                 _cancellationTokenSource = new CancellationTokenSource();
 
@@ -1263,7 +1257,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _cancellationTokenSource.Token).ConfigureAwait(false);
             }
 
-            for (int i = 0; i < _parallelMessages.Count; i++)
+            for (var i = 0; i < _parallelMessages.Count; i++)
             {
                 _cancellationTokenSource = new CancellationTokenSource();
                 await ShowNewParallelTranslation(_parallelMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
@@ -1303,7 +1297,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private static Brush? GetCorpusBrushColor(ShowTokenizationWindowMessage message)
         {
             // same color as defined in SharedVisualTemplates.xaml
-            Brush brush = Brushes.Blue;
+            Brush brush;
             switch (message.CorpusType)
             {
                 case CorpusType.Standard:
@@ -1333,7 +1327,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return brush;
         }
 
-        private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool ShowTranslations = true)
+        private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message,
+            ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool showTranslations = true)
         {
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
@@ -1345,7 +1340,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     CorpusId = Guid.Parse(message.ParallelCorpusId),
                     BorderColor = brush,
-                    ShowTranslation = ShowTranslations,
+                    ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
                 });
@@ -1354,7 +1349,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 row.CorpusId = Guid.Parse(message.ParallelCorpusId);
                 row.BorderColor = brush;
-                row.ShowTranslation = ShowTranslations;
+                row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
                 row.Verses = verses;
             }
@@ -1401,7 +1396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public void MoveCorpusDown(object obj)
+        private void MoveCorpusDown(object obj)
         {
             var row = obj as VersesDisplay;
 
@@ -1415,7 +1410,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             
             VersesDisplay.Move(index, index + 1);
         }
-        public void MoveCorpusUp(object obj)
+
+        private void MoveCorpusUp(object obj)
         {
             var row = obj as VersesDisplay;
 
@@ -1430,7 +1426,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             VersesDisplay.Move(index, index - 1);
         }
 
-        public void DeleteCorpusRow(object obj)
+        private void DeleteCorpusRow(object obj)
         {
             var row = obj as VersesDisplay;
 
