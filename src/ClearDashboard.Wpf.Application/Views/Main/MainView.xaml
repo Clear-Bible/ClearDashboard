@@ -113,7 +113,8 @@
                 Theme="{Binding SelectedTheme.Item2}">
                 <DockingManager.LayoutItemContainerStyle>
                     <Style TargetType="{x:Type LayoutItem}">
-                        <Setter Property="CloseCommand" Value="{Binding Model.RequestCloseCommand}"/>
+                        <Setter Property="CloseCommand" Value="{Binding Model.RequestCloseCommand}" />
+                        <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
                     </Style>
                 </DockingManager.LayoutItemContainerStyle>
                 <DockingManager.LayoutItemTemplateSelector>
@@ -165,7 +166,7 @@
                                 <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                                 <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
                                 <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
-                                <Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />
+                                <!--<Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />-->
                             </Style>
                         </panes:PanesStyleSelector.DocumentStyle>
 
