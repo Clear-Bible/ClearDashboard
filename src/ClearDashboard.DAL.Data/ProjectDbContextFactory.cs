@@ -52,7 +52,6 @@ namespace ClearDashboard.DataAccessLayer.Data
                     (pi, cc) => cc.Resolve<DbContextOptionsBuilder<ProjectDbContext>>(
                         new NamedParameter("projectName", projectName))));
 
-
             if (context != null)
             {
                 try

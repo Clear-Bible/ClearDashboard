@@ -54,7 +54,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<IEnumerable<(AlignmentSetId alignmentSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>( alignmentSetIds );
+            return new RequestResult<IEnumerable<(AlignmentSetId alignmentSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>( alignmentSetIds.ToList() );
         }
     }
 

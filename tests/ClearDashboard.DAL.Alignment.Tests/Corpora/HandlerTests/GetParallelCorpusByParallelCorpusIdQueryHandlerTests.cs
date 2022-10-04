@@ -17,6 +17,7 @@ using Xunit;
 using Xunit.Abstractions;
 
 using Models = ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Data.Sqlite;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -163,7 +164,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
-    public async void ParallelCorpus__NullTokenizedCorpus()
+    public async void ParallelCorpus__ForeignKeyRequiredForTokenizedCorpus()
     {
         try
         {
@@ -185,20 +186,27 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             // Remove the source tokenized corpus:
             parallelCorpusDB!.SourceTokenizedCorpus = null;
 
-            // Commit to database:
-            await ProjectDbContext.SaveChangesAsync();
+            // Commit to database.  Should throw a DbUpdateException
+            // containing a SqliteException 19 "FOREIGN KEY constraint failed"
+            var ex = await Assert.ThrowsAsync<DbUpdateException>(() => ProjectDbContext.SaveChangesAsync());
+            Assert.IsType<SqliteException>(ex.InnerException);
+            Assert.True((ex.InnerException as SqliteException)!.SqliteErrorCode == 19);
 
-            var query = new GetParallelCorpusByParallelCorpusIdQuery(parallelTokenizedCorpus.ParallelCorpusId);
+            parallelCorpusDB = ProjectDbContext!.ParallelCorpa.Include(pc => pc.TargetTokenizedCorpus).FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
+            Assert.NotNull(parallelCorpusDB);
 
-            var result = await Mediator!.Send(query);
-            Assert.NotNull(result);
-            Assert.False(result.Success);
-            Assert.NotNull(result.Message);
-            Output.WriteLine(result.Message);
+            // Remove the target tokenized corpus:
+            parallelCorpusDB!.TargetTokenizedCorpus = null;
+
+            // Commit to database.  Should throw a DbUpdateException
+            // containing a SqliteException 19 "FOREIGN KEY constraint failed"
+            ex = await Assert.ThrowsAsync<DbUpdateException>(() => ProjectDbContext.SaveChangesAsync());
+            Assert.IsType<Microsoft.Data.Sqlite.SqliteException>(ex.InnerException);
+            Assert.True((ex.InnerException as SqliteException)!.SqliteErrorCode == 19);
         }
         finally
         {
-//            await DeleteDatabaseContext();
+            await DeleteDatabaseContext();
         }
     }
 }
