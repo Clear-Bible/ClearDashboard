@@ -56,32 +56,36 @@
                 </Style>
             </materialDesign:DrawerHost.Style>
             <materialDesign:DrawerHost.TopDrawerContent>
-
-
-                <Grid>
+                <Grid Margin="15,15,15,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150" />
                         <ColumnDefinition Width="275" />
                         <ColumnDefinition Width="275" />
                         <ColumnDefinition Width="275" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
-
 
                     <Button
                         Grid.Row="4"
                         Grid.Column="0"
-                        Margin="4"
-                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
                         Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
                         CommandParameter="{x:Static Dock.Top}"
-                        Content="CLOSE" />
+                        FontSize="10"
+                        Height="20"
+                        Padding="0"
+                        Width="66"
+                        Margin="10"
+                        VerticalAlignment="Top"
+                        Content="CLOSE" 
+                        Foreground="White"/>
 
                     <Label
                         Grid.Row="0"
@@ -94,7 +98,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Font size:</Label>
+                        <Label VerticalAlignment="Center">Title font size:</Label>
                         <Slider
                             Name="TitleFontSizeSlider"
                             Width="100"
@@ -114,13 +118,13 @@
                         Grid.Column="0"
                         VerticalAlignment="Center"
                         FontWeight="Bold">
-                        Tokens:
+                        Source Text:
                     </Label>
                     <StackPanel
                         Grid.Row="1"
                         Grid.Column="1"
                         Orientation="Horizontal">
-                        <Label VerticalAlignment="Center">Font size:</Label>
+                        <Label VerticalAlignment="Center">Source font size:</Label>
                         <Slider
                             Name="TokenFontSizeSlider"
                             Width="100"
@@ -173,7 +177,6 @@
                             VerticalAlignment="Center"
                             Content="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
-
                     <StackPanel
                         Grid.Row="2"
                         Grid.Column="0"
@@ -183,6 +186,7 @@
                             Name="ShowTranslationsCheckbox"
                             Margin="22,0,0,0"
                             VerticalAlignment="Center"
+                            Visibility="Hidden"
                             IsChecked="True" />
                     </StackPanel>
                     <StackPanel
@@ -204,7 +208,7 @@
                             VerticalAlignment="Center"
                             Content="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
-                    <StackPanel
+                    <StackPanel Visibility="Collapsed"
                         Grid.Row="2"
                         Grid.Column="2"
                         Orientation="Horizontal">
@@ -233,6 +237,7 @@
                             Name="ShowNoteIndicatorsCheckbox"
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
+                            Visibility="Hidden"
                             IsChecked="True" />
                     </StackPanel>
                     <StackPanel
@@ -254,12 +259,12 @@
                             VerticalAlignment="Center"
                             Content="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
-
                     <StackPanel
                         Grid.Row="4"
                         Grid.Column="1"
                         HorizontalAlignment="Center"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        Visibility="Hidden">
                         <CheckBox
                             Name="CenteredCheckbox"
                             VerticalAlignment="Center"
@@ -270,7 +275,8 @@
                         Grid.Row="4"
                         Grid.Column="2"
                         HorizontalAlignment="Center"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        Visibility="Hidden">
                         <CheckBox
                             Name="VerticalCheckbox"
                             VerticalAlignment="Center"
@@ -281,7 +287,8 @@
                         Grid.Row="4"
                         Grid.Column="3"
                         HorizontalAlignment="Center"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        Visibility="Hidden">
                         <CheckBox
                             Name="WrapCheckbox"
                             VerticalAlignment="Center"
@@ -416,8 +423,8 @@
                                         <TextBlock
                                             Margin="8,0,5,0"
                                             VerticalAlignment="Center"
-                                            FontSize="16"
                                             FontWeight="Bold"
+                                            FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                             Text="{Binding RowTitle}" />
 
                                     </StackPanel>
