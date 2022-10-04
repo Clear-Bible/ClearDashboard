@@ -30,6 +30,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
+        /// Identifies the TokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenBackgroundProperty = DependencyProperty.Register("TokenBackground", typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Transparent));
+
+        /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(TokenDisplay),
@@ -553,6 +559,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
+            TokenDisplayViewModel.IsSelected = true;
+            CalculateLayout();
+
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
@@ -727,6 +736,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Thickness) GetValue(TokenMarginProperty);
             set => SetValue(TokenMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token background.
+        /// </summary>
+        public Brush TokenBackground
+        {
+            get => (Brush)GetValue(TokenBackgroundProperty);
+            set => SetValue(TokenBackgroundProperty, value);
         }
 
         /// <summary>
@@ -912,6 +930,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationMargin = new Thickness(leftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
+            TokenBackground = TokenDisplayViewModel.IsSelected ? Brushes.LightSteelBlue : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             TargetTranslationText = TokenDisplayViewModel.TargetTranslationText;
