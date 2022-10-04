@@ -50,7 +50,7 @@
                       SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedItem}">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Word}" Width="*" />
-                    <DataGridTextColumn Binding="{Binding Probability}" Width="75" Header="Count">
+                    <DataGridTextColumn Binding="{Binding Count}" Width="75" Header="Count">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="HorizontalContentAlignment" Value="Right"></Setter>
