@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Helpers;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +26,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
 
         #region Member Variables
-       
+
+        public ICommand RequestCloseCommand { get; set; }
+
         private string _title = null;
         private string _contentId = null;
         private bool _isSelected = false;
@@ -108,12 +114,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
-
+            RequestCloseCommand = new RelayCommandAsync(RequestClose);
         }
+
+
 
         #endregion //Constructor
 
         #region Methods
+
+        private async Task RequestClose(object obj)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.Guid));
+        }
 
         #endregion // Methods
 

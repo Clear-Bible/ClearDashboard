@@ -51,7 +51,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ShowTokenizationWindowMessage>,
                 IHandle<UiLanguageChangedMessage>,
                 IHandle<ActiveDocumentMessage>,
-                IHandle<ShowParallelTranslationWindowMessage>
+                IHandle<ShowParallelTranslationWindowMessage>,
+                IHandle<CloseDockingPane>
     {
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
@@ -1621,6 +1622,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             documentPane?.Children.Add(windowDockable);
 
             await viewModel.ShowParallelTranslationTokens(message, cancellationToken);
+        }
+
+        /// <summary>
+        /// Ensure that there is at least one document tab open at all times
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task HandleAsync(CloseDockingPane message, CancellationToken cancellationToken)
+        {
+            var windowGuid = message.guid;
+
+            var dockableWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>();
+
+            if (dockableWindows.Count() > 1)
+            {
+                foreach (var pane in dockableWindows)
+                {
+                    var content = pane.Content as EnhancedViewModel;
+                    // ReSharper disable once PossibleNullReferenceException
+                    if (content.Guid == windowGuid)
+                    {
+                        pane.Close();
+                        break;
+                    }
+                }
+            }
+
+            return Task.CompletedTask;
         }
     }
 

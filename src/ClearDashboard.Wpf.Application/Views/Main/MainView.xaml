@@ -111,6 +111,11 @@
                 AnchorablesSource="{Binding Tools}"
                 DocumentsSource="{Binding Documents}"
                 Theme="{Binding SelectedTheme.Item2}">
+                <DockingManager.LayoutItemContainerStyle>
+                    <Style TargetType="{x:Type LayoutItem}">
+                        <Setter Property="CloseCommand" Value="{Binding Model.RequestCloseCommand}"/>
+                    </Style>
+                </DockingManager.LayoutItemContainerStyle>
                 <DockingManager.LayoutItemTemplateSelector>
                     <panes:PanesTemplateSelector>
                         <!--  DOCUMENTS  -->
