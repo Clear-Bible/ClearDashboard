@@ -96,7 +96,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = TranslationAppliedEvent,
                 TokenDisplayViewModel = TokenDisplayViewModel,
                 Translation = new Translation(TokenDisplayViewModel.Token, TranslationValue.Text, "Assigned"),
-                TranslationActionType = ApplyAllCheckbox != null && (bool) ApplyAllCheckbox.IsChecked ? "PutPropagate" : "PutNoPropagate"
+                TranslationActionType = ApplyAllCheckbox != null && (bool) ApplyAllCheckbox.IsChecked ? TranslationActionTypes.PutPropagate : TranslationActionTypes.PutNoPropagate
             });
         }
 

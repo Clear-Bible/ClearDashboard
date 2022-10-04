@@ -199,7 +199,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             {
                 await translationSet.PutTranslation(
                     exampleTranslation,
-                    TranslationActionType.PutNoPropagate.ToString());
+                    TranslationActionTypes.PutNoPropagate);
             }
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -220,7 +220,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             // FIXME:  quick test of PutPropagate.  Need better tests of this
             await translationSet.PutTranslation(
                     new Alignment.Translation.Translation(exampleTranslations[1].SourceToken!, $"toobedoo", "Assigned"),
-                    TranslationActionType.PutNoPropagate.ToString());
+                    TranslationActionTypes.PutNoPropagate);
 
             var to = new Token(
                 new TokenId(
@@ -237,7 +237,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             await translationSet.PutTranslation(
                     new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
-                    TranslationActionType.PutPropagate.ToString());
+                    TranslationActionTypes.PutPropagate);
 
             /*
             translationSet.PutTranslationModelEntry("one", new Dictionary<string, double>()
@@ -414,7 +414,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                             Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
                             await translationSet.PutTranslation(
                                 new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
-                                TranslationActionType.PutNoPropagate.ToString());
+                                TranslationActionTypes.PutNoPropagate);
 
                             iteration++;
                             putTranslationTokenIds.Add(sourceToken.TokenId);

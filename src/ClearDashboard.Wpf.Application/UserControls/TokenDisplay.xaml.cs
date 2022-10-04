@@ -531,6 +531,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
+            CalculateLayout();
+        }
+
+        private void TokenDisplayViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
             CalculateLayout();
         }
 
@@ -912,6 +918,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
                 "FromTranslationModel" => Brushes.Red,
+                "FromAlignmentModel" => Brushes.Red,
                 "FromOther" => Brushes.Blue,
                 _ => Brushes.Black
             };

@@ -26,21 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             }
         }
 
-
-        public EngineStringDetokenizer Detokenizer
-        {
-            get
-            {
-                var detokenizerName = ParallelCorpusId?.SourceTokenizedCorpusId?.TokenizationFunction;
-                return detokenizerName switch
-                {
-                    "LatinWordTokenizer" => new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                    "WhitespaceTokenizer" => new EngineStringDetokenizer(new WhitespaceDetokenizer()),
-                    "ZwspWordTokenizer" => new EngineStringDetokenizer(new ZwspWordDetokenizer()),
-                    _ => throw new NotSupportedException($"'{detokenizerName}' is not a valid tokenizer name")
-                };
-            }
-        }
+        public EngineStringDetokenizer Detokenizer => ParallelCorpusId.SourceTokenizedCorpusId?.Detokenizer ?? new EngineStringDetokenizer(new LatinWordDetokenizer());
 
         public async Task Update(IMediator mediator)
         {
