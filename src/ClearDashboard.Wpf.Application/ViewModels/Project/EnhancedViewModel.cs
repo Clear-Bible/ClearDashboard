@@ -96,8 +96,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public bool IsRtl { get; set; }
 
-        // public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
-
         #region BCV
         private bool _paratextSync = true;
         public bool ParatextSync
@@ -236,13 +234,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public Visibility? ProgressBarVisibility
         {
             get => _progressBarVisibility;
-            //set => Set(ref _progressBarVisibility, value);
-            set
-            {
-                _progressBarVisibility = value;
-                NotifyOfPropertyChange(nameof(ProgressBarVisibility));
+            set => Set(ref _progressBarVisibility, value);
                 //Set(ref _progressBarVisibility, value);
-            }
         }
 
         private ObservableCollection<VersesDisplay> _versesDisplay = new();
