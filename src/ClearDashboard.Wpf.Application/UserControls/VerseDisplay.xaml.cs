@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
@@ -312,7 +313,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay
+                TokenDisplayViewModel = tokenDisplay,
+                ModifierKeys = System.Windows.Input.Keyboard.Modifiers
             });
         }
 
