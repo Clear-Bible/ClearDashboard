@@ -13,8 +13,8 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
@@ -33,7 +33,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 // ReSharper disable once CheckNamespace
@@ -374,8 +373,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8604
             // ReSharper disable once SuspiciousTypeConversion.Global
             DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
-#pragma warning restore CS8604
                 _projectManager, _eventAggregator);
+#pragma warning restore CS8604
 
             base.OnViewAttached(view, context);
         }
@@ -525,12 +524,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return;
             }
 
-            if (_projectManager.CurrentProject.DesignSurfaceLayout == "")
+            if (_projectManager?.CurrentProject.DesignSurfaceLayout == "")
             {
                 return;
             }
 
-            var json = _projectManager.CurrentProject.DesignSurfaceLayout;
+            var json = _projectManager?.CurrentProject.DesignSurfaceLayout;
 
             if (json == null)
             {
@@ -886,14 +885,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         }
-        // ReSharper disable UnusedMember.Global
-        // ReSharper disable once UnusedMember.Global
-        public async void AddParatextCorpus()
-        {
-            await AddParatextCorpus(string.Empty);
-        }
-        // ReSharper restore UnusedMember.Global
 
+        // ReSharper restore UnusedMember.Global
         // ReSharper disable once UnusedMember.Global
         private async Task AddParatextCorpus(string selectedParatextProjectId = "")
         {
@@ -1211,7 +1204,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         /// <summary>
-        /// creates the databound menu for the node
+        /// creates the data bound menu for the node
         /// </summary>
         /// <param name="connection"></param>
         /// <exception cref="NotImplementedException"></exception>
@@ -1234,7 +1227,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            { Header = "", Id = "SeparatorId1", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
 
             // ALIGNMENT SETS
@@ -1266,9 +1259,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             // TRANSLATION SET
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-                { Header = "", Id = "SeparatorId2", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-                { Header = "", Id = "SeparatorId2", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
             // Add new tokenization
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
@@ -1281,7 +1274,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Enabled = (connection.AlignmentSetInfo.Count > 0)
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            { Header = "", Id = "SeparatorId3", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
 
             foreach (var info in connection.TranslationSetInfo)
@@ -1713,7 +1706,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{newConnection.SourceConnector.ParentNode.CorpusId}'.");
             }
             var targetNodeTokenization = targetCorpusNode.NodeTokenizations.FirstOrDefault();
-            if (sourceNodeTokenization == null)
+            if (targetNodeTokenization == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
                     $"Cannot find the target TokenizedTextCorpusId associated to Corpus with Id '{newConnection.DestinationConnector.ParentNode.CorpusId}'.");
@@ -1964,7 +1957,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void UiLanguageChangedMessage(UiLanguageChangedMessage message)
         {
-            var language = message.LanguageCode;
+            //var language = message.LanguageCode;
 
             // rerender the context menus
             foreach (var corpusNode in DesignSurface.CorpusNodes)
@@ -2101,16 +2094,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
             // TODO - update the UI language
-            var language = message.LanguageCode;
+            //var language = message.LanguageCode;
 
             // rerender the context menus
             foreach (var corpusNode in DesignSurface.CorpusNodes)
             {
                 CreateCorpusNodeMenu(corpusNode);
             }
-
-
-
+            
             return Task.CompletedTask;
         }
 
