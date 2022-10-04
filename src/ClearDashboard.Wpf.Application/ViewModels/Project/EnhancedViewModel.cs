@@ -2,7 +2,12 @@
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Notes;
+using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -27,18 +32,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DAL.Alignment.Features.Notes;
-using ClearDashboard.DAL.Alignment.Features.Translation;
-using ClearDashboard.DAL.Alignment.Translation;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
-using TranslationSet = ClearDashboard.DataAccessLayer.Models.TranslationSet;
-using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -77,10 +75,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
 
-        public List<TokenProject> _tokenProjects = new();
-        public List<ParallelCorpus> _parallelProjects = new();
-        public List<ShowTokenizationWindowMessage> _projectMessages = new();
-        public List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
+        private List<TokenProject> _tokenProjects = new();
+        private List<ShowTokenizationWindowMessage> _projectMessages = new();
+        
+        private List<ParallelCorpus> _parallelProjects = new();
+        private List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
 
         public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
@@ -93,8 +92,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Public Properties
 
-        private string ContentID => this.ContentID;
-
         public bool IsRtl { get; set; }
 
         public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
@@ -106,7 +103,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _paratextSync;
             set
             {
-                if (value == true)
+                if (value)
                 {
                     // update Paratext with the verseId
                     //_ = Task.Run(() =>
@@ -143,7 +140,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private int _verseOffsetRange = 0;
+        private int _verseOffsetRange;
         public int VerseOffsetRange
         {
             get => _verseOffsetRange;
@@ -152,7 +149,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if (value != _verseOffsetRange)
                 {
                     _verseOffsetRange = value;
+#pragma warning disable CS4014
                     VerseChangeRerender();
+#pragma warning restore CS4014
                     NotifyOfPropertyChange(() => _verseOffsetRange);
                 }
             }
@@ -165,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set
             {
                 Set(ref _currentBook, value);
-                NotifyOfPropertyChange<string>(() => CurrentBookDisplay);
+                NotifyOfPropertyChange(() => CurrentBookDisplay);
             }
         }
 
@@ -191,7 +190,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     _verseChange = value;
 
+#pragma warning disable CS4014
                     VerseChangeRerender();
+#pragma warning restore CS4014
                     NotifyOfPropertyChange(() => VerseChange);
                 }
             }
@@ -270,7 +271,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Constructor
 
+        // ReSharper disable once UnusedMember.Global
+#pragma warning disable CS8618
         public EnhancedViewModel()
+#pragma warning restore CS8618
         {
             // required by design-time binding
             MockData();
@@ -288,7 +292,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _projectManager = projectManager;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
-            this.ContentId = "ENHANCEDVIEW";
+            ContentId = "ENHANCEDVIEW";
 
             //BcvInit(_projectManager.CurrentParatextProject.Guid);
             ProgressBarVisibility = Visibility.Collapsed;
@@ -383,7 +387,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
 
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
@@ -393,7 +397,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 InComingChangesStarted = false;
             }
 
-            return;
         }
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
@@ -401,7 +404,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             if (ProjectManager?.CurrentParatextProject is not null)
             {
                 // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
 
                 InComingChangesStarted = true;
 
@@ -607,12 +610,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 try
                 {
-                    var VerseTokens = await BuildTokenDisplayViewModels(message);
+                    var verseTokens = await BuildTokenDisplayViewModels(message);
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
                             Name = "Fetch Book",
-                            Description = $"Found {VerseTokens.Count} TokensTextRow entities.",
+                            Description = $"Found {verseTokens.Count} TokensTextRow entities.",
                             StartTime = DateTime.Now,
                             TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                         }), cancellationToken);
@@ -685,7 +688,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // multiple verses
                     bcv.SetVerseFromId(verseRange[0]);
                     title += $"  ({bcv.BookName} {bcv.ChapterNum}:{bcv.VerseNum}-";
-                    bcv.SetVerseFromId(verseRange[verseRange.Count - 1]);
+                    bcv.SetVerseFromId(verseRange[^1]);
                     title += $"{bcv.VerseNum})";
                 }
 
@@ -741,14 +744,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return verseRange;
         }
 
-        public async Task<List<EngineParallelTextRow?>> VerseTextRow(int BBBCCCVVV, ShowParallelTranslationWindowMessage message)
+        public async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, ShowParallelTranslationWindowMessage message)
         {
             try
             {
                 var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
                 var guid = Guid.Parse(message.ParallelCorpusId);
                 var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First(p => p.Id == guid));
-                var verses = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
+                var verses = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
 
                 // TODO save out the corpus for future use
                 // _parallelProjects
@@ -868,9 +871,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        private async Task<ObservableCollection<DAL.Alignment.Notes.Label>> GetLabelSuggestions()
+        private async Task<ObservableCollection<Label>> GetLabelSuggestions()
         {
-            var labels = await DAL.Alignment.Notes.Label.GetAll(Mediator);
+            var labels = await Label.GetAll(Mediator);
             return new ObservableCollection<Label>(labels);
         }
 
@@ -1143,7 +1146,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     int index = 0;
                     for (int i = 0; i < tokensTextRows.Count; i++)
                     {
-                        var verseRef = (SIL.Scripture.VerseRef)tokensTextRows[i].Ref;
+                        var verseRef = (VerseRef)tokensTextRows[i].Ref;
 
                         if (verseRef.VerseNum == CurrentBcv.VerseNum)
                         {
@@ -1269,18 +1272,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             
         }
 
-        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool ShowTranslations)
+        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool showTranslations)
         {
             var brush = GetCorpusBrushColor(message);
 
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == message.CorpusId);
             if (row is null)
             {
-                VersesDisplay.Add(new Models.VersesDisplay
+                VersesDisplay.Add(new VersesDisplay
                 {
                     CorpusId = message.CorpusId,
                     BorderColor = brush,
-                    ShowTranslation = ShowTranslations,
+                    ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
                 });
@@ -1289,7 +1292,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 row.CorpusId = message.CorpusId;
                 row.BorderColor = brush;
-                row.ShowTranslation = ShowTranslations;
+                row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
                 row.Verses = verses;
             }
@@ -1338,7 +1341,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
             if (row is null)
             {
-                VersesDisplay.Add(new Models.VersesDisplay
+                VersesDisplay.Add(new VersesDisplay
                 {
                     CorpusId = Guid.Parse(message.ParallelCorpusId),
                     BorderColor = brush,
@@ -1359,9 +1362,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 
-        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int BBBCCCVVV)
+        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int bbbcccvvv)
         {
-            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
+            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
             if (textRow != null)
             {
                 var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
@@ -1382,7 +1385,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return translation;
         }
 
-        private Translation GetParallelTranslation(ClearBible.Engine.Corpora.Token token)
+        private Translation GetParallelTranslation(EngineToken token)
         {
             var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
             return translation;
@@ -1457,7 +1460,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {
-            this.BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
 
             return Task.CompletedTask;
         }
@@ -1632,41 +1635,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(nameof(TranslationControlVisibility));
         }
 
-        //private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
-        //{
-        //    var result = new List<TranslationOption>();
-
-        //    var random = new Random();
-        //    var optionCount = random.Next(4) + 2;     // 2-5 options
-        //    var remainingPercentage = 100d;
-
-        //    var basePercentage = random.NextDouble() * remainingPercentage;
-        //    result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
-        //    remainingPercentage -= basePercentage;
-
-        //    for (var i = 1; i < optionCount - 1; i++)
-        //    {
-        //        var percentage = random.NextDouble() * remainingPercentage;
-        //        result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = percentage });
-        //        remainingPercentage -= percentage;
-        //    }
-
-        //    result.Add(new TranslationOption { Word = GetMockOogaWord(), Probability = remainingPercentage });
-
-        //    return result.OrderByDescending(to => to.Probability);
-        //}
-
-        //private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
-
-
-        //private static int mockOogaWordsIndexer_;
-
-        //private string GetMockOogaWord()
-        //{
-        //    var result = MockOogaWords[mockOogaWordsIndexer_++];
-        //    if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
-        //    return result;
-        //}
     }
 
 
