@@ -9,7 +9,15 @@ namespace ClearDashboard.DAL.Alignment.Notes
 {
     public class Note
     {
-        public NoteId? NoteId { get; private set; }
+        public NoteId? NoteId 
+        { 
+            get;
+#if DEBUG
+            set;
+#else
+            private set;
+#endif
+        }
         public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
 
@@ -108,7 +116,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             {
                 throw new MediatorErrorEngineException(result.Message);
             }
-       }
+        }
 
         public async Task DetachLabel(IMediator mediator, Label label, CancellationToken token = default)
         {

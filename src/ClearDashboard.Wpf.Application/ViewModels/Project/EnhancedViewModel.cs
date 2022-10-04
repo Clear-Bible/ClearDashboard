@@ -26,6 +26,7 @@ using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -83,8 +84,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private List<ParallelCorpus> _parallelProjects = new();
         private List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
-
-        public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
+        public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
         public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
         public IDetokenizer<string, string>? Detokenizer { get; set; } = new LatinWordDetokenizer();
         public IEnumerable<Translation> CurrentTranslations { get; set; }
@@ -95,8 +95,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Public Properties
 
         public bool IsRtl { get; set; }
-
-        public Visibility TranslationControlVisibility { get; set; } = Visibility.Collapsed;
 
         #region BCV
         private bool _paratextSync = true;
@@ -240,11 +238,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public Visibility? ProgressBarVisibility
         {
             get => _progressBarVisibility;
-            set
-            {
-                _progressBarVisibility = value;
-                NotifyOfPropertyChange(() => ProgressBarVisibility);
-            }
+            set => Set(ref _progressBarVisibility, value);
+                //Set(ref _progressBarVisibility, value);
         }
 
         private ObservableCollection<VersesDisplay> _versesDisplay = new();
@@ -259,6 +254,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _message;
             set => Set(ref _message, value);
         }
+
+        private ObservableCollection<TokensTextRow>? _verses;
+        public ObservableCollection<TokensTextRow>? Verses
+        {
+            get => _verses;
+            set => Set(ref _verses, value);
+        }
+
+        //public string? Message
+        //{
+        //    get => _message;
+        //    set => Set(ref _message, value);
+        //}
 
         #endregion //Observable Properties
 
@@ -868,17 +876,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private ObservableCollection<Note> GetNotes(EngineToken token)
         {
-            return NotesDictionary.ContainsKey(token.TokenId) ? new ObservableCollection<Note>(NotesDictionary[token.TokenId])
+            var matches = NotesDictionary.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
+            return matches.Key != null
+                ? new ObservableCollection<Note>(matches.Value)
                 : new ObservableCollection<Note>();
         }
-
-
-
-
-
-
-
-
 
         private async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
             CancellationToken localCancellationToken)
@@ -1386,6 +1388,51 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return translation;
         }
 
+        public async Task AddNoteToDatabase(Note note, IId entityId)
+        {
+            try
+            {
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await note.CreateOrUpdate(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Added note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                stopwatch.Restart();
+#endif
+                await note.AssociateDomainEntity(Mediator, entityId);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Associated note {note.NoteId.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                if (note.Labels.Any())
+                {
+#if DEBUG
+                    stopwatch.Restart();
+#endif
+                    foreach (var label in note.Labels)
+                    {
+                        if (label.LabelId == null)
+                        {
+                            await label.CreateOrUpdate(Mediator);
+                        }
+                        await note.AssociateLabel(Mediator, label);
+                    }
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Associated labels with note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                }
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
         private Translation GetParallelTranslation(EngineToken token)
         {
             var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
@@ -1499,7 +1546,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public void TranslationApplied(object sender, TranslationEventArgs e)
         {
             Task.Run(() => TranslationAppliedAsync(e).GetAwaiter()); 
-
         }
 
         public async Task TranslationAppliedAsync(TranslationEventArgs e)
@@ -1509,18 +1555,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ProgressBarVisibility = Visibility.Visible;
                 await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
                 await VerseChangeRerender();
-                HideTranslation();
+                TranslationControlVisibility = Visibility.Collapsed;
+                //HideTranslation();
             }
             finally
             {
                 ProgressBarVisibility = Visibility.Collapsed;
             }
-
         }
 
         public void TranslationCancelled(object sender, RoutedEventArgs e)
         {
-            HideTranslation();
+            TranslationControlVisibility = Visibility.Collapsed;
+            //HideTranslation();
         }
 
         public void NoteAdded(object sender, NoteEventArgs e)
@@ -1530,7 +1577,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task NoteAddedAsync(NoteEventArgs e)
         {
-            HideNote();
+            //HideNote();
 
             await e.Note.CreateOrUpdate(Mediator);
             await e.Note.AssociateDomainEntity(Mediator, e.EntityId);
@@ -1543,19 +1590,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await e.Note.AssociateLabel(Mediator, label);
             }
 
-            
+            await AddNoteToDatabase(e.Note, e.EntityId);
+
+            // TODO: notify the token that a note was added
+            //var token = VerseTokens.FirstOrDefault(vt => vt.Token.TokenId == e.EntityId);
+            //if (token != null)
+            //{
+            //    token.NoteAdded(e.Note);
+            //}
+
+            //Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
+            //NotifyOfPropertyChange(nameof(Message));
+
+            //e.TokenDisplayViewModel.Notes.Add(e.Note);
         }
 
         public async Task NoteUpdated(object sender, NoteEventArgs e)
         {
-            HideNote();
+            //HideNote();
 
             await e.Note.CreateOrUpdate(Mediator);
         }
 
         public async Task NoteDeleted(object sender, NoteEventArgs e)
         {
-            HideNote();
+            //HideNote();
 
             await e.Note.Delete(Mediator);
         }
@@ -1578,66 +1637,136 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public void CloseNotePaneRequested(object sender, NoteEventArgs args)
+        public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
         {
-            HideNote();
+            NoteControlVisibility = Visibility.Collapsed;
         }
 
         // ReSharper restore UnusedMember.Global
 
         #endregion
 
-        public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
+        private Visibility _noteControlVisibility = Visibility.Collapsed;
+        public Visibility NoteControlVisibility
+        {
+            get => _noteControlVisibility;
+            set => Set(ref _noteControlVisibility, value);
+        }
+
+        private Visibility _translationControlVisibility = Visibility.Collapsed;
+        public Visibility TranslationControlVisibility
+        {
+            get => _translationControlVisibility;
+            set => Set(ref _translationControlVisibility, value);
+        }
+
+
+        // public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
         private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
         {
-            NoteControlVisibility = Visibility.Visible;
             CurrentTokenDisplayViewModel = tokenDisplayViewModel;
-
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
+            NoteControlVisibility = Visibility.Visible;
         }
-        private void HideNote()
+
+        //private void HideNote()
+        //{
+        //    NoteControlVisibility = Visibility.Collapsed;
+        //    NotifyOfPropertyChange(nameof(NoteControlVisibility));
+        //}
+
+        //public Note CurrentNote { get; set; }
+
+        private TokenDisplayViewModel _currentTokenDisplayViewModel;
+        private IEnumerable<TranslationOption> _translationOptions;
+        private TranslationOption? _currentTranslationOption;
+
+        public TokenDisplayViewModel CurrentTokenDisplayViewModel
         {
-            NoteControlVisibility = Visibility.Collapsed;
-            NotifyOfPropertyChange(nameof(NoteControlVisibility));
+            get => _currentTokenDisplayViewModel;
+            set => Set(ref _currentTokenDisplayViewModel, value);
         }
 
-        public Note CurrentNote { get; set; }
-        public TokenDisplayViewModel CurrentTokenDisplayViewModel { get; set; }
+        public IEnumerable<TranslationOption> TranslationOptions
+        {
+            get => _translationOptions;
+            set => Set(ref _translationOptions, value);
+        }
 
+        public TranslationOption? CurrentTranslationOption
+        {
+            get => _currentTranslationOption;
+            set => Set(ref _currentTranslationOption, value);
+        }
 
-        public IEnumerable<TranslationOption> TranslationOptions { get; set; }
-        public TranslationOption CurrentTranslationOption { get; set; }
+        //public IEnumerable<TranslationOption> TranslationOptions { get; set; }
+        //public TranslationOption CurrentTranslationOption { get; set; }
         private async void DisplayTranslation(TranslationEventArgs e)
         {
-            TranslationControlVisibility = Visibility.Visible;
+            await Task.Factory.StartNew(async () =>
+            {
+                OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
 
-            CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
-            TranslationOptions = await GetTranslationOptions(e.Translation);
-            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
-
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-            NotifyOfPropertyChange(nameof(CurrentTokenDisplayViewModel));
-            NotifyOfPropertyChange(nameof(TranslationOptions));
-            NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+                CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
+                TranslationOptions = await GetTranslationOptions(e.Translation);
+                CurrentTranslationOption =
+                    TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
+                
+                OnUIThread(() => TranslationControlVisibility = Visibility.Visible);
+                OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
+            });
         }
 
         private async Task<IEnumerable<TranslationOption>> GetTranslationOptions(Translation translation)
         {
             var translationModelEntry = await CurrentTranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
             var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
-                .Select(option => new TranslationOption { Word = option.Key, Probability = option.Value })
+                .Select(option => new TranslationOption { Word = option.Key, Count = option.Value })
                 .Take(4)
                 .ToList();
             return translationOptions;
         }
 
-        private void HideTranslation()
-        {
-            TranslationControlVisibility = Visibility.Collapsed;
-            NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-        }
+        //private void HideTranslation()
+        //{
+        //    TranslationControlVisibility = Visibility.Collapsed;
+        //    NotifyOfPropertyChange(nameof(TranslationControlVisibility));
+        //}
 
+        //private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
+        //{
+        //    var result = new List<TranslationOption>();
+
+        //    var random = new Random();
+        //    var optionCount = random.Next(4) + 2;     // 2-5 options
+        //    var remainingPercentage = 100d;
+
+        //    var basePercentage = random.NextDouble() * remainingPercentage;
+        //    result.Add(new TranslationOption { Word = sourceTranslation, Count = basePercentage });
+        //    remainingPercentage -= basePercentage;
+
+        //    for (var i = 1; i < optionCount - 1; i++)
+        //    {
+        //        var percentage = random.NextDouble() * remainingPercentage;
+        //        result.Add(new TranslationOption { Word = GetMockOogaWord(), Count = percentage });
+        //        remainingPercentage -= percentage;
+        //    }
+
+        //    result.Add(new TranslationOption { Word = GetMockOogaWord(), Count = remainingPercentage });
+
+        //    return result.OrderByDescending(to => to.Count);
+        //}
+
+        //private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
+
+
+        //private static int mockOogaWordsIndexer_;
+
+        //private string GetMockOogaWord()
+        //{
+        //    var result = MockOogaWords[mockOogaWordsIndexer_++];
+        //    if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
+        //    return result;
+        //}
     }
 
 
