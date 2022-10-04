@@ -254,14 +254,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _versesDisplay, value);
         }
 
-
-        //private ObservableCollection<TokensTextRow>? _verses;
-        //public ObservableCollection<TokensTextRow>? Verses
-        //{
-        //    get => _verses;
-        //    set => Set(ref _verses, value);
-        //}
-
         public string? Message
         {
             get => _message;
@@ -551,7 +543,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
 
-        public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        public async Task<bool> ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
@@ -588,10 +580,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await ShowNewCorpusTokens(message, cancellationToken, localCancellationToken);
             }
-
+            return true;
         }
 
-        private async Task ShowNewParallelTranslation(ShowParallelTranslationWindowMessage message,
+        public async Task ShowNewParallelTranslation(ShowParallelTranslationWindowMessage message,
             CancellationToken cancellationToken, CancellationToken localCancellationToken)
         {
             var msg = _parallelMessages.Where(p =>
@@ -1055,8 +1047,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        //Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
-
                         UpdateVersesDisplay(message, verses, title, false);
                         NotifyOfPropertyChange(() => VersesDisplay);
 

@@ -558,7 +558,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var dir = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
 
             File.WriteAllText(dir, JsonSerializer.Serialize(serializedEnhancedViews, options));
-          
+
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
@@ -566,7 +566,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // save the design surface
             await _projectDesignSurfaceViewModel.SaveCanvas();
-            
+
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -634,12 +634,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         viewModel = IoC.Get<EnhancedViewModel>();
                         newWindow = true;
                     }
-                        
+
                     viewModel.Title = deserialized[i].DisplayName;
                     viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
                     viewModel.ParatextSync = deserialized[i].ParatextSync;
                     viewModel.CurrentBcv.SetVerseFromId(deserialized[i].BBBCCCVVV);
-                    viewModel.VerseChange = deserialized[i].BBBCCCVVV;
+                    viewModel.VerseChange = "001001001";
+                    viewModel.ProgressBarVisibility = Visibility.Visible;
 
                     if (newWindow)
                     {
@@ -659,25 +660,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     foreach (var displayOrder in deserialized[i].DisplayOrder)
                     {
+                        var cancellationToken = new CancellationToken();
                         if (displayOrder.MsgType == DisplayOrder.MessageType.ShowTokenizationWindowMessage)
                         {
-                            var cancellationToken = new CancellationToken();
                             try
                             {
                                 json = displayOrder.Data.ToString();
                                 var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json, options);
                                 if (message is not null)
                                 {
-                                    await viewModel.ShowCorpusTokens(message, cancellationToken);
+                                    viewModel.ProgressBarVisibility = Visibility.Visible;
+                                    var returnTask = await viewModel.ShowCorpusTokens(message, cancellationToken);
+                                    await Task.Delay(1000);
                                 }
                             }
                             catch (Exception e)
                             {
                                 Console.WriteLine(e);
                             }
-                            
+
+                        }
+                        else if (displayOrder.MsgType == DisplayOrder.MessageType.ShowParallelTranslationWindowMessage)
+                        {
+                            try
+                            {
+                                json = displayOrder.Data.ToString();
+                                var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json, options);
+                                if (message is not null)
+                                {
+                                    var cancellationTokenLocal = new CancellationToken();
+
+                                    viewModel.ProgressBarVisibility = Visibility.Visible;
+                                    await viewModel.ShowNewParallelTranslation(message, cancellationToken, cancellationTokenLocal);
+                                    await Task.Delay(1000);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
                         }
                     }
+                    viewModel.ProgressBarVisibility = Visibility.Visible;
+                    viewModel.VerseChange = deserialized[i].BBBCCCVVV;
                 }
             }
         }
