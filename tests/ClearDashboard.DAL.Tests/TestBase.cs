@@ -17,11 +17,11 @@ using ClearDashboard.DAL.Tests.Mocks;
 using ClearDashboard.DAL.Tests.Slices.LanguageResources;
 using ClearDashboard.DAL.Tests.Slices.Users;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Xunit;
@@ -63,7 +63,7 @@ namespace ClearDashboard.DAL.Tests
             Services.AddSingleton<IProjectProvider, ProjectProvider>();
             Services.AddScoped<ProjectDbContext>();
             Services.AddScoped<ProjectDbContextFactory>();
-            Services.AddScoped<SqliteDatabaseConnectionInterceptor>();
+            Services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder>();
         }
         private async void SetupTests()
         {

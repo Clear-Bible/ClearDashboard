@@ -179,7 +179,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
 
             var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
-            var parallelCorpusDB = ProjectDbContext!.ParallelCorpa.FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
+            var parallelCorpusDB = ProjectDbContext!.ParallelCorpa.Include(pc => pc.SourceTokenizedCorpus).FirstOrDefault(pc => pc.Id == parallelTokenizedCorpus.ParallelCorpusId.Id);
             Assert.NotNull(parallelCorpusDB);
 
             // Remove the source tokenized corpus:
@@ -198,7 +198,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
         }
         finally
         {
-            await DeleteDatabaseContext();
+//            await DeleteDatabaseContext();
         }
     }
 }

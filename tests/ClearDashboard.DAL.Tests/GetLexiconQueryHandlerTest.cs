@@ -29,8 +29,6 @@ namespace ClearDashboard.DAL.Tests
             var dashboardProjectManager = ServiceProvider.GetService<DashboardProjectManager>();
             dashboardProjectManager.CreateDashboardProject();
 
-            dashboardProjectManager.CurrentDashboardProject.DirectoryPath = path;
-
             dashboardProjectManager.CurrentParatextProject = new ParatextProject();
             dashboardProjectManager.CurrentParatextProject.DirectoryPath = path;
 

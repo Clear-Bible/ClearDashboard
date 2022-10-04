@@ -9,24 +9,24 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using Xunit;
 using Xunit.Abstractions;
 using Serilog.Events;
 using Serilog;
 using Microsoft.Extensions.Logging;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using Microsoft.EntityFrameworkCore;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
     public abstract class TestBase
     {
         protected ITestOutputHelper Output { get; private set; }
-        protected readonly ServiceCollection Services = new ServiceCollection();
-        private IServiceProvider? _serviceProvider = null;
-        protected IServiceProvider ServiceProvider => _serviceProvider ??= Services.BuildServiceProvider();
+        protected IContainer? Container { get; private set; }
 
-        protected IMediator? Mediator => ServiceProvider.GetService<IMediator>();
+        protected IMediator? Mediator { get; private set; }
 
         protected ProjectDbContext? ProjectDbContext { get; set; }
         protected string? ProjectName { get; set; }
@@ -44,29 +44,39 @@ namespace ClearDashboard.DAL.Alignment.Tests
 
         protected virtual void SetupDependencyInjection()
         {
-            Services.AddScoped<ProjectDbContext>();
-            Services.AddScoped<ProjectDbContextFactory>();
-            Services.AddScoped<SqliteDatabaseConnectionInterceptor>();
-            Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
-            Services.AddLogging();
-            Services.AddSingleton<IUserProvider, UserProvider>();
-            Services.AddSingleton<IProjectProvider, ProjectProvider>();
+            var services = new ServiceCollection();
+            services.AddScoped<ProjectDbContext>();
+            services.AddScoped<ProjectDbContextFactory>();
+            services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder>();
+            services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
+            services.AddLogging();
+            services.AddSingleton<IUserProvider, UserProvider>();
+            services.AddSingleton<IProjectProvider, ProjectProvider>();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            Container = builder.Build();
         }
 
         private async void SetupTests()
         {
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
+            Mediator = Container!.Resolve<IMediator>();
+
+            var factory = Container!.Resolve<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             ProjectName = $"Project{random.Next(1, 1000)}";
             Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {ProjectName}");
-            var assets = await factory?.Get(ProjectName, true)!;
-            ProjectDbContext= assets.ProjectDbContext;
 
+            ProjectDbContext = await factory!.GetDatabaseContext(
+                ProjectName,
+                true,
+                Container).ConfigureAwait(false);
 
-            var testUser = await AddDashboardUser(ProjectDbContext);
-            var projectInfo = await AddCurrentProject(ProjectDbContext, ProjectName);
+            _ = await AddDashboardUser(ProjectDbContext);
+            _ = await AddCurrentProject(ProjectDbContext, ProjectName);
         }
 
         protected async Task DeleteDatabaseContext()
@@ -77,13 +87,15 @@ namespace ClearDashboard.DAL.Alignment.Tests
                 await ProjectDbContext!.Database.EnsureDeletedAsync();
                 var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{ProjectName}";
                 Directory.Delete(projectDirectory, true);
+
+                Container!.Dispose();
             }
         }
 
         protected async Task<User> AddDashboardUser(ProjectDbContext context)
         {
             var testUser = new User { FirstName = "Test", LastName = "User" };
-            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            var userProvider = Container!.Resolve<IUserProvider>();
             Assert.NotNull(userProvider);
             userProvider!.CurrentUser = testUser;
 
@@ -95,7 +107,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
         protected async Task<Project> AddCurrentProject(ProjectDbContext context, string projectName)
         {
             var testProject = new Project { ProjectName = projectName, IsRtl = true };
-            var projectProvider = ServiceProvider.GetService<IProjectProvider>();
+            var projectProvider = Container!.Resolve<IProjectProvider>();
             Assert.NotNull(projectProvider);
             projectProvider!.CurrentProject = testProject;
 
@@ -114,9 +126,9 @@ namespace ClearDashboard.DAL.Alignment.Tests
                 .WriteTo.File(logPath, outputTemplate: outputTemplate, rollingInterval: RollingInterval.Day)
                 .WriteTo.Debug(outputTemplate: outputTemplate)
                 .CreateLogger();
-            var loggerFactory = ServiceProvider.GetService<ILoggerFactory>();
+            var loggerFactory = Container!.Resolve<ILoggerFactory>();
             loggerFactory.AddSerilog(log);
-            Logger = ServiceProvider.GetService<ILogger<TestBase>>()!;
+            Logger = Container!.Resolve<ILogger<TestBase>>()!;
             Logger.LogDebug($"Test logging has been configured.  Writing logs to '{logPath}'");
         }
     }

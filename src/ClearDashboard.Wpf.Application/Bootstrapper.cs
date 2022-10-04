@@ -69,7 +69,7 @@ namespace ClearDashboard.Wpf.Application
 
         protected override void PopulateServiceCollection(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddClearDashboardDataAccessLayer(registerDatabaseAbstractions:false);
+            serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>(); 
             base.PopulateServiceCollection(serviceCollection);
         }

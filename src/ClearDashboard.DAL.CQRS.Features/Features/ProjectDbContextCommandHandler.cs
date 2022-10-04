@@ -7,7 +7,7 @@ namespace ClearDashboard.DAL.CQRS.Features;
 
 public abstract record ProjectRequestCommand<TData> : IRequest<RequestResult<TData>>;
 
-public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse>, IDisposable
+public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData> : IRequestHandler<TRequest, TResponse> /*, IDisposable */
     where TRequest : ProjectRequestCommand<TData>,IRequest<TResponse>
     where TResponse : RequestResult<TData>, new()
 {
@@ -28,16 +28,34 @@ public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData>
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
     {
-        try 
+        try
         {
             if (!ProjectProvider!.HasCurrentProject)
             {
                 throw new InvalidOperationException("The ProjectProvider does not have a current project.");
             }
 
-            ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(ProjectProvider?.CurrentProject!.ProjectName!).ConfigureAwait(false);
-            return await SaveDataAsync(request, cancellationToken);
+            // Try creating a child scope - essentially 'per handler request' - so that
+            // when GetDatabaseContext is called, a new ProjectDbContext is created and then 
+            // disposed after SaveDataAsync is called and the handlerScope is disposed:
+            if (ProjectNameDbContextFactory!.ServiceScope.Tag == Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag)
+            {
+                ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(
+                    ProjectProvider?.CurrentProject!.ProjectName!,
+                    false).ConfigureAwait(false);
+                return await SaveDataAsync(request, cancellationToken);
+            }
+            else
+            {
+                using var requestScope = ProjectNameDbContextFactory!.ServiceScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
 
+                ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(
+                    ProjectProvider?.CurrentProject!.ProjectName!,
+                    false,
+                    requestScope).ConfigureAwait(false);
+                return await SaveDataAsync(request, cancellationToken);
+            }
         }
         catch (Exception ex)
         {
@@ -54,7 +72,6 @@ public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData>
         if (disposing)
         {
             ProjectNameDbContextFactory?.Dispose();
-            ProjectDbContext.Dispose();
         }
     }
 

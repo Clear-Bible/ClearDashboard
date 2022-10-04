@@ -1,10 +1,10 @@
 ﻿using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data.Extensions;
-using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 
 namespace ClearDashboard.DataAccessLayer.Data
@@ -14,31 +14,16 @@ namespace ClearDashboard.DataAccessLayer.Data
         #nullable disable
         private readonly ILogger<ProjectDbContext> _logger;
         public  IUserProvider UserProvider { get; set; }
-        public string DatabasePath { get; set; }
-        private readonly SqliteDatabaseConnectionInterceptor _sqliteDatabaseConnectionInterceptor;
-        
-        
-        public ProjectDbContext() : this(string.Empty)
-        {
-           
-        }
+        public string ProjectName { get; private set; }
+        public DbContextOptionsBuilder<ProjectDbContext> OptionsBuilder { get; private set; }
 
-        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider, SqliteDatabaseConnectionInterceptor sqliteDatabaseConnectionInterceptor) : this(string.Empty)
+        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider, string projectName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
+            : base(optionsBuilder.Options)
         {
             _logger = logger;
             UserProvider = userProvider;
-            _sqliteDatabaseConnectionInterceptor = sqliteDatabaseConnectionInterceptor;
-        }
-
-        public ProjectDbContext(DbContextOptions<ProjectDbContext> options)
-            : base(options)
-        {
-            DatabasePath = string.Empty;
-        }
-
-        protected ProjectDbContext(string databasePath)
-        {
-            DatabasePath = databasePath;
+            ProjectName = projectName;
+            OptionsBuilder = optionsBuilder;
         }
 
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
@@ -69,20 +54,8 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();
         //public virtual DbSet<VerseMappingVerseAssociation> VerseMappingVerseAssociations => Set<VerseMappingVerseAssociation>();
-                             
+
         //public virtual DbSet<ParallelTokenizedCorpus> ParallelTokenizedCorpa => Set<ParallelTokenizedCorpus>();
- 
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlite($"DataSource={DatabasePath};Pooling=true;Mode=ReadWriteCreate");
-                //optionsBuilder.UseSqlite($"Filename={DatabasePath}");
-            }
-
-            optionsBuilder.AddInterceptors(_sqliteDatabaseConnectionInterceptor);
-        }
 
         public async Task Migrate()
         {
@@ -125,7 +98,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
             catch
             {
-                _logger.LogInformation($"The migrations for the {DatabasePath} database failed -- forcing the migrations again.");
+                _logger.LogInformation($"The migrations for the {ProjectName} database failed -- forcing the migrations again.");
                 await Database.MigrateAsync();
             }
         }
@@ -366,5 +339,9 @@ namespace ClearDashboard.DataAccessLayer.Data
         //    return base.SaveChanges();
         //}
 
+        public override void Dispose()
+        {
+            base.Dispose();
+        }
     }
 }
