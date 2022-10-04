@@ -57,6 +57,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// </summary>
         public ObservableCollection<Note> Notes { get; set; } = new();
 
+        /// <summary>
+        /// Gets or sets whether this token is selected.
+        /// </summary>
+        public bool IsSelected { get; set; } = false;
+
         public bool HasNote => Notes.Any();
 
         public void NoteAdded()
