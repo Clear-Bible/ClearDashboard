@@ -104,7 +104,15 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
                 switch (processStatus)
                 {
                     case ProcessStatus.Completed:
-                        ParentViewModel.Ok();
+                        if (ParentViewModel.Steps.Count > 3)
+                        {
+                            await MoveForwards();
+                        }
+                        else
+                        {
+                            ParentViewModel.Ok();
+                        }
+
                         break;
                     case ProcessStatus.Failed:
                         ParentViewModel.Cancel();

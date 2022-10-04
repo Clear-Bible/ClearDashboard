@@ -61,7 +61,7 @@
                                 <DataTemplate>
                                     <TextBlock
                                         Width="40"
-                                        Text="{Binding ProbabilityPercentage}"
+                                        Text="{Binding Probability}"
                                         TextAlignment="Right" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

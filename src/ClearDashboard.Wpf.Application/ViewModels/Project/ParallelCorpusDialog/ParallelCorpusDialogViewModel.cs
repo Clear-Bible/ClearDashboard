@@ -23,6 +23,7 @@ using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using SIL.Machine.Translation;
 using SIL.Machine.Utils;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
@@ -147,7 +148,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             await ActivateItemAsync(Steps[0], cancellationToken);
 
             await base.OnInitializeAsync(cancellationToken);
-
            
         }
 
@@ -222,61 +222,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     LongRunningProcessStatus.Working,
                     cancellationToken,
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "ParallelCorpus",
-                //    Description = $"Retrieving tokenized source and target corpora for '{ParallelCorpus.DisplayName}'...",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-                //}), cancellationToken);
-
 
                 var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
                 var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
 
-                Logger!.LogInformation($"Aligning rows between target and source corpora");
+                Logger!.LogInformation($"Parallelizing source and target corpora");
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Working,
                     cancellationToken,
-                    $"Aligning rows for '{parallelCorpusDisplayName}' between target and source corpora...");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "ParallelCorpus",
-                //    Description = $"Aligning rows for '{parallelCorpusDisplayName}' between target and source corpora...",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-                //}), cancellationToken);
+                    $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'...");
 
                 // TODO:  Ask Chris/Russell how to go from models VerseMapping to Engine VerseMapping
                 ParallelTextCorpus = await Task.Run(async () => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new List<ClearBible.Engine.Corpora.VerseMapping>()), cancellationToken);
 
 
-                Logger!.LogInformation($"Creating the ParallelCorpus '{parallelCorpusDisplayName}'");
+                Logger!.LogInformation($"Saving parallelization '{parallelCorpusDisplayName}'");
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Working,
                     cancellationToken,
-                    $"Creating  ParallelCorpus '{parallelCorpusDisplayName}'...");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "ParallelCorpus",
-                //    Description = $"Creating  ParallelCorpus '{parallelCorpusDisplayName}'...",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-                //}), cancellationToken);
+                    $"Saving parallelization '{parallelCorpusDisplayName}'...");
+
                 ParallelTokenizedCorpus = await ParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!);
 
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Completed,
                     cancellationToken,
-                    $"Completed creation of  ParallelCorpus '{parallelCorpusDisplayName}'.");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "ParallelCorpus",
-                //    Description = $"Completed creation of  ParallelCorpus '{parallelCorpusDisplayName}'.",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                //}), cancellationToken);
-                Logger.LogInformation($"Completed creating the ParallelCorpus '{parallelCorpusDisplayName}'");
+                    $"Completed saving parallelization '{parallelCorpusDisplayName}'.");
+
+                Logger.LogInformation($"Completed saving parallelization '{parallelCorpusDisplayName}'");
 
                 ProcessStatus = ProcessStatus.Completed;
             }
@@ -289,14 +262,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         LongRunningProcessStatus.Error,
                         cancellationToken,
                         exception: ex);
-                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    //    new BackgroundTaskStatus
-                    //    {
-                    //        Name = "ParallelCorpus",
-                    //        EndTime = DateTime.Now,
-                    //        ErrorMessage = $"{ex}",
-                    //        TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                    //    }), cancellationToken);
 
                 }
 
@@ -309,6 +274,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 IsBusy = false;
                 Message = string.Empty;
             }
+
+            PlaySound.PlaySoundFromResource(null, null);
 
             return ProcessStatus;
         }
@@ -328,13 +295,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     LongRunningProcessStatus.Working,
                     cancellationToken,
                     $"Training SMT Model '{SelectedSmtAlgorithm}'.");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "TrainingSmtModel",
-                //    Description = $"Training SMT Model '{SelectedSmtAlgorithm}'.",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-                //}), cancellationToken);
+
                 Logger!.LogInformation($"Training SMT Model '{SelectedSmtAlgorithm}'.");
 
                 ProcessStatus = ProcessStatus.Completed;
@@ -344,21 +305,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
                     SelectedSmtAlgorithm,
                     ParallelTextCorpus,
-                    new DelegateProgress(status =>
-                       Logger.LogInformation($"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}")),
-                    SymmetrizationHeuristic.GrowDiagFinalAnd);
+                    new DelegateProgress(async status =>
+                        {
+                            var message = $"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}";
+                            await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working, cancellationToken, message);
+                          Logger!.LogInformation(message);
+                        }
+                    ), SymmetrizationHeuristic.GrowDiagFinalAnd);
 
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Completed,
                     cancellationToken,
                     $"Completed SMT Model '{SelectedSmtAlgorithm}'.");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "TrainingSmtModel",
-                //    Description = $"Completed SMT Model '{SelectedSmtAlgorithm}'.",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                //}), cancellationToken);
+
                 Logger!.LogInformation($"Completed SMT Model '{SelectedSmtAlgorithm}'.");
 
 
@@ -372,14 +331,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         LongRunningProcessStatus.Error,
                         cancellationToken,
                         exception: ex);
-                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    //    new BackgroundTaskStatus
-                    //    {
-                    //        Name = "TrainingSmtModel",
-                    //        EndTime = DateTime.Now,
-                    //        ErrorMessage = $"{ex}",
-                    //        TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                    //    }), cancellationToken);
                 }
 
                 ProcessStatus = ProcessStatus.Failed;
@@ -391,6 +342,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 IsBusy = false;
                 Message = string.Empty;
             }
+
+            PlaySound.PlaySoundFromResource(null, null);
 
             return ProcessStatus;
         }
@@ -410,29 +363,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     LongRunningProcessStatus.Working,
                     cancellationToken,
                     $"Creating the TranslationSet '{translationSetDisplayName}'...");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "TranslationSet",
-                //    Description = $"Creating the TranslationSet '{translationSetDisplayName}'...",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-                //}), cancellationToken);
 
                 var translationModel = WordAlignmentModel.GetTranslationTable();
-                TranslationSet = await translationModel.Create(translationSetDisplayName,
-                    SelectedSmtAlgorithm.ToString(), new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
+                //TranslationSet = await translationModel.Create(translationSetDisplayName,
+                //   SelectedSmtAlgorithm.ToString(), new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
+
+                // RUSSELL - code review
+                TranslationSet = await TranslationSet.Create(null, AlignmentSet.AlignmentSetId,
+                    translationSetDisplayName, new Dictionary<string, object>(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
+
+
 
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Completed,
                     cancellationToken,
                     $"Completed creation of the TranslationSet '{translationSetDisplayName}'.");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "TranslationSet",
-                //    Description = $"Completed creation of the TranslationSet '{translationSetDisplayName}'.",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                //}), cancellationToken);
                 Logger!.LogInformation($"Completed creating the TranslationSet '{translationSetDisplayName}'");
 
                 ProcessStatus = ProcessStatus.Completed;
@@ -446,14 +391,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         LongRunningProcessStatus.Error,
                         cancellationToken,
                         exception: ex);
-                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    //    new BackgroundTaskStatus
-                    //    {
-                    //        Name = "TranslationSet",
-                    //        EndTime = DateTime.Now,
-                    //        ErrorMessage = $"{ex}",
-                    //        TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                    //    }), cancellationToken);
                 }
 
                 ProcessStatus = ProcessStatus.Failed;
@@ -465,6 +402,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 IsBusy = false;
                 Message = string.Empty;
             }
+
+            PlaySound.PlaySoundFromResource(null, null);
 
             return ProcessStatus;
 
@@ -487,14 +426,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 await SendBackgroundStatus(statusName,
                     LongRunningProcessStatus.Working,
                     cancellationToken,
-                    $"Creating the AlignmentSet '{alignmentSetDisplayName}'...");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "AlignmentSet",
-                //    Description = $"Creating the AlignmentSet '{alignmentSetDisplayName}'...",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-                //}), cancellationToken);
+                    $"Aligning corpora and creating the AlignmentSet '{alignmentSetDisplayName}'...");
 
                 AlignedTokenPairs = TranslationCommandable.PredictAllAlignedTokenIdPairs(WordAlignmentModel, ParallelTextCorpus);
                 AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.ToString(),
@@ -503,13 +435,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     LongRunningProcessStatus.Completed,
                     cancellationToken,
                     $"Completed creation of the AlignmentSet '{alignmentSetDisplayName}'.");
-                //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                //{
-                //    Name = "AlignmentSet",
-                //    Description = $"Completed creation of the AlignmentSet '{alignmentSetDisplayName}'.",
-                //    StartTime = DateTime.Now,
-                //    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                //}), cancellationToken);
+               
                 Logger!.LogInformation($"Completed creating the AlignmentSet '{alignmentSetDisplayName}'");
 
                 ProcessStatus = ProcessStatus.Completed;
@@ -523,14 +449,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         LongRunningProcessStatus.Error,
                         cancellationToken,
                         exception:ex);
-                    //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                    //    new BackgroundTaskStatus
-                    //    {
-                    //        Name = "AlignmentSet",
-                    //        EndTime = DateTime.Now,
-                    //        ErrorMessage = $"{ex}",
-                    //        TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                    //    }), cancellationToken);
                 }
 
                 ProcessStatus = ProcessStatus.Failed;
@@ -542,6 +460,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 IsBusy = false;
                 Message = string.Empty;
             }
+
+            PlaySound.PlaySoundFromResource(null, null);
 
             return ProcessStatus;
         }

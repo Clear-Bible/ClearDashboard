@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,14 @@ namespace ClearDashboard.Wpf.Application.Validators
             RuleFor(x => x.SelectedProject).NotNull();
         }
 
+    }
+
+    public class InterlinearDialogViewModelValidator : AbstractValidator<InterlinearDialogViewModel>
+    {
+        public InterlinearDialogViewModelValidator()
+        {
+            RuleFor(x => x.TranslationSetDisplayName).NotNull();
+        }
     }
 
     public class TranslationSetStepViewModelValidator : AbstractValidator<TranslationSetStepViewModel>

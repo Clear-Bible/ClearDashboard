@@ -10,18 +10,18 @@ namespace ClearDashboard.DAL.Alignment.Translation
             Id = id;
             Metadata = new Dictionary<string, object>();
         }
-        public TranslationSetId(Guid id, ParallelCorpusId parallelCorpusId, string? displayName, string? smtModel, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
+        public TranslationSetId(Guid id, ParallelCorpusId parallelCorpusId, string? displayName, /*string? smtModel,*/ Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
         {
             Id = id;
             ParallelCorpusId = parallelCorpusId;
             DisplayName = displayName;
-            SmtModel = smtModel;
+            //SmtModel = smtModel;
             Metadata = metadata;
             Created = created;
             UserId = userId;
         }
         public string? DisplayName { get; set; }
-        public string? SmtModel { get; }
+        //public string? SmtModel { get; }
         public Dictionary<string, object> Metadata { get; set; }
         public ParallelCorpusId? ParallelCorpusId { get; }
         public DateTimeOffset? Created { get; }
@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
 
             if (ParallelCorpusId != other.ParallelCorpusId ||
                 DisplayName != other.DisplayName ||
-                SmtModel != other.SmtModel ||
+                //SmtModel != other.SmtModel ||
                 Created != other.Created ||
                 UserId != other.UserId)
             {
@@ -53,7 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 mhc ^= (item.Key, item.Value).GetHashCode();
             }
 
-            return HashCode.Combine(Id, ParallelCorpusId, DisplayName, SmtModel, Created, UserId, mhc);
+            return HashCode.Combine(Id, ParallelCorpusId, DisplayName, /*SmtModel,*/ Created, UserId, mhc);
         }
         public static bool operator ==(TranslationSetId? e1, TranslationSetId? e2) => object.Equals(e1, e2);
         public static bool operator !=(TranslationSetId? e1, TranslationSetId? e2) => !(e1 == e2);

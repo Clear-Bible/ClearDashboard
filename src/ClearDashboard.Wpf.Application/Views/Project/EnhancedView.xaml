@@ -179,11 +179,11 @@
                         Grid.Column="0"
                         Orientation="Horizontal">
                         <Label VerticalAlignment="Center" FontWeight="Bold">Translations:</Label>
-                        <CheckBox
+                        <!--<CheckBox
                             Name="ShowTranslationsCheckbox"
                             Margin="22,0,0,0"
                             VerticalAlignment="Center"
-                            IsChecked="True" />
+                            IsChecked="True" />-->
                     </StackPanel>
                     <StackPanel
                         Grid.Row="2"
@@ -325,7 +325,7 @@
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="25" />
+                <!--<RowDefinition Height="25" />-->
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -414,7 +414,7 @@
                                                 ToolTip="Remove Corpus" />
                                         </Button>
                                         <TextBlock
-                                            Margin="8,0,0,0"
+                                            Margin="8,0,5,0"
                                             VerticalAlignment="Center"
                                             FontSize="16"
                                             FontWeight="Bold"
@@ -518,14 +518,14 @@
 
 
 
-            <Label
+            <!--<Label
                 Grid.Row="1"
                 Grid.Column="0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Background="CadetBlue"
                 Content="{Binding Message}"
-                FontSize="15" />
+                FontSize="15" />-->
 
             <ProgressBar
                 Grid.Row="0"

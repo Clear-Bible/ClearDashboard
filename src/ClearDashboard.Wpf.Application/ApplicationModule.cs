@@ -72,17 +72,21 @@ namespace ClearDashboard.Wpf.Application
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
                 .WithMetadata("Order", 1);
 
+           
             builder.RegisterType<SmtModelStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
                 .WithMetadata("Order", 2);
 
-            builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
+            builder.RegisterType<AlignmentSetStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
                 .WithMetadata("Order", 3);
 
-            //builder.RegisterType<AlignmentSetStepViewModel>().As<IWorkflowStepViewModel>()
-            //    .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
-            //    .WithMetadata("Order", 4);
+
+            builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
+                .WithMetadata("Order", 4);
+
+
 
         }
     }

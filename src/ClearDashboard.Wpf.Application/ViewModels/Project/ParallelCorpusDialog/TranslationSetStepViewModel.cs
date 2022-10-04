@@ -77,14 +77,16 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
                 {
                     case ProcessStatus.Completed:
                         
-                        if (ParentViewModel.Steps.Count > 3)
-                        {
-                            await MoveForwards();
-                        }
-                        else
-                        {
-                            ParentViewModel.Ok();
-                        }
+                        //if (ParentViewModel.Steps.Count > 3)
+                        //{
+                        //    await MoveForwards();
+                        //}
+                        //else
+                        //{
+                        //    ParentViewModel.Ok();
+                        //}
+
+                        ParentViewModel.Ok();
 
                         break;
                     case ProcessStatus.Failed:

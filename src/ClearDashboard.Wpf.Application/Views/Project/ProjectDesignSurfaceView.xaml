@@ -310,7 +310,7 @@
                             <ContextMenu Name="ContextMenu" ItemsSource="{Binding MenuItems}">
                                 <ContextMenu.Resources>
                                     <HierarchicalDataTemplate DataType="{x:Type projectDesignSurface:ParallelCorpusConnectionMenuItemViewModel}" ItemsSource="{Binding Path=MenuItems}">
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel IsEnabled="{Binding IsEnabled}" Orientation="Horizontal">
                                             <iconPacks:PackIconPicolIcons
                                                 Width="15"
                                                 Height="15"
@@ -320,8 +320,21 @@
                                             <TextBlock
                                                 Margin="5,5,0,0"
                                                 VerticalAlignment="Center"
-                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                Text="{Binding Header}" />
+                                                IsEnabled="{Binding IsEnabled}"
+                                                Text="{Binding Header}">
+                                                <TextBlock.Style>
+                                                    <Style BasedOn="{StaticResource MahApps.Styles.TextBlock}" TargetType="TextBlock">
+                                                        <Setter Property="Foreground" Value="{DynamicResource PrimaryHueMidBrush}" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                                <Setter Property="Foreground" Value="{DynamicResource RedDarkBrush}" />
+                                                                <Setter Property="TextDecorations" Value="Strikethrough" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                            <!--  Text="{Binding Header}"  -->
                                         </StackPanel>
                                     </HierarchicalDataTemplate>
 
@@ -424,7 +437,10 @@
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Manuscript}">
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -795,11 +811,19 @@
                 <WrapPanel>
                     <!--  Manuscript  -->
                     <Button
-                        x:Name="AddManuscriptCorpus"
+                        x:Name="AddManuscriptHebrewCorpus"
                         Margin="10,0,10,10"
-                        cm:Message.Attach="AddManuscriptCorpus()"
-                        Content="{helpers:Localization Pds_Manuscript}"
-                        IsEnabled="{Binding AddManuscriptEnabled}"
+                        cm:Message.Attach="AddManuscriptHebrewCorpus()"
+                        Content="{helpers:Localization Pds_ManuscriptHebrew}"
+                        IsEnabled="{Binding AddManuscriptHebrewEnabled}"
+                        Style="{StaticResource BigButton}"
+                        Tag=" ScriptTextOutline" />
+                    <Button
+                        x:Name="AddManuscriptGreekCorpus"
+                        Margin="10,0,10,10"
+                        cm:Message.Attach="AddManuscriptGreekCorpus()"
+                        Content="{helpers:Localization Pds_ManuscriptGreek}"
+                        IsEnabled="{Binding AddManuscriptGreekEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
                     <Button

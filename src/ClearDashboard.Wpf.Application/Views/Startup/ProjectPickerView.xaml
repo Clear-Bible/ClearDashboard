@@ -84,15 +84,16 @@
             <ColumnDefinition Width="*" MinWidth="250" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal"
+        <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Margin="0,0,0,0">
+            Margin="0,0,0,0"
+            Orientation="Horizontal">
             <Image
                 Width="50"
                 Height="50"
-                HorizontalAlignment="Left"
                 Margin="20,0"
+                HorizontalAlignment="Left"
                 Source="../../Assets/ClearDashboard_logo_50.png" />
             <TextBlock
                 VerticalAlignment="Center"

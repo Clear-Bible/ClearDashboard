@@ -35,6 +35,8 @@ using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using Microsoft.Extensions.Options;
+using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
+using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -279,14 +281,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _selectedConnection, value);
         }
 
-        private bool _addManuscriptEnabled = true;
-        public bool AddManuscriptEnabled
+        private bool _addManuscriptHebrewEnabled = true;
+        public bool AddManuscriptHebrewEnabled
         {
-            get => _addManuscriptEnabled;
+            get => _addManuscriptHebrewEnabled;
             set
             {
-                _addManuscriptEnabled = value;
-                NotifyOfPropertyChange(() => AddManuscriptEnabled);
+                _addManuscriptHebrewEnabled = value;
+                NotifyOfPropertyChange(() => AddManuscriptHebrewEnabled);
+            }
+        }
+
+        private bool _addManuscriptGreekEnabled = true;
+        public bool AddManuscriptGreekEnabled
+        {
+            get => _addManuscriptGreekEnabled;
+            set
+            {
+                _addManuscriptGreekEnabled = value;
+                NotifyOfPropertyChange(() => AddManuscriptGreekEnabled);
             }
         }
 
@@ -453,6 +466,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TranslationSetId = translationSet.TranslationSetId,
                         ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
                         ParallelCorpusId = translationSet.ParallelCorpusId,
+                        AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
+                         AlignmentSetId = translationSet.AlignmentSetId,
+                    });
+                }
+
+                List<AlignmentSetInfo> serializedAlignmentSet = new();
+                foreach (var alignmentSetInfo in connection.AlignmentSetInfo)
+                {
+                    serializedAlignmentSet.Add(new AlignmentSetInfo
+                    {
+                        DisplayName = alignmentSetInfo.DisplayName ?? string.Empty,
+                        AlignmentSetId = alignmentSetInfo.AlignmentSetId,
+                        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName ?? string.Empty,
+                        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
                     });
                 }
 
@@ -461,6 +488,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     SourceConnectorId = connection.SourceConnector.ParatextID,
                     TargetConnectorId = connection.DestinationConnector.ParatextID,
                     TranslationSetInfo = serializedTranslationSet,
+                    AlignmentSetInfo = serializedAlignmentSet,
+                    ParallelCorpusDisplayName= connection.ParallelCorpusDisplayName,
+                    ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 });
             }
 
@@ -551,9 +581,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var node = CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
                     node.NodeTokenizations = corpusNode.NodeTokenizations;
 
-                    if (corpusNode.CorpusType == CorpusType.Manuscript)
+                    if (corpusNode.CorpusType == CorpusType.ManuscriptHebrew)
                     {
-                        AddManuscriptEnabled = false;
+                        AddManuscriptHebrewEnabled = false;
+                    }
+                    else if (corpusNode.CorpusType == CorpusType.ManuscriptGreek)
+                    {
+                        AddManuscriptGreekEnabled = false;
                     }
 
                     // add in the menu
@@ -575,6 +609,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             SourceConnector = sourceNode.OutputConnectors[0],
                             DestinationConnector = targetNode.InputConnectors[0],
                             TranslationSetInfo = deserializedConnection.TranslationSetInfo,
+                            AlignmentSetInfo = deserializedConnection.AlignmentSetInfo,
+                            ParallelCorpusDisplayName = deserializedConnection.ParallelCorpusDisplayName,
+                            ParallelCorpusId = new ParallelCorpusId(Guid.Parse(deserializedConnection.ParallelCorpusId)),
                         };
                         DesignSurface.Connections.Add(connection);
                         // add in the context menu
@@ -604,7 +641,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         // ReSharper disable once UnusedMember.Global
-        public async void AddManuscriptCorpus()
+        public async void AddManuscriptHebrewCorpus()
         {
             _logger.LogInformation("AddParatextCorpus called.");
 
@@ -613,7 +650,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //    CorpusType.Manuscript, new Dictionary<string, object>());
 
 
-            AddManuscriptEnabled = false;
+            AddManuscriptHebrewEnabled = false;
 
 
             CancellationTokenSource = new CancellationTokenSource();
@@ -621,17 +658,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             var syntaxTree = new SyntaxTrees();
-            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree)
+            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
                 .Transform<SetTrainingByTrainingLowercase>();
 
             BookInfo bookInfo = new BookInfo();
-            var books = bookInfo.GenerateScriptureBookList();
+            var books = bookInfo.GenerateScriptureBookList()
+                .Where(bi => sourceCorpus.Texts
+                    .Select(t => t.Id)
+                    .Contains(bi.Code))
+                .ToList();
 
             var metadata = new ParatextProjectMetadata
             {
-                Id = _projectManager.ManuscriptGuid.ToString(),
-                CorpusType = CorpusType.Manuscript,
-                Name = "Manuscript",
+                Id = _projectManager.ManuscriptHebrewGuid.ToString(),
+                CorpusType = CorpusType.ManuscriptHebrew,
+                Name = "Macula Hebrew",
                 AvailableBooks = books,
             };
 
@@ -646,10 +687,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
                         mediator: Mediator,
                         IsRtl: false,
-                        Name: "Manuscript",
-                        Language: "Manuscript",
-                        CorpusType: CorpusType.Manuscript.ToString(),
-                        ParatextId: _projectManager.ManuscriptGuid.ToString(),
+                        Name: "Macula Hebrew",
+                        Language: "Hebrew",
+                        CorpusType: CorpusType.ManuscriptHebrew.ToString(),
+                        ParatextId: _projectManager.ManuscriptHebrewGuid.ToString(),
                         token: cancellationToken);
 
                     OnUIThread(() => Corpora.Add(corpus));
@@ -681,7 +722,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }), cancellationToken);
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
-                        "Manuscript",
+                        "Macula Hebrew",
                         Tokenizer.WhitespaceTokenizer.ToString(),
                         cancellationToken);
 
@@ -729,6 +770,134 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+        public async void AddManuscriptGreekCorpus()
+        {
+            _logger.LogInformation("AddParatextGreekCorpus called.");
+
+            //var corpus = new DAL.Alignment.Corpora.Corpus(corpusId: new CorpusId(Guid.NewGuid()), mediator: null,
+            //    isRtl: false, name: "Manuscript", language: "Manuscript", paratextGuid: _projectManager.ManuscriptGuid,
+            //    CorpusType.Manuscript, new Dictionary<string, object>());
+
+
+            AddManuscriptGreekEnabled = false;
+
+
+            CancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = CancellationTokenSource.Token;
+
+
+            var syntaxTree = new SyntaxTrees();
+            var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
+                .Transform<SetTrainingByTrainingLowercase>();
+
+            BookInfo bookInfo = new BookInfo();
+            var books = bookInfo.GenerateScriptureBookList()
+                .Where(bi => sourceCorpus.Texts
+                    .Select(t => t.Id)
+                    .Contains(bi.Code))
+                .ToList();
+
+            var metadata = new ParatextProjectMetadata
+            {
+                Id = _projectManager.ManuscriptGreekGuid.ToString(),
+                CorpusType = CorpusType.ManuscriptGreek,
+                Name = "Macula Greek",
+                AvailableBooks = books,
+            };
+
+
+            _ = await Task.Factory.StartNew(async () =>
+            {
+
+                IsBusy = true;
+
+                try
+                {
+                    var corpus = await DAL.Alignment.Corpora.Corpus.Create(
+                        mediator: Mediator,
+                        IsRtl: false,
+                        Name: "Macula Greek",
+                        Language: "Greek",
+                        CorpusType: CorpusType.ManuscriptGreek.ToString(),
+                        ParatextId: _projectManager.ManuscriptGreekGuid.ToString(),
+                        token: cancellationToken);
+
+                    OnUIThread(() => Corpora.Add(corpus));
+
+                    CorpusNodeViewModel node = new();
+
+                    OnUIThread(() =>
+                    {
+                        // figure out some offset based on the number of nodes already in the network
+                        // so we don't overlap
+                        var point = GetFreeSpot();
+                        node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
+                    });
+
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = "Corpus",
+                        Description = $"Tokenizing and transforming '{metadata.Name}' corpus...",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
+                    }), cancellationToken);
+
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = "Corpus",
+                        Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
+                    }), cancellationToken);
+
+                    var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
+                        "Macula Greek",
+                        Tokenizer.WhitespaceTokenizer.ToString(),
+                        cancellationToken);
+
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                    {
+                        Name = "Corpus",
+                        Description = $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
+                        StartTime = DateTime.Now,
+                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                    }), cancellationToken);
+
+                    _logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
+                    //await EventAggregator.PublishOnCurrentThreadAsync(
+                    //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
+
+                    OnUIThread(() =>
+                    {
+                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
+                    });
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
+                    if (!cancellationToken.IsCancellationRequested)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Corpus",
+                                EndTime = DateTime.Now,
+                                ErrorMessage = $"{ex}",
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
+                            }), cancellationToken);
+                    }
+                }
+                finally
+                {
+                    CancellationTokenSource.Dispose();
+                    LongProcessRunning = false;
+                    IsBusy = false;
+                }
+            }, cancellationToken);
+
+
+        }
         // ReSharper disable UnusedMember.Global
         // ReSharper disable once UnusedMember.Global
         public async void AddParatextCorpus()
@@ -976,19 +1145,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ObservableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
 
             // restrict the ability of Manuscript to add new tokenizers
-            if (corpusNode.CorpusType != CorpusType.Manuscript)
+            if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew || corpusNode.CorpusType != CorpusType.ManuscriptGreek)
             {
                 // Add new tokenization
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
                 {
-                    Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", _logger), 
+                    Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", _logger),
                     Id = "AddTokenizationId",
-                    IconKind = "BookTextAdd", 
-                    ProjectDesignSurfaceViewModel = this, 
+                    IconKind = "BookTextAdd",
+                    ProjectDesignSurfaceViewModel = this,
                     CorpusNodeViewModel = corpusNode,
                 });
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
-                    { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
             }
 
             foreach (var nodeTokenization in corpusNode.NodeTokenizations)
@@ -1003,7 +1172,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         new CorpusNodeMenuItemViewModel
                         {
                             // Add Verses to focused enhanced view
-                            Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger), 
+                            Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger),
                             Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentTextAdd", CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
@@ -1011,20 +1180,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         new CorpusNodeMenuItemViewModel
                         {
                             // Show Verses in New Windows
-                            Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger), 
-                            Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this, 
+                            Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger),
+                            Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentText",
-                            CorpusNodeViewModel = corpusNode, 
+                            CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new CorpusNodeMenuItemViewModel
                         {
                             // Properties
-                            Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger), 
-                            Id = "TokenizerPropertiesId", 
-                            ProjectDesignSurfaceViewModel = this, 
+                            Header = LocalizationStrings.Get("Pds_PropertiesMenu", _logger),
+                            Id = "TokenizerPropertiesId",
+                            ProjectDesignSurfaceViewModel = this,
                             IconKind = "Settings",
-                            CorpusNodeViewModel = corpusNode, 
+                            CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         }
                     }
@@ -1033,9 +1202,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
             {
-                Header = "", 
-                Id = "SeparatorId", 
-                ProjectDesignSurfaceViewModel = this, 
+                Header = "",
+                Id = "SeparatorId",
+                ProjectDesignSurfaceViewModel = this,
                 IsSeparator = true
             });
 
@@ -1065,15 +1234,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems = new();
 
+            // Add new alignment set
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            {
+                Header = LocalizationStrings.Get("Pds_CreateNewAlignmentSetMenu", _logger),
+                Id = "CreateAlignmentSetId",
+                IconKind = "BookTextAdd",
+                ProjectDesignSurfaceViewModel = this,
+                ConnectionId = connection.Id,
+                ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
+                ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
+            });
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            { Header = "", Id = "SeparatorId1", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+
+
+            // ALIGNMENT SETS
+            foreach (var alignmentSetInfo in connection.AlignmentSetInfo)
+            {
+                connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                {
+                    Header = alignmentSetInfo.DisplayName,
+                    Id = alignmentSetInfo.AlignmentSetId,
+                    IconKind = "Sitemap",
+                    IsEnabled = false,
+                    MenuItems = new ObservableCollection<ParallelCorpusConnectionMenuItemViewModel>
+                    {
+                        new ParallelCorpusConnectionMenuItemViewModel
+                        {
+                            // Add Verses to focused enhanced view
+                            Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", _logger),
+                            Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
+                            IconKind = "DocumentTextAdd",
+                            AlignmentSetId = alignmentSetInfo.AlignmentSetId,
+                            DisplayName = alignmentSetInfo.DisplayName,
+                            ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
+                            ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
+                            IsEnabled = false,
+                        },
+                    }
+                });
+            }
+
+            // TRANSLATION SET
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                { Header = "", Id = "SeparatorId2", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+                { Header = "", Id = "SeparatorId2", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+
             // Add new tokenization
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
-                Header = LocalizationStrings.Get("Pds_AddNewTranslationSetMenu", _logger), Id = "AddTranslationSetId",
-                IconKind = "BookTextAdd", ProjectDesignSurfaceViewModel = this,
-                ConnectionId = connection.Id
+                Header = LocalizationStrings.Get("Pds_CreateNewInterlinear", _logger),
+                Id = "CreateNewInterlinearId",
+                IconKind = "BookTextAdd",
+                ProjectDesignSurfaceViewModel = this,
+                ConnectionId = connection.Id,
+                Enabled = (connection.AlignmentSetInfo.Count > 0)
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            { Header = "", Id = "SeparatorId3", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
 
             foreach (var info in connection.TranslationSetInfo)
@@ -1084,35 +1304,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Id = info.TranslationSetId,
                     IconKind = "Relevance",
                     MenuItems = new ObservableCollection<ParallelCorpusConnectionMenuItemViewModel>
-                    {
-                        new ParallelCorpusConnectionMenuItemViewModel
                         {
-                            // Add Verses to focused enhanced view
-                            Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", _logger),
-                            Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
-                            IconKind = "DocumentTextAdd",
-                            TranslationSetId = info.TranslationSetId,
-                            DisplayName = info.DisplayName,
-                            ParallelCorpusId = info.ParallelCorpusId,
-                            ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                        },
-                        new ParallelCorpusConnectionMenuItemViewModel
-                        {
-                            // Show Verses in New Windows
-                            Header = LocalizationStrings.Get("Pds_CalculateNewTranslationModel", _logger),
-                            Id = "ShowVerseId", ProjectDesignSurfaceViewModel = this,
-                            IconKind = "DocumentText",
-                            TranslationSetId = info.TranslationSetId,
-                            DisplayName = info.DisplayName,
-                            ParallelCorpusId = info.ParallelCorpusId,
-                            ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                        },
-                    }
+                            new ParallelCorpusConnectionMenuItemViewModel
+                            {
+                                // Add Verses to focused enhanced view
+                                Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", _logger),
+                                Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
+                                IconKind = "DocumentTextAdd",
+                                TranslationSetId = info.TranslationSetId,
+                                DisplayName = info.DisplayName,
+                                ParallelCorpusId = info.ParallelCorpusId,
+                                ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
+                            }
+                        }
                 });
             }
 
+
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
@@ -1153,20 +1363,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // node properties
                     SelectedConnection = connectionViewModel;
                     break;
+                 case "CreateNewInterlinearId":
+                     await AddNewInterlinear(connectionMenuItem);
+                     break;
                 case "AddToEnhancedViewId":
-                    await EventAggregator.PublishOnUIThreadAsync(
-                        new ShowParallelTranslationWindowMessage(connectionMenuItem.TranslationSetId,
-                            connectionMenuItem.DisplayName, 
-                            connectionMenuItem.ParallelCorpusId,
-                            connectionMenuItem.ParallelCorpusDisplayName,
-                            IsNewWindow: false));
-                    
+                    if (connectionMenuItem.IsEnabled)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(
+                            new ShowParallelTranslationWindowMessage(connectionMenuItem.TranslationSetId,
+                                connectionMenuItem.AlignmentSetId,
+                                connectionMenuItem.DisplayName,
+                                connectionMenuItem.ParallelCorpusId,
+                                connectionMenuItem.ParallelCorpusDisplayName,
+                                IsNewWindow: false));
+                    }
+                    else
+                    {
+                        
+                    }
+
+
+
+
+
                     break;
                 default:
-                    
+
                     break;
             }
         }
+
+       
 
         public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
         {
@@ -1442,6 +1669,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //    var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
         //}
 
+        private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("parallelCorpusId", connectionMenuItem.ParallelCorpusId)
+            };
+
+            var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
+            var result = _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+
+            if (result.Succeeded)
+            {
+                var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet,
+                        dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
+                        dialogViewModel.SelectedAlignmentSet.ParallelCorpusId, Mediator);
+
+                if (translationSet != null)
+                {
+                    connectionMenuItem.ConnectionViewModel.TranslationSetInfo.Add(new TranslationSetInfo
+                    {
+                        DisplayName = translationSet.TranslationSetId.DisplayName,
+                        TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
+                        ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
+                        ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
+                        AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
+                        AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
+                    });
+
+                    CreateConnectionMenu(connectionMenuItem.ConnectionViewModel);
+                    await SaveCanvas();
+                }
+            }
+        }
+
         public async Task AddParallelCorpus(ConnectionViewModel newConnection)
         {
             var sourceCorpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == newConnection.SourceConnector.ParentNode.Id);
@@ -1480,32 +1741,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             var dialogViewModel = LifetimeScope?.Resolve<ParallelCorpusDialogViewModel>(parameters);
 
-            ////var dialogViewModel = IoC.Get<ParallelCorpusDialogViewModel>();
-            //dialogViewModel.ConnectionViewModel = newConnection;
-            //dialogViewModel.SourceCorpusNodeViewModel = sourceCorpusNode;
-            //dialogViewModel.TargetCorpusNodeViewModel = targetCorpusNode;
-
-
-
-            //if (dialogViewModel is IDialog dialog)
-            //{
-            //    dialog.DialogMode = DialogMode.Add;
-            //}
-
             var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+
+            PlaySound.PlaySoundFromResource(null, null);
 
             if (success)
             {
                 // get TranslationSet , etc from the dialogViewModel
                 var translationSet = dialogViewModel.TranslationSet;
-                newConnection.TranslationSetInfo.Add(new TranslationSetInfo
-                {
-                    DisplayName = translationSet.TranslationSetId.DisplayName,
-                    TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
-                    ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
-                    ParallelCorpusId= translationSet.ParallelCorpusId.Id.ToString()
-                });
 
+                if (translationSet != null)
+                {
+                    newConnection.TranslationSetInfo.Add(new TranslationSetInfo
+                    {
+                        DisplayName = translationSet.TranslationSetId.DisplayName,
+                        TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
+                        ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
+                        ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
+                        AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
+                        AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
+                    });
+                }
+
+                var alignmentSet = dialogViewModel.AlignmentSet;
+                if (alignmentSet != null)
+                {
+                    newConnection.AlignmentSetInfo.Add(new AlignmentSetInfo
+                    {
+                        DisplayName = alignmentSet.AlignmentSetId.DisplayName,
+                        AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
+                        ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
+                        ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString()
+                    });
+                }
+
+                newConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
+                newConnection.ParallelCorpusDisplayName =
+                    dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
                 CreateConnectionMenu(newConnection);
                 await SaveCanvas();
             }
@@ -1712,7 +1984,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 CreateCorpusNodeMenu(corpusNode);
             }
         }
-
         #endregion // Methods
 
         //public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)

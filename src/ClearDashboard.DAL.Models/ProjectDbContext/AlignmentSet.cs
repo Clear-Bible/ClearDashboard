@@ -11,9 +11,9 @@ public class AlignmentSet : SynchronizableTimestampedEntity
         Metadata = new Dictionary<string, object>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
-    [ForeignKey("EngineWordAlignmentId")]
-    public Guid? EngineWordAlignmentId { get; set; }
-    public virtual EngineWordAlignment? EngineWordAlignment { get; set; }
+    //[ForeignKey("EngineWordAlignmentId")]
+    //public Guid? EngineWordAlignmentId { get; set; }
+    //public virtual EngineWordAlignment? EngineWordAlignment { get; set; }
     [ForeignKey("ParallelCorpusId")]
     public virtual Guid ParallelCorpusId { get; set; }
     public virtual ParallelCorpus? ParallelCorpus { get; set; }
