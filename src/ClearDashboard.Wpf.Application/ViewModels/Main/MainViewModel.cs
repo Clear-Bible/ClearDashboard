@@ -787,13 +787,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
+            
 
             // add vm to conductor
             Items.Add(viewModel);
 
+            // figure out how many enhanced views there are and set the title number for the window
+            var enhancedViews = Items.Where(w => w is EnhancedViewModel).ToList();
+
             // make a new document for the windows
             var windowDockable = new LayoutDocument
             {
+                Title = $"viewModel.Title  ({enhancedViews.Count})",
                 Content = viewModel,
                 IsActive = true
             };
