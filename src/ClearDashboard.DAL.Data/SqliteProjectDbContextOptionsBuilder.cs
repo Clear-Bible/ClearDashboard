@@ -23,7 +23,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public SqliteProjectDbContextOptionsBuilder(ILogger<SqliteProjectDbContextOptionsBuilder> logger, string databaseName)
         {
             _logger = logger;
-            DatabaseName = databaseName.Replace(" ", "_");
+            DatabaseName = databaseName;
             DatabaseDirectory = EnsureDatabaseDirectory(DatabaseName);
         }
 
@@ -34,11 +34,11 @@ namespace ClearDashboard.DataAccessLayer.Data
                 throw new ArgumentNullException(nameof(databaseName), "A project name must be provided in order for a 'Project' database context to returned.");
             }
 
-
+            // Use the 'dashboard directory path' as the database folder:
             var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, databaseName);
             if (!Directory.Exists(directoryPath))
             {
-                _logger?.LogInformation($"Creating project directory {directoryPath}.");
+                _logger?.LogInformation($"Creating database directory {directoryPath}.");
                 Directory.CreateDirectory(directoryPath);
             }
 

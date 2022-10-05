@@ -28,13 +28,14 @@ namespace ClearDashboard.DataAccessLayer.Data
         public async Task<ProjectDbContext> GetDatabaseContext(string projectName, bool migrate = false, ILifetimeScope? contextScope = null)
         {
             var scope = contextScope ?? _serviceScope;
+            var databaseName = ConvertProjectNameToSanitizedName(projectName);
 
             var context = scope.Resolve<ProjectDbContext>(
-                new NamedParameter("databaseName", projectName),
+                new NamedParameter("databaseName", databaseName),
                 new ResolvedParameter(
                     (pi, cc) => pi.Name == "optionsBuilder",
                     (pi, cc) => cc.Resolve<DbContextOptionsBuilder<ProjectDbContext>>(
-                        new NamedParameter("databaseName", projectName))));
+                        new NamedParameter("databaseName", databaseName))));
 
             if (context != null)
             {
@@ -62,6 +63,10 @@ namespace ClearDashboard.DataAccessLayer.Data
                 return context;
             }
             throw new NullReferenceException("Please ensure 'ProjectDbContext' has been registered with the dependency injection container.");
+        }
+        public static string ConvertProjectNameToSanitizedName(string projectName)
+        {
+            return projectName.Replace(" ", "_");
         }
     }
 }

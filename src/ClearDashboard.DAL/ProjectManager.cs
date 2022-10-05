@@ -98,6 +98,24 @@ namespace ClearDashboard.DataAccessLayer
 
         public virtual async Task Initialize()
         {
+            EnsureDashboardDirectory(FilePathTemplates.ProjectBaseDirectory);
+        }
+
+        private void EnsureDashboardDirectory(string directory)
+        {
+            if (!Directory.Exists(directory))
+            {
+                // need to create that directory
+                try
+                {
+                    Directory.CreateDirectory(directory);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex,
+                        $"An unexpected error occurred while creating '{directory}");
+                }
+            }
         }
 
         private Guid TemporaryUserGuid => Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7");
@@ -164,13 +182,21 @@ namespace ClearDashboard.DataAccessLayer
         {
             CreateDashboardProject();
 
-            // Seed the IProjectProvider implementation.
+            var projectSanitizedName = ProjectDbContextFactory.ConvertProjectNameToSanitizedName(projectName);
+
+            // Seed the IProjectProvider implementation for ProjectDbContext to use
+            // when creating the database:
             CurrentProject = new Project
             {
-                ProjectName = projectName
+                ProjectName = projectSanitizedName
             };
+
+            // Create the project directory:
+            CurrentDashboardProject.DirectoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectSanitizedName);
+            EnsureDashboardDirectory(CurrentDashboardProject.DirectoryPath);
+
             CurrentProject = await CreateProject(projectName);
-            CurrentDashboardProject.ProjectName = CurrentProject.ProjectName;
+            CurrentDashboardProject.ProjectName = projectSanitizedName;
         }
 
         public void Dispose()
