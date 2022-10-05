@@ -1640,6 +1640,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             if (added)
             {
+                // check to see if we somehow didn't get a source/target id properly.  If so remove the line
+                if (newConnection.SourceConnector.ParentNode.ParatextProjectId == "" || newConnection.SourceConnector.ParentNode.ParatextProjectId is null)
+                {
+                    DesignSurface.Connections.Remove(newConnection);
+                    return;
+                }
+
+                if (newConnection.DestinationConnector.ParentNode.ParatextProjectId == "" || newConnection.DestinationConnector.ParentNode.ParatextProjectId is null)
+                {
+                    DesignSurface.Connections.Remove(newConnection);
+                    return;
+                }
+
                 await EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
                     SourceParatextId: newConnection.SourceConnector.ParentNode.ParatextProjectId,
                     TargetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
