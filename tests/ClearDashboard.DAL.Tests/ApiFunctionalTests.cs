@@ -24,12 +24,10 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task CreateParallelCorpus()
         {
-            var projectDbContextFactory = ServiceProvider.GetService<ProjectDbContextFactory>();
-            var assets = await projectDbContextFactory?.Get("EnhancedView");
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase("EnhancedView", true);
 
-            var manuscriptCorpus = context.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "Manuscript");
-            var zzSurCorpus = context.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "zz_SUR");
+            var manuscriptCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "Manuscript");
+            var zzSurCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "zz_SUR");
 
             var manuscriptTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(manuscriptCorpus.Id));
             var zzSurTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(zzSurCorpus.Id));
@@ -113,16 +111,14 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task GetParallelCorpus()
         {
-            var projectDbContextFactory = ServiceProvider.GetService<ProjectDbContextFactory>();
-            var assets = await projectDbContextFactory?.Get("EnhancedView");
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase("EnhancedView", true);
 
             //var manuscriptCorpus = context.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "Manuscript");
             //var zzSurCorpus = context.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "zz_SUR");
 
             try
             {
-                var parallelCorpus = context.ParallelCorpa.FirstOrDefault();
+                var parallelCorpus = ProjectDbContext.ParallelCorpa.FirstOrDefault();
 
                 var corpus = await ParallelCorpus.Get(Mediator, new ParallelCorpusId(parallelCorpus.Id));
 

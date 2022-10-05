@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DAL.Tests.Mocks;
@@ -27,63 +28,49 @@ namespace ClearDashboard.DAL.Tests
         {
         }
 
-        protected override void SetupDependencyInjection()
-        {
-            Services.AddSingleton<IEventAggregator, EventAggregator>();
-            Services.AddClearDashboardDataAccessLayer();
-            Services.AddMediatR(typeof(GetUsersQueryHandler));
-            Services.AddLogging();
-            Services.AddSingleton<IUserProvider, UserProvider>();
-            Services.AddSingleton<IProjectProvider, ProjectProvider>();
-        }
-
         [Fact]
-        public async Task CreateAlignmentDatabase()
+        public Task CreateAlignmentDatabase()
         {
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Project{random.Next(1, 1000)}";
-            Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase(projectName, false);
+            Assert.NotNull(ProjectDbContext);
 
             Output.WriteLine($"Don't forget to delete the database: {projectName}.");
+            return Task.CompletedTask;
         }
 
         [Fact]
         public async Task ProjectInfoAddTest()
         {
-            var userProvider = ServiceProvider.GetService<IUserProvider>();
-            Assert.NotNull(userProvider);
-
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
-            Assert.NotNull(factory);
+
             Output.WriteLine($"Creating database: {projectName}");
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase(projectName, false);
 
             try
             {
+                var userProvider = Container!.Resolve<IUserProvider>();
                 var testUser = new User { FirstName = "Test", LastName = "User" };
                 userProvider.CurrentUser = testUser;
 
-                context.Users.Add(testUser);
-                await context.SaveChangesAsync();
+                ProjectDbContext.Users.Add(testUser);
+                await ProjectDbContext.SaveChangesAsync();
 
                 var projectInfo = new Project
                 {
+                    Id = Guid.NewGuid(),
                     IsRtl = true,
                     ProjectName = projectName
                 };
 
-                context.Projects.Add(projectInfo);
-                await context.SaveChangesAsync();
+                ProjectDbContext.Projects.Add(projectInfo);
+                await ProjectDbContext.SaveChangesAsync();
 
-                var roundTrippedProject = context.Projects.FirstOrDefault();
+                var roundTrippedProject = ProjectDbContext.Projects.FirstOrDefault(p => p.Id == projectInfo.Id);
 
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
@@ -94,10 +81,10 @@ namespace ClearDashboard.DAL.Tests
                 //await context.AddCopyAsync(projectInfo);
                 //await context.SaveChangesAsync();
 
-                Assert.Equal(2, context.Projects.Count());
+                Assert.Equal(2, ProjectDbContext.Projects.Count());
 
                 roundTrippedProject =
-                    context.Projects.OrderByDescending(project => project.Created).FirstOrDefault();
+                    ProjectDbContext.Projects.OrderByDescending(project => project.Created).FirstOrDefault();
 
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
@@ -111,11 +98,7 @@ namespace ClearDashboard.DAL.Tests
             }
             finally
             {
-                Output.WriteLine($"Deleting database: {projectName}");
-                await context.Database.EnsureDeletedAsync();
-                var projectDirectory =
-                    $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+                await DeleteDatabaseContext(projectName);
             }
         }
 
@@ -123,27 +106,23 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task ProjectInfoViaQueryAndCommandHandlersTest()
         {
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
-            Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase(projectName, false);
 
             try
             {
-                var testUser = await AddDashboardUser(context);
-                var projectInfo = await AddCurrentProject(context, projectName);
-
+                var testUser = await AddDashboardUser(ProjectDbContext, true);
+                var projectInfo = await AddCurrentProject(ProjectDbContext, projectName, true);
 
                 // Create a copy of the project which is not attached
                 // to the database context so we can compare it to 
                 // an updated version later on.
                 var copiedProject = Copy(projectInfo);
 
-                var mediator = ServiceProvider.GetService<IMediator>();
+                var mediator = Container!.Resolve<IMediator>();
 
                 // Save a project
                 //var saveCommand = new AddProjectInfoCommand(projectName, new[] { projectInfo });
@@ -166,7 +145,9 @@ namespace ClearDashboard.DAL.Tests
                 Assert.True(singleResult.Success);
                 Assert.True(singleResult.HasData);
 
-                Assert.Equal(projectInfo, singleResult.Data);
+                Assert.Equal(projectInfo.Id, singleResult.Data.Id);
+                Assert.Equal(projectInfo.ProjectName, singleResult.Data.ProjectName);
+                Assert.Equal(projectInfo.IsRtl, singleResult.Data.IsRtl);
 
                 var query = new GetProjectInfoListQuery();
                 var result = await mediator.Send(query);
@@ -182,8 +163,9 @@ namespace ClearDashboard.DAL.Tests
                 Assert.NotNull(roundTrippedProject);
                 Assert.Equal(testUser.Id, roundTrippedProject.UserId);
 
-                Assert.Equal(projectInfo, roundTrippedProject);
-
+                Assert.Equal(projectInfo.Id, roundTrippedProject.Id);
+                Assert.Equal(projectInfo.ProjectName, roundTrippedProject.ProjectName);
+                Assert.Equal(projectInfo.IsRtl, roundTrippedProject.IsRtl);
 
                 // Create a copy of the project which is not attached
                 // to the database context so we can compare it to 
@@ -191,10 +173,10 @@ namespace ClearDashboard.DAL.Tests
                 copiedProject = Copy(projectInfo);
 
                 // Now update the project
-                projectInfo.IsRtl = false;
-                projectInfo.ProjectName = $"Updated {projectName}";
+                copiedProject.IsRtl = false;
+                copiedProject.ProjectName = $"Updated {projectName}";
 
-                var updateCommand = new UpdateProjectInfoCommand(new[] { projectInfo });
+                var updateCommand = new UpdateProjectInfoCommand(new[] { copiedProject });
                 var updateResult = await mediator.Send(updateCommand);
                 Assert.NotNull(updateResult);
                 Assert.True(updateResult.Success);
@@ -202,7 +184,7 @@ namespace ClearDashboard.DAL.Tests
 
                 var updatedProject = updateResult.Data.FirstOrDefault();
 
-                Assert.NotEqual(projectInfo, copiedProject);
+                Assert.NotEqual(projectInfo.ProjectName, updatedProject.ProjectName);
 
             }
             catch (Exception ex)
@@ -213,36 +195,21 @@ namespace ClearDashboard.DAL.Tests
             }
             finally
             {
-                Output.WriteLine($"Deleting database: {projectName}");
-                await context.Database.EnsureDeletedAsync();
-                var projectDirectory =
-                    $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+                DeleteDatabaseContext(projectName);
             }
         }
 
         [Fact]
         public async Task CorpusMetadataTest()
         {
-            var userProvider = ServiceProvider.GetService<IUserProvider>();
-            Assert.NotNull(userProvider);
-
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
-            Assert.NotNull(factory);
+
             Output.WriteLine($"Creating database: {projectName}");
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase(projectName, false);
 
             try
             {
-                var testUser = new User { FirstName = "Test", LastName = "User" };
-                userProvider.CurrentUser = testUser;
-
-                context.Users.Add(testUser);
-                await context.SaveChangesAsync();
-
                 var corpus = new Corpus
                 {
                     Name = "Test Corpus"
@@ -250,10 +217,10 @@ namespace ClearDashboard.DAL.Tests
                 corpus.Metadata.Add("number", 1);
                 corpus.Metadata.Add("string", "ha!");
 
-                context.Corpa.Add(corpus);
-                await context.SaveChangesAsync();
+                ProjectDbContext.Corpa.Add(corpus);
+                await ProjectDbContext.SaveChangesAsync();
 
-                var roundTrippedCorpus = await context.Corpa.FirstOrDefaultAsync(c => c.Id == corpus.Id);
+                var roundTrippedCorpus = await ProjectDbContext.Corpa.FirstOrDefaultAsync(c => c.Id == corpus.Id);
 
                 Assert.NotNull(roundTrippedCorpus);
                 Assert.True(roundTrippedCorpus.Metadata.Count == 2);
@@ -266,11 +233,7 @@ namespace ClearDashboard.DAL.Tests
             }
             finally
             {
-                Output.WriteLine($"Deleting database: {projectName}");
-                await context.Database.EnsureDeletedAsync();
-                var projectDirectory =
-                    $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+                await DeleteDatabaseContext(projectName);
             }
         }
     }

@@ -3,18 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DAL.Tests.Mocks;
 using ClearDashboard.DAL.Tests.Slices.LanguageResources;
+using ClearDashboard.DAL.Tests.Slices.ProjectInfo;
 using ClearDashboard.DAL.Tests.Slices.Users;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features;
@@ -24,6 +28,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Paratext.PluginInterfaces;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -35,11 +40,12 @@ namespace ClearDashboard.DAL.Tests
         protected ITestOutputHelper Output { get; private set; }
         protected Process Process { get; set; }
         protected bool StopParatextOnTestConclusion { get; set; }
+        protected IContainer? Container { get; private set; }
         protected readonly ServiceCollection Services = new ServiceCollection();
         private IServiceProvider _serviceProvider = null;
         protected IServiceProvider ServiceProvider => _serviceProvider ??= Services.BuildServiceProvider();
 
-        protected IMediator? Mediator => ServiceProvider.GetService<IMediator>();
+        protected IMediator? Mediator { get; private set; }
         protected ProjectDbContext? ProjectDbContext { get; set; }
         protected string? ProjectName { get; set; }
 
@@ -48,7 +54,6 @@ namespace ClearDashboard.DAL.Tests
             Output = output;
             // ReSharper disable once VirtualMemberCallInConstructor
             SetupDependencyInjection();
-            SetupTests();
         }
 
         protected virtual void SetupDependencyInjection()
@@ -57,26 +62,45 @@ namespace ClearDashboard.DAL.Tests
             Services.AddSingleton<IWindowManager, WindowManager>();
             Services.AddSingleton<INavigationService>(sp=> null);
             Services.AddClearDashboardDataAccessLayer();
-            Services.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(CreateParallelCorpusCommandHandler));
-            Services.AddLogging();
-            Services.AddSingleton<IUserProvider, UserProvider>();
-            Services.AddSingleton<IProjectProvider, ProjectProvider>();
             Services.AddScoped<ProjectDbContext>();
             Services.AddScoped<ProjectDbContextFactory>();
             Services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder>();
+            Services.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(GetProjectInfoQueryHandler));
+            //Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
+            Services.AddLogging();
+            Services.AddSingleton<IUserProvider, UserProvider>();
+            Services.AddSingleton<IProjectProvider, ProjectProvider>();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(Services);
+
+            Container = builder.Build();
+            Mediator = Container!.Resolve<IMediator>();
         }
-        private async void SetupTests()
+ 
+        protected async void SetupProjectDatabase(string projectName, bool userProjectAlreadyInDb)
         {
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
-            ProjectName = $"EnhancedView";
+            var factory = Container!.Resolve<ProjectDbContextFactory>();
             Assert.NotNull(factory);
 
-            Output.WriteLine($"Opening database: {ProjectName}");
-            var assets = await factory?.Get(ProjectName)!;
-            ProjectDbContext = assets.ProjectDbContext;
-            
-            var testUser = await AddDashboardUser(ProjectDbContext);
-            SetupProjectProvider(ProjectDbContext);
+            Output.WriteLine($"Opening database: {projectName}");
+
+            ProjectDbContext = await factory!.GetDatabaseContext(
+                projectName,
+                true).ConfigureAwait(false);
+
+            _ = await AddDashboardUser(ProjectDbContext, userProjectAlreadyInDb);
+            _ = await AddCurrentProject(ProjectDbContext, projectName, userProjectAlreadyInDb);
+        }
+
+        protected async Task DeleteDatabaseContext(string projectName)
+        {
+            Output.WriteLine($"Deleting database: {projectName}");
+            await ProjectDbContext!.Database.EnsureDeletedAsync();
+            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
+            Directory.Delete(projectDirectory, true);
+
+            Container!.Dispose();
         }
 
         protected async Task<RequestResult<TData>> ExecuteParatextAndTestRequest<TRequest, TResult, TData>(
@@ -100,7 +124,7 @@ namespace ClearDashboard.DAL.Tests
             where TRequest : IRequest<RequestResult<TData>>
             where TResult : RequestResult<TData>, new()
         {
-            var mediator = ServiceProvider.GetService<IMediator>()!;
+            var mediator = Container!.Resolve<IMediator>()!;
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -184,35 +208,38 @@ namespace ClearDashboard.DAL.Tests
             return JsonSerializer.Deserialize<T>(json);
         }
 
-        protected async Task<User> AddDashboardUser(ProjectDbContext context)
+        protected async Task<User> AddDashboardUser(ProjectDbContext context, bool alreadyInDb)
         {
-            var testUser = new User { FirstName = "Test", LastName = "User" };
-            var userProvider = ServiceProvider.GetService<IUserProvider>();
+            User? user = alreadyInDb ? context.Users.FirstOrDefault() : null;
+            if (user is null)
+            {
+                user = new User { FirstName = "Test", LastName = "User" };
+                context.Users.Add(user);
+                await context.SaveChangesAsync();
+            }
+
+            var userProvider = Container!.Resolve<IUserProvider>();
             Assert.NotNull(userProvider);
-            userProvider!.CurrentUser = testUser;
+            userProvider!.CurrentUser = user;
 
-            context.Users.Add(testUser);
-            await context.SaveChangesAsync();
-            return testUser;
+            return user;
         }
 
-        protected void SetupProjectProvider(ProjectDbContext context)
+        protected async Task<Project> AddCurrentProject(ProjectDbContext context, string projectName, bool alreadyInDb)
         {
-            var projectProvider = ServiceProvider.GetService<IProjectProvider>();
-            Assert.NotNull(projectProvider);
-            projectProvider!.CurrentProject = context.Projects.First();
-        }
+            Project? project = alreadyInDb ? context.Projects.FirstOrDefault() : null;
+            if (project is null)
+            {
+                project = new Project { ProjectName = projectName, IsRtl = true };
+                context.Projects.Add(project);
+                await context.SaveChangesAsync();
+            }
 
-        protected async Task<Project> AddCurrentProject(ProjectDbContext context, string projectName)
-        {
-            var testProject = new Project { ProjectName = projectName, IsRtl = true };
-            var projectProvider = ServiceProvider.GetService<IProjectProvider>();
+            var projectProvider = Container!.Resolve<IProjectProvider>();
             Assert.NotNull(projectProvider);
-            projectProvider!.CurrentProject = testProject;
+            projectProvider!.CurrentProject = project;
 
-            context.Projects.Add(testProject);
-            await context.SaveChangesAsync();
-            return testProject;
+            return project;
         }
     }
 }
