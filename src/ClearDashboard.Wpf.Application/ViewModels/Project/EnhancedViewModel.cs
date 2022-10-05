@@ -75,6 +75,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
+        // used for storing the displayed corpus order
+        public List<DisplayOrder> DisplayOrder = new();
 
         private List<TokenProject> _tokenProjects = new();
         private List<ShowTokenizationWindowMessage> _projectMessages = new();
@@ -172,6 +174,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _verseChange;
             set
             {
+                if (_verseChange == "000000000")
+                {
+                    return;
+                }
+                
                 if (_verseChange == "")
                 {
                     _verseChange = value;
@@ -247,6 +254,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _versesDisplay, value);
         }
 
+        public string? Message
+        {
+            get => _message;
+            set => Set(ref _message, value);
+        }
 
         private ObservableCollection<TokensTextRow>? _verses;
         public ObservableCollection<TokensTextRow>? Verses
@@ -451,7 +463,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
+                        //Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -581,10 +593,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await ShowNewCorpusTokens(message, cancellationToken, localCancellationToken);
             }
-
+            
         }
 
-        private async Task ShowNewParallelTranslation(ShowParallelTranslationWindowMessage message,
+        public async Task ShowNewParallelTranslation(ShowParallelTranslationWindowMessage message,
             CancellationToken cancellationToken, CancellationToken localCancellationToken)
         {
             var msg = _parallelMessages.Where(p =>
@@ -667,7 +679,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
-                if (rows.Count == 1)
+                if (rows.Count <= 1)
                 {
                     // only one verse
                     bcv.SetVerseFromId(verseRange[0]);
@@ -875,7 +887,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 : new ObservableCollection<Note>();
         }
 
-        private async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
+        public async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
             CancellationToken localCancellationToken)
         {
             // current project
@@ -1042,8 +1054,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        //Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
-
                         UpdateVersesDisplay(message, verses, title, false);
                         NotifyOfPropertyChange(() => VersesDisplay);
 
@@ -1084,7 +1094,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 finally
                 {
                     _handleAsyncRunning = false;
-                    _cancellationTokenSource.Dispose();
+                    _cancellationTokenSource?.Dispose();
                 }
             }, cancellationToken);
         }
@@ -1191,7 +1201,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
+                        //Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
 
                         UpdateVersesDisplay(message, verses, title, false);
                         ProgressBarVisibility = Visibility.Collapsed;
@@ -1270,10 +1280,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                 });
+
+                // add to the grouping for saving
+                DisplayOrder.Add(new Models.DisplayOrder
+                {
+                    MsgType = Models.DisplayOrder.MessageType.ShowTokenizationWindowMessage,
+                    Data = message
+                });
             }
             else
             {
                 row.CorpusId = message.CorpusId;
+                row.BorderColor = brush;
+                row.ShowTranslation = showTranslations;
+                row.RowTitle = title;
+                row.Verses = verses;
+            }
+
+            NotifyOfPropertyChange(() => VersesDisplay);
+        }
+
+        private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message,
+            ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool showTranslations = true)
+        {
+            // same color as defined in SharedVisualTemplates.xaml
+            Brush brush = Brushes.SaddleBrown;
+
+            var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
+            if (row is null)
+            {
+                VersesDisplay.Add(new VersesDisplay
+                {
+                    CorpusId = Guid.Parse(message.ParallelCorpusId),
+                    BorderColor = brush,
+                    ShowTranslation = showTranslations,
+                    RowTitle = title,
+                    Verses = verses,
+                });
+
+                // add to the grouping for saving
+                DisplayOrder.Add(new Models.DisplayOrder
+                {
+                    MsgType = Models.DisplayOrder.MessageType.ShowParallelTranslationWindowMessage,
+                    Data = message
+                });
+            }
+            else
+            {
+                row.CorpusId = Guid.Parse(message.ParallelCorpusId);
                 row.BorderColor = brush;
                 row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
@@ -1314,36 +1368,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             return brush;
-        }
-
-        private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message,
-            ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool showTranslations = true)
-        {
-            // same color as defined in SharedVisualTemplates.xaml
-            Brush brush = Brushes.SaddleBrown;
-
-            var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
-            if (row is null)
-            {
-                VersesDisplay.Add(new VersesDisplay
-                {
-                    CorpusId = Guid.Parse(message.ParallelCorpusId),
-                    BorderColor = brush,
-                    ShowTranslation = showTranslations,
-                    RowTitle = title,
-                    Verses = verses,
-                });
-            }
-            else
-            {
-                row.CorpusId = Guid.Parse(message.ParallelCorpusId);
-                row.BorderColor = brush;
-                row.ShowTranslation = showTranslations;
-                row.RowTitle = title;
-                row.Verses = verses;
-            }
-
-            NotifyOfPropertyChange(() => VersesDisplay);
         }
 
         private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int bbbcccvvv)
@@ -1469,7 +1493,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
             VersesDisplay.RemoveAt(index);
-
+            // remove from the grouping for saving
+            DisplayOrder.RemoveAt(index);
 
             // remove stored collection
             var tokenProject  = _tokenProjects.FirstOrDefault(x => x.CorpusId==row.CorpusId);
