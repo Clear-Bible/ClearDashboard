@@ -12,10 +12,14 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics.Eventing.Reader;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
 
@@ -52,7 +56,25 @@ namespace ClearDashboard.Wpf.Application
             var selectedLanguage = Settings.Default.language_code;
             if (string.IsNullOrEmpty(selectedLanguage))
             {
-                selectedLanguage = "enUS";
+                var cultureName = "";
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                if (currentCulture.Parent.Name is not "zh" or "pt")
+                {
+                    cultureName = currentCulture.Parent.Name;
+                }
+                else
+                {
+                    cultureName = currentCulture.Name;
+                }
+
+                try
+                {
+                    selectedLanguage = ((LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue),cultureName.Replace("-", string.Empty))).ToString();
+                }
+                catch
+                {
+                    selectedLanguage = "amET";
+                }
             }
 
             var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));

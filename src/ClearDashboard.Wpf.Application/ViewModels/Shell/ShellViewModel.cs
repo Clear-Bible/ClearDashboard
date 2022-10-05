@@ -231,7 +231,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         set
         {
                 _loadingApplication = value;
-                SetLanguage();
+                SetLanguage();//
             }
     }
 
@@ -418,7 +418,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var culture = Settings.Default.language_code;
             if (string.IsNullOrEmpty(culture))
             {
-                culture = "en-US";
+                culture = "am-ET";
             }
             // strip out any "-" characters so the string can be properly parsed into the target enum
             SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
