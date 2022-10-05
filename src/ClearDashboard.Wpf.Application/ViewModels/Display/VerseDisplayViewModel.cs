@@ -199,6 +199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         private IEnumerable<Translation> Translations { get; set; } = new List<Translation>();
         private EngineStringDetokenizer Detokenizer { get; set; } = new(new LatinWordDetokenizer());
         private Dictionary<IId, IEnumerable<Note>>? AllEntityNotes { get; set; }
+        private bool IsRtl { get; set; }
 
         /// <summary>
         /// Gets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
@@ -255,7 +256,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
         }
 
-        private void BuildTokenDisplayViewModels(bool isRtl)
+        private void BuildTokenDisplayViewModels()
         {
             TokenDisplayViewModels = new List<TokenDisplayViewModel>();
             var paddedTokens = GetPaddedTokens(Tokens);
@@ -267,8 +268,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 {
                     Token = paddedToken.token,
                     // For right-to-left languages, the padding before and padding after should be swapped.
-                    PaddingBefore = !isRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
-                    PaddingAfter = !isRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
+                    PaddingBefore = !IsRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
+                    PaddingAfter = !IsRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
                     Translation = translation,
                     Notes = notes
                 });
@@ -353,10 +354,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 Detokenizer = detokenizer;
             }
+            IsRtl = isRtl;
             AllEntityNotes = await GetAllNotes();
             await PopulateLabelSuggestions();
             await PopulateTranslations();
-            BuildTokenDisplayViewModels(isRtl);
+            BuildTokenDisplayViewModels();
         }
 
         #endregion
