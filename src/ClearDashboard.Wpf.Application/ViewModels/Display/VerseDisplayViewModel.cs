@@ -305,7 +305,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task PopulateTranslations()
         {
-            if (TranslationSet != null)
+            if (_translationSet != null)
             {
                 Translations = await GetTranslations(Tokens.Select(t => t.TokenId));
             }
