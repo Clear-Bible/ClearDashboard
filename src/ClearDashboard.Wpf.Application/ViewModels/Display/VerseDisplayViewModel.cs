@@ -1,5 +1,5 @@
 ﻿// Uncomment this preprocessor definition to use mock data for dev/test purposes.  If defined, no database operations are performed.
-// #define MOCK
+//#define MOCK
 
 using System;
 using System.Collections.Generic;
@@ -126,9 +126,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 .Select(lt => new Label { Text = lt }));
         }
 
-        private static ObservableCollection<Note> GetMockNotes()
+        private static NoteCollection GetMockNotes()
         {
-            var result = new ObservableCollection<Note>();
+            var result = new NoteCollection();
             var random = new Random().NextDouble();
             if (random < 0.2)
             {
@@ -199,6 +199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         private IEnumerable<Translation> Translations { get; set; } = new List<Translation>();
         private EngineStringDetokenizer Detokenizer { get; set; } = new(new LatinWordDetokenizer());
         private Dictionary<IId, IEnumerable<Note>>? AllEntityNotes { get; set; }
+        private bool IsRtl { get; set; }
 
         /// <summary>
         /// Gets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
@@ -245,13 +246,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
         }
 
-        private ObservableCollection<Note> GetNotesForToken(Token token)
+        private NoteCollection GetNotesForToken(Token token)
         {
 #if MOCK
             return GetMockNotes();
 #else
             var matches = AllEntityNotes?.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
-            return matches is { Key: { } } ? new ObservableCollection<Note>(matches.Value.Value) : new ObservableCollection<Note>();
+            return matches is { Key: { } } ? new NoteCollection(matches.Value.Value) : new NoteCollection();
 #endif
         }
 
@@ -266,8 +267,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 select new TokenDisplayViewModel
                 {
                     Token = paddedToken.token,
-                    PaddingBefore = paddedToken.paddingBefore,
-                    PaddingAfter = paddedToken.paddingAfter,
+                    // For right-to-left languages, the padding before and padding after should be swapped.
+                    PaddingBefore = !IsRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
+                    PaddingAfter = !IsRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
                     Translation = translation,
                     Notes = notes
                 });
@@ -345,13 +347,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             LabelSuggestions = await GetLabelSuggestions();
         }
 
-        private async Task BindAsync(TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null)
+        private async Task BindAsync(TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null, bool isRtl = false)
         {
             TranslationSet = translationSet;
             if (detokenizer != null)
             {
                 Detokenizer = detokenizer;
             }
+            IsRtl = isRtl;
             AllEntityNotes = await GetAllNotes();
             await PopulateLabelSuggestions();
             await PopulateTranslations();
@@ -676,10 +679,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <returns>An awaitable <see cref="Task"/></returns>
         /// <remarks>Unless a <paramref name="translationSet"/> is provided, then no translations can be provided. </remarks>
         /// <exception cref="InvalidOperationException">Thrown is <paramref name="parallelTextRow"/> has no tokens.</exception>
-        public async Task BindAsync(EngineParallelTextRow parallelTextRow, TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null)
+        public async Task BindAsync(EngineParallelTextRow parallelTextRow, TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null, bool isRtl = false)
         {
             Tokens = parallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
-            await BindAsync(translationSet, detokenizer);
+            await BindAsync(translationSet, detokenizer, isRtl);
         }
 
         /// <summary>
@@ -690,10 +693,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <param name="detokenizer">The detokenizer to use for the text row (which can be obtained from TokenizedCorpus.Detokenizer).  Defaults to <see cref="LatinWordDetokenizer"/>.</param>
         /// <returns>An awaitable <see cref="Task"/></returns>
         /// <remarks>Unless a <paramref name="translationSet"/> is provided, then no translations can be provided. </remarks>
-        public async Task BindAsync(TokensTextRow textRow, TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null)
+        public async Task BindAsync(TokensTextRow textRow, TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null, bool isRtl = false)
         {
             Tokens = textRow.Tokens;
-            await BindAsync(translationSet, detokenizer);
+            await BindAsync(translationSet, detokenizer, isRtl);
         }
         #endregion
 

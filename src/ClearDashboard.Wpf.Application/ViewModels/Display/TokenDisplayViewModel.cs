@@ -17,6 +17,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     /// </summary>
     public class TokenDisplayViewModel : INotifyPropertyChanged
     {
+        private bool _isSelected = false;
+
         /// <summary>
         /// The token itself.
         /// </summary>
@@ -55,7 +57,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// A list of <see cref="Note"/>s for the token.
         /// </summary>
-        public ObservableCollection<Note> Notes { get; set; } = new();
+        public NoteCollection Notes { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets whether this token is selected.
+        /// </summary>
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+            }
+        }
 
         public bool HasNote => Notes.Any();
 
