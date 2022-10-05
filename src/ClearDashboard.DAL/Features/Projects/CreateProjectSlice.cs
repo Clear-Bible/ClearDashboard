@@ -27,7 +27,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
             {
                 var project = new Models.Project()
                 {
-                    ProjectName = ProjectDbContext.ProjectName
+                    ProjectName = ProjectDbContext.DatabaseName
                 };
 
                 await ProjectDbContext.Migrate();

@@ -14,15 +14,15 @@ namespace ClearDashboard.DataAccessLayer.Data
         #nullable disable
         private readonly ILogger<ProjectDbContext> _logger;
         public  IUserProvider UserProvider { get; set; }
-        public string ProjectName { get; private set; }
+        public string DatabaseName { get; private set; }
         public DbContextOptionsBuilder<ProjectDbContext> OptionsBuilder { get; private set; }
 
-        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider, string projectName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
+        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider, string databaseName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
             : base(optionsBuilder.Options)
         {
             _logger = logger;
             UserProvider = userProvider;
-            ProjectName = projectName;
+            DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
         }
 
@@ -78,8 +78,6 @@ namespace ClearDashboard.DataAccessLayer.Data
                 }
 
                 _logger?.LogInformation("Check to migrate database complete");
-
-
             }
             catch (Exception ex)
             {
@@ -98,7 +96,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             }
             catch
             {
-                _logger.LogInformation($"The migrations for the {ProjectName} database failed -- forcing the migrations again.");
+                _logger.LogInformation($"The migrations for the {DatabaseName} database failed -- forcing the migrations again.");
                 await Database.MigrateAsync();
             }
         }
@@ -240,8 +238,6 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .WithMany(p => p.Notes)
                 .UsingEntity<LabelNoteAssociation>();
         }
-
-
 
         //public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()
         //{

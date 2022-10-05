@@ -6,8 +6,8 @@ namespace ClearDashboard.DataAccessLayer.Data
     public class SqliteProjectDbContextOptionsBuilder : DbContextOptionsBuilder<ProjectDbContext>
     {
         private readonly ILogger<SqliteProjectDbContextOptionsBuilder> _logger;
-        public string ProjectName { get; private set; }
-        public string ProjectDirectory { get; private set; }
+        public string DatabaseName { get; private set; }
+        public string DatabaseDirectory { get; private set; }
 
         public override DbContextOptions<ProjectDbContext> Options
         {
@@ -15,26 +15,27 @@ namespace ClearDashboard.DataAccessLayer.Data
             {
                 return SqliteDbContextOptionsBuilderExtensions.UseSqlite<ProjectDbContext>(
                     new(),
-                    $"DataSource={ProjectDirectory}\\{ProjectName}.sqlite;Pooling=true;Mode=ReadWriteCreate").Options;
+                    $"DataSource={DatabaseDirectory}\\{DatabaseName}.sqlite;Pooling=true;Mode=ReadWriteCreate",
+                    options => options.CommandTimeout(600)).Options;
             }
         }
 
-        public SqliteProjectDbContextOptionsBuilder(ILogger<SqliteProjectDbContextOptionsBuilder> logger, string projectName)
+        public SqliteProjectDbContextOptionsBuilder(ILogger<SqliteProjectDbContextOptionsBuilder> logger, string databaseName)
         {
             _logger = logger;
-            ProjectName = projectName.Replace(" ", "_");
-            ProjectDirectory = EnsureProjectDirectory(ProjectName);
+            DatabaseName = databaseName.Replace(" ", "_");
+            DatabaseDirectory = EnsureDatabaseDirectory(DatabaseName);
         }
 
-        private string EnsureProjectDirectory(string projectName)
+        private string EnsureDatabaseDirectory(string databaseName)
         {
-            if (string.IsNullOrEmpty(projectName))
+            if (string.IsNullOrEmpty(databaseName))
             {
-                throw new ArgumentNullException(nameof(projectName), "A project name must be provided in order for a 'Project' database context to returned.");
+                throw new ArgumentNullException(nameof(databaseName), "A project name must be provided in order for a 'Project' database context to returned.");
             }
 
 
-            var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectName);
+            var directoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, databaseName);
             if (!Directory.Exists(directoryPath))
             {
                 _logger?.LogInformation($"Creating project directory {directoryPath}.");

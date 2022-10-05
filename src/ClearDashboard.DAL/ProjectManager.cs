@@ -34,7 +34,6 @@ namespace ClearDashboard.DataAccessLayer
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        public ProjectAssets ProjectAssets { get; set; }
         protected ILifetimeScope LifetimeScope { get; private set; }
         public User CurrentUser { get; set; }
         public Project CurrentProject { get; set; }

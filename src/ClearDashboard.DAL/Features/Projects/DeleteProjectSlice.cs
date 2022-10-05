@@ -43,10 +43,10 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
 
                 if (ProjectDbContext.OptionsBuilder.GetType() == typeof(SqliteProjectDbContextOptionsBuilder))
                 {
-                    var projectDirectory = (ProjectDbContext.OptionsBuilder as SqliteProjectDbContextOptionsBuilder)!.ProjectDirectory;
-                    if (Directory.Exists(projectDirectory))
+                    var databaseDirectory = (ProjectDbContext.OptionsBuilder as SqliteProjectDbContextOptionsBuilder)!.DatabaseDirectory;
+                    if (Directory.Exists(databaseDirectory))
                     {
-                        Directory.Delete(projectDirectory, true);
+                        Directory.Delete(databaseDirectory, true);
                     }
                 }
 

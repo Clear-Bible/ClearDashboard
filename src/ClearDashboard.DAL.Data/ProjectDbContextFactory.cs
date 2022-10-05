@@ -34,7 +34,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             var projectDbContext = await GetDatabaseContext(projectName, migrate, serviceScope);
             ProjectAssets = new ProjectAssets
             {
-                ProjectName = projectDbContext.ProjectName,
+                ProjectName = projectDbContext.DatabaseName,
                 ProjectDbContext = projectDbContext // This probably should not be here.  
             };
 
@@ -46,11 +46,11 @@ namespace ClearDashboard.DataAccessLayer.Data
             var scope = contextScope ?? _serviceScope;
 
             var context = scope.Resolve<ProjectDbContext>(
-                new NamedParameter("projectName", projectName),
+                new NamedParameter("databaseName", projectName),
                 new ResolvedParameter(
                     (pi, cc) => pi.Name == "optionsBuilder",
                     (pi, cc) => cc.Resolve<DbContextOptionsBuilder<ProjectDbContext>>(
-                        new NamedParameter("projectName", projectName))));
+                        new NamedParameter("databaseName", projectName))));
 
             if (context != null)
             {
