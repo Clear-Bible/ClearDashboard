@@ -68,7 +68,8 @@
             HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleHorizontalAlignment}"
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleFontSize}"
             Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
-            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}"
+            FlowDirection="LeftToRight"/>
         <Border
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensMargin}"
             Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensPadding}"
