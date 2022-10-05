@@ -31,8 +31,24 @@ namespace ClearDashboard.DAL.CQRS.Features
         {
             try
             {
-                ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(ProjectProvider?.CurrentProject?.ProjectName ?? string.Empty).ConfigureAwait(false);
-                return await GetDataAsync(request, cancellationToken);
+                if (ProjectNameDbContextFactory!.ServiceScope.Tag == Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag)
+                {
+                    ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(
+                        ProjectProvider?.CurrentProject?.ProjectName ?? string.Empty,
+                        false).ConfigureAwait(false);
+                    return await GetDataAsync(request, cancellationToken);
+                }
+                else
+                {
+                    using var requestScope = ProjectNameDbContextFactory!.ServiceScope
+                        .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+
+                    ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(
+                        ProjectProvider?.CurrentProject?.ProjectName ?? string.Empty,
+                        false,
+                        requestScope).ConfigureAwait(false);
+                    return await GetDataAsync(request, cancellationToken);
+                }
             }
             catch (Exception ex)
             {

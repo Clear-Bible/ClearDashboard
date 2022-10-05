@@ -123,17 +123,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Select(tc => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(tc),
                             null,
-                            "FromAlignmentModel")));
+                            "FromAlignmentModel")).ToList());
 //                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
                 }
 
                 return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(
-                    combined.OrderBy(t => t.SourceToken.TokenId.ToString())
+                    combined.OrderBy(t => t.SourceToken.TokenId.ToString()).ToList()
                 );
             }
             else
             {
-                return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(translations.OrderBy(t => t.SourceToken.TokenId.ToString()));
+                return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(translations.OrderBy(t => t.SourceToken.TokenId.ToString()).ToList());
             }
         }
      }

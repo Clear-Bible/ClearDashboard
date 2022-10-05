@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DAL.Tests.Mocks;
@@ -23,27 +24,14 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
         {
         }
 
-        protected override void SetupDependencyInjection()
-        {
-            Services.AddSingleton<IEventAggregator, EventAggregator>();
-            Services.AddClearDashboardDataAccessLayer();
-            Services.AddMediatR(typeof(GetUsersQueryHandler));
-            Services.AddLogging();
-            Services.AddSingleton<IUserProvider, UserProvider>();
-
-        }
-
         [Fact]
         public async Task GetUsersViaHandlerTest()
         {
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var random = new Random((int)DateTime.Now.Ticks);
             var projectName = $"Alignment{random.Next(1, 1000)}";
-            Assert.NotNull(factory);
 
             Output.WriteLine($"Creating database: {projectName}");
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase(projectName, true);
 
             try
             {
@@ -51,13 +39,12 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
                 var user1 = new User { FirstName = "Bob", LastName = "Smith" };
                 var user2 = new User { FirstName = "Janie", LastName = "Jones" };
 
-                await context.Users.AddRangeAsync(new[] { user1, user2 });
-                await context.SaveChangesAsync();
+                await ProjectDbContext.Users.AddRangeAsync(new[] { user1, user2 });
+                await ProjectDbContext.SaveChangesAsync();
 
-                var mediator = ServiceProvider.GetService<IMediator>();
+                var mediator = Container!.Resolve<IMediator>();
 
                 var request = new GetUsersQuery("Dummy");
-
                 var result = await mediator?.Send(request);
 
                 Assert.NotNull(result);
@@ -72,10 +59,7 @@ namespace ClearDashboard.DAL.Tests.AlignmentDbContextRequestHandler
             }
             finally
             {
-                Output.WriteLine($"Deleting database: {projectName}");
-                await context.Database.EnsureDeletedAsync();
-                var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+                await DeleteDatabaseContext(projectName);
             }
         }
 

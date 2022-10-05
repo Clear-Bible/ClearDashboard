@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(tc => tc.User)
                 .Where(tc => tc.CorpusId == request.CorpusId.Id)
                 .Select(tc => ModelHelper.BuildTokenizedTextCorpusId(tc))
-                .AsEnumerable();
+                .ToList();
             
             return Task.FromResult(
                 new RequestResult<IEnumerable<TokenizedTextCorpusId>>

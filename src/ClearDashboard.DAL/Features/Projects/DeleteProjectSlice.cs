@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Core;
+using Autofac;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -33,27 +35,22 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
         {
             try
             {
-                var projectAssets = await ProjectNameDbContextFactory.Get(request.projectName);
+                var project = ProjectDbContext.Projects.FirstOrDefault();
 
-                if (projectAssets.ProjectDbContext != null)
+                //projectAssets.ProjectDbContext!.Database.EnsureDeleted();
+                await ProjectDbContext!.Database.EnsureDeletedAsync();
+                await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+
+                if (ProjectDbContext.OptionsBuilder.GetType() == typeof(SqliteProjectDbContextOptionsBuilder))
                 {
-                    var project = projectAssets.ProjectDbContext.Projects.FirstOrDefault();
-
-                    //projectAssets.ProjectDbContext!.Database.EnsureDeleted();
-                    await projectAssets.ProjectDbContext!.Database.EnsureDeletedAsync();
-                    await projectAssets.ProjectDbContext!.SaveChangesAsync();
-
-
-                    if (Directory.Exists(projectAssets.ProjectDirectory))
+                    var databaseDirectory = (ProjectDbContext.OptionsBuilder as SqliteProjectDbContextOptionsBuilder)!.DatabaseDirectory;
+                    if (Directory.Exists(databaseDirectory))
                     {
-                        Directory.Delete(projectAssets.ProjectDirectory, true);
+                        Directory.Delete(databaseDirectory, true);
                     }
-
-                    return new RequestResult<Models.Project>(project);
                 }
 
-                throw new NullReferenceException($"The 'ProjectDbContext' for the project {request.projectName} could not be created.");
-
+                return new RequestResult<Models.Project>(project);
             }
             catch (Exception ex)
             {

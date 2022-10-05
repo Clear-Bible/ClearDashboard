@@ -18,7 +18,6 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using ClearDashboard.DataAccessLayer.Data.Models;
 using ClearDashboard.DataAccessLayer.Features.Projects;
 
 namespace ClearDashboard.DataAccessLayer
@@ -34,7 +33,6 @@ namespace ClearDashboard.DataAccessLayer
 
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
-        public ProjectAssets ProjectAssets { get; set; }
         protected ILifetimeScope LifetimeScope { get; private set; }
         public User CurrentUser { get; set; }
         public Project CurrentProject { get; set; }
@@ -100,27 +98,25 @@ namespace ClearDashboard.DataAccessLayer
 
         public virtual async Task Initialize()
         {
-            EnsureDashboardProjectDirectory();
+            EnsureDashboardDirectory(FilePathTemplates.ProjectBaseDirectory);
         }
 
-        private void EnsureDashboardProjectDirectory()
+        private void EnsureDashboardDirectory(string directory)
         {
-            if (!Directory.Exists(FilePathTemplates.ProjectBaseDirectory))
+            if (!Directory.Exists(directory))
             {
                 // need to create that directory
                 try
                 {
-                    Directory.CreateDirectory(FilePathTemplates.ProjectBaseDirectory);
+                    Directory.CreateDirectory(directory);
                 }
                 catch (Exception ex)
                 {
                     Logger.LogError(ex,
-                        $"An unexpected error occurred while creating '{FilePathTemplates.ProjectBaseDirectory}");
+                        $"An unexpected error occurred while creating '{directory}");
                 }
             }
         }
-
-
 
         private Guid TemporaryUserGuid => Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7");
         public User GetLicensedUser()
@@ -186,20 +182,21 @@ namespace ClearDashboard.DataAccessLayer
         {
             CreateDashboardProject();
 
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            
-            // Seed the IProjectProvider implementation.
-            var projectAssets = await projectDbContextFactory.Get(projectName);
-            CurrentDashboardProject.ProjectName = projectAssets.ProjectName;
-            CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
-            
+            var projectSanitizedName = ProjectDbContextFactory.ConvertProjectNameToSanitizedName(projectName);
 
+            // Seed the IProjectProvider implementation for ProjectDbContext to use
+            // when creating the database:
             CurrentProject = new Project
             {
-                ProjectName = projectName
+                ProjectName = projectSanitizedName
             };
-            CurrentProject = await CreateProject(projectName);
 
+            // Create the project directory:
+            CurrentDashboardProject.DirectoryPath = string.Format(FilePathTemplates.ProjectDirectoryTemplate, projectSanitizedName);
+            EnsureDashboardDirectory(CurrentDashboardProject.DirectoryPath);
+
+            CurrentProject = await CreateProject(projectName);
+            CurrentDashboardProject.ProjectName = projectSanitizedName;
         }
 
         public void Dispose()
@@ -226,12 +223,19 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task<Project> LoadProject(string projectName)
         {
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            
-            var projectAssets = await projectDbContextFactory.Get(projectName, true);
-            CurrentProject = projectAssets.ProjectDbContext.Projects.First();
-            CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
+            using var requestScope = LifetimeScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
 
+            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
+            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
+                projectName,
+                false,
+                requestScope);
+
+            CurrentProject = projectDbContext.Projects.First();
+            CurrentDashboardProject.DirectoryPath = string.Format(
+                FilePathTemplates.ProjectDirectoryTemplate, 
+                ProjectDbContextFactory.ConvertProjectNameToSanitizedName(CurrentProject.ProjectName));
 
             return CurrentProject;
         }
@@ -254,19 +258,24 @@ namespace ClearDashboard.DataAccessLayer
                 var message = $"Could not create a project: {result.Message}";
                 Logger.LogError(message);
                 throw new ApplicationException(message);
-            }
-            
+            } 
         }
 
         public async Task UpdateProject(Project project)
         {
+            using var requestScope = LifetimeScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+
             var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            var projectAssets = await projectDbContextFactory.Get(project.ProjectName);
+            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
+                project.ProjectName, 
+                false,
+                requestScope);
 
             Logger.LogInformation($"Saving the design surface layout for project '{CurrentProject.ProjectName}'");
-            projectAssets.ProjectDbContext.Attach(project);
+            projectDbContext.Update(project);
 
-            await projectAssets.ProjectDbContext.SaveChangesAsync();
+            await projectDbContext.SaveChangesAsync();
 
             Logger.LogInformation($"Saved the design surface layout for project '{CurrentProject.ProjectName}'");
         }

@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
@@ -10,6 +9,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using System.Reflection;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -37,10 +37,14 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterDatabaseDependencies(this ContainerBuilder builder)
         {
-            builder.RegisterType<ProjectDbContext>().InstancePerLifetimeScope();
+            // Mediator resolves this from the container, and generally 
+            // as a thick client app, there isn't any notion of 'requests',
+            // so most likely this will be resolved on the 'root' scope:
             builder.RegisterType<ProjectDbContextFactory>().InstancePerLifetimeScope();
-            builder.RegisterType<SqliteDatabaseConnectionInterceptor>().InstancePerLifetimeScope();
 
+            // Intended to be resolved/disposed at a 'request' level:
+            builder.RegisterType<ProjectDbContext>().InstancePerRequest();
+            builder.RegisterType<SqliteProjectDbContextOptionsBuilder>().As<DbContextOptionsBuilder<ProjectDbContext>>().InstancePerRequest();
         }
 
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)
