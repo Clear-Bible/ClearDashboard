@@ -12,17 +12,14 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
-using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
-using Paratext.PluginInterfaces;
 
 
 namespace ClearDashboard.Wpf.Application
