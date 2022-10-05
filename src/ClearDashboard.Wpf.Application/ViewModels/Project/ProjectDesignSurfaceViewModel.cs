@@ -1658,7 +1658,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     TargetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
                     ConnectorGuid: newConnection.Id));
 
-                // TODO:  
                 await AddParallelCorpus(newConnection);
             }
         }
