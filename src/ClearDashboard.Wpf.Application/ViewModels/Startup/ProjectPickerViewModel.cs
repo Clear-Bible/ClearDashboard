@@ -95,7 +95,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
                 SendUiLanguageChangeMessage(language);
-
             }
         }
 

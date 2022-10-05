@@ -141,8 +141,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
                 SendUiLanguageChangeMessage(language);
-
-                }
+            }
         }
 
         private static void SaveUserLanguage(string language)
@@ -235,7 +234,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         set
         {
                 _loadingApplication = value;
-                SetLanguage();//
+                SetLanguage();
             }
     }
 
@@ -298,21 +297,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             InitializeProjectManager();
             await base.OnActivateAsync(cancellationToken);
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            base.OnViewLoaded(view);
-        }
-
-        protected override void OnViewAttached(object view, object context)
-        {
-            base.OnViewAttached(view, context);
-        }
-
-        protected override void OnViewReady(object view)
-        {
-            base.OnViewReady(view);
         }
 
         private void InitializeProjectManager()
