@@ -57,6 +57,7 @@
         <userControls:VerseDisplay Grid.Row="1" Grid.Column="0"
                                    Margin="50,10"
                                    Title="Word translation (interlinear gloss)"
+                                   FlowDirection="LeftToRight"
                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    Tokens="{Binding VerseDisplayViewModel.TokenDisplayViewModels}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -259,10 +260,10 @@
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
 
             <userControls:NoteCollectionDisplay Visibility="{Binding NotePaneVisibility}"
-                                       Title="{Binding CurrentToken.SurfaceText}"
+                                       Title="{Binding SelectedTokens.CombinedSurfaceText}"
                                        EntityId="{Binding CurrentToken.Token.TokenId}"
                                        InnerMargin="0,0,0,30"
-                                       Notes="{Binding CurrentToken.Notes}"
+                                       Notes="{Binding SelectedTokens.CombinedNotes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelSuggestions="{Binding VerseDisplayViewModel.LabelSuggestions}"

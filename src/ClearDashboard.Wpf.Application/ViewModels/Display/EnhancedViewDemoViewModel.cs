@@ -1,5 +1,5 @@
 ﻿// Uncomment this preprocessor definition to use mock data for dev/test purposes.
-// #define MOCK
+#define MOCK
 
 using System;
 using System.Collections.Generic;
@@ -127,6 +127,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         private TokenDisplayViewModel _currentToken;
         private IEnumerable<TranslationOption> _translationOptions;
         private TranslationOption? _currentTranslationOption;
+        private TokenDisplayViewModelCollection _selectedTokens = new();
 
         public string Message
         {
@@ -139,6 +140,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             get => _currentToken;
             set => Set(ref _currentToken, value);
         }
+
+        public TokenDisplayViewModelCollection SelectedTokens
+        {
+            get => _selectedTokens;
+            set
+            {
+                Set(ref _selectedTokens, value);
+                NotifyOfPropertyChange(nameof(SelectedTokensSurfaceText));
+            }
+        }
+
+        public string SelectedTokensSurfaceText => String.Join(",", SelectedTokens.Select(t => t.SurfaceText));
 
         public IEnumerable<TranslationOption> TranslationOptions
         {
@@ -182,6 +195,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenClicked(TokenEventArgs e)
         {
+            SelectedTokens = e.SelectedTokens;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
         }
 
