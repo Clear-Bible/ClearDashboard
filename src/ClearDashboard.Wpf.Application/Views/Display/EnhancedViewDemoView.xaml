@@ -27,6 +27,7 @@
     <Page.Resources>
         <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter"/>
         <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter"/>
+        <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter"/>
         <userControls:ThicknessConverter x:Key="ThicknessConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Page.Resources>
@@ -57,6 +58,7 @@
         <userControls:VerseDisplay Grid.Row="1" Grid.Column="0"
                                    Margin="50,10"
                                    Title="Word translation (interlinear gloss)"
+                                   FlowDirection="{Binding ElementName=RtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    Tokens="{Binding VerseDisplayViewModel.TokenDisplayViewModels}" 
                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -241,6 +243,8 @@
                 <Label VerticalAlignment="Center">Center Words</Label>
             </StackPanel>
             <StackPanel Grid.Row="8" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <CheckBox VerticalAlignment="Center" Name="RtlCheckbox" IsChecked="False"/>
+                <Label VerticalAlignment="Center">Right To Left</Label>
                 <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
                 <Label VerticalAlignment="Center">Vertical Layout</Label>
             </StackPanel>
@@ -259,10 +263,10 @@
                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];" />
 
             <userControls:NoteCollectionDisplay Visibility="{Binding NotePaneVisibility}"
-                                       Title="{Binding CurrentToken.SurfaceText}"
+                                       Title="{Binding SelectedTokens.CombinedSurfaceText}"
                                        EntityId="{Binding CurrentToken.Token.TokenId}"
                                        InnerMargin="0,0,0,30"
-                                       Notes="{Binding CurrentToken.Notes}"
+                                       Notes="{Binding SelectedTokens.CombinedNotes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                        LabelSuggestions="{Binding VerseDisplayViewModel.LabelSuggestions}"
