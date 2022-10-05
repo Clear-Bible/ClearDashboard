@@ -540,8 +540,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
                             DisplayOrder = enhancedViewModel.DisplayOrder,
-                            DisplayName = enhancedViewModel.DisplayName,
+                            Title = enhancedViewModel.Title,
                             ParatextSync = enhancedViewModel.ParatextSync,
+                            VerseOffset = enhancedViewModel.VerseOffsetRange,
                         });
                     }
                 }
@@ -637,14 +638,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         // create a new one
                         viewModel = IoC.Get<EnhancedViewModel>();
+                        viewModel.ContentId = "ENHANCEDVIEW";
                         newWindow = true;
                     }
 
-                    viewModel.Title = deserialized[i].DisplayName;
+                    viewModel.Title = deserialized[i].Title;
+                    viewModel.VerseOffsetRange = deserialized[i].VerseOffset;
                     viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
                     viewModel.ParatextSync = deserialized[i].ParatextSync;
                     viewModel.CurrentBcv.SetVerseFromId(deserialized[i].BBBCCCVVV);
-                    viewModel.VerseChange = "001001001";
                     viewModel.ProgressBarVisibility = Visibility.Visible;
 
                     if (newWindow)
@@ -656,7 +658,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         var windowDockable = new LayoutDocument
                         {
                             Content = viewModel,
-                            Title = deserialized[i].DisplayName,
+                            Title = deserialized[i].Title,
                         };
 
                         var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
@@ -704,9 +706,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 Logger.LogError(e, "Error loading tokenization window");
                             }
                         }
+                        await Task.Delay(1000);
                     }
-                    viewModel.ProgressBarVisibility = Visibility.Visible;
-                    viewModel.VerseChange = deserialized[i].BBBCCCVVV;
                 }
             }
         }

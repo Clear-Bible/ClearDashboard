@@ -174,6 +174,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             get => _verseChange;
             set
             {
+                if (_verseChange == "000000000")
+                {
+                    return;
+                }
+                
                 if (_verseChange == "")
                 {
                     _verseChange = value;
@@ -1089,7 +1094,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 finally
                 {
                     _handleAsyncRunning = false;
-                    _cancellationTokenSource.Dispose();
+                    _cancellationTokenSource?.Dispose();
                 }
             }, cancellationToken);
         }

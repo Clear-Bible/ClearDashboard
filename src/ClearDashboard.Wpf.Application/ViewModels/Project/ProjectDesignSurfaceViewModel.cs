@@ -751,6 +751,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     CancellationTokenSource.Dispose();
                     LongProcessRunning = false;
                     IsBusy = false;
+                    PlaySound.PlaySoundFromResource(null, null);
                 }
             }, cancellationToken);
 
@@ -880,6 +881,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     CancellationTokenSource.Dispose();
                     LongProcessRunning = false;
                     IsBusy = false;
+                    PlaySound.PlaySoundFromResource(null, null);
                 }
             }, cancellationToken);
 
@@ -1063,6 +1065,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         CancellationTokenSource.Dispose();
                         LongProcessRunning = false;
                         IsBusy = false;
+                        PlaySound.PlaySoundFromResource(null, null);
                     }
                 }, cancellationToken);
 
