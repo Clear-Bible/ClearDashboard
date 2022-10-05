@@ -22,6 +22,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Display;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
+using Paratext.PluginInterfaces;
 
 
 namespace ClearDashboard.Wpf.Application
@@ -77,7 +78,10 @@ namespace ClearDashboard.Wpf.Application
                 }
             }
 
+            Settings.Default.language_code = selectedLanguage;
+            Settings.Default.Save();
             var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
+            
             var translationSource = Container?.Resolve<TranslationSource>();
             if (translationSource != null)
             {

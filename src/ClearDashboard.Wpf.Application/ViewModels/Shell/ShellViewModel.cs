@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,12 +29,13 @@ using Dapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using Action = System.Action;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
     public class ShellViewModel : DashboardApplicationScreen, IShellViewModel, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>,
-       IHandle<BackgroundTaskChangedMessage>
+       IHandle<BackgroundTaskChangedMessage>, IHandle<UiLanguageChangedMessage>
     {
         private readonly TranslationSource? _translationSource;
 
@@ -41,6 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(5);
         private readonly int _completedRemovalSeconds = 45;
         private bool _firstPass = false;
+        private bool _uiLanguageChangedMessageInProgress = false;
 
         private Timer? _timer;
         private bool _firstRun;
@@ -137,7 +141,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
-                SendUiLanguageChangeMessage(language);
+                if (!_uiLanguageChangedMessageInProgress)
+                {
+                    SendUiLanguageChangeMessage(language);
+                }
+                
             }
         }
 
@@ -240,6 +248,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
     private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
     {
+        SetLanguage();
         var uri = e.Uri;
 
         if (uri.OriginalString.Contains("HomeView.xaml"))
@@ -293,6 +302,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             InitializeProjectManager();
             await base.OnActivateAsync(cancellationToken);
+        }
+
+        protected override void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            base.OnViewAttached(view, context);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            base.OnViewReady(view);
         }
 
         private void InitializeProjectManager()
@@ -418,7 +442,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var culture = Settings.Default.language_code;
             if (string.IsNullOrEmpty(culture))
             {
-                culture = "am-ET";
+                var cultureName = "";
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                if (currentCulture.Parent.Name is not "zh" or "pt")
+                {
+                    cultureName = currentCulture.Name;//.Parent
+                }
+                else
+                {
+                    cultureName = currentCulture.Name;
+                }
+
+                try
+                {
+                    culture = ((LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), cultureName.Replace("-", string.Empty))).ToString();
+                }
+                catch
+                {
+                    culture = "amET";
+                }
             }
             // strip out any "-" characters so the string can be properly parsed into the target enum
             SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
@@ -540,5 +582,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         #endregion
+
+        public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            _uiLanguageChangedMessageInProgress = true;
+            _selectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), message.LanguageCode.Replace("-", string.Empty));
+
+            var language = EnumHelper.GetDescription(_selectedLanguage);
+            SaveUserLanguage(_selectedLanguage.ToString());
+            _translationSource.Language = language;
+
+
+            Message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
+            NotifyOfPropertyChange(() => SelectedLanguage);
+
+            if (!_uiLanguageChangedMessageInProgress)
+            {
+                SendUiLanguageChangeMessage(language);
+            }
+            _uiLanguageChangedMessageInProgress = false;
+            return Task.CompletedTask;
+        }
     }
 }
