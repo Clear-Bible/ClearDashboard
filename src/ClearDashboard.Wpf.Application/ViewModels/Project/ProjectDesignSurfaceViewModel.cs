@@ -673,7 +673,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
                         mediator: Mediator,
-                        IsRtl: false,
+                        IsRtl: true,
                         Name: "Macula Hebrew",
                         Language: "Hebrew",
                         CorpusType: CorpusType.ManuscriptHebrew.ToString(),
