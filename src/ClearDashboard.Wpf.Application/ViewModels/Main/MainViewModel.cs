@@ -548,17 +548,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            // save the document window contents
-            JsonSerializerOptions options = new()
+            try
             {
-                IncludeFields = true,
-                WriteIndented = false
-            };
+                // save the document window contents
+                JsonSerializerOptions options = new()
+                {
+                    IncludeFields = true,
+                    WriteIndented = false
+                };
 
-            FileInfo fi = new FileInfo(ProjectManager.CurrentDashboardProject.FullFilePath);
-            var dir = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
+                FileInfo fi = new FileInfo(ProjectManager.CurrentDashboardProject.DirectoryPath);
+                var dir = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
 
-            File.WriteAllText(dir, JsonSerializer.Serialize(serializedEnhancedViews, options));
+                File.WriteAllText(dir, JsonSerializer.Serialize(serializedEnhancedViews, options));
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+            }
 
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
