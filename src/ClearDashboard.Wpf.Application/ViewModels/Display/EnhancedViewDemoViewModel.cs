@@ -105,7 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 await ProjectManager!.LoadProject("EnhancedViewDemo");
                 var row = await GetVerseTextRow(01001001);
                 var translationSet = await GetFirstTranslationSet();
-                await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
+                await VerseDisplayViewModel!.BindAsync(row, null, Detokenizer);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
             }
