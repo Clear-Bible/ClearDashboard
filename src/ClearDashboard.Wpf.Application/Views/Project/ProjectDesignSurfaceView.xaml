@@ -793,8 +793,8 @@
             Margin="0"
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
-            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-            IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}">
+            Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
+            <!-- IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"-->
             <StackPanel Grid.Row="0" MinWidth="400">
                 <!--  Add Corpora  -->
                 <Label

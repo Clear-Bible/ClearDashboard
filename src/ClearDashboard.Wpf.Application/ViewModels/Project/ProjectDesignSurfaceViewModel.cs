@@ -502,9 +502,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             JsonSerializerOptions options = new()
             {
                 IncludeFields = true,
-                WriteIndented = false
+                WriteIndented = false,
+                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
             };
             _projectManager.CurrentProject.DesignSurfaceLayout = JsonSerializer.Serialize(surface, options);
+
+            Logger.LogInformation($"DesignSurfaceLayout : {_projectManager.CurrentProject.DesignSurfaceLayout}");
 
             try
             {
@@ -541,7 +544,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 ReferenceHandler = ReferenceHandler.IgnoreCycles,
                 IncludeFields = true,
-                WriteIndented = true
+                WriteIndented = true,
+                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
             };
             ProjectDesignSurfaceSerializationModel? deserialized = JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
 
@@ -726,9 +730,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //await EventAggregator.PublishOnCurrentThreadAsync(
                     //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
 
-                    OnUIThread(() =>
+                    OnUIThread(async () =>
                     {
-                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
+                        await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
                     });
 
                 }
@@ -779,7 +783,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
                 .Transform<SetTrainingByTrainingLowercase>();
 
-            BookInfo bookInfo = new BookInfo();
+            var bookInfo = new BookInfo();
             var books = bookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
                     .Select(t => t.Id)
@@ -856,9 +860,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //await EventAggregator.PublishOnCurrentThreadAsync(
                     //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer.ToString(), metadata), cancellationToken);
 
-                    OnUIThread(() =>
+                    OnUIThread(async () =>
                     {
-                        UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
+                        await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
                     });
 
                 }
@@ -1041,9 +1045,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         //await EventAggregator.PublishOnCurrentThreadAsync(
                         //    new TokenizedTextCorpusLoadedMessage(tokenizedTextCorpus, viewModel.SelectedTokenizer.ToString(), metadata), cancellationToken);
 
-                        OnUIThread(() =>
+                        OnUIThread(async () =>
                         {
-                            UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
+                            await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, viewModel.SelectedTokenizer);
                         });
                     }
                     catch (Exception ex)
@@ -1084,7 +1088,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// <param name="corpus"></param>
         /// <param name="tokenizedTextCorpus"></param>
         /// <param name="viewModelSelectedTokenizer"></param>
-        private void UpdateNodeTokenization(CorpusNodeViewModel node, DAL.Alignment.Corpora.Corpus corpus,
+        private async Task UpdateNodeTokenization(CorpusNodeViewModel node, DAL.Alignment.Corpora.Corpus corpus,
             TokenizedTextCorpus tokenizedTextCorpus, Tokenizer viewModelSelectedTokenizer)
         {
             var corpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == node.Id);
@@ -1121,6 +1125,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
 
                 CreateCorpusNodeMenu(corpusNode);
+                await SaveCanvas();
             }
         }
 
@@ -1861,8 +1866,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             var node = new CorpusNodeViewModel(corpus.Name ?? string.Empty, _eventAggregator, _projectManager)
             {
-                X = nodeLocation.X,
-                Y = nodeLocation.Y,
+                X = (double.IsNegativeInfinity(nodeLocation.X) || double.IsPositiveInfinity(nodeLocation.X) || double.IsNaN(nodeLocation.X)) ? 150 : nodeLocation.X,
+                Y = (double.IsNegativeInfinity(nodeLocation.Y) || double.IsPositiveInfinity(nodeLocation.Y) || double.IsNaN(nodeLocation.Y)) ? 150 : nodeLocation.Y,
                 CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusType),
                 ParatextProjectId = corpus.ParatextGuid ?? string.Empty,
                 CorpusId = corpus.CorpusId.Id,
