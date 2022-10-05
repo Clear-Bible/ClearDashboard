@@ -129,6 +129,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     ProjectName = table.Column<string>(type: "TEXT", nullable: true),
                     IsRtl = table.Column<bool>(type: "INTEGER", nullable: false),
                     DesignSurfaceLayout = table.Column<string>(type: "TEXT", nullable: true),
+                    WindowTabLayout = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },

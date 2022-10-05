@@ -550,17 +550,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             try
             {
-                // save the document window contents
                 JsonSerializerOptions options = new()
                 {
                     IncludeFields = true,
                     WriteIndented = false
                 };
-
-                FileInfo fi = new FileInfo(ProjectManager.CurrentDashboardProject.DirectoryPath);
-                var dir = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
-
-                File.WriteAllText(dir, JsonSerializer.Serialize(serializedEnhancedViews, options));
+                ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(serializedEnhancedViews, options);
+                
             }
             catch (Exception e)
             {
@@ -603,120 +599,115 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadDocuments()
         {
-            if (ProjectManager.CurrentDashboardProject.FullFilePath is null)
+            if (ProjectManager.CurrentProject.WindowTabLayout is null)
             {
                 return;
             }
 
-            // load the document window contents
-            FileInfo fi = new FileInfo(ProjectManager.CurrentDashboardProject.FullFilePath);
-            var path = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
 
-            if (File.Exists(path))
+            var json = ProjectManager.CurrentProject.WindowTabLayout;
+
+            JsonSerializerOptions options = new()
             {
-                var json = File.ReadAllText(path);
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                IncludeFields = true,
+                WriteIndented = true
+            };
+            List<SerializedEnhancedView> deserialized = JsonSerializer.Deserialize<List<SerializedEnhancedView>>(json, options);
 
-                JsonSerializerOptions options = new()
+            for (int i = 0; i < deserialized.Count; i++)
+            {
+                EnhancedViewModel viewModel = null;
+                if (i == 0)
                 {
-                    ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                    IncludeFields = true,
-                    WriteIndented = true
-                };
-                List<SerializedEnhancedView> deserialized = JsonSerializer.Deserialize<List<SerializedEnhancedView>>(json, options);
-
-                for (int i = 0; i < deserialized.Count; i++)
-                {
-                    EnhancedViewModel viewModel = null;
-                    if (i == 0)
+                    // use the existing on
+                    foreach (var vm in Items)
                     {
-                        // use the existing on
-                        foreach (var vm in Items)
+                        if (vm is EnhancedViewModel)
                         {
-                            if (vm is EnhancedViewModel)
-                            {
-                                viewModel = (EnhancedViewModel)vm;
-                                break;
-                            }
+                            viewModel = (EnhancedViewModel)vm;
+                            break;
                         }
-                    }
-
-                    bool newWindow = false;
-                    if (viewModel is null)
-                    {
-                        // create a new one
-                        viewModel = IoC.Get<EnhancedViewModel>();
-                        viewModel.ContentId = "ENHANCEDVIEW";
-                        newWindow = true;
-                    }
-
-                    viewModel.Title = deserialized[i].Title;
-                    viewModel.VerseOffsetRange = deserialized[i].VerseOffset;
-                    viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-                    viewModel.ParatextSync = deserialized[i].ParatextSync;
-                    viewModel.CurrentBcv.SetVerseFromId(deserialized[i].BBBCCCVVV);
-                    viewModel.ProgressBarVisibility = Visibility.Visible;
-
-                    if (newWindow)
-                    {
-                        // add vm to conductor
-                        Items.Add(viewModel);
-
-                        // make a new document for the windows
-                        var windowDockable = new LayoutDocument
-                        {
-                            Content = viewModel,
-                            Title = deserialized[i].Title,
-                        };
-
-                        var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-                        documentPane?.Children.Add(windowDockable);
-                    }
-
-                    foreach (var displayOrder in deserialized[i].DisplayOrder)
-                    {
-                        var cancellationToken = new CancellationToken();
-                        var cancellationTokenLocal = new CancellationToken();
-                        if (displayOrder.MsgType == DisplayOrder.MessageType.ShowTokenizationWindowMessage)
-                        {
-                            try
-                            {
-                                json = displayOrder.Data.ToString();
-                                var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json, options);
-                                if (message is not null)
-                                {
-                                    viewModel.ProgressBarVisibility = Visibility.Visible;
-                                    await viewModel.ShowNewCorpusTokens(message, cancellationToken, cancellationTokenLocal);
-                                    await Task.Delay(1000);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.LogError(e, "Error loading tokenization window");
-                            }
-
-                        }
-                        else if (displayOrder.MsgType == DisplayOrder.MessageType.ShowParallelTranslationWindowMessage)
-                        {
-                            try
-                            {
-                                json = displayOrder.Data.ToString();
-                                var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json, options);
-                                if (message is not null)
-                                {
-                                    viewModel.ProgressBarVisibility = Visibility.Visible;
-                                    await viewModel.ShowNewParallelTranslation(message, cancellationToken, cancellationTokenLocal);
-                                    await Task.Delay(1000);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Logger.LogError(e, "Error loading tokenization window");
-                            }
-                        }
-                        await Task.Delay(1000);
                     }
                 }
+
+                bool newWindow = false;
+                if (viewModel is null)
+                {
+                    // create a new one
+                    viewModel = IoC.Get<EnhancedViewModel>();
+                    viewModel.ContentId = "ENHANCEDVIEW";
+                    newWindow = true;
+                }
+
+                viewModel.Title = deserialized[i].Title;
+                viewModel.VerseOffsetRange = deserialized[i].VerseOffset;
+                viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+                viewModel.ParatextSync = deserialized[i].ParatextSync;
+                viewModel.CurrentBcv.SetVerseFromId(deserialized[i].BBBCCCVVV);
+                viewModel.ProgressBarVisibility = Visibility.Visible;
+
+                if (newWindow)
+                {
+                    // add vm to conductor
+                    Items.Add(viewModel);
+
+                    // make a new document for the windows
+                    var windowDockable = new LayoutDocument
+                    {
+                        Content = viewModel,
+                        Title = deserialized[i].Title,
+                    };
+
+                    var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+                    documentPane?.Children.Add(windowDockable);
+                }
+
+                foreach (var displayOrder in deserialized[i].DisplayOrder)
+                {
+                    var cancellationToken = new CancellationToken();
+                    var cancellationTokenLocal = new CancellationToken();
+                    if (displayOrder.MsgType == DisplayOrder.MessageType.ShowTokenizationWindowMessage)
+                    {
+                        try
+                        {
+                            json = displayOrder.Data.ToString();
+                            var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json, options);
+                            if (message is not null)
+                            {
+                                viewModel.ProgressBarVisibility = Visibility.Visible;
+                                await viewModel.ShowNewCorpusTokens(message, cancellationToken, cancellationTokenLocal);
+                                await Task.Delay(1000);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(e, "Error loading tokenization window");
+                        }
+
+                    }
+                    else if (displayOrder.MsgType == DisplayOrder.MessageType.ShowParallelTranslationWindowMessage)
+                    {
+                        try
+                        {
+                            json = displayOrder.Data.ToString();
+                            var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json, options);
+                            if (message is not null)
+                            {
+                                viewModel.ProgressBarVisibility = Visibility.Visible;
+                                await viewModel.ShowNewParallelTranslation(message, cancellationToken, cancellationTokenLocal);
+                                await Task.Delay(1000);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(e, "Error loading tokenization window");
+                        }
+                    }
+                    await Task.Delay(1000);
+                }
             }
+
         }
 
         private async void Init()
@@ -794,7 +785,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
-            
+
 
             // add vm to conductor
             Items.Add(viewModel);
@@ -805,7 +796,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // make a new document for the windows
             var windowDockable = new LayoutDocument
             {
-                Title = $"viewModel.Title  ({enhancedViews.Count})",
+                Title = $"{viewModel.Title}  ({enhancedViews.Count})",
                 Content = viewModel,
                 IsActive = true
             };

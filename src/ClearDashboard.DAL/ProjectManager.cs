@@ -230,7 +230,8 @@ namespace ClearDashboard.DataAccessLayer
             
             var projectAssets = await projectDbContextFactory.Get(projectName, true);
             CurrentProject = projectAssets.ProjectDbContext.Projects.First();
-           
+            CurrentDashboardProject.DirectoryPath = projectAssets.ProjectDirectory;
+
 
             return CurrentProject;
         }
