@@ -7,13 +7,12 @@ namespace ClearDashboard.Wpf.Application.Models
     [TypeConverter(typeof(EnumDefaultValueTypeConverter))]
     public enum LanguageTypeValue
     {
-        
-        [RTL(false)]
-        [Description("am"), DefaultValue("አማርኛ")]
-        am,
         [RTL(false)]
         [Description("en"), DefaultValue("English Language")]//multiple
         en,
+        [RTL(false)]
+        [Description("am"), DefaultValue("አማርኛ")]
+        am,
         [RTL(true)]
         [Description("ar"), DefaultValue("عربي")]//multiple
         ar,
