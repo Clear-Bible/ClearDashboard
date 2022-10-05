@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
-    public partial class VerseDisplay : UserControl
+    public partial class VerseDisplay
     {
         #region Static RoutedEvents
         /// <summary>
@@ -178,10 +178,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the Title Visibiilty dependency property.
+        /// Identifies the Title Visibility dependency property.
         /// </summary>
         public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register("TitleVisibility", typeof(Visibility), typeof(VerseDisplay), new PropertyMetadata(Visibility.Visible));
-
 
         /// <summary>
         /// Identifies the TitlePadding dependency property.
@@ -208,6 +207,36 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(HorizontalAlignment.Left));
 
         /// <summary>
+        /// Identifies the TokensMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokensMarginProperty = DependencyProperty.Register("TokensMargin", typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(0, 10, 0, 10)));
+
+        /// <summary>
+        /// Identifies the TokensPadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokensPaddingProperty = DependencyProperty.Register("TokensPadding", typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(10)));
+
+        /// <summary>
+        /// Identifies the TokensBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokensBackgroundProperty = DependencyProperty.Register("TokensBackground", typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.AliceBlue));
+
+        /// <summary>
+        /// Identifies the TokensBorderBrush dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokensBorderBrushProperty = DependencyProperty.Register("TokensBorderBrush", typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.Black));
+
+        /// <summary>
+        /// Identifies the TokensBorderThickness dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokensBorderThicknessProperty = DependencyProperty.Register("TokensBorderThickness", typeof(Thickness), typeof(VerseDisplay),
+            new PropertyMetadata(new Thickness(1)));
+
+        /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(VerseDisplay));
@@ -217,17 +246,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty WrapProperty = DependencyProperty.Register("Wrap", typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true, new PropertyChangedCallback(OnWrapChanged)));
-
-        /// <summary>
-        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="ItemsPanelTemplate"/>.
-        /// </summary>
-        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
-        /// <param name="args">Event args containing the new value.</param>
-        private static void OnWrapChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            var control = (VerseDisplay)obj;
-            control.CalculateItemsPanelTemplate((bool) args.NewValue);
-        }
 
         /// <summary>
         /// Identifies the ItemsPanelTemplate dependency property.
@@ -282,6 +300,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.LightGray));
 
         /// <summary>
+        /// Identifies the SelectedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register("SelectedTokenBackground", typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.LightSteelBlue));
+
+        /// <summary>
         /// Identifies the ShowTranslations dependency property.
         /// </summary>
         public static readonly DependencyProperty ShowTranslationsProperty = DependencyProperty.Register("ShowTranslations", typeof(bool), typeof(VerseDisplay),
@@ -296,6 +320,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion Static DependencyProperties
         #region Private event handlers
 
+        /// <summary>
+        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="ItemsPanelTemplate"/>.
+        /// </summary>
+        /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
+        /// <param name="args">Event args containing the new value.</param>
+        private static void OnWrapChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        {
+            var control = (VerseDisplay)obj;
+            control.CalculateItemsPanelTemplate((bool)args.NewValue);
+        }
+
         private void CalculateItemsPanelTemplate(bool wrap)
         {
             ItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
@@ -306,21 +341,47 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CalculateItemsPanelTemplate(Wrap);
         }
 
-        private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        private void RaiseTokenEvent(RoutedEvent routedEvent, TokenDisplayViewModel tokenDisplay)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = tokenDisplay,
-                ModifierKeys = System.Windows.Input.Keyboard.Modifiers
+                SelectedTokens = SelectedTokens,
+                ModifierKeys = Keyboard.Modifiers
             });
+        }
+
+        private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+            RaiseTokenEvent(routedEvent, tokenDisplay!);
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+            var ctrlPressed = (Keyboard.Modifiers & ModifierKeys.Control) > 0;
+            UpdateSelection(tokenDisplay!, ctrlPressed);
+
             RaiseTokenEvent(TokenClickedEvent, e);
+        }
+
+        private void UpdateSelection(TokenDisplayViewModel token, bool addToSelection)
+        {
+            if (!addToSelection)
+            {
+                foreach (var selectedToken in SelectedTokens)
+                {
+                    selectedToken.IsSelected = false;
+                }
+                SelectedTokens.Clear();
+            }
+
+            token.IsSelected = true;
+            SelectedTokens.Add(token);
         }
 
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
@@ -423,7 +484,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = control?.TokenDisplayViewModel
+                TokenDisplayViewModel = control?.TokenDisplayViewModel,
+                SelectedTokens = SelectedTokens
             });
         }
 
@@ -705,6 +767,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion
         #region Public properties
+
+        /// <summary>
+        /// Gets or sets the orientation for displaying the tokens.
+        /// </summary>
+        /// <remarks>
+        /// This controls the layout of the tokens to be displayed; regardless of this setting, any translation will be displayed vertically below the token.
+        /// </remarks>
+        public Orientation Orientation
+        {
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets whether the tokens should wrap in the control.
+        /// </summary>
+        public bool Wrap
+        {
+            get => (bool)GetValue(WrapProperty);
+            set => SetValue(WrapProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the title to be displayed for the verse.
         /// </summary>
@@ -722,7 +806,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (Visibility)GetValue(TitleVisibilityProperty);
             set => SetValue(TitleVisibilityProperty, value);
         }
-
 
         /// <summary>
         /// Gets or sets the padding of the title to be displayed for the verse.
@@ -761,27 +844,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the orientation for displaying the tokens.
-        /// </summary>
-        /// <remarks>
-        /// This controls the layout of the tokens to be displayed; regardless of this setting, any translation will be displayed vertically below the token.
-        /// </remarks>
-        public Orientation Orientation
-        {
-            get => (Orientation) GetValue(OrientationProperty);
-            set => SetValue(OrientationProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets whether the tokens should wrap in the control.
-        /// </summary>
-        public bool Wrap
-        {
-            get => (bool)GetValue(WrapProperty);
-            set => SetValue(WrapProperty, value);
-        }           
-
-        /// <summary>
         /// Gets or sets whether the <see cref="ItemsPanelTemplate"/> to use when rendering the control.
         /// </summary>
         /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
@@ -801,6 +863,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI.
+        /// </summary>
+        public TokenDisplayViewModelCollection SelectedTokens { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
@@ -810,6 +877,51 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (double)GetValue(HorizontalSpacingProperty);
             set => SetValue(HorizontalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin for the tokens list.
+        /// </summary>
+        public Thickness TokensMargin
+        {
+            get => (Thickness) GetValue(TokensMarginProperty);
+            set => SetValue(TokensMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for the tokens list.
+        /// </summary>
+        public Thickness TokensPadding
+        {
+            get => (Thickness) GetValue(TokensPaddingProperty);
+            set => SetValue(TokensPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the background of the tokens list.
+        /// </summary>
+        public Brush TokensBackground
+        {
+            get => (Brush)GetValue(TokensBackgroundProperty);
+            set => SetValue(TokensBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the border around the tokens list.
+        /// </summary>
+        public Brush TokensBorderBrush
+        {
+            get => (Brush)GetValue(TokensBorderBrushProperty);
+            set => SetValue(TokensBorderBrushProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the border thickness for the tokens list.
+        /// </summary>
+        public Thickness TokensBorderThickness
+        {
+            get => (Thickness)GetValue(TokensBorderThicknessProperty);
+            set => SetValue(TokensBorderThicknessProperty, value);
         }
 
         /// <summary>
@@ -873,6 +985,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Brush)GetValue(NoteIndicatorColorProperty);
             set => SetValue(NoteIndicatorColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the background of selected tokens.
+        /// </summary>
+        public Brush SelectedTokenBackground
+        {
+            get => (Brush)GetValue(SelectedTokenBackgroundProperty);
+            set => SetValue(SelectedTokenBackgroundProperty, value);
         }
 
         /// <summary>
