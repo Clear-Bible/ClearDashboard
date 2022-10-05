@@ -304,7 +304,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task PopulateTranslations()
         {
-            Translations = await GetTranslations(Tokens.Select(t => t.TokenId));
+            if (TranslationSet != null)
+            {
+                Translations = await GetTranslations(Tokens.Select(t => t.TokenId));
+            }
         }
 
         private async Task<Dictionary<IId, IEnumerable<Note>>?> GetAllNotes()
