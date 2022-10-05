@@ -74,7 +74,7 @@ namespace ClearDashboard.Wpf.Application
                 }
                 catch
                 {
-                    selectedLanguage = "amET";
+                    selectedLanguage = "en";
                 }
             }
 

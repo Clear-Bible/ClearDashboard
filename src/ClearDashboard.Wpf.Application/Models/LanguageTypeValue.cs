@@ -9,32 +9,32 @@ namespace ClearDashboard.Wpf.Application.Models
     {
         
         [RTL(false)]
-        [Description("am-ET"), DefaultValue("አማርኛ")]
-        amET,
+        [Description("am"), DefaultValue("አማርኛ")]
+        am,
         [RTL(false)]
         [Description("en"), DefaultValue("English Language")]//multiple
         en,
         [RTL(true)]
-        [Description("ar-EG"), DefaultValue("عربي")]//multiple
-        arEG,
+        [Description("ar"), DefaultValue("عربي")]//multiple
+        ar,
         [RTL(false)]
-        [Description("de-DE"), DefaultValue("Deutsche Sprache")]//multiple
-        deDE,
+        [Description("de"), DefaultValue("Deutsche Sprache")]//multiple
+        de,
         [RTL(false)]
-        [Description("es-MX"), DefaultValue("Lengua española")]//multiple
-        esMX,
+        [Description("es"), DefaultValue("Lengua española")]//multiple
+        es,
         [RTL(false)]
-        [Description("fr-FR"), DefaultValue("Langue française")]//multiple
-        frFR,
+        [Description("fr"), DefaultValue("Langue française")]//multiple
+        fr,
         [RTL(false)]
-        [Description("hi-IN"), DefaultValue("हिन्दी")]
-        hiIN,
+        [Description("hi"), DefaultValue("हिन्दी")]
+        hi,
         [RTL(false)]
-        [Description("id-ID"), DefaultValue("Bahasa Indo")]
-        idID,
+        [Description("id"), DefaultValue("Bahasa Indo")]
+        id,
         [RTL(false)]
-        [Description("km-KM"), DefaultValue("ខ្មែរ")]
-        kmKM,
+        [Description("km"), DefaultValue("ខ្មែរ")]
+        km,
         [RTL(false)]
         [Description("pt-PT"), DefaultValue("Idioma portugues")]
         ptPT,
@@ -42,14 +42,14 @@ namespace ClearDashboard.Wpf.Application.Models
         [Description("pt-BR"), DefaultValue("Língua portuguesa (Brasil)")]
         ptBR,
         [RTL(false)]
-        [Description("ro-RO"), DefaultValue("Română")]//multiple
-        roRO,
+        [Description("ro"), DefaultValue("Română")]//multiple
+        ro,
         [RTL(false)]
-        [Description("ru-RU"), DefaultValue("русский")]//multiple
-        ruRU,
+        [Description("ru"), DefaultValue("русский")]//multiple
+        ru,
         [RTL(false)]
-        [Description("vi-VN"), DefaultValue("Ngôn ngữ tiếng Việt")]
-        viVN,
+        [Description("vi"), DefaultValue("Ngôn ngữ tiếng Việt")]
+        vi,
         [RTL(false)]
         [Description("zh-CN"), DefaultValue("简体中文")]//multiple
         zhCN,
