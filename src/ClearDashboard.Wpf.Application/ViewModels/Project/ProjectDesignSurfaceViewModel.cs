@@ -438,6 +438,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Y = corpusNode.Y,
                     NodeTokenizations = corpusNode.NodeTokenizations,
                     CorpusId = corpusNode.CorpusId,
+                    IsRTL = corpusNode.IsRTL,
                 });
             }
 
@@ -552,7 +553,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = new DAL.Alignment.Corpora.Corpus(
                         corpusId: new CorpusId(corpusNode.CorpusId),
                         mediator: _mediator,
-                        isRtl: false,
+                        isRtl: corpusNode.IsRTL,
                         name: corpusNode.Name,
                         displayName: "",
                         language: "",
@@ -673,7 +674,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
                         mediator: Mediator,
-                        IsRtl: false,
+                        IsRtl: true,
                         Name: "Macula Hebrew",
                         Language: "Hebrew",
                         CorpusType: CorpusType.ManuscriptHebrew.ToString(),
@@ -1864,7 +1865,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Y = nodeLocation.Y,
                 CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusType),
                 ParatextProjectId = corpus.ParatextGuid ?? string.Empty,
-                CorpusId = corpus.CorpusId.Id
+                CorpusId = corpus.CorpusId.Id,
+                IsRTL = corpus.IsRtl,
             };
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", _eventAggregator, _projectManager, node.ParatextProjectId)
