@@ -454,7 +454,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
                         ParallelCorpusId = translationSet.ParallelCorpusId,
                         AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
-                         AlignmentSetId = translationSet.AlignmentSetId,
+                        AlignmentSetId = translationSet.AlignmentSetId,
                     });
                 }
 
@@ -476,7 +476,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     TargetConnectorId = connection.DestinationConnector.ParatextID,
                     TranslationSetInfo = serializedTranslationSet,
                     AlignmentSetInfo = serializedAlignmentSet,
-                    ParallelCorpusDisplayName= connection.ParallelCorpusDisplayName,
+                    ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
                     ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 });
             }
@@ -883,12 +883,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
             }, cancellationToken);
 
-
+            
         }
+
+
+        
+        public async Task AddParatextCorpus()
+        {
+            await AddParatextCorpus("");
+        }
+
 
         // ReSharper restore UnusedMember.Global
         // ReSharper disable once UnusedMember.Global
-        private async Task AddParatextCorpus(string selectedParatextProjectId = "")
+        public async Task AddParatextCorpus(string selectedParatextProjectId)
         {
             _logger.LogInformation("AddParatextCorpus called.");
             LongProcessRunning = true;
@@ -1259,9 +1267,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             // TRANSLATION SET
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-                { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
+            { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
             // Add new tokenization
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
@@ -1344,9 +1352,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // node properties
                     SelectedConnection = connectionViewModel;
                     break;
-                 case "CreateNewInterlinearId":
-                     await AddNewInterlinear(connectionMenuItem);
-                     break;
+                case "CreateNewInterlinearId":
+                    await AddNewInterlinear(connectionMenuItem);
+                    break;
                 case "AddToEnhancedViewId":
                     if (connectionMenuItem.IsEnabled)
                     {
@@ -1360,7 +1368,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     else
                     {
-                        
+
                     }
 
 
@@ -1374,7 +1382,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-       
+
 
         public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
         {
@@ -2101,7 +2109,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 CreateCorpusNodeMenu(corpusNode);
             }
-            
+
             return Task.CompletedTask;
         }
 

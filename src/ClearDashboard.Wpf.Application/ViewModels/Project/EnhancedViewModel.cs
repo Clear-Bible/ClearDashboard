@@ -551,7 +551,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
 
-        public async Task<bool> ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
@@ -588,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await ShowNewCorpusTokens(message, cancellationToken, localCancellationToken);
             }
-            return true;
+            
         }
 
         public async Task ShowNewParallelTranslation(ShowParallelTranslationWindowMessage message,
@@ -882,7 +882,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 : new ObservableCollection<Note>();
         }
 
-        private async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
+        public async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
             CancellationToken localCancellationToken)
         {
             // current project

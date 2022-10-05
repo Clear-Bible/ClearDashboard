@@ -595,6 +595,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadDocuments()
         {
+            if (ProjectManager.CurrentDashboardProject.FullFilePath is null)
+            {
+                return;
+            }
+
             // load the document window contents
             FileInfo fi = new FileInfo(ProjectManager.CurrentDashboardProject.FullFilePath);
             var path = Path.Combine(fi.DirectoryName, "SerializedEnhancedViews.json");
@@ -661,6 +666,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     foreach (var displayOrder in deserialized[i].DisplayOrder)
                     {
                         var cancellationToken = new CancellationToken();
+                        var cancellationTokenLocal = new CancellationToken();
                         if (displayOrder.MsgType == DisplayOrder.MessageType.ShowTokenizationWindowMessage)
                         {
                             try
@@ -670,13 +676,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 if (message is not null)
                                 {
                                     viewModel.ProgressBarVisibility = Visibility.Visible;
-                                    var returnTask = await viewModel.ShowCorpusTokens(message, cancellationToken);
+                                    await viewModel.ShowNewCorpusTokens(message, cancellationToken, cancellationTokenLocal);
                                     await Task.Delay(1000);
                                 }
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine(e);
+                                Logger.LogError(e, "Error loading tokenization window");
                             }
 
                         }
@@ -688,8 +694,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json, options);
                                 if (message is not null)
                                 {
-                                    var cancellationTokenLocal = new CancellationToken();
-
                                     viewModel.ProgressBarVisibility = Visibility.Visible;
                                     await viewModel.ShowNewParallelTranslation(message, cancellationToken, cancellationTokenLocal);
                                     await Task.Delay(1000);
@@ -697,7 +701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine(e);
+                                Logger.LogError(e, "Error loading tokenization window");
                             }
                         }
                     }
