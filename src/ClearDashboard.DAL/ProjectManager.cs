@@ -233,6 +233,9 @@ namespace ClearDashboard.DataAccessLayer
                 requestScope);
 
             CurrentProject = projectDbContext.Projects.First();
+            CurrentDashboardProject.DirectoryPath = string.Format(
+                FilePathTemplates.ProjectDirectoryTemplate, 
+                ProjectDbContextFactory.ConvertProjectNameToSanitizedName(CurrentProject.ProjectName));
 
             return CurrentProject;
         }
