@@ -6,7 +6,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data.Models;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {

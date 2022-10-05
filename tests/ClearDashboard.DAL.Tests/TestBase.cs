@@ -78,7 +78,7 @@ namespace ClearDashboard.DAL.Tests
             Mediator = Container!.Resolve<IMediator>();
         }
  
-        protected async void SetupProjectDatabase(string projectName, bool userProjectAlreadyInDb)
+        protected async void SetupProjectDatabase(string projectName, bool leaveDbEmpty, bool userProjectAlreadyInDb = false)
         {
             var factory = Container!.Resolve<ProjectDbContextFactory>();
             Assert.NotNull(factory);
@@ -89,16 +89,23 @@ namespace ClearDashboard.DAL.Tests
                 projectName,
                 true).ConfigureAwait(false);
 
-            _ = await AddDashboardUser(ProjectDbContext, userProjectAlreadyInDb);
-            _ = await AddCurrentProject(ProjectDbContext, projectName, userProjectAlreadyInDb);
+            if (!leaveDbEmpty)
+            {
+                _ = await AddDashboardUser(ProjectDbContext, userProjectAlreadyInDb);
+                _ = await AddCurrentProject(ProjectDbContext, projectName, userProjectAlreadyInDb);
+            }
+        }
+
+        protected static string GetProjectDirectory(string projectName)
+        {
+            return $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
         }
 
         protected async Task DeleteDatabaseContext(string projectName)
         {
             Output.WriteLine($"Deleting database: {projectName}");
             await ProjectDbContext!.Database.EnsureDeletedAsync();
-            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-            Directory.Delete(projectDirectory, true);
+            Directory.Delete(GetProjectDirectory(projectName), true);
 
             Container!.Dispose();
         }

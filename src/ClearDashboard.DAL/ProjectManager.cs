@@ -18,7 +18,6 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using ClearDashboard.DataAccessLayer.Data.Models;
 using ClearDashboard.DataAccessLayer.Features.Projects;
 
 namespace ClearDashboard.DataAccessLayer

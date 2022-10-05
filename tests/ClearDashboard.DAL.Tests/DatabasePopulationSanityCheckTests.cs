@@ -35,7 +35,7 @@ namespace ClearDashboard.DAL.Tests
             var projectName = $"Project{random.Next(1, 1000)}";
 
             Output.WriteLine($"Creating database: {projectName}");
-            SetupProjectDatabase(projectName, false);
+            SetupProjectDatabase(projectName, false, false);
             Assert.NotNull(ProjectDbContext);
 
             Output.WriteLine($"Don't forget to delete the database: {projectName}.");
@@ -49,7 +49,7 @@ namespace ClearDashboard.DAL.Tests
             var projectName = $"Alignment{random.Next(1, 1000)}";
 
             Output.WriteLine($"Creating database: {projectName}");
-            SetupProjectDatabase(projectName, false);
+            SetupProjectDatabase(projectName, false, false);
 
             try
             {
@@ -110,7 +110,7 @@ namespace ClearDashboard.DAL.Tests
             var projectName = $"Alignment{random.Next(1, 1000)}";
 
             Output.WriteLine($"Creating database: {projectName}");
-            SetupProjectDatabase(projectName, false);
+            SetupProjectDatabase(projectName, false, false);
 
             try
             {
@@ -206,7 +206,7 @@ namespace ClearDashboard.DAL.Tests
             var projectName = $"Alignment{random.Next(1, 1000)}";
 
             Output.WriteLine($"Creating database: {projectName}");
-            SetupProjectDatabase(projectName, false);
+            SetupProjectDatabase(projectName, false, false);
 
             try
             {

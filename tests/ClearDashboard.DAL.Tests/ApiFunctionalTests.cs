@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task CreateParallelCorpus()
         {
-            SetupProjectDatabase("EnhancedView", true);
+            SetupProjectDatabase("EnhancedView", false, true);
 
             var manuscriptCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "Manuscript");
             var zzSurCorpus = ProjectDbContext.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "zz_SUR");
@@ -111,7 +111,7 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task GetParallelCorpus()
         {
-            SetupProjectDatabase("EnhancedView", true);
+            SetupProjectDatabase("EnhancedView", false, true);
 
             //var manuscriptCorpus = context.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "Manuscript");
             //var zzSurCorpus = context.TokenizedCorpora.FirstOrDefault(tc => tc.DisplayName == "zz_SUR");

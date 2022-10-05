@@ -20,25 +20,18 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task TestProjectDatabaseCreation()
         {
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             var projectName = Guid.NewGuid().ToString();
-            var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-
-            Assert.NotNull(factory);
-
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            SetupProjectDatabase(projectName, true);
 
             try
             {
-                Assert.NotNull(assets);
-                var databaseName = $"{projectDirectory}\\{projectName}.sqlite";
+                Assert.NotNull(ProjectDbContext);
+                var databaseName = $"{GetProjectDirectory(projectName)}\\{projectName}.sqlite";
                 Assert.True(File.Exists(databaseName));
             }
             finally
             {
-                await context.Database.EnsureDeletedAsync();
-                Directory.Delete(projectDirectory, true);
+                await DeleteDatabaseContext(projectName);
             }
         }
     }
