@@ -867,12 +867,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return new ObservableCollection<Label>(labels);
         }
 
-        private ObservableCollection<Note> GetNotes(EngineToken token)
+        private NoteCollection GetNotes(EngineToken token)
         {
             var matches = NotesDictionary.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
             return matches.Key != null
-                ? new ObservableCollection<Note>(matches.Value)
-                : new ObservableCollection<Note>();
+                ? new NoteCollection(matches.Value)
+                : new NoteCollection();
         }
 
         private async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
