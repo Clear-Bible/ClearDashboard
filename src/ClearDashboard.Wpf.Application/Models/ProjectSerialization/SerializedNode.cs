@@ -13,4 +13,5 @@ public class SerializedNode
     public CorpusType CorpusType = CorpusType.Standard;
     public List<SerializedTokenization> NodeTokenizations = new();
     public Guid CorpusId { get; set; } = Guid.Empty;
+    public bool IsRTL { get; set; }
 }
