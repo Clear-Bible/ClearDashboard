@@ -24,34 +24,18 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
         {
             try
             {
-                var projectAssets = await ProjectNameDbContextFactory.Get(request.ProjectName, true);
-
-
-                if (projectAssets.ProjectDbContext != null)
+                var project = new Models.Project()
                 {
-                    var project = new Models.Project()
-                    {
-                        ProjectName = request.ProjectName
-                    };
+                    ProjectName = request.ProjectName
+                };
 
-                    try
-                    {
-                        await projectAssets.ProjectDbContext.Users.AddAsync(request.User, cancellationToken);
-                        await projectAssets.ProjectDbContext.Projects.AddAsync(project, cancellationToken);
-                        await projectAssets.ProjectDbContext.SaveChangesAsync(cancellationToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogError(ex, "An unexpected error occurred while creating a new project. Attempting to save one last time.");
-                       
-                        await projectAssets.ProjectDbContext.Users.AddAsync(request.User, cancellationToken);
-                        await projectAssets.ProjectDbContext.Projects.AddAsync(project, cancellationToken);
-                        await projectAssets.ProjectDbContext.SaveChangesAsync(cancellationToken);
-                    }
+                await ProjectDbContext.Migrate();
 
-                    return new RequestResult<Models.Project>(project);
-                }
-                throw new NullReferenceException($"The 'ProjectDbContext' for the project {request.ProjectName} could not be created.");
+                await ProjectDbContext.Users.AddAsync(request.User, cancellationToken);
+                await ProjectDbContext.Projects.AddAsync(project, cancellationToken);
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);
+
+                return new RequestResult<Models.Project>(project);
             }
             catch (Exception ex)
             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.CQRS;
@@ -30,12 +27,12 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
 
         protected override async Task<RequestResult<IEnumerable<Corpus>>> GetDataAsync(GetAllProjectsFromDatabaseQuery request, CancellationToken cancellationToken)
         {
-            var task = ProjectNameDbContextFactory.Get(request.projectName);
-            var projectAssets = task.Result;
-            return (RequestResult<IEnumerable<Corpus>>)EntityFrameworkQueryableExtensions
-                .Include(projectAssets.ProjectDbContext.Corpa, corpus => corpus.TokenizedCorpora)
-                .ThenInclude(tokenizedCorpus => tokenizedCorpus.Tokens);
+            // need an await to get the compiler to be 'quiet'
+            await Task.CompletedTask;
 
+            return new RequestResult<IEnumerable<Corpus>>(ProjectDbContext.Corpa
+                .Include(corpus => corpus.TokenizedCorpora)
+                    /*.ThenInclude(tokenizedCorpus => tokenizedCorpus.Tokens)*/);
         }
     }
 }

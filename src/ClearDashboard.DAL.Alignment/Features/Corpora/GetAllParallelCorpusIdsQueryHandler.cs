@@ -30,7 +30,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(pc => pc.User)
                 .Select(pc => ModelHelper.BuildParallelCorpusId(pc));
 
-            return Task.FromResult(new RequestResult<IEnumerable<ParallelCorpusId>>(parallelCorpusIds));
+            return Task.FromResult(new RequestResult<IEnumerable<ParallelCorpusId>>(parallelCorpusIds.ToList()));
        }
     }
 }

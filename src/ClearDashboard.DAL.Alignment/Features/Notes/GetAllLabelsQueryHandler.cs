@@ -39,8 +39,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
             return new RequestResult<IEnumerable<Label>>
             (
-                labels
-            ); ;
+                labels.ToList()
+            );
         }
     }
 }

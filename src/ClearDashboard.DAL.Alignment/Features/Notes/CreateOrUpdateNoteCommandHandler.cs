@@ -50,14 +50,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             {
                 note = new Models.Note
                 {
+                    Id = Guid.NewGuid(),
                     Text = request.Text,
-                    AbbreviatedText = request.AbbreviatedText
+                    AbbreviatedText = request.AbbreviatedText,
                 };
 
                 ProjectDbContext.Notes.Add(note);
             }
             
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            note = ProjectDbContext.Notes.Include(n => n.User).First(n => n.Id == note.Id);
 
             return new RequestResult<NoteId>(new NoteId(note.Id, note.Created, note.Modified, ModelHelper.BuildUserId(note.User!)));
         }

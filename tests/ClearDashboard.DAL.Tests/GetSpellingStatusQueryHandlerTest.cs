@@ -30,7 +30,6 @@ namespace ClearDashboard.DAL.Tests
             string path = Path.Combine(Environment.CurrentDirectory, @"Resources\XML\");
             var dashboardProjectManager = ServiceProvider.GetService<DashboardProjectManager>();
             dashboardProjectManager.CreateDashboardProject();
-            dashboardProjectManager.CurrentDashboardProject.DirectoryPath = path;
 
             dashboardProjectManager.CurrentParatextProject = new ParatextProject();
             dashboardProjectManager.CurrentParatextProject.DirectoryPath = path;

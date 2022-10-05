@@ -4,8 +4,8 @@ namespace ClearDashboard.DataAccessLayer.Models
     public class DashboardProject 
     {
         public string? DirectoryPath { get; set; }
-       //TODO:  fix this to use the correct CLear.Engine directory path
-       // public string ClearEngineDirectoryPath => Path.Combine(TargetProject.DirectoryPath, "ClearEngine");
+        //TODO:  fix this to use the correct CLear.Engine directory path
+        // public string ClearEngineDirectoryPath => Path.Combine(TargetProject.DirectoryPath, "ClearEngine");
         public bool HasJsonProjectName { get; set; } = false;
 
         public DashboardProject()

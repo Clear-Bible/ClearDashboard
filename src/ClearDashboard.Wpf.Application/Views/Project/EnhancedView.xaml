@@ -68,24 +68,24 @@
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
                         <RowDefinition Height="30" />
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
 
                     <Button
                         Grid.Row="4"
                         Grid.Column="0"
+                        Width="66"
+                        Height="20"
+                        Margin="10"
+                        Padding="0"
                         HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
                         Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
                         CommandParameter="{x:Static Dock.Top}"
+                        Content="CLOSE"
                         FontSize="10"
-                        Height="20"
-                        Padding="0"
-                        Width="66"
-                        Margin="10"
-                        VerticalAlignment="Top"
-                        Content="CLOSE" 
-                        Foreground="White"/>
+                        Foreground="White" />
 
                     <Label
                         Grid.Row="0"
@@ -187,7 +187,7 @@
                             Margin="22,0,0,0"
                             VerticalAlignment="Center"
                             Visibility="Hidden"
-                            IsChecked="True" />  -->
+                            IsChecked="True" />-->
                     </StackPanel>
                     <StackPanel
                         Grid.Row="2"
@@ -208,10 +208,11 @@
                             VerticalAlignment="Center"
                             Content="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
-                    <StackPanel Visibility="Collapsed"
+                    <StackPanel
                         Grid.Row="2"
                         Grid.Column="2"
-                        Orientation="Horizontal">
+                        Orientation="Horizontal"
+                        Visibility="Collapsed">
                         <Label VerticalAlignment="Center">Vertical spacing:</Label>
                         <Slider
                             Name="TranslationVerticalSpacingSlider"
@@ -237,8 +238,8 @@
                             Name="ShowNoteIndicatorsCheckbox"
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
-                            Visibility="Hidden"
-                            IsChecked="True" />
+                            IsChecked="True"
+                            Visibility="Hidden" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
@@ -422,8 +423,8 @@
                                         <TextBlock
                                             Margin="8,0,5,0"
                                             VerticalAlignment="Center"
-                                            FontWeight="Bold"
                                             FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                            FontWeight="Bold"
                                             Text="{Binding RowTitle}" />
 
                                     </StackPanel>
@@ -431,6 +432,8 @@
                                     <!--  INNER LISTVIEW  -->
                                     <ListView
                                         Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
                                         ItemsSource="{Binding Verses}"
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                         ScrollViewer.IsDeferredScrollingEnabled="True"

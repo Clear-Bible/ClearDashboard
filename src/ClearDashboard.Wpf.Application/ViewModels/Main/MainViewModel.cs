@@ -40,6 +40,10 @@ using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using System.Text.Json;
+using Microsoft.Extensions.Options;
+using System.Text.Json.Serialization;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -504,9 +508,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 OkSave();
             }
 
-            // save the design surface
-            await _projectDesignSurfaceViewModel.SaveCanvas();
-
             //we need to cancel running background processes
             //check a bool to see if it already cancelled or already completed
             if (_projectDesignSurfaceViewModel.LongProcessRunning)
@@ -524,11 +525,52 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }), cancellationToken);
             }
 
+            // save the open document windows
+            List<SerializedEnhancedView> serializedEnhancedViews = new List<SerializedEnhancedView>();
+            foreach (var window in Items)
+            {
+                if (window is EnhancedViewModel)
+                {
+                    var enhancedViewModel = (EnhancedViewModel)window;
 
+                    if (enhancedViewModel.DisplayOrder.Count > 0)
+                    {
+                        // get the displayed contents
+                        serializedEnhancedViews.Add(new SerializedEnhancedView
+                        {
+                            BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
+                            DisplayOrder = enhancedViewModel.DisplayOrder,
+                            Title = enhancedViewModel.Title,
+                            ParatextSync = enhancedViewModel.ParatextSync,
+                            VerseOffset = enhancedViewModel.VerseOffsetRange,
+                        });
+                    }
+                }
+            }
+
+            try
+            {
+                JsonSerializerOptions options = new()
+                {
+                    IncludeFields = true,
+                    WriteIndented = false
+                };
+                ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(serializedEnhancedViews, options);
+                
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+            }
 
             // unsubscribe to the event aggregator
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
+
+
+            // save the design surface
+            await _projectDesignSurfaceViewModel.SaveCanvas();
+
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -549,6 +591,123 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             await Task.Delay(250);
             Init();
+
+
+            // load the document window contents
+            await LoadDocuments();
+        }
+
+        private async Task LoadDocuments()
+        {
+            if (ProjectManager.CurrentProject.WindowTabLayout is null)
+            {
+                return;
+            }
+
+
+            var json = ProjectManager.CurrentProject.WindowTabLayout;
+
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                IncludeFields = true,
+                WriteIndented = true
+            };
+            List<SerializedEnhancedView> deserialized = JsonSerializer.Deserialize<List<SerializedEnhancedView>>(json, options);
+
+            for (int i = 0; i < deserialized.Count; i++)
+            {
+                EnhancedViewModel viewModel = null;
+                if (i == 0)
+                {
+                    // use the existing on
+                    foreach (var vm in Items)
+                    {
+                        if (vm is EnhancedViewModel)
+                        {
+                            viewModel = (EnhancedViewModel)vm;
+                            break;
+                        }
+                    }
+                }
+
+                bool newWindow = false;
+                if (viewModel is null)
+                {
+                    // create a new one
+                    viewModel = IoC.Get<EnhancedViewModel>();
+                    viewModel.ContentId = "ENHANCEDVIEW";
+                    newWindow = true;
+                }
+
+                viewModel.Title = deserialized[i].Title;
+                viewModel.VerseOffsetRange = deserialized[i].VerseOffset;
+                viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+                viewModel.ParatextSync = deserialized[i].ParatextSync;
+                viewModel.CurrentBcv.SetVerseFromId(deserialized[i].BBBCCCVVV);
+                viewModel.ProgressBarVisibility = Visibility.Visible;
+
+                if (newWindow)
+                {
+                    // add vm to conductor
+                    Items.Add(viewModel);
+
+                    // make a new document for the windows
+                    var windowDockable = new LayoutDocument
+                    {
+                        Content = viewModel,
+                        Title = deserialized[i].Title,
+                    };
+
+                    var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+                    documentPane?.Children.Add(windowDockable);
+                }
+
+                foreach (var displayOrder in deserialized[i].DisplayOrder)
+                {
+                    var cancellationToken = new CancellationToken();
+                    var cancellationTokenLocal = new CancellationToken();
+                    if (displayOrder.MsgType == DisplayOrder.MessageType.ShowTokenizationWindowMessage)
+                    {
+                        try
+                        {
+                            json = displayOrder.Data.ToString();
+                            var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json, options);
+                            if (message is not null)
+                            {
+                                viewModel.ProgressBarVisibility = Visibility.Visible;
+                                await viewModel.ShowNewCorpusTokens(message, cancellationToken, cancellationTokenLocal);
+                                await Task.Delay(1000);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(e, "Error loading tokenization window");
+                        }
+
+                    }
+                    else if (displayOrder.MsgType == DisplayOrder.MessageType.ShowParallelTranslationWindowMessage)
+                    {
+                        try
+                        {
+                            json = displayOrder.Data.ToString();
+                            var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json, options);
+                            if (message is not null)
+                            {
+                                viewModel.ProgressBarVisibility = Visibility.Visible;
+                                await viewModel.ShowNewParallelTranslation(message, cancellationToken, cancellationTokenLocal);
+                                await Task.Delay(1000);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.LogError(e, "Error loading tokenization window");
+                        }
+                    }
+                    await Task.Delay(1000);
+                }
+            }
+
         }
 
         private async void Init()
@@ -627,12 +786,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
 
+
             // add vm to conductor
             Items.Add(viewModel);
+
+            // figure out how many enhanced views there are and set the title number for the window
+            var enhancedViews = Items.Where(w => w is EnhancedViewModel).ToList();
 
             // make a new document for the windows
             var windowDockable = new LayoutDocument
             {
+                Title = $"{viewModel.Title}  ({enhancedViews.Count})",
                 Content = viewModel,
                 IsActive = true
             };

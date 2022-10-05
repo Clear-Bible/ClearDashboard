@@ -445,7 +445,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine("");
             foreach (var translation in translations)
             {
-                if (translation.TranslationOriginatedFrom != "FromTranslationModel")
+                if (translation.TranslationOriginatedFrom != "FromTranslationModel" && translation.TranslationOriginatedFrom != "FromAlignmentModel")
                 {
                     Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
                 }
@@ -466,6 +466,8 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
+            var parallelCorpus = await parallelTextCorpus.Create("pc1", Mediator!);
+
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
             // Should throw an exception because of the bogus ParallelCorpusId:
@@ -477,7 +479,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "fastalign",
                     false,
                     new Dictionary<string, object>(), //metadata
-                     new ParallelCorpusId(new Guid()),  //CHRIS is this right?
+                    parallelCorpus.ParallelCorpusId,
                     Mediator!);
             await Assert.ThrowsAnyAsync<Exception>(() => TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), new ParallelCorpusId(new Guid()), Mediator!));
         }

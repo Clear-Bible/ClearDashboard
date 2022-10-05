@@ -2,7 +2,6 @@
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Data.Interceptors;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
@@ -13,15 +12,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        private static void AddProjectNameDatabaseContextFactory(this IServiceCollection serviceCollection)
-        {
-          
-            serviceCollection.AddScoped<ProjectDbContext>();
-            serviceCollection.AddScoped<ProjectDbContextFactory>();
-            serviceCollection.AddScoped<SqliteDatabaseConnectionInterceptor>();
-        }
-
-        public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection, bool registerDatabaseAbstractions = true)
+        public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddLogging();
 
@@ -29,16 +20,11 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
             
             serviceCollection.AddSingleton<DashboardProjectManager>();
             serviceCollection.AddSingleton<ProjectManager, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
-            serviceCollection.AddTransient<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
-            serviceCollection.AddTransient<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+            serviceCollection.AddSingleton<IUserProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
+            serviceCollection.AddSingleton<IProjectProvider, DashboardProjectManager>(sp => sp.GetService<DashboardProjectManager>() ?? throw new InvalidOperationException());
 
 
             serviceCollection.AddScoped<ParatextProxy>();
-
-            if (registerDatabaseAbstractions)
-            {
-                serviceCollection.AddProjectNameDatabaseContextFactory();
-            }
             
             // QUESTION:  Can we run the HostedService as a scoped service?
             // ANSWER:    Testing seems to indicate, YES!
