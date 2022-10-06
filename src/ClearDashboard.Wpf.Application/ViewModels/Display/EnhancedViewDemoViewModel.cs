@@ -30,6 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
+        #region Demo data
         public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
         {
             try
@@ -116,6 +117,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
+        #endregion Demo data
+
         public IServiceProvider ServiceProvider { get; }
 
         public VerseDisplayViewModel VerseDisplayViewModel { get; set; } = new();
@@ -147,11 +150,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             set
             {
                 Set(ref _selectedTokens, value);
-                NotifyOfPropertyChange(nameof(SelectedTokensSurfaceText));
+                //NotifyOfPropertyChange(nameof(SelectedTokensSurfaceText));
             }
         }
 
-        public string SelectedTokensSurfaceText => String.Join(",", SelectedTokens.Select(t => t.SurfaceText));
+        //public string SelectedTokensSurfaceText => String.Join(",", SelectedTokens.Select(t => t.SurfaceText));
 
         public IEnumerable<TranslationOption> TranslationOptions
         {
@@ -185,13 +188,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             TranslationPaneVisibility = Visibility.Visible;
         }
 
-        private void DisplayNotePane(TokenDisplayViewModel tokenDisplayViewModel)
+        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
         {
             CurrentToken = tokenDisplayViewModel;
             NotePaneVisibility = Visibility.Visible;
         }
 
-#region Event Handlers
+        #region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
@@ -203,7 +206,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             if (e.TokenDisplayViewModel.HasNote)
             {
-                DisplayNotePane(e.TokenDisplayViewModel);
+                DisplayNote(e.TokenDisplayViewModel);
             }
 
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
@@ -232,13 +235,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            DisplayNotePane(e.TokenDisplayViewModel);
+            DisplayNote(e.TokenDisplayViewModel);
             Message = $"'Note indicator for token {e.EntityId} hovered";
         }
 
         public void NoteCreate(NoteEventArgs e)
         {
-            DisplayNotePane(e.TokenDisplayViewModel);
+            DisplayNote(e.TokenDisplayViewModel);
             Message = $"Opening new note panel for token {e.EntityId}";
         }
 
