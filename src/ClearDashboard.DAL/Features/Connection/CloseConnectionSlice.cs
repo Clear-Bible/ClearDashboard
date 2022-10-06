@@ -29,14 +29,14 @@ namespace ClearDashboard.DataAccessLayer.Features.Connection
         {
             try
             {
-                var projectAssets = await ProjectNameDbContextFactory.Get(request.ProjectName, true);
+                //var projectAssets = await ProjectNameDbContextFactory.Get(request.ProjectName, true);
 
 
-                if (projectAssets.ProjectDbContext != null)
-                {
-                    projectAssets.ProjectDbContext.Database.CloseConnectionAsync();
+                //if (projectAssets.ProjectDbContext != null)
+                //{
+                //    projectAssets.ProjectDbContext.Database.CloseConnectionAsync();
 
-                }
+                //}
 
                 return new RequestResult<bool>(true);
             }

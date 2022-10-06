@@ -495,7 +495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             await base.OnInitializeAsync(cancellationToken);
 
-            Init();
+            //Init();
         }
 
         protected override async void OnViewLoaded(object view)
@@ -597,8 +597,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
-            //await Task.Delay(250);
-            //Init();
+            await Task.Delay(250);
+            Init();
 
 
             // load the document window contents
@@ -950,7 +950,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
                         // New
-                        new() { Header = LocalizationStrings.Get("MainView_FileNew", Logger), Id = "NewID", ViewModel = this, }
+                        new() { Header = LocalizationStrings.Get("MainView_FileNew", Logger), Id = "NewID", ViewModel = this, },
+                        new() { Header = LocalizationStrings.Get("MainView_FileOpen", Logger), Id = "OpenID", ViewModel = this, }
                     }
                 },
                 new()
@@ -1675,48 +1676,68 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
         {
-            switch (menuItem.Id)
+            if (menuItem.Id == "OpenID")
             {
-                case "NewID":
-                    
-                    //var startupDialogViewModel = IoC.Get<StartupDialogViewModel>();
-                    var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
-                    startupDialogViewModel.MimicParatextConnection = true;
-                    var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
-
-                    //_projectDesignSurfaceViewModel.SaveCanvas();
-                    await OnDeactivateAsync(false, CancellationToken.None);
-                    this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-                    await OnInitializeAsync(CancellationToken.None);
-                    await OnActivateAsync(CancellationToken.None);
-                    await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-
-                    //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-
-                    //if (result.HasValue && result.Value)
-                    //{
-                    //    _projectDesignSurfaceViewModel.SaveCanvas();
-
-                    //    //await ExecuteRequest(new CloseConnectionCommand(ProjectManager.CurrentProject.ProjectName), CancellationToken.None);
-                    //    await OnDeactivateAsync(false, CancellationToken.None);
-
-                    //    var dashboardProject = startupDialogViewModel.ExtraData as DashboardProject;
-                    //    if (dashboardProject.IsNew)
-                    //    {
-                    //        await ProjectManager.CreateNewProject(dashboardProject.ProjectName);
-                    //    }
-                    //    else
-                    //    {
-                    //        await ProjectManager.LoadProject(dashboardProject.ProjectName);
-                    //    }
-                    //}
-
-
-
-
-
-                    break;
+                StartupDialogViewModel.GoToSetup = true;
             }
+
+            var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
+            startupDialogViewModel.MimicParatextConnection = true;
+            var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
+
+            if (result.HasValue && result.Value)
+            {
+                await OnDeactivateAsync(false, CancellationToken.None);
+                this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+                await OnInitializeAsync(CancellationToken.None);
+                await OnActivateAsync(CancellationToken.None);
+                await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+            }
+
+            //switch (menuItem.Id)
+            //{
+
+            //    case "NewID":
+
+            //        //var startupDialogViewModel = IoC.Get<StartupDialogViewModel>();
+            //        //_projectDesignSurfaceViewModel.SaveCanvas();
+            //        await OnDeactivateAsync(false, CancellationToken.None);
+            //        this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+            //        await OnInitializeAsync(CancellationToken.None);
+            //        await OnActivateAsync(CancellationToken.None);
+            //        await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+            //    //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+            //    //if (result.HasValue && result.Value)
+            //    //{
+            //    //    _projectDesignSurfaceViewModel.SaveCanvas();
+
+            //    //    //await ExecuteRequest(new CloseConnectionCommand(ProjectManager.CurrentProject.ProjectName), CancellationToken.None);
+            //    //    await OnDeactivateAsync(false, CancellationToken.None);
+
+            //    //    var dashboardProject = startupDialogViewModel.ExtraData as DashboardProject;
+            //    //    if (dashboardProject.IsNew)
+            //    //    {
+            //    //        await ProjectManager.CreateNewProject(dashboardProject.ProjectName);
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        await ProjectManager.LoadProject(dashboardProject.ProjectName);
+            //    //    }
+            //    //}
+            //        break;
+            //    case "OpenID":
+            //        await OnDeactivateAsync(false, CancellationToken.None);
+            //        this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+            //        await OnInitializeAsync(CancellationToken.None);
+            //        await OnActivateAsync(CancellationToken.None);
+            //        await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+            //        break;
+            //}
+
+
         }
 
         #endregion // Methods

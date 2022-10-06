@@ -28,6 +28,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public static bool InitialStartup = true;
         private bool _licenseCleared = false;
         private bool _runRegistration = false;
+        public static bool GoToSetup = false;
 
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
@@ -59,6 +60,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             CurrentStep = _runRegistration ? Steps![0] : Steps![1];
+
+            if (GoToSetup)
+            {
+                CurrentStep = Steps![2];
+                GoToSetup = false;
+            }
 
             IsLastWorkflowStep = (Steps.Count == 1);
             EnableControls = true;
