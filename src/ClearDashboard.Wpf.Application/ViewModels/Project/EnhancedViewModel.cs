@@ -1633,8 +1633,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             await e.Note.Delete(Mediator);
         }
+        
 
-        public async Task LabelSelected(object sender, LabelEventArgs e)
+        public void LabelSelected(object sender, LabelEventArgs e)
+        {
+            Task.Run(() => LabelSelectedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelSelectedAsync(LabelEventArgs e)
         {
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
@@ -1642,8 +1648,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await e.Note.AssociateLabel(Mediator, e.Label);
             }
         }
-
-        public async Task LabelAdded(object sender, LabelEventArgs e)
+        
+        public void LabelAdded(object sender, LabelEventArgs e)
         {
             Task.Run(() => LabelAddedAsync(e).GetAwaiter());
         }

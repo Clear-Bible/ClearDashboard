@@ -635,9 +635,6 @@
                                 <i:EventTrigger EventName="CloseRequested">
                                     <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="CloseNotePaneRequested">
-                                    <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </userControls:NoteCollectionDisplay>
 
