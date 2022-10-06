@@ -514,6 +514,62 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         /// <summary>
+        /// Adds a note to a collection of tokens.
+        /// </summary>
+        /// <param name="note">The <see cref="Note"/> to add.</param>
+        /// <param name="tokens">The entity ID to which to add the note.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task AddNoteAsync(Note note, TokenDisplayViewModelCollection tokens)
+        {
+            try
+            {
+#if !MOCK
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await note.CreateOrUpdate(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Added note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                stopwatch.Restart();
+#endif
+                //await note.AssociateDomainEntity(Mediator, entityId);
+#if DEBUG
+                stopwatch.Stop();
+                //Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                if (note.Labels.Any())
+                {
+#if DEBUG
+                    stopwatch.Restart();
+#endif
+                    foreach (var label in note.Labels)
+                    {
+                        if (label.LabelId == null)
+                        {
+                            await label.CreateOrUpdate(Mediator);
+                        }
+
+                        await note.AssociateLabel(Mediator, label);
+                    }
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Associated labels with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                    //var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
+                    //token?.NoteAdded();
+                }
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Updates a note.
         /// </summary>
         /// <param name="note">The <see cref="Note"/> to update.</param>
