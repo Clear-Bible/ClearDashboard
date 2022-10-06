@@ -1645,6 +1645,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task LabelAdded(object sender, LabelEventArgs e)
         {
+            Task.Run(() => LabelAddedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelAddedAsync(LabelEventArgs e)
+        {
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
