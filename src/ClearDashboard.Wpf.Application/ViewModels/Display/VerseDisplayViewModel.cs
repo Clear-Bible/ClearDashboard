@@ -14,6 +14,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Extensions;
 using SIL.Machine.Tokenization;
 using SIL.ObjectModel;
 
@@ -204,7 +205,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// Gets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
-        public List<TokenDisplayViewModel> TokenDisplayViewModels { get; private set; } = new();
+        public TokenDisplayViewModelCollection TokenDisplayViewModels { get; private set; } = new();
 
         /// <summary>
         /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion of labels.
@@ -258,7 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private void BuildTokenDisplayViewModels()
         {
-            TokenDisplayViewModels = new List<TokenDisplayViewModel>();
+            TokenDisplayViewModels = new TokenDisplayViewModelCollection();
             var paddedTokens = GetPaddedTokens(Tokens);
 
             TokenDisplayViewModels.AddRange(from paddedToken in paddedTokens
@@ -304,7 +305,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task PopulateTranslations()
         {
-            if (TranslationSet != null)
+            if (_translationSet != null)
             {
                 Translations = await GetTranslations(Tokens.Select(t => t.TokenId));
             }
