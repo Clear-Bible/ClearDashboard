@@ -54,7 +54,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                         note.NoteDomainEntityAssociations
                             .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet()
                     )
-                )
+                ).ToList()
             );
         }
     }

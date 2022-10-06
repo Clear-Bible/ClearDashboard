@@ -95,7 +95,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Orientation="Horizontal">
-            <Label FontSize="11">Labels:</Label>
+            <Label FontSize="11" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">Labels:</Label>
             <local:LabelsDisplay
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
                 LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
@@ -110,7 +110,8 @@
                 VerticalContentAlignment="Center"
                 LabelAdded="OnLabelAdded"
                 LabelSelected="OnLabelSelected"
-                LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}" />
+                LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
         </StackPanel>
     </Grid>
 </UserControl>

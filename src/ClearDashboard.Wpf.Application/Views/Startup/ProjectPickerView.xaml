@@ -363,8 +363,8 @@
                 <Label
                     Margin="15"
                     VerticalAlignment="Center"
-                    FontSize="21">
-                    No matches.
+                    FontSize="21"
+                    Content="{helpers:Localization ProjectPicker_NoMatches}">
                 </Label>
             </materialDesign:Card>
 

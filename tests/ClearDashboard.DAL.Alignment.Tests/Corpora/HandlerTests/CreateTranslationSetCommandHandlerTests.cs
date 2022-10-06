@@ -199,7 +199,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             {
                 await translationSet.PutTranslation(
                     exampleTranslation,
-                    TranslationActionType.PutNoPropagate.ToString());
+                    TranslationActionTypes.PutNoPropagate);
             }
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -220,7 +220,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             // FIXME:  quick test of PutPropagate.  Need better tests of this
             await translationSet.PutTranslation(
                     new Alignment.Translation.Translation(exampleTranslations[1].SourceToken!, $"toobedoo", "Assigned"),
-                    TranslationActionType.PutNoPropagate.ToString());
+                    TranslationActionTypes.PutNoPropagate);
 
             var to = new Token(
                 new TokenId(
@@ -237,7 +237,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             await translationSet.PutTranslation(
                     new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
-                    TranslationActionType.PutPropagate.ToString());
+                    TranslationActionTypes.PutPropagate);
 
             /*
             translationSet.PutTranslationModelEntry("one", new Dictionary<string, double>()
@@ -414,7 +414,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                             Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
                             await translationSet.PutTranslation(
                                 new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
-                                TranslationActionType.PutNoPropagate.ToString());
+                                TranslationActionTypes.PutNoPropagate);
 
                             iteration++;
                             putTranslationTokenIds.Add(sourceToken.TokenId);
@@ -445,7 +445,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine("");
             foreach (var translation in translations)
             {
-                if (translation.TranslationOriginatedFrom != "FromTranslationModel")
+                if (translation.TranslationOriginatedFrom != "FromTranslationModel" && translation.TranslationOriginatedFrom != "FromAlignmentModel")
                 {
                     Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
                 }
@@ -466,6 +466,8 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         try
         {
             var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
+            var parallelCorpus = await parallelTextCorpus.Create("pc1", Mediator!);
+
             var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
 
             // Should throw an exception because of the bogus ParallelCorpusId:
@@ -477,7 +479,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     "fastalign",
                     false,
                     new Dictionary<string, object>(), //metadata
-                     new ParallelCorpusId(new Guid()),  //CHRIS is this right?
+                    parallelCorpus.ParallelCorpusId,
                     Mediator!);
             await Assert.ThrowsAnyAsync<Exception>(() => TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), new ParallelCorpusId(new Guid()), Mediator!));
         }

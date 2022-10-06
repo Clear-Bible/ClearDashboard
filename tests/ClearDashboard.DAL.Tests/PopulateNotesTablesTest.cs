@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using ClearDashboard.DAL.Interfaces;
 using Xunit;
 using Xunit.Abstractions;
+using Autofac;
 
 namespace ClearDashboard.DAL.Tests
 {
@@ -23,15 +24,11 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task NoteRecipientTest()
         {
-
-            var userProvider = ServiceProvider.GetService<IUserProvider>()!;
-            Assert.NotNull(userProvider);
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             const string projectName = "NoteTest";
-            Assert.NotNull(factory);
+            SetupProjectDatabase(projectName, true);
 
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            var userProvider = Container!.Resolve<IUserProvider>()!;
+            Assert.NotNull(userProvider);
 
             try
             {
@@ -40,8 +37,8 @@ namespace ClearDashboard.DAL.Tests
                 var recipient1 = new User { FirstName = "Recipient",  LastName= "One" };
                 var recipient2 = new User { FirstName = "Recipient", LastName="Two" };
 
-                context.Users.AddRange(author, recipient1, recipient2);
-                await context.SaveChangesAsync();
+                ProjectDbContext.Users.AddRange(author, recipient1, recipient2);
+                await ProjectDbContext.SaveChangesAsync();
 
                 var note = new Note
                 {
@@ -52,10 +49,10 @@ namespace ClearDashboard.DAL.Tests
                 note.NoteRecipients.Add(new NoteRecipient { User = recipient1, UserType = UserType.Recipient });
                 note.NoteRecipients.Add(new NoteRecipient { User = recipient2, UserType = UserType.Recipient });
 
-                context.Notes.Add(note);
-                await context.SaveChangesAsync();
+                ProjectDbContext.Notes.Add(note);
+                await ProjectDbContext.SaveChangesAsync();
 
-                var roundTrippedNote = await context.Notes.FindAsync(note.Id);
+                var roundTrippedNote = await ProjectDbContext.Notes.FindAsync(note.Id);
 
                 Assert.NotNull(roundTrippedNote);
                 Assert.Equal(2, roundTrippedNote.NoteRecipients.Count);
@@ -72,27 +69,25 @@ namespace ClearDashboard.DAL.Tests
             }
             finally
             {
-                await context.Database.EnsureDeletedAsync();
-                var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+                await DeleteDatabaseContext(projectName);
             }
         }
 
         [Fact]
         public async Task NoteRawContentTest()
         {
-            var factory = ServiceProvider.GetService<ProjectDbContextFactory>();
             const string projectName = "NoteTest";
-            Assert.NotNull(factory);
+            SetupProjectDatabase(projectName, true);
 
-            var assets = await factory?.Get(projectName)!;
-            var context = assets.ProjectDbContext;
+            var userProvider = Container!.Resolve<IUserProvider>()!;
+            Assert.NotNull(userProvider);
 
             try
             {
                 var user = new User { FirstName = "Joe", LastName="User" };
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
+                userProvider.CurrentUser = user;
+                ProjectDbContext.Users.Add(user);
+                await ProjectDbContext.SaveChangesAsync();
 
                 var note = new Note
                 {
@@ -111,12 +106,12 @@ namespace ClearDashboard.DAL.Tests
                 };
                 note.ContentCollection.Add(binaryContent);
 
-                
 
-                context.Notes.Add(note);
-                await context.SaveChangesAsync();
 
-                var roundTrippedNote = await context.Notes.FindAsync(note.Id);
+                ProjectDbContext.Notes.Add(note);
+                await ProjectDbContext.SaveChangesAsync();
+
+                var roundTrippedNote = await ProjectDbContext.Notes.FindAsync(note.Id);
                 Assert.NotNull(roundTrippedNote);
                 Assert.NotNull(roundTrippedNote?.ContentCollection);
                 
@@ -137,9 +132,7 @@ namespace ClearDashboard.DAL.Tests
             }
             finally
             {
-                await context.Database.EnsureDeletedAsync();
-                var projectDirectory = $"{Environment.GetFolderPath(Environment.SpecialFolder.Personal)}\\ClearDashboard_Projects\\{projectName}";
-                Directory.Delete(projectDirectory, true);
+                await DeleteDatabaseContext(projectName);
             }
         }
 

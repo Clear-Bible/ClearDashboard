@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Resources;
@@ -240,6 +241,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
     private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
     {
+        SetLanguage();
         var uri = e.Uri;
 
         if (uri.OriginalString.Contains("HomeView.xaml"))
@@ -418,7 +420,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var culture = Settings.Default.language_code;
             if (string.IsNullOrEmpty(culture))
             {
-                culture = "en-US";
+                var cultureName = "";
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                if (currentCulture.Parent.Name is not "zh" or "pt")
+                {
+                    cultureName = currentCulture.Name;//.Parent
+                }
+                else
+                {
+                    cultureName = currentCulture.Name;
+                }
+
+                try
+                {
+                    culture = ((LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), cultureName.Replace("-", string.Empty))).ToString();
+                }
+                catch
+                {
+                    culture = "en";
+                }
             }
             // strip out any "-" characters so the string can be properly parsed into the target enum
             SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));

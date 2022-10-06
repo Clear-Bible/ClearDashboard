@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -28,6 +29,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register("TokenMargin", typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenBackgroundProperty = DependencyProperty.Register("TokenBackground", typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Transparent));
+
+        /// <summary>
+        /// Identifies the SelectedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register("SelectedTokenBackground", typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightSteelBlue));
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
@@ -531,6 +544,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
+            TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
+            CalculateLayout();
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            TokenDisplayViewModel.PropertyChanged -= TokenDisplayViewModelPropertyChanged;
+        }
+
+        private void TokenDisplayViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
             CalculateLayout();
         }
 
@@ -541,12 +565,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay
+                TokenDisplayViewModel = tokenDisplay,
+                ModifierKeys = Keyboard.Modifiers
             });
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
+            //TokenDisplayViewModel.IsSelected = true;
+            //CalculateLayout();
+
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
@@ -665,6 +693,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseNoteEvent(NoteRightButtonUpEvent, e);
         }
+
         private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(NoteRightButtonDownEvent, e);
@@ -721,6 +750,27 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Thickness) GetValue(TokenMarginProperty);
             set => SetValue(TokenMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token background when it is selected.
+        /// </summary>
+        public Brush SelectedTokenBackground
+        {
+            get => (Brush)GetValue(SelectedTokenBackgroundProperty);
+            set => SetValue(SelectedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token background.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token's selection status.
+        /// </remarks>
+        public Brush TokenBackground
+        {
+            get => (Brush)GetValue(TokenBackgroundProperty);
+            set => SetValue(TokenBackgroundProperty, value);
         }
 
         /// <summary>
@@ -816,7 +866,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the translation.
         /// </summary>
-        /// <remarks>This should normally not be called; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
+        /// <remarks>This should normally not be set explicitly; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
         public Visibility TranslationVisibility
         {
             get => (Visibility) GetValue(TranslationVisibilityProperty);
@@ -835,7 +885,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the note indicator.
         /// </summary>
-        /// <remarks>This should normally not be called directly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
+        /// <remarks>This should normally not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
         public Visibility NoteIndicatorVisibility
         {
             get => (Visibility) GetValue(NoteIndicatorVisibilityProperty);
@@ -899,19 +949,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingBefore.Length * HorizontalSpacing : 0;
             var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingAfter.Length * HorizontalSpacing : 0;
-            var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(rightMargin, HorizontalSpacing) : 0;
+            var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(leftMargin, HorizontalSpacing / 2) : 0;
+            var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(rightMargin, HorizontalSpacing / 2) : 0;
 
             TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
             NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
-            TranslationMargin = new Thickness(leftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
+            TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
+            TokenBackground = TokenDisplayViewModel.IsSelected ? SelectedTokenBackground : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             TargetTranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
                 "FromTranslationModel" => Brushes.Red,
+                "FromAlignmentModel" => Brushes.Red,
                 "FromOther" => Brushes.Blue,
                 _ => Brushes.Black
             };
@@ -926,12 +979,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             horizontalAlignmentProperty.AddValueChanged(this, OnHorizontalAlignmentChanged);
             
             Loaded += OnLoaded;
+            Unloaded += OnUnloaded;
         }
 
         private void OnHorizontalAlignmentChanged(object? sender, EventArgs args)
         {
             CalculateLayout();
         }
-
     }
 }

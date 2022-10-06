@@ -55,7 +55,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>( alignments.OrderBy(a => a.AlignedTokenPair.SourceToken.TokenId.ToString()) );
+            return new RequestResult<IEnumerable<Alignment.Translation.Alignment>>( alignments.OrderBy(a => a.AlignedTokenPair.SourceToken.TokenId.ToString()).ToList());
         }
      }
 }

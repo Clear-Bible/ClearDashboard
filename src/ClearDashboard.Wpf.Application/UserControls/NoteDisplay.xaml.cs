@@ -159,7 +159,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void ApplyNote(object sender, RoutedEventArgs e)
         {
             CloseEdit();
-            RaiseEvent(new NoteEventArgs()
+            RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = AddMode ? NoteAddedEvent : NoteUpdatedEvent,
                 EntityId = EntityId,
@@ -277,8 +277,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
-        public Visibility TimestampVisibility => IsChanged ? Visibility.Hidden : Visibility.Visible;
+        public Visibility TimestampVisibility => AddMode || IsChanged ? Visibility.Hidden : Visibility.Visible;
         public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Hidden;
+        public Visibility LabelSelectorVisibility => AddMode ? Visibility.Hidden : Visibility.Visible;
 
         /// <summary>
         /// Gets the text of the note to display.
@@ -415,14 +416,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets a formatted string corresponding to the date the note was modified.
         /// </summary>
-        //public string? Modified => Note != null && Note.NoteId != null && Note.NoteId.Modified != null ? Note?.NoteId?.Modified.Value.ToString("u") : string.Empty;
-        public string? Modified => DateTimeOffset.UtcNow.ToString("u");
+        public string? Modified => Note != null && Note.NoteId != null && Note.NoteId.Modified != null ? Note?.NoteId?.Modified.Value.ToString("u") : string.Empty;
 
         /// <summary>
         /// Gets the UserId of the user that last modified the note.
         /// </summary>
-        //public string? UserId => Note?.NoteId?.UserId?.ToString();
-        public string? UserId => "Joe Schmoe";
+        public string? UserId => Note?.NoteId?.UserId?.DisplayName;
 
         #endregion
         #region Public events

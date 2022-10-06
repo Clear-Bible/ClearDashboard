@@ -12,7 +12,9 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
@@ -52,10 +54,31 @@ namespace ClearDashboard.Wpf.Application
             var selectedLanguage = Settings.Default.language_code;
             if (string.IsNullOrEmpty(selectedLanguage))
             {
-                selectedLanguage = "enUS";
+                var cultureName = "";
+                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                if (currentCulture.Parent.Name is not "zh" or "pt")
+                {
+                    cultureName = currentCulture.Parent.Name;
+                }
+                else
+                {
+                    cultureName = currentCulture.Name;
+                }
+
+                try
+                {
+                    selectedLanguage = ((LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue),cultureName.Replace("-", string.Empty))).ToString();
+                }
+                catch
+                {
+                    selectedLanguage = "en";
+                }
             }
 
+            Settings.Default.language_code = selectedLanguage;
+            Settings.Default.Save();
             var languageType = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), selectedLanguage.Replace("-", string.Empty));
+            
             var translationSource = Container?.Resolve<TranslationSource>();
             if (translationSource != null)
             {
@@ -69,7 +92,7 @@ namespace ClearDashboard.Wpf.Application
 
         protected override void PopulateServiceCollection(ServiceCollection serviceCollection)
         {
-            serviceCollection.AddClearDashboardDataAccessLayer(registerDatabaseAbstractions:false);
+            serviceCollection.AddClearDashboardDataAccessLayer();
             serviceCollection.AddValidatorsFromAssemblyContaining<ProjectValidator>(); 
             base.PopulateServiceCollection(serviceCollection);
         }

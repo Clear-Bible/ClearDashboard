@@ -34,7 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<IEnumerable<Label>>(labels);
+            return new RequestResult<IEnumerable<Label>>(labels.ToList());
         }
     }
 }

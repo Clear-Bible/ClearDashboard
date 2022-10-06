@@ -16,6 +16,7 @@
         </Style>
     </UserControl.Resources>
     <Border
+        Padding="10"
         BorderBrush="{DynamicResource MaterialDesignToolForeground}"
         BorderThickness="1"
         CornerRadius="3">
@@ -24,7 +25,7 @@
                 <RowDefinition Height="25" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="30" />
+                <RowDefinition Height="50" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="60" />
@@ -32,44 +33,46 @@
             <Label
                 Grid.Row="0"
                 HorizontalContentAlignment="Center"
-                Content="Translation options for" />
+                Content="Select a translation for" />
             <Label
                 Grid.Row="1"
                 HorizontalContentAlignment="Center"
                 Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplayViewModel.SurfaceText}"
                 FontSize="20"
                 FontWeight="Bold" />
-            <ListView
-                Name="TranslationOptionsList"
+            <DataGrid
+                Name="TranslationOptionsDataGrid"
                 Grid.Row="2"
+                Padding="10,0"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationOptions}"
-                SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedItem}">
-                <ListView.View>
-                    <GridView x:Name="TranslationOptionsGrid">
-                        <GridViewColumn Width="100" DisplayMemberBinding="{Binding Path=Word}" />
-                        <GridViewColumn Width="100" Header="Probability">
-                            <GridViewColumn.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock
-                                        Margin="-30,0,0,-20"
-                                        FontSize="12"
-                                        Text="{Binding}"
-                                        TextAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.HeaderTemplate>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock
-                                        Width="40"
-                                        Text="{Binding Probability}"
-                                        TextAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <Label Grid.Row="3">Your Translation:</Label>
+                SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedItem}"
+                SelectionUnit="FullRow">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="*" Binding="{Binding Word}" />
+                    <DataGridTextColumn
+                        Width="75"
+                        Binding="{Binding Count}"
+                        Header="Count">
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Margin" Value="0,7,0,0" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Label Grid.Row="3" Margin="0,20,0,0">Your Translation:</Label>
             <TextBox
                 x:Name="TranslationValue"
                 Grid.Row="4"

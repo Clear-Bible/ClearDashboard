@@ -3,10 +3,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,20 +12,15 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using QuickGraph.Algorithms.RandomWalks;
-using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
@@ -37,264 +30,67 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
-        #region Mock data
-#if DEBUG
-        private static readonly string _testDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
-        private static readonly string _usfmTestProjectPath = Path.Combine(_testDataPath, "usfm", "Tes");
-        private static IEnumerable<TokensTextRow>? _mockCorpus;
-
-        private static IEnumerable<TokensTextRow>? MockCorpus => _mockCorpus ??=
-            new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, _usfmTestProjectPath)
-                .Tokenize<LatinWordTokenizer>()
-                .Transform<IntoTokensTextRowProcessor>()
-                .Transform<SetTrainingBySurfaceLowercase>()
-                .Cast<TokensTextRow>();
-
-        // ReSharper disable once InconsistentNaming
-        private static TokensTextRow? MockVerseTextRow(int BBBCCCVVV)
-        {
-            return MockCorpus?.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == BBBCCCVVV);
-        }
-
-        private static readonly List<string> _mockOogaWords = new()
-            { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
-
-        private static int _mockTranslationWordIndexer;
-
-        private static string MockTranslationWord
-        {
-            get
-            {
-                var result = _mockOogaWords[_mockTranslationWordIndexer++];
-                if (_mockTranslationWordIndexer == _mockOogaWords.Count) _mockTranslationWordIndexer = 0;
-                return result;
-            }
-        }
-
-        private static string MockTranslationStatus => new Random().Next(3) switch
-        {
-            0 => "FromTranslationModel",
-            1 => "FromOther",
-            _ => "Assigned"
-        };
-
-        private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
-        {
-            var result = new List<TranslationOption>();
-
-            var random = new Random();
-            var optionCount = random.Next(4) + 2; // 2-5 options
-            var remainingPercentage = 100d;
-
-            var basePercentage = random.NextDouble() * remainingPercentage;
-            result.Add(new TranslationOption { Word = sourceTranslation, Probability = basePercentage });
-            remainingPercentage -= basePercentage;
-
-            for (var i = 1; i < optionCount - 1; i++)
-            {
-                var percentage = random.NextDouble() * remainingPercentage;
-                result.Add(new TranslationOption { Word = MockTranslationWord, Probability = percentage });
-                remainingPercentage -= percentage;
-            }
-
-            result.Add(new TranslationOption { Word = MockTranslationWord, Probability = remainingPercentage });
-
-            return result.OrderByDescending(to => to.Probability);
-        }
-
-        private ObservableCollection<Label> MockLabels
-        {
-            get
-            {
-                var labelSuggestions = LabelSuggestions.ToList();
-                var labelTexts = new List<string>();
-                var numLabels = new Random().Next(4);
-
-                for (var i = 0; i <= numLabels; i++)
-                {
-                    var labelIndex = new Random().Next(LabelSuggestions.Count());
-                    if (!labelTexts.Contains(labelSuggestions[labelIndex].Text))
-                    {
-                        labelTexts.Add(labelSuggestions[labelIndex].Text);
-                    }
-                }
-
-                return new ObservableCollection<Label>(labelTexts.OrderBy(lt => lt)
-                    .Select(lt => new Label { Text = lt }));
-            }
-        }
-
-        private ObservableCollection<Note> MockNotes
-        {
-            get
-            {
-                var result = new ObservableCollection<Note>();
-                var random = new Random().NextDouble();
-                if (random < 0.2)
-                {
-                    result.Add(new Note
-                    {
-                        Text = "This is a note",
-                        //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                        //Labels = MockLabels
-                    });
-                }
-
-                if (random < 0.1)
-                {
-                    result.Add(new Note
-                    {
-                        Text = "Here's another note",
-                        //NoteId = new NoteId(Guid.NewGuid(), DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new UserId(Guid.NewGuid())),
-                        //Labels = MockLabels
-                    });
-                }
-
-                return result;
-            }
-        }
-
-        private static ObservableCollection<Label> MockLabelSuggestions => new()
-        {
-            new Label { Text = "alfa" },
-            new Label { Text = "bravo" },
-            new Label { Text = "charlie" },
-            new Label { Text = "delta" },
-            new Label { Text = "echo" }
-        };
-#endif
-#endregion
-
-        private async Task<ObservableCollection<Label>> GetLabelSuggestions()
-        {
-#if MOCK
-            return MockLabelSuggestions;
-#else
-            var labels = await Label.GetAll(Mediator);
-            return new ObservableCollection<Label>(labels);
-#endif
-        }
-
-        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(
-            IEnumerable<Token> tokens)
-        {
-            return Detokenizer.Detokenize(tokens);
-        }
-
-        private async Task<IEnumerable<TranslationOption>> GetTranslationOptions(Translation translation)
-        {
-#if MOCK
-            return GetMockTranslationOptions(translation.TargetTranslationText);
-#else
-            var translationModelEntry = await CurrentTranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
-            var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
-                .Select(option => new TranslationOption { Word = option.Key, Probability = option.Value })
-                .Take(4)
-                .ToList();
-            return translationOptions;
-#endif
-        }
-        private Translation GetTranslation(Token token)
-        {
-#if MOCK
-            var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
-                ? MockTranslationWord
-                : String.Empty;
-            return new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: MockTranslationStatus);
-#else
-            var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
-            return translation;
-#endif
-        }
-
-        private ObservableCollection<Note> GetNotes(Token token)
-        {
-#if MOCK
-            return MockNotes;
-#else
-            return NotesDictionary.ContainsKey(token.TokenId)
-                ? new ObservableCollection<Note>(NotesDictionary[token.TokenId])
-                : new ObservableCollection<Note>();
-#endif
-        }
-
-        private List<TokenDisplayViewModel> GetTokenDisplayViewModels(IEnumerable<Token> tokens)
-        {
-            var tokenDisplays = new List<TokenDisplayViewModel>();
-            var paddedTokens = GetPaddedTokens(tokens);
-
-            if (paddedTokens != null)
-            {
-                tokenDisplays.AddRange(from paddedToken in paddedTokens
-                    let translation = GetTranslation(paddedToken.token)
-                    let notes = GetNotes(paddedToken.token)
-                    select new TokenDisplayViewModel
-                    {
-                        Token = paddedToken.token,
-                        PaddingBefore = paddedToken.paddingBefore,
-                        PaddingAfter = paddedToken.paddingAfter,
-                        Translation = translation,
-                        Notes = notes
-                    });
-            }
-
-            return tokenDisplays;
-        }
-
-        private EngineStringDetokenizer CreateDetokenizer(string tokenizerName)
-        {
-            var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenizerName);
-            return tokenizer switch
-            {
-                Tokenizer.LatinWordTokenizer => new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                Tokenizer.WhitespaceTokenizer => new EngineStringDetokenizer(new WhitespaceDetokenizer()),
-                Tokenizer.ZwspWordTokenizer => new EngineStringDetokenizer(new ZwspWordDetokenizer()),
-                _ => throw new NotSupportedException($"'{tokenizerName}' is not a valid tokenizer name")
-            };
-        }
-
-        public async Task<ParallelCorpus> GetCorpus(ParallelCorpusId? corpusId = null)
-        {
-            if (corpusId == null)
-            {
-                var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
-                corpusId = corpusIds.First();
-            }
-
-            var corpus = await ParallelCorpus.Get(Mediator, corpusId);
-            Detokenizer = corpus.Detokenizer;
-
-            return corpus;
-        }
-
-        public async Task<EngineParallelTextRow?> VerseTextRow(int BBBCCCVVV, ParallelCorpusId corpusId = null)
+        #region Demo data
+        public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
         {
             try
             {
-                var corpus = await GetCorpus(corpusId);
-                var verse = corpus.GetByVerseRange(new VerseRef(BBBCCCVVV), 0, 0);
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                if (corpusId == null)
+                {
+                    var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator!);
+                    corpusId = corpusIds.First();
+                }
+                var corpus = await ParallelCorpus.Get(Mediator!, corpusId);
 
-                return verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
+                Detokenizer = corpus.Detokenizer;
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved parallel corpus {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                return corpus;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger?.LogCritical(e.ToString());
                 throw;
             }
         }
 
-        public async Task<TranslationSet?> GetTranslationSet()
+        public async Task<EngineParallelTextRow?> GetVerseTextRow(int bbbcccvvv, ParallelCorpusId? corpusId = null)
         {
             try
             {
-                var translationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator);
-                var translationSet = await TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
+                var corpus = await GetParallelCorpus(corpusId);
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var verse = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), 0, 0);
+                var row = verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved parallel corpus verse {bbbcccvvv} in {stopwatch.ElapsedMilliseconds} ms");
+                return row;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
 
+        public async Task<TranslationSet?> GetFirstTranslationSet()
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var translationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!);
+                var translationSet = await TranslationSet.Get(translationSetIds.First().translationSetId, Mediator!);
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved first translation set {translationSet.TranslationSetId.Id} in {stopwatch.ElapsedMilliseconds} ms");
                 return translationSet;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger?.LogCritical(e.ToString());
                 throw;
             }
         }
@@ -303,19 +99,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             try
             {
+                VerseDisplayViewModel = ServiceProvider!.GetService<VerseDisplayViewModel>();
 #if MOCK
-            var row = MockVerseTextRow(40001001);
-            VerseTokens = GetTokenDisplayViewModels(row.Tokens);
+                await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager.LoadProject("SUR");
-                var row = await VerseTextRow(01001001);
-                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-                CurrentTranslationSet = await GetTranslationSet();
-                CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-                VerseTokens = GetTokenDisplayViewModels(row.SourceTokens);
+                await ProjectManager!.LoadProject("EnhancedViewDemo");
+                var row = await GetVerseTextRow(01001001);
+                var translationSet = await GetFirstTranslationSet();
+                await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
 #endif
-                LabelSuggestions = await GetLabelSuggestions();
-                NotifyOfPropertyChange(nameof(VerseTokens));
+                NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
             }
             catch (Exception e)
             {
@@ -324,207 +117,188 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
-        public IEnumerable<TokenDisplayViewModel>? VerseTokens { get; set; }
-        public TokenDisplayViewModel CurrentToken { get; set; }
+        #endregion Demo data
+
+        public IServiceProvider ServiceProvider { get; }
+
+        public VerseDisplayViewModel VerseDisplayViewModel { get; set; } = new();
         public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
-        public TranslationOption CurrentTranslationOption { get; set; }
-        public TranslationSet CurrentTranslationSet { get; set; }
-        public Dictionary<IId, IEnumerable<Note>> NotesDictionary { get; set; }
-        public IEnumerable<Translation> CurrentTranslations { get; set; }
-        public IEnumerable<TranslationOption> TranslationOptions { get; set; }
-        public IEnumerable<Label> LabelSuggestions { get; set; }
 
-        public string? Message { get; set; }
+        private string _message = string.Empty;
+        private Visibility _notePaneVisibility = Visibility.Collapsed;
+        private Visibility _translationPaneVisibility = Visibility.Collapsed;
+        private TokenDisplayViewModel _currentToken;
+        private IEnumerable<TranslationOption> _translationOptions;
+        private TranslationOption? _currentTranslationOption;
+        private TokenDisplayViewModelCollection _selectedTokens = new();
 
-        public Visibility NotePaneVisibility { get; set; } = Visibility.Collapsed;
-        public Visibility TranslationPaneVisibility { get; set; } = Visibility.Collapsed;
-
-        private void SetCurrentToken(TokenDisplayViewModel viewModel)
+        public string Message
         {
-            CurrentToken = viewModel;
-            NotifyOfPropertyChange(nameof(CurrentToken));
+            get => _message;
+            set => Set(ref _message, value);
+        }
+
+        public TokenDisplayViewModel CurrentToken
+        {
+            get => _currentToken;
+            set => Set(ref _currentToken, value);
+        }
+
+        public TokenDisplayViewModelCollection SelectedTokens
+        {
+            get => _selectedTokens;
+            set
+            {
+                Set(ref _selectedTokens, value);
+                //NotifyOfPropertyChange(nameof(SelectedTokensSurfaceText));
+            }
+        }
+
+        //public string SelectedTokensSurfaceText => String.Join(",", SelectedTokens.Select(t => t.SurfaceText));
+
+        public IEnumerable<TranslationOption> TranslationOptions
+        {
+            get => _translationOptions;
+            set => Set(ref _translationOptions, value);
+        }
+
+        public TranslationOption? CurrentTranslationOption
+        {
+            get => _currentTranslationOption;
+            set => Set(ref _currentTranslationOption, value);
+        }
+
+        public Visibility NotePaneVisibility
+        {
+            get => _notePaneVisibility;
+            set => Set(ref _notePaneVisibility, value);
+        }
+
+        public Visibility TranslationPaneVisibility
+        {
+            get => _translationPaneVisibility;
+            set => Set(ref _translationPaneVisibility, value);
         }
 
         private async Task DisplayTranslationPane(TranslationEventArgs e)
         {
-            SetCurrentToken(e.TokenDisplayViewModel);
-
-            TranslationPaneVisibility = Visibility.Visible;
-            NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
-
-#if DEBUG
-            TranslationOptions = GetMockTranslationOptions(e.Translation.TargetTranslationText);
-            NotifyOfPropertyChange(nameof(TranslationOptions));
-#endif
-
+            CurrentToken = e.TokenDisplayViewModel;
+            TranslationOptions = await VerseDisplayViewModel.GetTranslationOptionsAsync(e.Translation);
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
-            NotifyOfPropertyChange(nameof(CurrentTranslationOption));
+            TranslationPaneVisibility = Visibility.Visible;
         }
 
-        private void DisplayNotePane(TokenDisplayViewModel tokenDisplayViewModel)
+        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
         {
-            SetCurrentToken(tokenDisplayViewModel);
-
+            CurrentToken = tokenDisplayViewModel;
             NotePaneVisibility = Visibility.Visible;
-            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
-#region Event Handlers
+        #region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
+            SelectedTokens = e.SelectedTokens;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
             if (e.TokenDisplayViewModel.HasNote)
             {
-                DisplayNotePane(e.TokenDisplayViewModel);
+                DisplayNote(e.TokenDisplayViewModel);
             }
 
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TokenMouseLeave(TokenEventArgs e)
         {
             Message = string.Empty;
-            NotifyOfPropertyChange(nameof(Message));
         }
 
-        public void TranslationClicked(TranslationEventArgs e)
+        public async Task TranslationClicked(TranslationEventArgs e)
         {
-            DisplayTranslationPane(e);
-
+            await DisplayTranslationPane(e);
             Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} clicked";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TranslationMouseEnter(TranslationEventArgs e)
         {
             Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} hovered";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void TranslationMouseLeave(TranslationEventArgs e)
         {
             Message = string.Empty;
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            DisplayNotePane(e.TokenDisplayViewModel);
-
+            DisplayNote(e.TokenDisplayViewModel);
             Message = $"'Note indicator for token {e.EntityId} hovered";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public void NoteCreate(NoteEventArgs e)
         {
-            DisplayNotePane(e.TokenDisplayViewModel);
-
+            DisplayNote(e.TokenDisplayViewModel);
             Message = $"Opening new note panel for token {e.EntityId}";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public async Task TranslationApplied(TranslationEventArgs e)
         {
-            await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
+            await VerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
 
             Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            TranslationPaneVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
+            TranslationPaneVisibility = Visibility.Collapsed;
         }
 
         public void TranslationCancelled(RoutedEventArgs e)
         {
             Message = "Translation cancelled.";
-            NotifyOfPropertyChange(nameof(Message));
-
-            TranslationPaneVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(TranslationPaneVisibility));
+            TranslationPaneVisibility = Visibility.Collapsed;
         }        
         
         public async Task NoteAdded(NoteEventArgs e)
         {
-#if !MOCK
-            await e.Note.CreateOrUpdate(Mediator);
-            await e.Note.AssociateDomainEntity(Mediator, e.TokenDisplayViewModel.Token.TokenId);
-            foreach (var label in e.Note.Labels)
-            {
-                if (label.LabelId == null)
-                {
-                    await label.CreateOrUpdate(Mediator);
-                }
-                await e.Note.AssociateLabel(Mediator, label);
-            }
-#endif
+            await VerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityId);
             Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            NotePaneVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
         public async Task NoteUpdated(NoteEventArgs e)
         {
-#if !MOCK
-            await e.Note.CreateOrUpdate(Mediator);
-#endif
+            await VerseDisplayViewModel.UpdateNoteAsync(e.Note);
             Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            NotePaneVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NotePaneVisibility));
         }
 
         public async Task NoteDeleted(NoteEventArgs e)
         {
-#if !MOCK
-            await e.Note.Delete(Mediator);
-#endif
+            await VerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityId);
             Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
-
-            NotePaneVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NotePaneVisibility));
-        }
-
-        public async Task LabelSelected(LabelEventArgs e)
-        {
-#if !MOCK
-            // If this is a new note, we'll handle the labels when the note is added.
-            if (e.Note.NoteId != null)
-            {
-                await e.Note.AssociateLabel(Mediator, e.Label);
-            }
-#endif
-            Message = $"Label '{e.Label.Text}' selected for note on token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
         }
 
         public async Task LabelAdded(LabelEventArgs e)
         {
-#if !MOCK
-            // If this is a new note, we'll handle the labels when the note is added.
+            // If this is a new note, we'll handle any labels when the note is added.
             if (e.Note.NoteId != null)
             {
-                e.Label = await e.Note.CreateAssociateLabel(Mediator, e.Label.Text);
+                await VerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
             }
-#endif
             Message = $"Label '{e.Label.Text}' added for note on token ({e.EntityId})";
-            NotifyOfPropertyChange(nameof(Message));
+        }
+
+        public async Task LabelSelected(LabelEventArgs e)
+        {
+            if (e.Note.NoteId != null)
+            {
+                await VerseDisplayViewModel.AssociateNoteLabelAsync(e.Note, e.Label);
+            }
+            Message = $"Label '{e.Label.Text}' selected for note on token ({e.EntityId})";
         }
 
         public void CloseNotePaneRequested(RoutedEventArgs args)
         {
-            NotePaneVisibility = Visibility.Hidden;
-            NotifyOfPropertyChange(nameof(NotePaneVisibility));
+            NotePaneVisibility = Visibility.Collapsed;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -532,18 +306,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             await base.OnActivateAsync(cancellationToken);
             await PopulateData();
         }
-        // ReSharper restore UnusedMember.Global
 
 #endregion
 
-        // ReSharper disable UnusedMember.Global
+#pragma warning disable CS8618
+        /// <summary>
+        /// Default constructor for design-time support only.
+        /// </summary>
         public EnhancedViewDemoViewModel()
         {
         }
 
-        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            ServiceProvider = serviceProvider;
         }
+#pragma warning restore CS8618
     }
 }

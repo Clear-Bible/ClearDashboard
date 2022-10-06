@@ -25,8 +25,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var alignmentSet = ProjectDbContext.AlignmentSets
                 .Include(ast => ast.ParallelCorpus)
                     .ThenInclude(pc => pc!.SourceTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
                 .Include(ast => ast.ParallelCorpus)
                     .ThenInclude(pc => pc!.TargetTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.User)
+                .Include(ast => ast.User)
                 .Where(ast => ast.Id == request.AlignmentSetId.Id)
                 .FirstOrDefault();
             if (alignmentSet == null)
