@@ -77,5 +77,14 @@ namespace ClearDashboard.Wpf.Application.Models
             set => Set(ref _showTranslation, value);
         }
 
+        private bool _isRtl;
+
+        public bool IsRtl
+        {
+            get => _isRtl;
+            set => Set(ref _isRtl, value);
+        }
+
+
     }
 }

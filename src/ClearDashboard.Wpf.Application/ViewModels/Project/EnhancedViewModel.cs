@@ -1042,19 +1042,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             var tokenDisplays = new List<TokenDisplayViewModel>();
 
-                            var VerseDisplayViewModel = _serviceProvider.GetService<VerseDisplayViewModel>();
+                            //var VerseDisplayViewModel = _serviceProvider.GetService<VerseDisplayViewModel>();
 
-                            await VerseDisplayViewModel!.BindAsync(verseRangeRow, null, new EngineStringDetokenizer(Detokenizer), message.IsRTL);
+                            //await VerseDisplayViewModel!.BindAsync(verseRangeRow, null, new EngineStringDetokenizer(Detokenizer), message.IsRTL);
 
-                            //tokenDisplays.AddRange(from token in tokens
-                            //                       let translation = GetTranslation(token.token)
-                            //                       select new TokenDisplayViewModel
-                            //                       {
-                            //                           Token = token.token,
-                            //                           PaddingBefore = token.paddingBefore,
-                            //                           PaddingAfter = token.paddingAfter,
-                            //                           Translation = translation
-                            //                       });
+                            tokenDisplays.AddRange(from token in tokens
+                                                   let translation = GetTranslation(token.token)
+                                                   select new TokenDisplayViewModel
+                                                   {
+                                                       Token = token.token,
+                                                       PaddingBefore = token.paddingBefore,
+                                                       PaddingAfter = token.paddingAfter,
+                                                       Translation = translation
+                                                   });
                             verses.Add(tokenDisplays);
                         }
                     }
@@ -1287,6 +1287,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
+                    IsRtl = message.IsRTL,
                 });
 
                 // add to the grouping for saving
@@ -1303,6 +1304,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
                 row.Verses = verses;
+                row.IsRtl = message.IsRTL;
             }
 
             NotifyOfPropertyChange(() => VersesDisplay);
