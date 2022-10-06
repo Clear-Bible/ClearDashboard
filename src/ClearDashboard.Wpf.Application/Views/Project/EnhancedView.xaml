@@ -28,6 +28,7 @@
             <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
             <converters:WidthSubtraction x:Key="WidthSubtraction" />
             <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+            <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter"/>
             <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
             <userControls:ThicknessConverter x:Key="ThicknessConverter" />
         </ResourceDictionary>
@@ -453,6 +454,7 @@
                                                         Title=""
                                                         Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                                         FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        FlowDirection="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext.IsRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                         HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         IsEnabled="True"
                                                         NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

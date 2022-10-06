@@ -9,6 +9,7 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -62,6 +63,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the EntityId dependency property.
         /// </summary>
         public static readonly DependencyProperty EntityIdProperty = DependencyProperty.Register("EntityId", typeof(IId), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the EntityId dependency property.
+        /// </summary>
+        public static readonly DependencyProperty EntityIdsProperty = DependencyProperty.Register("EntityIds", typeof(EntityIdCollection), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the Title dependency property.
@@ -143,17 +149,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseNoteEvent(RoutedEvent routedEvent, NoteEventArgs e)
         {
-            RaiseEvent(new NoteEventArgs()
+            RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
                 Note = e.Note,
-                EntityId = e.EntityId
+                EntityId = e.EntityId,
+                EntityIds = e.EntityIds
             });
         }
 
         private void RaiseLabelEvent(RoutedEvent routedEvent, LabelEventArgs e)
         {
-            RaiseEvent(new LabelEventArgs()
+            RaiseEvent(new LabelEventArgs
             {
                 RoutedEvent = routedEvent,
                 Note = e.Note,
@@ -215,6 +222,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (IId)GetValue(EntityIdProperty);
             set => SetValue(EntityIdProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="EntityIdCollection"/> that this control is operating on..
+        /// </summary>
+        public EntityIdCollection? EntityIds
+        {
+            get => (EntityIdCollection)GetValue(EntityIdsProperty);
+            set => SetValue(EntityIdsProperty, value);
         }
 
         /// <summary>

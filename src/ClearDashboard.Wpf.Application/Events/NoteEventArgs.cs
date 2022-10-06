@@ -19,6 +19,8 @@ namespace ClearDashboard.Wpf.Application.Events
 
         public IId? EntityId { get; set; }
 
+        public EntityIdCollection EntityIds { get; set; } = new();
+
         public Note? Note { get; set; }
     }
 }
