@@ -677,7 +677,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             {
                                 viewModel.ProgressBarVisibility = Visibility.Visible;
                                 await viewModel.ShowNewCorpusTokens(message, cancellationToken, cancellationTokenLocal);
-                                await Task.Delay(1000);
+                                await Task.Delay(1000, cancellationToken);
                             }
                         }
                         catch (Exception e)

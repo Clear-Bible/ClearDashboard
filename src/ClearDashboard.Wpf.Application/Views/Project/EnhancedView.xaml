@@ -28,7 +28,7 @@
             <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
             <converters:WidthSubtraction x:Key="WidthSubtraction" />
             <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-            <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter"/>
+            <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
             <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
             <userControls:ThicknessConverter x:Key="ThicknessConverter" />
         </ResourceDictionary>
@@ -432,6 +432,7 @@
 
                                     <!--  INNER LISTVIEW  -->
                                     <ListView
+                                        x:Name="InnerListView"
                                         Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Stretch"
@@ -448,13 +449,12 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Vertical">
-
                                                     <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
                                                     <userControls:VerseDisplay
                                                         Title=""
                                                         Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                                        FlowDirection="{Binding ElementName=InnerListView, Path=DataContext.IsRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                         FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                        FlowDirection="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext.IsRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                         HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         IsEnabled="True"
                                                         NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
