@@ -20,6 +20,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
@@ -62,6 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Member Variables
         private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
+        private readonly IServiceProvider _serviceProvider;
 
         private CancellationTokenSource? _cancellationTokenSource;
         private bool? _handleAsyncRunning;
@@ -292,13 +294,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
 #pragma warning restore CS8618
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
-            ILifetimeScope? lifetimeScope) :
+            ILifetimeScope? lifetimeScope, IServiceProvider serviceProvider) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
         {
 
             _logger = logger;
             _projectManager = projectManager;
+            _serviceProvider = serviceProvider;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
             ContentId = "ENHANCEDVIEW";
@@ -1038,6 +1041,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         if (tokens != null)
                         {
                             var tokenDisplays = new List<TokenDisplayViewModel>();
+
+                            //var VerseDisplayViewModel = _serviceProvider.GetService<VerseDisplayViewModel>();
+
+                            //await VerseDisplayViewModel!.BindAsync(verseRangeRow, null, new EngineStringDetokenizer(Detokenizer), message.IsRTL);
+
                             tokenDisplays.AddRange(from token in tokens
                                                    let translation = GetTranslation(token.token)
                                                    select new TokenDisplayViewModel
@@ -1279,6 +1287,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
+                    IsRtl = message.IsRTL,
                 });
 
                 // add to the grouping for saving
@@ -1295,6 +1304,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
                 row.Verses = verses;
+                row.IsRtl = message.IsRTL;
             }
 
             NotifyOfPropertyChange(() => VersesDisplay);
