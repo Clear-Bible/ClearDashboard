@@ -1078,6 +1078,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 catch (Exception ex)
                 {
+                    Logger?.LogError(ex, "An unexpected error occurred while displaying corpus tokens.");
                     ProgressBarVisibility = Visibility.Collapsed;
                     if (!localCancellationToken.IsCancellationRequested)
                     {
