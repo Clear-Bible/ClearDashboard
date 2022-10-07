@@ -523,6 +523,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     EndTime = DateTime.Now,
                     TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
+
+                await _projectDesignSurfaceViewModel.DeactivateAsync(false);
             }
 
             // save the open document windows
@@ -717,6 +719,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
             var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
+            await _projectDesignSurfaceViewModel.ActivateAsync();
             _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
 
             // force a load to happen as it is getting swallowed up elsewhere
