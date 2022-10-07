@@ -871,11 +871,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
             }, cancellationToken);
 
-            
+
         }
 
 
-        
+
         public async Task AddParatextCorpus()
         {
             await AddParatextCorpus("");
@@ -1128,8 +1128,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             // Add Verses to focused enhanced view
                             Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger),
-                            Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
-                            IconKind = "DocumentTextAdd", CorpusNodeViewModel = corpusNode,
+                            Id = "AddToEnhancedViewId",
+                            ProjectDesignSurfaceViewModel = this,
+                            IconKind = "DocumentTextAdd",
+                            CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         },
                         new CorpusNodeMenuItemViewModel
@@ -1383,6 +1385,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             CorpusId: corpusId,
                             TokenizedTextCorpusId: tokenizationId,
                             corpusNodeViewModel.CorpusType,
+                            corpusNodeViewModel.IsRTL,
                             IsNewWindow: showInNewWindow));
                     break;
                 case "PropertiesId":

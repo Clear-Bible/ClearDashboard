@@ -16,10 +16,10 @@
         </Style>
     </UserControl.Resources>
     <Border
+        Padding="10"
         BorderBrush="{DynamicResource MaterialDesignToolForeground}"
         BorderThickness="1"
-        CornerRadius="3"
-        Padding="10">
+        CornerRadius="3">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25" />
@@ -40,29 +40,33 @@
                 Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplayViewModel.SurfaceText}"
                 FontSize="20"
                 FontWeight="Bold" />
-            <DataGrid Name="TranslationOptionsDataGrid" 
-                      Grid.Row="2"
-                      Padding="10,0"
-                      AutoGenerateColumns="False"
-                      SelectionUnit="FullRow"
-                      IsReadOnly="True"
-                      ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationOptions}"
-                      SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedItem}">
+            <DataGrid
+                Name="TranslationOptionsDataGrid"
+                Grid.Row="2"
+                Padding="10,0"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationOptions}"
+                SelectedItem="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedItem}"
+                SelectionUnit="FullRow">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Word}" Width="*" />
-                    <DataGridTextColumn Binding="{Binding Count}" Width="75" Header="Count">
+                    <DataGridTextColumn Width="*" Binding="{Binding Word}" />
+                    <DataGridTextColumn
+                        Width="75"
+                        Binding="{Binding Count}"
+                        Header="Count">
                         <DataGridTextColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="HorizontalContentAlignment" Value="Right"></Setter>
-                                <Setter Property="Background" Value="Transparent"></Setter>
+                                <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                <Setter Property="Background" Value="Transparent" />
                             </Style>
                         </DataGridTextColumn.HeaderStyle>
                         <DataGridTextColumn.CellStyle>
                             <Style TargetType="DataGridCell">
-                                <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-                                <Setter Property="Margin" Value="0,7,0,0"></Setter>
-                                <Setter Property="Background" Value="Transparent"></Setter>
-                                <Setter Property="BorderThickness" Value="0"></Setter>
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                                <Setter Property="Margin" Value="0,7,0,0" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="BorderThickness" Value="0" />
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>

@@ -14,6 +14,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Extensions;
 using SIL.Machine.Tokenization;
 using SIL.ObjectModel;
 
@@ -204,7 +205,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// Gets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
-        public List<TokenDisplayViewModel> TokenDisplayViewModels { get; private set; } = new();
+        public TokenDisplayViewModelCollection TokenDisplayViewModels { get; private set; } = new();
 
         /// <summary>
         /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion of labels.
@@ -258,7 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private void BuildTokenDisplayViewModels()
         {
-            TokenDisplayViewModels = new List<TokenDisplayViewModel>();
+            TokenDisplayViewModels = new TokenDisplayViewModelCollection();
             var paddedTokens = GetPaddedTokens(Tokens);
 
             TokenDisplayViewModels.AddRange(from paddedToken in paddedTokens
@@ -304,7 +305,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task PopulateTranslations()
         {
-            Translations = await GetTranslations(Tokens.Select(t => t.TokenId));
+            if (_translationSet != null)
+            {
+                Translations = await GetTranslations(Tokens.Select(t => t.TokenId));
+            }
         }
 
         private async Task<Dictionary<IId, IEnumerable<Note>>?> GetAllNotes()
@@ -499,6 +503,62 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                     var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
                     token?.NoteAdded();
+                }
+#endif
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Adds a note to a collection of tokens.
+        /// </summary>
+        /// <param name="note">The <see cref="Note"/> to add.</param>
+        /// <param name="tokens">The entity ID to which to add the note.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task AddNoteAsync(Note note, TokenDisplayViewModelCollection tokens)
+        {
+            try
+            {
+#if !MOCK
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await note.CreateOrUpdate(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Added note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                stopwatch.Restart();
+#endif
+                //await note.AssociateDomainEntity(Mediator, entityId);
+#if DEBUG
+                stopwatch.Stop();
+                //Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                if (note.Labels.Any())
+                {
+#if DEBUG
+                    stopwatch.Restart();
+#endif
+                    foreach (var label in note.Labels)
+                    {
+                        if (label.LabelId == null)
+                        {
+                            await label.CreateOrUpdate(Mediator);
+                        }
+
+                        await note.AssociateLabel(Mediator, label);
+                    }
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Associated labels with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                    //var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
+                    //token?.NoteAdded();
                 }
 #endif
             }

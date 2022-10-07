@@ -159,7 +159,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void ApplyNote(object sender, RoutedEventArgs e)
         {
             CloseEdit();
-            RaiseEvent(new NoteEventArgs()
+            RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = AddMode ? NoteAddedEvent : NoteUpdatedEvent,
                 EntityId = EntityId,
