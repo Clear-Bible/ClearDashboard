@@ -22,15 +22,11 @@ using ClearDashboard.DataAccessLayer.Features.Projects;
 
 namespace ClearDashboard.DataAccessLayer
 {
-
-
     public abstract class ProjectManager : IUserProvider, IProjectProvider, IProjectManager, IDisposable
     {
 #nullable disable
         #region Properties
-        public Guid ManuscriptHebrewGuid = Guid.Parse("5db213425b714efc9dd23794525058a4");
-        public Guid ManuscriptGreekGuid = Guid.Parse("5db213425b714efc9dd23794525058a5");
-
+       
         protected ILogger Logger { get; private set; }
         protected ParatextProxy ParatextProxy { get; private set; }
         protected ILifetimeScope LifetimeScope { get; private set; }
