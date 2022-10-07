@@ -49,6 +49,7 @@ using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
+using QuickGraph.Algorithms.Observers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -1676,23 +1677,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
         {
-            if (menuItem.Id == "OpenID")
+            if (menuItem.Id == "NewID")
             {
                 StartupDialogViewModel.GoToSetup = true;
             }
 
             var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
             startupDialogViewModel.MimicParatextConnection = true;
+
+            await OnDeactivateAsync(false, CancellationToken.None);
+
             var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
 
-            if (result.HasValue && result.Value)
-            {
-                await OnDeactivateAsync(false, CancellationToken.None);
+            //if (result.HasValue && result.Value)
+            //{
                 this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
                 await OnInitializeAsync(CancellationToken.None);
                 await OnActivateAsync(CancellationToken.None);
                 await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-            }
+            //}
+            //else
+            //{
+
+            //}
 
             //switch (menuItem.Id)
             //{
@@ -1742,6 +1749,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #endregion // Methods
 
+        public async Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            //_projectDesignSurfaceViewModel.SaveCanvas();
+            //SetupProjectDesignSurface();
+            //await OnDeactivateAsync(false, CancellationToken.None);
+        }
+
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {
             var guid = message.Guid;
@@ -1758,14 +1772,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            return Task.CompletedTask;
-        }
-
-
-        public Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
-        {
-            //_projectDesignSurfaceViewModel.SaveCanvas();
-            //SetupProjectDesignSurface();
             return Task.CompletedTask;
         }
 
