@@ -262,7 +262,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public async Task UpdateProject(Project project)
         {
-            using var requestScope = LifetimeScope
+            await using var requestScope = LifetimeScope
                 .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
 
             var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();

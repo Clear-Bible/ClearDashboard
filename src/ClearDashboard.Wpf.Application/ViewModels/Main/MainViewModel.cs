@@ -44,6 +44,7 @@ using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
+using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -524,7 +525,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
 
-                await _projectDesignSurfaceViewModel.DeactivateAsync(false);
+               
             }
 
             // save the open document windows
@@ -569,11 +570,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
 
-
             // save the design surface
-            await _projectDesignSurfaceViewModel.SaveCanvas();
+            //await _projectDesignSurfaceViewModel.DeactivateAsync(false);
+
+            ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
+            await UpdateProject(ProjectManager.CurrentProject);
+
+            //await _projectDesignSurfaceViewModel.SaveCanvas();
 
             return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        public async Task UpdateProject(DataAccessLayer.Models.Project project)
+        {
+            await using var requestScope = LifetimeScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+
+            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
+            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
+                project.ProjectName,
+                false,
+                requestScope);
+
+            Logger.LogInformation($"Saving the design surface layout for project '{ProjectManager.CurrentProject.ProjectName}'");
+            projectDbContext.Update(project);
+
+            await projectDbContext.SaveChangesAsync();
+
+            Logger.LogInformation($"Saved the design surface layout for project '{project.ProjectName}'");
         }
 
         protected override async void OnViewAttached(object view, object context)

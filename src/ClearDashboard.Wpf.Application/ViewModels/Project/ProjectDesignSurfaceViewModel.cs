@@ -352,10 +352,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected  override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             _busyState.CollectionChanged -= BusyStateOnCollectionChanged;
-            return base.OnDeactivateAsync(close, cancellationToken);
+            await SaveCanvas();
+            await base.OnDeactivateAsync(close, cancellationToken);
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -434,79 +435,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             _ = await Task.Factory.StartNew(async () =>
             {
-                var surface = new ProjectDesignSurfaceSerializationModel();
+                var json = SerializeDesignSurface();
 
-                // save all the nodes
-                foreach (var corpusNode in DesignSurface.CorpusNodes)
-                {
-                    surface.CorpusNodes.Add(new SerializedNode
-                    {
-                        ParatextProjectId = corpusNode.ParatextProjectId,
-                        CorpusType = corpusNode.CorpusType,
-                        Name = corpusNode.Name,
-                        X = corpusNode.X,
-                        Y = corpusNode.Y,
-                        NodeTokenizations = corpusNode.NodeTokenizations,
-                        CorpusId = corpusNode.CorpusId,
-                        IsRTL = corpusNode.IsRTL,
-                    });
-                }
-
-                // save all the connections
-                foreach (var connection in DesignSurface.Connections)
-                {
-                    var serializedTranslationSet = connection.TranslationSetInfo.Select(translationSet => new TranslationSetInfo
-                        {
-                            DisplayName = translationSet.DisplayName ?? string.Empty,
-                            TranslationSetId = translationSet.TranslationSetId,
-                            ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
-                            ParallelCorpusId = translationSet.ParallelCorpusId,
-                            AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
-                            AlignmentSetId = translationSet.AlignmentSetId,
-                        })
-                        .ToList();
-
-                    var serializedAlignmentSet = connection.AlignmentSetInfo.Select(alignmentSetInfo => new AlignmentSetInfo
-                        {
-                            DisplayName = alignmentSetInfo.DisplayName ?? string.Empty, AlignmentSetId = alignmentSetInfo.AlignmentSetId, ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName ?? string.Empty, ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
-                        })
-                        .ToList();
-
-                    surface.Connections.Add(new SerializedConnection
-                    {
-                        SourceConnectorId = connection.SourceConnector.ParatextID,
-                        TargetConnectorId = connection.DestinationConnector.ParatextID,
-                        TranslationSetInfo = serializedTranslationSet,
-                        AlignmentSetInfo = serializedAlignmentSet,
-                        ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
-                        ParallelCorpusId = connection.ParallelCorpusId!.Id.ToString(),
-                    });
-                }
-
-                // save out the corpora
-                foreach (var corpus in this.Corpora)
-                {
-                    surface.Corpora.Add(new SerializedCorpus
-                    {
-                        CorpusId = corpus.CorpusId.Id.ToString(),
-                        CorpusType = corpus.CorpusType,
-                        Created = corpus.Created,
-                        DisplayName = corpus.DisplayName,
-                        IsRtl = corpus.IsRtl,
-                        Language = corpus.Language,
-                        Name = corpus.Name,
-                        ParatextGuid = corpus.ParatextGuid,
-                        UserId = corpus.UserId?.Id.ToString()
-                    });
-                }
-
-                JsonSerializerOptions options = new()
-                {
-                    IncludeFields = true,
-                    WriteIndented = false,
-                    NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
-                };
-                ProjectManager!.CurrentProject.DesignSurfaceLayout = JsonSerializer.Serialize(surface, options);
+                ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
 
                 Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
 
@@ -521,6 +452,88 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
                 }
             });
+
+        }
+
+        public string SerializeDesignSurface()
+        {
+            var surface = new ProjectDesignSurfaceSerializationModel();
+
+            // save all the nodes
+            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            {
+                surface.CorpusNodes.Add(new SerializedNode
+                {
+                    ParatextProjectId = corpusNode.ParatextProjectId,
+                    CorpusType = corpusNode.CorpusType,
+                    Name = corpusNode.Name,
+                    X = corpusNode.X,
+                    Y = corpusNode.Y,
+                    NodeTokenizations = corpusNode.NodeTokenizations,
+                    CorpusId = corpusNode.CorpusId,
+                    IsRTL = corpusNode.IsRTL,
+                });
+            }
+
+            // save all the connections
+            foreach (var connection in DesignSurface.Connections)
+            {
+                var serializedTranslationSet = connection.TranslationSetInfo.Select(translationSet => new TranslationSetInfo
+                    {
+                        DisplayName = translationSet.DisplayName ?? string.Empty,
+                        TranslationSetId = translationSet.TranslationSetId,
+                        ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
+                        ParallelCorpusId = translationSet.ParallelCorpusId,
+                        AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
+                        AlignmentSetId = translationSet.AlignmentSetId,
+                    })
+                    .ToList();
+
+                var serializedAlignmentSet = connection.AlignmentSetInfo.Select(alignmentSetInfo => new AlignmentSetInfo
+                    {
+                        DisplayName = alignmentSetInfo.DisplayName ?? string.Empty,
+                        AlignmentSetId = alignmentSetInfo.AlignmentSetId,
+                        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName ?? string.Empty,
+                        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
+                    })
+                    .ToList();
+
+                surface.Connections.Add(new SerializedConnection
+                {
+                    SourceConnectorId = connection.SourceConnector.ParatextID,
+                    TargetConnectorId = connection.DestinationConnector.ParatextID,
+                    TranslationSetInfo = serializedTranslationSet,
+                    AlignmentSetInfo = serializedAlignmentSet,
+                    ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
+                    ParallelCorpusId = connection.ParallelCorpusId!.Id.ToString(),
+                });
+            }
+
+            // save out the corpora
+            foreach (var corpus in this.Corpora)
+            {
+                surface.Corpora.Add(new SerializedCorpus
+                {
+                    CorpusId = corpus.CorpusId.Id.ToString(),
+                    CorpusType = corpus.CorpusType,
+                    Created = corpus.Created,
+                    DisplayName = corpus.DisplayName,
+                    IsRtl = corpus.IsRtl,
+                    Language = corpus.Language,
+                    Name = corpus.Name,
+                    ParatextGuid = corpus.ParatextGuid,
+                    UserId = corpus.UserId?.Id.ToString()
+                });
+            }
+
+            JsonSerializerOptions options = new()
+            {
+                IncludeFields = true,
+                WriteIndented = false,
+                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+            };
+
+           return  JsonSerializer.Serialize(surface, options);
 
         }
 
