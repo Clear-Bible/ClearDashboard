@@ -9,6 +9,7 @@ using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
@@ -900,7 +901,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     ParatextProjectMetadata metadata;
 
-                    if (message.ParatextProjectId == _projectManager?.ManuscriptHebrewGuid.ToString())
+                    if (message.ParatextProjectId == ManuscriptIds.HebrewManuscriptId)
                     {
                         // our fake Manuscript corpus
                         var bookInfo = new BookInfo();
@@ -908,13 +909,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         metadata = new ParatextProjectMetadata
                         {
-                            Id = _projectManager.ManuscriptHebrewGuid.ToString(),
+                            Id = ManuscriptIds.HebrewManuscriptId,
                             CorpusType = CorpusType.ManuscriptHebrew,
                             Name = "Macula Hebrew",
                             AvailableBooks = books,
                         };
                     }
-                    else if (message.ParatextProjectId == _projectManager?.ManuscriptGreekGuid.ToString())
+                    else if (message.ParatextProjectId == ManuscriptIds.GreekManuscriptId)
                     {
                         // our fake Manuscript corpus
                         var bookInfo = new BookInfo();
@@ -922,7 +923,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         metadata = new ParatextProjectMetadata
                         {
-                            Id = _projectManager.ManuscriptGreekGuid.ToString(),
+                            Id = ManuscriptIds.GreekManuscriptId,
                             CorpusType = CorpusType.ManuscriptGreek,
                             Name = "Macula Greek",
                             AvailableBooks = books,

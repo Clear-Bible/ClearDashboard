@@ -89,9 +89,6 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<TranslationSetStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
                 .WithMetadata("Order", 4);
-
-
-
         }
     }
 
@@ -100,11 +97,6 @@ namespace ClearDashboard.Wpf.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-
-            //serviceCollection.AddScoped<ProjectDbContext>();
-            //serviceCollection.AddScoped<ProjectDbContextFactory>();
-            //serviceCollection.AddScoped<SqliteDatabaseConnectionInterceptor>();
-
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
             builder.RegisterValidationDependencies();
