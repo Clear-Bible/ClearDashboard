@@ -20,6 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
+        public Guid? ThreadId { get; set; }
         public ICollection<Label> Labels { get; set; }
         public ICollection<LabelNoteAssociation> LabelNoteAssociations { get; set; }
         public ICollection<NoteDomainEntityAssociation> NoteDomainEntityAssociations { get; set; }

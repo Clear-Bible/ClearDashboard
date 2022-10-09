@@ -21,6 +21,8 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
 
+        public EntityId<NoteId>? ThreadId { get; private set; }
+
 #if DEBUG
         private ObservableCollection<Label> labels_;
 #else
@@ -38,18 +40,30 @@ namespace ClearDashboard.DAL.Alignment.Notes
         private readonly ICollection<IId> domainEntityIds_;
         public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
 
-        public Note()
+        public Note(EntityId<NoteId>? threadId = null)
         {
+            ThreadId = threadId;
             labels_ = new ObservableCollection<Label>();
             domainEntityIds_ = new HashSet<IId>(new IIdEquatableComparer());
         }
-        internal Note(NoteId noteId, string text, string? abbreviatedText, ICollection<Label> labels, ICollection<IId> domainEntityIds)
+        internal Note(NoteId noteId, string text, string? abbreviatedText, EntityId<NoteId>? threadId, ICollection<Label> labels, ICollection<IId> domainEntityIds)
         {
             NoteId = noteId;
             Text = text;
             AbbreviatedText = abbreviatedText;
+            ThreadId = threadId;
             labels_ = new ObservableCollection<Label>(labels.DistinctBy(l => l.LabelId)); ;
             domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEquatableComparer());
+        }
+
+        public bool IsReply()
+        {
+            if (NoteId is null)
+            {
+                throw new MediatorErrorEngineException("'CreateOrUpdate Note before calling IsReply");
+            }
+
+            return ThreadId is not null && !NoteId.IdEquals(ThreadId);
         }
 
         public IEnumerable<string> GetAttachmentContentTypes()
@@ -62,7 +76,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public async Task<Note> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
         {            
-            var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText);
+            var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText, ThreadId);
 
             var result = await mediator.Send(command, token);
             if (result.Success)
@@ -235,6 +249,22 @@ namespace ClearDashboard.DAL.Alignment.Notes
             IMediator mediator)
         {
             var command = new GetAllNotesQuery();
+
+            var result = await mediator.Send(command);
+            if (result.Success)
+            {
+                return result.Data!;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public static async Task<IOrderedEnumerable<Note>> GetNotesInThread(EntityId<NoteId> threadId,
+            IMediator mediator)
+        {
+            var command = new GetNotesInThreadQuery(threadId);
 
             var result = await mediator.Send(command);
             if (result.Success)

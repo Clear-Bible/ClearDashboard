@@ -48,17 +48,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
             return new RequestResult<Note>
             (
-                new Note(
-                    new NoteId(
-                        note.Id,
-                        note.Created,
-                        note.Modified,
-                        ModelHelper.BuildUserId(note.User!)),
-                    note.Text!,
-                    note.AbbreviatedText,
-                    note.LabelNoteAssociations.Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
-                    note.NoteDomainEntityAssociations
-                            .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet())
+                ModelHelper.BuildNote(note)
             );
         }
     }

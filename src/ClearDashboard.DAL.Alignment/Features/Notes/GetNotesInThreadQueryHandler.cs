@@ -8,41 +8,45 @@ using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
-     public class GetAllNotesQueryHandler : ProjectDbContextQueryHandler<GetAllNotesQuery,
-        RequestResult<IEnumerable<Note>>, IEnumerable<Note>>
+     public class GetNotesInThreadQueryHandler : ProjectDbContextQueryHandler<GetNotesInThreadQuery,
+        RequestResult<IOrderedEnumerable<Note>>, IOrderedEnumerable<Note>>
     {
         private readonly IMediator _mediator;
 
-        public GetAllNotesQueryHandler(IMediator mediator, 
+        public GetNotesInThreadQueryHandler(IMediator mediator, 
             ProjectDbContextFactory? projectNameDbContextFactory, 
             IProjectProvider projectProvider, 
-            ILogger<GetAllNotesQueryHandler> logger) 
+            ILogger<GetNotesInThreadQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<IEnumerable<Note>>> GetDataAsync(GetAllNotesQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IOrderedEnumerable<Note>>> GetDataAsync(GetNotesInThreadQuery request, CancellationToken cancellationToken)
         {
             var notes = ProjectDbContext.Notes
                 .Include(n => n.NoteDomainEntityAssociations)
                 .Include(n => n.LabelNoteAssociations)
                     .ThenInclude(ln => ln.Label)
                 .Include(n => n!.User)
+                .Where(n => request.ThreadNoteId.Id == n.Id || request.ThreadNoteId.Id == n.ThreadId)
                 .Select(note => ModelHelper.BuildNote(note));
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<IEnumerable<Note>>(
+            return new RequestResult<IOrderedEnumerable<Note>>(
                 notes
                     .ToList()
+                    .OrderBy(n => n.NoteId!.IdEquals(n.ThreadId ?? n.NoteId!))
+                    .OrderBy(n => n.NoteId!.Created)
             );
         }
     }

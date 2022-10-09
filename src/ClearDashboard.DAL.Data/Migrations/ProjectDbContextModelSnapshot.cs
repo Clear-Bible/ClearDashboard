@@ -263,6 +263,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("ThreadId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 

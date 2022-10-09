@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Threading;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -45,6 +46,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 note.Text = request.Text;
                 note.AbbreviatedText = request.AbbreviatedText;
                 note.Modified = DateTimeOffset.UtcNow;
+                // DO NOT MODIFY note.ThreadId once it is set during note creation
             }
             else
             {
@@ -52,8 +54,25 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 {
                     Id = Guid.NewGuid(),
                     Text = request.Text,
-                    AbbreviatedText = request.AbbreviatedText,
+                    AbbreviatedText = request.AbbreviatedText
                 };
+
+                // Validate ThreadId:
+                if (request.ThreadId is not null)
+                {
+                    if (ProjectDbContext!.Notes.Any(n => n.Id == request.ThreadId.Id && n.ThreadId != request.ThreadId.Id))
+                    {
+                        return new RequestResult<NoteId>
+                        (
+                            success: false,
+                            message: $"Note referred by ThreadId '{request.ThreadId.Id}' found in request is already itself a reply note"
+                        );
+                    } 
+                    else
+                    {
+                        note.ThreadId = request.ThreadId.Id;
+                    }
+                }
 
                 ProjectDbContext.Notes.Add(note);
             }
