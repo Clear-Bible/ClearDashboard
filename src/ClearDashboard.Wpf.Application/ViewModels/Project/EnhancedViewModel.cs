@@ -667,8 +667,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
 
             List<TokenDisplayViewModel> verseTokens = new();
-            var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
-            var verseOut2 = new ObservableCollection<VerseDisplayViewModel>();
+            var versesOut = new ObservableCollection<VerseDisplayViewModel>();
 
             List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
 
@@ -679,7 +678,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 OnUIThread(() =>
                 {
-                    UpdateParallelCorpusDisplay(message, verseOut2, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
+                    UpdateParallelCorpusDisplay(message, versesOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
                     NotifyOfPropertyChange(() => VersesDisplay);
 
                     ProgressBarVisibility = Visibility.Collapsed;
@@ -692,7 +691,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 foreach (var row in rows)
                 {
                     await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
-                    verseOut2.Add(VerseDisplayViewModel);
+                    versesOut.Add(VerseDisplayViewModel);
                 }
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
@@ -714,7 +713,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 OnUIThread(() =>
                 {
-                    UpdateParallelCorpusDisplay(message, verseOut2, title);
+                    UpdateParallelCorpusDisplay(message, versesOut, title);
                     NotifyOfPropertyChange(() => VersesDisplay);
 
                     ProgressBarVisibility = Visibility.Collapsed;
