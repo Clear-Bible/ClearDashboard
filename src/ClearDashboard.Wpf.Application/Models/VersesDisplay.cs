@@ -69,7 +69,14 @@ namespace ClearDashboard.Wpf.Application.Models
             set => Set(ref _verses, value);
         }
 
-
+        private ObservableCollection<VerseDisplayViewModel> _parallelVerses = new();
+        public ObservableCollection<VerseDisplayViewModel> ParallelVerses
+        {
+            get => _parallelVerses;
+            set => Set(ref _parallelVerses, value);
+        }
+        
+        
         private bool _showTranslation;
         public bool ShowTranslation
         {
