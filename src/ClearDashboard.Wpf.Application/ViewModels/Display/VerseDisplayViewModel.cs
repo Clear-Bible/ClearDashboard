@@ -465,61 +465,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task AddNoteAsync(Note note, IId entityId)
         {
-            try
-            {
-#if !MOCK
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                await note.CreateOrUpdate(Mediator);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Added note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-                stopwatch.Restart();
-#endif
-                await note.AssociateDomainEntity(Mediator, entityId);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                if (note.Labels.Any())
-                {
-#if DEBUG
-                    stopwatch.Restart();
-#endif
-                    foreach (var label in note.Labels)
-                    {
-                        if (label.LabelId == null)
-                        {
-                            await label.CreateOrUpdate(Mediator);
-                        }
-
-                        await note.AssociateLabel(Mediator, label);
-                    }
-#if DEBUG
-                    stopwatch.Stop();
-                    Logger?.LogInformation($"Associated labels with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                    var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
-                    token?.NoteAdded();
-                }
-#endif
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
+            await AddNoteAsync(note, new EntityIdCollection(entityId.ToEnumerable()));
         }
 
         /// <summary>
-        /// Adds a note to a collection of tokens.
+        /// Adds a note to a collection of entities.
         /// </summary>
         /// <param name="note">The <see cref="Note"/> to add.</param>
-        /// <param name="tokens">The entity ID to which to add the note.</param>
+        /// <param name="entityIds">The entity IDs to which to associate the note.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task AddNoteAsync(Note note, TokenDisplayViewModelCollection tokens)
+        public async Task AddNoteAsync(Note note, EntityIdCollection entityIds)
         {
             try
             {
@@ -532,13 +487,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Added note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-                stopwatch.Restart();
 #endif
-                //await note.AssociateDomainEntity(Mediator, entityId);
+                foreach (var entityId in entityIds)
+                {
 #if DEBUG
-                stopwatch.Stop();
-                //Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                    stopwatch.Restart();
 #endif
+                    await note.AssociateDomainEntity(Mediator, entityId);
+#if DEBUG
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                }
                 if (note.Labels.Any())
                 {
 #if DEBUG
@@ -557,8 +517,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     stopwatch.Stop();
                     Logger?.LogInformation($"Associated labels with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
-                    //var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
-                    //token?.NoteAdded();
+                }
+                foreach (var entityId in entityIds)
+                {
+                    var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
+                    token?.NoteAdded(note);
                 }
 #endif
             }
@@ -601,8 +564,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// Deletes a note.
         /// </summary>
-        /// <param name="note">The <see cref="Note"/> to update.</param>
-        /// <param name="entityId">The entity ID from which to add the note.</param>
+        /// <param name="note">The <see cref="Note"/> to delete.</param>
+        /// <param name="entityId">The entity ID from which to remove the note.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task DeleteNoteAsync(Note note, IId entityId)
         {
@@ -622,6 +585,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
                 token?.NoteDeleted();
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Deletes a note.
+        /// </summary>
+        /// <param name="note">The <see cref="Note"/> to delete.</param>
+        /// <param name="entityIds">The entity IDs from which to remove the note.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task DeleteNoteAsync(Note note, EntityIdCollection entityIds)
+        {
+            try
+            {
+#if MOCK
+                return;
+#endif
+#if DEBUG
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#endif
+                await note.Delete(Mediator);
+#if DEBUG
+                stopwatch.Stop();
+                Logger?.LogInformation($"Deleted note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+#endif
+                foreach (var entityId in entityIds)
+                {
+                    var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
+                    token?.NoteDeleted();
+                }
             }
             catch (Exception e)
             {
