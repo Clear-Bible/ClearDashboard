@@ -39,7 +39,6 @@ using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Features.Connection;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -716,6 +715,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             Logger.LogError(e, "Error loading tokenization window");
                         }
+
                     }
                     else if (displayOrder.MsgType == DisplayOrder.MessageType.ShowParallelTranslationWindowMessage)
                     {
