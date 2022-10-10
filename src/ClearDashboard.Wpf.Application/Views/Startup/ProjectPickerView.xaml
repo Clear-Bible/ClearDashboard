@@ -288,13 +288,12 @@
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
-                Style="{StaticResource EmptyMaterialDesignListView}"
                 Visibility="{Binding NoProjectVisibility}">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:Card
-                            Width="475"
+                            Width="540"
                             Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
