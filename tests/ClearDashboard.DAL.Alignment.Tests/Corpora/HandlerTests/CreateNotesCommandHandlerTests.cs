@@ -10,6 +10,9 @@ using Xunit.Abstractions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearBible.Engine.Utils;
 
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class CreateNotesCommandHandlerTests : TestBase
@@ -85,11 +88,13 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             var label = await new Label { Text = "boo label full of label-ness" }.CreateOrUpdate(Mediator!);
 
-            var note = await new Note { Text = "a boo note", AbbreviatedText = "not sure" }.CreateOrUpdate(Mediator!);
+            var note = await new Note { Text = "a boo note", AbbreviatedText = "not sure", NoteStatus = "Resolved" }.CreateOrUpdate(Mediator!);
+            var resolvedNoteId = note.NoteId;
             await note.AssociateLabel(Mediator!, label);
             var label2 = await note.CreateAssociateLabel(Mediator!, "boo label created in context of boo note");
 
             Assert.Equal(2, note.Labels.Count());
+            Assert.Equal(Models.NoteStatus.Resolved.ToString(), note.NoteStatus);
 
             #region Stopwatch
             sw.Stop();
@@ -111,6 +116,9 @@ public class CreateNotesCommandHandlerTests : TestBase
             #endregion
 
             var note2 = await new Note { Text = "a baa note", AbbreviatedText = "not sure" }.CreateOrUpdate(Mediator!);
+            Assert.Equal(Models.NoteStatus.Open.ToString(), note2.NoteStatus);
+            var openNoteId = note2.NoteId;
+
             var labels = await Label.Get(Mediator!, "boo lab");
             Assert.True(labels.Count() == 2);
             await note2.AssociateLabel(Mediator!, labels.First());
@@ -164,6 +172,18 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             ProjectDbContext.ChangeTracker.Clear();
 
+            var resolvedNote = await Note.Get(Mediator!, resolvedNoteId!);
+            Assert.Equal(note.Text, resolvedNote.Text);
+            Assert.Equal(note.AbbreviatedText, resolvedNote.AbbreviatedText);
+            Assert.Equal(note.NoteStatus, resolvedNote.NoteStatus);
+            Assert.Equal(note.ThreadId, resolvedNote.ThreadId);
+
+            var openNote = await Note.Get(Mediator!, openNoteId!);
+            Assert.Equal(note2.Text, openNote.Text);
+            Assert.Equal(note2.AbbreviatedText, openNote.AbbreviatedText);
+            Assert.Equal(note2.NoteStatus, openNote.NoteStatus);
+            Assert.Equal(note2.ThreadId, openNote.ThreadId);
+
             var allLabels = await Label.GetAll(Mediator!);
             Assert.Equal(3, ProjectDbContext.Labels.Count());
             Assert.Equal(3, allLabels.Count());
@@ -201,8 +221,8 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Equal(5, ProjectDbContext.NoteDomainEntityAssociations.Count());
 
             // Test Note.Delete and make sure the cascade delete works:
-            note.Delete(Mediator!);
-            note2.Delete(Mediator!);
+            await note.Delete(Mediator!);
+            await note2.Delete(Mediator!);
 
             ProjectDbContext.ChangeTracker.Clear();
 
@@ -218,6 +238,59 @@ public class CreateNotesCommandHandlerTests : TestBase
             ProjectDbContext.ChangeTracker.Clear();
 
             Assert.False(ProjectDbContext.Labels.Any());
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__Thread()
+    {
+        try
+        {
+            var leadingNote = await new Note { Text = "leading note" }.CreateOrUpdate(Mediator!);
+            var replyNote1 = await new Note(leadingNote) { Text = "reply note 1"  }.CreateOrUpdate(Mediator!);
+            var replyNote2 = await new Note(leadingNote) { Text = "reply note 2" }.CreateOrUpdate(Mediator!);
+            var replyNote3 = await new Note(replyNote1) { Text = "reply note 3" }.CreateOrUpdate(Mediator!);
+
+            var standaloneNote1 = await new Note { Text = "standalone note 1" }.CreateOrUpdate(Mediator!);
+            var replyNote4 = await new Note(replyNote1) { Text = "reply note 4" }.CreateOrUpdate(Mediator!);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            leadingNote = await Note.Get(Mediator!, leadingNote.NoteId!);
+            replyNote1 = await Note.Get(Mediator!, replyNote1.NoteId!);
+            replyNote4 = await Note.Get(Mediator!, replyNote4.NoteId!);
+            standaloneNote1 = await Note.Get(Mediator!, standaloneNote1.NoteId!);
+
+            Assert.False(standaloneNote1.IsReply());
+            Assert.False(leadingNote.IsReply());
+            Assert.True(replyNote1.IsReply());
+            Assert.True(replyNote4.IsReply());
+
+            Assert.Null(standaloneNote1.ThreadId);
+            Assert.Null(leadingNote.ThreadId);
+            Assert.True(leadingNote.NoteId!.IdEquals(replyNote1.ThreadId));
+            Assert.True(leadingNote.NoteId!.IdEquals(replyNote4.ThreadId));
+
+            var allNotesInThread1 = await Note.GetNotesInThread(new EntityId<NoteId>() { Id = leadingNote.NoteId!.Id }, Mediator!);
+            Assert.Equal(5, allNotesInThread1.Count());
+
+            var allNotesInThread2 = await Note.GetNotesInThread(new EntityId<NoteId>() { Id = replyNote3.ThreadId!.Id }, Mediator!);
+            Assert.Equal(5, allNotesInThread2.Count());
+
+            var position = 0;
+            Output.WriteLine("Notes in thread:");
+            foreach (var n in allNotesInThread2)
+            {
+                Assert.Equal((position == 0) ? "leading note" : $"reply note {position}", n.Text);
+                Output.WriteLine($"\t{n.Text}");
+
+                position++;
+            }
         }
         finally
         {

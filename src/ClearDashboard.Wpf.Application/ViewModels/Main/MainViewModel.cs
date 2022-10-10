@@ -44,6 +44,7 @@ using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using System.Text.Json;
 using Microsoft.Extensions.Options;
 using System.Text.Json.Serialization;
+using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -523,6 +524,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     EndTime = DateTime.Now,
                     TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
                 }), cancellationToken);
+
+               
             }
 
             // save the open document windows
@@ -567,11 +570,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
             EventAggregator?.Unsubscribe(this);
 
-
             // save the design surface
-            await _projectDesignSurfaceViewModel.SaveCanvas();
+            //await _projectDesignSurfaceViewModel.DeactivateAsync(false);
+
+            ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
+            await UpdateProject(ProjectManager.CurrentProject);
+
+            //await _projectDesignSurfaceViewModel.SaveCanvas();
 
             return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        public async Task UpdateProject(DataAccessLayer.Models.Project project)
+        {
+            await using var requestScope = LifetimeScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+
+            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
+            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
+                project.ProjectName,
+                false,
+                requestScope);
+
+            Logger.LogInformation($"Saving the design surface layout for project '{ProjectManager.CurrentProject.ProjectName}'");
+            projectDbContext.Update(project);
+
+            await projectDbContext.SaveChangesAsync();
+
+            Logger.LogInformation($"Saved the design surface layout for project '{project.ProjectName}'");
         }
 
         protected override async void OnViewAttached(object view, object context)
@@ -677,7 +703,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             {
                                 viewModel.ProgressBarVisibility = Visibility.Visible;
                                 await viewModel.ShowNewCorpusTokens(message, cancellationToken, cancellationTokenLocal);
-                                await Task.Delay(1000);
+                                await Task.Delay(1000, cancellationToken);
                             }
                         }
                         catch (Exception e)
@@ -717,6 +743,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
             var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
+            await _projectDesignSurfaceViewModel.ActivateAsync();
             _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
 
             // force a load to happen as it is getting swallowed up elsewhere

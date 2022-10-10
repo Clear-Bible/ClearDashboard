@@ -655,7 +655,7 @@
                                 <i:EventTrigger EventName="LabelAdded">
                                     <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="CloseNotePaneRequested">
+                                <i:EventTrigger EventName="CloseRequested">
                                     <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>

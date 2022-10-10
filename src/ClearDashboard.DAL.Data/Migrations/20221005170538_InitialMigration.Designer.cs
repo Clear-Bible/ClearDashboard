@@ -262,7 +262,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Modified")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("NoteStatus")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ThreadId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("UserId")

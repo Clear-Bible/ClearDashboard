@@ -94,6 +94,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 NotifyOfPropertyChange(() => SelectedLanguage);
 
+                SendUiLanguageChangeMessage(language);
             }
         }
 
@@ -369,6 +370,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             ParatextUserName = message.User.ParatextUserName;
             await Task.CompletedTask;
+        }
+
+        private async Task SendUiLanguageChangeMessage(string language)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
         }
     }
 }
