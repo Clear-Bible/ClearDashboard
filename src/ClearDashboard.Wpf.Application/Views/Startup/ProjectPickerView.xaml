@@ -293,7 +293,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:Card
-                            Width="540"
+                            Width="532"
                             Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"

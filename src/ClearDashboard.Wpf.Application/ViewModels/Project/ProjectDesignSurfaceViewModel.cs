@@ -338,7 +338,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<DAL.Alignment.Corpora.Corpus>();
-            ProjectName = ProjectManager.CurrentProject.ProjectName;
         }
 
         //protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -551,11 +550,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void LoadCanvas()
         {
+            ProjectName = ProjectManager.CurrentProject.ProjectName;
+
             // we have already loaded once
-            if (DesignSurface.CorpusNodes.Count > 0)
-            {
-                return;
-            }
+            //if (DesignSurface.CorpusNodes.Count > 0)
+            //{
+            //    return;
+            //}
 
             if (ProjectManager?.CurrentProject.DesignSurfaceLayout == "")
             {
@@ -576,6 +577,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 WriteIndented = true,
                 NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
             };
+
+            AddManuscriptGreekEnabled = true;
+            AddManuscriptHebrewEnabled = true;
             var deserialized = JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
 
             // restore the nodes

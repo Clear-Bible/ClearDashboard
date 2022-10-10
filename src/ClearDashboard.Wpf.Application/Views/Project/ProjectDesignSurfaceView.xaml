@@ -789,7 +789,7 @@
             Padding="5"
             Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
-           <!-- IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"-->
+            <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"  -->
             <StackPanel MinWidth="400">
                 <Label
                     Margin="0,-5,30,-12"
