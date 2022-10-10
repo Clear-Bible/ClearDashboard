@@ -11,5 +11,7 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public string AlignmentSetId { get; set; } = string.Empty;
         public string? AlignmentSetDisplayName { get; set; } = string.Empty;
+
+        public bool IsRTL { get; set; }
     }
 }

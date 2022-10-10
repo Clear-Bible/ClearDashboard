@@ -68,6 +68,7 @@
                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                   TranslationFlowDirection="{Binding ElementName=TranslationRtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -90,6 +91,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="275"/>
+                <ColumnDefinition Width="325"/>
                 <ColumnDefinition Width="325"/>
                 <ColumnDefinition Width="325"/>
             </Grid.ColumnDefinitions>
@@ -127,6 +129,10 @@
                 <Slider VerticalAlignment="Center" Minimum="1" Maximum="40" Name="HorizontalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
+                <CheckBox VerticalAlignment="Center" Name="RtlCheckbox" IsChecked="False"/>
+                <Label VerticalAlignment="Center">RTL</Label>
+            </StackPanel>
 
             <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" FontWeight="Bold">Translations:</Label>
@@ -141,6 +147,10 @@
                 <Label VerticalAlignment="Center">Vertical spacing:</Label>
                 <Slider VerticalAlignment="Center" Minimum="0" Maximum="40" Name="TranslationVerticalSpacingSlider" Width="100" Value="10" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Left">
+                <CheckBox VerticalAlignment="Center" Name="TranslationRtlCheckbox" IsChecked="False"/>
+                <Label VerticalAlignment="Center">RTL</Label>
             </StackPanel>
 
             <Label Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold">Notes:</Label>
@@ -234,7 +244,7 @@
             </StackPanel>
             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Margin="0,0,14,0">Height:</Label>
-                <Slider VerticalAlignment="Center" Minimum="1" Maximum="10" Name="NoteIndicatorHeightSlider" Width="100" Value="3" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                <Slider VerticalAlignment="Center" Minimum="1" Maximum="10" Name="NoteIndicatorHeightSlider" Width="100" Value="4" TickFrequency="1" IsSnapToTickEnabled="True"/>
                 <Label VerticalAlignment="Center" Content="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Width="40" />
             </StackPanel>
 
@@ -243,8 +253,6 @@
                 <Label VerticalAlignment="Center">Center Words</Label>
             </StackPanel>
             <StackPanel Grid.Row="8" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <CheckBox VerticalAlignment="Center" Name="RtlCheckbox" IsChecked="False"/>
-                <Label VerticalAlignment="Center">Right To Left</Label>
                 <CheckBox VerticalAlignment="Center" Name="VerticalCheckbox" IsChecked="False"/>
                 <Label VerticalAlignment="Center">Vertical Layout</Label>
             </StackPanel>
@@ -265,6 +273,7 @@
             <userControls:NoteCollectionDisplay Visibility="{Binding NotePaneVisibility}"
                                        Title="{Binding SelectedTokens.CombinedSurfaceText}"
                                        EntityId="{Binding CurrentToken.Token.TokenId}"
+                                       EntityIds="{Binding SelectedTokens.EntityIds}"
                                        InnerMargin="0,0,0,30"
                                        Notes="{Binding SelectedTokens.CombinedNotes}"
                                        NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

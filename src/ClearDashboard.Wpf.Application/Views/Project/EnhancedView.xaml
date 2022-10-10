@@ -255,7 +255,7 @@
                             Maximum="10"
                             Minimum="1"
                             TickFrequency="1"
-                            Value="3" />
+                            Value="4" />
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
@@ -431,16 +431,27 @@
                                     </StackPanel>
 
                                     <!--  INNER LISTVIEW  -->
+
+                                    <!--  ItemsSource="{Binding ParallelVerses}"  -->
                                     <ListView
                                         x:Name="InnerListView"
                                         Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Stretch"
-                                        ItemsSource="{Binding Verses}"
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                         ScrollViewer.IsDeferredScrollingEnabled="True"
                                         VirtualizingStackPanel.IsVirtualizing="True"
                                         VirtualizingStackPanel.VirtualizationMode="Recycling">
+                                        <ListView.Style>
+                                            <Style TargetType="ListView">
+                                                <Setter Property="ItemsSource" Value="{Binding Verses}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Verses.Count}" Value="0">
+                                                        <Setter Property="ItemsSource" Value="{Binding ParallelVerses}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ListView.Style>
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="Height" Value="Auto" />
@@ -450,6 +461,7 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Vertical">
                                                     <!--  cm:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];[Event TokenDoubleClicked] = [Action TokenDoubleClicked($eventArgs)];[Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];[Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];[Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];[Event TokenMouseWheel] = [Action TokenMouseWheel($eventArgs)];[Event TranslationClicked] = [Action TranslationClicked($eventArgs)];[Event TranslationDoubleClicked] = [Action TranslationDoubleClicked($eventArgs)];[Event TranslationRightButtonDown] = [Action TranslationRightButtonDown($eventArgs)];[Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];[Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];[Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];[Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];[Event NoteDoubleClicked] = [Action NoteDoubleClicked($eventArgs)];[Event NoteRightButtonDown] = [Action NoteRightButtonDown($eventArgs)];[Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];[Event NoteMouseLeave] = [Action NoteMouseLeave($eventArgs)];[Event NoteMouseWheel] = [Action NoteMouseWheel($eventArgs)];[Event NoteCreate] = [Action NoteCreate($eventArgs)]"  -->
+                                                    <!--  Tokens="{Binding ParallelVerses.TokenDisplayViewModels}"  -->
                                                     <userControls:VerseDisplay
                                                         Title=""
                                                         Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
@@ -464,11 +476,22 @@
                                                         TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         TitleVisibility="Collapsed"
                                                         TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                        Tokens="{Binding .}"
                                                         TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                         TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+
+                                                        <userControls:VerseDisplay.Style>
+                                                            <Style TargetType="userControls:VerseDisplay">
+                                                                <Setter Property="Tokens" Value="{Binding .}" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding DataContext.Verses.Count, RelativeSource={RelativeSource AncestorType=ListView}}" Value="0">
+                                                                        <Setter Property="Tokens" Value="{Binding TokenDisplayViewModels}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </userControls:VerseDisplay.Style>
+
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="TokenMouseEnter">
                                                                 <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />

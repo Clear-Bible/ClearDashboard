@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
@@ -21,6 +22,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SIL.Extensions;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 
@@ -30,7 +32,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
-        #region Demo data
+        #region Demo data - for demo page only
+        public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
+
         public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
         {
             try
@@ -119,11 +123,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         #endregion Demo data
 
-        public IServiceProvider ServiceProvider { get; }
+        private IServiceProvider ServiceProvider { get; }
 
         public VerseDisplayViewModel VerseDisplayViewModel { get; set; } = new();
-        public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
-
         private string _message = string.Empty;
         private Visibility _notePaneVisibility = Visibility.Collapsed;
         private Visibility _translationPaneVisibility = Visibility.Collapsed;
@@ -147,14 +149,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public TokenDisplayViewModelCollection SelectedTokens
         {
             get => _selectedTokens;
-            set
-            {
-                Set(ref _selectedTokens, value);
-                //NotifyOfPropertyChange(nameof(SelectedTokensSurfaceText));
-            }
+            set => Set(ref _selectedTokens, value);
         }
-
-        //public string SelectedTokensSurfaceText => String.Join(",", SelectedTokens.Select(t => t.SurfaceText));
 
         public IEnumerable<TranslationOption> TranslationOptions
         {
@@ -188,10 +184,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             TranslationPaneVisibility = Visibility.Visible;
         }
 
-        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
+        private static string GetModifierKeysText(ModifierKeys modifierKeys)
         {
-            CurrentToken = tokenDisplayViewModel;
-            NotePaneVisibility = Visibility.Visible;
+            var modifiers = string.Empty;
+            if ((modifierKeys & ModifierKeys.Control) > 0) modifiers += "Ctrl+";
+            if ((modifierKeys & ModifierKeys.Shift) > 0) modifiers += "Shift+";
+            if ((modifierKeys & ModifierKeys.Alt) > 0) modifiers += "Alt+";
+            if ((modifierKeys & ModifierKeys.Windows) > 0) modifiers += "Win+";
+            return modifiers;
         }
 
         #region Event Handlers
@@ -199,14 +199,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public void TokenClicked(TokenEventArgs e)
         {
             SelectedTokens = e.SelectedTokens;
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) clicked";
+            if (SelectedTokens.Any(t => t.HasNote))
+            {
+                NotePaneVisibility = Visibility.Visible;
+            }
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            if (e.TokenDisplayViewModel.HasNote)
+            if (!SelectedTokens.Any())
             {
-                DisplayNote(e.TokenDisplayViewModel);
+                if (e.TokenDisplayViewModel.HasNote)
+                {
+                    e.TokenDisplayViewModel.IsSelected = true;
+                    SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+                    NotePaneVisibility = Visibility.Visible;
+                }
             }
 
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
@@ -235,14 +244,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            DisplayNote(e.TokenDisplayViewModel);
-            Message = $"'Note indicator for token {e.EntityId} hovered";
+            e.TokenDisplayViewModel.IsSelected = true;
+            SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+            NotePaneVisibility = Visibility.Visible;
         }
 
         public void NoteCreate(NoteEventArgs e)
         {
-            DisplayNote(e.TokenDisplayViewModel);
-            Message = $"Opening new note panel for token {e.EntityId}";
+            NotePaneVisibility = Visibility.Visible;
         }
 
         public async Task TranslationApplied(TranslationEventArgs e)
@@ -261,20 +270,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         
         public async Task NoteAdded(NoteEventArgs e)
         {
-            await VerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityId);
-            Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
+            await VerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+            Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ",e.EntityIds.Select(id => id.ToString()))}";
         }
 
         public async Task NoteUpdated(NoteEventArgs e)
         {
             await VerseDisplayViewModel.UpdateNoteAsync(e.Note);
-            Message = $"Note '{e.Note.Text}' updated on token ({e.EntityId})";
+            Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
         public async Task NoteDeleted(NoteEventArgs e)
         {
-            await VerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityId);
-            Message = $"Note '{e.Note.Text}' deleted from token ({e.EntityId})";
+            await VerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+            Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
         }
 
         public async Task LabelAdded(LabelEventArgs e)
@@ -299,6 +308,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public void CloseNotePaneRequested(RoutedEventArgs args)
         {
             NotePaneVisibility = Visibility.Collapsed;
+            SelectedTokens = new TokenDisplayViewModelCollection();
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)

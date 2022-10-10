@@ -4,9 +4,6 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DAL.Alignment.Features.Notes;
-using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
@@ -89,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
         public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
-        public IDetokenizer<string, string>? Detokenizer { get; set; } = new LatinWordDetokenizer();
+        public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
         public IEnumerable<Translation> CurrentTranslations { get; set; }
         public IEnumerable<Label> LabelSuggestions { get; set; }
 
@@ -270,12 +267,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _verses, value);
         }
 
-        //public string? Message
-        //{
-        //    get => _message;
-        //    set => Set(ref _message, value);
-        //}
-
         #endregion //Observable Properties
 
 
@@ -293,11 +284,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
-#pragma warning restore CS8618
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope, IServiceProvider serviceProvider) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
+#pragma warning restore CS8618
         {
 
             _logger = logger;
@@ -401,9 +392,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
-
-                //CalculateChapters();
-                //CalculateVerses();
                 InComingChangesStarted = false;
             }
 
@@ -467,7 +455,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        //Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -649,10 +636,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }, cancellationToken);
         }
 
+        public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                if (corpusId == null)
+                {
+                    var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator!);
+                    corpusId = corpusIds.First();
+                }
+                var corpus = await ParallelCorpus.Get(Mediator!, corpusId);
+
+                Detokenizer = corpus.Detokenizer;
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved parallel corpus {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                return corpus;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
+            var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
+
             List<TokenDisplayViewModel> verseTokens = new();
-            var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
+            var versesOut = new ObservableCollection<VerseDisplayViewModel>();
 
             List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
 
@@ -663,7 +678,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 OnUIThread(() =>
                 {
-                    UpdateParallelCorpusDisplay(message, verseOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
+                    UpdateParallelCorpusDisplay(message, versesOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
                     NotifyOfPropertyChange(() => VersesDisplay);
 
                     ProgressBarVisibility = Visibility.Collapsed;
@@ -675,10 +690,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 CurrentTranslationSet = await GetTranslationSet(message);
                 foreach (var row in rows)
                 {
-                    CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-                    verseTokens = GetTokenDisplayViewModels(row.SourceTokens);
-                    LabelSuggestions = await GetLabelSuggestions();
-                    verseOut.Add(verseTokens);
+                    await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
+                    versesOut.Add(VerseDisplayViewModel);
                 }
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
@@ -700,7 +713,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 OnUIThread(() =>
                 {
-                    UpdateParallelCorpusDisplay(message, verseOut, title);
+                    UpdateParallelCorpusDisplay(message, versesOut, title);
                     NotifyOfPropertyChange(() => VersesDisplay);
 
                     ProgressBarVisibility = Visibility.Collapsed;
@@ -710,6 +723,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return verseTokens;
         }
 
+
+
+       
         private List<string> GetValidVerseRange(string bbbcccvvv, int offset)
         {
             List<string> verseRange = new();
@@ -777,37 +793,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public static async Task<Dictionary<IId, IEnumerable<Note>>> GetAllDomainEntityIdNotes(
-            IMediator mediator)
-        {
-            var command = new GetAllNotesQuery();
-
-            var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                // result.Data is in the form:  IEnumerable<Note>
-                // This linq uses SelectMany to extract out note / domain entity id pairs,
-                // groups them by domain entity id (using an IIdEquatable comparer) and writes
-                // the resulting IIdEquatable, INumerable<Note> groups to a dictionary:
-                var idNotes = result.Data!
-                    .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
-                    .GroupBy(pair => pair.iid, new IIdEquatableComparer())
-                    .ToDictionary(g => (g.Key as IId)!, g => g.Select(g => g.note));
-
-                // result.Data is in the form:  Dictionary<Note, IdEquatableCollection>
-                // This linq reverses that, grouping the appropriate Note references
-                // under their associated IIdEquatable(s):
-                //var idNotes = result.Data!
-                //    .SelectMany(nd => nd.Value, (nd, iid) => new { iid, note = nd.Key })
-                //    .GroupBy(pair => pair.iid)
-                //    .ToDictionary(g => g.Key, g => g.Select(g => g.note) /*.ToList() as ICollection<Note>*/);
-                return idNotes;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
 
         public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet(ShowParallelTranslationWindowMessage message)
         {
@@ -831,64 +816,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Console.WriteLine(e);
                 throw;
             }
-        }
-
-        public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>
-            GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
-        {
-            var result = await mediator.Send(new GetAllTranslationSetIdsQuery(parallelCorpusId, userId));
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
-
-        private List<TokenDisplayViewModel> GetTokenDisplayViewModels(IEnumerable<EngineToken> tokens)
-        {
-            var tokenDisplays = new List<TokenDisplayViewModel>();
-            var paddedTokens = GetPaddedTokens(tokens);
-
-            if (paddedTokens != null)
-            {
-                tokenDisplays.AddRange(from paddedToken in paddedTokens
-                    let translation = GetParallelTranslation(paddedToken.token)
-                    let notes = GetNotes(paddedToken.token)
-                    select new TokenDisplayViewModel
-                    {
-                        Token = paddedToken.token,
-                        PaddingBefore = paddedToken.paddingBefore,
-                        PaddingAfter = paddedToken.paddingAfter,
-                        Translation = translation,
-                        Notes = notes
-                    });
-            }
-
-            return tokenDisplays;
-        }
-
-        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(IEnumerable<EngineToken> tokens)
-        {
-            var detokenizer = new EngineStringDetokenizer(Detokenizer);
-            return detokenizer.Detokenize(tokens);
-        }
-
-
-        private async Task<ObservableCollection<Label>> GetLabelSuggestions()
-        {
-            var labels = await Label.GetAll(Mediator);
-            return new ObservableCollection<Label>(labels);
-        }
-
-        private NoteCollection GetNotes(EngineToken token)
-        {
-            var matches = NotesDictionary.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
-            return matches.Key != null
-                ? new NoteCollection(matches.Value)
-                : new NoteCollection();
         }
 
         public async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
@@ -1211,8 +1138,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        //Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
-
                         UpdateVersesDisplay(message, verses, title, false);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
@@ -1313,7 +1238,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message,
-            ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool showTranslations = true)
+            ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations = true)
         {
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
@@ -1327,7 +1252,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     BorderColor = brush,
                     ShowTranslation = showTranslations,
                     RowTitle = title,
-                    Verses = verses,
+                    ParallelVerses = verses,
                 });
 
                 // add to the grouping for saving
@@ -1343,7 +1268,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.BorderColor = brush;
                 row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
-                row.Verses = verses;
+                row.ParallelVerses = verses;
             }
 
             NotifyOfPropertyChange(() => VersesDisplay);
@@ -1448,12 +1373,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
-        }
-
-        private Translation GetParallelTranslation(EngineToken token)
-        {
-            var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
-            return translation;
         }
 
         private string RandomTranslationOriginatedFrom()
