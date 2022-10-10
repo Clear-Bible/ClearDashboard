@@ -584,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 Logger?.LogInformation($"Deleted note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
-                token?.NoteDeleted();
+                token?.NoteDeleted(note);
             }
             catch (Exception e)
             {
@@ -618,7 +618,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 foreach (var entityId in entityIds)
                 {
                     var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
-                    token?.NoteDeleted();
+                    token?.NoteDeleted(note);
                 }
             }
             catch (Exception e)

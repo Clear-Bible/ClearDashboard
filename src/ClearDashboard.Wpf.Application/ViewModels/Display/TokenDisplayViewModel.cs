@@ -81,8 +81,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             OnPropertyChanged(nameof(HasNote));
         }
 
-        public void NoteDeleted()
+        public void NoteDeleted(Note note)
         {
+            Notes.Remove(note);
             OnPropertyChanged(nameof(Notes));
             OnPropertyChanged(nameof(HasNote));
         }
