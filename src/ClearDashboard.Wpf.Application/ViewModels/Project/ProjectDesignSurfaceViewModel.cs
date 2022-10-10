@@ -338,7 +338,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new ObservableCollection<DAL.Alignment.Corpora.Corpus>();
-            ProjectName = _projectManager.CurrentProject.ProjectName;
+            ProjectName = ProjectManager.CurrentProject.ProjectName;
         }
 
         //protected override Task OnInitializeAsync(CancellationToken cancellationToken)

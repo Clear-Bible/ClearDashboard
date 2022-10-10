@@ -7,6 +7,8 @@ using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using System.Reflection;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +23,8 @@ namespace ClearDashboard.Wpf.Application
             // IMPORTANT!  - override the default ShellViewModel from the foundation.
             builder.RegisterType<ShellViewModel>().As<IShellViewModel>().SingleInstance();
             builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
-
+            builder.RegisterType<ProjectDesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<DesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
         }
 
         public static void RegisterValidationDependencies(this ContainerBuilder builder)
