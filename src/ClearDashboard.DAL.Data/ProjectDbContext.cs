@@ -67,15 +67,15 @@ namespace ClearDashboard.DataAccessLayer.Data
                 _logger?.LogInformation("Ensuring that the database is created, migrating if necessary.");
 
                 //todo comment out the if to allow migration for FileNew Projects
-                await Database.GetPendingMigrationsAsync();
-                //if ((await Database.GetPendingMigrationsAsync()).Any())
-                //{
+                //await Database.GetPendingMigrationsAsync();
+                if ((await Database.GetPendingMigrationsAsync()).Any())
+                {
                     _logger?.LogInformation("Migration required, migrating...");
                     await Database.MigrateAsync();
                     //await Database.CloseConnectionAsync();
 
                     await EnsureMigrated();
-                //}
+                }
                 _logger?.LogInformation("Check to migrate database complete");
             }
             catch (Exception ex)

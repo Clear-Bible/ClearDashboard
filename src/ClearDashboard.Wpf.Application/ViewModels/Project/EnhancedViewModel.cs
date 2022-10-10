@@ -48,8 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
-        IHandle<BCVLoadedMessage>//,
-        //IHandle<DashboardProjectChangedMessage>
+        IHandle<BCVLoadedMessage>
     {
 
         #region Commands

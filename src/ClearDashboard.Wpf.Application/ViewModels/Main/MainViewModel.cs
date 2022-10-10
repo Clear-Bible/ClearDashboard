@@ -62,7 +62,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ShowTokenizationWindowMessage>,
                 IHandle<UiLanguageChangedMessage>,
                 IHandle<ActiveDocumentMessage>,
-                IHandle<DashboardProjectChangedMessage>,
                 IHandle<ShowParallelTranslationWindowMessage>,
                 IHandle<CloseDockingPane>
     {
@@ -496,8 +495,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
             await base.OnInitializeAsync(cancellationToken);
-
-            //Init();
         }
 
         protected override async void OnViewLoaded(object view)
@@ -719,7 +716,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             Logger.LogError(e, "Error loading tokenization window");
                         }
-
                     }
                     else if (displayOrder.MsgType == DisplayOrder.MessageType.ShowParallelTranslationWindowMessage)
                     {
@@ -1715,72 +1711,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
 
-            //if (result.HasValue && result.Value)
-            //{
-                this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-                await OnInitializeAsync(CancellationToken.None);
-                await OnActivateAsync(CancellationToken.None);
-                await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-            //}
-            //else
-            //{
-
-            //}
-
-            //switch (menuItem.Id)
-            //{
-
-            //    case "NewID":
-
-            //        //var startupDialogViewModel = IoC.Get<StartupDialogViewModel>();
-            //        //_projectDesignSurfaceViewModel.SaveCanvas();
-            //        await OnDeactivateAsync(false, CancellationToken.None);
-            //        this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-            //        await OnInitializeAsync(CancellationToken.None);
-            //        await OnActivateAsync(CancellationToken.None);
-            //        await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-
-            //    //await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-
-            //    //if (result.HasValue && result.Value)
-            //    //{
-            //    //    _projectDesignSurfaceViewModel.SaveCanvas();
-
-            //    //    //await ExecuteRequest(new CloseConnectionCommand(ProjectManager.CurrentProject.ProjectName), CancellationToken.None);
-            //    //    await OnDeactivateAsync(false, CancellationToken.None);
-
-            //    //    var dashboardProject = startupDialogViewModel.ExtraData as DashboardProject;
-            //    //    if (dashboardProject.IsNew)
-            //    //    {
-            //    //        await ProjectManager.CreateNewProject(dashboardProject.ProjectName);
-            //    //    }
-            //    //    else
-            //    //    {
-            //    //        await ProjectManager.LoadProject(dashboardProject.ProjectName);
-            //    //    }
-            //    //}
-            //        break;
-            //    case "OpenID":
-            //        await OnDeactivateAsync(false, CancellationToken.None);
-            //        this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-            //        await OnInitializeAsync(CancellationToken.None);
-            //        await OnActivateAsync(CancellationToken.None);
-            //        await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-
-            //        break;
-            //}
-
-
+            this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+            await OnInitializeAsync(CancellationToken.None);
+            await OnActivateAsync(CancellationToken.None);
+            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
         }
 
         #endregion // Methods
 
-        public async Task HandleAsync(DashboardProjectChangedMessage message, CancellationToken cancellationToken)
-        {
-            //_projectDesignSurfaceViewModel.SaveCanvas();
-            //SetupProjectDesignSurface();
-            //await OnDeactivateAsync(false, CancellationToken.None);
-        }
 
         public Task HandleAsync(ActiveDocumentMessage message, CancellationToken cancellationToken)
         {

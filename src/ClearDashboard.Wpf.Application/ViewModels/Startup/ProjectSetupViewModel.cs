@@ -70,10 +70,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
            
             ParentViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
 
-            if (StartupDialogViewModel.DeleteVisible == Visibility.Collapsed)
-            {
-                EventAggregator.PublishOnUIThreadAsync(new DashboardProjectChangedMessage(ProjectManager.CurrentDashboardProject));
-            }
 
             ParentViewModel?.Ok();
         }
