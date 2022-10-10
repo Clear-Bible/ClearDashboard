@@ -46,6 +46,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 note.Text = request.Text;
                 note.AbbreviatedText = request.AbbreviatedText;
                 note.Modified = DateTimeOffset.UtcNow;
+                note.NoteStatus = request.NoteStatus;
+
                 // DO NOT MODIFY note.ThreadId once it is set during note creation
             }
             else
@@ -54,13 +56,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 {
                     Id = Guid.NewGuid(),
                     Text = request.Text,
-                    AbbreviatedText = request.AbbreviatedText
+                    AbbreviatedText = request.AbbreviatedText,
+                    NoteStatus = request.NoteStatus
                 };
 
                 // Validate ThreadId:
                 if (request.ThreadId is not null)
                 {
-                    if (ProjectDbContext!.Notes.Any(n => n.Id == request.ThreadId.Id && n.ThreadId != request.ThreadId.Id))
+                    if (ProjectDbContext!.Notes.Any(n => n.Id == request.ThreadId.Id && n.ThreadId != null && n.ThreadId != request.ThreadId.Id))
                     {
                         return new RequestResult<NoteId>
                         (
@@ -80,7 +83,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
             note = ProjectDbContext.Notes.Include(n => n.User).First(n => n.Id == note.Id);
 
-            return new RequestResult<NoteId>(new NoteId(note.Id, note.Created, note.Modified, ModelHelper.BuildUserId(note.User!)));
+            return new RequestResult<NoteId>(ModelHelper.BuildNoteId(note));
         }
     }
 }

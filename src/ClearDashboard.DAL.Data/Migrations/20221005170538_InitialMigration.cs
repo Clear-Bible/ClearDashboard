@@ -107,6 +107,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     Text = table.Column<string>(type: "TEXT", nullable: true),
                     AbbreviatedText = table.Column<string>(type: "TEXT", nullable: true),
                     ThreadId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    NoteStatus = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false),
                     Modified = table.Column<long>(type: "INTEGER", nullable: false)

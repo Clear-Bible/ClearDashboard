@@ -213,13 +213,10 @@ namespace ClearDashboard.DAL.Alignment.Features
         public static Note BuildNote(Models.Note note)
         {
             return new Note(
-                new NoteId(
-                    note.Id,
-                    note.Created,
-                    note.Modified,
-                    ModelHelper.BuildUserId(note.User!)),
+                BuildNoteId(note),
                 note.Text!,
                 note.AbbreviatedText,
+                note.NoteStatus,
                 (note.ThreadId is not null) ? new EntityId<NoteId>() { Id = note.ThreadId.Value } : null,
                 note.LabelNoteAssociations
                     .Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
