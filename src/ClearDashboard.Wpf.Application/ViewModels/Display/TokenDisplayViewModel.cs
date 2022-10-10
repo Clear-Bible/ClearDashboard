@@ -74,8 +74,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public bool HasNote => Notes.Any();
 
-        public void NoteAdded()
+        public void NoteAdded(Note note)
         {
+            Notes.Add(note);
             OnPropertyChanged(nameof(Notes));
             OnPropertyChanged(nameof(HasNote));
         }
