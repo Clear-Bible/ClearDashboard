@@ -9,6 +9,7 @@ using ClearDashboard.DAL.Alignment.Features.Notes;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
@@ -901,7 +902,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     ParatextProjectMetadata metadata;
 
-                    if (message.ParatextProjectId == _projectManager?.ManuscriptHebrewGuid.ToString())
+                    if (message.ParatextProjectId == ManuscriptIds.HebrewManuscriptId)
                     {
                         // our fake Manuscript corpus
                         var bookInfo = new BookInfo();
@@ -909,13 +910,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         metadata = new ParatextProjectMetadata
                         {
-                            Id = _projectManager.ManuscriptHebrewGuid.ToString(),
+                            Id = ManuscriptIds.HebrewManuscriptId,
                             CorpusType = CorpusType.ManuscriptHebrew,
                             Name = "Macula Hebrew",
                             AvailableBooks = books,
                         };
                     }
-                    else if (message.ParatextProjectId == _projectManager?.ManuscriptGreekGuid.ToString())
+                    else if (message.ParatextProjectId == ManuscriptIds.GreekManuscriptId)
                     {
                         // our fake Manuscript corpus
                         var bookInfo = new BookInfo();
@@ -923,7 +924,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         metadata = new ParatextProjectMetadata
                         {
-                            Id = _projectManager.ManuscriptGreekGuid.ToString(),
+                            Id = ManuscriptIds.GreekManuscriptId,
                             CorpusType = CorpusType.ManuscriptGreek,
                             Name = "Macula Greek",
                             AvailableBooks = books,
@@ -1079,6 +1080,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 catch (Exception ex)
                 {
+                    Logger?.LogError(ex, "An unexpected error occurred while displaying corpus tokens.");
                     ProgressBarVisibility = Visibility.Collapsed;
                     if (!localCancellationToken.IsCancellationRequested)
                     {
@@ -1634,8 +1636,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             await e.Note.Delete(Mediator);
         }
+        
 
-        public async Task LabelSelected(object sender, LabelEventArgs e)
+        public void LabelSelected(object sender, LabelEventArgs e)
+        {
+            Task.Run(() => LabelSelectedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelSelectedAsync(LabelEventArgs e)
         {
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
@@ -1643,8 +1651,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await e.Note.AssociateLabel(Mediator, e.Label);
             }
         }
+        
+        public void LabelAdded(object sender, LabelEventArgs e)
+        {
+            Task.Run(() => LabelAddedAsync(e).GetAwaiter());
+        }
 
-        public async Task LabelAdded(object sender, LabelEventArgs e)
+        public async Task LabelAddedAsync(LabelEventArgs e)
         {
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
