@@ -43,6 +43,8 @@
                 TranslationAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
                 TranslationClicked="OnTranslationClicked"
                 TranslationDoubleClicked="OnTranslationDoubleClicked"
+                TranslationFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
+                TranslationFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
                 TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 TranslationLeftButtonDown="OnTranslationLeftButtonDown"
                 TranslationLeftButtonUp="OnTranslationLeftButtonUp"

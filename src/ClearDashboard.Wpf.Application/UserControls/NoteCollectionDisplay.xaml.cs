@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -102,6 +103,36 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty InnerMarginProperty = DependencyProperty.Register("InnerMargin", typeof(Thickness), typeof(NoteCollectionDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 10)));
+
+        /// <summary>
+        /// Identifies the UserMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserMarginProperty = DependencyProperty.Register("UserMargin", typeof(Thickness), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the UserFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontFamilyProperty = DependencyProperty.Register("UserFontFamily", typeof(FontFamily), typeof(NoteCollectionDisplay),
+                new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the UserFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontSizeProperty = DependencyProperty.Register("UserFontSize", typeof(double), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(11d));
+
+        /// <summary>
+        /// Identifies the UserFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontWeightProperty = DependencyProperty.Register("UserFontWeight", typeof(FontWeight), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the UserFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontStyleProperty = DependencyProperty.Register("UserFontStyle", typeof(FontStyle), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(FontStyles.Normal));
 
         /// <summary>
         /// Identifies the TimestampFontSize dependency property.
@@ -279,7 +310,52 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the margin for the timestamp and user.
+        /// Gets or sets the font family for displaying the user name below the note.
+        /// </summary>
+        public FontFamily UserFontFamily
+        {
+            get => (FontFamily)GetValue(UserFontSizeProperty);
+            set => SetValue(UserFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for displaying the user name below the note.
+        /// </summary>
+        public double UserFontSize
+        {
+            get => (double)GetValue(UserFontSizeProperty);
+            set => SetValue(UserFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for displaying the user name below the note.
+        /// </summary>
+        public FontStyle UserFontStyle
+        {
+            get => (FontStyle)GetValue(UserFontStyleProperty);
+            set => SetValue(UserFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for displaying the user name below the note.
+        /// </summary>
+        public FontWeight UserFontWeight
+        {
+            get => (FontWeight)GetValue(UserFontWeightProperty);
+            set => SetValue(UserFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin for displaying the user below the note.
+        /// </summary>
+        public Thickness UserMargin
+        {
+            get => (Thickness)GetValue(UserMarginProperty);
+            set => SetValue(UserMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin for the timestamp.
         /// </summary>
         public Thickness TimestampMargin
         {
@@ -288,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font size for the timestamp and user.
+        /// Gets or sets the font size for the timestamp.
         /// </summary>
         public double TimestampFontSize
         {
