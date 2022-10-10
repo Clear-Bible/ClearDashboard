@@ -4,9 +4,6 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DAL.Alignment.Features.Notes;
-using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
@@ -39,7 +36,6 @@ using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
-using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -270,12 +266,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _verses, value);
         }
 
-        //public string? Message
-        //{
-        //    get => _message;
-        //    set => Set(ref _message, value);
-        //}
-
         #endregion //Observable Properties
 
 
@@ -401,9 +391,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 InComingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
-
-                //CalculateChapters();
-                //CalculateVerses();
                 InComingChangesStarted = false;
             }
 
@@ -467,7 +454,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        //Verses = new ObservableCollection<TokensTextRow>(tokensTextRows);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -675,36 +661,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        public async Task<TranslationSet?> GetFirstTranslationSet()
-        {
-            try
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                var translationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!);
-                var translationSet = await TranslationSet.Get(translationSetIds.First().translationSetId, Mediator!);
-                stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved first translation set {translationSet.TranslationSetId.Id} in {stopwatch.ElapsedMilliseconds} ms");
-                return translationSet;
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
-
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
             var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
-            //var rowNew = await GetVerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV));
-            //var translationSet = await GetFirstTranslationSet();
-            //await VerseDisplayViewModel!.BindAsync(rowNew, translationSet, Detokenizer);
-
-
-
-
-
 
             List<TokenDisplayViewModel> verseTokens = new();
             var verseOut = new ObservableCollection<List<TokenDisplayViewModel>>();
@@ -731,12 +690,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 CurrentTranslationSet = await GetTranslationSet(message);
                 foreach (var row in rows)
                 {
-                    //CurrentTranslations = await CurrentTranslationSet.GetTranslations(row.SourceTokens.Select(t => t.TokenId));
-                    //verseTokens = GetTokenDisplayViewModels(row.SourceTokens);
-                    //LabelSuggestions = await GetLabelSuggestions();
-                    //verseOut.Add(verseTokens);
-
-
                     await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
                     verseOut2.Add(VerseDisplayViewModel);
                 }
@@ -813,27 +766,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return verseRange;
         }
 
-        public async Task<EngineParallelTextRow?> GetVerseTextRow(int bbbcccvvv, ParallelCorpusId? corpusId = null)
-        {
-            try
-            {
-                var corpus = await GetParallelCorpus(corpusId);
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                var verse = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), 0, 0);
-                var row = verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
-                stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved parallel corpus verse {bbbcccvvv} in {stopwatch.ElapsedMilliseconds} ms");
-                return row;
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
-
-
         private async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, ShowParallelTranslationWindowMessage message)
         {
             try
@@ -861,37 +793,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        public static async Task<Dictionary<IId, IEnumerable<Note>>> GetAllDomainEntityIdNotes(
-            IMediator mediator)
-        {
-            var command = new GetAllNotesQuery();
-
-            var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                // result.Data is in the form:  IEnumerable<Note>
-                // This linq uses SelectMany to extract out note / domain entity id pairs,
-                // groups them by domain entity id (using an IIdEquatable comparer) and writes
-                // the resulting IIdEquatable, INumerable<Note> groups to a dictionary:
-                var idNotes = result.Data!
-                    .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
-                    .GroupBy(pair => pair.iid, new IIdEquatableComparer())
-                    .ToDictionary(g => (g.Key as IId)!, g => g.Select(g => g.note));
-
-                // result.Data is in the form:  Dictionary<Note, IdEquatableCollection>
-                // This linq reverses that, grouping the appropriate Note references
-                // under their associated IIdEquatable(s):
-                //var idNotes = result.Data!
-                //    .SelectMany(nd => nd.Value, (nd, iid) => new { iid, note = nd.Key })
-                //    .GroupBy(pair => pair.iid)
-                //    .ToDictionary(g => g.Key, g => g.Select(g => g.note) /*.ToList() as ICollection<Note>*/);
-                return idNotes;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
 
         public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet(ShowParallelTranslationWindowMessage message)
         {
@@ -915,64 +816,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Console.WriteLine(e);
                 throw;
             }
-        }
-
-        public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>>
-            GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
-        {
-            var result = await mediator.Send(new GetAllTranslationSetIdsQuery(parallelCorpusId, userId));
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
-        }
-
-        //private List<TokenDisplayViewModel> GetTokenDisplayViewModels(IEnumerable<EngineToken> tokens)
-        //{
-        //    var tokenDisplays = new List<TokenDisplayViewModel>();
-        //    var paddedTokens = GetPaddedTokens(tokens);
-
-        //    if (paddedTokens != null)
-        //    {
-        //        tokenDisplays.AddRange(from paddedToken in paddedTokens
-        //            let translation = GetParallelTranslation(paddedToken.token)
-        //            let notes = GetNotes(paddedToken.token)
-        //            select new TokenDisplayViewModel
-        //            {
-        //                Token = paddedToken.token,
-        //                PaddingBefore = paddedToken.paddingBefore,
-        //                PaddingAfter = paddedToken.paddingAfter,
-        //                Translation = translation,
-        //                Notes = notes
-        //            });
-        //    }
-
-        //    return tokenDisplays;
-        //}
-
-        //private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetPaddedTokens(IEnumerable<EngineToken> tokens)
-        //{
-        //    var detokenizer = new EngineStringDetokenizer(Detokenizer);
-        //    return detokenizer.Detokenize(tokens);
-        //}
-
-
-        private async Task<ObservableCollection<Label>> GetLabelSuggestions()
-        {
-            var labels = await Label.GetAll(Mediator);
-            return new ObservableCollection<Label>(labels);
-        }
-
-        private NoteCollection GetNotes(EngineToken token)
-        {
-            var matches = NotesDictionary.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
-            return matches.Key != null
-                ? new NoteCollection(matches.Value)
-                : new NoteCollection();
         }
 
         public async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
@@ -1294,8 +1137,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        //Verses = new ObservableCollection<TokensTextRow>(verseRangeRows);
-
                         UpdateVersesDisplay(message, verses, title, false);
                         ProgressBarVisibility = Visibility.Collapsed;
                     });
@@ -1531,12 +1372,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
-        }
-
-        private Translation GetParallelTranslation(EngineToken token)
-        {
-            var translation = CurrentTranslations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
-            return translation;
         }
 
         private string RandomTranslationOriginatedFrom()
