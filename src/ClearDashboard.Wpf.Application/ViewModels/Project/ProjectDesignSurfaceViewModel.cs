@@ -456,6 +456,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParallelCorpusId = translationSet.ParallelCorpusId,
                         AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
                         AlignmentSetId = translationSet.AlignmentSetId,
+                        IsRTL = translationSet.IsRTL,
                     });
                 }
 
@@ -1239,6 +1240,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ConnectionId = connection.Id,
                 ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
+                IsRTL = connection.IsRTL,
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
@@ -1370,6 +1372,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.DisplayName,
                                 connectionMenuItem.ParallelCorpusId,
                                 connectionMenuItem.ParallelCorpusDisplayName,
+                                connectionMenuItem.IsRTL,
                                 IsNewWindow: false));
                     }
                     else
