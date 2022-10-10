@@ -27,7 +27,6 @@
             <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
             <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
             <converters:WidthSubtraction x:Key="WidthSubtraction" />
-            <converters:IntToBool x:Key="IntToBool"/>
             <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
             <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
             <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
@@ -428,15 +427,6 @@
                                             FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                             FontWeight="Bold"
                                             Text="{Binding RowTitle}" />
-
-                                        <TextBlock
-                                            FontSize="20"
-                                            Foreground="MediumOrchid"
-                                            Text="{Binding Verses.Count}" />
-                                        <TextBlock
-                                            FontSize="20"
-                                            Foreground="MediumAquamarine"
-                                            Text="{Binding ParallelVerses.Count}" />
 
                                     </StackPanel>
 
