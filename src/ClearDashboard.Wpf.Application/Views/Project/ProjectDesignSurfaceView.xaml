@@ -841,6 +841,13 @@
                         Content="Paratext"
                         Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />
+                    <Button
+                        x:Name="RandomButton"
+                        Margin="10,0,10,10"
+                        cm:Message.Attach="RandomButton()"
+                        Content="Rando" />
+                    <!--  Tag=" ScriptTextOutline"  -->
+                    <!--    -->
                     <!--<Button
                         x:Name="TrainSmtModel"
                         Margin="10,0,10,10"

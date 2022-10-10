@@ -37,6 +37,8 @@ using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using Microsoft.Extensions.Options;
 using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using ClearApplicationFoundation.Extensions;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -385,8 +387,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //
 #pragma warning disable CS8604
             // ReSharper disable once SuspiciousTypeConversion.Global
+            
             DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
                 _projectManager, _eventAggregator);
+            //DesignSurface = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
+
 #pragma warning restore CS8604
 
             base.OnViewAttached(view, context);
@@ -902,13 +907,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
-
+        public async Task RandomButton()
+        {
+            var surface = DesignSurface;
+        }
 
         public async Task AddParatextCorpus()
         {
+            //DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
+            //    _projectManager, _eventAggregator);
+            //DesignSurface = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
+            //var views = LifetimeScope?.ResolveKeyedOrdered<DesignSurfaceViewModel>("DesignSurface", "Order").ToArray();
+            //var allRegistrations =
+            //    LifetimeScope
+            //        .ComponentRegistry
+            //        .Registrations
+            //        .Where(r => typeof(DesignSurfaceViewModel)
+            //            .IsAssignableFrom(r.Activator.LimitType))
+            //        .Select(r => r.Activator.LimitType);
             await AddParatextCorpus("");
         }
-
 
         // ReSharper restore UnusedMember.Global
         // ReSharper disable once UnusedMember.Global
