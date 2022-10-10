@@ -255,7 +255,7 @@
                             Maximum="10"
                             Minimum="1"
                             TickFrequency="1"
-                            Value="3" />
+                            Value="4" />
                         <Label
                             Width="40"
                             VerticalAlignment="Center"

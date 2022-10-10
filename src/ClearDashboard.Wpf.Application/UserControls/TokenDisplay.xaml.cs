@@ -91,6 +91,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
 
         /// <summary>
+        /// Identifies the TranslationFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register("TranslationFontFamily", typeof(FontFamily), typeof(TokenDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the TranslationFlowDirection dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFlowDirectionProperty = DependencyProperty.Register("TranslationFlowDirection", typeof(FlowDirection), typeof(TokenDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        /// <summary>
         /// Identifies the TranslationFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokenDisplay),
@@ -852,6 +864,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (double)GetValue(TranslationVerticalSpacingProperty);
             set => SetValue(TranslationVerticalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the translations.
+        /// </summary>
+        public FontFamily TranslationFontFamily
+        {
+            get => (FontFamily)GetValue(TranslationFontFamilyProperty);
+            set => SetValue(TranslationFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the translations.
+        /// </summary>
+        public FlowDirection TranslationFlowDirection
+        {
+            get => (FlowDirection)GetValue(TranslationFlowDirectionProperty);
+            set => SetValue(TranslationFlowDirectionProperty, value);
         }
 
         /// <summary>

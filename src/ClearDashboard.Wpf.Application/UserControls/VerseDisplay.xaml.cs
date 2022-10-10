@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -276,6 +277,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(16d));
 
         /// <summary>
+        /// Identifies the TranslationFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register("TranslationFontFamily", typeof(FontFamily), typeof(VerseDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the TranslationFlowDirection dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFlowDirectionProperty = DependencyProperty.Register("TranslationFlowDirection", typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+
+        /// <summary>
         /// Identifies the TranslationAlignment dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(VerseDisplay),
@@ -371,6 +385,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void UpdateSelection(TokenDisplayViewModel token, bool addToSelection)
         {
+            var tokenIsSelected = token.IsSelected;
             if (!addToSelection)
             {
                 foreach (var selectedToken in SelectedTokens)
@@ -380,8 +395,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 SelectedTokens.Clear();
             }
 
-            token.IsSelected = true;
-            SelectedTokens.Add(token);
+            token.IsSelected = !tokenIsSelected;
+            if (token.IsSelected)
+            {
+                SelectedTokens.Add(token);
+            }
         }
 
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
@@ -958,6 +976,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (double)GetValue(TranslationVerticalSpacingProperty);
             set => SetValue(TranslationVerticalSpacingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the translations.
+        /// </summary>
+        public FontFamily TranslationFontFamily
+        {
+            get => (FontFamily)GetValue(TranslationFontFamilyProperty);
+            set => SetValue(TranslationFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the translations.
+        /// </summary>
+        public FlowDirection TranslationFlowDirection
+        {
+            get => (FlowDirection)GetValue(TranslationFlowDirectionProperty);
+            set => SetValue(TranslationFlowDirectionProperty, value);
         }
 
         /// <summary>
