@@ -291,6 +291,21 @@ public class CreateNotesCommandHandlerTests : TestBase
 
                 position++;
             }
+
+            await replyNote1.Delete(Mediator!);
+
+            var allNotesInThread3 = await Note.GetNotesInThread(new EntityId<NoteId>() { Id = leadingNote.NoteId!.Id }, Mediator!);
+            Assert.Equal(4, allNotesInThread3.Count());
+
+            position = 0;
+            Output.WriteLine("Notes in thread (after deleting '1'):");
+            foreach (var n in allNotesInThread3)
+            {
+                Assert.Equal((position == 0) ? "leading note" : $"reply note {position+1}", n.Text);
+                Output.WriteLine($"\t{n.Text}");
+
+                position++;
+            }
         }
         finally
         {
