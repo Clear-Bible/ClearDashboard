@@ -1,9 +1,13 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using MediatR;
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Notes
 {
@@ -20,6 +24,22 @@ namespace ClearDashboard.DAL.Alignment.Notes
         }
         public string? Text { get; set; }
         public string? AbbreviatedText { get; set; }
+
+        private Models.NoteStatus noteStatus_;
+        public string NoteStatus
+        {
+            get { return noteStatus_.ToString(); }
+            set
+            {
+                if (!Enum.TryParse(value, out noteStatus_))
+                {
+                    throw new ArgumentException(
+                        $"Invalid NoteStatus '{value}'.  Must be one of: " + 
+                        $"{string.Join(", ", ((Models.NoteStatus[])Enum.GetValues(typeof(Models.NoteStatus))).Select(ns => $"'{ns}'"))}");
+                }
+            }
+        }
+        public EntityId<NoteId>? ThreadId { get; private set; }
 
 #if DEBUG
         private ObservableCollection<Label> labels_;
@@ -38,18 +58,40 @@ namespace ClearDashboard.DAL.Alignment.Notes
         private readonly ICollection<IId> domainEntityIds_;
         public IEnumerable<IId> DomainEntityIds { get { return domainEntityIds_; } }
 
-        public Note()
+        public Note(Note? noteInThread = null)
         {
+            if (noteInThread is not null)
+            {
+                if (noteInThread.NoteId is null)
+                {
+                    throw new MediatorErrorEngineException("'CreateOrUpdate NoteInThread before passing to Note constructor");
+                }
+                ThreadId = noteInThread.ThreadId ?? new EntityId<NoteId>() { Id = noteInThread.NoteId.Id };
+            }
+
+            noteStatus_ = Models.NoteStatus.Open;
             labels_ = new ObservableCollection<Label>();
             domainEntityIds_ = new HashSet<IId>(new IIdEquatableComparer());
         }
-        internal Note(NoteId noteId, string text, string? abbreviatedText, ICollection<Label> labels, ICollection<IId> domainEntityIds)
+        internal Note(NoteId noteId, string text, string? abbreviatedText, Models.NoteStatus noteStatus, EntityId<NoteId>? threadId, ICollection<Label> labels, ICollection<IId> domainEntityIds)
         {
             NoteId = noteId;
             Text = text;
             AbbreviatedText = abbreviatedText;
+            ThreadId = threadId;
+            noteStatus_ = noteStatus;
             labels_ = new ObservableCollection<Label>(labels.DistinctBy(l => l.LabelId)); ;
             domainEntityIds_ = new HashSet<IId>(domainEntityIds, new IIdEquatableComparer());
+        }
+
+        public bool IsReply()
+        {
+            if (NoteId is null)
+            {
+                throw new MediatorErrorEngineException("'CreateOrUpdate Note before calling IsReply");
+            }
+
+            return ThreadId is not null && !NoteId.IdEquals(ThreadId);
         }
 
         public IEnumerable<string> GetAttachmentContentTypes()
@@ -62,7 +104,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public async Task<Note> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
         {            
-            var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText);
+            var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText, noteStatus_, ThreadId);
 
             var result = await mediator.Send(command, token);
             if (result.Success)
@@ -235,6 +277,22 @@ namespace ClearDashboard.DAL.Alignment.Notes
             IMediator mediator)
         {
             var command = new GetAllNotesQuery();
+
+            var result = await mediator.Send(command);
+            if (result.Success)
+            {
+                return result.Data!;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public static async Task<IOrderedEnumerable<Note>> GetNotesInThread(EntityId<NoteId> threadId,
+            IMediator mediator)
+        {
+            var command = new GetNotesInThreadQuery(threadId);
 
             var result = await mediator.Send(command);
             if (result.Success)

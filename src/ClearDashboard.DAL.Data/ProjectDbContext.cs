@@ -25,6 +25,13 @@ namespace ClearDashboard.DataAccessLayer.Data
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
         }
+        internal ProjectDbContext(string databaseName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
+            : base(optionsBuilder.Options)
+        {
+            // This constructor is only for initial migration / design time usage
+            DatabaseName = databaseName;
+            OptionsBuilder = optionsBuilder;
+        }
 
         public virtual DbSet<Adornment> Adornments => Set<Adornment>();
 
@@ -333,10 +340,5 @@ namespace ClearDashboard.DataAccessLayer.Data
         //    }
         //    return base.SaveChanges();
         //}
-
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
     }
 }

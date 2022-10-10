@@ -1,6 +1,8 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -192,6 +194,35 @@ namespace ClearDashboard.DAL.Alignment.Features
                 translationSet.Metadata,
                 translationSet.Created,
                 BuildUserId(user));
+        }
+
+        public static NoteId BuildNoteId(Models.Note note)
+        {
+            if (note.User == null)
+            {
+                throw new MediatorErrorEngineException("DB Note passed to BuildNoteId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
+
+            return new NoteId(
+                note.Id,
+                note.Created,
+                note.Modified,
+                BuildUserId(note.User!));
+        }
+
+        public static Note BuildNote(Models.Note note)
+        {
+            return new Note(
+                BuildNoteId(note),
+                note.Text!,
+                note.AbbreviatedText,
+                note.NoteStatus,
+                (note.ThreadId is not null) ? new EntityId<NoteId>() { Id = note.ThreadId.Value } : null,
+                note.LabelNoteAssociations
+                    .Select(ln => new Label(new LabelId(ln.Label!.Id), ln.Label!.Text ?? string.Empty)).ToHashSet(),
+                note.NoteDomainEntityAssociations
+                    .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet()
+            );
         }
     }
 }
