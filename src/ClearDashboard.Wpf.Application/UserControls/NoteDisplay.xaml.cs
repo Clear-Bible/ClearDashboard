@@ -11,6 +11,7 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -57,6 +58,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the EntityId dependency property.
         /// </summary>
         public static readonly DependencyProperty EntityIdProperty = DependencyProperty.Register("EntityId", typeof(IId), typeof(NoteDisplay));
+        
+        /// <summary>
+        /// Identifies the EntityId dependency property.
+        /// </summary>
+        public static readonly DependencyProperty EntityIdsProperty = DependencyProperty.Register("EntityIds", typeof(EntityIdCollection), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the Note dependency property.
@@ -75,10 +81,51 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(15d));
 
         /// <summary>
+        /// Identifies the NoteFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteFontWeightProperty = DependencyProperty.Register("NoteFontWeight", typeof(FontWeight), typeof(NoteDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the NoteFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteFontStyleProperty = DependencyProperty.Register("NoteFontStyle", typeof(FontStyle), typeof(NoteDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
         /// Identifies the NoteMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteMarginProperty = DependencyProperty.Register("NoteMargin", typeof(Thickness), typeof(NoteDisplay),
             new PropertyMetadata(new Thickness(2, 2, 2, 2)));
+
+        /// <summary>
+        /// Identifies the UserMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserMarginProperty = DependencyProperty.Register("UserMargin", typeof(Thickness), typeof(NoteDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the UserFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontFamilyProperty = DependencyProperty.Register("UserFontFamily", typeof(FontFamily), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the UserFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontSizeProperty = DependencyProperty.Register("UserFontSize", typeof(double), typeof(NoteDisplay),
+            new PropertyMetadata(11d));
+
+        /// <summary>
+        /// Identifies the UserFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontWeightProperty = DependencyProperty.Register("UserFontWeight", typeof(FontWeight), typeof(NoteDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the UserFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty UserFontStyleProperty = DependencyProperty.Register("UserFontStyle", typeof(FontStyle), typeof(NoteDisplay),
+            new PropertyMetadata(FontStyles.Normal));
 
         /// <summary>
         /// Identifies the TimestampFontSize dependency property.
@@ -162,6 +209,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = AddMode ? NoteAddedEvent : NoteUpdatedEvent,
+                EntityIds = EntityIds,
                 EntityId = EntityId,
                 Note = Note
             });
@@ -204,6 +252,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 EntityId = EntityId,
+                EntityIds = EntityIds,
                 Label = args?.Label,
                 Note = Note
             });
@@ -270,14 +319,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set
             {
                 _isChanged = value;
-                OnPropertyChanged(nameof(TimestampVisibility));
+                OnPropertyChanged(nameof(TimestampRowVisibility));
                 OnPropertyChanged(nameof(ButtonVisibility));
             } 
         }
 
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
-        public Visibility TimestampVisibility => AddMode || IsChanged ? Visibility.Hidden : Visibility.Visible;
+        public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Hidden : Visibility.Visible;
         public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Hidden;
         public Visibility LabelSelectorVisibility => AddMode ? Visibility.Hidden : Visibility.Visible;
 
@@ -292,12 +341,75 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public ObservableCollection<NotesLabel> NoteLabels => Note?.Labels;
 
         /// <summary>
-        /// Gets or sets the <see cref="EntityId{T}"/> that contains the note.
+        /// Gets or sets the <see cref="EntityId{T}"/> associated with the note.
         /// </summary>
         public IId? EntityId
         {
             get => (IId)GetValue(EntityIdProperty);
             set => SetValue(EntityIdProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the collection of <see cref="EntityId{T}"/> associated with the note.
+        /// </summary>
+        public EntityIdCollection EntityIds
+        {
+            get => (EntityIdCollection)GetValue(EntityIdsProperty);
+            set => SetValue(EntityIdsProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background brush for individual label boxes.
+        /// </summary>
+        public SolidColorBrush LabelBackground
+        {
+            get => (SolidColorBrush)GetValue(LabelBackgroundProperty);
+            set => SetValue(LabelBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the corner radius for individual label boxes.
+        /// </summary>
+        public CornerRadius LabelCornerRadius
+        {
+            get => (CornerRadius)GetValue(LabelCornerRadiusProperty);
+            set => SetValue(LabelCornerRadiusProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for individual label boxes.
+        /// </summary>
+        public double LabelFontSize
+        {
+            get => (double)GetValue(LabelFontSizeProperty);
+            set => SetValue(LabelFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin for individual label boxes.
+        /// </summary>
+        public Thickness LabelMargin
+        {
+            get => (Thickness)GetValue(LabelMarginProperty);
+            set => SetValue(LabelMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for individual label boxes.
+        /// </summary>
+        public Thickness LabelPadding
+        {
+            get => (Thickness)GetValue(LabelPaddingProperty);
+            set => SetValue(LabelPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets a collection of <see cref="DAL.Alignment.Notes.Label"/> objects for auto selection in the control.
+        /// </summary>
+        public IEnumerable<NotesLabel> LabelSuggestions
+        {
+            get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
+            set => SetValue(LabelSuggestionsProperty, value);
         }
 
         /// <summary>
@@ -346,57 +458,48 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the background brush for individual label boxes.
+        /// Gets or sets the font family for displaying the user name below the note.
         /// </summary>
-        public SolidColorBrush LabelBackground
+        public FontFamily UserFontFamily
         {
-            get => (SolidColorBrush)GetValue(LabelBackgroundProperty);
-            set => SetValue(LabelBackgroundProperty, value);
+            get => (FontFamily)GetValue(UserFontSizeProperty);
+            set => SetValue(UserFontSizeProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the margin for individual label boxes.
+        /// Gets or sets the font size for displaying the user name below the note.
         /// </summary>
-        public Thickness LabelMargin
+        public double UserFontSize
         {
-            get => (Thickness)GetValue(LabelMarginProperty);
-            set => SetValue(LabelMarginProperty, value);
+            get => (double)GetValue(UserFontSizeProperty);
+            set => SetValue(UserFontSizeProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the padding for individual label boxes.
+        /// Gets or sets the font style for displaying the user name below the note.
         /// </summary>
-        public Thickness LabelPadding
+        public FontStyle UserFontStyle
         {
-            get => (Thickness)GetValue(LabelPaddingProperty);
-            set => SetValue(LabelPaddingProperty, value);
+            get => (FontStyle)GetValue(UserFontStyleProperty);
+            set => SetValue(UserFontStyleProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the corner radius for individual label boxes.
+        /// Gets or sets the font weight for displaying the user name below the note.
         /// </summary>
-        public CornerRadius LabelCornerRadius
+        public FontWeight UserFontWeight
         {
-            get => (CornerRadius)GetValue(LabelCornerRadiusProperty);
-            set => SetValue(LabelCornerRadiusProperty, value);
+            get => (FontWeight)GetValue(UserFontWeightProperty);
+            set => SetValue(UserFontStyleProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the font size for individual label boxes.
+        /// Gets or sets the margin for displaying the user below the note.
         /// </summary>
-        public double LabelFontSize
+        public Thickness UserMargin
         {
-            get => (double)GetValue(LabelFontSizeProperty);
-            set => SetValue(LabelFontSizeProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets a collection of <see cref="DAL.Alignment.Notes.Label"/> objects for auto selection in the control.
-        /// </summary>
-        public IEnumerable<NotesLabel> LabelSuggestions
-        {
-            get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
-            set => SetValue(LabelSuggestionsProperty, value);
+            get => (Thickness)GetValue(UserMarginProperty);
+            set => SetValue(UserMarginProperty, value);
         }
 
         /// <summary>
@@ -483,6 +586,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             InitializeComponent();
 
             Loaded += OnLoaded;
+        }
+
+        private void OnDeleteNote(object sender, RoutedEventArgs e)
+        {
+            var args = e;
         }
     }
 }
