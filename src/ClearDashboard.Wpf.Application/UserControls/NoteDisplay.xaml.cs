@@ -107,7 +107,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the UserFontFamily dependency property.
         /// </summary>
-        public static readonly DependencyProperty UserFontFamilyProperty = DependencyProperty.Register("UserFontFamily", typeof(FontFamily), typeof(NoteDisplay));
+        public static readonly DependencyProperty UserFontFamilyProperty = DependencyProperty.Register("UserFontFamily", typeof(FontFamily), typeof(NoteDisplay),
+                new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
 
         /// <summary>
         /// Identifies the UserFontSize dependency property.
@@ -274,6 +275,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             OnPropertyChanged(nameof(NoteLabels));
 
             RaiseLabelEvent(LabelSelectedEvent, labelEventArgs);
+        }
+
+        private void OnDeleteNote(object sender, RoutedEventArgs e)
+        {
+            RaiseEvent(new NoteEventArgs
+            {
+                RoutedEvent = NoteDeletedEvent,
+                EntityIds = EntityIds,
+                EntityId = EntityId,
+                Note = Note
+            });
         }
 
         [NotifyPropertyChangedInvocator]
@@ -588,9 +600,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
             Loaded += OnLoaded;
         }
 
-        private void OnDeleteNote(object sender, RoutedEventArgs e)
-        {
-            var args = e;
-        }
     }
 }
