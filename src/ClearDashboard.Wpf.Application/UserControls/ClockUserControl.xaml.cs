@@ -61,13 +61,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public ClockUserControl()
         {
-            
-        }
-
-        
-        public ClockUserControl(ILogger logger)
-        {
-            _logger = logger;
             InitializeComponent();
             DataContext = this;
 
