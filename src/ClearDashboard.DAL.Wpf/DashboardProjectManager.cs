@@ -23,7 +23,7 @@ public record ShowTokenizationWindowMessage(string ParatextProjectId, string Pro
     Guid CorpusId, Guid TokenizedTextCorpusId, CorpusType CorpusType, bool IsRTL, bool IsNewWindow);
 
 public record ShowParallelTranslationWindowMessage(string TranslationSetId, string AlignmentSetId, string DisplayName, string ParallelCorpusId,
-    string? ParallelCorpusDisplayName, bool IsNewWindow);
+    string? ParallelCorpusDisplayName, bool IsRTL, bool IsNewWindow);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record CloseDockingPane(Guid guid);
@@ -45,6 +45,7 @@ public record ParatextConnectedMessage(bool Connected);
 public record UserMessage(User User);
 
 public record LogActivityMessage(string Message);
+
 
 
 #region ProjectDesignSurfaceMessages

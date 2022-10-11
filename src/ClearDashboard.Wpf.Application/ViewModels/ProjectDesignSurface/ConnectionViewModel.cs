@@ -58,6 +58,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
+        public bool IsRTL { get; set; }
+
         public Guid Id { get; set; } = Guid.NewGuid();
         
         private ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> _menuItems = new();
