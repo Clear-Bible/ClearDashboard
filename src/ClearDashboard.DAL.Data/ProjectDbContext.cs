@@ -83,7 +83,6 @@ namespace ClearDashboard.DataAccessLayer.Data
 
                     await EnsureMigrated();
                 }
-
                 _logger?.LogInformation("Check to migrate database complete");
             }
             catch (Exception ex)

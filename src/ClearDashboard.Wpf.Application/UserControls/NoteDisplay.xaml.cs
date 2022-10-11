@@ -52,6 +52,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
             ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
+        /// <summary>
+        /// Identifies the LabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
+            ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
         #endregion Static Routed Events
         #region Static Dependency Properties
         /// <summary>
@@ -252,8 +258,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new LabelEventArgs
             {
                 RoutedEvent = routedEvent,
-                EntityId = EntityId,
-                EntityIds = EntityIds,
+                //EntityId = EntityId,
+                //EntityIds = EntityIds,
                 Label = args?.Label,
                 Note = Note
             });
@@ -262,22 +268,33 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             var labelEventArgs = e as LabelEventArgs;
-            Note.Labels.Add(labelEventArgs.Label);
-            OnPropertyChanged(nameof(NoteLabels));
 
             RaiseLabelEvent(LabelAddedEvent, labelEventArgs);
+            OnPropertyChanged(nameof(NoteLabels));
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
         {
             var labelEventArgs = e as LabelEventArgs;
-            Note.Labels.Add(labelEventArgs.Label);
-            OnPropertyChanged(nameof(NoteLabels));
 
             RaiseLabelEvent(LabelSelectedEvent, labelEventArgs);
+            OnPropertyChanged(nameof(NoteLabels));
+        }
+
+        private void OnLabelRemoved(object sender, RoutedEventArgs e)
+        {
+            var labelEventArgs = e as LabelEventArgs;
+
+            RaiseLabelEvent(LabelRemovedEvent, labelEventArgs);
+            OnPropertyChanged(nameof(NoteLabels));
         }
 
         private void OnDeleteNote(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = true;
+        }
+
+        private void DeleteConfirmed(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new NoteEventArgs
             {
@@ -286,6 +303,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 EntityId = EntityId,
                 Note = Note
             });
+            ConfirmDeletePopup.IsOpen = false;
+        }
+        private void DeleteCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = false;
         }
 
         [NotifyPropertyChangedInvocator]
@@ -452,6 +474,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the font weight for the note text box.
+        /// </summary>
+        public FontWeight NoteFontWeight
+        {
+            get => (FontWeight)GetValue(NoteFontWeightProperty);
+            set => SetValue(NoteFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the note text box.
+        /// </summary>
+        public FontStyle NoteFontStyle
+        {
+            get => (FontStyle)GetValue(NoteFontStyleProperty);
+            set => SetValue(NoteFontStyleProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the margin for the timestamp and user.
         /// </summary>
         public Thickness TimestampMargin
@@ -584,6 +624,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(LabelAddedEvent, value);
             remove => RemoveHandler(LabelAddedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is removed.
+        /// </summary>
+        public event RoutedEventHandler LabelRemoved
+        {
+            add => AddHandler(LabelRemovedEvent, value);
+            remove => RemoveHandler(LabelRemovedEvent, value);
         }
 
         /// <summary>

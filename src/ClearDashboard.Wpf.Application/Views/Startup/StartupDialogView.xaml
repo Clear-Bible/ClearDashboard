@@ -8,8 +8,7 @@
     Title="StartupDialogView"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    mc:Ignorable="d"
-    >
+    mc:Ignorable="d">
 
     <Grid>
         <!--<Button x:Name="GoToMain" cm:Message.Attach="GoToMain"  Background="{DynamicResource BlueDarkBrush}" Width="120">Go to Main</Button>-->

@@ -12,8 +12,10 @@ using System;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Printing;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
@@ -22,10 +24,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     {
         private DashboardProjectManager ProjectManager { get; }
         public bool MimicParatextConnection { get; set; }
+        public static Visibility DeleteVisible = Visibility.Visible;
+        public static bool InitialStartup = true;
         private bool _licenseCleared = false;
         private bool _runRegistration = false;
+        public static bool GoToSetup = false;
 
-        public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, DashboardProjectManager projectManager)
+        public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             ProjectManager = projectManager;
@@ -54,6 +60,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             CurrentStep = _runRegistration ? Steps![0] : Steps![1];
+
+            if (GoToSetup)
+            {
+                CurrentStep = Steps![2];
+                GoToSetup = false;
+            }
 
             IsLastWorkflowStep = (Steps.Count == 1);
             EnableControls = true;
@@ -94,6 +106,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public async void Ok()
         {
+            DeleteVisible = Visibility.Collapsed;
+            InitialStartup = false;
             await TryCloseAsync(true);
         }
 
