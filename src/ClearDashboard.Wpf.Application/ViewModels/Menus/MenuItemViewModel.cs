@@ -112,7 +112,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
 
         private async void Execute()
         {
-            if (Id is "NewID" or "OpenID")
+            if (Id == "NewID")
             {
                 await ViewModel.ExecuteMenuCommand(this);
                 return;

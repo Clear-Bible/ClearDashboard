@@ -101,8 +101,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
                 // mostly using database connection-level functions, commands, paramters etc.
-                using var connection = ProjectDbContext.Database.GetDbConnection();
-                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+                using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
                 using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand();
                 using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(); 
@@ -174,7 +173,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             cancellationToken);
                 }
 
-                
                 await transaction.CommitAsync(cancellationToken);
 
                 var tokenizedCorpusDb = ProjectDbContext!.TokenizedCorpora.Include(tc => tc.User).First(tc => tc.Id == tokenizationId);

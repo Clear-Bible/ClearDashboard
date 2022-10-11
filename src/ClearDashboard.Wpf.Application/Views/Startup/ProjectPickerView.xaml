@@ -11,7 +11,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:startup="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Width="Auto"
@@ -264,6 +263,93 @@
                         ValidatesOnDataErrors="True" />
                 </TextBox.Text>
             </TextBox>
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalAlignment="Center">
+            <ComboBox
+                x:Name="SelectedLanguage"
+                Width="200"
+                Height="30"
+                Margin="0,15,15,10"
+                HorizontalAlignment="Right"
+                VerticalContentAlignment="Top"
+                FontSize="12"
+                IsEnabled="{Binding Connected}"
+                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
+                SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
+        </StackPanel>
+        <!--<StackPanel
+            Grid.Row="2"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Orientation="Vertical">
+
+            <TextBlock
+                Margin="30,0"
+                FontSize="19"
+                Text="{helpers:Localization ProjectPicker_GetStarted}" />
+
+        </StackPanel>-->
+
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="1"
+            Margin="0,55,0,0">
+            <!--  Open Recent  -->
+            <Label
+                Margin="30,0"
+                Content="{helpers:Localization ProjectPicker_OpenRecent}"
+                FontSize="19" />
+            <Button
+                x:Name="MoveForwards"
+                Width="340"
+                Height="80"
+                Margin="10,5,40,10"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Top"
+                cal:Message.Attach="MoveForwards"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="DarkGray"
+                BorderThickness="0"
+                IsEnabled="{Binding Connected}"
+                Style="{StaticResource TransparentStyle}">
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <Image
+                        Height="30"
+                        Margin="5"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Source="../../Assets/newproject.png" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="19"
+                            FontWeight="Normal"
+                            Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
+                        <TextBlock
+                            Margin="0,2"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            FontWeight="Light"
+                            Text="{helpers:Localization ProjectPicker_CreateLong}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+
+            </Button>
+
+        </StackPanel>
+
+
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="0"
+            Margin="10,-95,0,0"
+            Orientation="Vertical">
 
             <materialDesign:Card
                 Width="475"
@@ -276,8 +362,9 @@
                 <Label
                     Margin="15"
                     VerticalAlignment="Center"
-                    Content="{helpers:Localization ProjectPicker_NoMatches}"
-                    FontSize="21" />
+                    FontSize="21"
+                    Content="{helpers:Localization ProjectPicker_NoMatches}">
+                </Label>
             </materialDesign:Card>
 
             <ListView
@@ -288,20 +375,20 @@
                 ItemsSource="{Binding DashboardProjectsDisplay}"
                 ScrollViewer.CanContentScroll="True"
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+                Style="{StaticResource EmptyMaterialDesignListView}"
                 Visibility="{Binding NoProjectVisibility}">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:Card
-                            Width="532"
+                            Width="475"
                             Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Background="Transparent"
                             Tag="{Binding DataContext, ElementName=GridLayout}">
                             <materialDesign:Card.ContextMenu>
-                                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Visibility="{x:Static startup:StartupDialogViewModel.DeleteVisible}">
-                                    <!--  , ConverterParameter={StaticResource True}  -->
+                                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />
                                 </ContextMenu>
                             </materialDesign:Card.ContextMenu>
@@ -357,104 +444,8 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </StackPanel>
 
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="1"
-            VerticalAlignment="Center">
-            <ComboBox
-                x:Name="SelectedLanguage"
-                Width="200"
-                Height="30"
-                Margin="0,15,15,10"
-                HorizontalAlignment="Right"
-                VerticalContentAlignment="Top"
-                FontSize="12"
-                IsEnabled="{Binding Connected}"
-                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type model:LanguageTypeValue}}}"
-                SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" />
-        </StackPanel>
-        <!--<StackPanel
-            Grid.Row="2"
-            Grid.Column="1"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Orientation="Vertical">
-
-            <TextBlock
-                Margin="30,0"
-                FontSize="19"
-                Text="{helpers:Localization ProjectPicker_GetStarted}" />
-
-        </StackPanel>-->
-
-        <StackPanel
-            Grid.Row="2"
-            Grid.Column="1"
-            Margin="0,0,0,0">
-            <!--  Open Recent  -->
-            <Label
-                Margin="7,0"
-                Content="{helpers:Localization ProjectPicker_GetStarted}"
-                FontSize="19" />
-            <Button
-                x:Name="MoveForwards"
-                Width="340"
-                Height="80"
-                Margin="10,5,40,10"
-                HorizontalContentAlignment="Left"
-                VerticalContentAlignment="Top"
-                cal:Message.Attach="MoveForwards"
-                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                Background="DarkGray"
-                BorderThickness="0"
-                IsEnabled="{Binding Connected}"
-                Style="{StaticResource TransparentStyle}">
-                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                    <Image
-                        Height="30"
-                        Margin="5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Source="../../Assets/newproject.png" />
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="19"
-                            FontWeight="Normal"
-                            Text="{helpers:Localization ProjectPicker_CreateNewProject}" />
-                        <TextBlock
-                            Margin="0,2"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            FontWeight="Light"
-                            Text="{helpers:Localization ProjectPicker_CreateLong}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-                </StackPanel>
-            </Button>
-
-            <TextBlock
-                Width="500"
-                MaxWidth="340"
-                Margin="11,10,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="16"
-                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
-                Text="{helpers:Localization ProjectPicker_DeleteError}"
-                TextWrapping="Wrap"
-                Visibility="{Binding DeleteErrorVisibility}" />
 
         </StackPanel>
-
-
-        <StackPanel
-            Grid.Row="3"
-            Grid.Column="0"
-            Margin="10,0,0,0"
-            Orientation="Vertical" />
     </Grid>
 </UserControl>
