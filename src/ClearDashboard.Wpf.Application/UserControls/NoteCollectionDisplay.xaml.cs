@@ -208,6 +208,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnNoteAdded(object sender, RoutedEventArgs e)
         {
             var args = e as NoteEventArgs;
+            if (Notes == null) Notes = new NoteCollection();
             Notes.Add(args.Note);
             NewNote = new Note();
 
@@ -224,6 +225,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteDeleted(object sender, RoutedEventArgs e)
         {
+            var args = e as NoteEventArgs;
+            Notes.Remove(args.Note);
+
             RaiseNoteEvent(NoteDeletedEvent, e as NoteEventArgs);
         }
 
