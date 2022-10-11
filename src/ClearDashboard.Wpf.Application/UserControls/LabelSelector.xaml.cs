@@ -70,11 +70,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (LabelSuggestionListBox.SelectedItem is NotesLabel selectedLabel)
             {
                 RaiseLabelEvent(LabelSelectedEvent, selectedLabel);
-                LabelTextBox.Text = string.Empty;
-                LabelSuggestionListBox.SelectedIndex = -1;
-                TextBoxVisibility = Visibility.Hidden;
-                OnPropertyChanged(nameof(TextBoxVisibility));
+                CloseTextBox();
             }
+        }
+
+        private void CloseTextBox()
+        {
+            LabelTextBox.Text = string.Empty;
+            LabelSuggestionListBox.SelectedIndex = -1;
+            TextBoxVisibility = Visibility.Hidden;
+            OnPropertyChanged(nameof(TextBoxVisibility));
         }
 
         private void OnLabelTextBoxKeyUp(object sender, KeyEventArgs e)
@@ -90,6 +95,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     RaiseLabelEvent(LabelAddedEvent, new NotesLabel {Text = LabelTextBox.Text});
                 }
+                CloseTextBox();
             }
         }
 
