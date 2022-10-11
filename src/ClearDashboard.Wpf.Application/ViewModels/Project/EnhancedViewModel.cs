@@ -614,6 +614,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 catch (Exception ex)
                 {
+                    Logger.LogError(ex, "The attempt to ShowNewParallelTranslation failed.");
                     ProgressBarVisibility = Visibility.Collapsed;
                     if (!localCancellationToken.IsCancellationRequested)
                     {
