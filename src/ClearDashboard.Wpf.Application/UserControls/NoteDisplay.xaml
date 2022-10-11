@@ -78,6 +78,7 @@
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}" 
                 />
             <Button 
+                Name="DeleteNoteButton"
                 Margin="10,0,10,0"
                 Padding="0,0,0,0" 
                 Background="Transparent" 
@@ -86,6 +87,18 @@
                 BorderThickness="0" 
                 Click="OnDeleteNote">X
             </Button>
+            <Popup Name="ConfirmDeletePopup" StaysOpen="False" PlacementTarget="{Binding ElementName=DeleteNoteButton}"
+                   Placement="Left" Width="200" VerticalOffset="30">
+                <Border BorderThickness="2">
+                    <StackPanel Orientation="Vertical" Background="LightGoldenrodYellow">
+                        <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Padding="10">Delete this note?</TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Margin="5" Click="DeleteConfirmed">Yes</Button>
+                            <Button Margin="5" Click="DeleteCancelled">No</Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Popup>
         </StackPanel>
         <StackPanel
             Grid.Row="1"

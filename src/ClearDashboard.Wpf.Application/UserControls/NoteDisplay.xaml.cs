@@ -262,22 +262,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             var labelEventArgs = e as LabelEventArgs;
-            Note.Labels.Add(labelEventArgs.Label);
-            OnPropertyChanged(nameof(NoteLabels));
 
             RaiseLabelEvent(LabelAddedEvent, labelEventArgs);
+            OnPropertyChanged(nameof(NoteLabels));
         }
 
         private void OnLabelSelected(object sender, RoutedEventArgs e)
         {
             var labelEventArgs = e as LabelEventArgs;
-            Note.Labels.Add(labelEventArgs.Label);
-            OnPropertyChanged(nameof(NoteLabels));
 
             RaiseLabelEvent(LabelSelectedEvent, labelEventArgs);
+            OnPropertyChanged(nameof(NoteLabels));
         }
 
         private void OnDeleteNote(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = true;
+        }
+
+        private void DeleteConfirmed(object sender, RoutedEventArgs e)
         {
             RaiseEvent(new NoteEventArgs
             {
@@ -286,6 +289,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 EntityId = EntityId,
                 Note = Note
             });
+            ConfirmDeletePopup.IsOpen = false;
+        }
+        private void DeleteCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = false;
         }
 
         [NotifyPropertyChangedInvocator]
