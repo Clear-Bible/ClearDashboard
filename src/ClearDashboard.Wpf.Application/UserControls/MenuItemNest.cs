@@ -40,8 +40,9 @@ public class MenuItemNest : INotifyPropertyChanged
 
     #region Observable Properties
 
+    // ReSharper disable once InconsistentNaming
     private string _checkBoxIsChecked { get; set; }
-    public string CheckBoxIsChecked
+    public string? CheckBoxIsChecked
     {
         get => _checkBoxIsChecked;
         set

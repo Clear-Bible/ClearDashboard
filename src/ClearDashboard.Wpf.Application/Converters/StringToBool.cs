@@ -15,6 +15,11 @@ namespace ClearDashboard.Wpf.Application.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is null)
+            {
+                return false;
+            }
+
             if (value.ToString() == "True")
             {
                 return true;
