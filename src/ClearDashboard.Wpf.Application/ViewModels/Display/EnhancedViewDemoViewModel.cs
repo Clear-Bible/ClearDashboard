@@ -293,7 +293,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 await VerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
             }
-            Message = $"Label '{e.Label.Text}' added for note on token ({e.EntityId})";
+            Message = $"Label '{e.Label.Text}' added for note";
         }
 
         public async Task LabelSelected(LabelEventArgs e)
@@ -302,7 +302,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 await VerseDisplayViewModel.AssociateNoteLabelAsync(e.Note, e.Label);
             }
-            Message = $"Label '{e.Label.Text}' selected for note on token ({e.EntityId})";
+            Message = $"Label '{e.Label.Text}' selected for note";
+        }
+
+        public async Task LabelRemoved(LabelEventArgs e)
+        {
+            if (e.Note.NoteId != null)
+            {
+                await VerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
+            }
+            Message = $"Label '{e.Label.Text}' removed for note";
         }
 
         public void CloseNotePaneRequested(RoutedEventArgs args)

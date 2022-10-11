@@ -52,6 +52,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         /// <summary>
+        /// Identifies the LabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
+            ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
         /// Identifies the CloseRequestedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent CloseRequestedEvent = EventManager.RegisterRoutedEvent
@@ -196,7 +202,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 Note = e.Note,
                 Label = e.Label,
-                EntityId = e.EntityId
             });
         }
 
@@ -208,6 +213,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnNoteAdded(object sender, RoutedEventArgs e)
         {
             var args = e as NoteEventArgs;
+            if (Notes == null) Notes = new NoteCollection();
             Notes.Add(args.Note);
             NewNote = new Note();
 
@@ -224,6 +230,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteDeleted(object sender, RoutedEventArgs e)
         {
+            var args = e as NoteEventArgs;
+            Notes.Remove(args.Note);
+
             RaiseNoteEvent(NoteDeletedEvent, e as NoteEventArgs);
         }
 
@@ -235,6 +244,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnLabelAdded(object sender, RoutedEventArgs e)
         {
             RaiseLabelEvent(LabelAddedEvent, e as LabelEventArgs);
+        }
+
+        private void OnLabelRemoved(object sender, RoutedEventArgs e)
+        {
+            RaiseLabelEvent(LabelRemovedEvent, e as LabelEventArgs);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -446,6 +460,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(LabelAddedEvent, value);
             remove => RemoveHandler(LabelAddedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is Removed.
+        /// </summary>
+        public event RoutedEventHandler LabelRemoved
+        {
+            add => AddHandler(LabelRemovedEvent, value);
+            remove => RemoveHandler(LabelRemovedEvent, value);
         }
 
         /// <summary>

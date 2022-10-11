@@ -286,6 +286,7 @@
                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];
                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];
                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];
+                                                           [Event LabelRemoved] = [Action LabelRemoved($eventArgs)];
                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];
                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];" >
                 <userControls:NoteCollectionDisplay.NoteMargin>

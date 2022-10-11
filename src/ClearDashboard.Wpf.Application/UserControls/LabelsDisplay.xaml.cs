@@ -2,15 +2,31 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
+using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a collection of <see cref="Label"/> values.
+    /// A control for displaying a collection of <see cref="System.Windows.Controls.Label"/> values.
     /// </summary>
     public partial class LabelsDisplay : UserControl
     {
+        #region Static Routed Events
+        /// <summary>
+        /// Identifies the LabelAddedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
+            ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelsDisplay));
+        #endregion
         #region Static DependencyProperties
+
+        /// <summary>
+        /// Identifies the Note dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register("Note", typeof(Note), typeof(LabelsDisplay));
 
         /// <summary>
         /// Identifies the Orientation dependency property.
@@ -47,6 +63,35 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty LabelsProperty = DependencyProperty.Register("Labels", typeof(IEnumerable), typeof(LabelsDisplay));
 
         #endregion Static DependencyProperties
+        #region Private event handlers
+
+        private void RaiseLabelEvent(RoutedEvent routedEvent, NotesLabel label)
+        {
+            RaiseEvent(new LabelEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Note = Note,
+                Label = label
+            });
+        }
+
+        private void OnRemoveLabel(object sender, RoutedEventArgs e)
+        {
+            var control = e.Source as FrameworkElement;
+            var label = control?.DataContext as NotesLabel;
+            RaiseLabelEvent(LabelRemovedEvent, label);
+        }
+
+        #endregion
+        #region Public properties
+        /// <summary>
+        /// Gets or sets the <see cref="Note"/> that the labels are associated with.
+        /// </summary>
+        public Note Note
+        {
+            get => (Note)GetValue(NoteProperty);
+            set => SetValue(NoteProperty, value);
+        }
 
         /// <summary>
         /// Gets or sets the orientation for displaying the labels.
@@ -94,17 +139,29 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="Label"/> objects to display in the control.
+        /// Gets or sets a collection of <see cref="System.Windows.Controls.Label"/> objects to display in the control.
         /// </summary>
         public IEnumerable Labels
         {
             get => (IEnumerable)GetValue(LabelsProperty);
             set => SetValue(LabelsProperty, value);
         }
+        #endregion Public properties
+        #region Public events
+        /// <summary>
+        /// Occurs when an new label is removed.
+        /// </summary>
+        public event RoutedEventHandler LabelRemoved
+        {
+            add => AddHandler(LabelRemovedEvent, value);
+            remove => RemoveHandler(LabelRemovedEvent, value);
+        }
+        #endregion
 
         public LabelsDisplay()
         {
             InitializeComponent();
         }
+
     }
 }
