@@ -721,7 +721,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             if (message is not null)
                             {
                                 viewModel.ProgressBarVisibility = Visibility.Visible;
-                                await viewModel.ShowNewParallelTranslation(message, cancellationToken, cancellationTokenLocal);
+                                await viewModel.ShowParallelTranslation(message, cancellationToken, cancellationTokenLocal);
                                 await Task.Delay(1000);
                             }
                         }
