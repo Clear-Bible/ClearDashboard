@@ -47,6 +47,7 @@ public record UserMessage(User User);
 public record LogActivityMessage(string Message);
 
 
+
 #region ProjectDesignSurfaceMessages
 public record NodeSelectedChangedMessage(object Node);
 public record ConnectionSelectedChangedMessage(Guid ConnectorId);
