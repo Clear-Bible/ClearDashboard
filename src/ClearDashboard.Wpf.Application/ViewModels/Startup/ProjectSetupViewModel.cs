@@ -9,7 +9,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -69,8 +68,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ProjectManager.CurrentDashboardProject.IsNew = true;
            
             ParentViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
-
-
             ParentViewModel?.Ok();
         }
 

@@ -34,13 +34,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using Microsoft.Extensions.Options;
-using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using SIL.ObjectModel;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using ClearApplicationFoundation.Extensions;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -90,7 +85,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
     #endregion //Enums
 
-    public class ProjectDesignSurfaceViewModel : ToolViewModel
+    public class ProjectDesignSurfaceViewModel : ToolViewModel, 
+        IHandle<NodeSelectedChangedMessage>,
+        IHandle<ConnectionSelectedChangedMessage>, 
+        IHandle<ProjectLoadCompleteMessage>, 
+        IHandle<CorpusDeletedMessage>,
+        IHandle<UiLanguageChangedMessage>
     {
         #region Member Variables
 
@@ -297,17 +297,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 _addManuscriptGreekEnabled = value;
                 NotifyOfPropertyChange(() => AddManuscriptGreekEnabled);
-            }
-        }
-
-        private string _projectName;
-        public string ProjectName
-        {
-            get => _projectName;
-            set
-            {
-                _projectName = value;
-                NotifyOfPropertyChange(() => ProjectName);
             }
         }
 
@@ -551,13 +540,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void LoadCanvas()
         {
-            ProjectName = ProjectManager.CurrentProject.ProjectName;
-
             // we have already loaded once
-            //if (DesignSurface.CorpusNodes.Count > 0)
-            //{
-            //    return;
-            //}
+            if (DesignSurface.CorpusNodes.Count > 0)
+            {
+                return;
+            }
 
             if (ProjectManager?.CurrentProject.DesignSurfaceLayout == "")
             {
@@ -578,9 +565,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 WriteIndented = true,
                 NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
             };
-
-            AddManuscriptGreekEnabled = true;
-            AddManuscriptHebrewEnabled = true;
             var deserialized = JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
 
             // restore the nodes
@@ -914,10 +898,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
+
+
         public async Task AddParatextCorpus()
         {
             await AddParatextCorpus("");
         }
+
 
         // ReSharper restore UnusedMember.Global
         // ReSharper disable once UnusedMember.Global
@@ -1992,6 +1979,145 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 CreateCorpusNodeMenu(corpusNode);
             }
+        }
+
+
+
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            var incomingMessage = message.Status;
+
+            if (incomingMessage.Name == "Corpus" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
+            {
+                CancellationTokenSource?.Cancel();
+
+                // return that your task was cancelled
+                incomingMessage.EndTime = DateTime.Now;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
+                incomingMessage.Description = "Task was cancelled";
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public Task HandleAsync(NodeSelectedChangedMessage message, CancellationToken cancellationToken)
+        {
+            //var node = message.Node as CorpusNodeViewModel;
+
+            //if (node is null)
+            //{
+            //    return;
+            //}
+
+            //var connection = node.AttachedConnections.Where(c => c.IsSelected).ToList();
+            //if (connection.Count > 0)
+            //{
+            //    SelectedConnection = connection[0];
+            //}
+            //else
+            //{
+            //    SelectedConnection = null;
+            //}
+
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ConnectionSelectedChangedMessage message, CancellationToken cancellationToken)
+        {
+            var guid = message.ConnectorId;
+
+            foreach (var node in DesignSurface.CorpusNodes)
+            {
+                foreach (var connection in node.AttachedConnections)
+                {
+                    if (connection.Id == guid)
+                    {
+                        node.IsSelected = true;
+                        connection.IsSelected = true;
+                        SelectedConnection = connection;
+                    }
+                    else
+                    {
+                        connection.IsSelected = false;
+                    }
+                }
+            }
+
+
+            //var nodes = DesignSurface.CorpusNodes.Where(b => b.IsSelected).ToList();
+            //for (int i = 0; i < nodes.Count; i++)
+            //{
+            //    Debug.WriteLine($"{i} {nodes[i].Name}");
+            //}
+
+
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ProjectLoadCompleteMessage message, CancellationToken cancellationToken)
+        {
+            if (ProjectManager.CurrentProject is not null)
+            {
+                LoadCanvas();
+            }
+            return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// A corpus has been removed from the database - check to see if it is the Manuscript so
+        /// we can enable the UI button.  Also delete the corpus for the database
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task HandleAsync(CorpusDeletedMessage message, CancellationToken cancellationToken)
+        {
+            //var paratextId = message.paratextId;
+            // TODO delete database corpus using the paratextId
+
+            AddManuscriptHebrewEnabled = true;
+            AddManuscriptGreekEnabled = true;
+
+
+            foreach (var node in DesignSurface.CorpusNodes)
+            {
+                if (node.CorpusType == CorpusType.ManuscriptHebrew)
+                {
+                    AddManuscriptHebrewEnabled = false;
+                    return Task.CompletedTask;
+                }
+                else if (node.CorpusType == CorpusType.ManuscriptGreek)
+                {
+                    AddManuscriptHebrewEnabled = false;
+                    return Task.CompletedTask;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+
+        /// <summary>
+        /// The UI language has changed
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            // TODO - update the UI language
+            //var language = message.LanguageCode;
+
+            // rerender the context menus
+            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            {
+                CreateCorpusNodeMenu(corpusNode);
+            }
+
+            return Task.CompletedTask;
         }
 
         #endregion // Methods
