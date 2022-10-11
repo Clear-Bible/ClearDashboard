@@ -120,7 +120,6 @@
                 CurrentBcv="{Binding Path=CurrentBcv}"
                 IsControlEnabled="False"
                 IsControlMinimal="True"
-                IsRtl="{Binding IsRtl}"
                 ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowHeader="False"
                 ShowOffsetControl="False"

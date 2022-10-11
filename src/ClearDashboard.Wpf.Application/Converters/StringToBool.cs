@@ -5,37 +5,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Markup;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.Converters
 {
-
-    public class WidthSubtraction : MarkupExtension, IValueConverter
+    [ValueConversion(typeof(string), typeof(bool))]
+    public class StringToBool : IValueConverter
     {
-        private static WidthSubtraction _instance;
-
-        #region IValueConverter Members
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var width = System.Convert.ToInt16(value) - System.Convert.ToInt16(parameter);
-            if (width < 0)
+            if (value is null)
             {
-                width = 0;
+                return false;
             }
-            
-            return width;
+
+            if (value.ToString() == "True")
+            {
+                return true;
+            }
+
+            return false;
         }
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
-        }
-
-        #endregion
-
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return _instance ?? (_instance = new WidthSubtraction());
         }
     }
 }
