@@ -579,30 +579,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //await _projectDesignSurfaceViewModel.DeactivateAsync(false);
 
             ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
-            await UpdateProject(ProjectManager.CurrentProject);
+            await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
 
             //await _projectDesignSurfaceViewModel.SaveCanvas();
 
             return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-        public async Task UpdateProject(DataAccessLayer.Models.Project project)
-        {
-            await using var requestScope = LifetimeScope
-                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
-                project.ProjectName,
-                false,
-                requestScope);
-
-            Logger.LogInformation($"Saving the design surface layout for project '{ProjectManager.CurrentProject.ProjectName}'");
-            projectDbContext.Update(project);
-
-            await projectDbContext.SaveChangesAsync();
-
-            Logger.LogInformation($"Saved the design surface layout for project '{project.ProjectName}'");
         }
 
         protected override async void OnViewAttached(object view, object context)

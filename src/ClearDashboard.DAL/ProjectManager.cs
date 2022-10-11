@@ -260,23 +260,10 @@ namespace ClearDashboard.DataAccessLayer
             } 
         }
 
-        public async Task UpdateProject(Project project)
+        public async Task<Project> UpdateProject(Project project)
         {
-            await using var requestScope = LifetimeScope
-                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
-                project.ProjectName, 
-                false,
-                requestScope);
-
-            Logger.LogInformation($"Saving the design surface layout for project '{CurrentProject.ProjectName}'");
-            projectDbContext.Update(project);
-
-            await projectDbContext.SaveChangesAsync();
-
-            Logger.LogInformation($"Saved the design surface layout for project '{CurrentProject.ProjectName}'");
+            var result = await ExecuteRequest(new UpdateProjectCommand(project), CancellationToken.None);
+            return result.Data;
         }
     }
 }
