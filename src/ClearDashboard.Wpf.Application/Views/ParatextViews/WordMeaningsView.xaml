@@ -120,7 +120,6 @@
                 CurrentBcv="{Binding Path=CurrentBcv}"
                 IsControlEnabled="False"
                 IsControlMinimal="True"
-                IsRtl="{Binding IsRtl}"
                 ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowHeader="False"
                 ShowOffsetControl="False"
@@ -445,8 +444,8 @@
 
         <ScrollViewer
             x:Name="LVSensesSlim"
-            Height="500"
             Grid.Row="2"
+            Height="500"
             DockPanel.Dock="Bottom"
             Visibility="Collapsed">
             <helpers:ScrollingToTopListBox ItemsSource="{Binding WordData}" Style="{StaticResource MaterialDesignListBox}">

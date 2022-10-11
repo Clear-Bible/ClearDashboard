@@ -62,29 +62,28 @@
             Orientation="Horizontal"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampRowVisibility}">
             <Label
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserId}"
-                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontFamily}" 
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontSize}" 
-                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}" 
-                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}"
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserMargin}"
                 VerticalContentAlignment="Center"
-                />
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserId}"
+                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontFamily}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontSize}"
+                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}"
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}" />
             <Label
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Modified}"
-                VerticalContentAlignment="Center"
-                FontStyle="Italic"
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}" 
-                />
-            <Button 
+                VerticalContentAlignment="Center"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Modified}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}"
+                FontStyle="Italic" />
+            <Button
                 Margin="10,0,10,0"
-                Padding="0,0,0,0" 
-                Background="Transparent" 
-                FontWeight="ExtraBold"
+                Padding="0,0,0,0"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="OnDeleteNote"
                 FontSize="16"
-                BorderThickness="0" 
-                Click="OnDeleteNote">X
+                FontWeight="ExtraBold">
+                X
             </Button>
         </StackPanel>
         <StackPanel
