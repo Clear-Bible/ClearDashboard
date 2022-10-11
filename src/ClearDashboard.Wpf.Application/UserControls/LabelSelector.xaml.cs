@@ -32,10 +32,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LabelSelector));
         #endregion
         #region Static Dependency Properties
-        /// <summary>
-        /// Identifies the EntityId dependency property.
-        /// </summary>
-        public static readonly DependencyProperty EntityIdProperty = DependencyProperty.Register("EntityId", typeof(IId), typeof(LabelSelector));
 
         /// <summary>
         /// Identifies the LabelSuggestions dependency property.
@@ -49,7 +45,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new LabelEventArgs
             {
                 RoutedEvent = routedEvent,
-                EntityId = EntityId,
                 Label = label
             });
         }
@@ -115,14 +110,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public properties
 
-        /// <summary>
-        /// Gets or sets the <see cref="EntityId{T}"/> that this control is operating on..
-        /// </summary>
-        public IId? EntityId
-        {
-            get => (IId)GetValue(EntityIdProperty);
-            set => SetValue(EntityIdProperty, value);
-        }
 
         /// <summary>
         /// Gets or sets a collection of <see cref="Label"/> objects for auto selection in the control.
