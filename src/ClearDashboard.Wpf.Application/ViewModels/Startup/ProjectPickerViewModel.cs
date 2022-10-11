@@ -67,17 +67,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
         }
 
-        private Visibility _deleteErrorVisibility = Visibility.Collapsed;
-        public Visibility DeleteErrorVisibility
-        {
-            get => _deleteErrorVisibility;
-            set
-            {
-                _deleteErrorVisibility = value;
-                NotifyOfPropertyChange(() => DeleteErrorVisibility);
-            }
-        }
-
         private string? _message = Resources.ResourceManager.GetString("language", Thread.CurrentThread.CurrentUICulture);
         public string? Message
         {
@@ -291,11 +280,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ParentViewModel.Ok();
         }
 
-        private async Task SendUiLanguageChangeMessage(string language)
-        {
-            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
-        }
-
         private bool CheckIfConnectedToParatext()
         {
             if (ProjectManager?.HasCurrentParatextProject == false)
@@ -334,11 +318,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
                 var originalDatabaseCopyName = $"{project.ProjectName}_original.sqlite";
                 File.Delete(Path.Combine(directoryInfo.Parent.ToString(), originalDatabaseCopyName));
-                DeleteErrorVisibility = Visibility.Collapsed;
             }
             catch (Exception e)
             {
-                DeleteErrorVisibility = Visibility.Visible;
                 Logger?.LogError(e, "An unexpected error occurred while deleting a project.");
             }
         }
@@ -368,7 +350,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             SetLanguage();
             base.OnViewAttached(view, context);
-            DeleteErrorVisibility = Visibility.Collapsed;
         }
 
         private static void SaveUserLanguage(string language)
@@ -389,6 +370,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             ParatextUserName = message.User.ParatextUserName;
             await Task.CompletedTask;
+        }
+
+        private async Task SendUiLanguageChangeMessage(string language)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
         }
     }
 }
