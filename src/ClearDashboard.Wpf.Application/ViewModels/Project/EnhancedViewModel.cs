@@ -84,11 +84,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private List<ParallelCorpus> _parallelProjects = new();
         private List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
-        public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
-        public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
-        public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
-        public IEnumerable<Translation> CurrentTranslations { get; set; }
-        public IEnumerable<Label> LabelSuggestions { get; set; }
+
 
         #endregion //Member Variables
 
@@ -267,6 +263,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _verses, value);
         }
 
+        public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
+        public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
+        public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
+        public IEnumerable<Translation> CurrentTranslations { get; set; }
+        public IEnumerable<Label> LabelSuggestions { get; set; }
+
         #endregion //Observable Properties
 
 
@@ -377,134 +379,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
         }
 
-
-        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
-        {
-            if (CurrentBcv.BibleBookList.Count == 0)
-            {
-                return;
-            }
-
-            if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
-            {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
-
-                InComingChangesStarted = true;
-                CurrentBcv.SetVerseFromId(message.Verse);
-                InComingChangesStarted = false;
-            }
-
-        }
-
-        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
-        {
-            if (ProjectManager?.CurrentParatextProject is not null)
-            {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
-
-                InComingChangesStarted = true;
-
-                // set the CurrentBcv prior to listening to the event
-                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-
-                NotifyOfPropertyChange(() => CurrentBcv);
-                InComingChangesStarted = false;
-            }
-            else
-            {
-                BcvDictionary = new Dictionary<string, string>();
-            }
-        }
-
-        public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
-            _handleAsyncRunning = true;
-            _cancellationTokenSource = new CancellationTokenSource();
-            var localCancellationToken = _cancellationTokenSource.Token;
-            ProgressBarVisibility = Visibility.Visible;
-            await Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
-                    TokenizationType = message.TokenizationName;
-                    CurrentBook = message.ProjectMetadata.AvailableBooks.First();
-                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                        new BackgroundTaskStatus
-                        {
-                            Name = "Fetch Book",
-                            Description = $"Getting book '{CurrentBook?.Code}'...",
-                            StartTime = DateTime.Now,
-                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-                        }), cancellationToken);
-
-                    var tokensTextRows =
-                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
-                            .GetRows()
-                            .WithCancellation(localCancellationToken)
-                            .Cast<TokensTextRow>()
-                            .Where(ttr => ttr
-                                .Tokens
-                                .Count(t => t
-                                    .TokenId
-                                    .ChapterNumber == CurrentBook?.Number) > 0)
-                            .ToList();
-
-                    OnUIThread(() =>
-                    {
-                        ProgressBarVisibility = Visibility.Collapsed;
-                    });
-                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                        new BackgroundTaskStatus
-                        {
-                            Name = "Fetch Book",
-                            Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
-                            StartTime = DateTime.Now,
-                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                        }), cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    if (!localCancellationToken.IsCancellationRequested)
-                    {
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                            new BackgroundTaskStatus
-                            {
-                                Name = "Fetch Book",
-                                EndTime = DateTime.Now,
-                                ErrorMessage = $"{ex}",
-                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                            }), cancellationToken);
-                    }
-                }
-                finally
-                {
-                    _handleAsyncRunning = false;
-                    _cancellationTokenSource.Dispose();
-                }
-            }, cancellationToken);
-        }
-
-        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-        {
-            var incomingMessage = message.Status;
-
-            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
-            {
-                _cancellationTokenSource?.Cancel();
-
-                // return that your task was cancelled
-                incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
-                incomingMessage.Description = "Task was cancelled";
-
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
-            }
-            await Task.CompletedTask;
-        }
 
         public async Task ShowParallelTranslationTokens(ShowParallelTranslationWindowMessage message, CancellationToken cancellationToken)
         {
@@ -1443,6 +1317,136 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             
         }
 
+        #region IHandle
+
+        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (CurrentBcv.BibleBookList.Count == 0)
+            {
+                return;
+            }
+
+            if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
+            {
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+
+                InComingChangesStarted = true;
+                CurrentBcv.SetVerseFromId(message.Verse);
+                InComingChangesStarted = false;
+            }
+
+        }
+
+        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (ProjectManager?.CurrentParatextProject is not null)
+            {
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+
+                InComingChangesStarted = true;
+
+                // set the CurrentBcv prior to listening to the event
+                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+
+                NotifyOfPropertyChange(() => CurrentBcv);
+                InComingChangesStarted = false;
+            }
+            else
+            {
+                BcvDictionary = new Dictionary<string, string>();
+            }
+        }
+
+        public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
+            _handleAsyncRunning = true;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var localCancellationToken = _cancellationTokenSource.Token;
+            ProgressBarVisibility = Visibility.Visible;
+            await Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
+                    TokenizationType = message.TokenizationName;
+                    CurrentBook = message.ProjectMetadata.AvailableBooks.First();
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Getting book '{CurrentBook?.Code}'...",
+                            StartTime = DateTime.Now,
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
+                        }), cancellationToken);
+
+                    var tokensTextRows =
+                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                            .GetRows()
+                            .WithCancellation(localCancellationToken)
+                            .Cast<TokensTextRow>()
+                            .Where(ttr => ttr
+                                .Tokens
+                                .Count(t => t
+                                    .TokenId
+                                    .ChapterNumber == CurrentBook?.Number) > 0)
+                            .ToList();
+
+                    OnUIThread(() =>
+                    {
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    });
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                            StartTime = DateTime.Now,
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                        }), cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    if (!localCancellationToken.IsCancellationRequested)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                EndTime = DateTime.Now,
+                                ErrorMessage = $"{ex}",
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
+                            }), cancellationToken);
+                    }
+                }
+                finally
+                {
+                    _handleAsyncRunning = false;
+                    _cancellationTokenSource.Dispose();
+                }
+            }, cancellationToken);
+        }
+
+
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            var incomingMessage = message.Status;
+
+            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
+            {
+                _cancellationTokenSource?.Cancel();
+
+                // return that your task was cancelled
+                incomingMessage.EndTime = DateTime.Now;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
+                incomingMessage.Description = "Task was cancelled";
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
+            }
+            await Task.CompletedTask;
+        }
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {
@@ -1451,6 +1455,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return Task.CompletedTask;
         }
 
+        #endregion
 
         #endregion // Methods
 
@@ -1593,6 +1598,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #endregion
 
+        #region VerseControlMethods
+
         private Visibility _noteControlVisibility = Visibility.Collapsed;
         public Visibility NoteControlVisibility
         {
@@ -1672,6 +1679,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 .ToList();
             return translationOptions;
         }
+
+        #endregion
 
         //private void HideTranslation()
         //{
