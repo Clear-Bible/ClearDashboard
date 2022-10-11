@@ -18,13 +18,7 @@ namespace ClearDashboard.Wpf.Application.Converters
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var width = System.Convert.ToInt16(value) - System.Convert.ToInt16(parameter);
-            if (width < 0)
-            {
-                width = 0;
-            }
-            
-            return width;
+            return System.Convert.ToInt16(value) - System.Convert.ToInt16(parameter);
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {

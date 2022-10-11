@@ -456,10 +456,9 @@
                 BorderThickness="1">
                 <ListView
                     x:Name="SelectedItemVerses"
-                    MinHeight="{Binding ElementName=LowerBorder, Path=ActualHeight}"
+                    MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
                     Margin="5"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
+                    VerticalAlignment="Top"
                     ItemsSource="{Binding SelectedItemVerses}">
                     <ListView.View>
                         <GridView>

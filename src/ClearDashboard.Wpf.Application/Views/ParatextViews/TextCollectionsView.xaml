@@ -63,6 +63,7 @@
                 CurrentBcv="{Binding Path=CurrentBcv}"
                 IsControlEnabled="False"
                 IsControlMinimal="True"
+                IsRtl="{Binding IsRtl}"
                 ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowHeader="False"
                 ShowOffsetControl="False"
@@ -79,7 +80,7 @@
 
             <ListView
                 x:Name="TextCollectionListView"
-                MinHeight="{Binding ElementName=LowerBorder, Path=ActualHeight}"
+                MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
                 Margin="5"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">
