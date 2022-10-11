@@ -81,7 +81,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private List<TokenProject> _tokenProjects = new();
         private List<ShowTokenizationWindowMessage> _projectMessages = new();
         
-        private List<ParallelCorpus> _parallelProjects = new();
+        private List<ParallelProject> _parallelProjects = new();
         private List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
 
@@ -374,52 +374,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        public void LaunchMirrorView(double actualWidth, double actualHeight)
-        {
-            LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
-        }
+        //public void LaunchMirrorView(double actualWidth, double actualHeight)
+        //{
+        //    LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
+        //}
 
 
-        public async Task ShowParallelTranslationTokens(ShowParallelTranslationWindowMessage message, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
-            _handleAsyncRunning = true;
-            _cancellationTokenSource = new CancellationTokenSource();
-            var localCancellationToken = _cancellationTokenSource.Token;
-
-            ProgressBarVisibility = Visibility.Visible;
-
-            TokenProject? project = null;
-            // check if we have this already
-            try
-            {
-                if (_tokenProjects.Count > 0)
-                {
-                    //project = _tokenProjects.First(p =>
-                    //{
-                    //    return p.ParatextProjectId == message.ParatextProjectId
-                    //           && p.TokenizationType == message.TokenizationType;
-                    //}) ?? null;
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-            }
-
-            // existing project
-            if (project is not null)
-            {
-                //await ShowExistingCorpusTokens(message, cancellationToken, project, localCancellationToken);
-            }
-            else
-            {
-                await ShowNewParallelTranslation(message, cancellationToken, localCancellationToken);
-            }
-
-        }
-
-
+        #region Corpus
 
         public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
         {
@@ -459,237 +420,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await ShowNewCorpusTokens(message, cancellationToken, localCancellationToken);
             }
             
-        }
-
-        public async Task ShowNewParallelTranslation(ShowParallelTranslationWindowMessage message,
-            CancellationToken cancellationToken, CancellationToken localCancellationToken)
-        {
-            var msg = _parallelMessages.Where(p =>
-                p.TranslationSetId == message.TranslationSetId && p.ParallelCorpusId == message.ParallelCorpusId).ToList();
-            if (msg.Count == 0)
-            {
-                _parallelMessages.Add(message);
-            }
-
-            // current project
-            _ = await Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    var verseTokens = await BuildTokenDisplayViewModels(message);
-                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                        new BackgroundTaskStatus
-                        {
-                            Name = "Fetch Book",
-                            Description = $"Found {verseTokens.Count} TokensTextRow entities.",
-                            StartTime = DateTime.Now,
-                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                        }), cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    ProgressBarVisibility = Visibility.Collapsed;
-                    if (!localCancellationToken.IsCancellationRequested)
-                    {
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                            new BackgroundTaskStatus
-                            {
-                                Name = "Fetch Book",
-                                EndTime = DateTime.Now,
-                                ErrorMessage = $"{ex}",
-                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                            }), cancellationToken);
-                    }
-                }
-                finally
-                {
-                    _handleAsyncRunning = false;
-                    if (_cancellationTokenSource != null) 
-                        _cancellationTokenSource.Dispose();
-                }
-            }, cancellationToken);
-        }
-
-        public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
-        {
-            try
-            {
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-                if (corpusId == null)
-                {
-                    var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator!);
-                    corpusId = corpusIds.First();
-                }
-                var corpus = await ParallelCorpus.Get(Mediator!, corpusId);
-
-                Detokenizer = corpus.Detokenizer;
-                stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved parallel corpus {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
-                return corpus;
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
-
-
-        private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
-        {
-            var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
-
-            List<TokenDisplayViewModel> verseTokens = new();
-            var versesOut = new ObservableCollection<VerseDisplayViewModel>();
-
-            List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
-
-            var rows = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
-
-            if (rows is null)
-            {
-
-                OnUIThread(() =>
-                {
-                    UpdateParallelCorpusDisplay(message, versesOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
-                    NotifyOfPropertyChange(() => VersesDisplay);
-
-                    ProgressBarVisibility = Visibility.Collapsed;
-                });
-            }
-            else
-            {
-                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-                CurrentTranslationSet = await GetTranslationSet(message);
-                foreach (var row in rows)
-                {
-                    await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
-                    versesOut.Add(VerseDisplayViewModel);
-                }
-
-                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
-                string title = message.ParallelCorpusDisplayName ?? string.Empty;
-                if (rows.Count <= 1)
-                {
-                    // only one verse
-                    bcv.SetVerseFromId(verseRange[0]);
-                    title += $"  ({bcv.BookName} {bcv.ChapterNum}:{bcv.VerseNum})";
-                }
-                else
-                {
-                    // multiple verses
-                    bcv.SetVerseFromId(verseRange[0]);
-                    title += $"  ({bcv.BookName} {bcv.ChapterNum}:{bcv.VerseNum}-";
-                    bcv.SetVerseFromId(verseRange[^1]);
-                    title += $"{bcv.VerseNum})";
-                }
-
-                OnUIThread(() =>
-                {
-                    UpdateParallelCorpusDisplay(message, versesOut, title);
-                    NotifyOfPropertyChange(() => VersesDisplay);
-
-                    ProgressBarVisibility = Visibility.Collapsed;
-                });
-            }
-
-            return verseTokens;
-        }
-
-
-
-       
-        private List<string> GetValidVerseRange(string bbbcccvvv, int offset)
-        {
-            List<string> verseRange = new();
-            verseRange.Add(bbbcccvvv);
-
-            int currentVerse = Convert.ToInt32(bbbcccvvv.Substring(6));
-            
-            // get lower range first
-            int j = 1;
-            while (j <= offset)
-            {
-                // check verse
-                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000")))
-                {
-                    verseRange.Add(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000"));
-                }
-                
-                j++;
-            }
-
-
-            // get upper range
-            j = 1;
-            while (j <= offset)
-            {
-                // check verse
-                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse + j).ToString("000")))
-                {
-                    verseRange.Add(bbbcccvvv.Substring(0, 6) + (currentVerse + j).ToString("000"));
-                }
-
-                j++;
-            }
-
-            // sort list
-            verseRange.Sort();
-
-            return verseRange;
-        }
-
-        private async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, ShowParallelTranslationWindowMessage message)
-        {
-            try
-            {
-                var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
-                var guid = Guid.Parse(message.ParallelCorpusId);
-                var corpus = await ParallelCorpus.Get(Mediator, corpusIds.First(p => p.Id == guid));
-                var verses = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
-
-                // TODO save out the corpus for future use
-                // _parallelProjects
-
-                List<EngineParallelTextRow?> rows = new();
-                foreach (var verse in verses.parallelTextRows)
-                {
-                    rows.Add(verse as EngineParallelTextRow);
-                }
-
-                return rows;  // return verses.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-
-        public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet(ShowParallelTranslationWindowMessage message)
-        {
-            DAL.Alignment.Translation.TranslationSet translationSet;
-            try
-            {
-                if (message.TranslationSetId == "")
-                {
-                    var translationSetIds = await DAL.Alignment.Translation.TranslationSet.GetAllTranslationSetIds(Mediator);
-                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
-                }
-                else
-                {
-                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(message.TranslationSetId)), Mediator);
-                }
-
-                return translationSet;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
 
         public async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
@@ -849,14 +579,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //await VerseDisplayViewModel!.BindAsync(verseRangeRow, null, new EngineStringDetokenizer(Detokenizer), message.IsRTL);
 
                             tokenDisplays.AddRange(from token in tokens
-                                                   let translation = GetTranslation(token.token)
-                                                   select new TokenDisplayViewModel
-                                                   {
-                                                       Token = token.token,
-                                                       PaddingBefore = token.paddingBefore,
-                                                       PaddingAfter = token.paddingAfter,
-                                                       Translation = translation
-                                                   });
+                                let translation = GetTranslation(token.token)
+                                select new TokenDisplayViewModel
+                                {
+                                    Token = token.token,
+                                    PaddingBefore = token.paddingBefore,
+                                    PaddingAfter = token.paddingAfter,
+                                    Translation = translation
+                                });
                             verses.Add(tokenDisplays);
                         }
                     }
@@ -997,14 +727,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             var tokenDisplays = new List<TokenDisplayViewModel>();
                             tokenDisplays.AddRange(from token in tokens
-                                                   let translation = GetTranslation(token.token)
-                                                   select new TokenDisplayViewModel
-                                                   {
-                                                       Token = token.token,
-                                                       PaddingBefore = token.paddingBefore,
-                                                       PaddingAfter = token.paddingAfter,
-                                                       Translation = translation
-                                                   });
+                                let translation = GetTranslation(token.token)
+                                select new TokenDisplayViewModel
+                                {
+                                    Token = token.token,
+                                    PaddingBefore = token.paddingBefore,
+                                    PaddingAfter = token.paddingAfter,
+                                    Translation = translation
+                                });
                             verses.Add(tokenDisplays);
                         }
                     }
@@ -1055,10 +785,80 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }, cancellationToken);
         }
 
+        #endregion
+
+        #region Parallel
+
+        public async Task ShowParallelTranslationTokens(ShowParallelTranslationWindowMessage message, CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
+            _handleAsyncRunning = true;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var localCancellationToken = _cancellationTokenSource.Token;
+
+            ProgressBarVisibility = Visibility.Visible;
+
+            TokenProject? project = null;
+
+            await ShowParallelTranslation(message, cancellationToken, localCancellationToken);
+        }
+
+        public async Task ShowParallelTranslation(ShowParallelTranslationWindowMessage message,
+            CancellationToken cancellationToken, CancellationToken localCancellationToken)
+        {
+            var msg = _parallelMessages.Where(p =>
+                p.TranslationSetId == message.TranslationSetId && p.ParallelCorpusId == message.ParallelCorpusId).ToList();
+            if (msg.Count == 0)
+            {
+                _parallelMessages.Add(message);
+            }
+
+            // current project
+            _ = await Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    var verseTokens = await BuildTokenDisplayViewModels(message);
+                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                        new BackgroundTaskStatus
+                        {
+                            Name = "Fetch Book",
+                            Description = $"Found {verseTokens.Count} TokensTextRow entities.",
+                            StartTime = DateTime.Now,
+                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                        }), cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    ProgressBarVisibility = Visibility.Collapsed;
+                    if (!localCancellationToken.IsCancellationRequested)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = "Fetch Book",
+                                EndTime = DateTime.Now,
+                                ErrorMessage = $"{ex}",
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
+                            }), cancellationToken);
+                    }
+                }
+                finally
+                {
+                    _handleAsyncRunning = false;
+                    if (_cancellationTokenSource != null) 
+                        _cancellationTokenSource.Dispose();
+                }
+            }, cancellationToken);
+        }
+
+        #endregion
+
         private async Task VerseChangeRerender()
         {
             for (var i = 0; i < _tokenProjects.Count; i++)
             {
+                ProgressBarVisibility = Visibility.Visible;
                 _cancellationTokenSource = new CancellationTokenSource();
 
                 await ShowExistingCorpusTokens(_projectMessages[i], _cancellationTokenSource.Token, _tokenProjects[i],
@@ -1067,11 +867,219 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             for (var i = 0; i < _parallelMessages.Count; i++)
             {
+                ProgressBarVisibility = Visibility.Visible;
                 _cancellationTokenSource = new CancellationTokenSource();
-                await ShowNewParallelTranslation(_parallelMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
+                
+                await ShowParallelTranslation(_parallelMessages[i], _cancellationTokenSource.Token,
+                    _cancellationTokenSource.Token);
             }
 
             
+        }
+
+        public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                if (corpusId == null)
+                {
+                    var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator!);
+                    corpusId = corpusIds.First();
+                }
+                var corpus = await ParallelCorpus.Get(Mediator!, corpusId);
+
+                Detokenizer = corpus.Detokenizer;
+                stopwatch.Stop();
+                Logger?.LogInformation($"Retrieved parallel corpus {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                return corpus;
+            }
+            catch (Exception e)
+            {
+                Logger?.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+
+        private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
+        {
+            var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
+
+            List<TokenDisplayViewModel> verseTokens = new();
+            var versesOut = new ObservableCollection<VerseDisplayViewModel>();
+
+            List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
+
+            var rows = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
+
+            if (rows is null)
+            {
+
+                OnUIThread(() =>
+                {
+                    UpdateParallelCorpusDisplay(message, versesOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+
+                    ProgressBarVisibility = Visibility.Collapsed;
+                });
+            }
+            else
+            {
+                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
+                CurrentTranslationSet = await GetTranslationSet(message);
+                foreach (var row in rows)
+                {
+                    await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
+                    versesOut.Add(VerseDisplayViewModel);
+                }
+
+                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
+                string title = message.ParallelCorpusDisplayName ?? string.Empty;
+                if (rows.Count <= 1)
+                {
+                    // only one verse
+                    bcv.SetVerseFromId(verseRange[0]);
+                    title += $"  ({bcv.BookName} {bcv.ChapterNum}:{bcv.VerseNum})";
+                }
+                else
+                {
+                    // multiple verses
+                    bcv.SetVerseFromId(verseRange[0]);
+                    title += $"  ({bcv.BookName} {bcv.ChapterNum}:{bcv.VerseNum}-";
+                    bcv.SetVerseFromId(verseRange[^1]);
+                    title += $"{bcv.VerseNum})";
+                }
+
+                OnUIThread(() =>
+                {
+                    UpdateParallelCorpusDisplay(message, versesOut, title);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+
+                    ProgressBarVisibility = Visibility.Collapsed;
+                });
+            }
+
+            return verseTokens;
+        }
+
+
+
+       
+        private List<string> GetValidVerseRange(string bbbcccvvv, int offset)
+        {
+            List<string> verseRange = new();
+            verseRange.Add(bbbcccvvv);
+
+            int currentVerse = Convert.ToInt32(bbbcccvvv.Substring(6));
+            
+            // get lower range first
+            int j = 1;
+            while (j <= offset)
+            {
+                // check verse
+                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000")))
+                {
+                    verseRange.Add(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000"));
+                }
+                
+                j++;
+            }
+
+
+            // get upper range
+            j = 1;
+            while (j <= offset)
+            {
+                // check verse
+                if (BcvDictionary.ContainsKey(bbbcccvvv.Substring(0, 6) + (currentVerse + j).ToString("000")))
+                {
+                    verseRange.Add(bbbcccvvv.Substring(0, 6) + (currentVerse + j).ToString("000"));
+                }
+
+                j++;
+            }
+
+            // sort list
+            verseRange.Sort();
+
+            return verseRange;
+        }
+
+        private async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, ShowParallelTranslationWindowMessage message)
+        {
+            try
+            {
+                var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator);
+                var guid = Guid.Parse(message.ParallelCorpusId);
+
+
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+                // check if this project exist or not
+                var project = _parallelProjects.FirstOrDefault(x => x.ParallelCorpusId == guid);
+                ParallelCorpus corpus;
+                if (project is null)
+                {
+                    // save this to the list
+                    corpus = await ParallelCorpus.Get(Mediator, corpusIds.First(p => p.Id == guid));
+                    _parallelProjects.Add(new ParallelProject
+                    {
+                        ParallelCorpusId = guid,
+                        parallelTextRows= corpus,
+                    });
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Retrieved parallel corpus first time {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
+                }
+                else
+                {
+                    corpus = project.parallelTextRows;
+                    stopwatch.Stop();
+                    Logger?.LogInformation($"Retrieved parallel corpus subsequent times {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                }
+
+                var verses = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
+                
+                List<EngineParallelTextRow?> rows = new();
+                foreach (var verse in verses.parallelTextRows)
+                {
+                    rows.Add(verse as EngineParallelTextRow);
+                }
+
+                return rows;  // return verses.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
+
+
+        public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet(ShowParallelTranslationWindowMessage message)
+        {
+            DAL.Alignment.Translation.TranslationSet translationSet;
+            try
+            {
+                if (message.TranslationSetId == "")
+                {
+                    var translationSetIds = await DAL.Alignment.Translation.TranslationSet.GetAllTranslationSetIds(Mediator);
+                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
+                }
+                else
+                {
+                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(message.TranslationSetId)), Mediator);
+                }
+
+                return translationSet;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<List<TokenDisplayViewModel>> verses, string title, bool showTranslations)
