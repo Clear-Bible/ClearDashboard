@@ -988,14 +988,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 ParatextId: metadata.Id,
                                 token: cancellationToken);
 #pragma warning restore CS8604
-
+                           }
                            OnUIThread(() =>
                             {
                                 Corpora.Add(corpus);
                                 var point = GetFreeSpot();
                                 node = CreateNode(corpus, point, dialogViewModel.SelectedTokenizer);
                             });
-                        }
+                        
 
                         await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
                             description: $"Tokenizing and transforming '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
