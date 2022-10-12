@@ -1680,22 +1680,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
         {
-            if (menuItem.Id == "NewID")
+            if (!_projectDesignSurfaceViewModel.LongProcessRunning)
             {
-                StartupDialogViewModel.GoToSetup = true;
+                if (menuItem.Id == "NewID")
+                {
+                    StartupDialogViewModel.GoToSetup = true;
+                }
+
+                var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
+                startupDialogViewModel.MimicParatextConnection = true;
+
+                await OnDeactivateAsync(false, CancellationToken.None);
+
+                var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
+
+                this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+                await OnInitializeAsync(CancellationToken.None);
+                await OnActivateAsync(CancellationToken.None);
+                await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             }
-
-            var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
-            startupDialogViewModel.MimicParatextConnection = true;
-
-            await OnDeactivateAsync(false, CancellationToken.None);
-
-            var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
-
-            this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-            await OnInitializeAsync(CancellationToken.None);
-            await OnActivateAsync(CancellationToken.None);
-            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
         }
 
         #endregion // Methods
