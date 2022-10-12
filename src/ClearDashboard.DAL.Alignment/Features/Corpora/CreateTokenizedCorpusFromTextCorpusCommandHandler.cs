@@ -1,10 +1,10 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
-using System.Linq;
 using System.Text.Json;
 
 //USE TO ACCESS Models
@@ -71,7 +70,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             Logger.LogInformation($"Private memory usage (BEFORE BULK INSERT): {proc.PrivateMemorySize64}");
 #endif
 
-            var tokenizedCorpus = new TokenizedCorpus
+            var tokenizedCorpus = new Models.TokenizedCorpus
             {
                 Corpus = corpus,
                 DisplayName = request.DisplayName,
@@ -114,14 +113,28 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 foreach (var bookId in bookIds)
                 {
-                    var bookTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
+                    var ttrs = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+
+                    var dups = ttrs
+                        .SelectMany(ttr => ttr.Tokens)
+                        .SelectMany(t => (t is CompositeToken token) ? token.Tokens : new List<Token>() { t })
+                        .GroupBy(t => t.TokenId)
+                        .Where(g => g.Count() > 1)
+                        .Select(g => g.Key);
+
+                    if (dups.Any())
+                    {
+                        throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpus.Name}' book '{bookId}'");
+                    }
+
+                    var bookTokens = ttrs
                         .SelectMany(ttr => ttr.Tokens)
                         .Select(token =>
                         {
                             if (token is CompositeToken compositeToken)
                             {
                                 tokenCount++;
-                                return new TokenComposite
+                                return new Models.TokenComposite
                                 {
                                     Id = compositeToken.TokenId.Id,
                                     TokenizationId = tokenizationId,
@@ -164,11 +177,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     SubwordNumber = token.TokenId.SubWordNumber,
                                     SurfaceText = token.SurfaceText,
                                     PropertiesJson = token.PropertiesJson
-                                } as TokenComponent;
+                                } as Models.TokenComponent;
                             }
                         });
 
-                        await InsertTokenComponentsAsync(
+                    await InsertTokenComponentsAsync(
                             bookTokens, 
                             tokenComponentInsertCommand, 
                             cancellationToken);
@@ -223,13 +236,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             return command;
         }
 
-        private static async Task InsertTokenComponentsAsync(IEnumerable<TokenComponent> tokenComponents, DbCommand componentCmd, CancellationToken cancellationToken)
+        private static async Task InsertTokenComponentsAsync(IEnumerable<Models.TokenComponent> tokenComponents, DbCommand componentCmd, CancellationToken cancellationToken)
         {
             foreach (var tokenComponent in tokenComponents)
             {
-                if (tokenComponent is TokenComposite)
+                if (tokenComponent is Models.TokenComposite)
                 {
-                    var tokenComposite = (tokenComponent as TokenComposite)!;
+                    var tokenComposite = (tokenComponent as Models.TokenComposite)!;
                     await InsertTokenCompositeAsync(tokenComposite, componentCmd, cancellationToken);
 
                     foreach (var token in tokenComposite.Tokens)
@@ -261,7 +274,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@TokenCompositeId"].Value = (tokenCompositeId != null) ? tokenCompositeId : DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
-        private static async Task InsertTokenCompositeAsync(TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
+        private static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
         {
             componentCmd.Parameters["@Id"].Value = tokenComposite.Id;
             componentCmd.Parameters["@EngineTokenId"].Value = tokenComposite.EngineTokenId;
