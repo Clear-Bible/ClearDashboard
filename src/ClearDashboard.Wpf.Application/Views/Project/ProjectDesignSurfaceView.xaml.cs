@@ -116,7 +116,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void OnDeleteSelectedNodesExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            this.ViewModel.DeleteSelectedNodes();
+            //this.ViewModel.DeleteSelectedNodes();
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void OnDeleteCorpusNodeExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var node = (CorpusNodeViewModel)e.Parameter;
-            this.ViewModel.DeleteNode(node);
+            //this.ViewModel.DeleteNode(node);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void OnDeleteConnectionExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             var connection = (ConnectionViewModel)e.Parameter;
-            this.ViewModel.DeleteConnection(connection);
+            //this.ViewModel.DeleteConnection(connection);
         }
 
         /// <summary>
