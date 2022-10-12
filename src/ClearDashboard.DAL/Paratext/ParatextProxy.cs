@@ -115,8 +115,23 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
         private  async Task<Process> InternalStartParatextAsync()
         {
-            var paratextInstallDirectory = Environment.GetEnvironmentVariable("ParatextInstallDir");
-            var process = Process.Start($"{paratextInstallDirectory}\\paratext.exe");
+            if (IsParatextInstalled() == false)
+            {
+                _logger.LogError($"Paratext is not installed");
+                return null;
+            }
+
+            _logger.LogInformation($"Paratext Install Path: {ParatextInstallPath}\\paratext.exe");
+
+            Process process = null;
+            try
+            {
+                process = Process.Start($"{ParatextInstallPath}\\paratext.exe");
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation($"Paratext Start Error: {e.Message}");
+            }
 
             return await Task.FromResult(process);
         }
