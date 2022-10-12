@@ -211,24 +211,12 @@ namespace ClearDashboard.DataAccessLayer
             return mediator.Send(request, cancellationToken);
         }
         #endregion
-        
-        public Task<IEnumerable<Project>> GetAllProjects()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<Project> LoadProject(string projectName)
         {
-            using var requestScope = LifetimeScope
-                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+            var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
+            CurrentProject = result.Data;
 
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
-                projectName,
-                false,
-                requestScope);
-
-            CurrentProject = projectDbContext.Projects.First();
             if (CurrentDashboardProject != null)
             {
                 CurrentDashboardProject.DirectoryPath = string.Format(
