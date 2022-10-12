@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ClearDashboard.Wpf.Application.Helpers;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -9,29 +11,42 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Helpers;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
     /// Interaction logic for ClockUserControl.xaml
     /// </summary>
-    public partial class ClockUserControl : UserControl, INotifyPropertyChanged
+    public partial class ClockUserControl : INotifyPropertyChanged
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
+
+        #region Member Variables      
+
         private List<string> utcComboList = new();
 
-        System.Timers.Timer _refreshTimer = new System.Timers.Timer(3000);
+        private Timer _refreshTimer = new Timer(3000);
 
         private int _timeDisplayIndex = 0;
 
         private ReadOnlyCollection<TimeZoneInfo> _timezones = TimeZoneInfo.GetSystemTimeZones();
 
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        public ObservableCollection<MenuItemNest> CheckedList { get; set; }
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
         private ObservableCollection<MenuItemNest> _menuItems;
         public ObservableCollection<MenuItemNest> MenuItems
         {
-            get { return _menuItems; }
+            get => _menuItems;
             set
             {
                 _menuItems = value;
@@ -39,7 +54,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        public ObservableCollection<MenuItemNest> CheckedList { get; set; }
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
 
         public ClockUserControl()
         {
@@ -160,6 +179,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             _refreshTimer.Enabled = true;
             InstantClockRefresh();
         }
+
+        #endregion //Constructor
+
+
+        #region Methods
 
         private void SaveMenuToSettings()
         {
@@ -518,17 +542,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string propName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propName));
-            }
-        }
-
         private void sortMenuItemsIndividual(ObservableCollection<MenuItemNest> collection)
         {
             for (int i = 0; i < collection.Count; i++)
@@ -583,107 +596,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 cbox.Background = Brushes.Transparent;
             }
         }
-    }
 
-    public class MenuItemNest : INotifyPropertyChanged
-    {
-        public MenuItemNest()
-        {
-        }
+        #endregion // Methods
 
-        public Visibility AddButtonVisibility { get; set; }
-        public Visibility DeleteButtonVisibility { get; set; }
 
-        public Visibility CheckBoxVisibility { get; set; }
-        private string _checkBoxIsChecked { get; set; }
-        public string CheckBoxIsChecked
-        {
-            get { return _checkBoxIsChecked; }
-            set
-            {
-                _checkBoxIsChecked = value;
-                OnPropertyChanged();
-            }
-        }
-        public Visibility TextBoxVisibility { get; set; }
-
-        private string _textBoxText { get; set; }
-        public string TextBoxText
-        {
-            get { return _textBoxText; }
-            set
-            {
-                _textBoxText = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Visibility NameTimeVisibility { get; set; }
-        private string _nameTime { get; set; }
-        public string NameTime
-        {
-            get { return _nameTime; }
-            set
-            {
-                _nameTime = value;
-                OnPropertyChanged();
-            }
-        }
-        public Visibility TextBlockVisibility { get; set; }
-        private string _textBlockText { get; set; }
-        public string TextBlockText
-        {
-            get { return _textBlockText; }
-            set
-            {
-                _textBlockText = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Visibility UtcComboVisibility { get; set; }
-        private string _utcComboSelectedString { get; set; } = "(UTC) Coordinated Universal Time";
-        public string UtcComboSelectedString
-        {
-            get { return _utcComboSelectedString; }
-            set
-            {
-                _utcComboSelectedString = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public TimeZoneInfo TimeZoneInfo { get; set; }
-        public ClockMenuLevel MenuLevel { get; set; }
-        public enum ClockMenuLevel
-        {
-            Display,
-            Group,
-            Individual,
-            Utc
-        }
-
-        private string _groupName;
-        public string GroupName
-        {
-            get { return _groupName; }
-            set { _groupName = value; }
-        }
-
-        private Brush _foreground { get; set; } = Brushes.LimeGreen;
-        public Brush Foreground
-        {
-            get { return _foreground; }
-            set
-            {
-                _foreground = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public List<string> UtcStringList { get; set; }
-
-        public ObservableCollection<MenuItemNest> MenuItems { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propName = null)
