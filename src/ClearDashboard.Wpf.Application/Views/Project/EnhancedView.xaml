@@ -336,13 +336,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="19*" />
+                <ColumnDefinition Width="106*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!--  OUTER LISTVIEW  -->
             <ListView
                 x:Name="OuterListView"
+                Grid.ColumnSpan="2"
                 Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                 ItemsSource="{Binding VersesDisplay}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -396,10 +398,10 @@
                             <Border
                                 Grid.Column="1"
                                 Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='20'}"
-                                BorderBrush="{Binding BorderColor}"
+                                Padding="3,0,3,0"
                                 HorizontalAlignment="Stretch"
+                                BorderBrush="{Binding BorderColor}"
                                 BorderThickness="3"
-                                Padding="3 0 3 0"
                                 CornerRadius="4">
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal">
@@ -563,10 +565,8 @@
                 FontSize="15" />-->
 
             <ProgressBar
-                Grid.Row="0"
-                Grid.RowSpan="2"
-                Grid.Column="0"
-                Width="75"
+                Grid.Column="1"
+                Width="76"
                 Height="75"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -579,8 +579,7 @@
 
             <controls:SidebarExpander
                 Grid.Row="0"
-                Grid.RowSpan="2"
-                Grid.Column="1"
+                Grid.Column="2"
                 mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
@@ -655,6 +654,9 @@
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="LabelAdded">
                                     <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="LabelRemoved">
+                                    <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="CloseRequested">
                                     <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
