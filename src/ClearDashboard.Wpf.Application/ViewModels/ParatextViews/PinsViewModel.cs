@@ -750,7 +750,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
                     var paratextInstallPath = paratextUtils.ParatextInstallPath;
 
-                    var queryBtResult = await ExecuteRequest(new GetCurrentParatextVerseTextQuery(), CancellationToken.None);
+                    var bookNum = int.Parse(verse.TargetBBBCCCVV.Substring(0, 3));
+                    var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
+                    var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));
+
+                    var queryBtResult = await ExecuteRequest(new GetCurrentParatextVerseTextQuery(bookNum, chapterNum, verseNum), CancellationToken.None);
                     var verseText = queryBtResult.Data.Name;
 
                     SelectedItemVerses.Add(new PinsVerseList

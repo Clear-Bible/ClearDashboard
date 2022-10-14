@@ -34,6 +34,13 @@ namespace ClearDashboard.WebApiParatextPlugin
         #region Properties
 
         private IProject _project;
+
+        public IProject Project
+        {
+            get { return _project; }
+            set { _project = value; }
+        }
+
         private List<IProject> _projectList = new();
         private IVerseRef _verseRef;
         private IWindowPluginHost _host;
