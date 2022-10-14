@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 
@@ -20,5 +21,7 @@ namespace ClearDashboard.Wpf.Application.Events
         /// The keyboard <see cref="ModifierKeys"/> at the time of the event.
         /// </summary>
         public ModifierKeys ModifierKeys { get; set; }
+
+        public Guid VerseDisplayId { get; set; }
     }
 }

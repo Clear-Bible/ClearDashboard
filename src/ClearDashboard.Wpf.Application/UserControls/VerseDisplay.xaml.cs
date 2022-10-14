@@ -362,7 +362,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = tokenDisplay,
                 SelectedTokens = SelectedTokens,
-                ModifierKeys = Keyboard.Modifiers
+                ModifierKeys = Keyboard.Modifiers,
+                VerseDisplayId = this.Id,
             });
         }
 
@@ -785,6 +786,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion
         #region Public properties
+
+        public Guid Id = Guid.NewGuid();
+
 
         /// <summary>
         /// Gets or sets the orientation for displaying the tokens.
