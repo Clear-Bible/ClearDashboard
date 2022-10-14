@@ -742,14 +742,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 foreach (var verse in verseList)
                 {
                     string verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
-
-                    //var mediator = LifetimeScope.Resolve<IMediator>();
-                    //var verseText = mediator.Send(new GetCurrentVerseTextQuery(), CancellationToken.None).Result.Data;
-                    //var verseText = Mediator.Send(new GetCurrentVerseQuery()).Result.Data;
-
-                    ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
-                    var paratextInstallPath = paratextUtils.ParatextInstallPath;
-
+                    
                     var bookNum = int.Parse(verse.TargetBBBCCCVV.Substring(0, 3));
                     var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
                     var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));

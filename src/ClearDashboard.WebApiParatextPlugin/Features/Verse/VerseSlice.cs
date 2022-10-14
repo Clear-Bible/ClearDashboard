@@ -18,7 +18,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Verse
 
         public GetCurrentVerseQueryHandler(IVerseRef verseRef, ILogger<GetCurrentVerseQueryHandler> logger)
         {
-             _verseRef = verseRef;
+            _verseRef = verseRef;
             _logger = logger;
         }
 
