@@ -14,6 +14,7 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -111,6 +112,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
 
                 var tokenCount = 0;
+                var bookTokens2 = request.TextCorpus.GetRows(new List<string>() { "GEN" }).Cast<TokensTextRow>().SelectMany(ttr => ttr.Tokens);
 
                 foreach (var bookId in bookIds)
                 {

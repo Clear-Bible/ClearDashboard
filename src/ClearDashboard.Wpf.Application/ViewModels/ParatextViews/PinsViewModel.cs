@@ -12,17 +12,27 @@ using System.Windows.Input;
 using System.Xml;
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.Bcv;
+using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.ParatextPlugin.CQRS.Features.ReferenceUsfm;
+using ClearDashboard.ParatextPlugin.CQRS.Features.User;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
+using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.Extensions.Logging;
+using QuickGraph;
 using SIL.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
@@ -505,7 +515,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 // bind the data grid to the collection view
                 GridCollectionView = CollectionViewSource.GetDefaultView(GridData);
                 // setup the filtering routine to determine what gets displayed
-                GridCollectionView.Filter = new Predicate<object>(FiterTerms);
+                GridCollectionView.Filter = new Predicate<object>(FilterTerms);
                 NotifyOfPropertyChange(() => GridCollectionView);
 
                 // turn off the progress bar
@@ -681,7 +691,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             FilterString = "";
         }
 
-        private bool FiterTerms(object item)
+        private bool FilterTerms(object item)
         {
             var itemDt = (PinsDataTable)item;
 
@@ -699,7 +709,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// User has clicked on a verse button in the grid
         /// </summary>
         /// <param name="obj"></param>
-        private void VerseButtonClick(object obj)
+        private async void VerseButtonClick(object obj)
         {
             if (obj is PinsDataTable dataRow)
             {
@@ -733,16 +743,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 {
                     string verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
 
+                    //var mediator = LifetimeScope.Resolve<IMediator>();
+                    //var verseText = mediator.Send(new GetCurrentVerseTextQuery(), CancellationToken.None).Result.Data;
+                    //var verseText = Mediator.Send(new GetCurrentVerseQuery()).Result.Data;
+
+                    ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+                    var paratextInstallPath = paratextUtils.ParatextInstallPath;
+
+                    var queryBtResult = await ExecuteRequest(new GetCurrentParatextVerseTextQuery(), CancellationToken.None);
+                    var verseText = queryBtResult.Data.Name;
+
                     SelectedItemVerses.Add(new PinsVerseList
                     {
                         BBBCCCVVV = verse.TargetBBBCCCVV,
                         VerseIdShort = verseIdShort,
-                        VerseText = "SOME VERSE TEXT TO LOOKUP ONCE THE DB IS COMPLETE"  // TODO COME BACK TO THIS WHEN THE DATABASE COMES ONLINE
+                        VerseText = verseText
                     });
                 }
                 NotifyOfPropertyChange(() => SelectedItemVerses);
                 VerseRefDialogOpen = true;
             }
+
+            return;
         }
 
         /// <summary>

@@ -9,11 +9,8 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Features.User
 {
-
-
     public class GetCurrentParatextUserQueryHandler : ParatextRequestHandler<GetCurrentParatextUserQuery, RequestResult<AssignedUser>, AssignedUser>
     {
-
         public GetCurrentParatextUserQueryHandler([NotNull] ILogger<GetCurrentParatextUserQueryHandler> logger) : base(logger)
         {
             //no-op
