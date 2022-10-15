@@ -13,6 +13,8 @@ using SIL.Extensions;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ModelVerificationType = ClearDashboard.DataAccessLayer.Models.AlignmentVerification;
 using ModelOriginatedType = ClearDashboard.DataAccessLayer.Models.AlignmentOriginatedFrom;
+using ClearDashboard.DAL.Alignment.Features.Events;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -92,16 +94,36 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             ProjectDbContext!.Remove(alignmentsToRemove);
 
-            alignmentSet.Alignments.Add(new Models.Alignment
+            var alignment = new Models.Alignment
             {
                 SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id,
                 TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id,
                 Score = request.Alignment.AlignedTokenPair.Score,
                 AlignmentVerification = verificationType,
                 AlignmentOriginatedFrom = originatedType
-            });
+            };
 
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            alignmentSet.Alignments.Add(alignment);
+
+            using (var transaction = ProjectDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    alignmentSet.AddDomainEvent(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment, ProjectDbContext));
+                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+
+                    transaction.Commit();
+                } 
+                catch (Exception ex)
+                {
+                    return new RequestResult<object>
+                    (
+                        success: false,
+                        message: $"Error saving alignment changes: '{ex.Message}'"
+                    );
+                }
+            }
+
             return new RequestResult<object>(null);
         }
     }

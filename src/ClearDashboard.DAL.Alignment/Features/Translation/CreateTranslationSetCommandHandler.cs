@@ -94,13 +94,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         }).ToList() ?? new()
                 };
 
+                cancellationToken.ThrowIfCancellationRequested();
+
                 // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
                 // mostly using database connection-level functions, commands, paramters etc.
+                using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
-                using var translationSetInsertCommand = CreateTranslationSetInsertCommand();
-                using var translationModelEntryInsertCommand = CreateTranslationModelEntryInsertCommand();
-                using var translationModelTargetTextScoreInsertCommand = CreateTranslationModelTargetTextScoreInsertCommand();
+                using var translationSetInsertCommand = CreateTranslationSetInsertCommand(connection);
+                using var translationModelEntryInsertCommand = CreateTranslationModelEntryInsertCommand(connection);
+                using var translationModelTargetTextScoreInsertCommand = CreateTranslationModelTargetTextScoreInsertCommand(connection);
 
                 var translationSetId = await InsertTranslationSetAsync(
                     translationSet, 
@@ -109,6 +112,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 foreach (var translationModelEntry in translationSet.TranslationModel)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     await InsertTranslationModelEntryAsync(
                         translationModelEntry,
                         translationSetId,
@@ -157,12 +162,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
         }
 
-        private DbCommand CreateTranslationSetInsertCommand()
+        private static DbCommand CreateTranslationSetInsertCommand(DbConnection connection)
         {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var command = connection.CreateCommand();
             var columns = new string[] { "Id", "ParallelCorpusId", "AlignmentSetId", /*"DerivedFrom", "EngineWordAlignmentId", */ "DisplayName", /*"SmtModel",*/ "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TranslationSet), columns);
+
+            command.Prepare();
 
             return command;
         }
@@ -189,12 +196,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             return translationSetId;
         }
 
-        private DbCommand CreateTranslationModelEntryInsertCommand()
+        private static DbCommand CreateTranslationModelEntryInsertCommand(DbConnection connection)
         {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var command = connection.CreateCommand();
             var columns = new string[] { "Id", "TranslationSetId", "SourceText" };
 
             ApplyColumnsToCommand(command, typeof(Models.TranslationModelEntry), columns);
+
+            command.Prepare();
 
             return command;
         }
@@ -214,12 +223,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
         }
 
-        private DbCommand CreateTranslationModelTargetTextScoreInsertCommand()
+        private static DbCommand CreateTranslationModelTargetTextScoreInsertCommand(DbConnection connection)
         {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var command = connection.CreateCommand();
             var columns = new string[] { "Id", "TranslationModelEntryId", "Text", "Score" };
 
             ApplyColumnsToCommand(command, typeof(Models.TranslationModelTargetTextScore), columns);
+
+            command.Prepare();
 
             return command;
         }

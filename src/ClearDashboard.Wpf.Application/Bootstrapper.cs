@@ -20,12 +20,47 @@ using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
-
+using Autofac.Extensions.DependencyInjection;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using Caliburn.Micro;
+using MediatR;
 
 namespace ClearDashboard.Wpf.Application
 {
     internal class Bootstrapper : FoundationBootstrapper
     {
+        private readonly IHost _host;
+        public Bootstrapper() : base()
+        {
+            // Autofac container should already be built by call to base() constructor
+            // (which calls Caliburn.Micro "Initialize", which calls FoundationBootstrapper
+            // "configure").  So, 
+
+            _host = Host.CreateDefaultBuilder()
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureServices(services =>
+                {
+                    services.Configure<HostOptions>(options =>
+                    {
+                        //Service Behavior in case of exceptions - defautls to StopHost
+                        options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+                        //Host will try to wait 30 seconds before stopping the service. 
+                        options.ShutdownTimeout = TimeSpan.FromSeconds(5);
+                    });
+                    services.AddHostedService<ClearDashboard.DAL.Alignment.BackgroundServices.AlignmentTargetTextDenormalizer>();
+                })
+                .ConfigureContainer<ContainerBuilder>(builder =>
+                {
+                    builder.RegisterInstance(Container!.Resolve<IEventAggregator>());
+                    builder.RegisterInstance(Container!.Resolve<IMediator>());
+                    builder.RegisterInstance(Container!.Resolve<ILoggerFactory>()).SingleInstance();
+                    builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>)).SingleInstance();
+                    builder.RegisterDatabaseDependencies();
+                })
+                .Build();
+        }
+
         protected override void PreInitialize()
         {
             DashboardApplication.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
@@ -153,9 +188,22 @@ namespace ClearDashboard.Wpf.Application
             base.SaveMainWindowState();
         }
 
-        #region Application exit
-        protected override void OnExit(object sender, EventArgs e)
+        protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            await _host.StartAsync();
+
+            Logger?.LogInformation("ClearDashboard application is starting.");
+            base.OnStartup(sender, e);
+        }
+
+        #region Application exit
+        protected override async void OnExit(object sender, EventArgs e)
+        {
+            using (_host)
+            {
+                await _host.StopAsync(TimeSpan.FromSeconds(5));
+            }
+
             Logger?.LogInformation("ClearDashboard application is exiting.");
             base.OnExit(sender, e);
         }

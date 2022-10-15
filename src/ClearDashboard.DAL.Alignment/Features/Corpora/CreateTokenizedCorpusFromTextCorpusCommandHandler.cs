@@ -103,8 +103,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
-                using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand();
-                using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(); 
+                using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand(connection);
+                using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(connection); 
 
                 await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
                 tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
@@ -226,12 +226,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
         }
 
-        private DbCommand CreateTokenComponentInsertCommand()
+        private static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var command = connection.CreateCommand();
             var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "TokenizationId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "PropertiesJson", "TokenCompositeId" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
+
+            command.Prepare();
 
             return command;
         }
@@ -240,6 +242,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             foreach (var tokenComponent in tokenComponents)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 if (tokenComponent is Models.TokenComposite)
                 {
                     var tokenComposite = (tokenComponent as Models.TokenComposite)!;
@@ -292,12 +296,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private DbCommand CreateTokenizedCorpusInsertCommand()
+        private static DbCommand CreateTokenizedCorpusInsertCommand(DbConnection connection)
         {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var command = connection.CreateCommand();
             var columns = new string[] { "Id", "CorpusId", "DisplayName", "TokenizationFunction", "ScrVersType", "CustomVersData", "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenizedCorpus), columns);
+
+            command.Prepare();
 
             return command;
         }

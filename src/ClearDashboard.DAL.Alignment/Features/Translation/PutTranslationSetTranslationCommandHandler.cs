@@ -48,6 +48,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             if (request.TranslationActionType == "PutPropagate")
             {
                 var translations = ProjectDbContext!.Translations
+                    .Include(tr => tr.SourceTokenComponent)
                     .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
                     .Where(tr => tr.SourceTokenComponent!.TrainingText == request.Translation.SourceToken.TrainingText);
                 var tokenComponents = ProjectDbContext!.TokenComponents
@@ -106,7 +107,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
                 var translation = ProjectDbContext!.Translations
                     .Where(tr => tr.TranslationSetId == translationSet.Id)
-                    .Where(tr => tr.SourceTokenComponent!.Id == rTokenId.Id)
+                    .Where(tr => tr.SourceTokenComponentId == rTokenId.Id)
                     .FirstOrDefault();
 
                 if (translation != null)

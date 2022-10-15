@@ -24,7 +24,6 @@ public record ShowTokenizationWindowMessage(string ParatextProjectId, string Pro
 
 public record ShowParallelTranslationWindowMessage(string TranslationSetId, string AlignmentSetId, string DisplayName, string ParallelCorpusId,
     string? ParallelCorpusDisplayName, bool IsRTL, bool IsNewWindow);
-public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record CloseDockingPane(Guid guid);
 public record UiLanguageChangedMessage(string LanguageCode);
