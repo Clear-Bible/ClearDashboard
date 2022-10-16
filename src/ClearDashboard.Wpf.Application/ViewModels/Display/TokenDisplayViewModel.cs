@@ -45,6 +45,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public string SurfaceText => Token.SurfaceText;
 
         /// <summary>
+        /// The extended propertiesof the token to be displayed.
+        /// </summary>
+        public string? ExtendedProperties => Token.ExtendedProperties;
+
+        /// <summary>
         /// The target translation text of the token.
         /// </summary>
         public string TargetTranslationText => Translation?.TargetTranslationText ?? string.Empty;

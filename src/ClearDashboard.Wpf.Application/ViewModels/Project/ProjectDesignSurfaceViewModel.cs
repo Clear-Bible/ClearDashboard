@@ -41,6 +41,7 @@ using SIL.ObjectModel;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearBible.Macula.PropertiesSources.Tokenization;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -691,7 +692,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             var syntaxTree = new SyntaxTrees();
             var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
-                .Transform<SetTrainingByTrainingLowercase>();
+                .Transform<SetTrainingByTrainingLowercase>()
+                .Transform<AddPronominalReferencesToTokens>(); 
 
             var bookInfo = new BookInfo();
             var books = bookInfo.GenerateScriptureBookList()
@@ -820,7 +822,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             var syntaxTree = new SyntaxTrees();
             var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.G)
-                .Transform<SetTrainingByTrainingLowercase>();
+                .Transform<SetTrainingByTrainingLowercase>()
+                .Transform<AddPronominalReferencesToTokens>(); 
 
             var bookInfo = new BookInfo();
             var books = bookInfo.GenerateScriptureBookList()

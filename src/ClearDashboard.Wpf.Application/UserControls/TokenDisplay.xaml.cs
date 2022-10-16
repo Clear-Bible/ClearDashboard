@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Data.SqlTypes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Linq;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Events;
@@ -136,6 +138,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the SurfaceText dependency property.
         /// </summary>
         public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register("SurfaceText", typeof(string), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the ExtendedProperties dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register("ExtendedProperties", typeof(string), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TargetTranslationText dependency property.
@@ -964,6 +971,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the extendedProperties to be displayed.
+        /// </summary>
+        /// <remarks>
+        /// This should normally not be called directly; it is computed based on the orientation of the display.
+        /// </remarks>
+        public string? ExtendedProperties
+        {
+            get => (string)GetValue(ExtendedPropertiesProperty);
+            set => SetValue(ExtendedPropertiesProperty, value);
+        }
+
+
+        /// <summary>
         /// Gets or sets the translation target text to be displayed.
         /// </summary>
         /// <remarks>
@@ -990,6 +1010,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TokenBackground = TokenDisplayViewModel.IsSelected ? SelectedTokenBackground : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
+            ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
             TargetTranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
