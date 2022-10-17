@@ -91,7 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public ObservableCollection<PinsVerseList> SelectedItemVerses { get; } = new();
 
-        public string FontFamily { get; } = "Segoe UI";
+        public string FontFamily { get; set; } = "Segoe UI";
 
         public float FontSize { get; } = 12;
 
@@ -764,6 +764,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         VerseIdShort = verseIdShort,
                         VerseText = verseText
                     });
+                    FontFamily = ProjectManager.CurrentParatextProject.DefaultFont;
                 }
                 NotifyOfPropertyChange(() => SelectedItemVerses);
                 VerseRefDialogOpen = true;
@@ -784,7 +785,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 return;
             }
 
-            
+            //_ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None));
             //await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
             await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(obj.ToString()));
 
