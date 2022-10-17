@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
@@ -7,6 +8,7 @@ namespace ClearDashboard.Wpf.Application.Events
 {
     public class LabelEventArgs : RoutedEventArgs
     {
+        public Guid VerseDisplayId { get; set; }
         public Label Label { get; set; }
         public Note Note { get; set; }
     }

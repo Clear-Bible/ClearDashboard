@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -172,6 +173,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
         #endregion
         #region Static DependencyProperties
+
+
+        public static readonly DependencyProperty VerseDisplayViewModelIdProperty = DependencyProperty.Register("VerseDisplayViewModelId", typeof(Guid), typeof(Guid));
 
         /// <summary>
         /// Identifies the Title dependency property.
@@ -363,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 TokenDisplayViewModel = tokenDisplay,
                 SelectedTokens = SelectedTokens,
                 ModifierKeys = Keyboard.Modifiers,
-                VerseDisplayId = this.Id,
+                VerseDisplayId = this.VerseDisplayViewModelId,
             });
         }
 
@@ -449,8 +453,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
-                Translation = control?.TokenDisplayViewModel?.Translation
-            });
+                Translation = control?.TokenDisplayViewModel?.Translation,
+                VerseDisplayId = this.VerseDisplayViewModelId,
+            }) ;
         }
 
         private void OnTranslationClicked(object sender, RoutedEventArgs e)
@@ -504,7 +509,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
-                SelectedTokens = SelectedTokens
+                SelectedTokens = SelectedTokens,
+                VerseDisplayId = this.VerseDisplayViewModelId,
             });
         }
 
@@ -787,9 +793,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public properties
 
-        public Guid Id = Guid.NewGuid();
-
-
+        public Guid VerseDisplayViewModelId
+        {
+            get => (Guid)GetValue(VerseDisplayViewModelIdProperty);
+            set => SetValue(VerseDisplayViewModelIdProperty, value);
+        }
+        
         /// <summary>
         /// Gets or sets the orientation for displaying the tokens.
         /// </summary>

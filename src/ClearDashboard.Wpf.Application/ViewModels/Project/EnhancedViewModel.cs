@@ -17,13 +17,13 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -31,8 +31,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
@@ -71,6 +73,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private string? _message;
         private BookInfo? _currentBook;
 
+        private EnhancedView View;
+
         private bool InComingChangesStarted { get; set; }
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
@@ -93,6 +97,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public bool IsRtl { get; set; }
 
         public List<string> WorkingJobs { get; set; } = new();
+
+        public VerseDisplay SelectedVerseDisplay { get; set; }
 
         #region BCV
         private bool _paratextSync = true;
@@ -314,6 +320,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
+
+
+            if (view is EnhancedView enhancedView)
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute
+                View = enhancedView;
+            }
+            
+
 
             base.OnViewAttached(view, context);
         }
@@ -774,6 +789,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.IsRtl = message.IsRTL;
             }
 
+            //do a dump of VerseDisplayViewModel Ids
+            foreach (var verseDisplayViewModel in verses)
+            {
+                Debug.WriteLine($"INCOMMING ID: {verseDisplayViewModel.Id}");
+            }
+
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 
@@ -1088,6 +1109,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.ParallelVerses = verses;
             }
 
+            //do a dump of VerseDisplayViewModel Ids
+            foreach (var verseDisplayViewModel in verses)
+            {
+                Debug.WriteLine($"INCOMMING ID: {verseDisplayViewModel.Id}");
+            }
+
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 
@@ -1248,6 +1275,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TranslationClicked(object sender, TranslationEventArgs e)
         {
+            if (SelectedVerseDisplay is not null)
+            {
+                
+            }
+
+
+            Debug.WriteLine($"Looking for: {e.VerseDisplayId}");
+            foreach (var versesDisplay in this.VersesDisplay)
+            {
+                foreach (var item in versesDisplay.ParallelVerses)
+                {
+                    Debug.WriteLine(item.Id);
+
+                    if (item.Id == e.VerseDisplayId)
+                    {
+                        Debug.WriteLine("");
+
+                    }
+                }
+            }
+
             DisplayTranslation(e);
         }
 
@@ -1271,16 +1319,153 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             try
             {
                 ProgressBarVisibility = Visibility.Visible;
-                await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
-                await VerseChangeRerender();
+                //await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
+                //await VerseChangeRerender();
+
+                // get the current VerseDisplay
+                //var verseDisplay = GetSelectedVerseDisplay(e.VerseDisplayId);
+
+                
                 TranslationControlVisibility = Visibility.Collapsed;
-                //HideTranslation();
             }
             finally
             {
                 ProgressBarVisibility = Visibility.Collapsed;
             }
         }
+
+        //private void SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    var innerListView = sender as ListView;
+
+
+        //    ItemContainerGenerator generator = innerListView.ItemContainerGenerator;
+        //    ListBoxItem selectedItem = (ListBoxItem)generator.ContainerFromIndex(innerListView.SelectedIndex);
+        //    VerseDisplay verseDisplay = GetChildrenByType(selectedItem, typeof(VerseDisplay), "VerseDisplay") as VerseDisplay;
+        //    if (verseDisplay != null)
+        //    {
+        //        MessageBox.Show("We've found Label with name 'label': " + verseDisplay.Content);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("There is no such Label");
+        //    }
+        //}
+
+
+        //private VerseDisplay GetSelectedVerseDisplay(Guid eVerseDisplayId)
+        //{
+
+        //    foreach (Control control in FindLogicalChildren<Control>(View))
+        //    {
+        //        Debug.WriteLine(control.GetType());
+
+        //        if (control is ListView)
+        //        {
+        //            // found our outer listview, now get the innerlistview
+        //            var innerListView = (ListView)control;
+                    
+        //            foreach (var itemRow in innerListView.Items)
+        //            {
+
+        //                //VerseDisplay verseDisplay = (VerseDisplay)itemRow.FindLogicalChildren("VerseDisplay");
+
+
+
+        //                ListViewItem listViewItem = (ListViewItem)innerListView.ItemContainerGenerator.ContainerFromItem(itemRow);
+
+
+        //                Debug.WriteLine(itemRow.GetType());
+
+        //                //if (itemRow is VerseDisplay)
+        //                //{
+        //                //    // check the guid
+        //                //    var verseDisplay = (VerseDisplay)itemRow;
+
+        //                //    if (verseDisplay.Id == eVerseDisplayId)
+        //                //    {
+        //                //        return verseDisplay;
+        //                //    }
+        //                //}
+
+        //            }
+        //        }
+        //    }
+
+        //    return new VerseDisplay();
+        //}
+
+        //public Visual GetChildrenByType(Visual visualElement, Type typeElement, string nameElement)
+        //{
+        //    if (visualElement == null) return null;
+        //    if (visualElement.GetType() == typeElement)
+        //    {
+        //        FrameworkElement fe = visualElement as FrameworkElement;
+        //        if (fe != null)
+        //        {
+        //            if (fe.Name == nameElement)
+        //            {
+        //                return fe;
+        //            }
+        //        }
+        //    }
+        //    Visual foundElement = null;
+        //    if (visualElement is FrameworkElement)
+        //        (visualElement as FrameworkElement).ApplyTemplate();
+        //    for (int i = 0; i < VisualTreeHelper.GetChildrenCount(visualElement); i++)
+        //    {
+        //        Visual visual = VisualTreeHelper.GetChild(visualElement, i) as Visual;
+        //        foundElement = GetChildrenByType(visual, typeElement, nameElement);
+        //        if (foundElement != null)
+        //            break;
+        //    }
+        //    return foundElement;
+        //}
+
+
+        //private T GetVisualChildInDataTemplate<T>(DependencyObject parent) where T : Visual
+        //{
+        //    T child = default(T);
+        //    int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+        //    for (int i = 0; i < numVisuals; i++)
+        //    {
+        //        Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
+        //        child = v as T;
+        //        if (child == null)
+        //        {
+        //            child = GetVisualChildInDataTemplate<T>(v);
+        //        }
+        //        if (child != null)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //    return child;
+        //}
+
+        //public IEnumerable<T> FindLogicalChildren<T>(DependencyObject depObj) where T : DependencyObject
+        //{
+        //    if (depObj != null)
+        //    {
+        //        foreach (object rawChild in LogicalTreeHelper.GetChildren(depObj))
+        //        {
+        //            if (rawChild is DependencyObject)
+        //            {
+        //                DependencyObject child = (DependencyObject)rawChild;
+        //                if (child is T)
+        //                {
+        //                    yield return (T)child;
+        //                }
+
+        //                foreach (T childOfChild in FindLogicalChildren<T>(child))
+        //                {
+        //                    yield return childOfChild;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
 
         public void TranslationCancelled(object sender, RoutedEventArgs e)
         {
@@ -1499,6 +1684,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _currentTranslationOption, value);
         }
 
+        
         private async void DisplayTranslation(TranslationEventArgs e)
         {
             await Task.Factory.StartNew(async () =>
@@ -1541,4 +1727,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
     }
+
+    
 }
