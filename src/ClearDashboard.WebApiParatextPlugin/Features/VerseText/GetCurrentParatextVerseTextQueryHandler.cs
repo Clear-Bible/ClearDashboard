@@ -17,7 +17,7 @@ using ClearDashboard.WebApiParatextPlugin.Features.Project;
 namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
 {
     public class
-        GetCurrentParatextVerseTextQueryHandler : IRequestHandler<GetCurrentParatextVerseTextQuery, RequestResult<AssignedUser>>
+        GetParatextVerseTextQueryHandler : IRequestHandler<GetParatextVerseTextQuery, RequestResult<AssignedUser>>
     {
         private readonly IPluginHost _pluginHost;
         private readonly ILogger<GetCurrentProjectQueryHandler> _logger;
@@ -25,7 +25,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
         private readonly IPluginHost _host;
         private readonly IVerseRef _verseRef;
 
-        public GetCurrentParatextVerseTextQueryHandler(IPluginHost pluginHost, ILogger<GetCurrentProjectQueryHandler> logger, 
+        public GetParatextVerseTextQueryHandler(IPluginHost pluginHost, ILogger<GetProjectQueryHandler> logger, 
             IPluginHost host, IVerseRef verseRef, MainWindow mainWindow)
         {
             _pluginHost = pluginHost;
@@ -35,7 +35,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
             _verseRef = verseRef;
         }
 
-        public Task<RequestResult<AssignedUser>> Handle(GetCurrentParatextVerseTextQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<AssignedUser>> Handle(GetParatextVerseTextQuery request, CancellationToken cancellationToken)
         {
             var verseText = Helpers.VerseText.LookupVerseText(_mainWindow.Project, request.BookNum, request.ChapterNum, request.VerseNum);
 

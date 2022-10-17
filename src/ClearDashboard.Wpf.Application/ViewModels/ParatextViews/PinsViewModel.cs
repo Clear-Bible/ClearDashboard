@@ -747,8 +747,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
                     var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));
 
-                    var queryBtResult = await ExecuteRequest(new GetCurrentParatextVerseTextQuery(bookNum, chapterNum, verseNum), CancellationToken.None);
-                    var verseText = queryBtResult.Data.Name;
+                    var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum), CancellationToken.None);
+                    var verseText = "";
+                    if(verseTextResult.Success)
+                        verseText = verseTextResult.Data.Name;
+                    else
+                    {
+                        verseText = "There was an issue getting the text for this verse.";
+                        Logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    }
 
                     SelectedItemVerses.Add(new PinsVerseList
                     {

@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.DataAccessLayer.Features.VerseText
 {
-    public class GetCurrentParatextVerseTextQueryHandler : ParatextRequestHandler<GetCurrentParatextVerseTextQuery, RequestResult<AssignedUser>, AssignedUser>
+    public class GetParatextVerseTextQueryHandler : ParatextRequestHandler<GetParatextVerseTextQuery, RequestResult<AssignedUser>, AssignedUser>
     {
-        public GetCurrentParatextVerseTextQueryHandler(ILogger<GetCurrentParatextVerseTextQueryHandler> logger) : base(logger)
+        public GetParatextVerseTextQueryHandler(ILogger<GetParatextVerseTextQueryHandler> logger) : base(logger)
         {
             //no-op
         }
 
-        public override async Task<RequestResult<AssignedUser>> Handle(GetCurrentParatextVerseTextQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<AssignedUser>> Handle(GetParatextVerseTextQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("versetext", request, cancellationToken);
         }

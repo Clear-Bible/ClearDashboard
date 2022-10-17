@@ -24,7 +24,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
         }
 
         [HttpPost]
-        public async Task<RequestResult<AssignedUser>> GetAsync([FromBody] GetCurrentParatextVerseTextQuery query)
+        public async Task<RequestResult<AssignedUser>> GetAsync([FromBody] GetParatextVerseTextQuery query)
         {
             return await ExecuteRequestAsync<RequestResult<AssignedUser>, AssignedUser>(query, CancellationToken.None);
 

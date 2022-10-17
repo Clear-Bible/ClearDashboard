@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.VerseText
 {
-    public record GetCurrentParatextVerseTextQuery
+    public record GetParatextVerseTextQuery
         (int BookNum, int ChapterNum, int VerseNum) : IRequest<RequestResult<AssignedUser>>
     {
         public int BookNum { get; } = BookNum;
