@@ -16,13 +16,13 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -67,7 +67,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private bool? _handleAsyncRunning;
         private string? _tokenizationType;
         private TokenizedTextCorpus? _currentTokenizedTextCorpus;
-        private Visibility? _progressBarVisibility = Visibility.Visible;
         private string? _message;
         private BookInfo? _currentBook;
 
@@ -91,6 +90,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Public Properties
 
         public bool IsRtl { get; set; }
+
+        public List<string> WorkingJobs { get; set; } = new();
 
         #region BCV
         private bool _paratextSync = true;
@@ -236,11 +237,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _currentTokenizedTextCorpus, value);
         }
 
+        private Visibility? _progressBarVisibility = Visibility.Visible;
         public Visibility? ProgressBarVisibility
         {
             get => _progressBarVisibility;
             set => Set(ref _progressBarVisibility, value);
-                //Set(ref _progressBarVisibility, value);
         }
 
         private ObservableCollection<VersesDisplay> _versesDisplay = new();
@@ -457,6 +458,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
 
+
             var rows = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
 
             if (rows is null)
@@ -466,8 +468,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     UpdateParallelCorpusDisplay(message, versesOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
                     NotifyOfPropertyChange(() => VersesDisplay);
-
-                    ProgressBarVisibility = Visibility.Collapsed;
                 });
             }
             else
@@ -501,8 +501,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     UpdateParallelCorpusDisplay(message, versesOut, title);
                     NotifyOfPropertyChange(() => VersesDisplay);
-
-                    ProgressBarVisibility = Visibility.Collapsed;
                 });
             }
 
@@ -580,6 +578,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task ShowNewCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
             CancellationToken localCancellationToken)
         {
+            // add this to the job stack
+            WorkingJobs.Add(message.TokenizedTextCorpusId.ToString());
+
             // current project
             await Task.Factory.StartNew(async () =>
             {
@@ -751,8 +752,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         UpdateVersesDisplay(message, verses, title, false);
                         NotifyOfPropertyChange(() => VersesDisplay);
-
-                        ProgressBarVisibility = Visibility.Collapsed;
                     });
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
@@ -791,6 +790,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     _handleAsyncRunning = false;
                     _cancellationTokenSource?.Dispose();
+
+                    // remove from the job stack
+                    for (int i = WorkingJobs.Count - 1; i >= 0; i--)
+                    {
+                        if (WorkingJobs[i] == message.TokenizedTextCorpusId.ToString())
+                        {
+                            WorkingJobs.RemoveAt(i);
+                        }
+                    }
+
+                    if (WorkingJobs.Count == 0)
+                    {
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    }
                 }
             }, cancellationToken);
         }
@@ -961,6 +974,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task ShowParallelTranslation(ShowParallelTranslationWindowMessage message,
             CancellationToken cancellationToken, CancellationToken localCancellationToken)
         {
+
+            WorkingJobs.Add(message.TranslationSetId);
+
             var msg = _parallelMessages.Where(p =>
                 p.TranslationSetId == message.TranslationSetId && p.ParallelCorpusId == message.ParallelCorpusId).ToList();
             if (msg.Count == 0)
@@ -973,6 +989,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 try
                 {
+                    ProgressBarVisibility = Visibility.Visible;
+
                     var verseTokens = await BuildTokenDisplayViewModels(message);
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
@@ -986,7 +1004,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 catch (Exception ex)
                 {
                     Logger.LogError(ex, "The attempt to ShowNewParallelTranslation failed.");
-                    ProgressBarVisibility = Visibility.Collapsed;
                     if (!localCancellationToken.IsCancellationRequested)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -1004,6 +1021,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _handleAsyncRunning = false;
                     if (_cancellationTokenSource != null) 
                         _cancellationTokenSource.Dispose();
+
+                    // remove from the job stack
+                    for (int i = WorkingJobs.Count - 1; i >= 0; i--)
+                    {
+                        if (WorkingJobs[i] == message.TranslationSetId)
+                        {
+                            WorkingJobs.RemoveAt(i);
+                        }
+                    }
+
+                    if (WorkingJobs.Count == 0)
+                    {
+                        ProgressBarVisibility = Visibility.Collapsed;
+                    }
                 }
             }, cancellationToken);
         }
@@ -1530,8 +1561,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task NoteAddedAsync(NoteEventArgs e)
         {
-            //HideNote();
-
             await e.Note.CreateOrUpdate(Mediator);
             await e.Note.AssociateDomainEntity(Mediator, e.EntityId);
             foreach (var label in e.Note.Labels)
@@ -1558,20 +1587,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //e.TokenDisplayViewModel.Notes.Add(e.Note);
         }
 
-        public async Task NoteUpdated(object sender, NoteEventArgs e)
+        public void NoteUpdated(object sender, NoteEventArgs e)
         {
-            //HideNote();
-
-            await e.Note.CreateOrUpdate(Mediator);
+            Task.Run(() => NoteUpdatedAsync(e).GetAwaiter());
         }
 
-        public async Task NoteDeleted(object sender, NoteEventArgs e)
+        public async Task NoteUpdatedAsync(NoteEventArgs e)
         {
-            //HideNote();
-
-            await e.Note.Delete(Mediator);
+            if (e.Note.NoteId is not null)
+            {
+                e.Note.CreateOrUpdate(Mediator);
+            }
+            
+            //await VerseDisplayViewModel.UpdateNoteAsync(e.Note);
+            Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
-        
+
+
+        public void NoteDeleted(object sender, NoteEventArgs e)
+        {
+            Task.Run(() => NoteDeletedAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteDeletedAsync(NoteEventArgs e)
+        {
+            if (e.Note.NoteId != null)
+            {
+                await e.Note.Delete(Mediator);
+            }
+
+            //await VerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+            Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
+        }
 
         public void LabelSelected(object sender, LabelEventArgs e)
         {
@@ -1599,6 +1646,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 e.Label = await e.Note.CreateAssociateLabel(Mediator, e.Label.Text);
             }
+        }
+
+        public void LabelRemoved(object sender, LabelEventArgs e)
+        {
+            Task.Run(() => LabelRemovedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelRemovedAsync(LabelEventArgs e)
+        {
+            if (e.Note.NoteId != null)
+            {
+                await e.Note.DetachLabel(Mediator, e.Label);
+
+                //await VerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
+            }
+            Message = $"Label '{e.Label.Text}' removed for note";
         }
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
@@ -1634,13 +1697,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NoteControlVisibility = Visibility.Visible;
         }
 
-        //private void HideNote()
-        //{
-        //    NoteControlVisibility = Visibility.Collapsed;
-        //    NotifyOfPropertyChange(nameof(NoteControlVisibility));
-        //}
-
-        //public Note CurrentNote { get; set; }
 
         private TokenDisplayViewModel _currentTokenDisplayViewModel;
         private IEnumerable<TranslationOption> _translationOptions;
@@ -1664,8 +1720,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _currentTranslationOption, value);
         }
 
-        //public IEnumerable<TranslationOption> TranslationOptions { get; set; }
-        //public TranslationOption CurrentTranslationOption { get; set; }
         private async void DisplayTranslation(TranslationEventArgs e)
         {
             await Task.Factory.StartNew(async () =>
@@ -1694,47 +1748,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #endregion
 
-        //private void HideTranslation()
-        //{
-        //    TranslationControlVisibility = Visibility.Collapsed;
-        //    NotifyOfPropertyChange(nameof(TranslationControlVisibility));
-        //}
-
-        //private IEnumerable<TranslationOption> GetMockTranslationOptions(string sourceTranslation)
-        //{
-        //    var result = new List<TranslationOption>();
-
-        //    var random = new Random();
-        //    var optionCount = random.Next(4) + 2;     // 2-5 options
-        //    var remainingPercentage = 100d;
-
-        //    var basePercentage = random.NextDouble() * remainingPercentage;
-        //    result.Add(new TranslationOption { Word = sourceTranslation, Count = basePercentage });
-        //    remainingPercentage -= basePercentage;
-
-        //    for (var i = 1; i < optionCount - 1; i++)
-        //    {
-        //        var percentage = random.NextDouble() * remainingPercentage;
-        //        result.Add(new TranslationOption { Word = GetMockOogaWord(), Count = percentage });
-        //        remainingPercentage -= percentage;
-        //    }
-
-        //    result.Add(new TranslationOption { Word = GetMockOogaWord(), Count = remainingPercentage });
-
-        //    return result.OrderByDescending(to => to.Count);
-        //}
-
-        //private readonly List<string> MockOogaWords = new() { "Ooga", "booga", "bong", "biddle", "foo", "boi", "foodie", "fingle", "boing", "la" };
-
-
-        //private static int mockOogaWordsIndexer_;
-
-        //private string GetMockOogaWord()
-        //{
-        //    var result = MockOogaWords[mockOogaWordsIndexer_++];
-        //    if (mockOogaWordsIndexer_ == MockOogaWords.Count) mockOogaWordsIndexer_ = 0;
-        //    return result;
-        //}
     }
 
 

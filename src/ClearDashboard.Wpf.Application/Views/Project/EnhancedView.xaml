@@ -47,7 +47,7 @@
             Background="{StaticResource MahApps.Brushes.Accent}"
             BorderBrush="{DynamicResource MaterialDesignDivider}"
             BorderThickness="2">
-            <materialDesign:DrawerHost.Style>
+            <!--<materialDesign:DrawerHost.Style>
                 <Style BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}" TargetType="materialDesign:DrawerHost">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsChecked, ElementName=BackgroundToggle}" Value="True">
@@ -55,7 +55,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </materialDesign:DrawerHost.Style>
+            </materialDesign:DrawerHost.Style>-->
             <materialDesign:DrawerHost.TopDrawerContent>
                 <Grid Margin="15,15,15,0">
                     <Grid.ColumnDefinitions>
@@ -336,13 +336,15 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="19*" />
+                <ColumnDefinition Width="106*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <!--  OUTER LISTVIEW  -->
             <ListView
                 x:Name="OuterListView"
+                Grid.ColumnSpan="2"
                 Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                 ItemsSource="{Binding VersesDisplay}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -363,7 +365,7 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel
-                                Margin="0,0,5,0"
+                                Margin="0,0,3,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
 
@@ -396,6 +398,8 @@
                             <Border
                                 Grid.Column="1"
                                 Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='20'}"
+                                Padding="3,0,3,0"
+                                HorizontalAlignment="Stretch"
                                 BorderBrush="{Binding BorderColor}"
                                 BorderThickness="3"
                                 CornerRadius="4">
@@ -432,10 +436,9 @@
 
                                     <!--  INNER LISTVIEW  -->
 
-                                    <!--  ItemsSource="{Binding ParallelVerses}"  -->
                                     <ListView
                                         x:Name="InnerListView"
-                                        Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                        Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Stretch"
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -562,10 +565,8 @@
                 FontSize="15" />-->
 
             <ProgressBar
-                Grid.Row="0"
-                Grid.RowSpan="2"
-                Grid.Column="0"
-                Width="75"
+                Grid.Column="1"
+                Width="76"
                 Height="75"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
@@ -578,8 +579,7 @@
 
             <controls:SidebarExpander
                 Grid.Row="0"
-                Grid.RowSpan="2"
-                Grid.Column="1"
+                Grid.Column="2"
                 mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
@@ -654,6 +654,9 @@
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="LabelAdded">
                                     <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="LabelRemoved">
+                                    <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="CloseRequested">
                                     <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />

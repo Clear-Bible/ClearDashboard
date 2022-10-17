@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Autofac;
+using Autofac.Core.Lifetime;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -12,27 +16,32 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
-    public record LoadProjectQuery(string projectName) : ProjectRequestQuery<IEnumerable<Corpus>>;
+    public record LoadProjectQuery(string projectName) :  IRequest<RequestResult<Models.Project>>;
 
-    public class LoadProjectQueryHandler : ProjectDbContextQueryHandler<LoadProjectQuery,
-        RequestResult<IEnumerable<Corpus>>, IEnumerable<Corpus>>
+    public class LoadProjectQueryHandler : IRequestHandler<LoadProjectQuery,RequestResult<Models.Project>>
     {
         private readonly IMediator _mediator;
+        private readonly ILifetimeScope _lifetimeScope;
         public LoadProjectQueryHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory,
-            IProjectProvider projectProvider, ILogger<LoadProjectQueryHandler> logger)
-            : base(projectNameDbContextFactory, projectProvider, logger)
+            IProjectProvider projectProvider, ILogger<LoadProjectQueryHandler> logger, ILifetimeScope lifetimeScope)
         {
+            _lifetimeScope = lifetimeScope;
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<IEnumerable<Corpus>>> GetDataAsync(LoadProjectQuery request, CancellationToken cancellationToken)
+        public async Task<RequestResult<Models.Project>> Handle(LoadProjectQuery request, CancellationToken cancellationToken)
         {
-            // need an await to get the compiler to be 'quiet'
-            await Task.CompletedTask;
+            using var requestScope = _lifetimeScope.BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
 
-            return new RequestResult<IEnumerable<Corpus>>(ProjectDbContext.Corpa
-                .Include(corpus => corpus.TokenizedCorpora)
-                    /*.ThenInclude(tokenizedCorpus => tokenizedCorpus.Tokens)*/);
+            var projectDbContextFactory = _lifetimeScope.Resolve<ProjectDbContextFactory>();
+            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
+                request.projectName,
+                false,
+                requestScope);
+
+            var currentProject = projectDbContext.Projects.First();
+
+            return new RequestResult<Models.Project>(currentProject);
         }
     }
 }

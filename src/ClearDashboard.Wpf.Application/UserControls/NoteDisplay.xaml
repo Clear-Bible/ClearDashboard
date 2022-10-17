@@ -25,8 +25,8 @@
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
             Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteText}"
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontSize}"
-            FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontWeight}"
             FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontStyle}"
+            FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontWeight}"
             MouseDown="NoteLabelClick"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteLabelVisibility}" />
         <TextBox
@@ -34,8 +34,8 @@
             Grid.Row="0"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontSize}"
-            FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontWeight}"
             FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontStyle}"
+            FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontWeight}"
             Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Text}"
             TextChanged="NoteTextBoxOnTextChanged"
             TextWrapping="Wrap"
@@ -66,37 +66,41 @@
             Orientation="Horizontal"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampRowVisibility}">
             <Label
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserId}"
-                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontFamily}" 
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontSize}" 
-                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}" 
-                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}"
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserMargin}"
                 VerticalContentAlignment="Center"
-                />
-            <Label
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Modified}"
-                VerticalContentAlignment="Center"
-                FontStyle="Italic"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}" 
-                />
-            <Button 
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserId}"
+                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontFamily}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontSize}"
+                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontStyle}"
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}" />
+            <Label Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampMargin}" FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampFontSize}" />
+            <Button
                 Name="DeleteNoteButton"
                 Margin="10,0,10,0"
-                Padding="0,0,0,0" 
-                Background="Transparent" 
-                FontWeight="ExtraBold"
+                Padding="0,0,0,0"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="OnDeleteNote"
                 FontSize="16"
-                BorderThickness="0" 
-                Click="OnDeleteNote">X
+                FontWeight="ExtraBold">
+                X
             </Button>
-            <Popup Name="ConfirmDeletePopup" StaysOpen="False" PlacementTarget="{Binding ElementName=DeleteNoteButton}"
-                   Placement="Left" Width="200" VerticalOffset="30">
+            <Popup
+                Name="ConfirmDeletePopup"
+                Width="200"
+                Placement="Left"
+                PlacementTarget="{Binding ElementName=DeleteNoteButton}"
+                StaysOpen="False"
+                VerticalOffset="30">
                 <Border BorderThickness="2">
-                    <StackPanel Orientation="Vertical" Background="LightGoldenrodYellow">
-                        <TextBlock HorizontalAlignment="Center" FontWeight="Bold" Padding="10">Delete this note?</TextBlock>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Background="LightGoldenrodYellow" Orientation="Vertical">
+                        <TextBlock
+                            Padding="10"
+                            HorizontalAlignment="Center"
+                            FontWeight="Bold">
+                            Delete this note?
+                        </TextBlock>
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <Button Margin="5" Click="DeleteConfirmed">Yes</Button>
                             <Button Margin="5" Click="DeleteCancelled">No</Button>
                         </StackPanel>
@@ -132,14 +136,14 @@
             Orientation="Horizontal">
             <Label FontSize="11" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">Labels:</Label>
             <local:LabelsDisplay
-                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
                 LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
                 LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
                 LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
                 LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
-                Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteLabels}" 
-                LabelRemoved="OnLabelRemoved"/>
+                LabelRemoved="OnLabelRemoved"
+                Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteLabels}"
+                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
             <local:LabelSelector
                 Grid.Row="3"
                 HorizontalAlignment="Center"
