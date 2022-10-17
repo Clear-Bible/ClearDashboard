@@ -28,6 +28,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.AspNet.SignalR.Client.Http;
@@ -776,27 +777,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// all the various verse renderings
         /// </summary>
         /// <param name="obj"></param>
-        private void VerseClick(object obj)
+        private async void VerseClick(object obj)
         {
             if (obj is null)
             {
                 return;
             }
 
-            // ReSharper disable once IdentifierTypo
-            // ReSharper disable once InconsistentNaming
-            var verseBBCCCVVV = (string)obj;
-            var verses = SelectedItemVerses.Where(v => v.BBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
+            
+            //await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
+            await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(obj.ToString()));
 
-            if (verses.Count <= 0) return;
+            //// ReSharper disable once IdentifierTypo
+            //// ReSharper disable once InconsistentNaming
+            //var verseBBCCCVVV = (string)obj;
+            //var verses = SelectedItemVerses.Where(v => v.BBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
+
+            //if (verses.Count <= 0) return;
 
 
-            // show the verse in context popup window
-            IWindowManager manager = new WindowManager();
-            manager.ShowWindowAsync(
-                new VersePopUpViewModel(navigationService: NavigationService, logger: Logger as ILogger<VersePopUpViewModel>,
-                    projectManager: ProjectManager, eventAggregator: EventAggregator, mediator: _mediator, lifetimeScope: LifetimeScope,
-                    verse: verses[0]));
+            //// show the verse in context popup window
+            //IWindowManager manager = new WindowManager();
+            //manager.ShowWindowAsync(
+            //    new VersePopUpViewModel(navigationService: NavigationService, logger: Logger as ILogger<VersePopUpViewModel>,
+            //        projectManager: ProjectManager, eventAggregator: EventAggregator, mediator: _mediator, lifetimeScope: LifetimeScope,
+            //        verse: verses[0]));
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
