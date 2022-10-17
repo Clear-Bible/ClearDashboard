@@ -6,5 +6,5 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 {
     public record DenormalizeAlignmentTopTargetsCommand(
-        Guid AlignmentSetId) : ProjectRequestCommand<object>;
+        Guid AlignmentSetId) : ProjectRequestCommand<int>;
 }

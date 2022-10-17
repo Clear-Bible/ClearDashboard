@@ -22,7 +22,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 {
     public class DenormalizeAlignmentTopTargetsCommandHandler : ProjectDbContextCommandHandler<DenormalizeAlignmentTopTargetsCommand,
-        RequestResult<object>, object>
+        RequestResult<int>, int>
     {
         private readonly IMediator _mediator;
 
@@ -34,9 +34,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<object>> SaveDataAsync(DenormalizeAlignmentTopTargetsCommand request,
+        protected override async Task<RequestResult<int>> SaveDataAsync(DenormalizeAlignmentTopTargetsCommand request,
             CancellationToken cancellationToken)
         {
+            await Task.CompletedTask;
             IQueryable<AlignmentSetDenormalizationTask> tasks = ProjectDbContext.AlignmentSetDenormalizationTasks;
 
             if (request.AlignmentSetId != Guid.Empty)
@@ -46,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
             if (!tasks.Any())
             {
-                return new RequestResult<object>(new());
+                return new RequestResult<int>(0);
             }
 
 #if DEBUG
@@ -55,16 +56,45 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
 #endif
 
-            var tasksByAlignmentSetId = tasks
-                .GroupBy(t => t.AlignmentSetId);
+            try
+            {
 
-            // TODO:  Loop through each alignment set and do all the following
-            // logic for each one:
+                tasks
+                    .ToList()
+                    .GroupBy(t => t.AlignmentSetId)
+                    .ForEach(async g =>
+                {
+                    await ProcessAlignmentSet(g.Key, g.Select(g => g), cancellationToken);
+                });
 
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
+
+                return new RequestResult<int>(tasks.Count());
+            }
+            catch (Exception ex)
+            {
+                return new RequestResult<int>
+                (
+                    success: false,
+                    message: $"Error denormalizing AlignmentSet data: {ex.Message}"
+                );
+            }
+        }
+
+        private async Task ProcessAlignmentSet(Guid alignmentSetId, IEnumerable<AlignmentSetDenormalizationTask> tasks, CancellationToken cancellationToken)
+        {
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set '{alignmentSetId}' (start)");
+#endif
             var alignments = ProjectDbContext!.Alignments
                 .Include(a => a.SourceTokenComponent)
                         .Include(a => a.TargetTokenComponent)
-                .Where(a => a.AlignmentSetId == request.AlignmentSetId);
+                .Where(a => a.AlignmentSetId == alignmentSetId);
 
             IEnumerable<string>? sourceTrainingTexts = null;
             if (tasks.All(t => t.SourceText != null))
@@ -97,7 +127,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Querying alignment tokens complete.  Starting insert into denormalization table");
             sw.Restart();
 #endif
-            cancellationToken.ThrowIfCancellationRequested();
+            
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
 
             await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
@@ -109,9 +143,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
                 await ExecuteAlignmentTopTargetTrainingTextDeleteCommand(
-                    request.AlignmentSetId, 
-                    sourceTrainingTexts, 
-                    connection, 
+                    alignmentSetId,
+                    sourceTrainingTexts,
+                    connection,
                     cancellationToken);
 
                 using var insertCommand = CreateAlignmentTopTargetTrainingTextInsertCommand(connection);
@@ -128,19 +162,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                             cancellationToken);
                 }
 
-                ProjectDbContext.Remove(tasks);
+                ProjectDbContext.RemoveRange(tasks);
+
+                ProjectDbContext.Database.UseTransaction(transaction);
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
+                ProjectDbContext.Database.UseTransaction(null);
 
 #if DEBUG
                 sw.Stop();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set (end)");
 #endif
-                return new RequestResult<object>(new object());
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"Error denormalizing AlignmentSet data: {ex.Message}");
-                throw;
             }
             finally
             {

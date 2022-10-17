@@ -25,6 +25,8 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using Caliburn.Micro;
 using MediatR;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -54,6 +56,7 @@ namespace ClearDashboard.Wpf.Application
                 {
                     builder.RegisterInstance(Container!.Resolve<IEventAggregator>());
                     builder.RegisterInstance(Container!.Resolve<IMediator>());
+                    builder.RegisterInstance(Container!.Resolve<IProjectProvider>());
                     builder.RegisterInstance(Container!.Resolve<ILoggerFactory>()).SingleInstance();
                     builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>)).SingleInstance();
                     builder.RegisterDatabaseDependencies();
@@ -188,21 +191,19 @@ namespace ClearDashboard.Wpf.Application
             base.SaveMainWindowState();
         }
 
-        protected override async void OnStartup(object sender, StartupEventArgs e)
+        protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            await _host.StartAsync();
+            _host.StartAsync();
 
             Logger?.LogInformation("ClearDashboard application is starting.");
             base.OnStartup(sender, e);
         }
 
         #region Application exit
-        protected override async void OnExit(object sender, EventArgs e)
+        protected override void OnExit(object sender, EventArgs e)
         {
-            using (_host)
-            {
-                await _host.StopAsync(TimeSpan.FromSeconds(5));
-            }
+            _host.StopAsync(TimeSpan.FromSeconds(5));
+            _host.Dispose();
 
             Logger?.LogInformation("ClearDashboard application is exiting.");
             base.OnExit(sender, e);

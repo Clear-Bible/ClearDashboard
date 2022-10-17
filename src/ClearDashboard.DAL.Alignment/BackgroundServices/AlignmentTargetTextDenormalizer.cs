@@ -1,6 +1,10 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DAL.Alignment.Features.Events;
+using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +23,7 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
         private readonly IMediator _mediator;
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger<AlignmentTargetTextDenormalizer> _logger;
+        private TaskCompletionSource<bool>? _tcs = null;
 
         public AlignmentTargetTextDenormalizer(ILifetimeScope serviceProvider, IMediator mediator, IEventAggregator eventAggregator, ILogger<AlignmentTargetTextDenormalizer> logger)
         {
@@ -37,26 +42,77 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogDebug($"AlignmentTargetTextDenormalizer task doing background work.");
+                var waitTime = 120000;
+                if (_serviceScope.Resolve<IProjectProvider>().HasCurrentProject)
+                {
+                    _logger.LogDebug($"AlignmentTargetTextDenormalizer running denormalization.");
+                    await Task.Run(() => RunDenormalization(stoppingToken), stoppingToken);
+                }
+                else
+                {
+                    waitTime = 500;
+                }
 
-                // This eShopOnContainers method is querying a database table
-                // and publishing events into the Event Bus (RabbitMQ / ServiceBus)
+                _logger.LogDebug($"AlignmentTargetTextDenormalizer waiting for event or completion of delay time.");
 
-                await Task.Delay(10000, stoppingToken);
+                _tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                await Task.WhenAny(tasks: new Task[] { _tcs.Task, Task.Delay(waitTime, stoppingToken) });
             }
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"AlignmentTargetTextDenormalizer stopAsync.");
+            try 
+            { 
+                _tcs?.TrySetCanceled(cancellationToken); 
+            } 
+            catch (ObjectDisposedException) { }
+
             return base.StopAsync(cancellationToken);
         }
-        private async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? exception = null)
+
+        private async Task TriggerTaskCompletionSource()
+        {
+            try
+            {
+                _tcs?.TrySetResult(true);
+            }
+            catch (ObjectDisposedException)
+            {
+                _logger.LogDebug($"AlignmentTargetTextDenormalizer TaskCompletionSource already disposed.");
+            }
+
+            await Task.CompletedTask;
+        }
+
+        private async Task RunDenormalization(CancellationToken cancellationToken)
+        {
+            var name = "Denormalization";
+            await PublishStatusMessage(name, LongRunningProcessStatus.Working, cancellationToken, "Running alignment data denormalization");
+
+            var result = await _mediator.Send(
+                new DenormalizeAlignmentTopTargetsCommand(Guid.Empty), 
+                cancellationToken);
+
+            if (result.Success)
+            {
+                await PublishStatusMessage(name, LongRunningProcessStatus.Completed, cancellationToken, "Completed alignment data denormalization");
+                return;
+            }
+            else
+            {
+                await PublishStatusMessage(name, LongRunningProcessStatus.Completed, cancellationToken, "Error running alignment data denormalization (see logs for detailed error message)", DateTime.Now.AddMinutes(-1));
+                _logger.LogDebug($"AlignmentTargetTextDenormalizer failed due to: {result.Message}");
+
+                //await Task.Delay(2000, cancellationToken).ContinueWith(cw => PublishStatusMessage(name, LongRunningProcessStatus.Completed, cancellationToken, null, DateTime.Now.AddMinutes(-5)));
+            }
+        }
+        private async Task PublishStatusMessage(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, DateTime? endTime = null, Exception? exception = null)
         {
             var backgroundTaskStatus = new BackgroundTaskStatus
             {
                 Name = name,
-                EndTime = DateTime.Now,
+                EndTime = endTime ?? DateTime.Now,
                 Description = !string.IsNullOrEmpty(description) ? description : null,
                 ErrorMessage = exception != null ? $"{exception}" : null,
                 TaskLongRunningProcessStatus = status
@@ -66,14 +122,15 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
 
         public async Task HandleAsync(AlignmentSetCreatedEvent message, CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
-            return;
+            _logger.LogDebug($"AlignmentTargetTextDenormalizer received AlignmentSetCreatedEvent.");
+            await TriggerTaskCompletionSource();
         }
 
         public async Task HandleAsync(AlignmentAddedRemovedEvent message, CancellationToken cancellationToken)
         {
-            await Task.CompletedTask;
-            return;
+            _logger.LogDebug($"AlignmentTargetTextDenormalizer received AlignmentAddedRemovedEvent.");
+            await TriggerTaskCompletionSource();
         }
+
     }
 }

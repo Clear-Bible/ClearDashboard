@@ -141,6 +141,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                                             kvp.Value,
                                             "FromAlignmentModel"))
                                 ));
+
+#if DEBUG
+                        sw.Stop();
+                        Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from Alignment model '{translationSet.DisplayName}' (end)");
+                        sw.Restart();
+#endif
                     }
                     else
                     {
@@ -153,13 +159,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                                 "FromAlignmentModel"));
 
                         combined.AddRange(translationsFromAlignmentModel.ToList());
-                    }
-
 #if DEBUG
-                    sw.Stop();
-                    Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from Alignment model '{translationSet.DisplayName}' (end)");
-                    sw.Restart();
+                        sw.Stop();
+                        Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from denormalized Alignment model '{translationSet.DisplayName}' (end)");
+                        sw.Restart();
 #endif
+                    }
                 }
 
                 var tokensIdsNotFound = request.TokenIds

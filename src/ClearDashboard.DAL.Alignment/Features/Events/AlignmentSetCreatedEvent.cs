@@ -16,6 +16,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
     {
         public Guid AlignmentSetId { get; }
         public ProjectDbContext ProjectDbContext { get; }
+
+        /// <summary>
+        /// ProjectDbContext is provided to this event so that the database operations
+        /// of its handler can be done in the same transaction as the event publisher.
+        /// </summary>
+        /// <param name="alignmentSetId"></param>
+        /// <param name="projectDbContext"></param>
         public AlignmentSetCreatedEvent(Guid alignmentSetId, ProjectDbContext projectDbContext)
         {
             AlignmentSetId = alignmentSetId;
