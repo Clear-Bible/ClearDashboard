@@ -2,7 +2,6 @@
     x:Class="ClearDashboard.Wpf.Application.Views.Project.EnhancedView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,7 +10,6 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:projectViews="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
@@ -47,15 +45,6 @@
             Background="{StaticResource MahApps.Brushes.Accent}"
             BorderBrush="{DynamicResource MaterialDesignDivider}"
             BorderThickness="2">
-            <!--<materialDesign:DrawerHost.Style>
-                <Style BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}" TargetType="materialDesign:DrawerHost">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=BackgroundToggle}" Value="True">
-                            <Setter Property="OverlayBackground" Value="{DynamicResource PrimaryHueMidBrush}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </materialDesign:DrawerHost.Style>-->
             <materialDesign:DrawerHost.TopDrawerContent>
                 <Grid Margin="15,15,15,0">
                     <Grid.ColumnDefinitions>
@@ -183,12 +172,6 @@
                         Grid.Column="0"
                         Orientation="Horizontal">
                         <Label VerticalAlignment="Center" FontWeight="Bold">Translations:</Label>
-                        <!--<CheckBox
-                            Name="ShowTranslationsCheckbox"
-                            Margin="22,0,0,0"
-                            VerticalAlignment="Center"
-                            Visibility="Hidden"
-                            IsChecked="True" />-->
                     </StackPanel>
                     <StackPanel
                         Grid.Row="2"
@@ -307,7 +290,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="15" />
+                    <RowDefinition Height="25" />
                 </Grid.RowDefinitions>
 
                 <Button
@@ -338,7 +321,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Content="{Binding Message}"
-                    FontSize="15" />
+                    FontSize="12" />
             </Grid>
         </materialDesign:DrawerHost>
 
@@ -520,13 +503,22 @@
 
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="TokenClicked">
-                                                                <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                                <i:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                             </i:EventTrigger>
                                                             <i:EventTrigger EventName="TokenMouseEnter">
                                                                 <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                             </i:EventTrigger>
                                                             <i:EventTrigger EventName="TranslationClicked">
                                                                 <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                            <i:EventTrigger EventName="TranslationMouseEnter">
+                                                                <i:CallMethodAction MethodName="TranslationMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                            <i:EventTrigger EventName="TranslationMouseLeave">
+                                                                <i:CallMethodAction MethodName="TranslationMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                            <i:EventTrigger EventName="NoteMouseEnter">
+                                                                <i:CallMethodAction MethodName="NoteMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                             </i:EventTrigger>
                                                             <i:EventTrigger EventName="NoteCreate">
                                                                 <i:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />

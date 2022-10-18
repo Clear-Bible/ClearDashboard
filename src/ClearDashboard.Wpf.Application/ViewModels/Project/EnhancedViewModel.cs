@@ -29,6 +29,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -1305,8 +1306,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Event Handlers
 
+        #region VerseDisplayControl
+
         public void TokenClicked(TokenEventArgs e)
         {
+            SelectedTokens = e.SelectedTokens;
+            if (SelectedTokens.Any(t => t.HasNote))
+            {
+                //NotePaneVisibility = Visibility.Visible;
+            }
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId})";
+        }
+
+        public void TokenClicked(object sender, TokenEventArgs e)
+        {
+            // WORKS
             SelectedTokens = e.SelectedTokens;
             if (SelectedTokens.Any(t => t.HasNote))
             {
@@ -1333,6 +1347,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
+            // WORKS
             if (e.TokenDisplayViewModel.HasNote)
             {
                 DisplayNote(e.TokenDisplayViewModel);
@@ -1344,6 +1359,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             DisplayTranslation(e);
         }
 
+        public void TranslationMouseEnter(object sender, TranslationEventArgs e)
+        {
+            Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} hovered";
+        }
+
+        public void TranslationMouseLeave(object sender, TranslationEventArgs e)
+        {
+            Message = string.Empty;
+        }
+
         public void NoteMouseEnter(object sender, NoteEventArgs e)
         {
             DisplayNote(e.TokenDisplayViewModel);
@@ -1351,8 +1376,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteCreate(object sender, NoteEventArgs e)
         {
+            //WORKS
             DisplayNote(e.TokenDisplayViewModel);
         }
+
+        #endregion
+
+        #region TranslationControl
 
         public void TranslationApplied(object sender, TranslationEventArgs e)
         {
@@ -1521,8 +1551,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //HideTranslation();
         }
 
+        #endregion
+
+        #region NoteControl
+
         public void NoteAdded(object sender, NoteEventArgs e)
         {
+            // WORKS
             Task.Run(() => NoteAddedAsync(e).GetAwaiter());
         }
 
@@ -1531,10 +1566,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
         }
 
-
         public void NoteUpdated(object sender, NoteEventArgs e)
         {
-            Task.Run(() => NoteUpdatedAsync(e).GetAwaiter());
+            Task.Run<TaskAwaiter>(() => NoteUpdatedAsync(e).GetAwaiter());
         }
 
         public async Task NoteUpdatedAsync(NoteEventArgs e)
@@ -1556,6 +1590,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public void LabelAdded(object sender, LabelEventArgs e)
+        {
+            Task.Run<TaskAwaiter>(() => LabelAddedAsync(e).GetAwaiter());
+        }
+
+        public async Task LabelAddedAsync(LabelEventArgs e)
+        {
+            // If this is a new note, we'll handle the labels when the note is added.
+            if (e.Note.NoteId != null)
+            {
+                await SelectedVerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
+            }
+        }
+
+
         public void LabelSelected(object sender, LabelEventArgs e)
         {
             Task.Run(() => LabelSelectedAsync(e).GetAwaiter());
@@ -1566,20 +1615,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             if (e.Note.NoteId != null)
             {
                 await SelectedVerseDisplayViewModel.AssociateNoteLabelAsync(e.Note, e.Label);
-            }
-        }
-        
-        public void LabelAdded(object sender, LabelEventArgs e)
-        {
-            Task.Run(() => LabelAddedAsync(e).GetAwaiter());
-        }
-
-        public async Task LabelAddedAsync(LabelEventArgs e)
-        {
-            // If this is a new note, we'll handle the labels when the note is added.
-            if (e.Note.NoteId != null)
-            {
-                await SelectedVerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
             }
         }
 
@@ -1600,6 +1635,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             NoteControlVisibility = Visibility.Collapsed;
         }
+
+        #endregion
 
         // ReSharper restore UnusedMember.Global
 
