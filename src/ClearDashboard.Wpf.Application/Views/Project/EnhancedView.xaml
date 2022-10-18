@@ -569,7 +569,7 @@
                         <userControls:TranslationSelector
                             Margin="2,5"
                             SelectedItem="{Binding CurrentTranslationOption}"
-                            TokenDisplayViewModel="{Binding CurrentTokenDisplayViewModel}"
+                            TokenDisplayViewModel="{Binding CurrentToken}"
                             TranslationOptions="{Binding TranslationOptions}"
                             Visibility="{Binding TranslationControlVisibility}">
                             <i:Interaction.Triggers>
@@ -585,15 +585,15 @@
                         <userControls:NoteCollectionDisplay
                             Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
                             Margin="0,5"
-                            EntityId="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=CurrentToken.Token.TokenId}"
-                            EntityIds="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=SelectedTokens.EntityIds}"
+                            EntityId="{Binding Path=CurrentToken.Token.TokenId}"
+                            EntityIds="{Binding Path=SelectedTokens.EntityIds}"
                             InnerMargin="0,0,0,30"
                             LabelBackground="BlanchedAlmond"
                             LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             LabelSuggestions="{Binding LabelSuggestions}"
                             NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            Notes="{Binding CurrentTokenDisplayViewModel.Notes}"
+                            Notes="{Binding SelectedTokens.CombinedNotes}"
                             TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             Visibility="{Binding NoteControlVisibility}">
                             <i:Interaction.Triggers>
