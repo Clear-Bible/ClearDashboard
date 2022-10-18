@@ -440,26 +440,9 @@
                                         ScrollViewer.IsDeferredScrollingEnabled="True"
                                         SelectionChanged="InnerListView_SelectionChanged"
                                         VirtualizingStackPanel.IsVirtualizing="True"
+                                        ItemsSource="{Binding ParallelVerses}"
                                         VirtualizingStackPanel.VirtualizationMode="Recycling">
 
-                                        <!--  SelectedItem="{Binding SelectedItem, ElementName=MainGrid, Path=DataContext}"  -->
-
-                                        <!--<i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseLeftButtonUp">
-                                                <i:InvokeCommandAction Command="{Binding LeftMouseUpCommand}" CommandParameter="{Binding ElementName=InnerListView, Path=SelectedItem}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>-->
-
-                                        <ListView.Style>
-                                            <Style TargetType="ListView">
-                                                <Setter Property="ItemsSource" Value="{Binding Verses}" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Verses.Count}" Value="0">
-                                                        <Setter Property="ItemsSource" Value="{Binding ParallelVerses}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ListView.Style>
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="Height" Value="Auto" />
@@ -485,21 +468,11 @@
                                                         TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         TitleVisibility="Collapsed"
                                                         TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                        Tokens="{Binding TokenDisplayViewModels}"
                                                         TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                         TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-
-                                                        <userControls:VerseDisplay.Style>
-                                                            <Style TargetType="userControls:VerseDisplay">
-                                                                <Setter Property="Tokens" Value="{Binding .}" />
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding DataContext.Verses.Count, RelativeSource={RelativeSource AncestorType=ListView}}" Value="0">
-                                                                        <Setter Property="Tokens" Value="{Binding TokenDisplayViewModels}" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </userControls:VerseDisplay.Style>
 
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="TokenClicked">
@@ -531,38 +504,6 @@
                                     </ListView>
                                 </StackPanel>
                             </Border>
-
-
-                            <!--<userControls:VerseDisplay
-                                Title=""
-                                Grid.Column="1"
-                                FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                IsEnabled="True"
-                                NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                ShowTranslations="{Binding ElementName=checkRow3, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                TitleVisibility="Collapsed"
-                                TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                Tokens="{Binding VersesDisplay.Verses}"
-                                TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="TokenMouseEnter">
-                                        <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="TranslationClicked">
-                                        <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="NoteCreate">
-                                        <i:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </userControls:VerseDisplay>-->
                         </Grid>
 
                     </DataTemplate>
