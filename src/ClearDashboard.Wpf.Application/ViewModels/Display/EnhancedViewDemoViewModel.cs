@@ -261,6 +261,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public async Task TranslationApplied(TranslationEventArgs e)
         {
             await VerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
+            NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
 
             Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             TranslationPaneVisibility = Visibility.Collapsed;
