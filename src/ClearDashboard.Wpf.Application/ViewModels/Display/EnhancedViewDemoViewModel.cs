@@ -111,6 +111,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var row = await GetVerseTextRow(01001001);
                 var translationSet = await GetFirstTranslationSet();
                 await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
+
+                //var books = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
+                //var bookId = books.FirstOrDefault(b => b.silCannonBookNum == 1);
+                //bookId.
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
             }
