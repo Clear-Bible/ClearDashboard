@@ -1513,6 +1513,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
         private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
         {
+            // WORKS
             CurrentToken = tokenDisplayViewModel;
             NoteControlVisibility = Visibility.Visible;
         }

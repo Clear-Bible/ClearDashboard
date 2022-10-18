@@ -561,9 +561,6 @@
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel
-                        Grid.Row="1"
-                        Grid.RowSpan="7"
-                        Grid.Column="1"
                         Orientation="Vertical">
 
                         <userControls:TranslationSelector
@@ -583,7 +580,7 @@
                         </userControls:TranslationSelector>
 
                         <userControls:NoteCollectionDisplay
-                            Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
+                            Title="{Binding Path=SelectedTokens.CombinedSurfaceText}"
                             Margin="0,5"
                             EntityId="{Binding Path=CurrentToken.Token.TokenId}"
                             EntityIds="{Binding Path=SelectedTokens.EntityIds}"
