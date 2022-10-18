@@ -436,11 +436,11 @@
                                         Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Stretch"
+                                        ItemsSource="{Binding Verses}"
                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                         ScrollViewer.IsDeferredScrollingEnabled="True"
                                         SelectionChanged="InnerListView_SelectionChanged"
                                         VirtualizingStackPanel.IsVirtualizing="True"
-                                        ItemsSource="{Binding Verses}"
                                         VirtualizingStackPanel.VirtualizationMode="Recycling">
 
                                         <ListView.ItemContainerStyle>
@@ -480,6 +480,9 @@
                                                             </i:EventTrigger>
                                                             <i:EventTrigger EventName="TokenMouseEnter">
                                                                 <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
+                                                            <i:EventTrigger EventName="TokenMouseLeave">
+                                                                <i:CallMethodAction MethodName="TokenMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                             </i:EventTrigger>
                                                             <i:EventTrigger EventName="TranslationClicked">
                                                                 <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
@@ -560,8 +563,7 @@
                     </TextBlock>
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel
-                        Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
 
                         <userControls:TranslationSelector
                             Margin="2,5"

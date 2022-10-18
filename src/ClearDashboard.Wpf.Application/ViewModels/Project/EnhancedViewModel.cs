@@ -1313,6 +1313,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #endregion // Methods
 
+        
+        
+
         #region Event Handlers
 
         #region VerseDisplayControl
@@ -1330,11 +1333,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
-            // WORKS
-            if (e.TokenDisplayViewModel.HasNote)
+            //WORKS
+            if (!SelectedTokens.Any())
             {
-                DisplayNote(e.TokenDisplayViewModel);
+                if (e.TokenDisplayViewModel.HasNote)
+                {
+                    e.TokenDisplayViewModel.IsSelected = true;
+                    SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+                    NoteControlVisibility = Visibility.Visible;
+                }
             }
+
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
+        }
+
+        public void TokenMouseLeave(object sender, TokenEventArgs e)
+        {
+            //WORKS
+            Message = string.Empty;
         }
 
         public void TranslationClicked(object sender, TranslationEventArgs e)
@@ -1357,7 +1373,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteMouseEnter(object sender, NoteEventArgs e)
         {
-            DisplayNote(e.TokenDisplayViewModel);
+            //WORKS
+            e.TokenDisplayViewModel.IsSelected = true;
+            SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+            NoteControlVisibility = Visibility.Visible;
         }
 
         public void NoteCreate(object sender, NoteEventArgs e)
@@ -1379,12 +1398,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task TranslationAppliedAsync(TranslationEventArgs e)
         {
             // WORKS
+
+            if (SelectedVerseDisplayViewModel is null)
+            {
+                return;
+            }
+            
             try
             {
                 ProgressBarVisibility = Visibility.Visible;
 
                 await SelectedVerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
 
+                Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
                 TranslationControlVisibility = Visibility.Collapsed;
             }
             finally
@@ -1396,6 +1422,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public void TranslationCancelled(object sender, RoutedEventArgs e)
         {
             //WORKS
+            Message = "Translation cancelled.";
             TranslationControlVisibility = Visibility.Collapsed;
         }
 
@@ -1412,9 +1439,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task NoteAddedAsync(NoteEventArgs e)
         {
             // WORKS
-            Debug.WriteLine(e.EntityIds);
 
+            if (SelectedVerseDisplayViewModel is null)
+            {
+                return;
+            }
+            
             await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+            Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
         public void NoteUpdated(object sender, NoteEventArgs e)
@@ -1424,6 +1456,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task NoteUpdatedAsync(NoteEventArgs e)
         {
+            if (SelectedVerseDisplayViewModel is null)
+            {
+                return;
+            }
+
             await SelectedVerseDisplayViewModel.UpdateNoteAsync(e.Note);
         }
 
