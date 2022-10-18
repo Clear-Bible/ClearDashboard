@@ -1356,16 +1356,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TranslationClicked(object sender, TranslationEventArgs e)
         {
+            // WORKS
             DisplayTranslation(e);
         }
 
         public void TranslationMouseEnter(object sender, TranslationEventArgs e)
         {
+            //WORKS
             Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} hovered";
         }
 
         public void TranslationMouseLeave(object sender, TranslationEventArgs e)
         {
+            //WORKS
             Message = string.Empty;
         }
 
