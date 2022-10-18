@@ -8,7 +8,6 @@ namespace ClearDashboard.Wpf.Application.Events
 {
     public class TranslationEventArgs : RoutedEventArgs
     {
-        public Guid VerseDisplayId { get; set; }
 
         /// <summary>
         /// The <see cref="TokenDisplayViewModel"/> that triggered this event.

@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.Project;
+using MaterialDesignColors;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Xceed.Wpf.Toolkit.Primitives;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
@@ -98,7 +100,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public List<string> WorkingJobs { get; set; } = new();
 
-        public VerseDisplay SelectedVerseDisplay { get; set; }
+
+        private VerseDisplayViewModel _selectedVerseDisplayViewModel;
+        public VerseDisplayViewModel SelectedVerseDisplayViewModel
+        {
+            get => _selectedVerseDisplayViewModel;
+            set
+            {
+                if (_selectedVerseDisplayViewModel != value)
+                {
+                    _selectedVerseDisplayViewModel = value;
+                    NotifyOfPropertyChange(() => SelectedVerseDisplayViewModel);
+                }
+            }
+        }
+
 
         #region BCV
         private bool _paratextSync = true;
@@ -277,6 +293,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public IEnumerable<Translation> CurrentTranslations { get; set; }
         public IEnumerable<Label> LabelSuggestions { get; set; }
 
+
+        private TokenDisplayViewModel _currentToken;
+        public TokenDisplayViewModel CurrentToken
+        {
+            get => _currentToken;
+            set => Set(ref _currentToken, value);
+        }
+
+        private TokenDisplayViewModelCollection _selectedTokens = new();
+        public TokenDisplayViewModelCollection SelectedTokens
+        {
+            get => _selectedTokens;
+            set => Set(ref _selectedTokens, value);
+        }
+
+
         #endregion //Observable Properties
 
 
@@ -305,6 +337,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
         }
+
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -437,6 +470,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 _projectMessages.Remove(tokenMessage);
             }
             
+        }
+
+        private void LeftMouseUp(object obj)
+        {
+            throw new NotImplementedException();
         }
 
 
@@ -770,6 +808,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     ParallelVerses = verses,
                     IsRtl = message.IsRTL,
+                    //VerseDisplayViewModelId = verses[0].Id,
                 });
 
                 // add to the grouping for saving
@@ -1091,6 +1130,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ShowTranslation = showTranslations,
                     RowTitle = title,
                     ParallelVerses = verses,
+                    //VerseDisplayViewModelId = verses[0].Id,
                 });
 
                 // add to the grouping for saving
@@ -1265,6 +1305,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Event Handlers
 
+        public void TokenClicked(TokenEventArgs e)
+        {
+            SelectedTokens = e.SelectedTokens;
+            if (SelectedTokens.Any(t => t.HasNote))
+            {
+                //NotePaneVisibility = Visibility.Visible;
+            }
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId})";
+        }
+
+        public void TokenMouseEnter(TokenEventArgs e)
+        {
+            if (!SelectedTokens.Any())
+            {
+                if (e.TokenDisplayViewModel.HasNote)
+                {
+                    e.TokenDisplayViewModel.IsSelected = true;
+                    SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+                    //NotePaneVisibility = Visibility.Visible;
+                }
+            }
+
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
+        }
+
+
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
             if (e.TokenDisplayViewModel.HasNote)
@@ -1275,27 +1341,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TranslationClicked(object sender, TranslationEventArgs e)
         {
-            if (SelectedVerseDisplay is not null)
-            {
-                
-            }
-
-
-            Debug.WriteLine($"Looking for: {e.VerseDisplayId}");
-            foreach (var versesDisplay in this.VersesDisplay)
-            {
-                foreach (var item in versesDisplay.ParallelVerses)
-                {
-                    Debug.WriteLine(item.Id);
-
-                    if (item.Id == e.VerseDisplayId)
-                    {
-                        Debug.WriteLine("");
-
-                    }
-                }
-            }
-
             DisplayTranslation(e);
         }
 
@@ -1319,13 +1364,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             try
             {
                 ProgressBarVisibility = Visibility.Visible;
+
+                await SelectedVerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
+
                 //await CurrentTranslationSet.PutTranslation(e.Translation, e.TranslationActionType);
                 //await VerseChangeRerender();
 
                 // get the current VerseDisplay
                 //var verseDisplay = GetSelectedVerseDisplay(e.VerseDisplayId);
 
-                
+
                 TranslationControlVisibility = Visibility.Collapsed;
             }
             finally
@@ -1480,76 +1528,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task NoteAddedAsync(NoteEventArgs e)
         {
-            await e.Note.CreateOrUpdate(Mediator);
-            await e.Note.AssociateDomainEntity(Mediator, e.EntityId);
-            foreach (var label in e.Note.Labels)
-            {
-                if (label.LabelId == null)
-                {
-                    await label.CreateOrUpdate(Mediator);
-                }
-                await e.Note.AssociateLabel(Mediator, label);
-            }
-
-            await AddNoteToDatabase(e.Note, e.EntityId);
-
-            // TODO: notify the token that a note was added
-            //var token = VerseTokens.FirstOrDefault(vt => vt.Token.TokenId == e.EntityId);
-            //if (token != null)
-            //{
-            //    token.NoteAdded(e.Note);
-            //}
-
-            //Message = $"Note '{e.Note.Text}' added to token ({e.EntityId})";
-            //NotifyOfPropertyChange(nameof(Message));
-
-            //e.TokenDisplayViewModel.Notes.Add(e.Note);
+            await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
         }
 
-        public async Task AddNoteToDatabase(Note note, IId entityId)
-        {
-            try
-            {
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                await note.CreateOrUpdate(Mediator);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Added note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
-                stopwatch.Restart();
-#endif
-                await note.AssociateDomainEntity(Mediator, entityId);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Associated note {note.NoteId.Id} with entity {entityId.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                if (note.Labels.Any())
-                {
-#if DEBUG
-                    stopwatch.Restart();
-#endif
-                    foreach (var label in note.Labels)
-                    {
-                        if (label.LabelId == null)
-                        {
-                            await label.CreateOrUpdate(Mediator);
-                        }
-                        await note.AssociateLabel(Mediator, label);
-                    }
-#if DEBUG
-                    stopwatch.Stop();
-                    Logger?.LogInformation($"Associated labels with note {note.NoteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                }
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
 
         public void NoteUpdated(object sender, NoteEventArgs e)
         {
@@ -1558,13 +1539,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task NoteUpdatedAsync(NoteEventArgs e)
         {
-            if (e.Note.NoteId is not null)
-            {
-                e.Note.CreateOrUpdate(Mediator);
-            }
-            
-            //await VerseDisplayViewModel.UpdateNoteAsync(e.Note);
-            Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+            await SelectedVerseDisplayViewModel.UpdateNoteAsync(e.Note);
         }
 
 
@@ -1577,11 +1552,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             if (e.Note.NoteId != null)
             {
-                await e.Note.Delete(Mediator);
+                await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
             }
-
-            //await VerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
-            Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
         }
 
         public void LabelSelected(object sender, LabelEventArgs e)
@@ -1591,10 +1563,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task LabelSelectedAsync(LabelEventArgs e)
         {
-            // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
-                await e.Note.AssociateLabel(Mediator, e.Label);
+                await SelectedVerseDisplayViewModel.AssociateNoteLabelAsync(e.Note, e.Label);
             }
         }
         
@@ -1608,7 +1579,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
-                e.Label = await e.Note.CreateAssociateLabel(Mediator, e.Label.Text);
+                await SelectedVerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
             }
         }
 
@@ -1621,11 +1592,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             if (e.Note.NoteId != null)
             {
-                await e.Note.DetachLabel(Mediator, e.Label);
-
-                //await VerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
+                await SelectedVerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
             }
-            Message = $"Label '{e.Label.Text}' removed for note";
         }
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
@@ -1692,13 +1660,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
 
                 CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
-                TranslationOptions = await GetTranslationOptions(e.Translation);
-                CurrentTranslationOption =
-                    TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
-                
+                TranslationOptions = await SelectedVerseDisplayViewModel.GetTranslationOptionsAsync(e.Translation);
+                CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
+
                 OnUIThread(() => TranslationControlVisibility = Visibility.Visible);
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
             });
+
+
+            //await Task.Factory.StartNew(async () =>
+            //{
+            //    OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+
+            //    CurrentTokenDisplayViewModel = e.TokenDisplayViewModel;
+            //    TranslationOptions = await GetTranslationOptions(e.Translation);
+            //    CurrentTranslationOption =
+            //        TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
+
+            //    OnUIThread(() => TranslationControlVisibility = Visibility.Visible);
+            //    OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
+            //});
         }
 
         private async Task<IEnumerable<TranslationOption>> GetTranslationOptions(Translation translation)

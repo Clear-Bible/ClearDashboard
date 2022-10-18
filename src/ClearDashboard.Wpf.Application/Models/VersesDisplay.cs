@@ -25,7 +25,20 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
-        
+        //private Guid _verseDisplayViewModelId;
+
+        //public Guid VerseDisplayViewModelId
+        //{
+        //    get => _verseDisplayViewModelId;
+        //    set
+        //    {
+        //        _verseDisplayViewModelId = value;
+        //        NotifyOfPropertyChange(() => VerseDisplayViewModelId);
+        //    }
+        //}
+
+
+
         private Visibility _visiblity = Visibility.Collapsed;
         public Visibility Visibility
         {

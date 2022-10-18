@@ -2,6 +2,7 @@
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application.Views.Project
 {
@@ -27,48 +29,19 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             InitializeComponent();
         }
 
+
+
         private void InnerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var innerListView = sender as ListView;
+            if (e.AddedItems.Count > 0)
+            {
+                var verseDisplayViewModel = e.AddedItems[0] as VerseDisplayViewModel;
+                Debug.WriteLine(verseDisplayViewModel.Id);
 
-            ItemContainerGenerator generator = innerListView.ItemContainerGenerator;
-            ListBoxItem selectedItem = (ListBoxItem)generator.ContainerFromIndex(innerListView.SelectedIndex);
-            VerseDisplay verseDisplay = GetChildrenByType(selectedItem, typeof(VerseDisplay), "VerseDisplay") as VerseDisplay;
-            if (verseDisplay is not null)
-            {
-                if (this.DataContext is EnhancedViewModel)
-                {
-                    var vm = (EnhancedViewModel)this.DataContext;
-                    vm.SelectedVerseDisplay = verseDisplay;
-                }
+                var vm = DataContext as EnhancedViewModel;
+                vm.SelectedVerseDisplayViewModel = verseDisplayViewModel;
             }
-        }
 
-        public Visual GetChildrenByType(Visual visualElement, Type typeElement, string nameElement)
-        {
-            if (visualElement == null) return null;
-            if (visualElement.GetType() == typeElement)
-            {
-                FrameworkElement fe = visualElement as FrameworkElement;
-                if (fe != null)
-                {
-                    if (fe.Name == nameElement)
-                    {
-                        return fe;
-                    }
-                }
-            }
-            Visual foundElement = null;
-            if (visualElement is FrameworkElement)
-                (visualElement as FrameworkElement).ApplyTemplate();
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(visualElement); i++)
-            {
-                Visual visual = VisualTreeHelper.GetChild(visualElement, i) as Visual;
-                foundElement = GetChildrenByType(visual, typeElement, nameElement);
-                if (foundElement != null)
-                    break;
-            }
-            return foundElement;
         }
     }
 }

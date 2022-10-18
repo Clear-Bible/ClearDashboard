@@ -305,6 +305,10 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="15" />
+                </Grid.RowDefinitions>
 
                 <Button
                     Grid.Column="0"
@@ -327,6 +331,14 @@
                     ShowOffsetControl="True"
                     VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="{Binding Message}"
+                    FontSize="15" />
             </Grid>
         </materialDesign:DrawerHost>
 
@@ -446,11 +458,12 @@
                                         SelectionChanged="InnerListView_SelectionChanged"
                                         VirtualizingStackPanel.IsVirtualizing="True"
                                         VirtualizingStackPanel.VirtualizationMode="Recycling">
-                                        <!--  SelectionChanged="InnerListView_SelectionChanged"  -->
+
+                                        <!--  SelectedItem="{Binding SelectedItem, ElementName=MainGrid, Path=DataContext}"  -->
 
                                         <!--<i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="SelectionChanged">
-                                                <i:CallMethodAction MethodName="SelectionChanged" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                            <i:EventTrigger EventName="MouseLeftButtonUp">
+                                                <i:InvokeCommandAction Command="{Binding LeftMouseUpCommand}" CommandParameter="{Binding ElementName=InnerListView, Path=SelectedItem}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>-->
 
@@ -492,7 +505,6 @@
                                                         TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                         TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                         TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                        
                                                         Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
 
                                                         <userControls:VerseDisplay.Style>
@@ -507,6 +519,9 @@
                                                         </userControls:VerseDisplay.Style>
 
                                                         <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="TokenClicked">
+                                                                <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                            </i:EventTrigger>
                                                             <i:EventTrigger EventName="TokenMouseEnter">
                                                                 <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                             </i:EventTrigger>
@@ -637,7 +652,8 @@
                         <userControls:NoteCollectionDisplay
                             Title="{Binding CurrentTokenDisplayViewModel.SurfaceText}"
                             Margin="0,5"
-                            EntityId="{Binding CurrentTokenDisplayViewModel.Token.TokenId}"
+                            EntityId="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=CurrentToken.Token.TokenId}"
+                            EntityIds="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=SelectedTokens.EntityIds}"
                             InnerMargin="0,0,0,30"
                             LabelBackground="BlanchedAlmond"
                             LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

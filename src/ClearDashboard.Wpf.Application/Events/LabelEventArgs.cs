@@ -8,7 +8,6 @@ namespace ClearDashboard.Wpf.Application.Events
 {
     public class LabelEventArgs : RoutedEventArgs
     {
-        public Guid VerseDisplayId { get; set; }
         public Label Label { get; set; }
         public Note Note { get; set; }
     }

@@ -175,8 +175,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Static DependencyProperties
 
 
-        public static readonly DependencyProperty VerseDisplayViewModelIdProperty = DependencyProperty.Register("VerseDisplayViewModelId", typeof(Guid), typeof(Guid));
-
         /// <summary>
         /// Identifies the Title dependency property.
         /// </summary>
@@ -367,7 +365,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 TokenDisplayViewModel = tokenDisplay,
                 SelectedTokens = SelectedTokens,
                 ModifierKeys = Keyboard.Modifiers,
-                VerseDisplayId = this.VerseDisplayViewModelId,
             });
         }
 
@@ -454,7 +451,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
                 Translation = control?.TokenDisplayViewModel?.Translation,
-                VerseDisplayId = this.VerseDisplayViewModelId,
             }) ;
         }
 
@@ -510,7 +506,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
                 SelectedTokens = SelectedTokens,
-                VerseDisplayId = this.VerseDisplayViewModelId,
             });
         }
 
@@ -792,12 +787,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion
         #region Public properties
-
-        public Guid VerseDisplayViewModelId
-        {
-            get => (Guid)GetValue(VerseDisplayViewModelIdProperty);
-            set => SetValue(VerseDisplayViewModelIdProperty, value);
-        }
         
         /// <summary>
         /// Gets or sets the orientation for displaying the tokens.
