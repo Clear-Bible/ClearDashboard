@@ -211,24 +211,12 @@ namespace ClearDashboard.DataAccessLayer
             return mediator.Send(request, cancellationToken);
         }
         #endregion
-        
-        public Task<IEnumerable<Project>> GetAllProjects()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<Project> LoadProject(string projectName)
         {
-            using var requestScope = LifetimeScope
-                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+            var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
+            CurrentProject = result.Data;
 
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
-                projectName,
-                false,
-                requestScope);
-
-            CurrentProject = projectDbContext.Projects.First();
             if (CurrentDashboardProject != null)
             {
                 CurrentDashboardProject.DirectoryPath = string.Format(
@@ -260,23 +248,10 @@ namespace ClearDashboard.DataAccessLayer
             } 
         }
 
-        public async Task UpdateProject(Project project)
+        public async Task<Project> UpdateProject(Project project)
         {
-            await using var requestScope = LifetimeScope
-                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
-                project.ProjectName, 
-                false,
-                requestScope);
-
-            Logger.LogInformation($"Saving the design surface layout for project '{CurrentProject.ProjectName}'");
-            projectDbContext.Update(project);
-
-            await projectDbContext.SaveChangesAsync();
-
-            Logger.LogInformation($"Saved the design surface layout for project '{CurrentProject.ProjectName}'");
+            var result = await ExecuteRequest(new UpdateProjectCommand(project), CancellationToken.None);
+            return result.Data;
         }
     }
 }

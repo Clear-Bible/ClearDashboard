@@ -9,10 +9,10 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
-    xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     d:DataContext="{d:DesignInstance Type=paratextViews:TextCollectionsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -63,7 +63,6 @@
                 CurrentBcv="{Binding Path=CurrentBcv}"
                 IsControlEnabled="False"
                 IsControlMinimal="True"
-                IsRtl="{Binding IsRtl}"
                 ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowHeader="False"
                 ShowOffsetControl="False"
@@ -80,7 +79,7 @@
 
             <ListView
                 x:Name="TextCollectionListView"
-                MinHeight="{Binding ElementName=LowerBorder, Path=Height}"
+                MinHeight="{Binding ElementName=LowerBorder, Path=ActualHeight}"
                 Margin="5"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">

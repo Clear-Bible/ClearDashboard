@@ -426,11 +426,10 @@
 
 
                         <ListView
-                            x:Name="SelectedItemVerses"
-                            Width="{Binding Path=ActualWidth, ElementName=PinsViewWindow}"
-                            Height="{Binding Path=ActualHeight, ElementName=DialogHost}"
+                            x:Name="ListView"
                             Margin="5"
-                            VerticalAlignment="Top"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
                             ItemsSource="{Binding SelectedItemVerses}"
                             ScrollViewer.VerticalScrollBarVisibility="Visible">
                             <ListView.ItemContainerStyle>
@@ -487,7 +486,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
+                                    <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=ListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock

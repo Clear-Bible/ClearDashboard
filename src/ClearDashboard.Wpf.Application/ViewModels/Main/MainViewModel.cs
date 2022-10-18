@@ -1,20 +1,21 @@
-﻿using AvalonDock.Layout;
+﻿using Autofac;
+using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Features.Bcv;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using ClearDashboard.Wpf.Application.Views.Main;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
@@ -26,30 +27,12 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Autofac;
-using Autofac.Core.Lifetime;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using Microsoft.Xaml.Behaviors.Core;
-using SIL.Reporting;
-using ClearDashboard.DataAccessLayer;
 using DockingManager = AvalonDock.DockingManager;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Serilog.Core;
-using System.Windows.Navigation;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
-using System.Text.Json;
-using Microsoft.Extensions.Options;
-using System.Text.Json.Serialization;
-using QuickGraph.Algorithms.Observers;
-using ClearDashboard.DataAccessLayer.Data;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -198,7 +181,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             _windowIdToLoad = "BIBLICALTERMS";
                             break;
                         case "EnhancedCorpusID":
-                            _windowIdToLoad = "ENHANCEDCORPUS";
+                            _windowIdToLoad = "ENHANCEDVIEW";
                             break;
                         case "PINSID":
                             _windowIdToLoad = "PINS";
@@ -543,12 +526,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     if (enhancedViewModel.DisplayOrder.Count > 0)
                     {
+                        var id = enhancedViewModel.Guid;
+
+                        // get the correct window for this view model so we can get the tab name
+                        var title = enhancedViewModel.Title;
+                        var windowsDockable = _dockingManager.Layout.Descendents()
+                            .OfType<LayoutDocument>()
+                            .FirstOrDefault(a =>
+                            {
+                                if (a.Content is not null)
+                                {
+                                    if (a.Content is EnhancedViewModel)
+                                    {
+                                        var vm = (EnhancedViewModel)a.Content;
+                                        if (vm.Guid == id)
+                                        {
+                                            return true;
+                                        }
+                                    }
+                                }
+                                return false;
+                            });
+
+                        if (windowsDockable is not null)
+                        {
+                            title = windowsDockable.Title;
+                        }
+                        
                         // get the displayed contents
                         serializedEnhancedViews.Add(new SerializedEnhancedView
                         {
                             BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
                             DisplayOrder = enhancedViewModel.DisplayOrder,
-                            Title = enhancedViewModel.Title,
+                            Title = title,
                             ParatextSync = enhancedViewModel.ParatextSync,
                             VerseOffset = enhancedViewModel.VerseOffsetRange,
                         });
@@ -579,30 +589,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //await _projectDesignSurfaceViewModel.DeactivateAsync(false);
 
             ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
-            await UpdateProject(ProjectManager.CurrentProject);
+            await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
 
             //await _projectDesignSurfaceViewModel.SaveCanvas();
 
             return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-        public async Task UpdateProject(DataAccessLayer.Models.Project project)
-        {
-            await using var requestScope = LifetimeScope
-                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-
-            var projectDbContextFactory = LifetimeScope.Resolve<ProjectDbContextFactory>();
-            var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
-                project.ProjectName,
-                false,
-                requestScope);
-
-            Logger.LogInformation($"Saving the design surface layout for project '{ProjectManager.CurrentProject.ProjectName}'");
-            projectDbContext.Update(project);
-
-            await projectDbContext.SaveChangesAsync();
-
-            Logger.LogInformation($"Saved the design surface layout for project '{project.ProjectName}'");
         }
 
         protected override async void OnViewAttached(object view, object context)
@@ -1196,9 +1187,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
+            
+
+
             // save to settings
             Settings.Default.LastLayout = filePath;
             _lastLayout = filePath;
+
+            // update the existing window to set the title
+            var windowsDockable = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>()
+                .FirstOrDefault(a =>
+                {
+                    if (a.Content is not null)
+                    {
+                        if (a.Content is EnhancedViewModel)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+
+            if (windowsDockable is not null)
+            {
+                var vm = (EnhancedViewModel)windowsDockable.Content;
+                windowsDockable.Title = vm.Title;
+            }
 
             // save the layout
             //var layoutSerializer = new XmlLayoutSerializer(this._dockingManager);
@@ -1460,76 +1475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             //}
         }
-
-        //private void CalculateBooks()
-        //{
-        //    CurrentBcv.BibleBookList?.Clear();
-
-        //    var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
-        //        .Select(g => g.First())
-        //        .ToList();
-
-        //    foreach (var book in books)
-        //    {
-        //        var bookId = book.Substring(0, 3);
-
-        //        var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
-
-        //        CurrentBcv.BibleBookList?.Add(bookName);
-        //    }
-
-        //}
-
-        //private void CalculateChapters()
-        //{
-        //    // CHAPTERS
-        //    var bookId = CurrentBcv.Book;
-        //    var chapters = BCVDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
-        //    for (var i = 0; i < chapters.Count; i++)
-        //    {
-        //        chapters[i] = chapters[i].Substring(3, 3);
-        //    }
-
-        //    chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-        //    // invoke to get it to run in STA mode
-        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
-        //    {
-        //        var chapterNumbers = new List<int>();
-        //        foreach (var chapter in chapters)
-        //        {
-        //            chapterNumbers.Add(Convert.ToInt16(chapter));
-        //        }
-
-        //        CurrentBcv.ChapterNumbers = chapterNumbers;
-        //    });
-        //}
-
-        //private void CalculateVerses()
-        //{
-        //    // VERSES
-        //    var bookId = CurrentBcv.Book;
-        //    var chapId = CurrentBcv.ChapterIdText;
-        //    var verses = BCVDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
-
-        //    for (int i = 0; i < verses.Count; i++)
-        //    {
-        //        verses[i] = verses[i].Substring(6);
-        //    }
-
-        //    verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
-        //    // invoke to get it to run in STA mode
-        //    System.Windows.Application.Current.Dispatcher.Invoke(delegate
-        //    {
-        //        List<int> verseNumbers = new List<int>();
-        //        foreach (var verse in verses)
-        //        {
-        //            verseNumbers.Add(Convert.ToInt16(verse));
-        //        }
-
-        //        CurrentBcv.VerseNumbers = verseNumbers;
-        //    });
-        //}
-
+        
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
             if (CurrentBcv.BibleBookList.Count == 0)
@@ -1699,22 +1645,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
         {
-            if (menuItem.Id == "NewID")
+            if (!_projectDesignSurfaceViewModel.LongProcessRunning)
             {
-                StartupDialogViewModel.GoToSetup = true;
+                if (menuItem.Id == "NewID")
+                {
+                    StartupDialogViewModel.GoToSetup = true;
+                }
+
+                var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
+                startupDialogViewModel.MimicParatextConnection = true;
+
+                await OnDeactivateAsync(false, CancellationToken.None);
+
+                var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
+
+                this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+                await OnInitializeAsync(CancellationToken.None);
+                await OnActivateAsync(CancellationToken.None);
+                await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             }
-
-            var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
-            startupDialogViewModel.MimicParatextConnection = true;
-
-            await OnDeactivateAsync(false, CancellationToken.None);
-
-            var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
-
-            this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-            await OnInitializeAsync(CancellationToken.None);
-            await OnActivateAsync(CancellationToken.None);
-            await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
         }
 
         #endregion // Methods
@@ -1852,7 +1801,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
     public static class WorkspaceLayoutNames
     {
-        public const string EnhancedCorpus = "ENHANCEDCORPUS";
+        public const string EnhancedCorpus = "ENHANCEDVIEW";
 
         public const string BiblicalTerms = "BIBLICALTERMS";
         public const string Pins = "PINS";
