@@ -802,7 +802,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     BorderColor = brush,
                     ShowTranslation = showTranslations,
                     RowTitle = title,
-                    ParallelVerses = verses,
+                    Verses = verses,
                     IsRtl = message.IsRTL,
                     //VerseDisplayViewModelId = verses[0].Id,
                 });
@@ -820,7 +820,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.BorderColor = brush;
                 row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
-                row.ParallelVerses = verses;
+                row.Verses = verses;
                 row.IsRtl = message.IsRTL;
             }
 
@@ -1125,7 +1125,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     BorderColor = brush,
                     ShowTranslation = showTranslations,
                     RowTitle = title,
-                    ParallelVerses = verses,
+                    Verses = verses,
                     //VerseDisplayViewModelId = verses[0].Id,
                 });
 
@@ -1142,7 +1142,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.BorderColor = brush;
                 row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
-                row.ParallelVerses = verses;
+                row.Verses = verses;
             }
 
             //do a dump of VerseDisplayViewModel Ids

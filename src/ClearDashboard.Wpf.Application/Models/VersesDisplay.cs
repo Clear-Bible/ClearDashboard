@@ -25,19 +25,6 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
-        //private Guid _verseDisplayViewModelId;
-
-        //public Guid VerseDisplayViewModelId
-        //{
-        //    get => _verseDisplayViewModelId;
-        //    set
-        //    {
-        //        _verseDisplayViewModelId = value;
-        //        NotifyOfPropertyChange(() => VerseDisplayViewModelId);
-        //    }
-        //}
-
-
 
         private Visibility _visiblity = Visibility.Collapsed;
         public Visibility Visibility
@@ -75,18 +62,11 @@ namespace ClearDashboard.Wpf.Application.Models
         }
         
         
-        private ObservableCollection<List<TokenDisplayViewModel>> _verses = new();
-        public ObservableCollection<List<TokenDisplayViewModel>> Verses
+        private ObservableCollection<VerseDisplayViewModel> _verses = new();
+        public ObservableCollection<VerseDisplayViewModel> Verses
         {
             get => _verses;
             set => Set(ref _verses, value);
-        }
-
-        private ObservableCollection<VerseDisplayViewModel> _parallelVerses = new();
-        public ObservableCollection<VerseDisplayViewModel> ParallelVerses
-        {
-            get => _parallelVerses;
-            set => Set(ref _parallelVerses, value);
         }
         
         
