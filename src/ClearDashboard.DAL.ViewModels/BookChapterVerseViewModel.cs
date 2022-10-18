@@ -1,6 +1,13 @@
 ﻿using System.Reflection.Metadata;
 using ClearDashboard.DataAccessLayer.Models;
 using static System.String;
+using ClearDashboard.DAL.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
 namespace ClearDashboard.DAL.ViewModels
 {
@@ -16,6 +23,8 @@ namespace ClearDashboard.DAL.ViewModels
         {
 
         }
+
+        private bool InComingChangesStarted { get; set; }
 
         public List<string> BibleBookList
         {
@@ -171,6 +180,162 @@ namespace ClearDashboard.DAL.ViewModels
             return BBBCCCVVV;
         }
 
+        #region BcvDictionary
+
+        //public static readonly DependencyProperty BcvDictionaryProperty = DependencyProperty.Register(
+        //    nameof(BcvDictionary), typeof(Dictionary<string, string>), typeof(BookChapterVerseViewModel),
+        //    new PropertyMetadata(new Dictionary<string, string>(),
+        //        new PropertyChangedCallback(OnBcvDictionaryChanged)));
+
+        //private static void OnBcvDictionaryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    BookChapterVerseViewModel? userControl = d as BookChapterVerseViewModel;
+        //    userControl?.OnBcvDictionaryChanged(e);
+        //}
+
+        //private void OnBcvDictionaryChanged(DependencyPropertyChangedEventArgs e)
+        //{
+        //    BcvDictionary = (Dictionary<string, string>)e.NewValue;
+        //}
+
+        //public Dictionary<string, string> BcvDictionary
+        //{
+        //    get => (Dictionary<string, string>)GetValue(BcvDictionaryProperty);
+        //    set
+        //    {
+        //        SetValue(BcvDictionaryProperty, value);
+        //    }
+        //}
+
+        private Dictionary<string, string> _bcvDictionary;
+
+        public Dictionary<string, string> BcvDictionary
+        {
+            get { return _bcvDictionary; }
+            set { _bcvDictionary = value; }
+        }
+
+
+        #endregion BcvDictionary
+
+        //#region CurrentBcv
+
+        //public static readonly DependencyProperty CurrentBcvProperty =
+        //    DependencyProperty.Register(nameof(CurrentBcv), typeof(BookChapterVerseViewModel), typeof(BookChapterVerseViewModel),
+        //        new PropertyMetadata(new BookChapterVerseViewModel(), new PropertyChangedCallback(OnCurrentBcvPropteryChanged)));
+
+        //private static void OnCurrentBcvPropteryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    BookChapterVerseViewModel? userControl = d as BookChapterVerseViewModel;
+        //    userControl?.OnCurrentBcvPropteryChanged(e);
+        //}
+
+        //private void OnCurrentBcvPropteryChanged(DependencyPropertyChangedEventArgs e)
+        //{
+        //    CurrentBcv = (BookChapterVerseViewModel)e.NewValue;
+        //}
+
+        //public BookChapterVerseViewModel CurrentBcv
+        //{
+        //    get => (BookChapterVerseViewModel)GetValue(CurrentBcvProperty);
+        //    set
+        //    {
+        //        SetValue(CurrentBcvProperty, value);
+
+        //        CalculateBooks();
+        //        CalculateChapters();
+        //        CalculateVerses();
+
+        //        VerseChange = CurrentBcv.GetVerseId();
+        //    }
+        //}
+
+        //#endregion CurrentBcv
+
+        private void CalculateBooks()
+        {
+            if (this is null)
+            {
+                return;
+            }
+
+            this.BibleBookList?.Clear();
+
+            var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var book in books)
+            {
+                var bookId = book.Substring(0, 3);
+
+                var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                this.BibleBookList?.Add(bookName);
+            }
+        }
+
+        private void CalculateChapters()
+        {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
+            // CHAPTERS
+            var bookId = this.Book;
+            var chapters = BcvDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                chapters[i] = chapters[i].Substring(3, 3);
+            }
+
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            //System.Windows.Application.Current.Dispatcher.Invoke(delegate
+            //{
+                List<int> chapterNumbers = new List<int>();
+                foreach (var chapter in chapters)
+                {
+                    chapterNumbers.Add(Convert.ToInt16(chapter));
+                }
+
+                this.ChapterNumbers = chapterNumbers;
+            //});
+        }
+
+        private void CalculateVerses()
+        {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
+            // VERSES
+            var bookId = this.Book;
+            var chapId = this.ChapterIdText;
+            var verses = BcvDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
+
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(6);
+            }
+
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            
+            //System.Windows.Application.Current.Dispatcher.Invoke(delegate
+            //{
+                List<int> verseNumbers = new List<int>();
+                foreach (var verse in verses)
+                {
+                    verseNumbers.Add(Convert.ToInt16(verse));
+                }
+
+                this.VerseNumbers = verseNumbers;
+            //});
+        }
+
         /// <summary>
         /// Uses a Paratext verse ID to set this object's properties.
         /// </summary>
@@ -221,6 +386,11 @@ namespace ClearDashboard.DAL.ViewModels
             {
                 return false;
             }
+
+            //InComingChangesStarted = true;//where are these being used?  We are turning on and off something here
+            //CalculateChapters();
+            //CalculateVerses();
+            //InComingChangesStarted = false;
 
             return true;
         }

@@ -785,13 +785,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 return;
             }
 
+            EnhancedViewModel.InComingChangesStarted = true;
             //_ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None));
-            //await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
-            await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(obj.ToString()));
+            await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
+            //await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(obj.ToString()));
 
             //// ReSharper disable once IdentifierTypo
             //// ReSharper disable once InconsistentNaming
-            //var verseBBCCCVVV = (string)obj;
+            var verseBBCCCVVV = (string)obj;
+            EnhancedViewModel.InComingChangesStarted = false;
             //var verses = SelectedItemVerses.Where(v => v.BBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
 
             //if (verses.Count <= 0) return;

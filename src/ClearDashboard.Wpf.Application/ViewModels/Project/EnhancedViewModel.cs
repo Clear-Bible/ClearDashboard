@@ -70,7 +70,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private string? _message;
         private BookInfo? _currentBook;
 
-        private bool InComingChangesStarted { get; set; }
+        public static bool InComingChangesStarted { get; set; }
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
@@ -184,7 +184,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 else if (_verseChange != value)
                 {
                     // push to Paratext
-                    if (ParatextSync)
+                    if (ParatextSync && !InComingChangesStarted)
                     {
                         _ = Task.Run(() =>
                             ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
@@ -1374,9 +1374,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
 
-                InComingChangesStarted = true;
-                CurrentBcv.SetVerseFromId(message.Verse);
-                InComingChangesStarted = false;
+                //InComingChangesStarted = true;
+                if (InComingChangesStarted)
+                {
+                    CurrentBcv.SetVerseFromId(message.Verse);
+                }
+                
+                //InComingChangesStarted = false;
             }
 
         }
