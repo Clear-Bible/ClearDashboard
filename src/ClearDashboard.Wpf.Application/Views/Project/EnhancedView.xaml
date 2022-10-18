@@ -444,7 +444,7 @@
                                         VirtualizingStackPanel.VirtualizationMode="Recycling">
 
                                         <ListView.ItemContainerStyle>
-                                            <Style TargetType="ListViewItem">
+                                            <Style TargetType="{x:Type ListViewItem}">
                                                 <Setter Property="Height" Value="Auto" />
 
                                                 <Style.Triggers>
