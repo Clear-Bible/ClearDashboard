@@ -1462,6 +1462,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             await SelectedVerseDisplayViewModel.UpdateNoteAsync(e.Note);
+            Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
 
@@ -1476,6 +1477,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
             }
+            Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
         }
 
         public void LabelAdded(object sender, LabelEventArgs e)
@@ -1485,11 +1487,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task LabelAddedAsync(LabelEventArgs e)
         {
+            if (SelectedVerseDisplayViewModel is null)
+            {
+                return;
+            }
+
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
                 await SelectedVerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
             }
+            Message = $"Label '{e.Label.Text}' added for note";
         }
 
 
@@ -1504,6 +1512,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SelectedVerseDisplayViewModel.AssociateNoteLabelAsync(e.Note, e.Label);
             }
+            Message = $"Label '{e.Label.Text}' selected for note";
         }
 
         public void LabelRemoved(object sender, LabelEventArgs e)
@@ -1517,6 +1526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SelectedVerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
             }
+            Message = $"Label '{e.Label.Text}' removed for note";
         }
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
