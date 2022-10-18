@@ -1,4 +1,20 @@
-﻿using System;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.PINS;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using SIL.ObjectModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,31 +26,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using Autofac;
-using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Features.Corpora;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Features.Bcv;
-using ClearDashboard.DataAccessLayer.Features.ManuscriptVerses;
-using ClearDashboard.DataAccessLayer.Features.PINS;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.ParatextPlugin.CQRS.Features.ReferenceUsfm;
-using ClearDashboard.ParatextPlugin.CQRS.Features.User;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
-using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using MediatR;
-using Microsoft.AspNet.SignalR.Client.Http;
-using Microsoft.Extensions.Logging;
-using QuickGraph;
-using SIL.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -786,25 +777,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
 
             EnhancedViewModel.InComingChangesStarted = true;
-            //_ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None));
             await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
-            //await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(obj.ToString()));
-
-            //// ReSharper disable once IdentifierTypo
-            //// ReSharper disable once InconsistentNaming
-            var verseBBCCCVVV = (string)obj;
             EnhancedViewModel.InComingChangesStarted = false;
-            //var verses = SelectedItemVerses.Where(v => v.BBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
-
-            //if (verses.Count <= 0) return;
-
-
-            //// show the verse in context popup window
-            //IWindowManager manager = new WindowManager();
-            //manager.ShowWindowAsync(
-            //    new VersePopUpViewModel(navigationService: NavigationService, logger: Logger as ILogger<VersePopUpViewModel>,
-            //        projectManager: ProjectManager, eventAggregator: EventAggregator, mediator: _mediator, lifetimeScope: LifetimeScope,
-            //        verse: verses[0]));
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)

@@ -1373,14 +1373,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
-
-                //InComingChangesStarted = true;
+                
                 if (InComingChangesStarted)
                 {
                     CurrentBcv.SetVerseFromId(message.Verse);
                 }
-                
-                //InComingChangesStarted = false;
             }
 
         }

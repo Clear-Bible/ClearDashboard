@@ -20,12 +20,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.VerseText
         GetParatextVerseTextQueryHandler : IRequestHandler<GetParatextVerseTextQuery, RequestResult<AssignedUser>>
     {
         private readonly IPluginHost _pluginHost;
-        private readonly ILogger<GetCurrentProjectQueryHandler> _logger;
+        private readonly ILogger<GetParatextVerseTextQueryHandler> _logger;
         private readonly MainWindow _mainWindow;
         private readonly IPluginHost _host;
         private readonly IVerseRef _verseRef;
 
-        public GetParatextVerseTextQueryHandler(IPluginHost pluginHost, ILogger<GetProjectQueryHandler> logger, 
+        public GetParatextVerseTextQueryHandler(IPluginHost pluginHost, ILogger<GetParatextVerseTextQueryHandler> logger, 
             IPluginHost host, IVerseRef verseRef, MainWindow mainWindow)
         {
             _pluginHost = pluginHost;
