@@ -414,7 +414,7 @@
                             Margin="0,8,8,0"
                             Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
                             IsCancel="True"
-                            Style="{StaticResource MahApps.Styles.Button}">
+                            Style="{StaticResource TransparentStyle}">
                             <Button.CommandParameter>
                                 <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
                                     False
@@ -425,8 +425,8 @@
 
 
                         <ListView
-                            Height="520"
                             x:Name="ListView"
+                            Height="520"
                             Margin="5"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
