@@ -212,16 +212,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            if (!SelectedTokens.Any())
-            {
-                if (e.TokenDisplayViewModel.HasNote)
-                {
-                    e.TokenDisplayViewModel.IsSelected = true;
-                    SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
-                    NotePaneVisibility = Visibility.Visible;
-                }
-            }
-
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
         }
 
@@ -246,7 +236,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = string.Empty;
         }
 
-        public void NoteMouseEnter(NoteEventArgs e)
+        public void NoteLeftButtonDown(NoteEventArgs e)
         {
             e.TokenDisplayViewModel.IsSelected = true;
             SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);

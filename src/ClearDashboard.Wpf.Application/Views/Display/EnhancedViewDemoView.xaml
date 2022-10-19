@@ -80,7 +80,7 @@
                                                        [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];
                                                        [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];
                                                        [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];
-                                                       [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];
+                                                       [Event NoteLeftButtonDown] = [Action NoteLeftButtonDown($eventArgs)];
                                                        [Event NoteCreate] = [Action NoteCreate($eventArgs)]
                                    "
                                    />
