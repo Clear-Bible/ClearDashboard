@@ -978,8 +978,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
-            var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
-
             List<TokenDisplayViewModel> verseTokens = new();
             var versesOut = new ObservableCollection<VerseDisplayViewModel>();
 
@@ -1003,6 +1001,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 CurrentTranslationSet = await GetTranslationSet(message);
                 foreach (var row in rows)
                 {
+                    var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
                     await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
                     versesOut.Add(VerseDisplayViewModel);
                 }
