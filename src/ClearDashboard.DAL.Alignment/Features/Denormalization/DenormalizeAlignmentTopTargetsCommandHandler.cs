@@ -1,4 +1,6 @@
 ﻿using Autofac.Core;
+using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Features.Events;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.CQRS;
@@ -58,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
             try
             {
-
+                PublishWorking("Starting alignment data denormalization tasks", cancellationToken);
                 tasks
                     .ToList()
                     .GroupBy(t => t.AlignmentSetId)
@@ -72,10 +74,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
 #endif
 
+                PublishCompleted(cancellationToken);
                 return new RequestResult<int>(tasks.Count());
             }
             catch (Exception ex)
             {
+                PublishException(ex, cancellationToken);
                 return new RequestResult<int>
                 (
                     success: false,
@@ -94,6 +98,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             var alignments = ProjectDbContext!.Alignments
                 .Include(a => a.SourceTokenComponent)
                         .Include(a => a.TargetTokenComponent)
+                .Include(a => a.AlignmentSet)
                 .Where(a => a.AlignmentSetId == alignmentSetId);
 
             IEnumerable<string>? sourceTrainingTexts = null;
@@ -107,6 +112,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             {
                 alignments = alignments.Where(a => a.SourceTokenComponent!.TrainingText != null);
             }
+
+            if (alignments.Count() == 0)
+            {
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set '{alignmentSetId}' (end) - no alignments found");
+#endif
+                return;
+            }
+
+            PublishWorking($"Finding top target text for {alignments.Count()} alignments in set '{alignments.First()!.AlignmentSet!.DisplayName}'", cancellationToken);
 
             var sourceTokenIdToTopTargetTrainingText = alignments
                 .ToList()
@@ -150,9 +166,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 
                 using var insertCommand = CreateAlignmentTopTargetTrainingTextInsertCommand(connection);
 
+                var completed = 0;
                 foreach (var a in sourceTokenIdToTopTargetTrainingText)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
+
+                    if (completed != 0 && completed % 10000 == 0)
+                    {
+                        var percentComplete = Convert.ToInt32(completed * 100 / sourceTokenIdToTopTargetTrainingText.Count);
+                        PublishWorking($"Creating data - {percentComplete}% completed", cancellationToken);
+                    }
 
                     await InsertAlignmentTopTargetTrainingTextAsync(
                             a.alignment,
@@ -160,7 +183,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                             a.TopTargetTrainingText,
                             insertCommand,
                             cancellationToken);
+
+                    completed++;
                 }
+
+                PublishWorking($"Creating data - 100% completed, saving changes", cancellationToken);
 
                 ProjectDbContext.RemoveRange(tasks);
 
@@ -168,6 +195,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 await ProjectDbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
                 ProjectDbContext.Database.UseTransaction(null);
+
+                PublishWorking($"Saving changes completed", cancellationToken);
 
 #if DEBUG
                 sw.Stop();
@@ -190,7 +219,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             return command;
         }
 
-        private async Task<Guid> InsertAlignmentTopTargetTrainingTextAsync(Models.Alignment alignment, string SourceTrainingText, string topTargetTrainingText, DbCommand insertCommand, CancellationToken cancellationToken)
+        private static async Task<Guid> InsertAlignmentTopTargetTrainingTextAsync(Models.Alignment alignment, string SourceTrainingText, string topTargetTrainingText, DbCommand insertCommand, CancellationToken cancellationToken)
         {
             var id = Guid.NewGuid();
 
@@ -261,5 +290,31 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
+        private async void PublishWorking(string description, CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.Working, 
+                    name: "Denormalization", 
+                    description: description), 
+                cancellationToken);
+        }
+        private async void PublishCompleted(CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.Completed,
+                    name: "Denormalization"),
+                cancellationToken);
+        }
+        private async void PublishException(Exception ex, CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.Completed,
+                    name: "Denormalization",
+                    exception: ex),
+                cancellationToken);
+        }
     }
 }
