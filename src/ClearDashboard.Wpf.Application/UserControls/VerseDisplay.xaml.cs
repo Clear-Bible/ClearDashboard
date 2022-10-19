@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -172,6 +173,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
         #endregion
         #region Static DependencyProperties
+
 
         /// <summary>
         /// Identifies the Title dependency property.
@@ -362,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = tokenDisplay,
                 SelectedTokens = SelectedTokens,
-                ModifierKeys = Keyboard.Modifiers
+                ModifierKeys = Keyboard.Modifiers,
             });
         }
 
@@ -448,8 +450,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
-                Translation = control?.TokenDisplayViewModel?.Translation
-            });
+                Translation = control?.TokenDisplayViewModel?.Translation,
+            }) ;
         }
 
         private void OnTranslationClicked(object sender, RoutedEventArgs e)
@@ -503,7 +505,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
-                SelectedTokens = SelectedTokens
+                SelectedTokens = SelectedTokens,
             });
         }
 
@@ -785,7 +787,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion
         #region Public properties
-
+        
         /// <summary>
         /// Gets or sets the orientation for displaying the tokens.
         /// </summary>
