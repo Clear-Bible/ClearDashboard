@@ -72,8 +72,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private string? _message;
         private BookInfo? _currentBook;
 
-        private EnhancedView View;
-
         private bool InComingChangesStarted { get; set; }
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
@@ -365,15 +363,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
 
-
-            if (view is EnhancedView enhancedView)
-            {
-                // ReSharper disable once AssignNullToNotNullAttribute
-                View = enhancedView;
-            }
-            
-
-
             base.OnViewAttached(view, context);
         }
 
@@ -408,9 +397,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 ProgressBarVisibility = Visibility.Visible;
                 _cancellationTokenSource = new CancellationTokenSource();
-
-                //await ShowExistingCorpusTokens(_projectMessages[i], _cancellationTokenSource.Token, _tokenProjects[i],
-                //    _cancellationTokenSource.Token).ConfigureAwait(false);
 
                 await ShowCorpusText(_projectMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
             }
@@ -532,15 +518,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             ProgressBarVisibility = Visibility.Visible;
-            // existing project
-            if (project is not null)
-            {
-                //await ShowExistingCorpusTokens(message, cancellationToken, project, localCancellationToken);
-            }
-            else
-            {
-                //await ShowNewCorpusTokens(message, cancellationToken, localCancellationToken);
-            }
 
             await ShowCorpusText(message, cancellationToken, localCancellationToken);
         }
@@ -789,16 +766,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private string RandomTranslationOriginatedFrom()
-        {
-            switch (new Random().Next(3))
-            {
-                case 0: return "FromTranslationModel";
-                case 1: return "FromOther";
-                default: return "Assigned";
-            }
-        }
-
         private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int bbbcccvvv)
         {
             var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
@@ -826,7 +793,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                     IsRtl = message.IsRTL,
-                    //VerseDisplayViewModelId = verses[0].Id,
                 });
 
                 // add to the grouping for saving
@@ -886,16 +852,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             return brush;
-        }
-
-        private Translation GetTranslation(EngineToken token)
-        {
-            var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
-                ? ""
-                : String.Empty;
-            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
-
-            return translation;
         }
 
         #endregion
@@ -1147,7 +1103,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
-                    //VerseDisplayViewModelId = verses[0].Id,
                 });
 
                 // add to the grouping for saving
@@ -1573,16 +1528,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        // public Visibility NoteControlVisibility { get; set; } = Visibility.Collapsed;
         private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
         {
             // WORKS
             CurrentToken = tokenDisplayViewModel;
             NoteControlVisibility = Visibility.Visible;
         }
-
-        
-
 
         
         private async void DisplayTranslation(TranslationEventArgs e)
@@ -1608,16 +1559,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 });
             });
             
-        }
-
-        private async Task<IEnumerable<TranslationOption>> GetTranslationOptions(Translation translation)
-        {
-            var translationModelEntry = await CurrentTranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
-            var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
-                .Select(option => new TranslationOption { Word = option.Key, Count = option.Value })
-                .Take(4)
-                .ToList();
-            return translationOptions;
         }
 
         #endregion
