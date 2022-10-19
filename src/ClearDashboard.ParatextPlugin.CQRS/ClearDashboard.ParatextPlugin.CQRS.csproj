@@ -17,7 +17,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="9.0.0" />
-		<PackageReference Include="ParatextPluginInterfaces" Version="2.0.21" />
+		<PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
 		<PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
 		<PackageReference Include="System.Text.Json" Version="6.0.6" />
 	</ItemGroup>
