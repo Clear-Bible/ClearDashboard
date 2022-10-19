@@ -1,4 +1,20 @@
-﻿using System;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Features.PINS;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using SIL.ObjectModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,20 +26,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using Autofac;
-using Caliburn.Micro;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Features.PINS;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using SIL.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -80,7 +82,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public ObservableCollection<PinsVerseList> SelectedItemVerses { get; } = new();
 
-        public string FontFamily { get; } = "Segoe UI";
+        public string FontFamily { get; set; } = "Segoe UI";
 
         public float FontSize { get; } = 12;
 
@@ -505,7 +507,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 // bind the data grid to the collection view
                 GridCollectionView = CollectionViewSource.GetDefaultView(GridData);
                 // setup the filtering routine to determine what gets displayed
-                GridCollectionView.Filter = new Predicate<object>(FiterTerms);
+                GridCollectionView.Filter = new Predicate<object>(FilterTerms);
                 NotifyOfPropertyChange(() => GridCollectionView);
 
                 // turn off the progress bar
@@ -681,7 +683,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             FilterString = "";
         }
 
-        private bool FiterTerms(object item)
+        private bool FilterTerms(object item)
         {
             var itemDt = (PinsDataTable)item;
 
@@ -699,7 +701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// User has clicked on a verse button in the grid
         /// </summary>
         /// <param name="obj"></param>
-        private void VerseButtonClick(object obj)
+        private async void VerseButtonClick(object obj)
         {
             if (obj is PinsDataTable dataRow)
             {
@@ -732,17 +734,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 foreach (var verse in verseList)
                 {
                     string verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
+                    
+                    var bookNum = int.Parse(verse.TargetBBBCCCVV.Substring(0, 3));
+                    var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
+                    var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));
+
+                    var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum), CancellationToken.None);
+                    var verseText = "";
+                    if(verseTextResult.Success)
+                        verseText = verseTextResult.Data.Name;
+                    else
+                    {
+                        verseText = "There was an issue getting the text for this verse.";
+                        Logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    }
 
                     SelectedItemVerses.Add(new PinsVerseList
                     {
                         BBBCCCVVV = verse.TargetBBBCCCVV,
                         VerseIdShort = verseIdShort,
-                        VerseText = "SOME VERSE TEXT TO LOOKUP ONCE THE DB IS COMPLETE"  // TODO COME BACK TO THIS WHEN THE DATABASE COMES ONLINE
+                        VerseText = verseText
                     });
+                    FontFamily = ProjectManager.CurrentParatextProject.DefaultFont;
                 }
                 NotifyOfPropertyChange(() => SelectedItemVerses);
                 VerseRefDialogOpen = true;
             }
+
+            return;
         }
 
         /// <summary>
@@ -750,27 +769,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// all the various verse renderings
         /// </summary>
         /// <param name="obj"></param>
-        private void VerseClick(object obj)
+        private async void VerseClick(object obj)
         {
             if (obj is null)
             {
                 return;
             }
 
-            // ReSharper disable once IdentifierTypo
-            // ReSharper disable once InconsistentNaming
-            var verseBBCCCVVV = (string)obj;
-            var verses = SelectedItemVerses.Where(v => v.BBBCCCVVV.Equals(verseBBCCCVVV)).ToList();
-
-            if (verses.Count <= 0) return;
-
-
-            // show the verse in context popup window
-            IWindowManager manager = new WindowManager();
-            manager.ShowWindowAsync(
-                new VersePopUpViewModel(navigationService: NavigationService, logger: Logger as ILogger<VersePopUpViewModel>,
-                    projectManager: ProjectManager, eventAggregator: EventAggregator, mediator: _mediator, lifetimeScope: LifetimeScope,
-                    verse: verses[0]));
+            EnhancedViewModel.InComingChangesStarted = true;
+            await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
+            EnhancedViewModel.InComingChangesStarted = false;
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
