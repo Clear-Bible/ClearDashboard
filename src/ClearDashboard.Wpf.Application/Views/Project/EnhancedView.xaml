@@ -320,12 +320,16 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal">
-                    <Label
+                    <TextBlock
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Content="{Binding SelectedVerseDisplayViewModel.Id}"
-                        FontSize="12" />
+                        Foreground="BlueViolet"
+                        FontSize="12" >
+                        <Run Text="SelectedId: "/>
+                        <Run Text="{Binding SelectedVerseDisplayViewModel.Id}"/>
+                    </TextBlock>
                     <Label
+                        Margin="20 0 0 0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Content="{Binding Message}"
