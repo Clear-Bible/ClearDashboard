@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
@@ -776,6 +777,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
+        }
+
+        public void CopyText(object sender)
+        {
+            //Get the clicked MenuItem
+            var menuItem = (MenuItem)sender;
+
+            //Get the ContextMenu to which the menuItem belongs
+            var contextMenu = (ContextMenu)menuItem.Parent;
+
+            //Find the placementTarget
+            var item = (DataGrid)contextMenu.PlacementTarget;
+
+            //Get the underlying item, that you cast to your object that is bound
+            //to the DataGrid (and has subject and state as property)
+            //var toDeleteFromBindedList = (YourObject)item.SelectedCells[0].Item;
+
+            //Remove the toDeleteFromBindedList object from your ObservableCollection
+            //yourObservableCollection.Remove(toDeleteFromBindedList);
+
+            Clipboard.SetText("status.Name + \": \" + status.Description");
         }
 
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)

@@ -128,8 +128,8 @@
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
-            SelectionMode="Extended"
-            SelectionUnit="FullRow"
+            SelectionMode="Single"
+            SelectionUnit="Cell"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
 
             <DataGrid.ContextMenu>
@@ -138,6 +138,7 @@
                         Command="{Binding ClearFilterCommand}"
                         CommandParameter="{Binding}"
                         Header="{helpers:Localization Pins_ClearFilter}" />
+                    <MenuItem Click="CopyText_OnClick" Header="{helpers:Localization Copy}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
