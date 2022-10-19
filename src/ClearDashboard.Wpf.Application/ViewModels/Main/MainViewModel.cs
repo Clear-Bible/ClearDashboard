@@ -1417,12 +1417,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 #pragma warning restore CA1416 // Validate platform compatibility
         }
-
-        public void CopyText(object text)
-        {
-            Clipboard.SetText("Hello world");
-        }
-
+        
         private void BcvChanged(object sender, PropertyChangedEventArgs e)
         {
             //if (ParatextSync && InComingChangesStarted == false)

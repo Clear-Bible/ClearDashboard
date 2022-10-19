@@ -488,6 +488,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public ICommand VerseClickCommand { get; set; }
         public RelayCommand ClearFilterCommand { get; }
 
+
         #endregion
 
         #region Constructor
