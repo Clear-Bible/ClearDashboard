@@ -45,36 +45,39 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
             switch (columnIndex)
             {
                 case (0):
-                    copyText = pinsTableItem.SimpRefs;
+                    copyText = pinsTableItem.XmlSource;
                     break;
                 case (1):
-                    copyText = pinsTableItem.Source;
+                    copyText = pinsTableItem.SimpRefs;
                     break;
                 case (2):
-                    copyText = pinsTableItem.Gloss;
+                    copyText = pinsTableItem.Source;
                     break;
                 case (3):
-                    copyText = pinsTableItem.OriginID;
+                    copyText = pinsTableItem.Gloss;
                     break;
                 case (4):
-                    copyText = pinsTableItem.Lang;
+                    copyText = pinsTableItem.OriginID;
                     break;
                 case (5):
-                    copyText = pinsTableItem.Phrase;
+                    copyText = pinsTableItem.Lang;
                     break;
                 case (6):
-                    copyText = pinsTableItem.Word;
+                    copyText = pinsTableItem.Phrase;
                     break;
                 case (7):
-                    copyText = pinsTableItem.Prefix;
+                    copyText = pinsTableItem.Word;
                     break;
                 case (8):
-                    copyText = pinsTableItem.Stem;
+                    copyText = pinsTableItem.Prefix;
                     break;
                 case (9):
-                    copyText = pinsTableItem.Suffix;
+                    copyText = pinsTableItem.Stem;
                     break;
                 case (10):
+                    copyText = pinsTableItem.Suffix;
+                    break;
+                case (11):
                     copyText = pinsTableItem.Notes;
                     break;
                 default:
