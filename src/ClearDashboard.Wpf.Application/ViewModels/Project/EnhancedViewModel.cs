@@ -1458,11 +1458,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteUpdated(object sender, NoteEventArgs e)
         {
+            //WORKS
             Task.Run<TaskAwaiter>(() => NoteUpdatedAsync(e).GetAwaiter());
         }
 
         public async Task NoteUpdatedAsync(NoteEventArgs e)
         {
+            //WORKS
             if (SelectedVerseDisplayViewModel is null)
             {
                 return;
@@ -1544,6 +1546,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
         {
+            //WORKS
             NoteControlVisibility = Visibility.Collapsed;
         }
 
