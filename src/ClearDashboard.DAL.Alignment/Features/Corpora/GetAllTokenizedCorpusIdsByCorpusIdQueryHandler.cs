@@ -25,11 +25,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override Task<RequestResult<IEnumerable<TokenizedTextCorpusId>>> GetDataAsync(GetAllTokenizedCorpusIdsByCorpusIdQuery request, CancellationToken cancellationToken)
         {
             
-            var tokenizedCorpusIds = ProjectDbContext.TokenizedCorpora
-                .Include(tc => tc.User)
-                .Where(tc => tc.CorpusId == request.CorpusId.Id)
-                .Select(tc => ModelHelper.BuildTokenizedTextCorpusId(tc))
-                .ToList();
+            var tokenizedCorpusIds = 
+                ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext)
+                    .Where(tc => tc.CorpusId == request.CorpusId.Id)
+                    .Select(tc => ModelHelper.BuildTokenizedTextCorpusId(tc))
+                    .ToList();
             
             return Task.FromResult(
                 new RequestResult<IEnumerable<TokenizedTextCorpusId>>

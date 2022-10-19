@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
@@ -7,6 +8,7 @@ namespace ClearDashboard.Wpf.Application.Events
 {
     public class TranslationEventArgs : RoutedEventArgs
     {
+
         /// <summary>
         /// The <see cref="TokenDisplayViewModel"/> that triggered this event.
         /// </summary>

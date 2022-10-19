@@ -107,7 +107,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager!.LoadProject("EnhancedViewDemo");
+                await ProjectManager!.LoadProject("SUR");
                 var row = await GetVerseTextRow(01001001);
                 var translationSet = await GetFirstTranslationSet();
                 await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
