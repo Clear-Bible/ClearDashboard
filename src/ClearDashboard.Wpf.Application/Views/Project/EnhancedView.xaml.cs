@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ClearDashboard.Wpf.Application.UserControls;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application.Views.Project
 {
@@ -24,5 +28,6 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         {
             InitializeComponent();
         }
+
     }
 }

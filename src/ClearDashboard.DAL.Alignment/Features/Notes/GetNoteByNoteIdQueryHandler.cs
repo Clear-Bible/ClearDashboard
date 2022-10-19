@@ -31,11 +31,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            var note = ProjectDbContext.Notes
+            var note = ModelHelper.AddIdIncludesNotesQuery(ProjectDbContext)
                 .Include(n => n.NoteDomainEntityAssociations)
                 .Include(n => n.LabelNoteAssociations)
                     .ThenInclude(ln => ln.Label)
-                .Include(n => n.User)
                 .FirstOrDefault(pc => pc.Id == request.NoteId.Id);
             if (note == null)
             {

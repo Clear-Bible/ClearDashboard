@@ -61,11 +61,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             //var bookNumbers = request.TokenIds.GroupBy(t => t.BookNumber).Select(grp => grp.Key);
             var tokenIdGuids = request.TokenIds.Select(t => t.Id).ToList();
 
-            var translations = ProjectDbContext!.Translations
-                .Include(tr => tr.SourceTokenComponent)
+            var translations = ModelHelper.AddIdIncludesTranslationsQuery(ProjectDbContext!)
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
                 .Where(tr => tokenIdGuids.Contains(tr.SourceTokenComponentId))
                 .Select(t => new Alignment.Translation.Translation(
+                    ModelHelper.BuildTranslationId(t),
                     ModelHelper.BuildToken(t.SourceTokenComponent!),
                     t.TargetText ?? string.Empty,
                     t.TranslationState.ToString()));

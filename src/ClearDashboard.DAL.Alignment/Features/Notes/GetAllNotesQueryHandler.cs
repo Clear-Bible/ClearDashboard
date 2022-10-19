@@ -17,24 +17,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
      public class GetAllNotesQueryHandler : ProjectDbContextQueryHandler<GetAllNotesQuery,
         RequestResult<IEnumerable<Note>>, IEnumerable<Note>>
     {
-        private readonly IMediator _mediator;
-
-        public GetAllNotesQueryHandler(IMediator mediator, 
+        public GetAllNotesQueryHandler( 
             ProjectDbContextFactory? projectNameDbContextFactory, 
             IProjectProvider projectProvider, 
             ILogger<GetAllNotesQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
-            _mediator = mediator;
         }
 
         protected override async Task<RequestResult<IEnumerable<Note>>> GetDataAsync(GetAllNotesQuery request, CancellationToken cancellationToken)
         {
-            var notes = ProjectDbContext.Notes
+            var notes = ModelHelper.AddIdIncludesNotesQuery(ProjectDbContext)
                 .Include(n => n.NoteDomainEntityAssociations)
                 .Include(n => n.LabelNoteAssociations)
                     .ThenInclude(ln => ln.Label)
-                .Include(n => n!.User)
                 .Select(note => ModelHelper.BuildNote(note));
 
             // need an await to get the compiler to be 'quiet'

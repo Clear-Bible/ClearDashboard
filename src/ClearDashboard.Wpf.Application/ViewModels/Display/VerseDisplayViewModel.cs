@@ -211,7 +211,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion of labels.
         /// </summary>
         public ObservableCollection<Label> LabelSuggestions { get; private set; } = new();
-        
+
+        #region Public Properties
+
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        #endregion Public Properties
+
+
         #region Private methods
         private IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens)
         {

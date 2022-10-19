@@ -22,16 +22,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         protected override async Task<RequestResult<(AlignmentSetId alignmentSetId, ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetAlignmentSetByAlignmentSetIdQuery request, CancellationToken cancellationToken)
         {
-            var alignmentSet = ProjectDbContext.AlignmentSets
-                .Include(ast => ast.ParallelCorpus)
-                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
-                        .ThenInclude(tc => tc!.User)
-                .Include(ast => ast.ParallelCorpus)
-                    .ThenInclude(pc => pc!.TargetTokenizedCorpus)
-                        .ThenInclude(tc => tc!.User)
-                .Include(ast => ast.ParallelCorpus)
-                    .ThenInclude(pc => pc!.User)
-                .Include(ast => ast.User)
+            var alignmentSet = ModelHelper.AddIdIncludesAlignmentSetsQuery(ProjectDbContext)
                 .Where(ast => ast.Id == request.AlignmentSetId.Id)
                 .FirstOrDefault();
             if (alignmentSet == null)

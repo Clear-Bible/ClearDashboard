@@ -24,11 +24,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override Task<RequestResult<IEnumerable<ParallelCorpusId>>> GetDataAsync(GetAllParallelCorpusIdsQuery request, CancellationToken cancellationToken)
         {
             //DB Impl notes: query ParallelCorpus table and return all ids
-            var parallelCorpusIds = ProjectDbContext.ParallelCorpa
-                .Include(pc => pc.SourceTokenizedCorpus)
-                .Include(pc => pc.TargetTokenizedCorpus)
-                .Include(pc => pc.User)
-                .Select(pc => ModelHelper.BuildParallelCorpusId(pc));
+            var parallelCorpusIds = 
+                ModelHelper.AddIdIncludesParallelCorpaQuery(ProjectDbContext)
+                    .Select(pc => ModelHelper.BuildParallelCorpusId(pc));
 
             return Task.FromResult(new RequestResult<IEnumerable<ParallelCorpusId>>(parallelCorpusIds.ToList()));
        }
