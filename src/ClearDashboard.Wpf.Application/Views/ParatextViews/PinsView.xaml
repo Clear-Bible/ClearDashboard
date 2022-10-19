@@ -181,7 +181,7 @@
                                     <Style BasedOn="{StaticResource MaterialDesignFlatAccentBgButton}" TargetType="Button">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding SimpRefs}" Value="0">
-                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
