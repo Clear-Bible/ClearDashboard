@@ -41,10 +41,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var sourceTokenIds = request.EngineParallelTextRows.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId.Id)).ToList();
             var targetTokenIds = request.EngineParallelTextRows.SelectMany(e => e.TargetTokens!.Select(st => st.TokenId.Id)).ToList();
 
-            var alignments = ProjectDbContext!.Alignments
+            var alignments = ModelHelper.AddIdIncludesAlignmentsQuery(ProjectDbContext!)
                 .Where(al => al.AlignmentSetId == request.AlignmentSetId.Id)
-                .Where(al => sourceTokenIds.Contains(al.SourceTokenComponent!.Id) || targetTokenIds.Contains(al.TargetTokenComponent!.Id))
+                .Where(al => sourceTokenIds.Contains(al.SourceTokenComponentId) || targetTokenIds.Contains(al.TargetTokenComponentId))
                 .Select(a => new Alignment.Translation.Alignment(
+                    ModelHelper.BuildAlignmentId(a),
                     new AlignedTokenPairs(
                         ModelHelper.BuildToken(a.SourceTokenComponent!),
                         ModelHelper.BuildToken(a.TargetTokenComponent!),

@@ -38,12 +38,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
 #endif
 
-            var parallelCorpus = ProjectDbContext!.ParallelCorpa
-                .Include(pc => pc.User)
-                .Include(pc => pc.SourceTokenizedCorpus)
-                    .ThenInclude(tc => tc!.User)
-                .Include(pc => pc.TargetTokenizedCorpus)
-                    .ThenInclude(tc => tc!.User)
+            var parallelCorpus = ModelHelper.AddIdIncludesParallelCorpaQuery(ProjectDbContext!)
                 .FirstOrDefault(c => c.Id == request.ParallelCorpusId.Id);
 
 #if DEBUG

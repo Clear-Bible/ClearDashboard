@@ -5,6 +5,7 @@ namespace ClearDashboard.DAL.Alignment.Translation;
 
 public class Alignment
 {
+    public AlignmentId? AlignmentId { get; private set; }
     public AlignedTokenPairs AlignedTokenPair { get; }
     /// <summary>
     /// Valid values are:  "Unverified", "Verified", "Question" only
@@ -18,10 +19,25 @@ public class Alignment
     /// <summary>
     /// For domain model use only!
     /// </summary>
+    /// <param name="alignmentId"></param>
     /// <param name="alignedTokenPair"></param>
     /// <param name="verification">Valid values are:  "Unverified", "Verified", "Question" only</param>
     /// <param name="originatedFrom">Valid values are:  "FromAlignmentModel", "Assigned" only</param>
-    public Alignment(AlignedTokenPairs alignedTokenPair, string verification, string originatedFrom)
+    internal Alignment(AlignmentId alignmentId, AlignedTokenPairs alignedTokenPair, string verification, string originatedFrom)
+    {
+        AlignmentId = alignmentId;
+        AlignedTokenPair = alignedTokenPair;
+        Verification = verification;
+        OriginatedFrom = originatedFrom;
+    }
+
+    /// <summary>
+    /// For domain model use only!
+    /// </summary>
+    /// <param name="alignedTokenPair"></param>
+    /// <param name="verification">Valid values are:  "Unverified", "Verified", "Question" only</param>
+    /// <param name="originatedFrom">Valid values are:  "FromAlignmentModel", "Assigned" only</param>
+    internal Alignment(AlignedTokenPairs alignedTokenPair, string verification, string originatedFrom)
     {
         AlignedTokenPair = alignedTokenPair;
         Verification = verification;
