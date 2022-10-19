@@ -1242,7 +1242,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
                 ? ""
                 : String.Empty;
-            var translation = new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: RandomTranslationOriginatedFrom());
+            var translation = new Translation(sourceToken: token, targetTranslationText: translationText, originatedFrom: RandomTranslationOriginatedFrom());
 
             return translation;
         }
