@@ -11,6 +11,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
+    xmlns:controls1="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     Width="600"
     Height="360"
     d:DataContext="{d:DesignInstance Type=project:AddParatextCorpusDialogViewModel,
@@ -143,12 +144,15 @@
 
             <StackPanel Grid.Row="0" Orientation="Vertical">
                 <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
-                <ComboBox
+                <controls1:AutoCompleteComboBox
+                    Style="{StaticResource MaterialDesignComboBox}"
                     Margin="30,0,0,0"
+                    TextSearch.TextPath="LongName"
                     VerticalAlignment="Top"
+                    Height="Auto"
                     ItemsSource="{Binding Projects}"
                     SelectedItem="{Binding SelectedProject}">
-                    <ComboBox.ItemTemplate>
+                    <controls1:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
@@ -157,8 +161,8 @@
                                 <TextBlock FontSize="10" Text="{Binding Id}" />
                             </StackPanel>
                         </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                    </controls1:AutoCompleteComboBox.ItemTemplate>
+                </controls1:AutoCompleteComboBox>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Vertical">

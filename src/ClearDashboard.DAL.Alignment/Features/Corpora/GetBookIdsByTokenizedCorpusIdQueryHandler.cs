@@ -37,9 +37,8 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         // pull out its parent CorpusId
         //Then iterate tokenization.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
         var tokenizedCorpus =
-            ProjectDbContext.TokenizedCorpora
+            ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext)
             .Include(tc => tc.Corpus)
-            .Include(tc => tc.User)
             .FirstOrDefault(i => i.Id == request.TokenizedTextCorpusId.Id);
 
         if (tokenizedCorpus == null)

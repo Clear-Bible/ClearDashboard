@@ -4,6 +4,8 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Data;
+using Microsoft.EntityFrameworkCore;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features
@@ -97,6 +99,11 @@ namespace ClearDashboard.DAL.Alignment.Features
             return new UserId(user.Id, user.FullName ?? string.Empty);
         }
 
+        public static IQueryable<Models.TokenizedCorpus> AddIdIncludesTokenizedCorpaQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.TokenizedCorpora.Include(e => e.User);
+        }
+
         public static TokenizedTextCorpusId BuildTokenizedTextCorpusId(Models.TokenizedCorpus tokenizedCorpus)
         {
             if (tokenizedCorpus.User == null)
@@ -111,6 +118,16 @@ namespace ClearDashboard.DAL.Alignment.Features
                 tokenizedCorpus.Metadata,
                 tokenizedCorpus.Created,
                 BuildUserId(tokenizedCorpus.User));
+        }
+
+        public static IQueryable<Models.ParallelCorpus> AddIdIncludesParallelCorpaQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.ParallelCorpa
+                .Include(e => e.User)
+                .Include(e => e.SourceTokenizedCorpus)
+                    .ThenInclude(tc => tc!.User)
+                .Include(e => e.TargetTokenizedCorpus)
+                    .ThenInclude(tc => tc!.User);
         }
 
         public static ParallelCorpusId BuildParallelCorpusId(Models.ParallelCorpus parallelCorpus)
@@ -143,6 +160,20 @@ namespace ClearDashboard.DAL.Alignment.Features
                 BuildUserId(user));
         }
 
+        public static IQueryable<Models.AlignmentSet> AddIdIncludesAlignmentSetsQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.AlignmentSets
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.TargetTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.User)
+                .Include(ast => ast.User);
+        }
+
         public static AlignmentSetId BuildAlignmentSetId(Models.AlignmentSet alignmentSet)
         {
             if (alignmentSet.ParallelCorpus == null)
@@ -170,6 +201,67 @@ namespace ClearDashboard.DAL.Alignment.Features
                 BuildUserId(user));
         }
 
+        public static IQueryable<Models.Alignment> AddIdIncludesAlignmentsQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.Alignments
+                .Include(e => e.SourceTokenComponent)
+                .Include(e => e.AlignmentSet)
+                    .ThenInclude(e => e!.ParallelCorpus)
+                        .ThenInclude(e => e!.SourceTokenizedCorpus)
+                .Include(e => e.AlignmentSet)
+                    .ThenInclude(e => e!.ParallelCorpus)
+                        .ThenInclude(e => e!.TargetTokenizedCorpus);
+        }
+
+        public static AlignmentId BuildAlignmentId(Models.Alignment alignment)
+        {
+            if (alignment.SourceTokenComponent == null)
+            {
+                throw new MediatorErrorEngineException("DB Alignment passed to BuildAlignmentId does not contain a SourceTokenComponent.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+            if (alignment.AlignmentSet?.ParallelCorpus == null)
+            {
+                throw new MediatorErrorEngineException("DB Alignment passed to BuildAlignmentId does not contain a parent AlignmentSet with a ParallelCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+            if (alignment.AlignmentSet?.ParallelCorpus.SourceTokenizedCorpus == null)
+            {
+                throw new MediatorErrorEngineException("DB Alignment passed to BuildAlignmentId does not contain a parent AlignmentSet with a ParallelCorpus that has a SourceTokenizedCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+            if (alignment.AlignmentSet?.ParallelCorpus.TargetTokenizedCorpus == null)
+            {
+                throw new MediatorErrorEngineException("DB Alignment passed to BuildAlignmentId does not contain a parent AlignmentSet with a ParallelCorpus that has a TargetTokenizedCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+
+            return BuildAlignmentId(
+                alignment,
+                alignment.AlignmentSet.ParallelCorpus.SourceTokenizedCorpus,
+                alignment.AlignmentSet.ParallelCorpus.TargetTokenizedCorpus,
+                alignment.SourceTokenComponent);
+        }
+
+        public static AlignmentId BuildAlignmentId(Models.Alignment alignment, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus, Models.TokenComponent sourceTokenComponent)
+        {
+            return new AlignmentId(
+                alignment.Id,
+                sourceTokenizedCorpus.DisplayName ?? string.Empty,
+                targetTokenizedCorpus.DisplayName ?? string.Empty,
+                ModelHelper.BuildTokenId(sourceTokenComponent));
+        }
+
+        public static IQueryable<Models.TranslationSet> AddIdIncludesTranslationSetsQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.TranslationSets
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.TargetTokenizedCorpus)
+                        .ThenInclude(tc => tc!.User)
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.User)
+                .Include(ast => ast.User);
+        }
+
         public static TranslationSetId BuildTranslationSetId(Models.TranslationSet translationSet)
         {
             if (translationSet.ParallelCorpus == null)
@@ -194,6 +286,58 @@ namespace ClearDashboard.DAL.Alignment.Features
                 translationSet.Metadata,
                 translationSet.Created,
                 BuildUserId(user));
+        }
+
+        public static IQueryable<Models.Translation> AddIdIncludesTranslationsQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.Translations
+                .Include(e => e.SourceTokenComponent)
+                .Include(e => e.TranslationSet)
+                    .ThenInclude(e => e!.ParallelCorpus)
+                        .ThenInclude(e => e!.SourceTokenizedCorpus)
+                .Include(e => e.TranslationSet)
+                    .ThenInclude(e => e!.ParallelCorpus)
+                        .ThenInclude(e => e!.TargetTokenizedCorpus);
+        }
+
+        public static TranslationId BuildTranslationId(Models.Translation translation)
+        {
+            if (translation.SourceTokenComponent == null)
+            {
+                throw new MediatorErrorEngineException("DB Translation passed to BuildTranslationId does not contain a SourceTokenComponent.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+            if (translation.TranslationSet?.ParallelCorpus == null)
+            {
+                throw new MediatorErrorEngineException("DB Translation passed to BuildTranslationId does not contain a parent TranslationSet with a ParallelCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+            if (translation.TranslationSet?.ParallelCorpus.SourceTokenizedCorpus == null)
+            {
+                throw new MediatorErrorEngineException("DB Translation passed to BuildTranslationId does not contain a parent TranslationSet with a ParallelCorpus that has a SourceTokenizedCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+            if (translation.TranslationSet?.ParallelCorpus.TargetTokenizedCorpus == null)
+            {
+                throw new MediatorErrorEngineException("DB Translation passed to BuildTranslationId does not contain a parent TranslationSet with a ParallelCorpus that has a TargetTokenizedCorpus.  Please ensure the necessary EFCore/Linq Include() method are called");
+            }
+
+            return BuildTranslationId(
+                translation, 
+                translation.TranslationSet.ParallelCorpus.SourceTokenizedCorpus,
+                translation.TranslationSet.ParallelCorpus.TargetTokenizedCorpus,
+                translation.SourceTokenComponent);
+        }
+
+        public static TranslationId BuildTranslationId(Models.Translation translation, Models.TokenizedCorpus sourceTokenizedCorpus, Models.TokenizedCorpus targetTokenizedCorpus, Models.TokenComponent sourceTokenComponent)
+        {
+            return new TranslationId(
+                translation.Id,
+                sourceTokenizedCorpus.DisplayName ?? string.Empty,
+                targetTokenizedCorpus.DisplayName ?? string.Empty,
+                ModelHelper.BuildTokenId(sourceTokenComponent));
+        }
+
+        public static IQueryable<Models.Note> AddIdIncludesNotesQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.Notes.Include(n => n!.User);
         }
 
         public static NoteId BuildNoteId(Models.Note note)
@@ -224,5 +368,20 @@ namespace ClearDashboard.DAL.Alignment.Features
                     .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet()
             );
         }
+
+        public static Type? FindEntityIdGenericType(this Type givenType)
+        {
+            if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == typeof(EntityId<>))
+            {
+                var genericArgs = givenType.GetGenericArguments();
+                if (genericArgs.Length == 1) return genericArgs[0];
+            }
+
+            Type? baseType = givenType.BaseType;
+            if (baseType == null) return null;
+
+            return baseType.FindEntityIdGenericType();
+        }
+
     }
 }

@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// The <see cref="TranslationState"/> of the translation.
         /// </summary>
-        public string TranslationState => Translation?.TranslationOriginatedFrom ?? string.Empty;
+        public string TranslationState => Translation?.OriginatedFrom ?? string.Empty;
 
         /// <summary>
         /// A list of <see cref="Note"/>s for the token.
