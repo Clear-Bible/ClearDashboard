@@ -31,6 +31,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using EngineToken = ClearBible.Engine.Corpora.Token;
@@ -482,9 +483,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             
         }
 
-        private void LeftMouseUp(object obj)
+        public void InnerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.AddedItems.Count > 0)
+            {
+                var verseDisplayViewModel = e.AddedItems[0] as VerseDisplayViewModel;
+                if (verseDisplayViewModel is not null)
+                {
+                    SelectedVerseDisplayViewModel = verseDisplayViewModel;
+                }
+            }
         }
 
 
@@ -1467,11 +1475,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteDeleted(object sender, NoteEventArgs e)
         {
+            //WORKS
             Task.Run(() => NoteDeletedAsync(e).GetAwaiter());
         }
 
         public async Task NoteDeletedAsync(NoteEventArgs e)
         {
+            //WORKS
             if (e.Note.NoteId != null)
             {
                 await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
@@ -1481,11 +1491,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void LabelAdded(object sender, LabelEventArgs e)
         {
+            //WORKS
             Task.Run<TaskAwaiter>(() => LabelAddedAsync(e).GetAwaiter());
         }
 
         public async Task LabelAddedAsync(LabelEventArgs e)
         {
+            //WORKS
             if (SelectedVerseDisplayViewModel is null)
             {
                 return;
@@ -1516,11 +1528,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void LabelRemoved(object sender, LabelEventArgs e)
         {
+            //WORKS
             Task.Run(() => LabelRemovedAsync(e).GetAwaiter());
         }
 
         public async Task LabelRemovedAsync(LabelEventArgs e)
         {
+            //WORKS
             if (e.Note.NoteId != null)
             {
                 await SelectedVerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);

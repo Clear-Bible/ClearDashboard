@@ -29,19 +29,5 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             InitializeComponent();
         }
 
-
-
-        private void InnerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count > 0)
-            {
-                var verseDisplayViewModel = e.AddedItems[0] as VerseDisplayViewModel;
-                Debug.WriteLine(verseDisplayViewModel.Id);
-
-                var vm = DataContext as EnhancedViewModel;
-                vm.SelectedVerseDisplayViewModel = verseDisplayViewModel;
-            }
-
-        }
     }
 }
