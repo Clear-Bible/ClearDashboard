@@ -408,7 +408,6 @@
             <materialDesign:DialogHost.DialogContent>
                 <Border
                     x:Name="LowerBorder"
-                    BorderBrush="{DynamicResource SecondaryHueLightBrush}"
                     BorderThickness="2"
                     CornerRadius="3">
                     <StackPanel Margin="16">
@@ -416,7 +415,7 @@
                             Margin="0,8,8,0"
                             Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
                             IsCancel="True"
-                            Style="{StaticResource MaterialDesignOutlinedSecondaryDarkButton}">
+                            Style="{StaticResource TransparentStyle}">
                             <Button.CommandParameter>
                                 <system:Boolean xmlns:system="clr-namespace:System;assembly=mscorlib">
                                     False
@@ -428,6 +427,7 @@
 
                         <ListView
                             x:Name="ListView"
+                            Height="520"
                             Margin="5"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"

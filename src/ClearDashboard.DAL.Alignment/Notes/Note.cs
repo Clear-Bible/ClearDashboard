@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
@@ -13,8 +14,8 @@ namespace ClearDashboard.DAL.Alignment.Notes
 {
     public class Note
     {
-        public NoteId? NoteId 
-        { 
+        public NoteId? NoteId
+        {
             get;
 #if DEBUG
             set;
@@ -34,7 +35,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 if (!Enum.TryParse(value, out noteStatus_))
                 {
                     throw new ArgumentException(
-                        $"Invalid NoteStatus '{value}'.  Must be one of: " + 
+                        $"Invalid NoteStatus '{value}'.  Must be one of: " +
                         $"{string.Join(", ", ((Models.NoteStatus[])Enum.GetValues(typeof(Models.NoteStatus))).Select(ns => $"'{ns}'"))}");
                 }
             }
@@ -102,8 +103,13 @@ namespace ClearDashboard.DAL.Alignment.Notes
             return new List<string>();
         }
 
+        public async Task<IEnumerable<IId>> GetFullDomainEntityIds(IMediator mediator)
+        {
+            return await GetFullDomainEntityIds(this.domainEntityIds_, mediator);
+        }
+
         public async Task<Note> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
-        {            
+        {
             var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText, noteStatus_, ThreadId);
 
             var result = await mediator.Send(command, token);
@@ -293,6 +299,21 @@ namespace ClearDashboard.DAL.Alignment.Notes
             IMediator mediator)
         {
             var command = new GetNotesInThreadQuery(threadId);
+
+            var result = await mediator.Send(command);
+            if (result.Success)
+            {
+                return result.Data!;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public static async Task<IEnumerable<IId>> GetFullDomainEntityIds(IEnumerable<IId> entityIds, IMediator mediator)
+        {
+            var command = new GetFullDomainEntityIdsQuery(entityIds);
 
             var result = await mediator.Send(command);
             if (result.Success)

@@ -393,7 +393,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine($"Translations from model count: {initialTranslations.Count()} (from first five engine parallel text rows)");
             //foreach (var translation in initialTranslations)
             //{
-            //    Output.WriteLine($"\tTokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationOriginatedFrom}");
+            //    Output.WriteLine($"\tTokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.OriginatedFrom}");
             //}
 
             Output.WriteLine("");
@@ -445,11 +445,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Output.WriteLine("");
             foreach (var translation in translations)
             {
-                if (translation.TranslationOriginatedFrom != "FromTranslationModel" && translation.TranslationOriginatedFrom != "FromAlignmentModel")
+                if (translation.OriginatedFrom != "FromTranslationModel" && translation.OriginatedFrom != "FromAlignmentModel")
                 {
                     Assert.InRange<TokenId>(translation.SourceToken.TokenId, new TokenId("040001003001001"), new TokenId("040001005006001"), Comparer<TokenId>.Create((t1, t2) => t1.CompareTo(t2)));
                 }
-                Output.WriteLine($"TokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.TranslationOriginatedFrom}");
+                Output.WriteLine($"TokenId: {translation.SourceToken.TokenId}, TrainingText: {translation.SourceToken.TrainingText}, TargetTranslationText: {translation.TargetTranslationText}, TranslationState: {translation.OriginatedFrom}");
             }
             Output.WriteLine("DONE");
         }

@@ -12,13 +12,36 @@ using ClearBible.Engine.Utils;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DAL.Alignment.Translation;
+using System.Diagnostics.Metrics;
+using System.CodeDom;
+using Microsoft.EntityFrameworkCore;
+using ClearDashboard.DAL.Alignment.Exceptions;
+using SIL.Machine.Translation;
+using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
+
 
 public class CreateNotesCommandHandlerTests : TestBase
 {
     public CreateNotesCommandHandlerTests(ITestOutputHelper output) : base(output)
     {
+    }
+
+    public class BadId : IId
+    {
+        public Guid Id { get; set; }
+
+        public int GetIdHashcode()
+        {
+            return Id.GetHashCode();
+        }
+
+        public bool IdEquals(object? other)
+        {
+            return other is IId id && id.Id.Equals(Id);
+        }
     }
 
     [Fact]
@@ -306,6 +329,74 @@ public class CreateNotesCommandHandlerTests : TestBase
 
                 position++;
             }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__GetFullEntityIds()
+    {
+        try
+        {
+            var sourceCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource", Guid.NewGuid().ToString());
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpus.CorpusId, "test", "tokenization");
+            var targetCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource", Guid.NewGuid().ToString());
+            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleGreekCorpus()
+                .Create(Mediator!, targetCorpus.CorpusId, "test", "tokenization");
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
+            var translationCommandable = new TranslationCommands();
+            using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
+                SmtModelType.FastAlign,
+                parallelTextCorpus,
+                null,
+                SymmetrizationHeuristic.GrowDiagFinalAnd);
+            var alignmentModel = translationCommandable.PredictAllAlignedTokenIdPairs(smtWordAlignmentModel, parallelTextCorpus).ToList();
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+            var n = await new Note() { Text = "everything note!" }.CreateOrUpdate(Mediator!);
+
+            await n.AssociateDomainEntity(Mediator!, sourceCorpus.CorpusId);
+            await n.AssociateDomainEntity(Mediator!, sourceTokenizedTextCorpus.TokenizedTextCorpusId);
+            await n.AssociateDomainEntity(Mediator!, targetTokenizedTextCorpus.TokenizedTextCorpusId);
+            await n.AssociateDomainEntity(Mediator!, parallelCorpus.ParallelCorpusId);
+            await n.AssociateDomainEntity(Mediator!, alignmentSet.AlignmentSetId);
+            await n.AssociateDomainEntity(Mediator!, translationSet.TranslationSetId);
+
+            var alignments = ProjectDbContext!.Alignments.Include(a => a.SourceTokenComponent).Where(a => a.AlignmentSetId == alignmentSet.AlignmentSetId.Id).Take(3);
+            foreach (var a in alignments)
+            {
+                await n.AssociateDomainEntity(Mediator!, new AlignmentId(a.Id, "boo", "boo", ModelHelper.BuildTokenId(a.SourceTokenComponent!)));
+            }
+
+            var fullIds = await n.GetFullDomainEntityIds(Mediator!);
+            foreach (var iid in fullIds)
+            {
+                Output.WriteLine($"{iid.GetType().Name}:  '{iid.Id}'");
+            }
+
+            var entityIds = new List<IId>() { translationSet.TranslationSetId, parallelCorpus.ParallelCorpusId };
+            entityIds.Add(new BadId() { Id = Guid.NewGuid() });
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => Note.GetFullDomainEntityIds(entityIds, Mediator!));
         }
         finally
         {

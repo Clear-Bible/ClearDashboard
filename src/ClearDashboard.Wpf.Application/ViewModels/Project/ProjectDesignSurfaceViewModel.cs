@@ -21,6 +21,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using SIL.ObjectModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -34,13 +35,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using Microsoft.Extensions.Options;
-using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
-using SIL.ObjectModel;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using ClearApplicationFoundation.Extensions;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project

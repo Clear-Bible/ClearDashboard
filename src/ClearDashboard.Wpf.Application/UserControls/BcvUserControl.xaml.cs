@@ -96,11 +96,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 SetValue(CurrentBcvProperty, value);
 
-                CalculateBooks();
-                CalculateChapters();
-                CalculateVerses();
+                    CalculateBooks();
+                    CalculateChapters();
+                    CalculateVerses();
 
-                VerseChange = CurrentBcv.GetVerseId();
+                    VerseChange = CurrentBcv.GetVerseId();
             }
         }
 
@@ -472,11 +472,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 bool somethingChanged = false;
 
                 // book switch so find the first chapter and verse for that book
-                var verseId = BcvDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
+                var verseId = CurrentBcv.BBBCCCVVV;
                 if (verseId != "")
                 {
                     InComingChangesStarted = true;
-                    CurrentBcv.SetVerseFromId(verseId);
+                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
 
                     CalculateChapters();
                     CalculateVerses();
@@ -499,11 +499,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
 
                 // chapter switch so find the first verse for that book and chapter
-                var verseId = BcvDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
+                var verseId = CurrentBcv.BBBCCCVVV;
                 if (verseId != "")
                 {
                     InComingChangesStarted = true;
-                    CurrentBcv.SetVerseFromId(verseId);
+                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
 
                     CalculateVerses();
                     InComingChangesStarted = false;
