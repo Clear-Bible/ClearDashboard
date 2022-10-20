@@ -1,16 +1,11 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
-using ClearDashboard.ParatextPlugin.CQRS.Features.ReferenceUsfm;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.CheckUsfm
 {

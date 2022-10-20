@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.ParatextPlugin.CQRS.Features.ReferenceUsfm;
+using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,14 +9,15 @@ using Xunit.Abstractions;
 
 namespace ClearDashboard.WebApiParatextPlugin.Tests
 {
-    public class GerReferenceUsfmQueryHandlerTests : TestBase
+    public class GetCheckUsfmQueryHandlerTests : TestBase
     {
-        public GerReferenceUsfmQueryHandlerTests(ITestOutputHelper output) : base(output)
+        public GetCheckUsfmQueryHandlerTests(ITestOutputHelper output) : base(output)
         {
+            //no-op
         }
 
         [Fact]
-        public async Task GetReferenceUsfmTestAsync()
+        public async Task GetCheckUsfmTestAsync()
         {
             try
             {
@@ -24,8 +25,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                 var client = new HttpClient();
                 client.BaseAddress = new Uri("http://localhost:9000/api/");
 
-                var response = await client.PostAsJsonAsync<GetReferenceUsfmQuery>("referenceusfm",
-                    new GetReferenceUsfmQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
+                var response = await client.PostAsJsonAsync<GetCheckUsfmQuery>("checkusfm",
+                    new GetCheckUsfmQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
 
                 Assert.True(response.IsSuccessStatusCode);
                 var result = await response.Content.ReadAsAsync<RequestResult<ReferenceUsfm>>();
@@ -44,6 +45,5 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
             }
 
         }
-
     }
 }

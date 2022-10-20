@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using FluentValidation;
 using MediatR;
@@ -13,28 +14,89 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
     public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
     {
+        #region Member Variables    
+
+        private readonly DashboardProjectManager? _projectManager;
+        private CorpusSourceType _corpusSourceType;
+        private List<ParatextProjectMetadata>? _projects;
+        private ParatextProjectMetadata? _selectedProject;
+        
+        private string? _corpusNameToSelect;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
         public enum CorpusType
         {
             Manuscript,
             Other
         }
 
-        private readonly DashboardProjectManager? _projectManager;
-        private CorpusSourceType _corpusSourceType;
-        private List<ParatextProjectMetadata>? _projects;
-        private ParatextProjectMetadata? _selectedProject;
-
-
-        private string? _corpusNameToSelect;
-
         public string? Parameter { get; set; }
 
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        private Visibility _showSpinner = Visibility.Collapsed;
+        public Visibility ShowSpinner
+        {
+            get => _showSpinner;
+            set
+            {
+                _showSpinner = value;
+                NotifyOfPropertyChange(() => ShowSpinner);
+            }
+        }
+
+
+        public CorpusSourceType CorpusSourceType
+        {
+            get => _corpusSourceType;
+            set => Set(ref _corpusSourceType, value);
+        }
+
+        public List<ParatextProjectMetadata>? Projects
+        {
+            get => _projects;
+            set => Set(ref _projects, value);
+        }
+
+        private Tokenizer _selectedTokenizer = Tokenizer.LatinWordTokenizer;
+        public Tokenizer SelectedTokenizer
+        {
+            get => _selectedTokenizer;
+            set => Set(ref _selectedTokenizer, value);
+        }
+
+        public ParatextProjectMetadata? SelectedProject
+        {
+            get => _selectedProject;
+            set
+            {
+                Set(ref _selectedProject, value);
+
+                CheckUsfm();
+                
+                ValidationResult = Validator?.Validate(this);
+                CanOk = ValidationResult.IsValid;
+            }
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
         public AddParatextCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time    
@@ -73,36 +135,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
-        public CorpusSourceType CorpusSourceType
-        {
-            get => _corpusSourceType;
-            set => Set(ref _corpusSourceType, value);
-        }
-
-        public List<ParatextProjectMetadata>? Projects
-        {
-            get => _projects;
-            set => Set(ref _projects, value);
-        }
-
-        private Tokenizer _selectedTokenizer = Tokenizer.LatinWordTokenizer;
-        public Tokenizer SelectedTokenizer
-        {
-            get => _selectedTokenizer;
-            set => Set(ref _selectedTokenizer, value);
-        }
-
-        public ParatextProjectMetadata? SelectedProject
-        {
-            get => _selectedProject;
-            set
-            {
-                Set(ref _selectedProject, value);
-                ValidationResult = Validator?.Validate(this);
-                CanOk = ValidationResult.IsValid;
-            }
-        }
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             CorpusSourceType = CorpusSourceType.Paratext;
@@ -115,12 +147,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await base.OnActivateAsync(cancellationToken);
         }
 
+        #endregion //Constructor
+
+
+
+
+        #region Methods
+
+        private async Task CheckUsfm()
+        {
+            ShowSpinner = Visibility.Visible;
+
+            var result = await _projectManager.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
+            if (result.Success)
+            {
+                var errors = result.Data;
+            }
+
+            ShowSpinner = Visibility.Collapsed;
+        }
+
         protected override ValidationResult Validate()
         {
             return (SelectedProject != null) ? Validator?.Validate(this) : null;
         }
 
         private bool _canOk;
+
         public bool CanOk
         {
             get => _canOk;
@@ -133,9 +186,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         public bool CanCancel => true /* can always cancel */;
+
         public async void Cancel()
         {
             await TryCloseAsync(false);
         }
+
+        #endregion // Methods
     }
 }
