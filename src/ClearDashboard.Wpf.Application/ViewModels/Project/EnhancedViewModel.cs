@@ -283,9 +283,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
-        public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
         public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
-        public IEnumerable<Translation> CurrentTranslations { get; set; }
+        //public IEnumerable<Translation> CurrentTranslations { get; set; }
         public IEnumerable<Label> LabelSuggestions { get; set; }
 
 
@@ -962,11 +961,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             else
             {
                 NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-                CurrentTranslationSet = await GetTranslationSet(message);
+                var currentTranslationSet = await GetTranslationSet(message);
                 foreach (var row in rows)
                 {
                     var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
-                    await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
+                    await VerseDisplayViewModel!.BindAsync(row, currentTranslationSet, Detokenizer);
                     versesOut.Add(VerseDisplayViewModel);
                 }
 
