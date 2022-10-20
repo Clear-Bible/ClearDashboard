@@ -11,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextviews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    x:Name="BiblicalTermsViewWindow"
     d:DataContext="{d:DesignInstance Type=paratextviews:BiblicalTermsViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
@@ -119,19 +120,28 @@
                     Margin="5,5,0,2"
                     BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                     BorderThickness="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Label
-                            Margin="5,0,5,0"
-                            VerticalAlignment="Center"
-                            Content="{helpers:Localization BiblicalTermsForm_Word}" />
-                        <TextBox
-                            x:Name="FilterText"
-                            MinWidth="125"
-                            Margin="0,0,5,0"
-                            VerticalAlignment="Center"
-                            AcceptsReturn="False"
-                            Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label
+                                Margin="5,0,5,0"
+                                VerticalAlignment="Center"
+                                Content="{helpers:Localization BiblicalTermsForm_Word}" />
+                            <TextBox
+                                x:Name="FilterText"
+                                MinWidth="125"
+                                Margin="0,0,5,0"
+                                VerticalAlignment="Center"
+                                AcceptsReturn="False"
+                                Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <Button
+                            Width="200"
+                            Height="25"
+                            Margin="10"
+                            Command="{Binding DataContext.ClearFilterCommand, ElementName=BiblicalTermsViewWindow}"
+                            CommandParameter="{Binding}"
+                            Content="{helpers:Localization Pins_ClearFilter}"
+                            Style="{StaticResource BlueMidButton}" />
                         <StackPanel
                             Margin="5,0,0,5"
                             VerticalAlignment="Center"
@@ -249,8 +259,18 @@
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             SelectedItem="{Binding SelectedBiblicalTermsData}"
             SelectionMode="Single"
-            SelectionUnit="FullRow"
+            SelectionUnit="Cell"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem
+                        Command="{Binding ClearFilterCommand}"
+                        CommandParameter="{Binding}"
+                        Header="{helpers:Localization Pins_ClearFilter}" />
+                    <MenuItem Click="CopyText_OnClick" Header="{helpers:Localization Copy}" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
 
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">

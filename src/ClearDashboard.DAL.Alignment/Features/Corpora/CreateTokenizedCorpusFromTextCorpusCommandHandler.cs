@@ -156,7 +156,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                                 WordNumber = childToken.TokenId.WordNumber,
                                                 SubwordNumber = childToken.TokenId.SubWordNumber,
                                                 SurfaceText = childToken.SurfaceText,
-                                                PropertiesJson = childToken.PropertiesJson
+                                                PropertiesJson = childToken.ExtendedProperties
                                             };
                                         }).ToList()
                                 };
@@ -176,7 +176,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     WordNumber = token.TokenId.WordNumber,
                                     SubwordNumber = token.TokenId.SubWordNumber,
                                     SurfaceText = token.SurfaceText,
-                                    PropertiesJson = token.PropertiesJson
+                                    PropertiesJson = token.ExtendedProperties
                                 } as Models.TokenComponent;
                             }
                         });
