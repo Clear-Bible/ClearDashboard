@@ -14,6 +14,7 @@
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
+    xmlns:startup="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     Title="ClearDashboard"
@@ -289,12 +290,13 @@
                     </Style.Triggers>
                 </Style>
             </Border.Style>
-            <Grid>
+            <Grid Name="GridLayout">
                 <!--  BackGround Tasks  -->
                 <ListView
                     x:Name="RadioButtonGroupChoiceChipOutline"
                     Margin="5"
                     VerticalContentAlignment="Top"
+                    materialDesign:RippleAssist.IsDisabled="True"
                     ItemsSource="{Binding BackgroundTaskStatuses}"
                     ScrollViewer.CanContentScroll="False"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
@@ -302,98 +304,103 @@
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" BorderThickness="1">
-                                <StackPanel Orientation="Horizontal">
-
-                                    <!--  ISCOMPLETED ICON  -->
-                                    <materialDesign:PackIcon
-                                        Width="18"
-                                        Height="18"
-                                        VerticalAlignment="Center">
-                                        <materialDesign:PackIcon.Style>
-                                            <Style TargetType="materialDesign:PackIcon">
-                                                <Setter Property="Kind" Value="AirplaneSettings" />
-                                                <Setter Property="Padding" Value="0" />
-
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Working}">
-                                                        <Setter Property="Foreground" Value="Orange" />
-                                                        <Setter Property="Kind" Value="Autorenew" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Completed}">
-                                                        <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
-                                                        <Setter Property="Kind" Value="CheckboxMarkedCircle" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Error}">
-                                                        <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
-                                                        <Setter Property="Kind" Value="AlertCircle" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.CancelTaskRequested}">
-                                                        <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
-                                                        <Setter Property="Kind" Value="CloseCircleOutline" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </materialDesign:PackIcon.Style>
-                                    </materialDesign:PackIcon>
-
-                                    <!--  Cancel Task Button  -->
-                                    <Button
-                                        Width="20"
-                                        Height="20"
-                                        Margin="4"
-                                        Padding="0"
-                                        cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
-                                        IsEnabled="{Binding TaskLongRunningProcessStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
-                                        ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
-                                        <Button.Style>
-                                            <Style TargetType="Button">
-                                                <Setter Property="Background" Value="Transparent" />
-                                            </Style>
-                                        </Button.Style>
+                            <Grid Tag="{Binding DataContext, ElementName=GridLayout}">
+                                <Grid.ContextMenu>
+                                    <ContextMenu Name="cm" cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem cal:Message.Attach="CopyText($dataContext)" Header="{helpers:Localization Copy}" />
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" BorderThickness="1">
+                                    <StackPanel materialDesign:RippleAssist.Feedback="Transparent" Orientation="Horizontal">
+                                        <!--  ISCOMPLETED ICON  -->
                                         <materialDesign:PackIcon
                                             Width="18"
                                             Height="18"
-                                            VerticalAlignment="Center"
-                                            Foreground="{StaticResource RedLightBrush}"
-                                            Kind="Cancel" />
-                                    </Button>
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon.Style>
+                                                <Style TargetType="materialDesign:PackIcon">
+                                                    <Setter Property="Kind" Value="AirplaneSettings" />
+                                                    <Setter Property="Padding" Value="0" />
 
-                                    <StackPanel Margin="5,0,0,0" Orientation="Vertical">
-                                        <!--  TASK NAME  -->
-                                        <TextBlock
-                                            Width="370"
-                                            HorizontalAlignment="Left"
-                                            FontSize="12"
-                                            FontWeight="Bold"
-                                            Foreground="{StaticResource BlueMidBrush}">
-                                            <Run Text="TASK: " />
-                                            <Run Text="{Binding Name}" />
-                                        </TextBlock>
-
-                                        <!--  TASK DESCRIPTION  -->
-                                        <TextBlock
-                                            Width="200"
-                                            HorizontalAlignment="Left"
-                                            FontSize="12"
-                                            FontWeight="Bold"
-                                            Text="{Binding Description}"
-                                            TextWrapping="Wrap">
-                                            <TextBlock.Style>
-                                                <Style TargetType="TextBlock">
                                                     <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Working}">
+                                                            <Setter Property="Foreground" Value="Orange" />
+                                                            <Setter Property="Kind" Value="Autorenew" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Completed}">
+                                                            <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
+                                                            <Setter Property="Kind" Value="CheckboxMarkedCircle" />
+                                                        </DataTrigger>
                                                         <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Error}">
-                                                            <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
+                                                            <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
+                                                            <Setter Property="Kind" Value="AlertCircle" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.CancelTaskRequested}">
+                                                            <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
+                                                            <Setter Property="Kind" Value="CloseCircleOutline" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
-                                            </TextBlock.Style>
-                                        </TextBlock>
+                                            </materialDesign:PackIcon.Style>
+                                        </materialDesign:PackIcon>
 
-                                        <!--<TextBlock Text="{Binding TaskStatus}" />-->
+                                        <!--  Cancel Task Button  -->
+                                        <Button
+                                            Width="20"
+                                            Height="20"
+                                            Margin="4"
+                                            Padding="0"
+                                            cal:Message.Attach="[Event Click] = [Action CancelTask($this)]"
+                                            materialDesign:RippleAssist.Feedback="Transparent"
+                                            IsEnabled="{Binding TaskLongRunningProcessStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
+                                            ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </Style>
+                                            </Button.Style>
+                                            <materialDesign:PackIcon
+                                                Width="18"
+                                                Height="18"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource RedLightBrush}"
+                                                Kind="Cancel" />
+                                        </Button>
+
+                                        <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                                            <!--  TASK NAME  -->
+                                            <TextBlock
+                                                Width="370"
+                                                HorizontalAlignment="Left"
+                                                FontSize="12"
+                                                FontWeight="Bold"
+                                                Foreground="{StaticResource BlueMidBrush}"
+                                                Text="{Binding Name}" />
+                                            <!--<Run Text="TASK: " />-->
+                                            <!--  TASK DESCRIPTION  -->
+                                            <TextBlock
+                                                Width="200"
+                                                HorizontalAlignment="Left"
+                                                FontSize="12"
+                                                FontWeight="Bold"
+                                                Text="{Binding Description}"
+                                                TextWrapping="Wrap">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Error}">
+                                                                <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!--<TextBlock Text="{Binding TaskStatus}" />-->
+                                        </StackPanel>
                                     </StackPanel>
-                                </StackPanel>
-                            </Border>
+                                </Border>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
