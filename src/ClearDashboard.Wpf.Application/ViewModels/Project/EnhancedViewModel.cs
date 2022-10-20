@@ -282,10 +282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _verses, value);
         }
 
-        public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
-        public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
         public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
-        public IEnumerable<Translation> CurrentTranslations { get; set; }
         public IEnumerable<Label> LabelSuggestions { get; set; }
 
 
@@ -961,13 +958,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             else
             {
-                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-                CurrentTranslationSet = await GetTranslationSet(message);
+                var translationSet = await GetTranslationSet(message);
                 foreach (var row in rows)
                 {
-                    var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
-                    await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
-                    versesOut.Add(VerseDisplayViewModel);
+                    var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
+                    await verseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
+                    versesOut.Add(verseDisplayViewModel);
                 }
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
@@ -1291,7 +1287,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 NoteControlVisibility = Visibility.Visible;
             }
+            else
+            {
+                NoteControlVisibility = Visibility.Collapsed;
+            }
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId})";
+        }
+
+        public void TokenRightButtonDown(object sender, TokenEventArgs e)
+        {
+            SelectedTokens = e.SelectedTokens;
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
         }
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
@@ -1407,8 +1413,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 return;
             }
-            
-            await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+
+            OnUIThread(async () =>
+            {
+                await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+                NotifyOfPropertyChange(() => VersesDisplay);
+            });
+
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
@@ -1442,7 +1453,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //WORKS
             if (e.Note.NoteId != null)
             {
-                await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+                OnUIThread(async () =>
+                {
+                    await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+                });
             }
             Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
         }
