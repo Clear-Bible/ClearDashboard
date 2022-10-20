@@ -515,6 +515,9 @@
                                                         <i:EventTrigger EventName="TokenClicked">
                                                             <i:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
+                                                        <i:EventTrigger EventName="TokenRightButtonDown">
+                                                            <i:CallMethodAction MethodName="TokenRightButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                        </i:EventTrigger>
                                                         <i:EventTrigger EventName="TokenMouseEnter">
                                                             <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
