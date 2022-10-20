@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -420,6 +421,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
+            if (!SelectedTokens.Any())
+            {
+                var control = e.Source as FrameworkElement;
+                var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+                UpdateSelection(tokenDisplay!, false);
+            }
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }
 
