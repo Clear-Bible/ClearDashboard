@@ -9,7 +9,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 
 namespace ClearDashboard.DataAccessLayer.Features.CheckUsfm
 {
-    public class GetCheckUsfmQueryHandler : ParatextRequestHandler<GetCheckUsfmQuery, RequestResult<List<UsfmHelper>>, List<UsfmHelper>>
+    public class GetCheckUsfmQueryHandler : ParatextRequestHandler<GetCheckUsfmQuery, RequestResult<List<UsfmError>>, List<UsfmError>>
     {
 
         public GetCheckUsfmQueryHandler(ILogger<GetCheckUsfmQueryHandler> logger) : base(logger)
@@ -17,7 +17,7 @@ namespace ClearDashboard.DataAccessLayer.Features.CheckUsfm
             //no-op
         }
 
-        public override async Task<RequestResult<List<UsfmHelper>>> Handle(GetCheckUsfmQuery request, CancellationToken cancellationToken)
+        public override async Task<RequestResult<List<UsfmError>>> Handle(GetCheckUsfmQuery request, CancellationToken cancellationToken)
         {
             return await ExecuteRequest("checkusfm", request, cancellationToken);
         }

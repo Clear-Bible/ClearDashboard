@@ -10,9 +10,9 @@ using System.Web.Http;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.CheckUsfm
 {
-    public class GetCheckUsfmController : FeatureSliceController
+    public class CheckUsfmController : FeatureSliceController
     {
-        public GetCheckUsfmController(IMediator mediator, ILogger<GetCheckUsfmQuery> logger) : base(mediator, logger)
+        public CheckUsfmController(IMediator mediator, ILogger<GetCheckUsfmQuery> logger) : base(mediator, logger)
         {
 
         }
