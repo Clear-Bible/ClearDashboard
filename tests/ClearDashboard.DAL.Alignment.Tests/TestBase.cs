@@ -18,6 +18,7 @@ using ILogger = Microsoft.Extensions.Logging.ILogger;
 using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Caliburn.Micro;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
@@ -52,6 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddLogging();
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IProjectProvider, ProjectProvider>();
+            services.AddSingleton<IEventAggregator, EventAggregator>();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
