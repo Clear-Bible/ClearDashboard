@@ -17,6 +17,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
     public partial class TimerUserControl : UserControl
     {
         System.Timers.Timer _timer = new System.Timers.Timer(1000);
+        private bool _justClicked = false;
+        private int _fivePercentOfTheGivenTime = 0;
+        private int _twentyPercentOfTheGivenTime = 0;
         
         public TimerUserControl()
         {
@@ -60,6 +63,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 e.Handled = true;
             }
+
+            if(_justClicked && e.Key != Key.Enter)
+            {
+                TimerBox.Text = "00000000000000";
+                SetLabelAndSeconds("00", "00", "00");
+                _justClicked = false;
+            }
         }
 
 
@@ -81,6 +91,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 _timerOn = true;
                 _timer.Enabled = true;
             }
+
+            StartStopButton.Focus();
         }
         
         private void OnTimedEvent(Object source, ElapsedEventArgs e)
@@ -94,13 +106,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             this.Dispatcher.Invoke(() =>
             {
-                if (_secondsLeft <= 0)
+                if (_secondsLeft <= _fivePercentOfTheGivenTime)
                 {
                     SetAppearNoTimeLeft();
                 }
                 else
                 {
-                    if (_secondsLeft <= 300)
+                    if (_secondsLeft <= _twentyPercentOfTheGivenTime)
                     {
                         SetAppearLittleTimeLeft();
                     }
@@ -168,6 +180,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             _secondsLeft = Convert.ToInt32(seconds);
             _secondsLeft += Convert.ToInt32(minutes) * 60;
             _secondsLeft += Convert.ToInt32(hours) * 60 * 60;
+
+            _fivePercentOfTheGivenTime = (int)(_secondsLeft * 0.05);
+            _twentyPercentOfTheGivenTime = (int)(_secondsLeft * 0.20);
         }
 
 
@@ -178,9 +193,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
            PauseTimer();
 
             TimerLabel.Foreground = Brushes.LightGray;
-            TimerBox.Text = "00000000000000";
-            SetLabelAndSeconds("00", "00","00");
+            _justClicked = true;
+            //TimerBox.Text = "00000000000000";
+            //SetLabelAndSeconds("00", "00","00");
 
+            StartStopButton.IsDefault = true;
 
             //TimerTbx.Text = _time.Hours.ToString().PadLeft(2, '0') + _time.Minutes.ToString().PadLeft(2, '0') + _time.Seconds.ToString().PadLeft(2,'0');
         }
@@ -202,6 +219,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 //SetAppearMuchTimeLeft();
             }
+
+            StartStopButton.IsDefault = false;
+            _justClicked = false;
         }
 
 

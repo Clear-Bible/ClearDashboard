@@ -486,7 +486,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public ICommand NotesCommand { get; set; }
         public ICommand VerseClickCommand { get; set; }
-
+        public RelayCommand ClearFilterCommand { get; }
 
 
         #endregion
@@ -506,6 +506,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Bottom;
             _cancellationTokenSource = new CancellationTokenSource();
+
+            ClearFilterCommand = new RelayCommand(ClearFilter);
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -1112,6 +1114,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _getBiblicalTermsRunning = false;
                 _cancellationTokenSource.Dispose();
             }
+        }
+
+        private void ClearFilter(object obj)
+        {
+            FilterText = "";
         }
 
 
