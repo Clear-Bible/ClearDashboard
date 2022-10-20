@@ -18,9 +18,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.CheckUsfm
         }
 
         [HttpPost]
-        public async Task<RequestResult<List<UsfmError>>> GetAsync([FromBody] GetCheckUsfmQuery command)
+        public async Task<RequestResult<UsfmHelper>> GetAsync([FromBody] GetCheckUsfmQuery command)
         {
-            var result = await ExecuteRequestAsync<RequestResult<List<UsfmError>>, List<UsfmError>>(command, CancellationToken.None);
+            var result = await ExecuteRequestAsync<RequestResult<UsfmHelper>, UsfmHelper>(command, CancellationToken.None);
             return result;
         }
 

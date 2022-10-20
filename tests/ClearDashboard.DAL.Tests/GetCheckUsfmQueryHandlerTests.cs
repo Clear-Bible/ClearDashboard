@@ -24,13 +24,12 @@ namespace ClearDashboard.DAL.Tests
         {
             // get the HEB/GRK sourcelanguage project type
             var result =
-                await ExecuteParatextAndTestRequest<GetCheckUsfmQuery, RequestResult<List<UsfmError>>, List<UsfmError>>(
+                await ExecuteParatextAndTestRequest<GetCheckUsfmQuery, RequestResult<UsfmHelper>, UsfmHelper>(
                     new GetCheckUsfmQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
 
             Assert.True(result.HasData);
             Assert.NotNull(result.Data);
-            //Assert.NotEmpty(result?.Data?.UsfmDirectoryPath);
-            //Assert.Equal("Biblia Hebraica Stuttgartensia", result?.Data?.LongName);
+            Assert.NotEmpty(result?.Data?.Path);
         }
     }
 }

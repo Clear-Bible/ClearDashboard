@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm
 {
-    public record GetCheckUsfmQuery(string Id) : IRequest<RequestResult<List<UsfmError>>>
+    public record GetCheckUsfmQuery(string Id) : IRequest<RequestResult<UsfmHelper>>
     {
         public string Id { get; } = Id;
     }

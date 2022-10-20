@@ -914,7 +914,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// </summary>
         /// <param name="projectId"></param>
         /// <returns></returns>
-        public List<UsfmError> GetCheckForUsfmErrors(string projectId)
+        public UsfmHelper GetCheckForUsfmErrors(string projectId)
         {
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
@@ -922,7 +922,12 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             if (project == null)
             {
-                return new List<UsfmError>();
+                return new UsfmHelper
+                {
+                    Path = null,
+                    NumberOfErrors = 0,
+                    UsfmErrors = new List<UsfmError>()
+                };
             }
 
             // creating usfm directory
@@ -938,7 +943,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 AppendText(Color.Red, e.Message);
             }
 
-            return usfmHelper.UsfmErrors;
+            return usfmHelper;
         }
         /// <summary>
         /// Called by a slice

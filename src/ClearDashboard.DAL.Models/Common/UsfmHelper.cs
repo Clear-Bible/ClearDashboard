@@ -9,6 +9,7 @@ namespace ClearDashboard.DataAccessLayer.Models.Common
     public class UsfmHelper
     {
         public string Path { get; set; } = string.Empty;
+        public int NumberOfErrors { get; set; } = 0;
         public List<UsfmError> UsfmErrors { get; set; } = new();
     }
 

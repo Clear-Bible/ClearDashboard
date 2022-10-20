@@ -29,15 +29,13 @@ namespace ClearDashboard.WebApiParatextPlugin.Tests
                     new GetCheckUsfmQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
 
                 Assert.True(response.IsSuccessStatusCode);
-                var result = await response.Content.ReadAsAsync<RequestResult<ReferenceUsfm>>();
+                var result = await response.Content.ReadAsAsync<RequestResult<UsfmHelper>>();
 
                 Assert.NotNull(result);
                 Assert.True(result.Success);
                 Assert.NotNull(result.Data);
 
-                Assert.NotEmpty(result?.Data?.UsfmDirectoryPath);
-                Assert.Equal("Biblia Hebraica Stuttgartensia", result?.Data?.LongName);
-
+                Assert.NotEmpty(result?.Data?.Path);
             }
             finally
             {

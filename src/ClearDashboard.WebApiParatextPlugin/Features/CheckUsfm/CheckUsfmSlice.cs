@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.CheckUsfm
 {
-    public class GetCheckUsfmQueryHandler : IRequestHandler<GetCheckUsfmQuery, RequestResult<List<UsfmError>>>
+    public class GetCheckUsfmQueryHandler : IRequestHandler<GetCheckUsfmQuery, RequestResult<UsfmHelper>>
     {
         private readonly ILogger<GetCheckUsfmQueryHandler> _logger;
         private readonly MainWindow _mainWindow;
@@ -19,9 +19,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.CheckUsfm
             _logger = logger;
             _mainWindow = mainWindow;
         }
-        public Task<RequestResult<List<UsfmError>>> Handle(GetCheckUsfmQuery request, CancellationToken cancellationToken)
+        public Task<RequestResult<UsfmHelper>> Handle(GetCheckUsfmQuery request, CancellationToken cancellationToken)
         {
-            var queryResult = new RequestResult<List<UsfmError>>(new List<UsfmError>());
+            var queryResult = new RequestResult<UsfmHelper>(new UsfmHelper());
             var result = _mainWindow.GetCheckForUsfmErrors(request.Id);
             queryResult.Data = result;
             queryResult.Success = true;

@@ -240,7 +240,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                                 mainWindow.AppendText(Color.Red, $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]");
                                                 usfmError.Add(new UsfmError
                                                 {
-                                                    Reference = UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key),
+                                                    Reference = marker.VerseRef.ToString(),
                                                     Error = $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]",
                                                 });
                                             }
@@ -343,7 +343,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                 mainWindow.AppendText(Color.Red, ex.Message);
             }
 
-            return new UsfmHelper { Path = exportPath, UsfmErrors = usfmError };
+            return new UsfmHelper
+            {
+                Path = exportPath, 
+                UsfmErrors = usfmError, 
+                NumberOfErrors = usfmError.Count
+            };
         }
 
         // update the settings file to use "normal" file extensions
