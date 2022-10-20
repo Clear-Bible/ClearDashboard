@@ -107,8 +107,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager!.LoadProject("SUR");
-                var row = await GetVerseTextRow(01001001);
+                await ProjectManager!.LoadProject("EnhancedViewDemo");
+                var row = await GetVerseTextRow(40001001);
                 var translationSet = await GetFirstTranslationSet();
                 await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
 
@@ -207,7 +207,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 NotePaneVisibility = Visibility.Visible;
             }
+            else
+            {
+                NotePaneVisibility = Visibility.Collapsed;
+            }
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
+        }
+
+        public void TokenRightButtonDown(TokenEventArgs e)
+        {
+            SelectedTokens = e.SelectedTokens;
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
