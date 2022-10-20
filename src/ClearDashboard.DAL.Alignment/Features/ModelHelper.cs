@@ -39,7 +39,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                     token.SurfaceText ?? string.Empty,
                     token.TrainingText ?? string.Empty)
                 {
-                    PropertiesJson = token.PropertiesJson
+                    ExtendedProperties = token.PropertiesJson
                 };
             }
         }

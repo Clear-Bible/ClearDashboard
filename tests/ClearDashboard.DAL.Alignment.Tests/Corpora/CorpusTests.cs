@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
 using MediatR;
@@ -24,6 +28,25 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
         #nullable disable
         public CorpusTests(ITestOutputHelper output) : base(output)
         {
+        }
+
+        [Fact]
+        public void Corpus_SyntaxTrees_SyntaxTreeTokenExtendedProperties()
+        {
+            var syntaxTree = new SyntaxTrees();
+            var corpus = new SyntaxTreeFileTextCorpus(syntaxTree)
+                .Transform<AddPronominalReferencesToTokens>();
+
+            var tokensTextRow = corpus.GetRows(new List<string> { "GEN" }).Cast<TokensTextRow>().Take(10).ToList();
+            var token = tokensTextRow[4].Tokens[9];
+            var extendedProperties = token.ExtendedProperties;
+
+            if (extendedProperties != null)
+            {
+                var rootElement = XDocument.Parse(extendedProperties).Root;
+                Assert.Equal("he called", rootElement?.XPathSelectElement("/ExtendedProperties/SyntaxTreeToken/English")?.Value ?? "");   //token's english
+                Assert.Equal("God", rootElement?.XPathSelectElement("/ExtendedProperties/PronominalReferences/VerbSubjectReferences/English")?.Value ?? ""); //token's verb's subject 
+            }
         }
 
         [Fact]
