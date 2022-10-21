@@ -203,6 +203,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task CheckUsfm()
         {
+            if (SelectedProject is null)
+            {
+                return;
+            }
+
             ShowSpinner = Visibility.Visible;
 
             var result = await _projectManager.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
