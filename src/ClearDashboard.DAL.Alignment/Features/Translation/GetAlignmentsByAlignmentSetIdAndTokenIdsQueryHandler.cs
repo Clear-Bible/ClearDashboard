@@ -51,7 +51,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         ModelHelper.BuildToken(a.TargetTokenComponent!),
                         a.Score),
                     a.AlignmentVerification.ToString(),
-                    a.AlignmentOriginatedFrom.ToString()));
+                    a.AlignmentOriginatedFrom.ToString()))
+                .ToList();
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;

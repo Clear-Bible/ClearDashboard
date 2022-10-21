@@ -24,6 +24,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// </summary>
         public Token Token { get; set; }
 
+        public bool IsSource { get; set; }
+
         /// <summary>
         /// Padding to be rendered before the token, as determined by a <see cref="EngineStringDetokenizer"/>.
         /// </summary>
@@ -40,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public Translation? Translation { get; set; }
 
         /// <summary>
-        /// The surface text of the token to be displayed.
+        /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
 

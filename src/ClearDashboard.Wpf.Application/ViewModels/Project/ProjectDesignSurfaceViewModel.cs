@@ -39,6 +39,7 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Macula.PropertiesSources.Tokenization;
+using ClearBible.Engine.Exceptions;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -500,12 +501,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     .ToList();
 
                 var serializedAlignmentSet = connection.AlignmentSetInfo.Select(alignmentSetInfo => new AlignmentSetInfo
-                {
-                    DisplayName = alignmentSetInfo.DisplayName ?? string.Empty,
-                    AlignmentSetId = alignmentSetInfo.AlignmentSetId,
-                    ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName ?? string.Empty,
-                    ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
-                })
+                    {
+                        DisplayName = alignmentSetInfo.DisplayName ?? string.Empty,
+                        AlignmentSetId = alignmentSetInfo.AlignmentSetId,
+                        ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName ?? string.Empty,
+                        ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
+                        IsRtl = alignmentSetInfo.IsRtl,
+                        IsTargetRtl = alignmentSetInfo.IsTargetRtl,
+                    })
                     .ToList();
 
                 surface.Connections.Add(new SerializedConnection
@@ -1241,20 +1244,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Header = alignmentSetInfo.DisplayName,
                     Id = alignmentSetInfo.AlignmentSetId,
                     IconKind = "Sitemap",
-                    IsEnabled = false,
+                    IsEnabled = true,
                     MenuItems = new ObservableCollection<ParallelCorpusConnectionMenuItemViewModel>
                     {
                         new ParallelCorpusConnectionMenuItemViewModel
                         {
                             // Add Verses to focused enhanced view
                             Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", Logger),
-                            Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
+                            Id = "AddAlignmentToEnhancedViewId", 
+                            ProjectDesignSurfaceViewModel = this,
                             IconKind = "DocumentTextAdd",
                             AlignmentSetId = alignmentSetInfo.AlignmentSetId,
                             DisplayName = alignmentSetInfo.DisplayName,
                             ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
                             ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
-                            IsEnabled = false,
+                            IsEnabled = true,
+                            IsRTL = alignmentSetInfo.IsRtl,
+                            IsTargetRTL = alignmentSetInfo.IsTargetRtl
                         },
                     }
                 });
@@ -1293,12 +1299,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 // Add Verses to focused enhanced view
                                 Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", Logger),
-                                Id = "AddToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
+                                Id = "AddTranslationToEnhancedViewId", ProjectDesignSurfaceViewModel = this,
                                 IconKind = "DocumentTextAdd",
                                 TranslationSetId = info.TranslationSetId,
                                 DisplayName = info.DisplayName,
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
+                                IsRTL = info.IsRTL,
                             }
                         }
                 });
@@ -1350,23 +1357,44 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case "CreateNewInterlinearId":
                     await AddNewInterlinear(connectionMenuItem);
                     break;
-                case "AddToEnhancedViewId":
+                case "AddAlignmentToEnhancedViewId":
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
-                            new ShowParallelTranslationWindowMessage(connectionMenuItem.TranslationSetId,
+                            new ShowParallelTranslationWindowMessage(
+                                null,
                                 connectionMenuItem.AlignmentSetId,
                                 connectionMenuItem.DisplayName,
-                                connectionMenuItem.ParallelCorpusId,
+                                connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
                                 connectionMenuItem.ParallelCorpusDisplayName,
+                                //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
                                 connectionMenuItem.IsRTL,
+                                //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                                connectionMenuItem.IsTargetRTL,
+                                IsNewWindow: false));
+                    }
+                    break;
+                case "AddTranslationToEnhancedViewId":
+                    if (connectionMenuItem.IsEnabled)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(
+                            new ShowParallelTranslationWindowMessage(
+                                connectionMenuItem.TranslationSetId,
+                                null,
+                                connectionMenuItem.DisplayName,
+                                connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
+                                connectionMenuItem.ParallelCorpusDisplayName,
+                                //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                                connectionMenuItem.IsRTL,
+                                //FIXME:surface serialization null,
+                                null,
                                 IsNewWindow: false));
                     }
                     else
                     {
 
                     }
-
+                    break;
 
 
 
@@ -1407,12 +1435,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpusId = Guid.Parse(tokenization.CorpusId);
                     var tokenizationId = Guid.Parse(tokenization.TokenizedTextCorpusId);
                     await EventAggregator.PublishOnUIThreadAsync(
-                        new ShowTokenizationWindowMessage(ParatextProjectId: corpusNodeViewModel.ParatextProjectId,
+                        new ShowTokenizationWindowMessage(
+                            corpusNodeViewModel.ParatextProjectId,
                             ProjectName: corpusNodeViewModel.Name,
                             TokenizationType: corpusNodeMenuItem.Tokenizer,
                             CorpusId: corpusId,
                             TokenizedTextCorpusId: tokenizationId,
                             corpusNodeViewModel.CorpusType,
+                            //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             corpusNodeViewModel.IsRTL,
                             IsNewWindow: showInNewWindow));
                     break;
@@ -1779,7 +1809,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         DisplayName = alignmentSet.AlignmentSetId.DisplayName,
                         AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
                         ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
-                        ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString()
+                        ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString(),
                     });
                 }
 
