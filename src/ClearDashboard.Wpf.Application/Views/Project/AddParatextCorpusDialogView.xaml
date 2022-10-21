@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -167,24 +168,24 @@
                 </controls1:AutoCompleteComboBox>
             </StackPanel>
 
-            <ProgressBar
-                Grid.Row="1"
-                Width="25"
-                Height="25"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
-                Visibility="{Binding ShowSpinner}" />
-
             <StackPanel
                 Grid.Row="1"
                 Margin="25,0,0,0"
                 Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="{helpers:Localization AddParatextCorpusDialog_Check}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        Content="{helpers:Localization AddParatextCorpusDialog_Check}"
+                        FontSize="18" />
 
                     <Label
+                        Grid.Column="1"
                         VerticalAlignment="Center"
                         Content="{Binding Path=ErrorTitle, Mode=OneWay}"
                         FontSize="18">
@@ -199,7 +200,9 @@
                             </Style>
                         </Label.Style>
                     </Label>
+
                     <Label
+                        Grid.Column="2"
                         VerticalAlignment="Center"
                         Content="{Binding Path=UsfmErrors.Count, Mode=OneWay}"
                         FontSize="18">
@@ -215,11 +218,30 @@
                         </Label.Style>
                     </Label>
 
-                </StackPanel>
+                    <Button
+                        x:Name="CopyToClipboard"
+                        Grid.Column="3"
+                        Width="30"
+                        Height="30"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Margin="0 0 5 0"
+                        ToolTip="{helpers:Localization AddParatextCorpusDialog_CopyToClipboard}">
+                        <Button.Style>
+                            <Style BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+                                <Setter Property="Padding" Value="0" />
+                            </Style>
+                        </Button.Style>
+                        <iconPacks:PackIconOcticons
+                            Width="20"
+                            Height="20"
+                            Kind="Clippy" />
+                    </Button>
+
+                </Grid>
 
                 <ListView
-                    MinHeight="100"
-                    MaxHeight="125"
+                    Height="135"
                     Margin="18,0,5,5"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding UsfmErrors}">
@@ -254,7 +276,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="300">
+                            <GridViewColumn Width="400">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock
@@ -269,6 +291,16 @@
                 </ListView>
             </StackPanel>
 
+            <ProgressBar
+                Grid.Row="1"
+                Width="50"
+                Height="50"
+                Margin="0,40,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsIndeterminate="True"
+                Style="{StaticResource MaterialDesignCircularProgressBar}"
+                Visibility="{Binding ShowSpinner}" />
 
             <StackPanel Grid.Row="2" Orientation="Vertical">
                 <Label Content="{helpers:Localization AddCorpusDialog_SelectEngine}" />

@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -186,6 +187,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Methods
 
+        public void CopyToClipboard()
+        {
+            Clipboard.Clear();
+            StringBuilder sb = new StringBuilder();
+            foreach (var error in UsfmErrors)
+            {
+                sb.AppendLine($"{error.Reference}\t{error.Error}");
+            }
+
+            Clipboard.SetText(sb.ToString());
+        }
+    
+
+
         private async Task CheckUsfm()
         {
             ShowSpinner = Visibility.Visible;
@@ -203,7 +218,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 else
                 {
                     UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
-                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", _logger);
                 }
                 
             }
