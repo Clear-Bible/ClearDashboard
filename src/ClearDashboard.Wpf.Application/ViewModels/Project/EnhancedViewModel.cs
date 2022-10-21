@@ -402,6 +402,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await ShowCorpusText(_projectMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
             }
 
+            // clear out exising VersesDisplay
             for (var i = 0; i < _parallelMessages.Count; i++)
             {
                 ProgressBarVisibility = Visibility.Visible;
@@ -453,6 +454,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             VersesDisplay.RemoveAt(index);
             // remove from the grouping for saving
             DisplayOrder.RemoveAt(index);
+
+            // remove from stored collection
+            var project = _parallelProjects.FirstOrDefault(x => x.ParallelCorpusId == row.ParallelCorpusId);
+            if (project != null)
+            {
+                _parallelProjects.Remove(project);
+            }
+
+            var parallelMessages = _parallelMessages.FirstOrDefault(x => Guid.Parse(x.ParallelCorpusId) == row.ParallelCorpusId);
+            if (parallelMessages is not null)
+            {
+                _parallelMessages.Remove(parallelMessages);
+            }
+
+
 
             // remove stored collection
             var tokenProject  = _tokenProjects.FirstOrDefault(x => x.CorpusId==row.CorpusId);
@@ -1099,28 +1115,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Brush brush = Brushes.SaddleBrown;
 
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
-            VersesDisplay.Add(new VersesDisplay
-            {
-                CorpusId = Guid.Parse(message.ParallelCorpusId),
-                BorderColor = brush,
-                ShowTranslation = showTranslations,
-                RowTitle = title,
-                Verses = verses,
-            });
 
-            // add to the grouping for saving
-            DisplayOrder.Add(new Models.DisplayOrder
+            if (row is null)
             {
-                MsgType = Models.DisplayOrder.MessageType.ShowParallelTranslationWindowMessage,
-                Data = message
-            });
- 
-            //do a dump of VerseDisplayViewModel Ids
-            foreach (var verseDisplayViewModel in verses)
+                VersesDisplay.Add(new VersesDisplay
+                {
+                    ParallelCorpusId = Guid.Parse(message.ParallelCorpusId),
+                    CorpusId = Guid.Parse(message.ParallelCorpusId),
+                    BorderColor = brush,
+                    ShowTranslation = showTranslations,
+                    RowTitle = title,
+                    Verses = verses,
+                });
+
+                // add to the grouping for saving
+                DisplayOrder.Add(new Models.DisplayOrder
+                {
+                    MsgType = Models.DisplayOrder.MessageType.ShowParallelTranslationWindowMessage,
+                    Data = message
+                });
+            }
+            else
             {
-                Debug.WriteLine($"INCOMMING ID: {verseDisplayViewModel.Id}");
+                row.RowTitle = title;
+                row.Verses = verses;
+                row.BorderColor = brush;
             }
 
+            
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 

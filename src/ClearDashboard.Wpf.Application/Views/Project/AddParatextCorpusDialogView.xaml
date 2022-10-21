@@ -223,9 +223,9 @@
                         Grid.Column="3"
                         Width="30"
                         Height="30"
+                        Margin="0,0,5,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
-                        Margin="0 0 5 0"
                         ToolTip="{helpers:Localization AddParatextCorpusDialog_CopyToClipboard}">
                         <Button.Style>
                             <Style BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">

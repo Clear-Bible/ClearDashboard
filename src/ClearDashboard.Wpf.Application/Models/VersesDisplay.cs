@@ -25,6 +25,17 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
+        private Guid _parallelCorpusId;
+        public Guid ParallelCorpusId
+        {
+            get => _parallelCorpusId;
+            set
+            {
+                _parallelCorpusId = value;
+                NotifyOfPropertyChange(() => ParallelCorpusId);
+            }
+        }
+
 
         private Visibility _visiblity = Visibility.Collapsed;
         public Visibility Visibility
