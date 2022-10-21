@@ -110,7 +110,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 await ProjectManager!.LoadProject("SUR");
                 var row = await GetVerseTextRow(01001001);
                 var translationSet = await GetFirstTranslationSet();
-                await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
+                await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
             }
