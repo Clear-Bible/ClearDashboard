@@ -2,76 +2,69 @@
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
     public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
     {
+        #region Member Variables
+
+        private readonly ILogger<AddParatextCorpusDialogViewModel>? _logger;
+        private readonly DashboardProjectManager? _projectManager;
+        private CorpusSourceType _corpusSourceType;
+        private List<ParatextProjectMetadata>? _projects;
+        private ParatextProjectMetadata? _selectedProject;
+        
+        private string? _corpusNameToSelect;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
         public enum CorpusType
         {
             Manuscript,
             Other
         }
 
-        private readonly DashboardProjectManager? _projectManager;
-        private CorpusSourceType _corpusSourceType;
-        private List<ParatextProjectMetadata>? _projects;
-        private ParatextProjectMetadata? _selectedProject;
-
-
-        private string? _corpusNameToSelect;
-
         public string? Parameter { get; set; }
 
-        public AddParatextCorpusDialogViewModel()
-        {
-            // used by Caliburn Micro for design time    
-        }
+        #endregion //Public Properties
 
-        public AddParatextCorpusDialogViewModel(INavigationService? navigationService,
-            ILogger<AddParatextCorpusDialogViewModel>? logger,
-            DashboardProjectManager? projectManager,
-            IEventAggregator? eventAggregator,
-            IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator, ILifetimeScope? lifetimeScope)
-            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
-        {
-            _projectManager = projectManager;
-        }
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        #region Observable Properties
+
+        private Visibility _showSpinner = Visibility.Collapsed;
+        public Visibility ShowSpinner
         {
-            if (!string.IsNullOrEmpty(Parameter))
+            get => _showSpinner;
+            set
             {
-                try
-                {
-                    var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(Parameter);
-                    foreach (var value in values)
-                    {
-                        _corpusNameToSelect = value.Key;
-                        break;
-                    }
-                }
-                catch (Exception)
-                {
-                    //no-op.
-                }
+                _showSpinner = value;
+                NotifyOfPropertyChange(() => ShowSpinner);
             }
-            
-            return base.OnInitializeAsync(cancellationToken);
-
         }
+
 
         public CorpusSourceType CorpusSourceType
         {
@@ -98,9 +91,81 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set
             {
                 Set(ref _selectedProject, value);
+
+                CheckUsfm();
+                
                 ValidationResult = Validator?.Validate(this);
                 CanOk = ValidationResult.IsValid;
             }
+        }
+
+
+        private ObservableCollection<UsfmError> _usfmErrors = new();
+        public ObservableCollection<UsfmError> UsfmErrors
+        {
+            get => _usfmErrors;
+            set
+            {
+                _usfmErrors = value;
+                NotifyOfPropertyChange(() => UsfmErrors);
+            }
+        }
+
+        private string _errorTitle;
+        public string ErrorTitle
+        {
+            get => _errorTitle;
+            set
+            {
+                _errorTitle = value;
+                NotifyOfPropertyChange(() => ErrorTitle);
+            }
+        }
+
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+        public AddParatextCorpusDialogViewModel()
+        {
+            // used by Caliburn Micro for design time    
+        }
+
+        public AddParatextCorpusDialogViewModel(INavigationService? navigationService,
+            ILogger<AddParatextCorpusDialogViewModel>? logger,
+            DashboardProjectManager? projectManager,
+            IEventAggregator? eventAggregator,
+            IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator, ILifetimeScope? lifetimeScope)
+            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
+        {
+            _logger = logger;
+            _projectManager = projectManager;
+
+            ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            if (!string.IsNullOrEmpty(Parameter))
+            {
+                try
+                {
+                    var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(Parameter);
+                    foreach (var value in values)
+                    {
+                        _corpusNameToSelect = value.Key;
+                        break;
+                    }
+                }
+                catch (Exception)
+                {
+                    //no-op.
+                }
+            }
+            
+            return base.OnInitializeAsync(cancellationToken);
+
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -115,12 +180,59 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await base.OnActivateAsync(cancellationToken);
         }
 
+        #endregion //Constructor
+
+
+
+
+        #region Methods
+
+        public void CopyToClipboard()
+        {
+            Clipboard.Clear();
+            StringBuilder sb = new StringBuilder();
+            foreach (var error in UsfmErrors)
+            {
+                sb.AppendLine($"{error.Reference}\t{error.Error}");
+            }
+
+            Clipboard.SetText(sb.ToString());
+        }
+    
+
+
+        private async Task CheckUsfm()
+        {
+            ShowSpinner = Visibility.Visible;
+
+            var result = await _projectManager.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
+            if (result.Success)
+            {
+                var errors = result.Data;
+
+                if (errors.NumberOfErrors == 0)
+                {
+                    UsfmErrors = new();
+                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+                }
+                else
+                {
+                    UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
+                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", _logger);
+                }
+                
+            }
+
+            ShowSpinner = Visibility.Collapsed;
+        }
+
         protected override ValidationResult Validate()
         {
             return (SelectedProject != null) ? Validator?.Validate(this) : null;
         }
 
         private bool _canOk;
+
         public bool CanOk
         {
             get => _canOk;
@@ -133,9 +245,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         public bool CanCancel => true /* can always cancel */;
+
         public async void Cancel()
         {
             await TryCloseAsync(false);
         }
+
+        #endregion // Methods
     }
 }

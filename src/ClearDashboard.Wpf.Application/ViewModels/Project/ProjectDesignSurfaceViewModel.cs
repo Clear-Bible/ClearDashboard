@@ -153,11 +153,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         #endregion //Member Variables
-        
+
         #region Public Variables
 
         #endregion //Public Variables
-        
+
         #region Observable Properties
 
         private ObservableCollection<DAL.Alignment.Corpora.Corpus> Corpora { get; set; }
@@ -330,9 +330,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
-           
+
             _windowManager = windowManager;
-         
+
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
@@ -357,12 +357,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private void BusyStateOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-  
+
             NotifyOfPropertyChange(() => IsBusy);
 
         }
 
-        protected  override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             _busyState.CollectionChanged -= BusyStateOnCollectionChanged;
             await SaveCanvas();
@@ -393,7 +393,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 #pragma warning disable CS8604
             // ReSharper disable once SuspiciousTypeConversion.Global
             DesignSurface = LifetimeScope.Resolve<DesignSurfaceViewModel>();
-           // DesignSurface = new DesignSurfaceViewModel(NavigationService, Logger as ILogger<DesignSurfaceViewModel>,
+            // DesignSurface = new DesignSurfaceViewModel(NavigationService, Logger as ILogger<DesignSurfaceViewModel>,
             //    ProjectManager, EventAggregator);
 #pragma warning restore CS8604
 
@@ -489,15 +489,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             foreach (var connection in DesignSurface.Connections)
             {
                 var serializedTranslationSet = connection.TranslationSetInfo.Select(translationSet => new TranslationSetInfo
-                    {
-                        DisplayName = translationSet.DisplayName ?? string.Empty,
-                        TranslationSetId = translationSet.TranslationSetId,
-                        ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
-                        ParallelCorpusId = translationSet.ParallelCorpusId,
-                        AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
-                        AlignmentSetId = translationSet.AlignmentSetId,
-                        IsRTL = translationSet.IsRTL,
-                    })
+                {
+                    DisplayName = translationSet.DisplayName ?? string.Empty,
+                    TranslationSetId = translationSet.TranslationSetId,
+                    ParallelCorpusDisplayName = translationSet.ParallelCorpusDisplayName ?? string.Empty,
+                    ParallelCorpusId = translationSet.ParallelCorpusId,
+                    AlignmentSetDisplayName = translationSet.AlignmentSetDisplayName ?? string.Empty,
+                    AlignmentSetId = translationSet.AlignmentSetId,
+                    IsRTL = translationSet.IsRTL,
+                })
                     .ToList();
 
                 var serializedAlignmentSet = connection.AlignmentSetInfo.Select(alignmentSetInfo => new AlignmentSetInfo
@@ -546,7 +546,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
             };
 
-           return  JsonSerializer.Serialize(surface, options);
+            return JsonSerializer.Serialize(surface, options);
 
         }
 
@@ -720,7 +720,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
 
                     await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
-                        description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken); 
+                        description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
                         mediator: Mediator,
@@ -746,7 +746,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
-                  
+
 
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
@@ -757,9 +757,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await SendBackgroundStatus(statusName, LongRunningProcessStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
-              
+
                     Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-                  
+
                     OnUIThread(async () =>
                     {
                         await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
@@ -772,7 +772,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (!cancellationToken.IsCancellationRequested)
                     {
                         await SendBackgroundStatus(statusName, LongRunningProcessStatus.Error,
-                           exception:ex, cancellationToken: cancellationToken);
+                           exception: ex, cancellationToken: cancellationToken);
 
                     }
                 }
@@ -807,7 +807,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             Logger.LogInformation("AddParatextGreekCorpus called.");
 
-          
+
             AddManuscriptGreekEnabled = false;
 
 
@@ -848,7 +848,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 try
                 {
                     await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
-                        description:  $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
+                        description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
 
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
@@ -875,7 +875,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
-               
+
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
                         "Macula Greek",
                         Tokenizer.WhitespaceTokenizer.ToString(),
@@ -884,10 +884,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await SendBackgroundStatus(statusName, LongRunningProcessStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
-                
+
 
                     Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-                 
+
 
                     OnUIThread(async () =>
                     {
@@ -933,23 +933,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
 
-           // await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel>(
-           //     DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
-           var dialogViewModel = LifetimeScope.Resolve<AddParatextCorpusDialogViewModel>();
-           var result = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+            // await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel>(
+            //     DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
+            var dialogViewModel = LifetimeScope.Resolve<AddParatextCorpusDialogViewModel>();
+            var result = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
 
-           //  async Task<bool> Callback(AddParatextCorpusDialogViewModel dialogViewModel)
+            //  async Task<bool> Callback(AddParatextCorpusDialogViewModel dialogViewModel)
             if (result)
             {
-                
+
                 //IsBusy = true;
 
                 var metadata = dialogViewModel.SelectedProject;
                 var statusName = $"{metadata.Name}";
                 _busyState.Add(statusName, true);
 
-               _ = await Task.Factory.StartNew(async () => 
-               {
+                _ = await Task.Factory.StartNew(async () =>
+                {
                     try
                     {
                         DAL.Alignment.Corpora.Corpus? corpus = null;
@@ -973,76 +973,76 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 break;
                             }
                         }
-                        
+
                         // first time for this corpus
                         if (corpus is null)
                         {
                             await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
-                                description: $"Creating corpus '{metadata.Name}'...", cancellationToken: cancellationToken);
+                               description: $"Creating corpus '{metadata.Name}'...", cancellationToken: cancellationToken);
 #pragma warning disable CS8604
-                           corpus = await DAL.Alignment.Corpora.Corpus.Create(
-                                mediator: Mediator,
-                                IsRtl: metadata.IsRtl,
+                            corpus = await DAL.Alignment.Corpora.Corpus.Create(
+                                 mediator: Mediator,
+                                 IsRtl: metadata.IsRtl,
 
-                                Name: metadata.Name,
+                                 Name: metadata.Name,
 
-                                Language: metadata.LanguageName,
-                                CorpusType: metadata.CorpusTypeDisplay,
-                                ParatextId: metadata.Id,
-                                token: cancellationToken);
+                                 Language: metadata.LanguageName,
+                                 CorpusType: metadata.CorpusTypeDisplay,
+                                 ParatextId: metadata.Id,
+                                 token: cancellationToken);
 #pragma warning restore CS8604
-                           }
-                           OnUIThread(() =>
-                            {
-                                Corpora.Add(corpus);
-                                var point = GetFreeSpot();
-                                node = CreateNode(corpus, point, dialogViewModel.SelectedTokenizer);
-                            });
-                        
+                        }
+                        OnUIThread(() =>
+                        {
+                                 Corpora.Add(corpus);
+                                 var point = GetFreeSpot();
+                                 node = CreateNode(corpus, point, dialogViewModel.SelectedTokenizer);
+                             });
+
 
                         await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
-                            description: $"Tokenizing and transforming '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
+                           description: $"Tokenizing and transforming '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
                         var textCorpus = dialogViewModel.SelectedTokenizer switch
                         {
-                            Tokenizer.LatinWordTokenizer => 
-                                (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
-                                .Tokenize<LatinWordTokenizer>()
-                                .Transform<IntoTokensTextRowProcessor>()
-                                .Transform<SetTrainingBySurfaceLowercase>(),
+                            Tokenizer.LatinWordTokenizer =>
+                               (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
+                               .Tokenize<LatinWordTokenizer>()
+                               .Transform<IntoTokensTextRowProcessor>()
+                               .Transform<SetTrainingBySurfaceLowercase>(),
                             Tokenizer.WhitespaceTokenizer =>
-                                (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
-                                .Tokenize<WhitespaceTokenizer>()
-                                .Transform<IntoTokensTextRowProcessor>()
-                                .Transform<SetTrainingBySurfaceLowercase>(),
+                               (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
+                               .Tokenize<WhitespaceTokenizer>()
+                               .Transform<IntoTokensTextRowProcessor>()
+                               .Transform<SetTrainingBySurfaceLowercase>(),
                             Tokenizer.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
-                                .Tokenize<ZwspWordTokenizer>()
-                                .Transform<IntoTokensTextRowProcessor>()
-                                .Transform<SetTrainingBySurfaceLowercase>(),
+                               .Tokenize<ZwspWordTokenizer>()
+                               .Transform<IntoTokensTextRowProcessor>()
+                               .Transform<SetTrainingBySurfaceLowercase>(),
                             _ => (await ParatextProjectTextCorpus.Get(Mediator, metadata.Id!, cancellationToken))
-                                .Tokenize<WhitespaceTokenizer>()
-                                .Transform<IntoTokensTextRowProcessor>()
-                                .Transform<SetTrainingBySurfaceLowercase>()
+                               .Tokenize<WhitespaceTokenizer>()
+                               .Transform<IntoTokensTextRowProcessor>()
+                               .Transform<SetTrainingBySurfaceLowercase>()
                         };
 
                         await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
-                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
-                        
+                           description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
+
 
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                            metadata.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
+                           metadata.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
                         await SendBackgroundStatus(statusName, LongRunningProcessStatus.Completed,
-                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
+                           description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
-                      
+
                         Logger.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-                        
+
                         OnUIThread(async () =>
-                        {
-                            await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, dialogViewModel.SelectedTokenizer);
-                        });
+                       {
+                             await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, dialogViewModel.SelectedTokenizer);
+                         });
                     }
                     catch (Exception ex)
                     {
@@ -1051,7 +1051,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
 
                             await SendBackgroundStatus(statusName, LongRunningProcessStatus.Error,
-                                exception:ex, cancellationToken: cancellationToken);
+                               exception: ex, cancellationToken: cancellationToken);
                         }
                     }
                     finally
@@ -1062,7 +1062,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         _busyState.Remove(statusName);
                         PlaySound.PlaySoundFromResource(null, null);
                     }
-               }, cancellationToken);
+                }, cancellationToken);
             }
         }
 
