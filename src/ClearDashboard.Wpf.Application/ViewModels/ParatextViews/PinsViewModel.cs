@@ -704,65 +704,76 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// <param name="obj"></param>
         private async void VerseButtonClick(object obj)
         {
+            ProgressBarVisibility = Visibility.Visible;
+
             if (obj is PinsDataTable dataRow)
             {
-                if (dataRow.VerseList.Count == 0)
-                {
-                    return;
-                }
+                if (await LoadVerseText(dataRow)) return;
+            }
+            
+            ProgressBarVisibility = Visibility.Collapsed;
+            return;
+        }
 
-                SelectedItemVerses.Clear();
-
-                // sort these BBBCCCVVV so that they are arranged properly
-                dataRow.VerseList.Sort();
-
-                // create a list for doing versification processing
-                List<VersificationList> verseList = new List<VersificationList>();
-                foreach (var verse in dataRow.VerseList)
-                {
-                    verseList.Add(new VersificationList
-                    {
-                        SourceBBBCCCVV = verse.Substring(0, 9),
-                        TargetBBBCCCVV = "",
-                    });
-                }
-
-                // this data from the BiblicalTerms & AllBiblicalTerms XML files has versification from the org.vrs
-                // convert it over to the current project versification format.
-                verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.CurrentParatextProject);
-
-                // create the list to display
-                foreach (var verse in verseList)
-                {
-                    string verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
-                    
-                    var bookNum = int.Parse(verse.TargetBBBCCCVV.Substring(0, 3));
-                    var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
-                    var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));
-
-                    var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum), CancellationToken.None);
-                    var verseText = "";
-                    if(verseTextResult.Success)
-                        verseText = verseTextResult.Data.Name;
-                    else
-                    {
-                        verseText = "There was an issue getting the text for this verse.";
-                        Logger.LogInformation("Failure to GetParatextVerseTextQuery");
-                    }
-
-                    SelectedItemVerses.Add(new PinsVerseList
-                    {
-                        BBBCCCVVV = verse.TargetBBBCCCVV,
-                        VerseIdShort = verseIdShort,
-                        VerseText = verseText
-                    });
-                    FontFamily = ProjectManager.CurrentParatextProject.DefaultFont;
-                }
-                NotifyOfPropertyChange(() => SelectedItemVerses);
-                VerseRefDialogOpen = true;
+        private async Task<bool> LoadVerseText(PinsDataTable dataRow)
+        {
+            if (dataRow.VerseList.Count == 0)
+            {
+                return true;
             }
 
-            return;
+            SelectedItemVerses.Clear();
+
+            // sort these BBBCCCVVV so that they are arranged properly
+            dataRow.VerseList.Sort();
+
+            // create a list for doing versification processing
+            List<VersificationList> verseList = new List<VersificationList>();
+            foreach (var verse in dataRow.VerseList)
+            {
+                verseList.Add(new VersificationList
+                {
+                    SourceBBBCCCVV = verse.Substring(0, 9),
+                    TargetBBBCCCVV = "",
+                });
+            }
+
+            // this data from the BiblicalTerms & AllBiblicalTerms XML files has versification from the org.vrs
+            // convert it over to the current project versification format.
+            verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.CurrentParatextProject);
+
+            // create the list to display
+            foreach (var verse in verseList)
+            {
+                string verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
+
+                var bookNum = int.Parse(verse.TargetBBBCCCVV.Substring(0, 3));
+                var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
+                var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));
+
+                var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum),
+                    CancellationToken.None);
+                var verseText = "";
+                if (verseTextResult.Success)
+                    verseText = verseTextResult.Data.Name;
+                else
+                {
+                    verseText = "There was an issue getting the text for this verse.";
+                    Logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                }
+
+                SelectedItemVerses.Add(new PinsVerseList
+                {
+                    BBBCCCVVV = verse.TargetBBBCCCVV,
+                    VerseIdShort = verseIdShort,
+                    VerseText = verseText
+                });
+                FontFamily = ProjectManager.CurrentParatextProject.DefaultFont;
+            }
+
+            NotifyOfPropertyChange(() => SelectedItemVerses);
+            VerseRefDialogOpen = true;
+            return false;
         }
 
         /// <summary>
