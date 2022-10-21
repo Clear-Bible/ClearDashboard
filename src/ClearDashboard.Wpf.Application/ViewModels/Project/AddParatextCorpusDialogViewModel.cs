@@ -2,15 +2,19 @@
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,8 +25,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
     public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
     {
-        #region Member Variables    
+        #region Member Variables
 
+        private readonly ILogger<AddParatextCorpusDialogViewModel>? _logger;
         private readonly DashboardProjectManager? _projectManager;
         private CorpusSourceType _corpusSourceType;
         private List<ParatextProjectMetadata>? _projects;
@@ -93,6 +98,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+
+        private ObservableCollection<UsfmError> _usfmErrors = new();
+        public ObservableCollection<UsfmError> UsfmErrors
+        {
+            get => _usfmErrors;
+            set
+            {
+                _usfmErrors = value;
+                NotifyOfPropertyChange(() => UsfmErrors);
+            }
+        }
+
+        private string _errorTitle;
+        public string ErrorTitle
+        {
+            get => _errorTitle;
+            set
+            {
+                _errorTitle = value;
+                NotifyOfPropertyChange(() => ErrorTitle);
+            }
+        }
+
+
         #endregion //Observable Properties
 
 
@@ -109,7 +138,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             IValidator<AddParatextCorpusDialogViewModel> validator, IMediator? mediator, ILifetimeScope? lifetimeScope)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
+            _logger = logger;
             _projectManager = projectManager;
+
+            ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -162,6 +194,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             if (result.Success)
             {
                 var errors = result.Data;
+
+                if (errors.NumberOfErrors == 0)
+                {
+                    UsfmErrors = new();
+                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+                }
+                else
+                {
+                    UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
+                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+                }
+                
             }
 
             ShowSpinner = Visibility.Collapsed;
