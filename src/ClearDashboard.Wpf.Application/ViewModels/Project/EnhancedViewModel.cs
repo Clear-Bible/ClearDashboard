@@ -454,6 +454,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // remove from the grouping for saving
             DisplayOrder.RemoveAt(index);
 
+            // remove from stored collection
+            var project = _parallelProjects.FirstOrDefault(x => x.ParallelCorpusId == row.ParallelCorpusId);
+            if (project != null)
+            {
+                _parallelProjects.Remove(project);
+            }
+
+            var parallelMessages = _parallelMessages.FirstOrDefault(x => Guid.Parse(x.ParallelCorpusId) == row.ParallelCorpusId);
+            if (parallelMessages is not null)
+            {
+                _parallelMessages.Remove(parallelMessages);
+            }
+
+
+
             // remove stored collection
             var tokenProject  = _tokenProjects.FirstOrDefault(x => x.CorpusId==row.CorpusId);
             if (tokenProject is not null)
@@ -1101,6 +1116,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
             VersesDisplay.Add(new VersesDisplay
             {
+                ParallelCorpusId = Guid.Parse(message.ParallelCorpusId),
                 CorpusId = Guid.Parse(message.ParallelCorpusId),
                 BorderColor = brush,
                 ShowTranslation = showTranslations,
