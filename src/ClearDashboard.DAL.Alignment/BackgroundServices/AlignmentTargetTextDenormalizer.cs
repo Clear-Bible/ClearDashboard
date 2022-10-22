@@ -18,28 +18,33 @@ using System.Xml.Linq;
 
 namespace ClearDashboard.DAL.Alignment.BackgroundServices
 {
-    public class AlignmentTargetTextDenormalizer : BackgroundService, IHandle<AlignmentSetCreatedEvent>, IHandle<AlignmentAddedRemovedEvent>
+    public class AlignmentTargetTextDenormalizer : BackgroundService, IHandle<AlignmentSetCreatedEvent>, IHandle<AlignmentAddedRemovedEvent>, IHandle<BackgroundTaskChangedMessage>
     {
         private readonly IMediator _mediator;
-        private readonly IEventAggregator _eventAggregator;
         private readonly IProjectProvider _projectProvider;
         private readonly ILogger<AlignmentTargetTextDenormalizer> _logger;
-        private readonly IHostApplicationLifetime _hostApplicationLifetime;
+        private readonly BackgroundServiceDelegateProgress<AlignmentTargetTextDenormalizer>.Factory _progressReporterFactory;
         private TaskCompletionSource<bool>? _tcs = null;
 
-        public AlignmentTargetTextDenormalizer(IMediator mediator, IEventAggregator eventAggregator, IProjectProvider projectProvider, ILogger<AlignmentTargetTextDenormalizer> logger, IHostApplicationLifetime hostApplicationLifetime)
+        public AlignmentTargetTextDenormalizer(
+            IMediator mediator, 
+            IProjectProvider projectProvider, 
+            ILogger<AlignmentTargetTextDenormalizer> logger, 
+            IEventAggregator eventAggregator, 
+            IHostApplicationLifetime hostApplicationLifetime,
+            BackgroundServiceDelegateProgress<AlignmentTargetTextDenormalizer>.Factory progressReporterFactory)
         {
             _mediator = mediator;
-            _eventAggregator = eventAggregator;
             _projectProvider = projectProvider;
             _logger = logger;
-            _hostApplicationLifetime = hostApplicationLifetime;
+            _progressReporterFactory = progressReporterFactory;
 
-            _hostApplicationLifetime.ApplicationStarted.Register(() => _logger.LogInformation("Background service started"));
-            _hostApplicationLifetime.ApplicationStopping.Register(() => _logger.LogInformation("Background service stopping"));
-            _hostApplicationLifetime.ApplicationStopped.Register(() => _logger.LogInformation("Background service stopped"));
+            hostApplicationLifetime.ApplicationStarted.Register(() => _logger.LogInformation("Background service started"));
+            hostApplicationLifetime.ApplicationStopping.Register(() => _logger.LogInformation("Background service stopping"));
+            hostApplicationLifetime.ApplicationStopped.Register(() => _logger.LogInformation("Background service stopped"));
 
             eventAggregator.SubscribeOnBackgroundThread(this);
+            eventAggregator.SubscribeOnUIThread(this);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -47,17 +52,25 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
             stoppingToken.Register(() =>
                 _logger.LogDebug($" AlignmentTargetTextDenormalizer background task is stopping."));
 
+            // Await right away so Host Startup can continue.
+            await Task.Delay(10, stoppingToken).ConfigureAwait(false);
+
             while (!stoppingToken.IsCancellationRequested)
             {
-                var waitTime = 120000;
+                var waitTime = 30000;
                 if (_projectProvider.HasCurrentProject)
                 {
                     _logger.LogDebug($"AlignmentTargetTextDenormalizer running denormalization.");
-                    await Task.Run(() => RunDenormalization(stoppingToken), stoppingToken);
+                    await RunDenormalization(stoppingToken);
                 }
                 else
                 {
                     waitTime = 500;
+                }
+
+                if (stoppingToken.IsCancellationRequested)
+                {
+                    _logger.LogDebug("Cancellation REQUESTED!");
                 }
 
                 _logger.LogDebug($"AlignmentTargetTextDenormalizer waiting for event or completion of delay time.");
@@ -95,7 +108,7 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
         private async Task RunDenormalization(CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(
-                new DenormalizeAlignmentTopTargetsCommand(Guid.Empty), 
+                new DenormalizeAlignmentTopTargetsCommand(Guid.Empty, _progressReporterFactory(cancellationToken)), 
                 cancellationToken);
 
             if (result.Success)
@@ -118,6 +131,20 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
         {
             _logger.LogDebug($"AlignmentTargetTextDenormalizer received AlignmentAddedRemovedEvent.");
             await TriggerTaskCompletionSource();
+        }
+
+        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Status.Name == LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", _logger) && 
+                message.Status.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
+            {
+                if (!ExecuteTask.IsCompleted)
+                {
+                    await StopAsync(cancellationToken);
+                    await Task.Delay(30000, cancellationToken);
+                    await StartAsync(cancellationToken);
+                }
+            }
         }
     }
 }

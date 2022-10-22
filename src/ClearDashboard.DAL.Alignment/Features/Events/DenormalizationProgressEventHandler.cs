@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DAL.Alignment.Translation;
 using Caliburn.Micro;
+using SIL.Machine.Utils;
+using System.IO;
 
 namespace ClearDashboard.DAL.Alignment.Features.Events
 {
@@ -32,6 +34,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
 
         public async Task Handle(DenormalizationProgressEvent notification, CancellationToken cancellationToken)
         {
+            if (notification.Exception is not null || notification.Description is not null)
+            {
+                _logger.LogInformation("Background task '{ProcessName}' reports status '{processStatus}' with message '{message}'", notification.Name, notification.Status, notification.Exception?.Message ?? notification.Description);
+            }
+            else
+            {
+                _logger.LogInformation("Background task '{ProcessName}' reports status '{processStatus}'", notification.Name, notification.Status);
+            }
+
             var backgroundTaskStatus = new BackgroundTaskStatus
             {
                 Name = notification.Name,

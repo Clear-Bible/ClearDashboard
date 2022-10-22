@@ -1,8 +1,4 @@
-﻿using Autofac.Core;
-using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Features.Events;
-using ClearDashboard.DAL.Alignment.Features.Translation;
-using ClearDashboard.DAL.Alignment.Translation;
+﻿using ClearDashboard.DAL.Alignment.Features.Events;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -10,11 +6,14 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using SIL.Linq;
+using SIL.Machine.Utils;
+using System;
+using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Resources;
 using System.Text.Json;
 using System.Threading;
 
@@ -28,8 +27,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
     {
         private readonly IMediator _mediator;
 
+        private struct SourceTokenIdToTopTargetTrainingText { 
+            public Models.Alignment Alignment; 
+            public string SourceTrainingText; 
+            public string TopTargetTrainingText; 
+        }
+
         public DenormalizeAlignmentTopTargetsCommandHandler(IMediator mediator,
-            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
+            ProjectDbContextFactory? projectNameDbContextFactory, 
+            IProjectProvider projectProvider,
             ILogger<DenormalizeAlignmentTopTargetsCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
             logger)
         {
@@ -53,33 +59,47 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             }
 
 #if DEBUG
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
             sw.Start();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
 #endif
 
             try
             {
-                PublishWorking("Starting alignment data denormalization tasks", cancellationToken);
-                tasks
-                    .ToList()
-                    .GroupBy(t => t.AlignmentSetId)
-                    .ForEach(async g =>
-                {
-                    await ProcessAlignmentSet(g.Key, g.Select(g => g), cancellationToken);
-                });
+                var reporter = new PhasedProgressReporter(request.Progress,
+                    new Phase(LocalizationStrings.Get("Denormalization_ProcessingTasks", Logger)));
+
+                using (PhaseProgress phaseProgress = reporter.StartNextPhase())
+                    //PublishWorking("Denormalization_ProcessingTasks", Array.Empty<object>(), cancellationToken);
+                    foreach (var g in tasks
+                        .ToList()
+                        .GroupBy(t => t.AlignmentSetId))
+                    {
+                        await ProcessAlignmentSet(g.Key, g.Select(g => g), phaseProgress, cancellationToken);
+                    }
 
 #if DEBUG
                 sw.Stop();
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
 #endif
 
-                PublishCompleted(cancellationToken);
+                request.Progress.ReportCompleted();
+                //PublishCompleted(cancellationToken);
                 return new RequestResult<int>(tasks.Count());
+            }
+            catch (OperationCanceledException)
+            {
+                request.Progress.ReportCancelRequestReceived(LocalizationStrings.Get("Denormalization_AlignmentTopTargets_RunCancelled", Logger));
+                return new RequestResult<int>
+                (
+                    success: false,
+                    message: $"AlignmentSet data denormalization cancelled"
+                );
             }
             catch (Exception ex)
             {
-                PublishException(ex, cancellationToken);
+                request.Progress.ReportException(ex);
+//                PublishException(ex, cancellationToken);
                 return new RequestResult<int>
                 (
                     success: false,
@@ -88,67 +108,158 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             }
         }
 
-        private async Task ProcessAlignmentSet(Guid alignmentSetId, IEnumerable<AlignmentSetDenormalizationTask> tasks, CancellationToken cancellationToken)
+        private async Task ProcessAlignmentSet(
+            Guid alignmentSetId, 
+            IEnumerable<AlignmentSetDenormalizationTask> tasks,
+            IProgress<ProgressStatus> progressStatus,
+            CancellationToken cancellationToken)
         {
 #if DEBUG
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
             sw.Start();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set '{alignmentSetId}' (start)");
 #endif
-            var alignments = ProjectDbContext!.Alignments
-                .Include(a => a.SourceTokenComponent)
-                        .Include(a => a.TargetTokenComponent)
-                .Include(a => a.AlignmentSet)
-                .Where(a => a.AlignmentSetId == alignmentSetId);
+
+            var reporter = new PhasedProgressReporter(progressStatus,
+                    new Phase(LocalizationStrings.Get("Denormalization_QueryingData", Logger)),
+                    new Phase(LocalizationStrings.Get("Denormalization_CreatingData", Logger)));
 
             IEnumerable<string>? sourceTrainingTexts = null;
-            if (tasks.All(t => t.SourceText != null))
+            IEnumerable<SourceTokenIdToTopTargetTrainingText>? sourceTokenIdToTopTargetTrainingTexts = null;
+
+            using (PhaseProgress phaseProgress = reporter.StartNextPhase())
+                (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts) =
+                    await QueryDataToDenormalize(alignmentSetId, tasks, phaseProgress, cancellationToken);
+
+#if DEBUG
+            sw.Stop();
+            if (sourceTokenIdToTopTargetTrainingTexts is null)
             {
-                sourceTrainingTexts = tasks.Select(t => t.SourceText!).Distinct();
-                alignments = alignments
-                    .Where(a => sourceTrainingTexts.Contains(a.SourceTokenComponent!.TrainingText));
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set '{alignmentSetId}' (end) - no alignments found");
             }
             else
             {
-                alignments = alignments.Where(a => a.SourceTokenComponent!.TrainingText != null);
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Querying alignment tokens complete.  Starting insert into denormalization table");
+                sw.Restart();
             }
-
-            if (alignments.Count() == 0)
-            {
-#if DEBUG
-                sw.Stop();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set '{alignmentSetId}' (end) - no alignments found");
 #endif
+
+            if (sourceTokenIdToTopTargetTrainingTexts is null)
+            {
                 return;
             }
+            cancellationToken.ThrowIfCancellationRequested();
 
-            PublishWorking($"Finding top target text for {alignments.Count()} alignments in set '{alignments.First()!.AlignmentSet!.DisplayName}'", cancellationToken);
+            using (PhaseProgress phaseProgress = reporter.StartNextPhase())
+                await CreateDenormalizedData(
+                    alignmentSetId,
+                    tasks,
+                    sourceTrainingTexts,
+                    sourceTokenIdToTopTargetTrainingTexts,
+                    phaseProgress,
+                    cancellationToken);
 
-            var sourceTokenIdToTopTargetTrainingText = alignments
-                .ToList()
-                .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
-                .SelectMany(g => g
-                    .Select(a => new
-                    {
-                        alignment = a,
-                        SourceTrainingText = g.Key,
-                        TopTargetTrainingText = g
-                            .Where(a => a.TargetTokenComponent!.TrainingText != null)
-                            .GroupBy(a => a.TargetTokenComponent!.TrainingText!)
-                            .OrderByDescending(g => g.Count())
-                            .First().Key
-                    })).ToList();
 #if DEBUG
             sw.Stop();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Querying alignment tokens complete.  Starting insert into denormalization table");
-            sw.Restart();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set (end)");
 #endif
-            
-            if (cancellationToken.IsCancellationRequested)
+        }
+
+        private async Task<(IEnumerable<string>?, IEnumerable<SourceTokenIdToTopTargetTrainingText>?)> QueryDataToDenormalize(
+            Guid alignmentSetId, 
+            IEnumerable<AlignmentSetDenormalizationTask> tasks,
+            IProgress<ProgressStatus> progress,
+            CancellationToken cancellationToken)
+        {
+            IEnumerable<string>? sourceTrainingTexts = null;
+            IEnumerable<SourceTokenIdToTopTargetTrainingText>? sourceTokenIdToTopTargetTrainingTexts = null;
+
+            var alignmentSet = ProjectDbContext!.AlignmentSets
+                .FirstOrDefault(ast => ast.Id == alignmentSetId);
+
+            if (alignmentSet is null)
             {
-                return;
+                Logger.LogError($"AlignmentSet not found for id '{alignmentSetId}'");
+                return (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts);
             }
 
+            progress.Report(new ProgressStatus(0, string.Format(
+                LocalizationStrings.Get("Denormalization_AlignmentTopTargets_FindingAlignments", Logger), 
+                new Object[] { alignmentSet!.DisplayName ?? string.Empty }
+            )));
+
+            //PublishWorking(
+            //    "Denormalization_AlignmentTopTargets_FindingAlignments",
+            //    new object[] { alignmentSetId }, cancellationToken);
+
+            var alignments = ProjectDbContext!.Alignments
+                .Include(a => a.SourceTokenComponent)
+                        .Include(a => a.TargetTokenComponent)
+                .Where(a => a.AlignmentSetId == alignmentSetId);
+
+            List<Models.Alignment>? alignmentResults = null;
+            if (tasks.All(t => t.SourceText != null))
+            {
+                sourceTrainingTexts = tasks.Select(t => t.SourceText!).Distinct();
+                alignmentResults = await alignments
+                    .Where(a => sourceTrainingTexts.Contains(a.SourceTokenComponent!.TrainingText))
+                    .ToListAsync(cancellationToken);
+            }
+            else
+            {
+                alignmentResults = await alignments.Where(a => a.SourceTokenComponent!.TrainingText != null)
+                    .ToListAsync(cancellationToken);
+            }
+
+            if (!alignmentResults.Any())
+            {
+                return (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts);
+            }
+
+            progress.Report(new ProgressStatus(0, string.Format(
+                LocalizationStrings.Get("Denormalization_AlignmentTopTargets_FindingTopTargetTextPerSourceText", Logger),
+                new Object[] { alignmentResults.Count(), alignments.First()!.AlignmentSet!.DisplayName ?? string.Empty }
+            )));
+
+            //PublishWorking(
+            //    "Denormalization_AlignmentTopTargets_FindingTargetTextGroups",
+            //    new object[] { alignments.Count(), alignments.First()!.AlignmentSet!.DisplayName ?? string.Empty },
+            //    cancellationToken);
+
+            var sourceTrainingTextGroups = alignmentResults
+                .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
+                .ToDictionary(g => g.Key, g => g.Select(a => a));
+
+            var sourceTrainingTextToTopTarget = sourceTrainingTextGroups
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value
+                        .Where(a => a.TargetTokenComponent!.TrainingText != null)
+                        .GroupBy(a => a.TargetTokenComponent!.TrainingText!)
+                        .OrderByDescending(g => g.Count())
+                        .First().Key
+                );
+
+            sourceTokenIdToTopTargetTrainingTexts = sourceTrainingTextGroups
+                .SelectMany(sg => sg.Value
+                    .Select(a => new SourceTokenIdToTopTargetTrainingText
+                    {
+                        Alignment = a,
+                        SourceTrainingText = sg.Key,
+                        TopTargetTrainingText = sourceTrainingTextToTopTarget[sg.Key]
+                    })).ToList();
+
+            return (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts);
+        }
+
+        private async Task CreateDenormalizedData(
+            Guid alignmentSetId,
+            IEnumerable<AlignmentSetDenormalizationTask> tasks,
+            IEnumerable<string>? sourceTrainingTexts,
+            IEnumerable<SourceTokenIdToTopTargetTrainingText> sourceTokenIdToTopTargetTrainingTexts,
+            IProgress<ProgressStatus> progress,
+            CancellationToken cancellationToken)
+        {
             await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
             try
@@ -157,6 +268,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 // mostly using database connection-level functions, commands, paramters etc.
                 using var connection = ProjectDbContext.Database.GetDbConnection();
                 using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+
+                progress.Report(new ProgressStatus(
+                    0,
+                    LocalizationStrings.Get("Denormalization_AlignmentTopTargets_DeletingPreviousRecords", Logger)));
+                    //PublishWorking("Denormalization_AlignmentTopTargets_DeletingPreviousRecords", Array.Empty<object>(), cancellationToken);
 
                 await ExecuteAlignmentTopTargetTrainingTextDeleteCommand(
                     alignmentSetId,
@@ -167,18 +283,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 using var insertCommand = CreateAlignmentTopTargetTrainingTextInsertCommand(connection);
 
                 var completed = 0;
-                foreach (var a in sourceTokenIdToTopTargetTrainingText)
+                foreach (var a in sourceTokenIdToTopTargetTrainingTexts)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    if (completed != 0 && completed % 10000 == 0)
+                    if (completed % 10000 == 0)
                     {
-                        var percentComplete = Convert.ToInt32(completed * 100 / sourceTokenIdToTopTargetTrainingText.Count);
-                        PublishWorking($"Creating data - {percentComplete}% completed", cancellationToken);
+                        progress.Report(new ProgressStatus(
+                            completed, sourceTokenIdToTopTargetTrainingTexts.Count(), 
+                            string.Format(
+                                LocalizationStrings.Get("Denormalization_AlignmentTopTargets_InsertingRecords", Logger), 
+                                new Object[] { sourceTokenIdToTopTargetTrainingTexts.Count() })
+                            ));
+                        //var percentComplete = Convert.ToInt32(completed * 100 / sourceTokenIdToTopTargetTrainingTexts.Count());
+                        //PublishWorking("Denormalization_AlignmentTopTargets_InsertingRecords", new object[] { percentComplete }, cancellationToken);
                     }
 
                     await InsertAlignmentTopTargetTrainingTextAsync(
-                            a.alignment,
+                            a.Alignment,
                             a.SourceTrainingText,
                             a.TopTargetTrainingText,
                             insertCommand,
@@ -187,7 +309,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                     completed++;
                 }
 
-                PublishWorking($"Creating data - 100% completed, saving changes", cancellationToken);
+                progress.Report(new ProgressStatus(0, 
+                    LocalizationStrings.Get("Denormalization_AlignmentTopTargets_SavingChanges", Logger)));
+                    //PublishWorking("Denormalization_AlignmentTopTargets_SavingChanges", Array.Empty<object>(), cancellationToken);
 
                 ProjectDbContext.RemoveRange(tasks);
 
@@ -195,13 +319,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                 await ProjectDbContext.SaveChangesAsync(cancellationToken);
                 await transaction.CommitAsync(cancellationToken);
                 ProjectDbContext.Database.UseTransaction(null);
-
-                PublishWorking($"Saving changes completed", cancellationToken);
-
-#if DEBUG
-                sw.Stop();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set (end)");
-#endif
             }
             finally
             {
@@ -290,13 +407,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        private async void PublishWorking(string description, CancellationToken cancellationToken)
+        private async void PublishWorking(string key, object[] args, CancellationToken cancellationToken)
         {
             await _mediator.Publish(
                 new DenormalizationProgressEvent(
                     status: LongRunningProcessStatus.Working, 
-                    name: "Denormalization", 
-                    description: description), 
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger), 
+                    description: string.Format(LocalizationStrings.Get(key, Logger), args) ?? string.Empty), 
                 cancellationToken);
         }
         private async void PublishCompleted(CancellationToken cancellationToken)
@@ -304,7 +421,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             await _mediator.Publish(
                 new DenormalizationProgressEvent(
                     status: LongRunningProcessStatus.Completed,
-                    name: "Denormalization"),
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger)),
                 cancellationToken);
         }
         private async void PublishException(Exception ex, CancellationToken cancellationToken)
@@ -312,9 +429,61 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             await _mediator.Publish(
                 new DenormalizationProgressEvent(
                     status: LongRunningProcessStatus.Completed,
-                    name: "Denormalization",
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger),
                     exception: ex),
                 cancellationToken);
+        }
+        private async void PublishCancelRequested(CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.CancelTaskRequested,
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger),
+                    description: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_RunCancelled", Logger)),
+                cancellationToken);
+        }
+    }
+
+    // Very temporary - until the real LocalizedStrings implementation is put into 
+    // DI or some common project Alignment has access to:
+    public static class LocalizationStrings
+    {
+        static readonly Dictionary<string, string> _mappings;
+        static LocalizationStrings()
+        {
+            _mappings = new Dictionary<string, string>()
+            {
+                { "Denormalization_AlignmentTopTargets_BackgroundTaskName", "Alignment Denormalization" },
+                { "Denormalization_ProcessingTasks", "Processing tasks" },
+                { "Denormalization_QueryingData", "Querying data" },
+                { "Denormalization_CreatingData", "Creating data" },
+                { "Denormalization_AlignmentTopTargets_FindingAlignments", "Finding targeted alignments in set '{0}'" },
+                { "Denormalization_AlignmentTopTargets_FindingTopTargetTextPerSourceText", "Finding top target training text per source training text for {0} alignments in set '{1}'" },
+                { "Denormalization_AlignmentTopTargets_DeletingPreviousRecords", "Deleting previous records" },
+                { "Denormalization_AlignmentTopTargets_InsertingRecords", "Inserting {0} records - percent completed {{PercentCompleted:P0}}" },
+                { "Denormalization_AlignmentTopTargets_SavingChanges", "Saving changes" },
+                { "Denormalization_AlignmentTopTargets_RunCancelled", "Run cancelled" },
+            };
+        }
+        public static string Get(string key, ILogger logger)
+        {
+            string localizedString;
+            try
+            {
+                localizedString = _mappings[key];
+            }
+            catch (Exception e)
+            {
+                logger.LogCritical($"Localization string missing for key '{key}' {e.Message} {Thread.CurrentThread.CurrentUICulture.Name}");
+                localizedString = key;
+            }
+
+            if (localizedString == null)
+            {
+                logger.LogCritical($"Localization string missing for key '{key}' {Thread.CurrentThread.CurrentUICulture.Name}");
+                localizedString = key;
+            }
+            return localizedString;
         }
     }
 }

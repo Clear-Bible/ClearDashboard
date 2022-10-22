@@ -1,10 +1,9 @@
-﻿using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
+﻿using ClearDashboard.DAL.Alignment.BackgroundServices;
 using ClearDashboard.DAL.CQRS.Features;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.DAL.Alignment.Features.Denormalization
 {
     public record DenormalizeAlignmentTopTargetsCommand(
-        Guid AlignmentSetId) : ProjectRequestCommand<int>;
+        Guid AlignmentSetId, ILongRunningProgress<ProgressStatus> Progress) : ProjectRequestCommand<int>;
 }

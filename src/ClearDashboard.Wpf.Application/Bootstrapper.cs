@@ -27,6 +27,13 @@ using Caliburn.Micro;
 using MediatR;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Wpf;
+using System.Net;
+using SIL.Machine.Utils;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
+using ClearDashboard.DataAccessLayer.Models;
+using System.Data.Common;
+using System.Xml.Linq;
+using ClearDashboard.DAL.Alignment.BackgroundServices;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -46,11 +53,11 @@ namespace ClearDashboard.Wpf.Application
                     services.Configure<HostOptions>(options =>
                     {
                         //Service Behavior in case of exceptions - defautls to StopHost
-                        options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+//                        options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
                         //Host will try to wait 30 seconds before stopping the service. 
                         options.ShutdownTimeout = TimeSpan.FromSeconds(5);
                     });
-                    services.AddHostedService<ClearDashboard.DAL.Alignment.BackgroundServices.AlignmentTargetTextDenormalizer>();
+                    services.AddHostedService<AlignmentTargetTextDenormalizer>();
                 })
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
@@ -60,6 +67,13 @@ namespace ClearDashboard.Wpf.Application
                     builder.RegisterInstance(Container!.Resolve<ILoggerFactory>()).SingleInstance();
                     builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>)).SingleInstance();
                     builder.RegisterDatabaseDependencies();
+
+                    // TODO:  localize ProcessName value:
+                    builder.RegisterType<BackgroundServiceDelegateProgress<AlignmentTargetTextDenormalizer>>().WithProperty(
+                        "ProcessName",
+                        ClearDashboard.DAL.Alignment.Features.Denormalization.LocalizationStrings.Get(
+                            "Denormalization_AlignmentTopTargets_BackgroundTaskName", 
+                            Container!.Resolve<ILogger<Bootstrapper>>()));
                 })
                 .Build();
         }
