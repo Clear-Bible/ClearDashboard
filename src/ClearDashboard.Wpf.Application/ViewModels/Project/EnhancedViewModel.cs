@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -16,7 +17,6 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -283,8 +283,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
-        public DAL.Alignment.Translation.TranslationSet CurrentTranslationSet { get; set; }
         public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
+        public EngineStringDetokenizer TargetDetokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
+
         public IEnumerable<Translation> CurrentTranslations { get; set; }
         public IEnumerable<Label> LabelSuggestions { get; set; }
 
@@ -401,6 +402,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await ShowCorpusText(_projectMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
             }
 
+            // clear out exising VersesDisplay
             for (var i = 0; i < _parallelMessages.Count; i++)
             {
                 ProgressBarVisibility = Visibility.Visible;
@@ -452,6 +454,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             VersesDisplay.RemoveAt(index);
             // remove from the grouping for saving
             DisplayOrder.RemoveAt(index);
+
+            // remove from stored collection
+            var project = _parallelProjects.FirstOrDefault(x => x.ParallelCorpusId == row.ParallelCorpusId);
+            if (project != null)
+            {
+                _parallelProjects.Remove(project);
+            }
+
+            var parallelMessages = _parallelMessages.FirstOrDefault(x => Guid.Parse(x.ParallelCorpusId) == row.ParallelCorpusId);
+            if (parallelMessages is not null)
+            {
+                _parallelMessages.Remove(parallelMessages);
+            }
+
+
 
             // remove stored collection
             var tokenProject  = _tokenProjects.FirstOrDefault(x => x.CorpusId==row.CorpusId);
@@ -528,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // add this to the job stack
             WorkingJobs.Add(message.TokenizedTextCorpusId.ToString());
 
-            await Task.Factory.StartNew(async () =>
+            _ = await Task.Factory.StartNew(async () =>
             {
                 try
                 {
@@ -676,7 +693,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     foreach (var textRow in tokensTextRowsRange)
                     {
                         var VerseDisplayViewModel = _serviceProvider.GetService<VerseDisplayViewModel>();
-                        await VerseDisplayViewModel!.BindAsync(textRow, null, null, message.IsRTL);
+                        //FIXME: detokenizer should come from message.Detokenizer.
+                        await VerseDisplayViewModel!.ShowCorpusAsync(
+                            textRow,
+                            //FIXME:surface serialization message.detokenizer,
+                            new EngineStringDetokenizer(new LatinWordDetokenizer()), 
+                            message.IsRTL);
 
                         verses.Add(VerseDisplayViewModel);
                     }
@@ -742,30 +764,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }, cancellationToken);
         }
 
-        public async Task<DAL.Alignment.Translation.TranslationSet?> GetTranslationSet(ShowParallelTranslationWindowMessage message)
+        public async Task<DAL.Alignment.Translation.TranslationSet> GetTranslationSet(string translationSetId)
         {
-            DAL.Alignment.Translation.TranslationSet translationSet;
-            try
-            {
-                if (message.TranslationSetId == "")
-                {
-                    var translationSetIds = await DAL.Alignment.Translation.TranslationSet.GetAllTranslationSetIds(Mediator);
-                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(translationSetIds.First().translationSetId, Mediator);
-                }
-                else
-                {
-                    translationSet = await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(message.TranslationSetId)), Mediator);
-                }
-
-                return translationSet;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(translationSetId)), Mediator);
         }
-
+        public static async Task<DAL.Alignment.Translation.AlignmentSet> GetAlignmentSet(string alignmentSetId, IMediator mediator)
+        {
+            return await DAL.Alignment.Translation.AlignmentSet.Get(new AlignmentSetId(Guid.Parse(alignmentSetId)), mediator);
+        }
         private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int bbbcccvvv)
         {
             var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
@@ -879,7 +885,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             WorkingJobs.Add(message.TranslationSetId);
 
             var msg = _parallelMessages.Where(p =>
-                p.TranslationSetId == message.TranslationSetId && p.ParallelCorpusId == message.ParallelCorpusId).ToList();
+                p.TranslationSetId == message.TranslationSetId && p.AlignmentSetId == message.AlignmentSetId && p.ParallelCorpusId == message.ParallelCorpusId).ToList();
             if (msg.Count == 0)
             {
                 _parallelMessages.Add(message);
@@ -961,12 +967,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             else
             {
-                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator);
-                CurrentTranslationSet = await GetTranslationSet(message);
+                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
                 foreach (var row in rows)
                 {
                     var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
-                    await VerseDisplayViewModel!.BindAsync(row, CurrentTranslationSet, Detokenizer);
+                    if (message.AlignmentSetId != null)
+                        await VerseDisplayViewModel!.ShowAlignmentsAsyn(
+                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
+                            await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
+                            //FIXME:surface serialization message.SourceDetokenizer, 
+                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            message.IsRTL,
+                            //FIXME:surface serialization message.TargetDetokenizer ?? throw new InvalidParameterEngineException(name: "message.TargetDetokenizer", value: "null", message: "message.TargetDetokenizer must not be null when message.AlignmentSetId is not null."),
+                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            message.IsTargetRTL ?? throw new InvalidDataEngineException(name: "IsTargetRTL", value: "null"));
+                    else 
+                        await VerseDisplayViewModel!.ShowTranslationAsync(
+                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
+                            await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null")),
+                            //FIXME:surface serialization message.SourceDetokenizer, 
+                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
+                            message.IsRTL);
                     versesOut.Add(VerseDisplayViewModel);
                 }
 
@@ -1094,10 +1115,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Brush brush = Brushes.SaddleBrown;
 
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
+
             if (row is null)
             {
                 VersesDisplay.Add(new VersesDisplay
                 {
+                    ParallelCorpusId = Guid.Parse(message.ParallelCorpusId),
                     CorpusId = Guid.Parse(message.ParallelCorpusId),
                     BorderColor = brush,
                     ShowTranslation = showTranslations,
@@ -1114,19 +1137,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             else
             {
-                row.CorpusId = Guid.Parse(message.ParallelCorpusId);
-                row.BorderColor = brush;
-                row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
                 row.Verses = verses;
+                row.BorderColor = brush;
             }
 
-            //do a dump of VerseDisplayViewModel Ids
-            foreach (var verseDisplayViewModel in verses)
-            {
-                Debug.WriteLine($"INCOMMING ID: {verseDisplayViewModel.Id}");
-            }
-
+            
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 
