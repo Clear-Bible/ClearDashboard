@@ -34,7 +34,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
@@ -761,18 +760,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Console.WriteLine(e);
                 throw;
             }
-        }
-
-        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int bbbcccvvv)
-        {
-            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
-            if (textRow != null)
-            {
-                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                return detokenizer.Detokenize(textRow.Tokens);
-            }
-
-            return null;
         }
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
