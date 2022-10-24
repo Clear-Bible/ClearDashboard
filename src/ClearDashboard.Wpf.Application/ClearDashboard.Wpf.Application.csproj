@@ -15,13 +15,9 @@
 
   <ItemGroup>
     <Compile Remove="Views\DesignSurface\**" />
-    <Compile Remove="Views\PopUps\**" />
     <EmbeddedResource Remove="Views\DesignSurface\**" />
-    <EmbeddedResource Remove="Views\PopUps\**" />
     <None Remove="Views\DesignSurface\**" />
-    <None Remove="Views\PopUps\**" />
     <Page Remove="Views\DesignSurface\**" />
-    <Page Remove="Views\PopUps\**" />
   </ItemGroup>
 
   <ItemGroup>

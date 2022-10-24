@@ -1,21 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Resources;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Navigation;
-using System.Windows.Threading;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearApplicationFoundation.ViewModels.Shell;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
@@ -24,11 +9,31 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
-using Dapper;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using ClearDashboard.Wpf.Application.Views.PopUps;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Action = System.Action;
+using QuickGraph;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Dynamic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Navigation;
+using System.Windows.Threading;
+using static System.Net.WebRequestMethods;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -36,6 +41,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
        IHandle<BackgroundTaskChangedMessage>
     {
         private readonly TranslationSource? _translationSource;
+        private readonly INavigationService _navigationService;
+        private readonly ILogger<ShellViewModel> _logger;
+        private readonly DashboardProjectManager? _projectManager;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IWindowManager _windowManager;
+        private readonly IMediator _mediator;
+        private readonly ILifetimeScope _lifetimeScope;
 
         #region Properties
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
@@ -159,6 +171,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
         }
 
+        private Visibility _showUpdateLink = Visibility.Collapsed;
+        public Visibility ShowUpdateLink
+        {
+            get => _showUpdateLink;
+            set
+            {
+                _showUpdateLink = value;
+                NotifyOfPropertyChange(() => ShowUpdateLink);
+            }
+        }
+
+
+        private Uri _updateUrl = new Uri("https://www.clearbible.org");
+        public Uri UpdateUrl
+        {
+            get => _updateUrl;
+            set
+            {
+                _updateUrl = value;
+                NotifyOfPropertyChange(() => UpdateUrl);
+            }
+        }
+
+        public List<ReleaseNote> UpdateNotes { get; set; }
+
         #endregion
 
         #region Commands
@@ -195,6 +232,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             _translationSource = translationSource;
+            _navigationService = navigationService;
+            _logger = logger;
+            _projectManager = projectManager;
+            _eventAggregator = eventAggregator;
+            _windowManager = windowManager;
+            _mediator = mediator;
+            _lifetimeScope = lifetimeScope;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
@@ -294,6 +338,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
 
             InitializeProjectManager();
+
+            CheckForProgramUpdates();
+
             await base.OnActivateAsync(cancellationToken);
         }
 
@@ -344,6 +391,189 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #endregion
 
         #region Methods
+
+        public void ShowNotes()
+        {
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.MinWidth = 600;
+            settings.MinHeight = 600;
+            settings.Title = "Release Notes";
+
+            var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
+            viewModel.ReleaseNotes = new ObservableCollection<ReleaseNote>(UpdateNotes);
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowWindowAsync(viewModel, null, settings);
+        }
+
+        private async void CheckForProgramUpdates()
+        {
+            //var updateJson = new UpdateFormat
+            //{
+            //    Version = "0.4.0.0",
+            //    ReleaseDate = DateTime.Now.ToString(),
+            //    DownloadLink = "",
+            //};
+
+            //var releaseNote = new ReleaseNote
+            //{
+            //    NoteType = ReleaseNote.ReleaseNoteType.Added,
+            //    Note = "Alignments can now be added to the EnhancedView.  Pressing shift while hovering over tokens in either source or target will highlight the corresponding aligned token in the other related corpus. Alt hover will clear selection."
+            //};
+            //updateJson.ReleaseNotes.Add(releaseNote);
+            //releaseNote = new ReleaseNote
+            //{
+            //    NoteType = ReleaseNote.ReleaseNoteType.Added,
+            //    Note = "On adding in a new Paratext Corpus, you can now search for the corpus name in the dropdown box."
+            //};
+            //updateJson.ReleaseNotes.Add(releaseNote);
+
+            //var options = new JsonSerializerOptions { WriteIndented = true };
+            //string jsonString = JsonSerializer.Serialize(updateJson, options);
+            //File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
+
+            var bInterent = await CheckForInternetConnection();
+
+            if (!bInterent)
+            {
+                return;
+            }
+
+
+            Stream stream;
+            try
+            {
+                WebClient webClient = new WebClient();
+                stream = await webClient.OpenReadTaskAsync(new Uri("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/main/ClearDashboard.json", UriKind.Absolute));
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
+
+            var updateJson = await JsonSerializer.DeserializeAsync<UpdateFormat>(stream);
+            bool isNewer = CheckWebVersion(updateJson.Version);
+
+            if (isNewer)
+            {
+                ShowUpdateLink = Visibility.Visible;
+                UpdateUrl = new Uri(updateJson.DownloadLink);
+                UpdateNotes = updateJson.ReleaseNotes;
+            }
+        }
+
+        
+
+        private bool CheckWebVersion(string webVersion)
+        {
+            //convert string to version
+            var ver = webVersion.Split('.');
+            Version webVer;
+
+            if (ver.Length == 4)
+            {
+                try
+                {
+                    webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), Convert.ToInt32(ver[3]));
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            else if (ver.Length == 3)
+            {
+                try
+                {
+                    webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), 0);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            else if (ver.Length == 2)
+            {
+                try
+                {
+                    webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), 0, 0);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            else if (ver.Length == 2)
+            {
+                try
+                {
+                    webVer = new Version(Convert.ToInt32(ver[0]), 0, 0, 0);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+
+            //get the assembly version
+            Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+
+            // compare
+            var result = webVer.CompareTo(thisVersion);
+
+            if (result == 1)
+            {
+                //newer release present on the web
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> CheckForInternetConnection()
+        {
+            try
+            {
+                WebClient webClient = new WebClient();
+
+                Stream stream = await webClient.OpenReadTaskAsync(new Uri("http://google.com/generate_204", UriKind.Absolute));
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public void ClickUpdateLink()
+        {
+            if (UpdateUrl.AbsoluteUri == "")
+            {
+                return;
+            }
+
+            try
+            {
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = UpdateUrl.AbsoluteUri,
+                    UseShellExecute = true
+                };
+                Process.Start(psi);
+            }
+            catch (Exception exception)
+            {
+                Debug.WriteLine(exception);
+            }
+        }
+        
 
         /// <summary>
         /// Button click for the background tasks on the status bar
