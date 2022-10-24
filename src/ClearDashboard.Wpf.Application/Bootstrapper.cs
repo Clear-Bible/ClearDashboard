@@ -61,10 +61,10 @@ namespace ClearDashboard.Wpf.Application
                 })
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
-                    builder.RegisterInstance(Container!.Resolve<IEventAggregator>());
-                    builder.RegisterInstance(Container!.Resolve<IMediator>());
-                    builder.RegisterInstance(Container!.Resolve<IProjectProvider>());
-                    builder.RegisterInstance(Container!.Resolve<ILoggerFactory>()).SingleInstance();
+                    builder.RegisterInstance(Container!.Resolve<IEventAggregator>()).ExternallyOwned();
+                    builder.RegisterInstance(Container!.Resolve<IMediator>()).ExternallyOwned();
+                    builder.RegisterInstance(Container!.Resolve<IProjectProvider>()).ExternallyOwned();
+                    builder.RegisterInstance(Container!.Resolve<ILoggerFactory>()).SingleInstance().ExternallyOwned();
                     builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>)).SingleInstance();
                     builder.RegisterDatabaseDependencies();
 
