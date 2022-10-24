@@ -34,6 +34,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
@@ -965,7 +966,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             else
             {
-                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
+                //NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
                 foreach (var row in rows)
                 {
                     var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
