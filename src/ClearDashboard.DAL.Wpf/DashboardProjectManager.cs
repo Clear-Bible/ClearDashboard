@@ -1,11 +1,13 @@
 using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Tokenization;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Tokenization;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -19,11 +21,27 @@ using System.Xml.Linq;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-public record ShowTokenizationWindowMessage(string ParatextProjectId, string ProjectName, string TokenizationType,
-    Guid CorpusId, Guid TokenizedTextCorpusId, CorpusType CorpusType, bool IsRTL, bool IsNewWindow);
+public record ShowTokenizationWindowMessage(
+    string ParatextProjectId, 
+    string ProjectName,
+    string TokenizationType,
+    Guid CorpusId, 
+    Guid TokenizedTextCorpusId, 
+    CorpusType CorpusType,
+    //FIXME:surface serializationEngineStringDetokenizer Detokenizer,
+    bool IsRTL, bool IsNewWindow);
 
-public record ShowParallelTranslationWindowMessage(string TranslationSetId, string AlignmentSetId, string DisplayName, string ParallelCorpusId,
-    string? ParallelCorpusDisplayName, bool IsRTL, bool IsNewWindow);
+public record ShowParallelTranslationWindowMessage(
+    string? TranslationSetId, 
+    string? AlignmentSetId, 
+    string DisplayName, 
+    string ParallelCorpusId,
+    string? ParallelCorpusDisplayName,
+    //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
+    bool IsRTL,
+    //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
+    bool? IsTargetRTL, 
+    bool IsNewWindow);
 public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record CloseDockingPane(Guid guid);

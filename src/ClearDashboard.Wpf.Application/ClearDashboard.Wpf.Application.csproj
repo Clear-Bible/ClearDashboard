@@ -8,9 +8,9 @@
     <Platforms>AnyCPU</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2022</Copyright>
-    <AssemblyVersion>0.3.1.0</AssemblyVersion>
-    <FileVersion>0.3.0.0</FileVersion>
-    <Version>0.3.1.0</Version>
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
+    <FileVersion>0.4.0.0</FileVersion>
+    <Version>0.4.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -106,6 +106,7 @@
     <PackageReference Include="Dirkster.AvalonDock.Themes.Metro" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
+    <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.4.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />

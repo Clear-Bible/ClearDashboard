@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -165,8 +168,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the NoteMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));        
-        
+            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
         /// <summary>
         /// Identifies the NoteCreateEvent routed event.
         /// </summary>
@@ -255,11 +258,33 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the ItemsPanelTemplate dependency property.
         /// </summary>
         public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(ItemsPanelTemplate), typeof(VerseDisplay));
-        
+
         /// <summary>
         /// Identifies the Tokens dependency property.
         /// </summary>
         public static readonly DependencyProperty TokensProperty = DependencyProperty.Register("Tokens", typeof(IEnumerable), typeof(VerseDisplay));
+
+
+        public static readonly DependencyProperty TargetTokensProperty = DependencyProperty.Register("TargetTokens", typeof(IEnumerable), typeof(VerseDisplay),
+            new PropertyMetadata(null, OnTargetTokensChanged));
+
+        public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var verseDisplay = (VerseDisplay)d;
+
+            if (verseDisplay.TargetTokens != null)
+            {
+                var tokenDisplayViewModelCollection = (TokenDisplayViewModelCollection)verseDisplay.TargetTokens!;
+                verseDisplay.TargetVisibility = tokenDisplayViewModelCollection.Count() > 0 ? Visibility.Visible : Visibility.Collapsed;
+            }
+            else
+            {
+                verseDisplay.TargetVisibility = Visibility.Collapsed;
+            }
+        }
+
+        public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register("TargetVisibility", typeof(Visibility), typeof(VerseDisplay));
+
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
@@ -437,6 +462,126 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
+            var control = e.Source as FrameworkElement;
+            var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
+            var verseDisplayViewModel = (VerseDisplayViewModel)DataContext;
+            if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+            {
+                if (tokenDisplayViewModel != null && verseDisplayViewModel.Alignments != null)
+                {
+                    IEnumerable<Token> sourceTokens;
+                    IEnumerable<Token> targetTokens;
+                    if (tokenDisplayViewModel.IsSource)
+                    {
+                        targetTokens = verseDisplayViewModel.Alignments
+                            .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
+                            .SelectMany(a =>
+                            {
+                                if (a.AlignedTokenPair.TargetToken is not CompositeToken)
+                                {
+                                    return new List<Token>() { a.AlignedTokenPair.TargetToken };
+                                }
+                                else
+                                {
+                                    return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
+                                }
+                            }); ;
+                        sourceTokens = verseDisplayViewModel.Alignments
+                            .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
+                            .SelectMany(a =>
+                            {
+                                if (a.AlignedTokenPair.SourceToken is not CompositeToken)
+                                {
+                                    return new List<Token>() { a.AlignedTokenPair.SourceToken };
+                                }
+                                else
+                                {
+                                    return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
+                                }
+                            });
+                    }
+                    else
+                    {
+                        sourceTokens = verseDisplayViewModel.Alignments
+                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
+                            .SelectMany(a =>
+                            {
+                                if (a.AlignedTokenPair.SourceToken is not CompositeToken)
+                                {
+                                    return new List<Token>() { a.AlignedTokenPair.SourceToken };
+                                }
+                                else
+                                {
+                                    return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
+                                }
+                            }); ;
+                        targetTokens = verseDisplayViewModel.Alignments
+                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
+                            .SelectMany(a =>
+                            {
+                                if (a.AlignedTokenPair.TargetToken is not CompositeToken)
+                                {
+                                    return new List<Token>() { a.AlignedTokenPair.TargetToken };
+                                }
+                                else
+                                {
+                                    return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
+                                }
+                            });
+                    }
+                    verseDisplayViewModel.TokenDisplayViewModels
+                        .Select(tdm =>
+                        {
+                            if (sourceTokens
+                                .Select(t => t.TokenId)
+                                .Contains(tdm.Token.TokenId))
+                            {
+                                tdm.IsSelected = true;
+                            }
+                            else
+                            {
+                                tdm.IsSelected = false;
+                            }
+                            return tdm;
+                        })
+                        .ToList();
+                    verseDisplayViewModel.TargetTokenDisplayViewModels
+                        .Select(tdm =>
+                        {
+                            if (targetTokens
+                                .Select(t => t.TokenId)
+                                .Contains(tdm.Token.TokenId))
+                            {
+                                tdm.IsSelected = true;
+                            }
+                            else
+                            {
+                                tdm.IsSelected = false;
+                            }
+                            return tdm;
+                        })
+                        .ToList();
+                }
+            }
+            else if  ((Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+            {
+                verseDisplayViewModel.TokenDisplayViewModels
+                    .Select(tdm =>
+                    {
+                        tdm.IsSelected = false;
+                        return tdm;
+                    })
+                    .ToList();
+                verseDisplayViewModel.TargetTokenDisplayViewModels
+                    .Select(tdm =>
+                    {
+                        tdm.IsSelected = false;
+                        return tdm;
+                    })
+                    .ToList();
+
+            }
+
             RaiseTokenEvent(TokenMouseEnterEvent, e);
         }
 
@@ -887,6 +1032,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (IEnumerable)GetValue(TokensProperty);
             set => SetValue(TokensProperty, value);
+        }
+
+        public IEnumerable? TargetTokens
+        {
+            get => (IEnumerable)GetValue(TargetTokensProperty);
+            set => SetValue(TargetTokensProperty, value);
+        }
+
+        public Visibility TargetVisibility
+        {
+            get => (Visibility)GetValue(TargetVisibilityProperty);
+            set => SetValue(TargetVisibilityProperty, value);
         }
 
         /// <summary>

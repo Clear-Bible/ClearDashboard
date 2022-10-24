@@ -1,13 +1,12 @@
-﻿using Microsoft.Win32;
+﻿using ClearDashboard.DataAccessLayer.Models.Common;
+using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows.Input;
 using System.Xml;
 
 namespace ClearDashboard.WebApiParatextPlugin.Helpers
@@ -23,8 +22,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
         /// <param name="project"></param>
         /// <param name="mainWindow"></param>
         // ReSharper disable once InconsistentNaming
-        public string ExportUSFMScripture(IProject project, MainWindow mainWindow)
+        public UsfmHelper ExportUSFMScripture(IProject project, MainWindow mainWindow)
         {
+            List<UsfmError> usfmError = new();
+
             string exportPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             exportPath = Path.Combine(exportPath, "ClearDashboard_Projects", "DataFiles", project.ID);
 
@@ -37,7 +38,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                 catch (Exception e)
                 {
                     mainWindow.AppendText(Color.Red, e.Message);
-                    return exportPath;
+                    return new UsfmHelper
+                    {
+                        Path = exportPath,
+                    };
                 }
             }
 
@@ -165,6 +169,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                         bool lastTokenChapter = false;
                         bool lastTokenText = false;
                         bool lastVerseZero = false;
+                        string lastVerseRef = "";
+                        
                         foreach (var token in tokens)
                         {
                             if (token is IUSFMMarkerToken marker)
@@ -181,9 +187,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     if (marker.Data != null)
                                     {
                                         string verseMarker = marker.Data.Trim();
-                                        bool foundMatch = false;
+                                        
                                         try
                                         {
+                                            bool foundMatch = false;
                                             string key = $"{project.AvailableBooks[bookNum].Number}{lastChapter.PadLeft(3, '0')}{marker.Data.Trim().PadLeft(3, '0')}";
 
                                             // look for numbers, space, and a dash as being valid
@@ -194,7 +201,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                                 // check to see if the verse ends in '-'
                                                 if (marker.Data.Trim().EndsWith("-"))
                                                 {
-                                                    mainWindow.AppendText(Color.Red, $"Verse {key} ends in '-'");
+                                                    mainWindow.AppendText(Color.Red, $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'");
+                                                    usfmError.Add( new UsfmError
+                                                    {
+                                                        Reference = UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key),
+                                                        Error = $"Verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)} ends in '-'",
+                                                    });
                                                 }
                                                 else
                                                 {
@@ -203,17 +215,34 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                                     // check if this has already been entered and is a duplicate
                                                     if (verseKey.ContainsKey(key))
                                                     {
-                                                        mainWindow.AppendText(Color.Red, $"Duplicate verse {key}");
+                                                        if (lastVerseRef != marker.VerseRef.ToString())
+                                                        {
+                                                            mainWindow.AppendText(Color.Red,
+                                                                $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}");
+                                                            usfmError.Add(new UsfmError
+                                                            {
+                                                                Reference = UsfmReferenceHelper
+                                                                    .ConvertBbbcccvvvToReadable(key),
+                                                                Error =
+                                                                    $"Duplicate verse {UsfmReferenceHelper.ConvertBbbcccvvvToReadable(key)}",
+                                                            });
+                                                        }
                                                     }
                                                     else
                                                     {
                                                         verseKey.Add(key, key);
+                                                        lastVerseRef = marker.VerseRef.ToString();
                                                     }
                                                 }
                                             }
                                             else
                                             {
                                                 mainWindow.AppendText(Color.Red, $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]");
+                                                usfmError.Add(new UsfmError
+                                                {
+                                                    Reference = marker.VerseRef.ToString(),
+                                                    Error = $"Error with verse numbering in {project.AvailableBooks[bookNum].Code} {lastChapter} [{verseMarker}]",
+                                                });
                                             }
                                         }
                                         catch (ArgumentException ex)
@@ -226,6 +255,11 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                                     {
                                         sb.Append($@"\v {marker.Data?.Trim()} ");
                                         mainWindow.AppendText(Color.Red, $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}");
+                                        usfmError.Add(new UsfmError
+                                        {
+                                            Reference = $"{project.AvailableBooks[bookNum].Code} {lastChapter }",
+                                            Error = $"Error with empty verse tag in {project.AvailableBooks[bookNum].Code} {lastChapter}",
+                                        });
                                     }
 
                                     lastTokenChapter = false;
@@ -309,7 +343,12 @@ namespace ClearDashboard.WebApiParatextPlugin.Helpers
                 mainWindow.AppendText(Color.Red, ex.Message);
             }
 
-            return exportPath;
+            return new UsfmHelper
+            {
+                Path = exportPath, 
+                UsfmErrors = usfmError, 
+                NumberOfErrors = usfmError.Count
+            };
         }
 
         // update the settings file to use "normal" file extensions

@@ -115,6 +115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 //var books = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
                 //var bookId = books.FirstOrDefault(b => b.silCannonBookNum == 1);
                 //bookId.
+                await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
             }

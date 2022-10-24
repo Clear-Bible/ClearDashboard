@@ -27,6 +27,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Point = System.Windows.Point;
 using Autofac;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using System.Collections.Specialized;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -486,7 +487,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public ICommand NotesCommand { get; set; }
         public ICommand VerseClickCommand { get; set; }
-
+        public RelayCommand ClearFilterCommand { get; }
 
 
         #endregion
@@ -506,6 +507,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Bottom;
             _cancellationTokenSource = new CancellationTokenSource();
+
+            ClearFilterCommand = new RelayCommand(ClearFilter);
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -556,6 +559,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             // setup the method that we go to for filtering
             BiblicalTermsCollectionView.Filter = FilterGridItems;
+
+            NotifyOfPropertyChange(() => BiblicalTermsCollectionView);
 
             // wire up the commands
             NotesCommand = new RelayCommand(ShowNotes);
@@ -1114,6 +1119,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        private void ClearFilter(object obj)
+        {
+            FilterText = "";
+        }
+
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
@@ -1140,7 +1150,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         #endregion // Methods
-
-
     }
 }

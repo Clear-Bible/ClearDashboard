@@ -23,7 +23,7 @@ namespace ClearDashboard.DAL.Tests
         [Fact]
         public async Task GetReferenceUsfmTest()
         {
-            // get the HEB/GRK sourcelanguage project type
+            // get the HEB/GRK source language project type
             var result =
                 await ExecuteParatextAndTestRequest<GetReferenceUsfmQuery, RequestResult<ReferenceUsfm>, ReferenceUsfm>(
                     new GetReferenceUsfmQuery("3f0f2b0426e1457e8e496834aaa30fce00000002abcdefff"));
