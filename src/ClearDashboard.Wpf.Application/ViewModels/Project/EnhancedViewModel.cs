@@ -1114,13 +1114,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
 
-            var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == Guid.Parse(message.ParallelCorpusId));
+
+
+
+            VersesDisplay? row;
+            if (message.AlignmentSetId is null)
+            {
+                // interlinear
+                row = VersesDisplay.FirstOrDefault(v =>
+                    v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
+                    v.TranslationSetId == Guid.Parse(message.TranslationSetId));
+
+            }
+            else
+            {
+                // alignment
+                row = VersesDisplay.FirstOrDefault(v =>
+                    v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
+                    v.AlignmentSetId == Guid.Parse(message.AlignmentSetId));
+
+            }
+
 
             if (row is null)
             {
+                Guid alignmentSetId = Guid.Empty;
+                if (message.AlignmentSetId is not null)
+                {
+                    alignmentSetId = Guid.Parse(message.AlignmentSetId);
+                    brush = Brushes.DarkGreen;
+                }
+
+                Guid translationSetId = Guid.Empty;
+                if (message.TranslationSetId is not null)
+                {
+                    translationSetId = Guid.Parse(message.TranslationSetId);
+                }
+
                 VersesDisplay.Add(new VersesDisplay
                 {
+                    AlignmentSetId = alignmentSetId,
                     ParallelCorpusId = Guid.Parse(message.ParallelCorpusId),
+                    TranslationSetId = translationSetId,
                     CorpusId = Guid.Parse(message.ParallelCorpusId),
                     BorderColor = brush,
                     ShowTranslation = showTranslations,
