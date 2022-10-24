@@ -110,7 +110,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 await ProjectManager!.LoadProject("EnhancedViewDemo");
                 var row = await GetVerseTextRow(40001001);
                 var translationSet = await GetFirstTranslationSet();
-                await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
+                //await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
 
                 //var books = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
                 //var bookId = books.FirstOrDefault(b => b.silCannonBookNum == 1);
