@@ -25,6 +25,7 @@ using SIL.Linq;
 using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.WebApiParatextPlugin.Models;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -890,9 +891,9 @@ namespace ClearDashboard.WebApiParatextPlugin
             try
             {
                 var paratextExtractUSFM = new ParatextExtractUSFM();
-                var path = paratextExtractUSFM.ExportUSFMScripture(project, this);
+                var usfmHelper = paratextExtractUSFM.ExportUSFMScripture(project, this);
 
-                referenceUsfm.UsfmDirectoryPath = path;
+                referenceUsfm.UsfmDirectoryPath = usfmHelper.Path;
                 referenceUsfm.Name = project.ShortName;
                 referenceUsfm.LongName = project.LongName;
                 referenceUsfm.Language = project.LanguageName;
@@ -908,7 +909,42 @@ namespace ClearDashboard.WebApiParatextPlugin
             return referenceUsfm;
         }
 
+        /// <summary>
+        /// Gets the USFM for a project with the following project guid
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        public UsfmHelper GetCheckForUsfmErrors(string projectId)
+        {
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            var project = projects.FirstOrDefault(p => p.ID == projectId);
 
+            if (project == null)
+            {
+                return new UsfmHelper
+                {
+                    Path = null,
+                    NumberOfErrors = 0,
+                    UsfmErrors = new List<UsfmError>()
+                };
+            }
+
+            // creating usfm directory
+            UsfmHelper usfmHelper = new();
+            try
+            {
+                var paratextExtractUSFM = new ParatextExtractUSFM();
+                usfmHelper = paratextExtractUSFM.ExportUSFMScripture(project, this);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+                AppendText(Color.Red, e.Message);
+            }
+
+            return usfmHelper;
+        }
         /// <summary>
         /// Called by a slice
         /// returns both the versification and the list of books available

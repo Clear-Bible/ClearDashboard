@@ -7,4 +7,8 @@ public class AlignmentSetInfo
 
     public string ParallelCorpusId { get; set; } = string.Empty;
     public string? ParallelCorpusDisplayName { get; set; } = string.Empty;
+
+    public bool IsRtl { get; set; } = false;
+
+    public bool IsTargetRtl { get; set; } = false;
 }

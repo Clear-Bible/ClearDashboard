@@ -185,27 +185,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         private TranslationSet? _translationSet;
         private TranslationSet? TranslationSet
         {
-            get
-            {
-                if (_translationSet == null)
-                {
-                    throw new InvalidOperationException("Cannot perform translation operations because the TranslationSet is null.  Ensure that you have called VerseDisplayViewModel.BindAsync() with the current translation set.");
-                }
-                return _translationSet;
-            }
+            get => _translationSet;
             set => _translationSet = value;
         }
 
+        private AlignmentSet? _alignmentSet;
+        private AlignmentSet? AlignmentSet
+        {
+            get =>  _alignmentSet;
+            set => _alignmentSet = value;
+        }
+
+        public IEnumerable<Alignment>? Alignments { get; set; } = null;
+
         private IReadOnlyList<Token> Tokens { get; set; }
-        private IEnumerable<Translation> Translations { get; set; } = new List<Translation>();
-        private EngineStringDetokenizer Detokenizer { get; set; } = new(new LatinWordDetokenizer());
+
+        private IReadOnlyList<Token>? TargetTokens { get; set; } = null;
+        private IEnumerable<Translation>? Translations { get; set; }
+        private EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
+        private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
         private Dictionary<IId, IEnumerable<Note>>? AllEntityNotes { get; set; }
         private bool IsRtl { get; set; }
+
+        private bool IsTargetRtl { get; set; }
 
         /// <summary>
         /// Gets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
         public TokenDisplayViewModelCollection TokenDisplayViewModels { get; private set; } = new();
+
+        public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
 
         /// <summary>
         /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion of labels.
@@ -220,7 +229,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
 
         #region Private methods
-        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens)
+        private static IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, ILogger? logger)
         {
             try
             {
@@ -228,21 +237,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                var result = Detokenizer.Detokenize(tokens);
+                var result = detokenizer.Detokenize(tokens);
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved padded tokens from {Detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
+                logger?.LogInformation($"Retrieved padded tokens from {detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 return result;
             }
             catch (Exception e)
             {
-                Logger?.LogCritical(e.ToString());
+                logger?.LogCritical(e.ToString());
                 throw;
             }
         }
 
-        private Translation? GetTranslationForToken(Token token)
+        private static Translation? GetTranslationForToken(Token token, IEnumerable<Translation>? translations)
         {
 #if MOCK
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
@@ -250,41 +259,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 : String.Empty;
             return new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: GetMockTranslationStatus());
 #else
-            return Translations.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
+            return translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? null;
 #endif
         }
 
-        private NoteCollection GetNotesForToken(Token token)
+        private static NoteCollection GetNotesForToken(Token token, Dictionary<IId, IEnumerable<Note>>? allEntityNotes)
         {
 #if MOCK
             return GetMockNotes();
 #else
-            var matches = AllEntityNotes?.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
+            var matches = allEntityNotes?.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
             return matches is { Key: { } } ? new NoteCollection(matches.Value.Value) : new NoteCollection();
 #endif
         }
 
-        private void BuildTokenDisplayViewModels()
+        private static TokenDisplayViewModelCollection BuildTokenDisplayViewModels(
+            IReadOnlyList<Token> tokens, 
+            EngineStringDetokenizer detokenizer, 
+            IEnumerable<Translation>? translations,
+            Dictionary<IId, IEnumerable<Note>>? allEntityNotes,
+            bool isRtl,
+            bool isSource,
+            ILogger? logger)
         {
-            TokenDisplayViewModels = new TokenDisplayViewModelCollection();
-            var paddedTokens = GetPaddedTokens(Tokens);
+            var paddedTokens = GetPaddedTokens(tokens, detokenizer, logger);
 
-            TokenDisplayViewModels.AddRange(from paddedToken in paddedTokens
-                let translation = GetTranslationForToken(paddedToken.token)
-                let notes = GetNotesForToken(paddedToken.token)
+            var tokenDisplayViewModelCollection = new TokenDisplayViewModelCollection();
+            tokenDisplayViewModelCollection.AddRange(from paddedToken in paddedTokens
+                let translation = GetTranslationForToken(paddedToken.token, translations)
+                let notes = GetNotesForToken(paddedToken.token, allEntityNotes)
                 select new TokenDisplayViewModel
                 {
                     Token = paddedToken.token,
                     // For right-to-left languages, the padding before and padding after should be swapped.
-                    PaddingBefore = !IsRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
-                    PaddingAfter = !IsRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
+                    PaddingBefore = !isRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
+                    PaddingAfter = !isRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
                     Translation = translation,
-                    Notes = notes
+                    Notes = notes,
+                    IsSource = isSource
                 });
-
+            return tokenDisplayViewModelCollection;
         }
 
-        private async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> tokens)
+        private static async Task<IEnumerable<Translation>> GetTranslations(TranslationSet translationSet, IEnumerable<TokenId> tokens, ILogger?logger)
         {
 #if MOCK
             return new List<Translation>();
@@ -295,39 +312,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                var result = await TranslationSet!.GetTranslations(tokens);
+                var result = await translationSet!.GetTranslations(tokens);
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved translations in {stopwatch.ElapsedMilliseconds} ms");
+                logger?.LogInformation($"Retrieved translations in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 return result;
             }
             catch (Exception e)
             {
-                Logger?.LogCritical(e.ToString());
+                logger?.LogCritical(e.ToString());
                 throw;
             }
 #endif
         }
 
-        private async Task PopulateTranslations()
-        {
-            if (_translationSet != null)
-            {
-                Translations = await GetTranslations(Tokens.Select(t => t.TokenId));
-            }
-        }
-
-        private async Task<Dictionary<IId, IEnumerable<Note>>?> GetAllNotes()
+        private static async Task<Dictionary<IId, IEnumerable<Note>>?> GetAllNotes(IMediator mediator)
         {
 #if MOCK
             return new Dictionary<IId, IEnumerable<Note>>();
 #else
-            return await Note.GetAllDomainEntityIdNotes(Mediator);
+            return await Note.GetAllDomainEntityIdNotes(mediator);
 #endif
         }
 
-        private async Task<ObservableCollection<Label>> GetLabelSuggestions()
+        private static async Task<ObservableCollection<Label>> GetLabelSuggestions(IMediator mediator, ILogger? logger)
         {
 #if MOCK
             return MockLabelSuggestions;
@@ -338,38 +347,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                var labels = await Label.GetAll(Mediator);
+                var labels = await Label.GetAll(mediator);
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved label suggestions in {stopwatch.ElapsedMilliseconds}ms");
+                logger?.LogInformation($"Retrieved label suggestions in {stopwatch.ElapsedMilliseconds}ms");
 #endif
                 return new ObservableCollection<Label>(labels);
             }
             catch (Exception e)
             {
-                Logger?.LogCritical(e.ToString());
+                logger?.LogCritical(e.ToString());
                 throw;
             }
 #endif
-        }
-
-        private async Task PopulateLabelSuggestions()
-        {
-            LabelSuggestions = await GetLabelSuggestions();
-        }
-
-        private async Task BindAsync(TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null, bool isRtl = false)
-        {
-            TranslationSet = translationSet;
-            if (detokenizer != null)
-            {
-                Detokenizer = detokenizer;
-            }
-            IsRtl = isRtl;
-            AllEntityNotes = await GetAllNotes();
-            await PopulateLabelSuggestions();
-            await PopulateTranslations();
-            BuildTokenDisplayViewModels();
         }
 
         #endregion
@@ -393,7 +383,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 if (TranslationSet == null)
                 {
-                    throw new InvalidOperationException("Cannot retrieve translation options because the translation set is null.  Ensure that you have called BindAsync() with the current translation set.");
+                    throw new InvalidOperationException("Cannot retrieve translation options because the translation set is null.  Ensure that you have called ShowTranslationAsync() with the current translation set.");
                 }
 
                 var translationModelEntry = await TranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
@@ -441,7 +431,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 if (TranslationSet == null)
                 {
-                    throw new InvalidOperationException("Cannot save translation because the translation set is null.  Ensure that you have called BindAsync() with the current translation set.");
+                    throw new InvalidOperationException("Cannot save translation because the translation set is null.  Ensure that you have called ShowTranslationAsync() with the current translation set.");
                 }
 
                 await TranslationSet.PutTranslation(translation, translationActionType);
@@ -452,8 +442,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 // If translation propagates to other translations, then we need a fresh call to PopulateTranslations() and to rebuild the token displays.
                 if (translationActionType == TranslationActionTypes.PutPropagate)
                 {
-                    await PopulateTranslations();
-                    BuildTokenDisplayViewModels();
+                    Translations = await GetTranslations(TranslationSet, Tokens.Select(t => t.TokenId), Logger);
+
+                    TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, SourceDetokenizer, Translations, AllEntityNotes, IsRtl, true, Logger);
                 }
             }
             catch (Exception e)
@@ -735,34 +726,65 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     }
 #endif
 
-        /// <summary>
-        /// Binds an <see cref="EngineParallelTextRow"/> to this view model.
-        /// </summary>
-        /// <param name="parallelTextRow">The <see cref="EngineParallelTextRow"/> to display.</param>
-        /// <param name="translationSet">The <see cref="TranslationSet"/> from which to obtain token translations.</param>
-        /// <param name="detokenizer">The detokenizer to use for the text row (which can be obtained from TokenizedCorpus.Detokenizer).  Defaults to <see cref="LatinWordDetokenizer"/>.</param>
-        /// <returns>An awaitable <see cref="Task"/></returns>
-        /// <remarks>Unless a <paramref name="translationSet"/> is provided, then no translations can be provided. </remarks>
-        /// <exception cref="InvalidOperationException">Thrown is <paramref name="parallelTextRow"/> has no tokens.</exception>
-        public async Task BindAsync(EngineParallelTextRow parallelTextRow, TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null, bool isRtl = false)
-        {
-            Tokens = parallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
-            await BindAsync(translationSet, detokenizer, isRtl);
-        }
-
-        /// <summary>
-        /// Binds an <see cref="TokensTextRow"/> to this view model.
-        /// </summary>
-        /// <param name="textRow">The <see cref="TokensTextRow"/> to display.</param>
-        /// <param name="translationSet">The <see cref="TranslationSet"/> from which to obtain token translations.</param>
-        /// <param name="detokenizer">The detokenizer to use for the text row (which can be obtained from TokenizedCorpus.Detokenizer).  Defaults to <see cref="LatinWordDetokenizer"/>.</param>
-        /// <returns>An awaitable <see cref="Task"/></returns>
-        /// <remarks>Unless a <paramref name="translationSet"/> is provided, then no translations can be provided. </remarks>
-        public async Task BindAsync(TokensTextRow textRow, TranslationSet? translationSet = null, EngineStringDetokenizer? detokenizer = null, bool isRtl = false)
+        public async Task ShowCorpusAsync(
+            TokensTextRow textRow, 
+            EngineStringDetokenizer detokenizer, 
+            bool isRtl)
         {
             Tokens = textRow.Tokens;
-            await BindAsync(translationSet, detokenizer, isRtl);
+            TranslationSet = null;
+            AlignmentSet = null;
+            SourceDetokenizer = detokenizer;
+            IsRtl = isRtl;
+            IsTargetRtl = false;
+            AllEntityNotes = await GetAllNotes(Mediator);
+            LabelSuggestions = await GetLabelSuggestions(Mediator, Logger);
+
+            TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, detokenizer, null, AllEntityNotes, IsRtl, true, Logger);
         }
+
+        public async Task ShowTranslationAsync(
+            EngineParallelTextRow engineParallelTextRow,
+            TranslationSet translationSet,
+            EngineStringDetokenizer sourceDetokenizer,
+            bool isSourceRtl)
+        {
+            Tokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            TranslationSet = translationSet;
+            AlignmentSet = null;
+            SourceDetokenizer = sourceDetokenizer;
+            IsRtl = isSourceRtl;
+            IsTargetRtl = false;
+            AllEntityNotes = await GetAllNotes(Mediator);
+            LabelSuggestions = await GetLabelSuggestions(Mediator, Logger);
+            Translations = await GetTranslations(TranslationSet, Tokens.Select(t => t.TokenId), Logger);
+
+            TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, sourceDetokenizer, Translations, AllEntityNotes, IsRtl, true, Logger);
+        }
+
+        public async Task ShowAlignmentsAsyn(
+            EngineParallelTextRow engineParallelTextRow,
+            AlignmentSet alignmentSet,
+            EngineStringDetokenizer sourceDetokenizer,
+            bool isSourceRtl,
+            EngineStringDetokenizer targetDetokenizer,
+            bool isTargetRtl)
+        {
+            Tokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            TargetTokens = engineParallelTextRow.TargetTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            TranslationSet = null;
+            AlignmentSet = alignmentSet;
+            Alignments = await alignmentSet.GetAlignments(new List<EngineParallelTextRow>() { engineParallelTextRow });
+            SourceDetokenizer = sourceDetokenizer;
+            IsRtl = isSourceRtl;
+            IsTargetRtl = isTargetRtl;
+            AllEntityNotes = await GetAllNotes(Mediator);
+            LabelSuggestions = await GetLabelSuggestions(Mediator, Logger);
+
+            TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, sourceDetokenizer, null, AllEntityNotes, isSourceRtl, true, Logger);
+            TargetTokenDisplayViewModels = BuildTokenDisplayViewModels(TargetTokens, targetDetokenizer, null, AllEntityNotes, isTargetRtl, false, Logger);
+        }
+
         #endregion
 
         /// <summary>

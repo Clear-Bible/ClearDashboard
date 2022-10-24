@@ -44,10 +44,6 @@
                      Background="LightYellow"
                      Visibility="{Binding ElementName=ExtendedPropertiesTreeViewName,Path=Visibility}"
                  >
-                    <!--
-                    <local:ExtendedPropertiesDisplay ExtendedPropertiesXml="{Binding ExtendedProperties}">
-                    </local:ExtendedPropertiesDisplay>
-                    -->
                     <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}"></controls:ExtendedPropertiesTreeView>
                 </ToolTip>
             </Button.ToolTip>
