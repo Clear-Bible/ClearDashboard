@@ -25,6 +25,19 @@ namespace ClearDashboard.Wpf.Application.Models
             }
         }
 
+
+        private Guid _alignmentSetId;
+        public Guid AlignmentSetId
+        {
+            get => _alignmentSetId;
+            set
+            {
+                _alignmentSetId = value;
+                NotifyOfPropertyChange(() => AlignmentSetId);
+            }
+        }
+
+
         private Guid _parallelCorpusId;
         public Guid ParallelCorpusId
         {
@@ -35,6 +48,18 @@ namespace ClearDashboard.Wpf.Application.Models
                 NotifyOfPropertyChange(() => ParallelCorpusId);
             }
         }
+
+        private Guid _translationSetId;
+        public Guid TranslationSetId
+        {
+            get => _translationSetId;
+            set
+            {
+                _translationSetId = value;
+                NotifyOfPropertyChange(() => TranslationSetId);
+            }
+        }
+
 
 
         private Visibility _visiblity = Visibility.Collapsed;
