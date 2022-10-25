@@ -4,6 +4,7 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DAL.Alignment.Features.Events;
 using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
@@ -24,15 +25,20 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
         private readonly IProjectProvider _projectProvider;
         private readonly ILogger<AlignmentTargetTextDenormalizer> _logger;
         private readonly BackgroundServiceDelegateProgress<AlignmentTargetTextDenormalizer>.Factory _progressReporterFactory;
+
         private TaskCompletionSource<bool>? _tcs = null;
+        private readonly object _delayLock = new();
+        private bool _shouldDelay = true;
+        private bool _rootScopeLifetimeEnding = false;
 
         public AlignmentTargetTextDenormalizer(
-            IMediator mediator, 
-            IProjectProvider projectProvider, 
-            ILogger<AlignmentTargetTextDenormalizer> logger, 
-            IEventAggregator eventAggregator, 
+            IMediator mediator,
+            IProjectProvider projectProvider,
+            ILogger<AlignmentTargetTextDenormalizer> logger,
+            IEventAggregator eventAggregator,
             IHostApplicationLifetime hostApplicationLifetime,
-            BackgroundServiceDelegateProgress<AlignmentTargetTextDenormalizer>.Factory progressReporterFactory)
+            BackgroundServiceDelegateProgress<AlignmentTargetTextDenormalizer>.Factory progressReporterFactory,
+            ILifetimeScope rootLifetimeScope)
         {
             _mediator = mediator;
             _projectProvider = projectProvider;
@@ -43,8 +49,9 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
             hostApplicationLifetime.ApplicationStopping.Register(() => _logger.LogInformation("Background service stopping"));
             hostApplicationLifetime.ApplicationStopped.Register(() => _logger.LogInformation("Background service stopped"));
 
-            eventAggregator.SubscribeOnBackgroundThread(this);
-            eventAggregator.SubscribeOnUIThread(this);
+            rootLifetimeScope.CurrentScopeEnding += (o, eventArgs) => _rootScopeLifetimeEnding = true;
+
+            eventAggregator.SubscribeOnPublishedThread(this);
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -57,7 +64,7 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                var waitTime = 30000;
+                var waitTime = 30000; 
                 if (_projectProvider.HasCurrentProject)
                 {
                     _logger.LogDebug($"AlignmentTargetTextDenormalizer running denormalization.");
@@ -68,14 +75,9 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
                     waitTime = 500;
                 }
 
-                if (stoppingToken.IsCancellationRequested)
-                {
-                    _logger.LogDebug("Cancellation REQUESTED!");
-                }
-
                 _logger.LogDebug($"AlignmentTargetTextDenormalizer waiting for event or completion of delay time.");
 
-                _tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                _tcs = InitializeTaskCompletionSource();
                 await Task.WhenAny(tasks: new Task[] { _tcs.Task, Task.Delay(waitTime, stoppingToken) });
             }
         }
@@ -83,19 +85,47 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             try 
-            { 
-                _tcs?.TrySetCanceled(cancellationToken); 
+            {
+                lock (_delayLock)
+                {
+                    _tcs?.TrySetCanceled(cancellationToken);
+                    _shouldDelay = false;
+                }
             } 
             catch (ObjectDisposedException) { }
 
             return base.StopAsync(cancellationToken);
         }
 
+        private TaskCompletionSource<bool> InitializeTaskCompletionSource()
+        {
+            lock (_delayLock)
+            {
+                var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+                if (!_shouldDelay)
+                {
+                    try
+                    {
+                        tcs.TrySetResult(true);
+                        _logger.LogInformation($"AlignmentTargetTextDenormalizer no delay on next delay!.");
+
+                    }
+                    catch (ObjectDisposedException) { }
+                }
+                _shouldDelay = true;  // Set it back to default value for next iteration
+                return tcs;
+            }
+        }
+
         private async Task TriggerTaskCompletionSource()
         {
             try
             {
-                _tcs?.TrySetResult(true);
+                lock (_delayLock)
+                {
+                    _tcs?.TrySetResult(true);
+                    _shouldDelay = false;
+                }
             }
             catch (ObjectDisposedException)
             {
@@ -107,23 +137,41 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
 
         private async Task RunDenormalization(CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(
-                new DenormalizeAlignmentTopTargetsCommand(Guid.Empty, _progressReporterFactory(cancellationToken)), 
-                cancellationToken);
+            try
+            {
+                // FIXME:  we need to look at the application shutdown sequence to see why the DI container
+                // resources are getting disposed before this BackgroundService StopAsync is complete. (Resulting
+                // in a ObjectDisposedException when RunDenormalization uses Mediator to invoke its command).
+                // As a stopgap, we are using the root container's CurrentScopeEnding event to set
+                // _rootScopeLifetimeEnding, and using it to .  
 
-            if (result.Success)
-            {
-                return;
+                var result = (!_rootScopeLifetimeEnding) ? 
+                    await _mediator.Send(
+                        new DenormalizeAlignmentTopTargetsCommand(Guid.Empty, _progressReporterFactory(cancellationToken)), 
+                        cancellationToken) :
+                    new RequestResult<int>() { Success = false, Message = "Unable to call denormalization handler because root ILifetimeScope is disposing/ending"};
+
+                if (result.Success)
+                {
+                    return;
+                }
+                else
+                {
+                    _logger.LogDebug($"AlignmentTargetTextDenormalizer failed due to: {result.Message}");
+                }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                _logger.LogDebug($"AlignmentTargetTextDenormalizer failed due to: {result.Message}");
+                if (!_rootScopeLifetimeEnding)
+                {
+                    _logger.LogError($"AlignmentTargetTextDenormalizer failed due to ObjectDisposedException");
+                }
             }
         }
 
         public async Task HandleAsync(AlignmentSetCreatedEvent message, CancellationToken cancellationToken)
         {
-            _logger.LogDebug($"AlignmentTargetTextDenormalizer received AlignmentSetCreatedEvent.");
+            _logger.LogInformation($"AlignmentTargetTextDenormalizer received AlignmentSetCreatedEvent.");
             await TriggerTaskCompletionSource();
         }
 

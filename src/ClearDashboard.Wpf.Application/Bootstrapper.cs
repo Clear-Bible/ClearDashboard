@@ -34,6 +34,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using System.Data.Common;
 using System.Xml.Linq;
 using ClearDashboard.DAL.Alignment.BackgroundServices;
+using Autofac.Core.Lifetime;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -57,10 +58,18 @@ namespace ClearDashboard.Wpf.Application
                         //Host will try to wait 30 seconds before stopping the service. 
                         options.ShutdownTimeout = TimeSpan.FromSeconds(5);
                     });
-                    services.AddHostedService<AlignmentTargetTextDenormalizer>();
                 })
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
+                    builder
+                        .RegisterType<AlignmentTargetTextDenormalizer>()
+                        .As<IHostedService>()
+                        // Passing this in so that the hosted service can subscribe to its
+                        // CurrentScopeEnding event and avoid using any shared registrations
+                        // after that event fires.  
+                        .WithParameter(new TypedParameter(typeof(ILifetimeScope), Container!))
+                        .SingleInstance();
+
                     builder.RegisterInstance(Container!.Resolve<IEventAggregator>()).ExternallyOwned();
                     builder.RegisterInstance(Container!.Resolve<IMediator>()).ExternallyOwned();
                     builder.RegisterInstance(Container!.Resolve<IProjectProvider>()).ExternallyOwned();

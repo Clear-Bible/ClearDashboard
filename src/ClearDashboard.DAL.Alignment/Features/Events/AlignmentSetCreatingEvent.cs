@@ -12,17 +12,22 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Events
 {
-    public class AlignmentSetCreatedEvent : INotification
+    public class AlignmentSetCreatingEvent : INotification
     {
         public Guid AlignmentSetId { get; }
+        public ProjectDbContext ProjectDbContext { get; }
 
         /// <summary>
-        /// Fired after the alignment set creation is complete
+        /// Fired during alignment set creation
+        /// ProjectDbContext is provided to this event so that the database operations
+        /// of its handler can be done in the same transaction as the event publisher.
         /// </summary>
         /// <param name="alignmentSetId"></param>
-        public AlignmentSetCreatedEvent(Guid alignmentSetId)
+        /// <param name="projectDbContext"></param>
+        public AlignmentSetCreatingEvent(Guid alignmentSetId, ProjectDbContext projectDbContext)
         {
             AlignmentSetId = alignmentSetId;
+            ProjectDbContext = projectDbContext;
         }
     }
 }

@@ -185,7 +185,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     // the underlying DbConnection transaction in case any event handlers
                     // need to alter data as part of the current transaction:
                     ProjectDbContext.Database.UseTransaction(transaction);
-                    await _mediator.Publish(new AlignmentSetCreatedEvent(alignmentSetId, ProjectDbContext), cancellationToken);
+                    await _mediator.Publish(new AlignmentSetCreatingEvent(alignmentSetId, ProjectDbContext), cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
                     ProjectDbContext.Database.UseTransaction(null);
                 }
@@ -207,6 +207,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .First(ast => ast.Id == alignmentSetId);
 
                 var parallelCorpusId = ModelHelper.BuildParallelCorpusId(parallelCorpus);
+
+                await _mediator.Publish(new AlignmentSetCreatedEvent(alignmentSetId), cancellationToken);
 
                 return new RequestResult<AlignmentSet>(new AlignmentSet(
                     ModelHelper.BuildAlignmentSetId(alignmentSetFromDb, parallelCorpusId, alignmentSetFromDb.User!),

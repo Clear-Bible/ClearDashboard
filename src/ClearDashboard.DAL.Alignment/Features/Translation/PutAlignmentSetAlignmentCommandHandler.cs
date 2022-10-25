@@ -15,6 +15,7 @@ using ModelVerificationType = ClearDashboard.DataAccessLayer.Models.AlignmentVer
 using ModelOriginatedType = ClearDashboard.DataAccessLayer.Models.AlignmentOriginatedFrom;
 using ClearDashboard.DAL.Alignment.Features.Events;
 using Microsoft.EntityFrameworkCore.Storage;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -109,7 +110,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
                 try
                 {
-                    alignmentSet.AddDomainEvent(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment, ProjectDbContext));
+                    alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignment, ProjectDbContext));
                     _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
                     transaction.Commit();
@@ -124,6 +125,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
             }
 
+            await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment));
             return new RequestResult<object>(null);
         }
     }

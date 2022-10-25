@@ -18,19 +18,19 @@ using Caliburn.Micro;
 
 namespace ClearDashboard.DAL.Alignment.Features.Events
 {
-    public class AlignmentSetCreatedEventHandler : INotificationHandler<AlignmentSetCreatedEvent>
+    public class AlignmentSetCreateEventHandler : INotificationHandler<AlignmentSetCreatingEvent>, INotificationHandler<AlignmentSetCreatedEvent>
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly ILogger _logger;
-        public AlignmentSetCreatedEventHandler(
-            ILogger<AlignmentSetCreatedEventHandler> logger,
+        public AlignmentSetCreateEventHandler(
+            ILogger<AlignmentSetCreateEventHandler> logger,
             IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _logger = logger;
         }
 
-        public async Task Handle(AlignmentSetCreatedEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(AlignmentSetCreatingEvent notification, CancellationToken cancellationToken)
         {
             notification.ProjectDbContext.AlignmentSetDenormalizationTasks.Add(new AlignmentSetDenormalizationTask()
             {
@@ -38,8 +38,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
             });
 
             await notification.ProjectDbContext.SaveChangesAsync(cancellationToken);
+        }
 
-            await _eventAggregator.PublishOnBackgroundThreadAsync(notification);
+        public async Task Handle(AlignmentSetCreatedEvent notification, CancellationToken cancellationToken)
+        {
+            await _eventAggregator.PublishOnBackgroundThreadAsync(notification, cancellationToken: cancellationToken);
         }
 
     }
