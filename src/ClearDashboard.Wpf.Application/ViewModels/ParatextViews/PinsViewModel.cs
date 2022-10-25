@@ -708,11 +708,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (obj is PinsDataTable dataRow)
             {
-                if (await LoadVerseText(dataRow)) return;
+                await LoadVerseText(dataRow);
             }
             
             ProgressBarVisibility = Visibility.Collapsed;
-            return;
         }
 
         private async Task<bool> LoadVerseText(PinsDataTable dataRow)
