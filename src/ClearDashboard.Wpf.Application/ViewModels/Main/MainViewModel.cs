@@ -35,6 +35,7 @@ using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using DockingManager = AvalonDock.DockingManager;
 using System.Dynamic;
+using ClearApplicationFoundation.LogHelpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -174,7 +175,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "GatherLogsID")
                 {
-
+                    GatherLogs();
                 }
                 else if (value == "AboutID")
                 {
@@ -214,9 +215,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 NotifyOfPropertyChange(() => WindowIdToLoad);
             }
         }
-
-
-
 
         private async Task StartDashboardAsync(int secondsToWait = 10)
         {
@@ -818,6 +816,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         #endregion //Constructor
 
         #region Methods
+
+        private void GatherLogs()
+        {
+            return;
+
+
+            LogReporting logReporting = new LogReporting();
+
+            // get the paratext log file
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Paratext93", "ParatextLog.log");
+
+            if (File.Exists(path))
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        var logData = sr.ReadToEnd();
+                    }
+                }
+
+
+
+                var log = File.ReadAllText(path);
+                if (log != "")
+                {
+                    logReporting.ParatextLog = log;
+                }
+            }
+
+            // get the Dashboard log file
+            var dashboardLogPath = IoC.Get<CaptureFilePathHook>();
+
+        }
 
         private void ShowAboutWindow()
         {

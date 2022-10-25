@@ -20,16 +20,24 @@
         <Image Source="/Assets/ClearDashboard_logo_250.png" />
 
         <TextBlock
-            Grid.Row="1"
-            FontSize="26"
+            Grid.Row="0"
+            Margin="0,0,0,10"
             HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            FontSize="36"
+            Text="Clear Dashboard" />
+
+        <TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            FontSize="26"
             Text="{Binding VersionInfo}" />
 
         <Button
             x:Name="ClickLink"
-            Height="40"
-            Width="160"
             Grid.Row="2"
+            Width="160"
+            Height="40"
             Margin="10"
             Style="{StaticResource TransparentButton}">
             <TextBlock
