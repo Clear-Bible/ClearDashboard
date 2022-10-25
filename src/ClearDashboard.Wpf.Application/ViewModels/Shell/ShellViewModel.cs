@@ -182,7 +182,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
 
-        private Uri _updateUrl = new Uri("https://www.clearbible.org");
+        private Uri _updateUrl = new Uri("https://www.clear.bible");
         public Uri UpdateUrl
         {
             get => _updateUrl;
