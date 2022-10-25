@@ -323,13 +323,13 @@
                     <TextBlock
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
-                        Foreground="BlueViolet"
-                        FontSize="12" >
-                        <Run Text="SelectedId: "/>
-                        <Run Text="{Binding SelectedVerseDisplayViewModel.Id}"/>
+                        FontSize="12"
+                        Foreground="BlueViolet">
+                        <Run Text="SelectedId: " />
+                        <Run Text="{Binding SelectedVerseDisplayViewModel.Id}" />
                     </TextBlock>
                     <Label
-                        Margin="20 0 0 0"
+                        Margin="20,0,0,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Content="{Binding Message}"
@@ -502,11 +502,11 @@
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     ShowTranslations="{Binding DataContext.ShowTranslation, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                    TargetTokens="{Binding TargetTokenDisplayViewModels}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Tokens="{Binding TokenDisplayViewModels}"
-                                                    TargetTokens="{Binding TargetTokenDisplayViewModels}"
                                                     TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
