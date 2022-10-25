@@ -23,7 +23,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<ParallelCorpus> Create(
             this EngineParallelTextCorpus engineParallelTextCorpus,
             string displayName,
-            IMediator mediator)
+            IMediator mediator, 
+            CancellationToken token = default)
         {
             if (engineParallelTextCorpus.GetType() == typeof(ParallelCorpus))
             {
@@ -48,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 ((TokenizedTextCorpus)engineParallelTextCorpus.SourceCorpus).TokenizedTextCorpusId,
                 ((TokenizedTextCorpus)engineParallelTextCorpus.TargetCorpus).TokenizedTextCorpusId,
                 engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
-                displayName));
+                displayName), token);
 
             if (createParallelCorpusCommandResult.Success && createParallelCorpusCommandResult.Data != null)
             {

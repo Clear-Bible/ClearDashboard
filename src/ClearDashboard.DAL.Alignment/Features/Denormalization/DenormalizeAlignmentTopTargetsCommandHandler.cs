@@ -1,0 +1,489 @@
+﻿using ClearDashboard.DAL.Alignment.Features.Events;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SIL.Linq;
+using SIL.Machine.Utils;
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Resources;
+using System.Text.Json;
+using System.Threading;
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
+
+namespace ClearDashboard.DAL.Alignment.Features.Denormalization
+{
+    public class DenormalizeAlignmentTopTargetsCommandHandler : ProjectDbContextCommandHandler<DenormalizeAlignmentTopTargetsCommand,
+        RequestResult<int>, int>
+    {
+        private readonly IMediator _mediator;
+
+        private struct SourceTokenIdToTopTargetTrainingText { 
+            public Models.Alignment Alignment; 
+            public string SourceTrainingText; 
+            public string TopTargetTrainingText; 
+        }
+
+        public DenormalizeAlignmentTopTargetsCommandHandler(IMediator mediator,
+            ProjectDbContextFactory? projectNameDbContextFactory, 
+            IProjectProvider projectProvider,
+            ILogger<DenormalizeAlignmentTopTargetsCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            logger)
+        {
+            _mediator = mediator;
+        }
+
+        protected override async Task<RequestResult<int>> SaveDataAsync(DenormalizeAlignmentTopTargetsCommand request,
+            CancellationToken cancellationToken)
+        {
+            await Task.CompletedTask;
+            IQueryable<AlignmentSetDenormalizationTask> tasks = ProjectDbContext.AlignmentSetDenormalizationTasks;
+
+            if (request.AlignmentSetId != Guid.Empty)
+            {
+                tasks = tasks.Where(t => t.AlignmentSetId == request.AlignmentSetId);
+            }
+
+            if (!tasks.Any())
+            {
+                return new RequestResult<int>(0);
+            }
+
+#if DEBUG
+            Stopwatch sw = new();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
+
+            try
+            {
+                var reporter = new PhasedProgressReporter(request.Progress,
+                    new Phase(LocalizationStrings.Get("Denormalization_ProcessingTasks", Logger)));
+
+                using (PhaseProgress phaseProgress = reporter.StartNextPhase())
+                    //PublishWorking("Denormalization_ProcessingTasks", Array.Empty<object>(), cancellationToken);
+                    foreach (var g in tasks
+                        .ToList()
+                        .GroupBy(t => t.AlignmentSetId))
+                    {
+                        await ProcessAlignmentSet(g.Key, g.Select(g => g), phaseProgress, cancellationToken);
+                    }
+
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+#endif
+
+                request.Progress.ReportCompleted();
+                //PublishCompleted(cancellationToken);
+                return new RequestResult<int>(tasks.Count());
+            }
+            catch (OperationCanceledException)
+            {
+                request.Progress.ReportCancelRequestReceived(LocalizationStrings.Get("Denormalization_AlignmentTopTargets_RunCancelled", Logger));
+                return new RequestResult<int>
+                (
+                    success: false,
+                    message: $"AlignmentSet data denormalization cancelled"
+                );
+            }
+            catch (Exception ex)
+            {
+                request.Progress.ReportException(ex);
+//                PublishException(ex, cancellationToken);
+                return new RequestResult<int>
+                (
+                    success: false,
+                    message: $"Error denormalizing AlignmentSet data: {ex.Message}"
+                );
+            }
+        }
+
+        private async Task ProcessAlignmentSet(
+            Guid alignmentSetId, 
+            IEnumerable<AlignmentSetDenormalizationTask> tasks,
+            IProgress<ProgressStatus> progressStatus,
+            CancellationToken cancellationToken)
+        {
+#if DEBUG
+            Stopwatch sw = new();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set '{alignmentSetId}' (start)");
+#endif
+
+            var reporter = new PhasedProgressReporter(progressStatus,
+                    new Phase(LocalizationStrings.Get("Denormalization_QueryingData", Logger)),
+                    new Phase(LocalizationStrings.Get("Denormalization_CreatingData", Logger)));
+
+            IEnumerable<string>? sourceTrainingTexts = null;
+            IEnumerable<SourceTokenIdToTopTargetTrainingText>? sourceTokenIdToTopTargetTrainingTexts = null;
+
+            using (PhaseProgress phaseProgress = reporter.StartNextPhase())
+                (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts) =
+                    await QueryDataToDenormalize(alignmentSetId, tasks, phaseProgress, cancellationToken);
+
+#if DEBUG
+            sw.Stop();
+            if (sourceTokenIdToTopTargetTrainingTexts is null)
+            {
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set '{alignmentSetId}' (end) - no alignments found");
+            }
+            else
+            {
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Querying alignment tokens complete.  Starting insert into denormalization table");
+                sw.Restart();
+            }
+#endif
+
+            if (sourceTokenIdToTopTargetTrainingTexts is null)
+            {
+                return;
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+
+            using (PhaseProgress phaseProgress = reporter.StartNextPhase())
+                await CreateDenormalizedData(
+                    alignmentSetId,
+                    tasks,
+                    sourceTrainingTexts,
+                    sourceTokenIdToTopTargetTrainingTexts,
+                    phaseProgress,
+                    cancellationToken);
+
+#if DEBUG
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Process alignment set (end)");
+#endif
+        }
+
+        private async Task<(IEnumerable<string>?, IEnumerable<SourceTokenIdToTopTargetTrainingText>?)> QueryDataToDenormalize(
+            Guid alignmentSetId, 
+            IEnumerable<AlignmentSetDenormalizationTask> tasks,
+            IProgress<ProgressStatus> progress,
+            CancellationToken cancellationToken)
+        {
+            IEnumerable<string>? sourceTrainingTexts = null;
+            IEnumerable<SourceTokenIdToTopTargetTrainingText>? sourceTokenIdToTopTargetTrainingTexts = null;
+
+            var alignmentSet = ProjectDbContext!.AlignmentSets
+                .FirstOrDefault(ast => ast.Id == alignmentSetId);
+
+            if (alignmentSet is null)
+            {
+                Logger.LogError($"AlignmentSet not found for id '{alignmentSetId}'");
+                return (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts);
+            }
+
+            progress.Report(new ProgressStatus(0, string.Format(
+                LocalizationStrings.Get("Denormalization_AlignmentTopTargets_FindingAlignments", Logger), 
+                new Object[] { alignmentSet!.DisplayName ?? string.Empty }
+            )));
+
+            //PublishWorking(
+            //    "Denormalization_AlignmentTopTargets_FindingAlignments",
+            //    new object[] { alignmentSetId }, cancellationToken);
+
+            var alignments = ProjectDbContext!.Alignments
+                .Include(a => a.SourceTokenComponent)
+                        .Include(a => a.TargetTokenComponent)
+                .Where(a => a.AlignmentSetId == alignmentSetId);
+
+            List<Models.Alignment>? alignmentResults = null;
+            if (tasks.All(t => t.SourceText != null))
+            {
+                sourceTrainingTexts = tasks.Select(t => t.SourceText!).Distinct();
+                alignmentResults = await alignments
+                    .Where(a => sourceTrainingTexts.Contains(a.SourceTokenComponent!.TrainingText))
+                    .ToListAsync(cancellationToken);
+            }
+            else
+            {
+                alignmentResults = await alignments.Where(a => a.SourceTokenComponent!.TrainingText != null)
+                    .ToListAsync(cancellationToken);
+            }
+
+            if (!alignmentResults.Any())
+            {
+                return (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts);
+            }
+
+            progress.Report(new ProgressStatus(0, string.Format(
+                LocalizationStrings.Get("Denormalization_AlignmentTopTargets_FindingTopTargetTextPerSourceText", Logger),
+                new Object[] { alignmentResults.Count(), alignments.First()!.AlignmentSet!.DisplayName ?? string.Empty }
+            )));
+
+            //PublishWorking(
+            //    "Denormalization_AlignmentTopTargets_FindingTargetTextGroups",
+            //    new object[] { alignments.Count(), alignments.First()!.AlignmentSet!.DisplayName ?? string.Empty },
+            //    cancellationToken);
+
+            var sourceTrainingTextGroups = alignmentResults
+                .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
+                .ToDictionary(g => g.Key, g => g.Select(a => a));
+
+            var sourceTrainingTextToTopTarget = sourceTrainingTextGroups
+                .ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value
+                        .Where(a => a.TargetTokenComponent!.TrainingText != null)
+                        .GroupBy(a => a.TargetTokenComponent!.TrainingText!)
+                        .OrderByDescending(g => g.Count())
+                        .First().Key
+                );
+
+            sourceTokenIdToTopTargetTrainingTexts = sourceTrainingTextGroups
+                .SelectMany(sg => sg.Value
+                    .Select(a => new SourceTokenIdToTopTargetTrainingText
+                    {
+                        Alignment = a,
+                        SourceTrainingText = sg.Key,
+                        TopTargetTrainingText = sourceTrainingTextToTopTarget[sg.Key]
+                    })).ToList();
+
+            return (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts);
+        }
+
+        private async Task CreateDenormalizedData(
+            Guid alignmentSetId,
+            IEnumerable<AlignmentSetDenormalizationTask> tasks,
+            IEnumerable<string>? sourceTrainingTexts,
+            IEnumerable<SourceTokenIdToTopTargetTrainingText> sourceTokenIdToTopTargetTrainingTexts,
+            IProgress<ProgressStatus> progress,
+            CancellationToken cancellationToken)
+        {
+            await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
+            try
+            {
+                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
+                // mostly using database connection-level functions, commands, paramters etc.
+                using var connection = ProjectDbContext.Database.GetDbConnection();
+                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+
+                progress.Report(new ProgressStatus(
+                    0,
+                    LocalizationStrings.Get("Denormalization_AlignmentTopTargets_DeletingPreviousRecords", Logger)));
+                    //PublishWorking("Denormalization_AlignmentTopTargets_DeletingPreviousRecords", Array.Empty<object>(), cancellationToken);
+
+                await ExecuteAlignmentTopTargetTrainingTextDeleteCommand(
+                    alignmentSetId,
+                    sourceTrainingTexts,
+                    connection,
+                    cancellationToken);
+
+                using var insertCommand = CreateAlignmentTopTargetTrainingTextInsertCommand(connection);
+
+                var completed = 0;
+                foreach (var a in sourceTokenIdToTopTargetTrainingTexts)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    if (completed % 10000 == 0)
+                    {
+                        progress.Report(new ProgressStatus(
+                            completed, sourceTokenIdToTopTargetTrainingTexts.Count(), 
+                            string.Format(
+                                LocalizationStrings.Get("Denormalization_AlignmentTopTargets_InsertingRecords", Logger), 
+                                new Object[] { sourceTokenIdToTopTargetTrainingTexts.Count() })
+                            ));
+                        //var percentComplete = Convert.ToInt32(completed * 100 / sourceTokenIdToTopTargetTrainingTexts.Count());
+                        //PublishWorking("Denormalization_AlignmentTopTargets_InsertingRecords", new object[] { percentComplete }, cancellationToken);
+                    }
+
+                    await InsertAlignmentTopTargetTrainingTextAsync(
+                            a.Alignment,
+                            a.SourceTrainingText,
+                            a.TopTargetTrainingText,
+                            insertCommand,
+                            cancellationToken);
+
+                    completed++;
+                }
+
+                progress.Report(new ProgressStatus(0, 
+                    LocalizationStrings.Get("Denormalization_AlignmentTopTargets_SavingChanges", Logger)));
+                    //PublishWorking("Denormalization_AlignmentTopTargets_SavingChanges", Array.Empty<object>(), cancellationToken);
+
+                ProjectDbContext.RemoveRange(tasks);
+
+                ProjectDbContext.Database.UseTransaction(transaction);
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+                ProjectDbContext.Database.UseTransaction(null);
+            }
+            finally
+            {
+                await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+            }
+        }
+
+        private static DbCommand CreateAlignmentTopTargetTrainingTextInsertCommand(DbConnection connection)
+        {
+            var command = connection.CreateCommand();
+            var columns = new string[] { "Id", "AlignmentSetId", "AlignmentId", "SourceTokenComponentId", "SourceTrainingText", "TopTargetTrainingText" };
+
+            ApplyColumnsToCommand(command, typeof(Models.AlignmentTopTargetTrainingText), columns);
+
+            return command;
+        }
+
+        private static async Task<Guid> InsertAlignmentTopTargetTrainingTextAsync(Models.Alignment alignment, string SourceTrainingText, string topTargetTrainingText, DbCommand insertCommand, CancellationToken cancellationToken)
+        {
+            var id = Guid.NewGuid();
+
+            insertCommand.Parameters["@Id"].Value = id;
+            insertCommand.Parameters["@AlignmentSetId"].Value = alignment.AlignmentSetId;
+            insertCommand.Parameters["@AlignmentId"].Value = alignment.Id;
+            insertCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
+            insertCommand.Parameters["@SourceTrainingText"].Value = SourceTrainingText;
+            insertCommand.Parameters["@TopTargetTrainingText"].Value = topTargetTrainingText;
+
+            _ = await insertCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+
+            return id;
+        }
+
+        private static void ApplyColumnsToCommand(DbCommand command, Type type, string[] columns)
+        {
+            command.CommandText =
+            $@"
+                INSERT INTO {type.Name} ({string.Join(", ", columns)})
+                VALUES ({string.Join(", ", columns.Select(c => "@" + c))})
+            ";
+
+            foreach (var column in columns)
+            {
+                var parameter = command.CreateParameter();
+                parameter.ParameterName = $"@{column}";
+                command.Parameters.Add(parameter);
+            }
+        }
+
+        private static async Task ExecuteAlignmentTopTargetTrainingTextDeleteCommand(Guid alignmentSetId, IEnumerable<string>? sourceTrainingTexts, DbConnection connection, CancellationToken cancellationToken)
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = $@"
+                DELETE FROM {typeof(Models.AlignmentTopTargetTrainingText).Name}
+                WHERE AlignmentSetId = @AlignmentSetId
+            ";
+
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "@AlignmentSetId";
+            command.Parameters.Add(parameter);
+            command.Parameters["@AlignmentSetId"].Value = alignmentSetId;
+
+            if (sourceTrainingTexts is not null && sourceTrainingTexts.Any())
+            {
+                command.CommandText += "AND SourceTrainingText IN (";
+
+                sourceTrainingTexts
+                    .Select((t, index) => new
+                    {
+                        index,
+                        name = "@t" + index,
+                        value = t
+                    }).ForEach(pi =>
+                    {
+                        command.CommandText += (pi.index > 0) ? $", {pi.name}" : pi.name;
+
+                        var parameter = command.CreateParameter();
+                        parameter.ParameterName = pi.name;
+                        command.Parameters.Add(parameter);
+                        command.Parameters[pi.name].Value = pi.value;
+                    });
+
+                command.CommandText += ")";
+            }
+
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        private async void PublishWorking(string key, object[] args, CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.Working, 
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger), 
+                    description: string.Format(LocalizationStrings.Get(key, Logger), args) ?? string.Empty), 
+                cancellationToken);
+        }
+        private async void PublishCompleted(CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.Completed,
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger)),
+                cancellationToken);
+        }
+        private async void PublishException(Exception ex, CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.Completed,
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger),
+                    exception: ex),
+                cancellationToken);
+        }
+        private async void PublishCancelRequested(CancellationToken cancellationToken)
+        {
+            await _mediator.Publish(
+                new DenormalizationProgressEvent(
+                    status: LongRunningProcessStatus.CancelTaskRequested,
+                    name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger),
+                    description: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_RunCancelled", Logger)),
+                cancellationToken);
+        }
+    }
+
+    // Very temporary - until the real LocalizedStrings implementation is put into 
+    // DI or some common project Alignment has access to:
+    public static class LocalizationStrings
+    {
+        static readonly Dictionary<string, string> _mappings;
+        static LocalizationStrings()
+        {
+            _mappings = new Dictionary<string, string>()
+            {
+                { "Denormalization_AlignmentTopTargets_BackgroundTaskName", "Alignment Denormalization" },
+                { "Denormalization_ProcessingTasks", "Processing tasks" },
+                { "Denormalization_QueryingData", "Querying data" },
+                { "Denormalization_CreatingData", "Creating data" },
+                { "Denormalization_AlignmentTopTargets_FindingAlignments", "Finding targeted alignments in set '{0}'" },
+                { "Denormalization_AlignmentTopTargets_FindingTopTargetTextPerSourceText", "Finding top target training text per source training text for {0} alignments in set '{1}'" },
+                { "Denormalization_AlignmentTopTargets_DeletingPreviousRecords", "Deleting previous records" },
+                { "Denormalization_AlignmentTopTargets_InsertingRecords", "Inserting {0} records - percent completed {{PercentCompleted:P0}}" },
+                { "Denormalization_AlignmentTopTargets_SavingChanges", "Saving changes" },
+                { "Denormalization_AlignmentTopTargets_RunCancelled", "Run cancelled" },
+            };
+        }
+        public static string Get(string key, ILogger logger)
+        {
+            string localizedString;
+            try
+            {
+                localizedString = _mappings[key];
+            }
+            catch (Exception e)
+            {
+                logger.LogCritical($"Localization string missing for key '{key}' {e.Message} {Thread.CurrentThread.CurrentUICulture.Name}");
+                localizedString = key;
+            }
+
+            if (localizedString == null)
+            {
+                logger.LogCritical($"Localization string missing for key '{key}' {Thread.CurrentThread.CurrentUICulture.Name}");
+                localizedString = key;
+            }
+            return localizedString;
+        }
+    }
+}
