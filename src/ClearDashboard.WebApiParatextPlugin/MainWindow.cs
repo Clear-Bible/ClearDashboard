@@ -557,7 +557,6 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             var projects = _host.GetAllProjects(true);
 
-
             var metadata=  projects.Select(project => new ParatextProjectMetadata
                 {
                     Id = project.ID,
@@ -569,6 +568,31 @@ namespace ClearDashboard.WebApiParatextPlugin
                     AvailableBooks = project.GetAvailableBooks(),
             })
                 .ToList();
+
+            var books = new List<BookInfo>();
+            foreach (var project in metadata)
+            {
+                if (project.AvailableBooks.Count > books.Count)
+                {
+                    books = project.AvailableBooks;
+                }
+            }
+
+            var enhancedResources = _host.AllEnhancedResources;
+
+            var enhancedResourcesMetadata = enhancedResources.Select(enhancedResource => new ParatextProjectMetadata
+                {
+                    Id = enhancedResource.ID,
+                    LanguageName = enhancedResource.LanguageName,
+                    Name = enhancedResource.ShortName,
+                    LongName = enhancedResource.LongName,
+                    CorpusType = CorpusType.Standard,//DetermineCorpusType(enhancedResource.Type),
+                    IsRtl = enhancedResource.Language.IsRtoL,
+                    AvailableBooks = books,
+                })
+                .ToList();
+
+            metadata.AddRange(enhancedResourcesMetadata);
 
             var projectNames = metadata.Select(project => project.Name).ToList();
 
@@ -957,6 +981,11 @@ namespace ClearDashboard.WebApiParatextPlugin
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
             var project = projects.FirstOrDefault(p => p.ID == ParatextProjectId);
+            if (project == null)
+            {
+                var enhancedResources = _host.AllEnhancedResources;
+                project = (IProject)enhancedResources.FirstOrDefault(r => r.ID == ParatextProjectId);
+            }
 
             var versificationBookIds = new VersificationBookIds();
 

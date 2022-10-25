@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Linq;
+using SIL.Extensions;
+using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
@@ -55,6 +57,8 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         var bookNumbers = ProjectDbContext.Tokens
              .Where(tc => tc.TokenizationId == request.TokenizedTextCorpusId.Id)
              .Select(tc => tc.BookNumber).Distinct();
+
+        var bookNumsExposed = bookNumbers.ToList();
 
         var bookNumbersToAbbreviations =
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
