@@ -560,13 +560,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var localizedString = LocalizationStrings.Get("ShellView_ShowNotes", _logger);
 
-
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.CanResize;
             settings.MinWidth = 600;
             settings.MinHeight = 600;
-            settings.Title = $"{localizedString} - {_updateData.Version}";
+            settings.Title = $"{localizedString} - {_updateData?.Version}";
 
             var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
             viewModel.ReleaseNotes = new ObservableCollection<ReleaseNote>(UpdateNotes);

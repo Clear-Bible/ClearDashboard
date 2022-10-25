@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
+    public enum ReleaseNoteType
+    {
+        Added,
+        BugFix,
+        Changed,
+        Updated,
+        Deferred
+    }
+    
     public class UpdateFormat
     {
         public string Version { get; set; } = String.Empty;
@@ -16,14 +25,7 @@ namespace ClearDashboard.Wpf.Application.Models
 
     public class ReleaseNote
     {
-        public enum ReleaseNoteType
-        {
-            Added,
-            BugFix,
-            Changed,
-            Updated,
-            Deferred
-        }
+
 
         public ReleaseNoteType NoteType { get; set; } = ReleaseNoteType.Added;
         public string Note { get; set; } = String.Empty;
