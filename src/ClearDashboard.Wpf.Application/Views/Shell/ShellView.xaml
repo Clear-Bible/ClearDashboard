@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -463,7 +464,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
@@ -496,27 +497,37 @@
                 </Button>
             </StatusBarItem>
             <Separator Grid.Column="1" />
-            <StatusBarItem Grid.Column="2">
-                <Button
-                    x:Name="StartBackgroundTask"
-                    Height="25"
-                    Margin="8,0,0,0"
-                    Padding="3"
-                    Style="{StaticResource GreenLightButton}"
-                    ToolTip="This button only shows up in Debug mode"
-                    Visibility="Collapsed">
-                    Start Background Task
-                </Button>
-                <!--  Visibility="{x:Static helpers:DebugVisibility.DebugOnly}"  -->
-            </StatusBarItem>
+            <StatusBarItem Grid.Column="2" />
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
-                <!--<ProgressBar
-                    Width="90"
-                    Height="16"
-                    VerticalAlignment="Center"
-                    Visibility="{Binding ShowSpinner}"
-                    Value="40" />-->
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">
+
+                    <Button
+                        x:Name="ClickUpdateLink"
+                        Margin="10,0,10,0"
+                        Padding="0"
+                        BorderThickness="0"
+                        Style="{StaticResource TransparentButton}">
+                        <TextBlock
+                            Cursor="Hand"
+                            Foreground="DodgerBlue"
+                            Text="{helpers:Localization ShellView_UpdateFound}"
+                            TextDecorations="Underline" />
+                    </Button>
+                    <Button
+                        x:Name="ShowNotes"
+                        Margin="0,0,10,0"
+                        Padding="0"
+                        BorderThickness="0"
+                        Style="{StaticResource TransparentButton}"
+                        ToolTip="{helpers:Localization ShellView_ShowNotes}">
+                        <iconPacks:PackIconPixelartIcons
+                            Width="20"
+                            Height="20"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="Notes" />
+                    </Button>
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
 

@@ -323,6 +323,23 @@
                         <Setter Property="BorderBrush" Value="Gray" />
                         <Setter Property="Foreground" Value="White" />
                     </Style>
+
+                    <Style x:Key="HyperlinkStyledButton" TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock
+                                        MinWidth="100"
+                                        Background="Linen"
+                                        Cursor="Hand"
+                                        Foreground="DodgerBlue"
+                                        Text="{TemplateBinding Content}"
+                                        TextDecorations="Underline" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
                 </ResourceDictionary>
 
                 <ResourceDictionary x:Name="ClearLogo" Source="Assets/ClearLogo.xaml" />
