@@ -21,7 +21,6 @@ namespace ClearDashboard.Wpf.Application.Models
             Added,
             BugFix,
             Changed,
-            Fixed,
             Updated,
             Deferred
         }

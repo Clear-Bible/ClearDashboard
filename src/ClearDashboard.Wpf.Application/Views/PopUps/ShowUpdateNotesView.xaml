@@ -3,14 +3,45 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.PopUps"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     Title="ShowUpdateNotesView"
     Width="800"
     Height="450"
+    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
     mc:Ignorable="d">
+
+    <Window.Resources>
+        <DataTemplate x:Key="added">
+            <iconPacks:PackIconOcticons Foreground="{StaticResource GreenMidBrush}" Kind="DiffAdded" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="bugfix">
+            <iconPacks:PackIconModern Foreground="{StaticResource RedMidBrush}" Kind="BugRemove" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="changed">
+            <iconPacks:PackIconOcticons Foreground="{StaticResource BlueMidBrush}" Kind="DiffModified" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="updated">
+            <iconPacks:PackIconFontAwesome Foreground="{StaticResource YellowVeryDarkBrush}" Kind="WrenchSolid" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="deferred">
+            <iconPacks:PackIconModern Foreground="{StaticResource IndigoMidBrush}" Kind="TimerStop" />
+        </DataTemplate>
+
+    </Window.Resources>
+
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
         <ListView
             Margin="18,0,5,5"
@@ -21,11 +52,6 @@
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="Visibility" Value="Visible" />
-                    <!--<Style.Triggers>
-                        <DataTrigger Binding="{Binding Count}" Value="0">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>-->
                 </Style>
             </ListView.Style>
             <ListView.ItemContainerStyle>
@@ -45,6 +71,32 @@
                     <GridViewColumn Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
+                                <DataTemplate.Triggers>
+
+                                    <!--
+                                        Added,
+                                        BugFix,
+                                        Changed,
+                                        Updated,
+                                        Deferred
+                                    -->
+
+                                    <DataTrigger Binding="{Binding NoteType}" Value="0">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource added}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding NoteType}" Value="1">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource bugfix}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding NoteType}" Value="2">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource changed}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding NoteType}" Value="3">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource updated}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding NoteType}" Value="4">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource deferred}" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
                                 <!--<iconPacks:PackIconMaterial Kind="BugCheckOutline" />-->
                                 <!--<iconPacks:PackIconMaterial Kind="NewBox" />-->
 
@@ -53,7 +105,7 @@
                                 <!--<iconPacks:PackIconOcticons Kind="DiffModified" />-->
                                 <!--<iconPacks:PackIconFontAwesome Kind="WrenchSolid" />-->
                                 <!--<iconPacks:PackIconModern Kind="TimerStop" />-->
-                                <TextBlock Text="{Binding NoteType}" />
+                                <!--<TextBlock Text="{Binding NoteType}" />-->
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -70,5 +122,14 @@
                 </GridView>
             </ListView.View>
         </ListView>
+
+        <Button
+            x:Name="Close"
+            Grid.Row="1"
+            MaxWidth="150"
+            Margin="5"
+            Content="{helpers:Localization Ok}" />
+
+
     </Grid>
 </Window>

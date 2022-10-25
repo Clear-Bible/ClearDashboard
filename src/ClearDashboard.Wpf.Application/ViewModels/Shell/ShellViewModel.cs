@@ -10,10 +10,9 @@ using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using ClearDashboard.Wpf.Application.Views.PopUps;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using QuickGraph;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -24,16 +23,13 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using static System.Net.WebRequestMethods;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -48,12 +44,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private readonly IWindowManager _windowManager;
         private readonly IMediator _mediator;
         private readonly ILifetimeScope _lifetimeScope;
+        
 
         #region Properties
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
         private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(5);
         private readonly int _completedRemovalSeconds = 45;
         private bool _firstPass = false;
+
+        private UpdateFormat? _updateData = null;
 
         private Timer? _timer;
         private bool _firstRun;
@@ -392,22 +391,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region Methods
 
-        public void ShowNotes()
-        {
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.CanResize;
-            settings.MinWidth = 600;
-            settings.MinHeight = 600;
-            settings.Title = "Release Notes";
-
-            var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
-            viewModel.ReleaseNotes = new ObservableCollection<ReleaseNote>(UpdateNotes);
-
-            IWindowManager manager = new WindowManager();
-            manager.ShowWindowAsync(viewModel, null, settings);
-        }
-
         private async void CheckForProgramUpdates()
         {
             //var updateJson = new UpdateFormat
@@ -453,15 +436,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 return;
             }
 
-
-            var updateJson = await JsonSerializer.DeserializeAsync<UpdateFormat>(stream);
-            bool isNewer = CheckWebVersion(updateJson.Version);
+            _updateData = await JsonSerializer.DeserializeAsync<UpdateFormat>(stream);
+            bool isNewer = CheckWebVersion(_updateData.Version);
 
             if (isNewer)
             {
                 ShowUpdateLink = Visibility.Visible;
-                UpdateUrl = new Uri(updateJson.DownloadLink);
-                UpdateNotes = updateJson.ReleaseNotes;
+                UpdateUrl = new Uri(_updateData.DownloadLink);
+                UpdateNotes = _updateData.ReleaseNotes;
             }
         }
 
@@ -573,7 +555,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 Debug.WriteLine(exception);
             }
         }
-        
+
+        public void ShowNotes()
+        {
+            var localizedString = LocalizationStrings.Get("ShellView_ShowNotes", _logger);
+
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.CanResize;
+            settings.MinWidth = 600;
+            settings.MinHeight = 600;
+            settings.Title = $"{localizedString} - {_updateData.Version}";
+
+            var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
+            viewModel.ReleaseNotes = new ObservableCollection<ReleaseNote>(UpdateNotes);
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowWindowAsync(viewModel, null, settings);
+        }
+
 
         /// <summary>
         /// Button click for the background tasks on the status bar

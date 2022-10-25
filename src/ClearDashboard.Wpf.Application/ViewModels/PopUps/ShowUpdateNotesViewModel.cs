@@ -44,6 +44,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             //ReleaseNotes = releaseNotes;
         }
 
-
+        public void Close()
+        {
+            Close();
+        }
     }
 }

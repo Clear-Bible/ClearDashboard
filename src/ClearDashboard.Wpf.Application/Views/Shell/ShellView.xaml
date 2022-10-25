@@ -464,7 +464,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
@@ -498,11 +498,15 @@
             </StatusBarItem>
             <Separator Grid.Column="1" />
             <StatusBarItem Grid.Column="2">
+
+            </StatusBarItem>
+            <Separator Grid.Column="3" />
+            <StatusBarItem Grid.Column="4" >
                 <StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">
 
                     <Button
                         x:Name="ClickUpdateLink"
-                        Margin="50,0,10,0"
+                        Margin="10,0,10,0"
                         Padding="0"
                         BorderThickness="0"
                         Style="{StaticResource TransparentButton}">
@@ -514,7 +518,7 @@
                     </Button>
                     <Button
                         x:Name="ShowNotes"
-                        Margin="0"
+                        Margin="0 0 10 0"
                         Padding="0"
                         BorderThickness="0"
                         Style="{StaticResource TransparentButton}"
@@ -527,8 +531,6 @@
                     </Button>
                 </StackPanel>
             </StatusBarItem>
-            <Separator Grid.Column="3" />
-            <StatusBarItem Grid.Column="4" />
         </StatusBar>
 
     </Grid>
