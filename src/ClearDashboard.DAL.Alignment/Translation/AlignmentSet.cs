@@ -14,9 +14,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public AlignmentSetId AlignmentSetId { get; }
         public ParallelCorpusId ParallelCorpusId { get; }
 
-        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows)
+        public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, CancellationToken token = default)
         {
-            var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows));
+            var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows), token);
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -27,9 +27,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
-        public async void PutAlignment(Alignment alignment)
+        public async void PutAlignment(Alignment alignment, CancellationToken token = default)
         {
-            var result = await mediator_.Send(new PutAlignmentSetAlignmentCommand(AlignmentSetId, alignment));
+            var result = await mediator_.Send(new PutAlignmentSetAlignmentCommand(AlignmentSetId, alignment), token);
             if (result.Success)
             {
                 return;
@@ -73,7 +73,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
-        public async Task Update()
+        public async Task Update(CancellationToken token = default)
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
             throw new NotImplementedException();
@@ -121,7 +121,8 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 bool isSyntaxTreeAlignerRefined,
                 Dictionary<string, object> metadata,
                 ParallelCorpusId parallelCorpusId,
-                IMediator mediator)
+                IMediator mediator,
+                CancellationToken token = default)
         {
             var createTranslationSetCommandResult = await mediator.Send(new CreateAlignmentSetCommand(
                 alignedTokenPairs.Select(a => new Alignment(a, "Unverified", "FromAlignmentModel")),
@@ -129,7 +130,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 smtModel,
                 isSyntaxTreeAlignerRefined,
                 metadata,
-                parallelCorpusId));
+                parallelCorpusId), token);
 
             if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
             {

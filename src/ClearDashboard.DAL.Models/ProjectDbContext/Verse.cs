@@ -21,8 +21,11 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? VerseText { get; set; }
 
+        [ForeignKey("CorpusId")]
         public Guid? CorpusId { get; set; }
         public virtual Corpus? Corpus { get; set; }
+
+        [ForeignKey("VerseMappingId")]
         public Guid? VerseMappingId { get; set; }
         public VerseMapping? VerseMapping { get; set; }
 

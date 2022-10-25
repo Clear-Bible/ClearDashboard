@@ -148,7 +148,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
             ProjectDbContext.ParallelCorpa.Add(parallelCorpusModel);
-            await ProjectDbContext.SaveChangesAsync();
+            await ProjectDbContext.SaveChangesAsync(cancellationToken);
 
 #if DEBUG
             proc.Refresh();

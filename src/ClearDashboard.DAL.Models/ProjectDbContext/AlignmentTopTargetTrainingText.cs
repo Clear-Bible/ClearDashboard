@@ -1,0 +1,31 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ClearDashboard.DataAccessLayer.Models;
+
+public class AlignmentTopTargetTrainingText
+{
+    public AlignmentTopTargetTrainingText()
+    {
+        // ReSharper disable VirtualMemberCallInConstructor
+        SourceTrainingText = string.Empty;
+        TopTargetTrainingText = string.Empty;
+        // ReSharper restore VirtualMemberCallInConstructor
+    }
+
+    public Guid Id { get; set; }
+
+    [ForeignKey("AlignmentSetId")]
+    public virtual Guid AlignmentSetId { get; set; }
+    public virtual AlignmentSet? AlignmentSet { get; set; }
+
+    [ForeignKey("AlignmentId")]
+    public virtual Guid AlignmentId { get; set; }
+    public virtual Alignment? Alignment { get; set; }
+
+    [ForeignKey("SourceTokenComponentId")]
+    public Guid SourceTokenComponentId { get; set; }
+    public TokenComponent? SourceTokenComponent { get; set; }
+
+    public string SourceTrainingText { get; set; }
+    public string TopTargetTrainingText { get; set; }
+}

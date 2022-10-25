@@ -25,9 +25,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 bool isSyntaxTreeAlignerRefined,
                 Dictionary<string, object> metadata,
                 ParallelCorpusId parallelCorpusId, 
-                IMediator mediator)
+                IMediator mediator,
+                CancellationToken token = default)
         {
-            return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, metadata, parallelCorpusId, mediator);
+            return await AlignmentSet.Create(alignTokenPairs, displayName, smtModel, isSyntaxTreeAlignerRefined, metadata, parallelCorpusId, mediator, token);
         }
     }
 }
