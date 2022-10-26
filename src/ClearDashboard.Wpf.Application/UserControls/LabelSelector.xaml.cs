@@ -97,13 +97,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         void SetTextboxFocus()
         {
-            //LabelTextBox.Focusable = true;
-            //LabelTextBox.GetBindingExpression(VisibilityProperty)?.UpdateSource();
-            //LabelTextBox.GetBindingExpression(VisibilityProperty)?.UpdateTarget();
             LabelTextBox.Focus();
             Keyboard.Focus(LabelTextBox);
-            //FocusManager.SetFocusedElement(LabelStackPanel, LabelTextBox);
-            //LabelTextBox.SelectAll();
         }
 
         private void AddButtonClicked(object sender, RoutedEventArgs e)
@@ -111,8 +106,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TextBoxVisibility = Visibility.Visible;
             OnPropertyChanged(nameof(TextBoxVisibility));
 
-            // The visibility binding needs to refresh before we can focus the textbox.
-            // https://stackoverflow.com/questions/4868122/wpf-why-isnt-keyboard-focus-working
             System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
         }
 
