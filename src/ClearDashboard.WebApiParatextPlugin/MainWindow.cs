@@ -557,6 +557,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             var projects = _host.GetAllProjects(true);
 
+
             var metadata=  projects.Select(project => new ParatextProjectMetadata
                 {
                     Id = project.ID,

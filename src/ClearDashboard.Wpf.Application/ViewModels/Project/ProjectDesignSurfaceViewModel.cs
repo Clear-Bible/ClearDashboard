@@ -1028,6 +1028,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
+
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
                            metadata.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
