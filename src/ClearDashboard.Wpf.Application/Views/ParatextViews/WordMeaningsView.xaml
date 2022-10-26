@@ -395,9 +395,8 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Stretch"
                                 BorderThickness="0"
-                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
-                                Style="{StaticResource TransparentStyle}">
-                                <!--<Button.Style>
+                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
+                                <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Template">
                                             <Setter.Value>
@@ -433,7 +432,7 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Button.Style>-->
+                                </Button.Style>
                                 <materialDesign:PackIcon Kind="ChevronRight" />
                             </Button>
                         </Grid>

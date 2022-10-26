@@ -204,8 +204,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // push to Paratext
                     if (ParatextSync && !InComingChangesStarted)
                     {
-                        _ = Task.Run(() =>
-                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                        //_ = Task.Run(() =>
+                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None);//);
                     }
 
                     _verseChange = value;
@@ -1203,6 +1203,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
+            InComingChangesStarted = true;
             if (CurrentBcv.BibleBookList.Count == 0)
             {
                 return;
@@ -1213,11 +1214,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
                 
-                if (InComingChangesStarted)
-                {
-                    CurrentBcv.SetVerseFromId(message.Verse);
-                }
+                //if (InComingChangesStarted)
+                //{
+                CurrentBcv.SetVerseFromId(message.Verse);
+                //}
             }
+
+            InComingChangesStarted = false;
 
         }
 
