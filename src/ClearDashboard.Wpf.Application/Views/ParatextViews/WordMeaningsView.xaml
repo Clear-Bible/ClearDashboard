@@ -412,6 +412,7 @@
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
+
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
                                                 <Setter Property="Template">
