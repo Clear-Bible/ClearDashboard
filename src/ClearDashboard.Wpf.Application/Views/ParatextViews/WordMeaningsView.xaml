@@ -393,18 +393,52 @@
                                 Grid.Column="4"
                                 Margin="0,0,35,0"
                                 HorizontalAlignment="Left"
-                                VerticalAlignment="Stretch"
+                                VerticalAlignment="Center"
                                 BorderThickness="0"
-                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
-                                Style="{StaticResource TransparentStyle}">
-                                <!--<Button.Style>
+                                Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
+                                <Button.Style>
                                     <Style TargetType="Button">
+                                        <!--<Setter Property="HorizontalContentAlignment" Value="Center" />
+                                        <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Width" Value="100" />
+                                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border>
+                                                        <Border.Style>
+                                                            <Style TargetType="{x:Type Border}">
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter Property="Background" Value="LightGray" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsMouseOver" Value="False">
+                                                                        <Setter Property="Background" Value="#EEEBEB" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsEnabled" Value="False">
+                                                                        <Setter Property="Background" Value="Transparent" />
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <Grid
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Background="Transparent">
+                                                            <ContentPresenter />
+                                                        </Grid>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>-->
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="Button">
                                                     <Button
+                                                        HorizontalContentAlignment="Center"
                                                         HorizontalAlignment="Left"
-                                                        VerticalAlignment="Top"
+                                                        VerticalAlignment="Center"
+                                                        OverridesDefaultStyle="True"
                                                         BorderThickness="0"
                                                         Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
                                                         CommandParameter="{Binding}">
@@ -413,7 +447,6 @@
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
-
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
                                                 <Setter Property="Template">
@@ -433,7 +466,7 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Button.Style>-->
+                                </Button.Style>
                                 <materialDesign:PackIcon Kind="ChevronRight" />
                             </Button>
                         </Grid>
