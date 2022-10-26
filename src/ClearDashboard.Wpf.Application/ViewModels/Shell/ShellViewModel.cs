@@ -30,11 +30,15 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
-    public class ShellViewModel : DashboardApplicationScreen, IShellViewModel, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>,
-       IHandle<BackgroundTaskChangedMessage>
+    public class ShellViewModel : DashboardApplicationScreen, IShellViewModel, 
+        IHandle<ParatextConnectedMessage>, 
+        IHandle<UserMessage>, 
+        IHandle<BackgroundTaskChangedMessage>, 
+        IHandle<GetApplicationWindowSettings>
     {
         private readonly TranslationSource? _translationSource;
         private readonly INavigationService _navigationService;
@@ -97,6 +101,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #endregion
 
         #region ObservableProps
+
+        private WindowSettings _windowSettings;
+        public WindowSettings WindowSettings
+        {
+            get => _windowSettings;
+            set
+            {
+                _windowSettings = value;
+                NotifyOfPropertyChange(() => WindowSettings);
+
+                EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings));
+            }
+        }
+
+
 
         private Visibility _showSpinner = Visibility.Collapsed;
         public Visibility ShowSpinner
@@ -795,5 +814,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         #endregion
+
+        public async Task HandleAsync(GetApplicationWindowSettings message, CancellationToken cancellationToken)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings));
+        }
     }
 }

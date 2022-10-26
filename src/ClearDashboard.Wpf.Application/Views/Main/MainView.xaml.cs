@@ -149,11 +149,11 @@ namespace ClearDashboard.Wpf.Application.Views.Main
         //}
 
 
-        private async void OnPageUnloaded(object sender, RoutedEventArgs e)
-        {
-            //await _mainViewModel.DeactivateAsync(true);
+        //private async void OnPageUnloaded(object sender, RoutedEventArgs e)
+        //{
+        //    //await _mainViewModel.DeactivateAsync(true);
 
-        }
+        //}
     }
 
 

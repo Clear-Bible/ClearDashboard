@@ -2,6 +2,7 @@ using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
@@ -20,6 +21,10 @@ using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
+
+
+public record GetApplicationWindowSettings();
+public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
 public record ShowTokenizationWindowMessage(
     string ParatextProjectId, 
