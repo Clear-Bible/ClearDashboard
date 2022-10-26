@@ -5,7 +5,6 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
@@ -15,7 +14,6 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
@@ -205,7 +203,6 @@ public class DashboardProjectManager : ProjectManager
         {
             CurrentVerse = verse;
             await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
-
         });
 
         HubProxy.On<ParatextProject>("sendProject", async (project) =>

@@ -13,17 +13,12 @@ using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Microsoft.Win32;
-using Paratext.PluginInterfaces;
-using QuickGraph.Collections;
 using SIL.ObjectModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,19 +27,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Diagnostics;
 using Microsoft.Win32;
 using System.IO;
-using System.Drawing;
-using System.ComponentModel;
-using System.Collections;
-using System.Reflection;
-using System.Threading;
-using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -52,11 +36,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
     {
 
         #region Member Variables
-        public Dictionary<string, string> LexMatRef = new Dictionary<string, string>();
+        public Dictionary<string, string> LexMatRef = new();
         public string[] BibleBooks = { "01GEN", "02EXO", "03LEV", "04NUM", "05DEU", "06JOS", "07JDG", "08RUT", "091SA", "102SA", "111KI", "122KI", "131CH", "142CH", "15EZR", "16NEH", "17EST", "18JOB", "19PSA", "20PRO", "21ECC", "22SNG", "23ISA", "24JER", "25LAM", "26EZK", "27DAN", "28HOS", "29JOL", "30AMO", "31OBA", "32JON", "33MIC", "34NAM", "35HAB", "36ZEP", "37HAG", "38ZEC", "39MAL", "41MAT", "42MRK", "43LUK", "44JHN", "45ACT", "46ROM", "471CO", "482COR", "49GAL", "50EPH", "51PHP", "52COL", "531TH", "542TH", "551TI", "562TI", "57TIT", "58PHM", "59HEB", "60JAS", "611PE", "622PE", "631JN", "642JN", "653JN", "66JUD", "67REV", "70TOB", "71JDT", "72ESG", "73WIS", "74SIR", "75BAR", "76LJE", "77S3Y", "78SUS", "79BEL", "80MAN", "81PS2" };
         public Dictionary<string, string> BibleBookDict;
-        public string[] b; // project book file data
-        public string ProjectDir, ProgramDir, ProjectDir7 = "", ProjectDir89 = "";
+        public string[] projectBookFileData;
+        public string ProjectDir;
         private TermRenderingsList _termRenderingsList = new();
         private BiblicalTermsList _biblicalTermsList = new();
         private BiblicalTermsList _allBiblicalTermsList = new();
@@ -501,8 +485,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     // populate the data grid
                     foreach (var entry in _lexicon.Entries.Item)
                     {
-                        
-
                         foreach (var senseEntry in entry.Entry.Sense)
                         {
                             GridData.Add(new PinsDataTable
@@ -523,7 +505,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
                                 Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
                                 Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
-                                //VerseList = verseList
                             });
                             cancellationToken.ThrowIfCancellationRequested();
                         }
@@ -542,27 +523,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 foreach (string f in bookfilesfiltered)             // loop through books f
                 {
-                    b = File.ReadAllLines(f);                       // read file and check
-                    for (int k = 0; k < b.Count(); k++)
+                    projectBookFileData = File.ReadAllLines(f);                       // read file and check
+                    for (int k = 0; k < projectBookFileData.Count(); k++)
                     {
-                        if (b[k].Contains("<item>"))
+                        if (projectBookFileData[k].Contains("<item>"))
                         {
-                            if (b[++k].Contains("<string>"))
+                            if (projectBookFileData[++k].Contains("<string>"))
                             {
-                                tref = GetTagValue(b[k]);
+                                tref = GetTagValue(projectBookFileData[k]);
                                 do
                                 {
-                                    if (b[++k].Contains("<Lexeme"))  // build a dictionary where key = lexeme+gloss, and where value = references
+                                    if (projectBookFileData[++k].Contains("<Lexeme"))  // build a dictionary where key = lexeme+gloss, and where value = references
                                     {
                                         lx = lt = li = "";
-                                        Lexparse(b[k], ref lx, ref lt, ref li);
+                                        Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
                                         if (LexMatRef.ContainsKey(li + lx))     // key already exists so add references to previous value
                                             LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
                                         else                                    // this is a new key so create a new key, value pair
                                             LexMatRef.Add(li + lx, tref);
                                     }
                                 }
-                                while (!b[k].Contains("</item>"));
+                                while (!projectBookFileData[k].Contains("</item>"));
                             }
                         }
                     }
@@ -668,15 +649,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             return false;
         }
 
-        private List<string> PathToProjName(List<string> projlist)
-        {
-            projlist = projlist
-                .Select(s => s[ProjectDir.Length..])   // remove Projects root path
-                .Select(s => s[..s.IndexOf("\\")])     // remove file names so that only project (subdirectory) names remain
-                .Distinct().ToList();                  // remove duplicates
-            return projlist;
-        }
-
         private string GetTagValue(string t)
         {
             string ttrim = t.TrimStart(' ', '<');            // remove leading blanks and < leaving "tagname>VALUE</tagname>"
@@ -739,24 +711,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 + Convert.ToInt32(s[8..11]).ToString()).ToList();
             // formerly s.Substring(2, 3) s.Substring(5, 3) s.Substing(8, 3)
             refs = t_listOut;
-        }
-
-        private void SimplifyRefs(List<string> rlst, ref string outputRefs)
-        {
-            List<string> rlst1 = new List<string>();
-            List<string> rlst2 = new List<string>();
-            List<string> rlstout = new List<string>();
-            rlst = rlst.Select(s => s.Trim()).ToList();
-            rlst = rlst.Where(s => s.Length > 0).ToList();
-            rlst1 = rlst.Select(s => s.Substring(0, 3)).Distinct().ToList();    // find all unique book names in rlst
-            foreach (string r in rlst1)                                         // loop through each unique book name
-            {
-                rlst2 = rlst.Where(s => s.Substring(0, 3).Equals(r)).ToList();  // find all references in this book
-                rlst2 = rlst2.Select(s => s.Substring(4)).ToList();             // remove book name on all references
-                rlst2[0] = r + " " + rlst2[0];                                  // replace book name on first reference in list
-                rlstout.AddRange(rlst2);
-            }
-            outputRefs = String.Join(", ", rlstout);
         }
 
         private async Task<bool> GetLexicon()

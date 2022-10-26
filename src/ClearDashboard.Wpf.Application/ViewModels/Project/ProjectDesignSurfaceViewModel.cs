@@ -40,8 +40,6 @@ using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearBible.Engine.Exceptions;
-using Microsoft.AspNet.SignalR.Client.Http;
-using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -1029,8 +1027,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
-
-                        var bookTokensList = textCorpus.GetRows().Cast<TokensTextRow>().ToList();
 
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,

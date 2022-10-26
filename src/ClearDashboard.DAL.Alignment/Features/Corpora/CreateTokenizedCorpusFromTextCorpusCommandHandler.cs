@@ -114,7 +114,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 foreach (var bookId in bookIds)
                 {
-                    var bookTokensList = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
                     var bookTokens = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>()
                         .SelectMany(ttr => ttr.Tokens)
                         .Select(token =>
