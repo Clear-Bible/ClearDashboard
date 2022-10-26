@@ -464,122 +464,134 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var control = e.Source as FrameworkElement;
             var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
-            var verseDisplayViewModel = (VerseDisplayViewModel)DataContext;
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+
+            if (DataContext is VerseDisplayViewModel verseDisplayViewModel)
             {
-                if (tokenDisplayViewModel != null && verseDisplayViewModel.Alignments != null)
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
                 {
-                    IEnumerable<Token> sourceTokens;
-                    IEnumerable<Token> targetTokens;
-                    if (tokenDisplayViewModel.IsSource)
+                    if (tokenDisplayViewModel != null && verseDisplayViewModel.Alignments != null)
                     {
-                        targetTokens = verseDisplayViewModel.Alignments
-                            .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
-                            .SelectMany(a =>
-                            {
-                                if (a.AlignedTokenPair.TargetToken is not CompositeToken)
+                        IEnumerable<Token> sourceTokens;
+                        IEnumerable<Token> targetTokens;
+                        if (tokenDisplayViewModel.IsSource)
+                        {
+                            targetTokens = verseDisplayViewModel.Alignments
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                    .TokenId))
+                                .SelectMany(a =>
                                 {
-                                    return new List<Token>() { a.AlignedTokenPair.TargetToken };
+                                    if (a.AlignedTokenPair.TargetToken is not CompositeToken)
+                                    {
+                                        return new List<Token>() { a.AlignedTokenPair.TargetToken };
+                                    }
+                                    else
+                                    {
+                                        return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
+                                    }
+                                });
+                            ;
+                            sourceTokens = verseDisplayViewModel.Alignments
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                    .TokenId))
+                                .SelectMany(a =>
+                                {
+                                    if (a.AlignedTokenPair.SourceToken is not CompositeToken)
+                                    {
+                                        return new List<Token>() { a.AlignedTokenPair.SourceToken };
+                                    }
+                                    else
+                                    {
+                                        return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
+                                    }
+                                });
+                        }
+                        else
+                        {
+                            sourceTokens = verseDisplayViewModel.Alignments
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                    .TokenId))
+                                .SelectMany(a =>
+                                {
+                                    if (a.AlignedTokenPair.SourceToken is not CompositeToken)
+                                    {
+                                        return new List<Token>() { a.AlignedTokenPair.SourceToken };
+                                    }
+                                    else
+                                    {
+                                        return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
+                                    }
+                                });
+                            ;
+                            targetTokens = verseDisplayViewModel.Alignments
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                    .TokenId))
+                                .SelectMany(a =>
+                                {
+                                    if (a.AlignedTokenPair.TargetToken is not CompositeToken)
+                                    {
+                                        return new List<Token>() { a.AlignedTokenPair.TargetToken };
+                                    }
+                                    else
+                                    {
+                                        return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
+                                    }
+                                });
+                        }
+
+                        verseDisplayViewModel.TokenDisplayViewModels
+                            .Select(tdm =>
+                            {
+                                if (sourceTokens
+                                    .Select(t => t.TokenId)
+                                    .Contains(tdm.Token.TokenId))
+                                {
+                                    tdm.IsSelected = true;
                                 }
                                 else
                                 {
-                                    return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
+                                    tdm.IsSelected = false;
                                 }
-                            }); ;
-                        sourceTokens = verseDisplayViewModel.Alignments
-                            .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
-                            .SelectMany(a =>
+
+                                return tdm;
+                            })
+                            .ToList();
+                        verseDisplayViewModel.TargetTokenDisplayViewModels
+                            .Select(tdm =>
                             {
-                                if (a.AlignedTokenPair.SourceToken is not CompositeToken)
+                                if (targetTokens
+                                    .Select(t => t.TokenId)
+                                    .Contains(tdm.Token.TokenId))
                                 {
-                                    return new List<Token>() { a.AlignedTokenPair.SourceToken };
+                                    tdm.IsSelected = true;
                                 }
                                 else
                                 {
-                                    return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
+                                    tdm.IsSelected = false;
                                 }
-                            });
+
+                                return tdm;
+                            })
+                            .ToList();
                     }
-                    else
-                    {
-                        sourceTokens = verseDisplayViewModel.Alignments
-                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
-                            .SelectMany(a =>
-                            {
-                                if (a.AlignedTokenPair.SourceToken is not CompositeToken)
-                                {
-                                    return new List<Token>() { a.AlignedTokenPair.SourceToken };
-                                }
-                                else
-                                {
-                                    return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
-                                }
-                            }); ;
-                        targetTokens = verseDisplayViewModel.Alignments
-                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token.TokenId))
-                            .SelectMany(a =>
-                            {
-                                if (a.AlignedTokenPair.TargetToken is not CompositeToken)
-                                {
-                                    return new List<Token>() { a.AlignedTokenPair.TargetToken };
-                                }
-                                else
-                                {
-                                    return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
-                                }
-                            });
-                    }
+                }
+                else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+                {
                     verseDisplayViewModel.TokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            if (sourceTokens
-                                .Select(t => t.TokenId)
-                                .Contains(tdm.Token.TokenId))
-                            {
-                                tdm.IsSelected = true;
-                            }
-                            else
-                            {
-                                tdm.IsSelected = false;
-                            }
+                            tdm.IsSelected = false;
                             return tdm;
                         })
                         .ToList();
                     verseDisplayViewModel.TargetTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            if (targetTokens
-                                .Select(t => t.TokenId)
-                                .Contains(tdm.Token.TokenId))
-                            {
-                                tdm.IsSelected = true;
-                            }
-                            else
-                            {
-                                tdm.IsSelected = false;
-                            }
+                            tdm.IsSelected = false;
                             return tdm;
                         })
                         .ToList();
-                }
-            }
-            else if  ((Keyboard.Modifiers & ModifierKeys.Alt) > 0)
-            {
-                verseDisplayViewModel.TokenDisplayViewModels
-                    .Select(tdm =>
-                    {
-                        tdm.IsSelected = false;
-                        return tdm;
-                    })
-                    .ToList();
-                verseDisplayViewModel.TargetTokenDisplayViewModels
-                    .Select(tdm =>
-                    {
-                        tdm.IsSelected = false;
-                        return tdm;
-                    })
-                    .ToList();
 
+                }
             }
 
             RaiseTokenEvent(TokenMouseEnterEvent, e);
