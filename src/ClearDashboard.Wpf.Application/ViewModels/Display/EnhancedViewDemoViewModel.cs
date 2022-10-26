@@ -254,6 +254,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotePaneVisibility = Visibility.Visible;
         }
 
+        public void NoteMouseEnter(NoteEventArgs e)
+        {
+            e.TokenDisplayViewModel.IsSelected = true;
+            SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+            NotePaneVisibility = Visibility.Visible;
+        }
+
         public void NoteCreate(NoteEventArgs e)
         {
             NotePaneVisibility = Visibility.Visible;
