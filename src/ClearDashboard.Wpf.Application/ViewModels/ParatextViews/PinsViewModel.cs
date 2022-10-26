@@ -13,12 +13,17 @@ using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
+using Paratext.PluginInterfaces;
+using QuickGraph.Collections;
 using SIL.ObjectModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +32,19 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Diagnostics;
+using Microsoft.Win32;
+using System.IO;
+using System.Drawing;
+using System.ComponentModel;
+using System.Collections;
+using System.Reflection;
+using System.Threading;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -34,7 +52,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
     {
 
         #region Member Variables
-
+        public Dictionary<string, string> LexMatRef = new Dictionary<string, string>();
+        public string[] BibleBooks = { "01GEN", "02EXO", "03LEV", "04NUM", "05DEU", "06JOS", "07JDG", "08RUT", "091SA", "102SA", "111KI", "122KI", "131CH", "142CH", "15EZR", "16NEH", "17EST", "18JOB", "19PSA", "20PRO", "21ECC", "22SNG", "23ISA", "24JER", "25LAM", "26EZK", "27DAN", "28HOS", "29JOL", "30AMO", "31OBA", "32JON", "33MIC", "34NAM", "35HAB", "36ZEP", "37HAG", "38ZEC", "39MAL", "41MAT", "42MRK", "43LUK", "44JHN", "45ACT", "46ROM", "471CO", "482COR", "49GAL", "50EPH", "51PHP", "52COL", "531TH", "542TH", "551TI", "562TI", "57TIT", "58PHM", "59HEB", "60JAS", "611PE", "622PE", "631JN", "642JN", "653JN", "66JUD", "67REV", "70TOB", "71JDT", "72ESG", "73WIS", "74SIR", "75BAR", "76LJE", "77S3Y", "78SUS", "79BEL", "80MAN", "81PS2" };
+        public Dictionary<string, string> BibleBookDict;
+        public string[] b; // project book file data
+        public string ProjectDir, ProgramDir, ProjectDir7 = "", ProjectDir89 = "";
         private TermRenderingsList _termRenderingsList = new();
         private BiblicalTermsList _biblicalTermsList = new();
         private BiblicalTermsList _allBiblicalTermsList = new();
@@ -479,6 +501,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     // populate the data grid
                     foreach (var entry in _lexicon.Entries.Item)
                     {
+                        
+
                         foreach (var senseEntry in entry.Entry.Sense)
                         {
                             GridData.Add(new PinsDataTable
@@ -499,9 +523,162 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 Stem = (entry.Lexeme.Type == "Stem") ? "Stem" : "",
                                 Suffix = (entry.Lexeme.Type == "Suffix") ? "-suf" : "",
                                 Word = (entry.Lexeme.Type == "Word") ? "Wrd" : "",
+                                //VerseList = verseList
                             });
                             cancellationToken.ThrowIfCancellationRequested();
                         }
+                    }
+                }
+
+                
+                BibleBookDict = BibleBooks.ToDictionary(item => item[2..5], item => item[..2]);
+                var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
+                ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
+                var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories).ToList();
+                string tref, lx, lt, li;
+                int bcnt = 0;
+                var lexlang = ProjectManager.CurrentParatextProject.Name;
+                var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
+
+                foreach (string f in bookfilesfiltered)             // loop through books f
+                {
+                    b = File.ReadAllLines(f);                       // read file and check
+                    for (int k = 0; k < b.Count(); k++)
+                    {
+                        if (b[k].Contains("<item>"))
+                        {
+                            if (b[++k].Contains("<string>"))
+                            {
+                                tref = GetTagValue(b[k]);
+                                do
+                                {
+                                    if (b[++k].Contains("<Lexeme"))  // build a dictionary where key = lexeme+gloss, and where value = references
+                                    {
+                                        lx = lt = li = "";
+                                        Lexparse(b[k], ref lx, ref lt, ref li);
+                                        if (LexMatRef.ContainsKey(li + lx))     // key already exists so add references to previous value
+                                            LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
+                                        else                                    // this is a new key so create a new key, value pair
+                                            LexMatRef.Add(li + lx, tref);
+                                    }
+                                }
+                                while (!b[k].Contains("</item>"));
+                            }
+                        }
+                    }
+                }
+
+                List<string> rs;
+                string ky, vl;
+                int ndx2;
+                int pndx = 0;
+                foreach (var LMR in LexMatRef)
+                {
+                    try
+                    {
+                        rs = LMR.Value.Split(',')
+                            .ToList(); // change dictionary values from comma delimited string to List for sorting
+                        ky = LMR.Key;
+                        SortRefs(ref rs);                     // sort the List  
+                        vl = String.Join(", ", rs); // change List back to comma delimited string
+
+                        if (!vl.Contains("missing"))
+                        {
+                            var objectToFind = GridData.Where(s => s.Match == ky).FirstOrDefault();
+                            ndx2 = GridData.IndexOf(objectToFind);//.FindIndex(s => s.Match == ky);
+                            if (ndx2 >= 0) GridData[ndx2].Refs = vl;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+
+                string L, G;
+                string simrefs = "";
+                List<PinsDataTable> results = new List<PinsDataTable>();
+                PinsDataTable datrow;
+
+                // join rows of that have the same lexeme and gloss
+                for (int i = 0; i < GridData.Count; i++) // cannot use foreach because various items are removed causing for each loop error
+                {
+                    try
+                    {
+                        datrow = GridData[i];
+                        if (datrow.Lform == "Phrase")
+                            datrow.Phrase = "Phr";
+                        L = datrow.Source; // lexeme
+                        G = datrow.Gloss; // gloss
+
+                        //results = GridData.Where(s => (s.Source == L) && (s.Gloss == G)).ToList(); // create results List where lexemes and glosses match
+                        //if (results.Count == 1) // no need to join two rows, but still need to Simplify
+                        //{
+                        if (datrow.Refs != "")
+                        {
+                            //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
+                            var longrefs = datrow.Refs.Split(',').ToList();
+                            var simprefs = new List<string>();
+                            foreach (var longref in longrefs)
+                            {
+                                var booksplit = longref.Split(' ').ToList();
+                                var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
+                                var chapterVerseSplit = booksplit[1].Split(':').ToList();
+                                var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
+                                var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
+                                simprefs.Add(bookNum + chapterNum + verseNum);
+                            }
+
+                            datrow.SimpRefs = simprefs.Count.ToString();
+                            datrow.VerseList = simprefs;
+                        }
+                        else
+                        {
+                            datrow.SimpRefs = "0";
+                            datrow.VerseList = null;
+                        
+                        }
+                        //
+                        //else
+                        //{
+                        //    // skip first result because this is the same as the current datrow (thedata[i])
+                        //    //results.Remove(results[0]);
+                        //    foreach (PinsDataTable result in results)
+                        //    {
+                        //        var longrefs = result.Refs.Split(',').ToList();
+                        //        var simprefs = new List<string>();
+                        //        foreach (var longref in longrefs)
+                        //        {
+                        //            var booksplit = longref.Split(' ').ToList();
+                        //            var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
+                        //            var chapterVerseSplit = booksplit[1].Split(':').ToList();
+                        //            var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
+                        //            var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
+                        //            simprefs.Add(bookNum + chapterNum + verseNum);
+                        //        }
+
+                        //        result.SimpRefs = simprefs.Count.ToString();
+                        //        result.VerseList = simprefs;
+                        //        //datrow.Lform += " " + datrow2.Lform; // merge lexical form data (Word, Stem, Prefix, Suffix, Phrase)
+                        //        //rs = (datrow.Refs + ", " + datrow2.Refs).Split(',').ToList();
+                        //        //SortRefs(ref rs);
+                        //        //datrow.Refs = String.Join(", ", rs);
+                        //        ////SimplifyRefs(rs, ref simrefs);
+                        //        //datrow.SimpRefs = simrefs;
+                        //        //datrow.Code += " " + datrow2.Code;
+                        //        //datrow.Match += " " + datrow2.Match;
+                        //        //GridData.Remove(datrow2);
+                        //    }
+                        //    //                    datrow.Phrase = datrow.Lform.Contains("Phrase") ? "Phr" : "";
+                        //    //                    datrow.Word = datrow.Lform.Contains("Word") ? "Wrd" : "";
+                        //    //                    datrow.Prefix = datrow.Lform.Contains("Prefix") ? "pre-" : "";
+                        //    //                    datrow.Stem = datrow.Lform.Contains("Stem") ? "Stem" : "";
+                        //    //                    datrow.Suffix = datrow.Lform.Contains("Suffix") ? "-suf" : "";
+                        //}
+                    }
+                    catch (Exception ex)
+                    {
+
                     }
                 }
 
@@ -544,6 +721,97 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 _cancellationTokenSource.Dispose();
             }
             return false;
+        }
+
+        private List<string> PathToProjName(List<string> projlist)
+        {
+            projlist = projlist
+                .Select(s => s[ProjectDir.Length..])   // remove Projects root path
+                .Select(s => s[..s.IndexOf("\\")])     // remove file names so that only project (subdirectory) names remain
+                .Distinct().ToList();                  // remove duplicates
+            return projlist;
+        }
+
+        private string GetTagValue(string t)
+        {
+            string ttrim = t.TrimStart(' ', '<');            // remove leading blanks and < leaving "tagname>VALUE</tagname>"
+            string[] words = ttrim.Split('<', '>');          // value of simple tag is words[1] (tagname, VALUE, /tagname)
+            return words[1];                                 // return second word only
+        }
+
+        private void Lexparse(string lexin, ref string lex, ref string lext, ref string lexi)
+        {
+            var tmp = lexin.Split('"');
+            if (tmp.Length > 3)
+                lexi = tmp[3];
+            else
+                lexi = "missing";
+            if (tmp.Length > 1)
+            {
+                var tmp2 = tmp[1].Split(':');
+                lext = tmp2[0];
+                lex = tmp2[1];
+            }
+            else
+            {
+                lext = "missing";
+                lex = "missing";
+            }
+        }
+
+        private void SortRefs(ref List<string> refs)
+        {
+            refs = refs
+                .Select(s => s.Trim()) //.ToList();    // trim leading and trailing to ensure valid BBB CCC:VVV
+                .Where(s => s.Length > 0).ToList();    // remove references = "" 
+            List<string> t_list = new List<string>();
+            List<string> t_listOut = new List<string>();
+            //            string[] book = { "01GEN", "02EXO", "03LEV", "04NUM", "05DEU", "06JOS", "07JDG", "08RUT", "091SA", "102SA", "111KI", "122KI", "131CH", "142CH", "15EZR", "16NEH", "17EST", "18JOB", "19PSA", "20PRO", "21ECC", "22SNG", "23ISA", "24JER", "25LAM", "26EZK", "27DAN", "28HOS", "29JOL", "30AMO", "31OBA", "32JON", "33MIC", "34NAM", "35HAB", "36ZEP", "37HAG", "38ZEC", "39MAL", "41MAT", "42MRK", "43LUK", "44JHN", "45ACT", "46ROM", "471CO", "482COR", "49GAL", "50EPH", "51PHP", "52COL", "531TH", "542TH", "551TI", "562TI", "57TIT", "58PHM", "59HEB", "60JAS", "611PE", "622PE", "631JN", "642JN", "653JN", "66JUD", "67REV", "70TOB", "71JDT", "72ESG", "73WIS", "74SIR", "75BAR", "76LJE", "77S3Y", "78SUS", "79BEL", "80MAN", "81PS2" };
+
+            //            var dictbk = book.ToDictionary(item => item[2..5], item => item[..2]);
+            // formerly book.ToDictionary(item => item.Substring(2, 3), item => item.Substring(0, 2));
+
+            // convert back to sortable form (bbBBBcccvvv)  
+            // lookup 0:2 to get bb from Dictionary and append 0:2
+            // take 4: ':' and pad 0's to get ccc
+            // take ':' to end and pad 0's to get vvv
+            t_list = refs
+                .Select(s => BibleBookDict[s[..3]] + s[..3]                // changed from dictbk to BibleBooksDict
+                + s[4..s.IndexOf(':')].PadLeft(3, '0')
+                + s[(s.IndexOf(':') + 1)..].PadLeft(3, '0'))
+                .ToList();
+            // formerly s.Substring(0, 3)   s.Substring(4, s.IndexOf(':') - 4)  s.Substring(s.IndexOf(':') + 1)
+            t_list.Sort();
+            t_list = t_list.Distinct().ToList();
+
+            // convert back to standard form (BBB ccc:vvv)  
+            // skip 0:1 because don't need book number anymore, leaving BBB in 3:4
+            // take 5:7 convert to number to lose leading zeros, then convert back to string for CCC
+            // take 8:10 convert to number to lose leading zeros, then convert back to string for VVV
+            t_listOut = t_list
+                .Select(s => s[2..5] + " "
+                + Convert.ToInt32(s[5..8]).ToString() + ":"
+                + Convert.ToInt32(s[8..11]).ToString()).ToList();
+            // formerly s.Substring(2, 3) s.Substring(5, 3) s.Substing(8, 3)
+            refs = t_listOut;
+        }
+
+        private void SimplifyRefs(List<string> rlst, ref string outputRefs)
+        {
+            List<string> rlst1 = new List<string>();
+            List<string> rlst2 = new List<string>();
+            List<string> rlstout = new List<string>();
+            rlst = rlst.Select(s => s.Trim()).ToList();
+            rlst = rlst.Where(s => s.Length > 0).ToList();
+            rlst1 = rlst.Select(s => s.Substring(0, 3)).Distinct().ToList();    // find all unique book names in rlst
+            foreach (string r in rlst1)                                         // loop through each unique book name
+            {
+                rlst2 = rlst.Where(s => s.Substring(0, 3).Equals(r)).ToList();  // find all references in this book
+                rlst2 = rlst2.Select(s => s.Substring(4)).ToList();             // remove book name on all references
+                rlst2[0] = r + " " + rlst2[0];                                  // replace book name on first reference in list
+                rlstout.AddRange(rlst2);
+            }
+            outputRefs = String.Join(", ", rlstout);
         }
 
         private async Task<bool> GetLexicon()
