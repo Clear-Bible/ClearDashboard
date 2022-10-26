@@ -131,6 +131,59 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("AlignmentSet");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSetDenormalizationTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AlignmentSetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceText")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlignmentSetId");
+
+                    b.ToTable("AlignmentSetDenormalizationTask");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentTopTargetTrainingText", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AlignmentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AlignmentSetId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SourceTokenComponentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SourceTrainingText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TopTargetTrainingText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlignmentId");
+
+                    b.HasIndex("AlignmentSetId");
+
+                    b.HasIndex("SourceTokenComponentId");
+
+                    b.ToTable("AlignmentTopTargetTrainingText");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>
                 {
                     b.Property<Guid>("Id")
@@ -754,6 +807,10 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookNumber");
+
+                    b.HasIndex("ChapterNumber");
+
                     b.HasIndex("CorpusHistoryId");
 
                     b.HasIndex("CorpusId");
@@ -761,6 +818,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.HasIndex("VerseMappingId");
+
+                    b.HasIndex("VerseNumber");
 
                     b.ToTable("Verse");
                 });
@@ -960,6 +1019,44 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("ParallelCorpus");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentSetDenormalizationTask", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", "AlignmentSet")
+                        .WithMany()
+                        .HasForeignKey("AlignmentSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AlignmentSet");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentTopTargetTrainingText", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Alignment", "Alignment")
+                        .WithMany()
+                        .HasForeignKey("AlignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", "AlignmentSet")
+                        .WithMany()
+                        .HasForeignKey("AlignmentSetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "SourceTokenComponent")
+                        .WithMany()
+                        .HasForeignKey("SourceTokenComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Alignment");
+
+                    b.Navigation("AlignmentSet");
+
+                    b.Navigation("SourceTokenComponent");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Corpus", b =>

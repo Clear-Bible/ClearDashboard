@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data.Extensions;
 using ClearDashboard.DataAccessLayer.Models;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
@@ -13,14 +14,16 @@ namespace ClearDashboard.DataAccessLayer.Data
     {
         #nullable disable
         private readonly ILogger<ProjectDbContext> _logger;
-        public  IUserProvider UserProvider { get; set; }
+        private readonly IMediator _mediator;
+        public IUserProvider UserProvider { get; set; }
         public string DatabaseName { get; private set; }
         public DbContextOptionsBuilder<ProjectDbContext> OptionsBuilder { get; private set; }
 
-        public ProjectDbContext(ILogger<ProjectDbContext> logger, IUserProvider userProvider, string databaseName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
+        public ProjectDbContext(ILogger<ProjectDbContext> logger, IMediator mediator, IUserProvider userProvider, string databaseName, DbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
             : base(optionsBuilder.Options)
         {
             _logger = logger;
+            _mediator = mediator;
             UserProvider = userProvider;
             DatabaseName = databaseName;
             OptionsBuilder = optionsBuilder;
@@ -64,6 +67,8 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         //public virtual DbSet<ParallelTokenizedCorpus> ParallelTokenizedCorpa => Set<ParallelTokenizedCorpus>();
 
+        public virtual DbSet<AlignmentSetDenormalizationTask> AlignmentSetDenormalizationTasks => Set<AlignmentSetDenormalizationTask>();
+        public virtual DbSet<AlignmentTopTargetTrainingText> AlignmentTopTargetTrainingTexts => Set<AlignmentTopTargetTrainingText>();
         public async Task Migrate()
         {
             try
@@ -234,7 +239,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             //modelBuilder.Entity<Token>()
             //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });
 
-            modelBuilder.Entity<Translation>().Navigation(e => e.SourceTokenComponent).AutoInclude();
+//            modelBuilder.Entity<Translation>().Navigation(e => e.SourceTokenComponent).AutoInclude();
             modelBuilder.Entity<TranslationModelEntry>().HasIndex(e => new { e.TranslationSetId, e.SourceText }).IsUnique();
             modelBuilder.Entity<TranslationModelTargetTextScore>().HasIndex(e => new { e.TranslationModelEntryId, e.Text}).IsUnique();
 
@@ -243,6 +248,16 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasMany(p => p.Labels)
                 .WithMany(p => p.Notes)
                 .UsingEntity<LabelNoteAssociation>();
+
+            modelBuilder.Entity<Verse>().HasIndex(e => e.BookNumber);
+            modelBuilder.Entity<Verse>().HasIndex(e => e.ChapterNumber);
+            modelBuilder.Entity<Verse>().HasIndex(e => e.VerseNumber);
+
+            modelBuilder.Entity<Alignment>().HasIndex(e => e.SourceTokenComponentId);
+            modelBuilder.Entity<Translation>().HasIndex(e => e.SourceTokenComponentId);
+            modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
+            modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.SourceTokenComponentId);
+
         }
 
         //public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()
@@ -318,10 +333,11 @@ namespace ClearDashboard.DataAccessLayer.Data
         //    return base.Update(entity);
         //}
 
-        //public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
-        //{
-        //    return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        //}
+        public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            await _mediator.DispatchDomainEventsAsync(this, cancellationToken);
+            return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
 
         //public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         //{

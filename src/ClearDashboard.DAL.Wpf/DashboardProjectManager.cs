@@ -42,7 +42,6 @@ public record ShowParallelTranslationWindowMessage(
     //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
     bool? IsTargetRTL, 
     bool IsNewWindow);
-public record BackgroundTaskChangedMessage(BackgroundTaskStatus Status);
 
 public record CloseDockingPane(Guid guid);
 public record UiLanguageChangedMessage(string LanguageCode);

@@ -32,7 +32,10 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using DockingManager = AvalonDock.DockingManager;
+using System.Dynamic;
+using ClearApplicationFoundation.LogHelpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -170,6 +173,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     AddNewEnhancedView();
                 }
+                else if (value == "GatherLogsID")
+                {
+                    GatherLogs();
+                }
+                else if (value == "AboutID")
+                {
+                    ShowAboutWindow();
+                }
                 else
                 {
                     switch (value)
@@ -204,8 +215,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 NotifyOfPropertyChange(() => WindowIdToLoad);
             }
         }
-
-
 
         private async Task StartDashboardAsync(int secondsToWait = 10)
         {
@@ -808,6 +817,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Methods
 
+        private void GatherLogs()
+        {
+            return;
+
+
+            LogReporting logReporting = new LogReporting();
+
+            // get the paratext log file
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Paratext93", "ParatextLog.log");
+
+            if (File.Exists(path))
+            {
+                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    using (StreamReader sr = new StreamReader(fs))
+                    {
+                        var logData = sr.ReadToEnd();
+                    }
+                }
+
+
+
+                var log = File.ReadAllText(path);
+                if (log != "")
+                {
+                    logReporting.ParatextLog = log;
+                }
+            }
+
+            // get the Dashboard log file
+            var dashboardLogPath = IoC.Get<CaptureFilePathHook>();
+
+        }
+
+        private void ShowAboutWindow()
+        {
+            var localizedString = LocalizationStrings.Get("MainView_About", Logger);
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<AboutViewModel>();
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
+        }
+
         private void AddNewEnhancedView()
         {
             EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
@@ -1007,7 +1067,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 },
                 
                 // HELP
-                new() { Header = LocalizationStrings.Get("MainView_Help", Logger), Id =  "HelpID", ViewModel = this, }
+                new()
+                {
+                    Header = LocalizationStrings.Get("MainView_Help", Logger), Id =  "HelpID", ViewModel = this,
+                    MenuItems = new ObservableCollection<MenuItemViewModel>
+                    {
+                        // Gather Logs
+                        new() { Header = LocalizationStrings.Get("MainView_GatherLogs", Logger), Id = "GatherLogsID", ViewModel = this, },
+                        // About
+                        new() { Header = LocalizationStrings.Get("MainView_About", Logger), Id = "AboutID", ViewModel = this, },
+                    }
+                }
             };
         }
 

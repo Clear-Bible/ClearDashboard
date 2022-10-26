@@ -137,6 +137,19 @@ namespace ClearDashboard.DAL.Alignment.Notes
             return label;
         }
 
+        /// <summary>
+        /// NOTE:  this method alters a the "Labels" ObservableCollection that was created in the Note constructor.  
+        /// For each UI thread that is going to access this method (really,the Labels ObservableCollection in general), 
+        /// a WPF-layer caller should establish a “lock” object, tell WPF about it 
+        /// (using EnableCollectionSynchronization(note.Labels, theLockObject)), and use it in a “lock” statement every 
+        /// time those methods are called.  Summarized from:
+        /// https://learn.microsoft.com/en-us/dotnet/api/system.windows.data.bindingoperations.enablecollectionsynchronization
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="label"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        /// <exception cref="MediatorErrorEngineException"></exception>
         public async Task AssociateLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
             if (labels_.Any(l => l.LabelId == label.LabelId))
@@ -166,6 +179,19 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
+        /// <summary>
+        /// NOTE:  this method alters a the "Labels" ObservableCollection that was created in the Note constructor.  
+        /// For each UI thread that is going to access this method (really,the Labels ObservableCollection in general), 
+        /// a WPF-layer caller should establish a “lock” object, tell WPF about it 
+        /// (using EnableCollectionSynchronization(note.Labels, theLockObject)), and use it in a “lock” statement every 
+        /// time those methods are called.  Summarized from:
+        /// https://learn.microsoft.com/en-us/dotnet/api/system.windows.data.bindingoperations.enablecollectionsynchronization
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="label"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        /// <exception cref="MediatorErrorEngineException"></exception>
         public async Task DetachLabel(IMediator mediator, Label label, CancellationToken token = default)
         {
             var labelMatch = labels_.FirstOrDefault(l => l.LabelId == label.LabelId);
