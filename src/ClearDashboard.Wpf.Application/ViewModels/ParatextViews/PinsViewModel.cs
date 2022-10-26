@@ -572,6 +572,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 string ky, vl;
                 int ndx2;
                 int pndx = 0;
+                string simrefs = "";
+                List<PinsDataTable> results = new List<PinsDataTable>();
+                PinsDataTable datrow;
                 foreach (var LMR in LexMatRef)
                 {
                     try
@@ -586,95 +589,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         {
                             var objectToFind = GridData.Where(s => s.Match == ky).FirstOrDefault();
                             ndx2 = GridData.IndexOf(objectToFind);//.FindIndex(s => s.Match == ky);
-                            if (ndx2 >= 0) GridData[ndx2].Refs = vl;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-                }
-
-                string L, G;
-                string simrefs = "";
-                List<PinsDataTable> results = new List<PinsDataTable>();
-                PinsDataTable datrow;
-
-                // join rows of that have the same lexeme and gloss
-                for (int i = 0; i < GridData.Count; i++) // cannot use foreach because various items are removed causing for each loop error
-                {
-                    try
-                    {
-                        datrow = GridData[i];
-                        if (datrow.Lform == "Phrase")
-                            datrow.Phrase = "Phr";
-                        L = datrow.Source; // lexeme
-                        G = datrow.Gloss; // gloss
-
-                        //results = GridData.Where(s => (s.Source == L) && (s.Gloss == G)).ToList(); // create results List where lexemes and glosses match
-                        //if (results.Count == 1) // no need to join two rows, but still need to Simplify
-                        //{
-                        if (datrow.Refs != "")
-                        {
-                            //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
-                            var longrefs = datrow.Refs.Split(',').ToList();
-                            var simprefs = new List<string>();
-                            foreach (var longref in longrefs)
+                            if (ndx2 >= 0)
                             {
-                                var booksplit = longref.Split(' ').ToList();
-                                var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
-                                var chapterVerseSplit = booksplit[1].Split(':').ToList();
-                                var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
-                                var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
-                                simprefs.Add(bookNum + chapterNum + verseNum);
+                                datrow = GridData[ndx2];
+                                datrow.Refs = vl;
+
+                                if (datrow.Refs != "")
+                                {
+                                    //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
+                                    var longrefs = datrow.Refs.Split(',').ToList();
+                                    var simprefs = new List<string>();
+                                    foreach (var longref in longrefs)
+                                    {
+                                        var booksplit = longref.Split(' ').ToList();
+                                        var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
+                                        var chapterVerseSplit = booksplit[1].Split(':').ToList();
+                                        var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
+                                        var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
+                                        simprefs.Add(bookNum + chapterNum + verseNum);
+                                    }
+
+                                    datrow.SimpRefs = simprefs.Count.ToString();
+                                    datrow.VerseList = simprefs;
+                                }
+                                else
+                                {
+                                    datrow.SimpRefs = "0";
+                                    datrow.VerseList = null;
+
+                                }
                             }
-
-                            datrow.SimpRefs = simprefs.Count.ToString();
-                            datrow.VerseList = simprefs;
                         }
-                        else
-                        {
-                            datrow.SimpRefs = "0";
-                            datrow.VerseList = null;
-                        
-                        }
-                        //
-                        //else
-                        //{
-                        //    // skip first result because this is the same as the current datrow (thedata[i])
-                        //    //results.Remove(results[0]);
-                        //    foreach (PinsDataTable result in results)
-                        //    {
-                        //        var longrefs = result.Refs.Split(',').ToList();
-                        //        var simprefs = new List<string>();
-                        //        foreach (var longref in longrefs)
-                        //        {
-                        //            var booksplit = longref.Split(' ').ToList();
-                        //            var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
-                        //            var chapterVerseSplit = booksplit[1].Split(':').ToList();
-                        //            var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
-                        //            var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
-                        //            simprefs.Add(bookNum + chapterNum + verseNum);
-                        //        }
-
-                        //        result.SimpRefs = simprefs.Count.ToString();
-                        //        result.VerseList = simprefs;
-                        //        //datrow.Lform += " " + datrow2.Lform; // merge lexical form data (Word, Stem, Prefix, Suffix, Phrase)
-                        //        //rs = (datrow.Refs + ", " + datrow2.Refs).Split(',').ToList();
-                        //        //SortRefs(ref rs);
-                        //        //datrow.Refs = String.Join(", ", rs);
-                        //        ////SimplifyRefs(rs, ref simrefs);
-                        //        //datrow.SimpRefs = simrefs;
-                        //        //datrow.Code += " " + datrow2.Code;
-                        //        //datrow.Match += " " + datrow2.Match;
-                        //        //GridData.Remove(datrow2);
-                        //    }
-                        //    //                    datrow.Phrase = datrow.Lform.Contains("Phrase") ? "Phr" : "";
-                        //    //                    datrow.Word = datrow.Lform.Contains("Word") ? "Wrd" : "";
-                        //    //                    datrow.Prefix = datrow.Lform.Contains("Prefix") ? "pre-" : "";
-                        //    //                    datrow.Stem = datrow.Lform.Contains("Stem") ? "Stem" : "";
-                        //    //                    datrow.Suffix = datrow.Lform.Contains("Suffix") ? "-suf" : "";
-                        //}
                     }
                     catch (Exception ex)
                     {
