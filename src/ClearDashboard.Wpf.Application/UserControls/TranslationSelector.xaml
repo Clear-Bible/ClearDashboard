@@ -77,7 +77,7 @@
                 x:Name="TranslationValue"
                 Grid.Row="4"
                 Margin="10,0"
-                Text="{Binding SelectedItem.Word, ElementName=TranslationOptionsList}" />
+                Text="{Binding SelectedItem.Word, ElementName=TranslationOptionsDataGrid}" />
             <StackPanel Grid.Row="5" Orientation="Horizontal">
                 <CheckBox
                     x:Name="ApplyAllCheckbox"

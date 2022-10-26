@@ -95,6 +95,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             OnPropertyChanged(nameof(HasNote));
         }
 
+        public void TranslationApplied(Translation translation)
+        {
+            Translation = translation;
+            OnPropertyChanged(nameof(Translation));
+            OnPropertyChanged(nameof(TargetTranslationText));
+            OnPropertyChanged(nameof(TranslationState));
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

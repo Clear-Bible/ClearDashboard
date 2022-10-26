@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
@@ -32,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     /// <summary>
     /// A class containing the need information to render a verse of <see cref="Token"/>s in the UI.
     /// </summary>
-    public class VerseDisplayViewModel
+    public class VerseDisplayViewModel : PropertyChangedBase
     {
         #region Mock data construction
 #if MOCK
@@ -352,7 +353,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 stopwatch.Stop();
                 logger?.LogInformation($"Retrieved label suggestions in {stopwatch.ElapsedMilliseconds}ms");
 #endif
-                return new ObservableCollection<Label>(labels);
+                return new ObservableCollection<Label>(labels.OrderBy(l => l.Text));
             }
             catch (Exception e)
             {
@@ -643,14 +644,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                var newLabel = await note.CreateAssociateLabel(Mediator, labelText);
+                async void CreateAssociateLabel()
+                {
+                    var newLabel = await note.CreateAssociateLabel(Mediator, labelText);
+                    LabelSuggestions.Add(newLabel);
+                    LabelSuggestions = new ObservableCollection<Label>(LabelSuggestions.OrderBy(l => l.Text));
+                }
+
+                App.Current.Dispatcher.Invoke(CreateAssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
 #endif
-                LabelSuggestions.Add(newLabel);
-                LabelSuggestions = new ObservableCollection<Label>(LabelSuggestions.OrderBy(l => l.Text));
             }
             catch (Exception e)
             {
@@ -674,7 +680,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                await note.AssociateLabel(Mediator, label);
+                async void AssociateLabel()
+                {
+                    await note.AssociateLabel(Mediator, label);
+                }
+
+                App.Current.Dispatcher.Invoke(AssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -703,7 +714,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                await note.DetachLabel(Mediator, label);
+                async void DetachLabel()
+                {
+                    await note.DetachLabel(Mediator, label);
+                }
+
+                App.Current.Dispatcher.Invoke(DetachLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");

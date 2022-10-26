@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
@@ -94,11 +95,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
+        void SetTextboxFocus()
+        {
+            LabelTextBox.Focus();
+            Keyboard.Focus(LabelTextBox);
+        }
+
         private void AddButtonClicked(object sender, RoutedEventArgs e)
         {
             TextBoxVisibility = Visibility.Visible;
             OnPropertyChanged(nameof(TextBoxVisibility));
-            LabelTextBox.Focus();
+
+            System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -164,6 +172,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public LabelSelector()
         {
             InitializeComponent();
+        }
+
+        private void LabelTextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void LabelTextBox_OnLostKeyboardFocus(object sender, RoutedEventArgs e)
+        {
+            var args = e as KeyboardFocusChangedEventArgs;
+            if (args?.NewFocus?.GetType() == typeof(ScrollViewer))
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(SetTextboxFocus, DispatcherPriority.Render);
+            }
         }
     }
 }
