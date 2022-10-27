@@ -63,18 +63,25 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 // Validate ThreadId:
                 if (request.ThreadId is not null)
                 {
-                    if (ProjectDbContext!.Notes.Any(n => n.Id == request.ThreadId.Id && n.ThreadId != null && n.ThreadId != request.ThreadId.Id))
+                    var leadNoteInThread = ProjectDbContext!.Notes
+                        .FirstOrDefault(n => n.Id == request.ThreadId.Id && n.ThreadId == null || n.ThreadId == request.ThreadId.Id);
+                    if (leadNoteInThread is not null)
                     {
-                        return new RequestResult<NoteId>
-                        (
-                            success: false,
-                            message: $"Note referred by ThreadId '{request.ThreadId.Id}' found in request is already itself a reply note"
-                        );
-                    } 
-                    else
-                    {
-                        note.ThreadId = request.ThreadId.Id;
+                        if (leadNoteInThread.ThreadId is not null && leadNoteInThread.ThreadId != request.ThreadId.Id)
+                        {
+                            return new RequestResult<NoteId>
+                            (
+                                success: false,
+                                message: $"Note referred by ThreadId '{request.ThreadId.Id}' found in request is already itself a reply note"
+                            );
+                        }
+
+                        leadNoteInThread.ThreadId = request.ThreadId.Id;
                     }
+
+                    // A note's ThreadId does not have to refer to the Id of a Note
+                    // (the lead note of a thread might have been deleted):
+                    note.ThreadId = request.ThreadId.Id;
                 }
 
                 ProjectDbContext.Notes.Add(note);
