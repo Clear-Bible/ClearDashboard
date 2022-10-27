@@ -919,10 +919,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 files.Add(destinationScreenShotPath);
             }
 
-
+            var guid = Guid.NewGuid().ToString();
+            var zipPath = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
             if (files.Count > 0)
             {
-                ZipFiles zipFiles = new(files, Path.Combine(Path.GetTempPath(), "logs.zip"));
+                if (File.Exists(zipPath))
+                {
+                    File.Delete(zipPath);
+                }
+
+                ZipFiles zipFiles = new(files, zipPath);
                 var bRet = zipFiles.Zip();
 
                 if (bRet == false)
@@ -933,8 +939,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // open the message window
-            ShowSlackMessageWindow(Path.Combine(Path.GetTempPath(), "logs.zip"));
-
+            ShowSlackMessageWindow(zipPath);
         }
 
         private void ShowSlackMessageWindow(string zipFilePath)

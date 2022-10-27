@@ -44,8 +44,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
             var response = await slackClient.UploadFileAsync(content);
             string responseJson = await response.Content.ReadAsStringAsync();
 
+            // release the file lock
+            content.Dispose();
+            
             // convert JSON response to object
-            var fileResponse = JsonSerializer.Deserialize<SlackFileResponse>(responseJson);
+            var fileResponse = System.Text.Json.JsonSerializer.Deserialize<SlackFileResponse>(responseJson, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
 
             if (fileResponse is null)
             {
@@ -74,6 +80,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         public String? Error { get; set; }
         public SlackFile? File { get; set; }
     }
+
 
     /// <summary>
     /// a slack file

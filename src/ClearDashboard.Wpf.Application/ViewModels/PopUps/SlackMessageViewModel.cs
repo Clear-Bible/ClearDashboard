@@ -5,11 +5,6 @@ using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -127,7 +122,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
-            SlackMessage slackMessage = new SlackMessage("", this.FilePathAttachment, _logger as ILogger<SlackMessage>);
+            string msg = $"*User:* {ParatextUser} \n*Message:* \n{UserMessage}";
+            
+
+            SlackMessage slackMessage = new SlackMessage(msg, this.FilePathAttachment, _logger as ILogger<SlackMessage>);
             var bSuccess = await slackMessage.SendFileToSlackAsync();
 
             if (bSuccess == true)

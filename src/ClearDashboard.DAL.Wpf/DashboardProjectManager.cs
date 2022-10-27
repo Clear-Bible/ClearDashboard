@@ -197,6 +197,7 @@ public class DashboardProjectManager : ProjectManager
     protected override async Task PublishParatextUser(User user)
     {
         await EventAggregator.PublishOnUIThreadAsync(new UserMessage(user));
+        this.ParatextUserName = user.ParatextUserName;
     }
 
     protected async Task HookSignalREvents()

@@ -10,7 +10,7 @@
     xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     Title="SlackMessageView"
     Width="500"
-    Height="500"
+    Height="300"
     helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
     WindowStyle="ToolWindow"
     mc:Ignorable="d">
@@ -45,7 +45,7 @@
         <!--  Row 1  -->
         <TextBlock
             Grid.Row="1"
-            Margin="0,0,0,10"
+            Margin="10,0,0,5"
             VerticalAlignment="Bottom"
             FontSize="18"
             Text="{helpers:Localization SlackMessageView_Message}" />
@@ -53,10 +53,15 @@
         <!--  Row 2  -->
         <TextBox
             Grid.Row="2"
-            Margin="10"
-            BorderBrush="{StaticResource MaterialDesignDarkForeground}"
+            Margin="10,0,10,0"
+            AcceptsReturn="True"
+            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="2"
-            Text="{Binding UserMessage}" />
+            FontSize="16"
+            Foreground="{StaticResource SecondaryHueDarkForegroundBrush}"
+            SpellCheck.IsEnabled="True"
+            Text="{Binding UserMessage}"
+            TextWrapping="Wrap" />
 
         <!--  Row 3  -->
         <StackPanel Grid.Row="3" Orientation="Horizontal">
@@ -64,7 +69,7 @@
             <iconPacks:PackIconUnicons
                 Width="36"
                 Height="36"
-                Margin="20,0,0,0"
+                Margin="20,0,50,0"
                 VerticalAlignment="Center"
                 Foreground="{StaticResource RedMidBrush}"
                 Kind="EnvelopeExclamation">
@@ -72,7 +77,7 @@
                     <Style TargetType="iconPacks:PackIconUnicons">
                         <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SendErrorVisibility}" Value="Visible">
+                            <DataTrigger Binding="{Binding SendErrorVisibility}" Value="Collapsed">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -83,7 +88,7 @@
             <iconPacks:PackIconUnicons
                 Width="36"
                 Height="36"
-                Margin="20,0,0,0"
+                Margin="20,0,50,0"
                 VerticalAlignment="Center"
                 Foreground="{StaticResource GreenMidBrush}"
                 Kind="EnvelopeCheck">
@@ -91,7 +96,7 @@
                     <Style TargetType="iconPacks:PackIconUnicons">
                         <Setter Property="Visibility" Value="Visible" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding SendSuccessfulVisibility}" Value="Visible">
+                            <DataTrigger Binding="{Binding SendSuccessfulVisibility}" Value="Collapsed">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -113,10 +118,24 @@
                             <DataTrigger Binding="{Binding NoInternetVisibility}" Value="Visible">
                                 <Setter Property="IsEnabled" Value="False" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding SendErrorVisibility}" Value="Visible">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SendSuccessfulVisibility}" Value="Visible">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>
         </StackPanel>
+
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="4"
+            Margin="2"
+            BorderBrush="{StaticResource IndigoDarkBrush}"
+            BorderThickness="2"
+            CornerRadius="5" />
     </Grid>
 </Window>
