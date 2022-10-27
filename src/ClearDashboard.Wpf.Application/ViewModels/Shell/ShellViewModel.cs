@@ -436,8 +436,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             //string jsonString = JsonSerializer.Serialize(updateJson, options);
             //File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
 
-            var bInterent = await CheckForInternetConnection();
-
+            var bInterent = await NetworkHelper.IsConnectedToInternet();           // check internet connection
             if (!bInterent)
             {
                 return;
@@ -536,21 +535,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 return true;
             }
             return false;
-        }
-
-        public async Task<bool> CheckForInternetConnection()
-        {
-            try
-            {
-                WebClient webClient = new WebClient();
-
-                Stream stream = await webClient.OpenReadTaskAsync(new Uri("http://google.com/generate_204", UriKind.Absolute));
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
 
         public void ClickUpdateLink()

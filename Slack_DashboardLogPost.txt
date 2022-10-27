@@ -13,3 +13,20 @@ Slack signs the requests we send you using this secret. Confirm that each reques
 Verification Token: VprsB3ZJVR1XNJgLZKdYm7zn
 
 App Token: xapp-1-A0487F6PJE7-4273035254598-21c39b1d81854bb5d9c49a8b0962cda1f06e79b9d05d354213135ad4381d1b85
+
+Bot User OAuth Token: xoxb-543912748098-4276663789221-yA8iEo2FYECELxpePNnSOkRP
+xapp-1-A0487F6PJE7-4274263134550-353ff6c82079c940d578dce8957ed64f2cf4184af9bbe5e83dd2c1beccc0ebd9
+
+
+
+Bot User OAuth Token
+xoxb-543912748098-4276663789221-yA8iEo2FYECELxpePNnSOkRP  <---WORKING
+
+xoxe.xoxp-1-Mi0yLTU0MzkxMjc0ODA5OC0xMDUyNTg2MzMyNzQxLTQyNzc4MzMxMzU5NTctNDI3NDE3OTA2ODUzNC05NzNiNjUyYzJiMDNhYTA2ZGIyMTA3NzAxNjQ4MzQ0ZjMzZWY1Zjk2ZDNjNDMzODVhMTBiMDgxZDM5OWM2Nzk0
+xoxe-1-My0xLTU0MzkxMjc0ODA5OC00Mjc3ODMzMTM1OTU3LTQyODA3ODY1NzY1NjItZDUzMjkxYWZkMzVkZWIwYTk1YjlkOTlmZDE3NzczM2M3ZWY2MDZkMjRiOWM4MjlhMmYxZThlOGUyNjFjZWE4Zg
+
+
+
+curl -F file=@logs5.zip -F "initial_comment=File Upload Example" -F channels=dashboard-external-logs -H "Authorization: Bearer xoxb-543912748098-4276663789221-yA8iEo2FYECELxpePNnSOkRP" https://slack.com/api/files.upload
+
+curl -F file=@logs5.zip -F "initial_comment=File Upload Example" -F channels=C048084B26A -H "Authorization: Bearer xoxb-543912748098-4276663789221-yA8iEo2FYECELxpePNnSOkRP" https://slack.com/api/files.upload

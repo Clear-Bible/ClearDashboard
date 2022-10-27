@@ -932,8 +932,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            // send the logs to the server
-            
+            // open the message window
+            ShowSlackMessageWindow(Path.Combine(Path.GetTempPath(), "logs.zip"));
+
+        }
+
+        private void ShowSlackMessageWindow(string zipFilePath)
+        {
+            var localizedString = LocalizationStrings.Get("SlackMessageView_Title", Logger);
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<SlackMessageViewModel>();
+            viewModel.FilePathAttachment = zipFilePath;
+            viewModel.ParatextUser = ProjectManager.ParatextUserName;
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
         }
 
         private void ShowAboutWindow()
