@@ -204,8 +204,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // push to Paratext
                     if (ParatextSync && !InComingChangesStarted)
                     {
-                        _ = Task.Run(() =>
-                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                        //_ = Task.Run(() =>
+                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None);//);
                     }
 
                     _verseChange = value;
@@ -282,13 +282,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _verses, value);
         }
 
-        public Dictionary<IId, IEnumerable<Note>>? NotesDictionary { get; set; }
         public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
         public EngineStringDetokenizer TargetDetokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
 
         public IEnumerable<Translation> CurrentTranslations { get; set; }
-        public IEnumerable<Label> LabelSuggestions { get; set; }
 
+        private IEnumerable<Label> _labelSuggestions;
+        public IEnumerable<Label> LabelSuggestions
+        {
+            get => _labelSuggestions;
+            set => Set(ref _labelSuggestions, value);
+        }
 
         private TokenDisplayViewModel _currentToken;
         public TokenDisplayViewModel CurrentToken
@@ -692,17 +696,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     foreach (var textRow in tokensTextRowsRange)
                     {
-                        var VerseDisplayViewModel = _serviceProvider.GetService<VerseDisplayViewModel>();
+                        var verseDisplayViewModel = _serviceProvider.GetService<VerseDisplayViewModel>();
                         //FIXME: detokenizer should come from message.Detokenizer.
-                        await VerseDisplayViewModel!.ShowCorpusAsync(
+                        await verseDisplayViewModel!.ShowCorpusAsync(
                             textRow,
                             //FIXME:surface serialization message.detokenizer,
                             new EngineStringDetokenizer(new LatinWordDetokenizer()), 
                             message.IsRTL);
 
-                        verses.Add(VerseDisplayViewModel);
+                        verses.Add(verseDisplayViewModel);
                     }
 
+                    if (verses.Any())
+                    {
+                        // Label suggestions are the same for each VerseDisplayViewModel
+                        LabelSuggestions = verses.First().LabelSuggestions;
+                    }
 
                     OnUIThread(() =>
                     {
@@ -967,12 +976,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             else
             {
-                NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
+                //NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
                 foreach (var row in rows)
                 {
-                    var VerseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
+                    var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
                     if (message.AlignmentSetId != null)
-                        await VerseDisplayViewModel!.ShowAlignmentsAsyn(
+                        await verseDisplayViewModel!.ShowAlignmentsAsyn(
                             row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
                             await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
                             //FIXME:surface serialization message.SourceDetokenizer, 
@@ -982,13 +991,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             message.IsTargetRTL ?? throw new InvalidDataEngineException(name: "IsTargetRTL", value: "null"));
                     else 
-                        await VerseDisplayViewModel!.ShowTranslationAsync(
+                        await verseDisplayViewModel!.ShowTranslationAsync(
                             row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
                             await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null")),
                             //FIXME:surface serialization message.SourceDetokenizer, 
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             message.IsRTL);
-                    versesOut.Add(VerseDisplayViewModel);
+                    versesOut.Add(verseDisplayViewModel);
+                }
+
+                if (versesOut.Any())
+                {
+                    // Label suggestions are the same for each VerseDisplayViewModel
+                    LabelSuggestions = versesOut.First().LabelSuggestions;
                 }
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
@@ -1188,6 +1203,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
+            InComingChangesStarted = true;
             if (CurrentBcv.BibleBookList.Count == 0)
             {
                 return;
@@ -1198,11 +1214,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
                 
-                if (InComingChangesStarted)
-                {
-                    CurrentBcv.SetVerseFromId(message.Verse);
-                }
+                //if (InComingChangesStarted)
+                //{
+                CurrentBcv.SetVerseFromId(message.Verse);
+                //}
             }
+
+            InComingChangesStarted = false;
 
         }
 
@@ -1342,21 +1360,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 NoteControlVisibility = Visibility.Visible;
             }
+            else
+            {
+                NoteControlVisibility = Visibility.Collapsed;
+            }
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId})";
+        }
+
+        public void TokenRightButtonDown(object sender, TokenEventArgs e)
+        {
+            SelectedTokens = e.SelectedTokens;
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
         }
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
-            //WORKS
-            if (!SelectedTokens.Any())
-            {
-                if (e.TokenDisplayViewModel.HasNote)
-                {
-                    e.TokenDisplayViewModel.IsSelected = true;
-                    SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
-                    NoteControlVisibility = Visibility.Visible;
-                }
-            }
 
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
         }
@@ -1388,9 +1406,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public void NoteMouseEnter(object sender, NoteEventArgs e)
         {
             //WORKS
-            e.TokenDisplayViewModel.IsSelected = true;
-            SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
-            NoteControlVisibility = Visibility.Visible;
+            //e.TokenDisplayViewModel.IsSelected = true;
+            //SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+            //NoteControlVisibility = Visibility.Visible;
         }
 
         public void NoteCreate(object sender, NoteEventArgs e)
@@ -1458,8 +1476,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 return;
             }
-            
-            await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+
+            OnUIThread(async () =>
+            {
+                await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+                NotifyOfPropertyChange(() => VersesDisplay);
+            });
+
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
@@ -1493,7 +1516,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //WORKS
             if (e.Note.NoteId != null)
             {
-                await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+                OnUIThread(async () =>
+                {
+                    await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+                    NotifyOfPropertyChange(() => VersesDisplay);
+                });
             }
             Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
         }
@@ -1573,6 +1600,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         private Visibility _translationControlVisibility = Visibility.Collapsed;
+
         public Visibility TranslationControlVisibility
         {
             get => _translationControlVisibility;

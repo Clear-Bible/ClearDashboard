@@ -107,9 +107,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager!.LoadProject("SUR");
-                var row = await GetVerseTextRow(01001001);
+                await ProjectManager!.LoadProject("EnhancedViewDemo");
+                var row = await GetVerseTextRow(40001001);
                 var translationSet = await GetFirstTranslationSet();
+                //await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
+
+                //var books = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
+                //var bookId = books.FirstOrDefault(b => b.silCannonBookNum == 1);
+                //bookId.
                 await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
@@ -203,21 +208,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 NotePaneVisibility = Visibility.Visible;
             }
+            else
+            {
+                NotePaneVisibility = Visibility.Collapsed;
+            }
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
+        }
+
+        public void TokenRightButtonDown(TokenEventArgs e)
+        {
+            SelectedTokens = e.SelectedTokens;
+            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            if (!SelectedTokens.Any())
-            {
-                if (e.TokenDisplayViewModel.HasNote)
-                {
-                    e.TokenDisplayViewModel.IsSelected = true;
-                    SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
-                    NotePaneVisibility = Visibility.Visible;
-                }
-            }
-
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
         }
 
@@ -242,6 +247,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = string.Empty;
         }
 
+        public void NoteLeftButtonDown(NoteEventArgs e)
+        {
+            e.TokenDisplayViewModel.IsSelected = true;
+            SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+            NotePaneVisibility = Visibility.Visible;
+        }
+
         public void NoteMouseEnter(NoteEventArgs e)
         {
             e.TokenDisplayViewModel.IsSelected = true;
@@ -257,6 +269,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public async Task TranslationApplied(TranslationEventArgs e)
         {
             await VerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
+            NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
 
             Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
             TranslationPaneVisibility = Visibility.Collapsed;

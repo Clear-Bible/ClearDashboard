@@ -1,4 +1,5 @@
-﻿using ClearDashboard.Wpf.Application.Properties;
+﻿using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Microsoft.Extensions.Logging;
 using System;
@@ -129,6 +130,19 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
             _logger.LogInformation("ShellView initialized.");
 
             this.Closing += OnWindowClosing;
+        }
+
+        private void ApplicationWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var vm = (ShellViewModel)this.DataContext;
+            WindowSettings windowSettings = new WindowSettings
+            {
+                Height = (int)this.Height,
+                Width = (int)this.Width,
+                Left = (int)this.Left,
+                Top = (int)this.Top,
+            };
+            vm.WindowSettings = windowSettings;
         }
     }
 }

@@ -34,12 +34,12 @@ If there are no duplicates, click on the Populate Resources button which will it
 Add the following lines to each XAML header:
 
 ```
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Helpers"
-    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Strings"
-    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:strings="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    helpers:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
 ```
 
-For each text element to translate, you pass in the translated text in the following binding manner: `{helpers:Loc Landing_Projects}`
+For each text element to translate, you pass in the translated text in the following binding manner: `{helpers:Localization Landing_Projects}`
 
 Example:
 ```
