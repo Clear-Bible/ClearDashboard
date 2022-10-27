@@ -32,8 +32,9 @@
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
-    Unloaded="OnPageUnloaded"
     mc:Ignorable="d">
+
+    <!--cm:Message.Attach="[Event OnWindowSizeChanged] = [Action OnWindowSizeChanged]"-->
 
     <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
