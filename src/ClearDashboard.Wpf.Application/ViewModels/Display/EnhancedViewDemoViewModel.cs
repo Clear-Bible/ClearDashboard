@@ -18,6 +18,7 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Persistence;
 using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -112,12 +113,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var translationSet = await GetFirstTranslationSet();
                 //await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
 
-                //var books = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
-                //var bookId = books.FirstOrDefault(b => b.silCannonBookNum == 1);
-                //bookId.
+                BookIds = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
                 await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
+                NotifyOfPropertyChange(nameof(BookIds));
             }
             catch (Exception e)
             {
@@ -138,6 +138,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         private IEnumerable<TranslationOption> _translationOptions;
         private TranslationOption? _currentTranslationOption;
         private TokenDisplayViewModelCollection _selectedTokens = new();
+        private List<FileGetBookIds.BookId> _bookIds = new();
 
         public string Message
         {
@@ -179,6 +180,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             get => _translationPaneVisibility;
             set => Set(ref _translationPaneVisibility, value);
+        }
+
+        public List<FileGetBookIds.BookId> BookIds
+        {
+            get => _bookIds;
+            set => Set(ref _bookIds, value);
         }
 
         private async Task DisplayTranslationPane(TranslationEventArgs e)

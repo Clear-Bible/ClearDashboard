@@ -26,10 +26,10 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-        <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
-        <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
-        <userControls:ThicknessConverter x:Key="ThicknessConverter" />
+        <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+        <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+        <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+        <converters:ThicknessConverter x:Key="ThicknessConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
     <Grid Margin="10">
@@ -714,7 +714,6 @@
             <userControls:NoteCollectionDisplay
                 Title="{Binding SelectedTokens.CombinedSurfaceText}"
                 cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)];                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];                                                            [Event LabelRemoved] = [Action LabelRemoved($eventArgs)];                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];"
-                EntityId="{Binding CurrentToken.Token.TokenId}"
                 EntityIds="{Binding SelectedTokens.EntityIds}"
                 InnerMargin="0,0,0,30"
                 LabelBackground="BlanchedAlmond"

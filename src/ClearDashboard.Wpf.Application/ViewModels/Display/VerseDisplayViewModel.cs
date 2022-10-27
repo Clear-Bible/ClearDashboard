@@ -183,21 +183,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
-        private TranslationSet? _translationSet;
-        private TranslationSet? TranslationSet
-        {
-            get => _translationSet;
-            set => _translationSet = value;
-        }
+        private TranslationSet? TranslationSet { get; set; }
 
-        private AlignmentSet? _alignmentSet;
-        private AlignmentSet? AlignmentSet
-        {
-            get =>  _alignmentSet;
-            set => _alignmentSet = value;
-        }
+        private AlignmentSet? AlignmentSet { get; set; }
 
-        public IEnumerable<Alignment>? Alignments { get; set; } = null;
+        public IEnumerable<Alignment>? Alignments { get; set; }
 
         private IReadOnlyList<Token> Tokens { get; set; }
 
@@ -264,13 +254,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
         }
 
-        private static NoteCollection GetNotesForToken(Token token, Dictionary<IId, IEnumerable<Note>>? allEntityNotes)
+        private static NoteViewModelCollection GetNotesForToken(Token token, Dictionary<IId, IEnumerable<Note>>? allEntityNotes)
         {
 #if MOCK
             return GetMockNotes();
 #else
             var matches = allEntityNotes?.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
-            return matches is { Key: { } } ? new NoteCollection(matches.Value.Value) : new NoteCollection();
+            return matches is { Key: { } } ? new NoteViewModelCollection(matches.Value.Value.Select(n => new NoteViewModel(n))) : new NoteViewModelCollection();
 #endif
         }
 
@@ -456,16 +446,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
         }
 
-        /// <summary>
-        /// Adds a note to a specified entity.
-        /// </summary>
-        /// <param name="note">The <see cref="Note"/> to add.</param>
-        /// <param name="entityId">The entity ID to which to add the note.</param>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task AddNoteAsync(Note note, IId entityId)
-        {
-            await AddNoteAsync(note, new EntityIdCollection(entityId.ToEnumerable()));
-        }
+        ///// <summary>
+        ///// Adds a note to a specified entity.
+        ///// </summary>
+        ///// <param name="note">The <see cref="Note"/> to add.</param>
+        ///// <param name="entityId">The entity ID to which to add the note.</param>
+        ///// <returns>An awaitable <see cref="Task"/>.</returns>
+        //public async Task AddNoteAsync(Note note, IId entityId)
+        //{
+        //    await AddNoteAsync(note, new EntityIdCollection(entityId.ToEnumerable()));
+        //}
+
+        ///// <summary>
+        ///// Adds a note to a collection of entities.
+        ///// </summary>
+        ///// <param name="note">The <see cref="NoteViewModel"/> to add.</param>
+        ///// <param name="entityIds">The entity IDs to which to associate the note.</param>
+        ///// <returns>An awaitable <see cref="Task"/>.</returns>
+        //public async Task AddNoteAsync(NoteViewModel note, EntityIdCollection entityIds)
+        //{
+        //    await AddNoteAsync(note.Note, entityIds);
+        //}
 
         /// <summary>
         /// Adds a note to a collection of entities.
@@ -473,7 +474,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <param name="note">The <see cref="Note"/> to add.</param>
         /// <param name="entityIds">The entity IDs to which to associate the note.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task AddNoteAsync(Note note, EntityIdCollection entityIds)
+        public async Task AddNoteAsync(NoteViewModel note, EntityIdCollection entityIds)
         {
             try
             {
@@ -482,7 +483,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                await note.CreateOrUpdate(Mediator);
+                await note.Note.CreateOrUpdate(Mediator);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Added note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -492,7 +493,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if DEBUG
                     stopwatch.Restart();
 #endif
-                    await note.AssociateDomainEntity(Mediator, entityId);
+                    await note.Note.AssociateDomainEntity(Mediator, entityId);
 #if DEBUG
                     stopwatch.Stop();
                     Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
@@ -510,7 +511,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                             await label.CreateOrUpdate(Mediator);
                         }
 
-                        await note.AssociateLabel(Mediator, label);
+                        await note.Note.AssociateLabel(Mediator, label);
                     }
 #if DEBUG
                     stopwatch.Stop();
@@ -529,6 +530,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Updates a note.
+        /// </summary>
+        /// <param name="note">The <see cref="NoteViewModel"/> to update.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task UpdateNoteAsync(NoteViewModel note)
+        {
+            await UpdateNoteAsync(note.Note);
         }
 
         /// <summary>
@@ -560,37 +571,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
-        /// <summary>
-        /// Deletes a note.
-        /// </summary>
-        /// <param name="note">The <see cref="Note"/> to delete.</param>
-        /// <param name="entityId">The entity ID from which to remove the note.</param>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task DeleteNoteAsync(Note note, IId entityId)
-        {
-            try
-            {
-#if MOCK
-                return;
-#endif
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                await note.Delete(Mediator);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Deleted note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
-                token?.NoteDeleted(note);
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
+        ///// <summary>
+        ///// Deletes a note.
+        ///// </summary>
+        ///// <param name="note">The <see cref="NoteViewModel"/> to delete.</param>
+        ///// <param name="entityIds">The entity IDs from which to remove the note.</param>
+        ///// <returns>An awaitable <see cref="Task"/>.</returns>
+        //public async Task DeleteNoteAsync(NoteViewModel note, EntityIdCollection entityIds)
+        //{
+        //    await DeleteNoteAsync(note.Note, entityIds);
+        //}
 
         /// <summary>
         /// Deletes a note.
@@ -598,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <param name="note">The <see cref="Note"/> to delete.</param>
         /// <param name="entityIds">The entity IDs from which to remove the note.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task DeleteNoteAsync(Note note, EntityIdCollection entityIds)
+        public async Task DeleteNoteAsync(NoteViewModel note, EntityIdCollection entityIds)
         {
             try
             {
@@ -609,7 +599,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                await note.Delete(Mediator);
+                await note.Note.Delete(Mediator);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Deleted note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -630,10 +620,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// Creates a new <see cref="Label"/> and associates it with a <see cref="Note"/>.
         /// </summary>
-        /// <param name="note">The <see cref="Note"/> to which to associate the label.</param>
+        /// <param name="note">The <see cref="NoteViewModel"/> to which to associate the label.</param>
         /// <param name="labelText">The text of the new <see cref="Label"/>.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task CreateAssociateNoteLabelAsync(Note note, string labelText)
+        public async Task CreateAssociateNoteLabelAsync(NoteViewModel note, string labelText)
         {
             try
             {
@@ -646,12 +636,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 async void CreateAssociateLabel()
                 {
-                    var newLabel = await note.CreateAssociateLabel(Mediator, labelText);
+                    var newLabel = await note.Note.CreateAssociateLabel(Mediator, labelText);
                     LabelSuggestions.Add(newLabel);
                     LabelSuggestions = new ObservableCollection<Label>(LabelSuggestions.OrderBy(l => l.Text));
                 }
 
-                App.Current.Dispatcher.Invoke(CreateAssociateLabel);
+                await App.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -668,10 +658,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// Associates a <see cref="Label"/> with a <see cref="Note"/>.
         /// </summary>
-        /// <param name="note">The <see cref="Note"/> to which to associate the label.</param>
+        /// <param name="note">The <see cref="NoteViewModel"/> to which to associate the label.</param>
         /// <param name="label">The <see cref="Label"/> to associate.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task AssociateNoteLabelAsync(Note note, Label label)
+        public async Task AssociateNoteLabelAsync(NoteViewModel note, Label label)
         {
             try
             {
@@ -682,10 +672,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 async void AssociateLabel()
                 {
-                    await note.AssociateLabel(Mediator, label);
+                    await note.Note.AssociateLabel(Mediator, label);
                 }
 
-                App.Current.Dispatcher.Invoke(AssociateLabel);
+                await App.Current.Dispatcher.InvokeAsync(AssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -702,10 +692,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// Detaches a <see cref="Label"/> from a <see cref="Note"/>.
         /// </summary>
-        /// <param name="note">The <see cref="Note"/> from which to detach the label.</param>
+        /// <param name="note">The <see cref="NoteViewModel"/> from which to detach the label.</param>
         /// <param name="label">The <see cref="Label"/> to detach.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task DetachNoteLabel(Note note, Label label)
+        public async Task DetachNoteLabel(NoteViewModel note, Label label)
         {
             try
             {
@@ -716,10 +706,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 async void DetachLabel()
                 {
-                    await note.DetachLabel(Mediator, label);
+                    await note.Note.DetachLabel(Mediator, label);
                 }
 
-                App.Current.Dispatcher.Invoke(DetachLabel);
+                await App.Current.Dispatcher.InvokeAsync(DetachLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -778,7 +768,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, sourceDetokenizer, Translations, AllEntityNotes, IsRtl, true, Logger);
         }
 
-        public async Task ShowAlignmentsAsyn(
+        public async Task ShowAlignmentsAsync(
             EngineParallelTextRow engineParallelTextRow,
             AlignmentSet alignmentSet,
             EngineStringDetokenizer sourceDetokenizer,
@@ -814,6 +804,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Tokens = new ReadOnlyList<Token>(new List<Token>());
         }
 
+        /// <summary>
+        /// Constructor used via dependency injection.
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="mediator"></param>
+        // ReSharper disable once UnusedMember.Global
         public VerseDisplayViewModel(ILogger<VerseDisplayViewModel>? logger, IMediator mediator) : this()
         {
             Logger = logger;

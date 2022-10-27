@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using ClearBible.Engine.Utils;
-using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     public class TokenDisplayViewModelCollection : ObservableCollection<TokenDisplayViewModel>, INotifyPropertyChanged
     {
-        public NoteCollection CombinedNotes { get; private set; }
+        public NoteViewModelCollection CombinedNotes { get; private set; } = new();
 
-        public string CombinedSurfaceText { get; private set; }
+        public string CombinedSurfaceText { get; private set; } = string.Empty;
 
-        public EntityIdCollection EntityIds { get; private set; }
+        public EntityIdCollection EntityIds { get; private set; } = new(); 
 
         public TokenDisplayViewModelCollection()
         {
-            CollectionChanged += OnCollectionChanged;
         }
 
         public TokenDisplayViewModelCollection(TokenDisplayViewModel token) : this()
@@ -27,9 +23,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Add(token);
         }
 
-        private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            CombinedNotes = new NoteCollection();
+            CombinedNotes = new NoteViewModelCollection();
             foreach (var token in Items)
             {
                 foreach (var note in token.Notes)

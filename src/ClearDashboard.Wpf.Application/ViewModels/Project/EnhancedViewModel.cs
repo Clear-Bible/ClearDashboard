@@ -981,7 +981,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
                     if (message.AlignmentSetId != null)
-                        await verseDisplayViewModel!.ShowAlignmentsAsyn(
+                        await verseDisplayViewModel!.ShowAlignmentsAsync(
                             row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
                             await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
                             //FIXME:surface serialization message.SourceDetokenizer, 

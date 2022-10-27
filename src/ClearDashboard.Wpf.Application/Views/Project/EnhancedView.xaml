@@ -25,10 +25,10 @@
             <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
             <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
             <converters:WidthSubtraction x:Key="WidthSubtraction" />
-            <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-            <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
-            <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
-            <userControls:ThicknessConverter x:Key="ThicknessConverter" />
+            <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+            <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+            <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+            <converters:ThicknessConverter x:Key="ThicknessConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -612,7 +612,6 @@
                         <userControls:NoteCollectionDisplay
                             Title="{Binding Path=SelectedTokens.CombinedSurfaceText}"
                             Margin="0,5"
-                            EntityId="{Binding Path=CurrentToken.Token.TokenId}"
                             EntityIds="{Binding Path=SelectedTokens.EntityIds}"
                             InnerMargin="0,0,0,30"
                             LabelBackground="BlanchedAlmond"

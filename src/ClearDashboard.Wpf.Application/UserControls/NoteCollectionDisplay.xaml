@@ -3,19 +3,17 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontSize="16"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <DataTemplate x:Key="NoteTemplate" DataType="local:NoteDisplay">
-            <local:NoteDisplay
+        <DataTemplate x:Key="NoteTemplate" DataType="userControls:NoteDisplay">
+            <userControls:NoteDisplay
                 x:Name="NoteDisplay"
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=InnerMargin}"
-                EntityId="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityId}"
                 EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
                 LabelAdded="OnLabelAdded"
                 LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
@@ -74,11 +72,10 @@
                     ItemTemplate="{StaticResource NoteTemplate}"
                     ItemsPanel="{StaticResource NotesPanelTemplate}"
                     ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Notes}" />
-                <local:NoteDisplay
+                <userControls:NoteDisplay
                     x:Name="AddNoteControl"
                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=InnerMargin}"
                     AddMode="True"
-                    EntityId="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityId}"
                     EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
                     LabelAdded="OnLabelAdded"
                     LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"

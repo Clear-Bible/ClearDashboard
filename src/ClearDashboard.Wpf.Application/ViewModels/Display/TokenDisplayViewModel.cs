@@ -62,9 +62,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public string TranslationState => Translation?.OriginatedFrom ?? string.Empty;
 
         /// <summary>
-        /// A list of <see cref="Note"/>s for the token.
+        /// A list of <see cref="NoteViewModel"/>s for the token.
         /// </summary>
-        public NoteCollection Notes { get; set; } = new();
+        public NoteViewModelCollection Notes { get; set; } = new();
 
         /// <summary>
         /// Gets or sets whether this token is selected.
@@ -81,14 +81,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public bool HasNote => Notes.Any();
 
-        public void NoteAdded(Note note)
+        public void NoteAdded(NoteViewModel note)
         {
             Notes.Add(note);
             OnPropertyChanged(nameof(Notes));
             OnPropertyChanged(nameof(HasNote));
         }
 
-        public void NoteDeleted(Note note)
+        public void NoteDeleted(NoteViewModel note)
         {
             Notes.Remove(note);
             OnPropertyChanged(nameof(Notes));
