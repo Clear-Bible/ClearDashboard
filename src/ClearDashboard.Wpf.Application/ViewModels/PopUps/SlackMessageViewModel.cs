@@ -128,13 +128,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             SlackMessage slackMessage = new SlackMessage("", this.FilePathAttachment, _logger as ILogger<SlackMessage>);
-            //if (expr)
-            //{
-                
+            var bSuccess = await slackMessage.SendFileToSlackAsync();
 
-                
-            //}
-
+            if (bSuccess == true)
+            {
+                SendSuccessfulVisibility = Visibility.Visible;
+                SendErrorVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                SendSuccessfulVisibility = Visibility.Collapsed;
+                SendErrorVisibility = Visibility.Visible;
+            }
         }
 
         #endregion // Methods
