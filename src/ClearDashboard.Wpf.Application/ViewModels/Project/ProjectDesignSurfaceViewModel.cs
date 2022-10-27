@@ -669,6 +669,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         private readonly ObservableDictionary<string, bool> _busyState = new ObservableDictionary<string, bool>();
+
+        private bool _isBusy;
         public override bool IsBusy
         {
             get => _busyState.Count > 0;

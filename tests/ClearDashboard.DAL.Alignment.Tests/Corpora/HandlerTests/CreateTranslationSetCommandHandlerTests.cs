@@ -206,6 +206,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             var translationSetDb = ProjectDbContext.TranslationSets
                 .Include(ts => ts.Translations)
+                    .ThenInclude(t => t.SourceTokenComponent)
                 .FirstOrDefault(ts => ts.Id == translationSet.TranslationSetId.Id);
             Assert.NotNull(translationSetDb);
             Assert.Equal(exampleTranslations.Count, translationSetDb!.Translations.Count);

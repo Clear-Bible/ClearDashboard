@@ -67,14 +67,14 @@ namespace ClearDashboard.DAL.Alignment.Translation
         }
 
         */
-        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow)
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<EngineParallelTextRow> engineParallelTextRow, CancellationToken token = default)
         {
-            return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)));
+            return await GetTranslations(engineParallelTextRow.SelectMany(e => e.SourceTokens!.Select(st => st.TokenId)), token);
         }
 
-        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds)
+        public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds, CancellationToken token = default)
         {
-            var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds));
+            var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds), token);
             if (result.Success && result.Data != null)
             {
                 return result.Data;
@@ -91,9 +91,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         /// <param name="translation"></param>
         /// <param name="translationActionType">Valid values are:  "PutPropagate", "PutNoPropagate"</param>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public async Task PutTranslation(Translation translation, string translationActionType)
+        public async Task PutTranslation(Translation translation, string translationActionType, CancellationToken token = default)
         {
-            var result = await mediator_.Send(new PutTranslationSetTranslationCommand(TranslationSetId, translation, translationActionType));
+            var result = await mediator_.Send(new PutTranslationSetTranslationCommand(TranslationSetId, translation, translationActionType), token);
             if (result.Success)
             {
                 return;
@@ -104,7 +104,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
             }
         }
 
-        public async void Update()
+        public async void Update(CancellationToken token = default)
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId and also this.AlignmentSetId
         }
@@ -161,7 +161,8 @@ namespace ClearDashboard.DAL.Alignment.Translation
             //string smtModel,
             Dictionary<string, object> metadata,
             ParallelCorpusId parallelCorpusId,
-            IMediator mediator)
+            IMediator mediator,
+            CancellationToken token = default)
         {
             var createTranslationSetCommandResult = await mediator.Send(new CreateTranslationSetCommand(
                 translationModel,
@@ -169,7 +170,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 displayName,
                 //smtModel,
                 metadata,
-                parallelCorpusId));
+                parallelCorpusId), token);
 
             if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
             {

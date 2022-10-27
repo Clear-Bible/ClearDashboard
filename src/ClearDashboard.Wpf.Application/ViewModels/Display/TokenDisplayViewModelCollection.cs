@@ -32,7 +32,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             CombinedNotes = new NoteCollection();
             foreach (var token in Items)
             {
-                CombinedNotes.AddRange(token.Notes);
+                foreach (var note in token.Notes)
+                {
+                    if (!CombinedNotes.Contains(note))
+                    {
+                        CombinedNotes.Add(note);
+                    }
+                }
             }
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(CombinedNotes)));
 

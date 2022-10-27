@@ -274,13 +274,36 @@ public class CreateNotesCommandHandlerTests : TestBase
     {
         try
         {
+            var sourceCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource", Guid.NewGuid().ToString());
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpus.CorpusId, "test", "tokenization");
+
+            var sourceTokens = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizationId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Take(3)
+                .Select(t => ModelHelper.BuildToken(t)).ToList();
+
             var leadingNote = await new Note { Text = "leading note" }.CreateOrUpdate(Mediator!);
+            await leadingNote.AssociateDomainEntity(Mediator!, sourceTokens![0].TokenId);
+
             var replyNote1 = await new Note(leadingNote) { Text = "reply note 1"  }.CreateOrUpdate(Mediator!);
             var replyNote2 = await new Note(leadingNote) { Text = "reply note 2" }.CreateOrUpdate(Mediator!);
             var replyNote3 = await new Note(replyNote1) { Text = "reply note 3" }.CreateOrUpdate(Mediator!);
+            await replyNote3.AssociateDomainEntity(Mediator!, sourceTokens![1].TokenId);
 
             var standaloneNote1 = await new Note { Text = "standalone note 1" }.CreateOrUpdate(Mediator!);
+            var standaloneNote2 = await new Note { Text = "standalone note 2" }.CreateOrUpdate(Mediator!);
+            await standaloneNote2.AssociateDomainEntity(Mediator!, sourceTokens![2].TokenId);
+            await standaloneNote2.AssociateDomainEntity(Mediator!, sourceTokens![1].TokenId);
+            var standaloneNote3 = await new Note { Text = "standalone note 3" }.CreateOrUpdate(Mediator!);
+            await standaloneNote3.AssociateDomainEntity(Mediator!, sourceTokens![0].TokenId);
             var replyNote4 = await new Note(replyNote1) { Text = "reply note 4" }.CreateOrUpdate(Mediator!);
+
+            var leadingNote2 = await new Note { Text = "leading note2" }.CreateOrUpdate(Mediator!);
+            var replyNote21 = await new Note(leadingNote2) { Text = "reply note 1 for leading note 2" }.CreateOrUpdate(Mediator!);
 
             ProjectDbContext!.ChangeTracker.Clear();
 
@@ -295,7 +318,8 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.True(replyNote4.IsReply());
 
             Assert.Null(standaloneNote1.ThreadId);
-            Assert.Null(leadingNote.ThreadId);
+            Assert.NotNull(leadingNote.ThreadId);
+            Assert.True(leadingNote.NoteId!.IdEquals(leadingNote.ThreadId));
             Assert.True(leadingNote.NoteId!.IdEquals(replyNote1.ThreadId));
             Assert.True(leadingNote.NoteId!.IdEquals(replyNote4.ThreadId));
 
@@ -329,6 +353,65 @@ public class CreateNotesCommandHandlerTests : TestBase
 
                 position++;
             }
+
+            Output.WriteLine($"\nOutput IId + Notes (hierarchical - Leading Notes containing reply Notes):");
+            var entityNotesAndThreads = await Note.GetAllDomainEntityIdNotesThreads(Mediator!);
+            foreach (var kvp in entityNotesAndThreads)
+            {
+                Output.WriteLine($"\tIId (TokenId): {kvp.Key.Id}");
+                foreach (var kvp2 in kvp.Value)
+                {
+                    Output.WriteLine($"\t\tNote name: {kvp2.Key.Text}");
+                    foreach (var kvp3 in kvp2.Value)
+                    {
+                        Output.WriteLine($"\t\t\tReply note name: {kvp3.Text}");
+                    }
+                }
+            }
+
+            Assert.True(entityNotesAndThreads.ContainsKey(sourceTokens![0].TokenId));
+            Assert.True(entityNotesAndThreads.ContainsKey(sourceTokens![1].TokenId));
+            Assert.True(entityNotesAndThreads.ContainsKey(sourceTokens![2].TokenId));
+
+            Assert.Contains(leadingNote.NoteId, entityNotesAndThreads[sourceTokens![0].TokenId].Select(n => n.Key.NoteId));
+            Assert.Contains(replyNote2.NoteId, entityNotesAndThreads[sourceTokens![0].TokenId].SelectMany(kvp => kvp.Value).Select(note => note.NoteId).Distinct());
+            Assert.Contains(replyNote3.NoteId, entityNotesAndThreads[sourceTokens![0].TokenId].SelectMany(kvp => kvp.Value).Select(note => note.NoteId).Distinct());
+            Assert.Contains(replyNote4.NoteId, entityNotesAndThreads[sourceTokens![0].TokenId].SelectMany(kvp => kvp.Value).Select(note => note.NoteId).Distinct());
+            Assert.Contains(standaloneNote3.NoteId, entityNotesAndThreads[sourceTokens![0].TokenId].Select(n => n.Key.NoteId));
+
+            Assert.Contains(replyNote3.NoteId, entityNotesAndThreads[sourceTokens![1].TokenId].Select(n => n.Key.NoteId));
+
+            Assert.Contains(standaloneNote2.NoteId, entityNotesAndThreads[sourceTokens![2].TokenId].Select(n => n.Key.NoteId));
+
+            Output.WriteLine($"\nOutput IId + Notes (flattened - Leading Notes and reply Notes listed together):");
+            var entityNotes = await Note.GetAllDomainEntityIdNotes(Mediator!);
+            foreach (var kvp in entityNotes)
+            {
+                Output.WriteLine($"\tIId (TokenId): {kvp.Key.Id}");
+                foreach (var kvp2 in kvp.Value)
+                {
+                    Output.WriteLine($"\t\tNote name: {kvp2.Text}");
+                }
+            }
+
+            Assert.True(entityNotes.ContainsKey(sourceTokens![0].TokenId));
+            Assert.True(entityNotes.ContainsKey(sourceTokens![1].TokenId));
+            Assert.True(entityNotes.ContainsKey(sourceTokens![2].TokenId));
+
+            Assert.Contains(leadingNote.NoteId, entityNotes[sourceTokens![0].TokenId].Select(n => n.NoteId));
+            Assert.Contains(replyNote2.NoteId, entityNotes[sourceTokens![0].TokenId].Select(n => n.NoteId));
+            Assert.Contains(replyNote3.NoteId, entityNotes[sourceTokens![0].TokenId].Select(n => n.NoteId));
+            Assert.Contains(replyNote4.NoteId, entityNotes[sourceTokens![0].TokenId].Select(n => n.NoteId));
+            Assert.Contains(standaloneNote3.NoteId, entityNotes[sourceTokens![0].TokenId].Select(n => n.NoteId));
+
+            Assert.Contains(replyNote3.NoteId, entityNotes[sourceTokens![1].TokenId].Select(n => n.NoteId));
+
+            Assert.Contains(standaloneNote2.NoteId, entityNotes[sourceTokens![2].TokenId].Select(n => n.NoteId));
+
+            var noteIdsInEntityNotes = entityNotes.SelectMany(kvp => kvp.Value).Select(note => note.NoteId).Distinct();
+            Assert.Contains(leadingNote.NoteId, noteIdsInEntityNotes);
+            Assert.DoesNotContain(leadingNote2.NoteId, noteIdsInEntityNotes);
+            Assert.DoesNotContain(replyNote21.NoteId, noteIdsInEntityNotes);
         }
         finally
         {

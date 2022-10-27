@@ -36,7 +36,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
             var projectDbContextFactory = _lifetimeScope.Resolve<ProjectDbContextFactory>();
             var projectDbContext = await projectDbContextFactory.GetDatabaseContext(
                 request.projectName,
-                false,
+                true,
                 requestScope);
 
             var currentProject = projectDbContext.Projects.First();

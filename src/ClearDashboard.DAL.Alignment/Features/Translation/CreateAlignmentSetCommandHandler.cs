@@ -15,6 +15,7 @@ using System.Data.Common;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 using System.Diagnostics;
+using ClearDashboard.DAL.Alignment.Features.Events;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -136,12 +137,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
             }
 
-            await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
-
             try
             {
+                var alignmentSetId = Guid.NewGuid();
                 var alignmentSet = new Models.AlignmentSet
                 {
+                    Id = alignmentSetId,
                     ParallelCorpusId = request.ParallelCorpusId.Id,
                     DisplayName = request.DisplayName,
                     SmtModel = request.SmtModel,
@@ -160,20 +161,38 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         }).ToList()
                 };
 
-                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
-                // mostly using database connection-level functions, commands, paramters etc.
-                using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
 
-                using var alignmentSetInsertCommand = CreateAlignmentSetInsertCommand();
-                using var alignmentInsertCommand = CreateAlignmentInsertCommand();
+                await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
 
-                var alignmentSetId = await InsertAlignmentSetAsync(
-                    alignmentSet, 
-                    alignmentSetInsertCommand, 
-                    alignmentInsertCommand, 
-                    cancellationToken);
+                try
+                {
+                    // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
+                    // mostly using database connection-level functions, commands, paramters etc.
+                    using var connection = ProjectDbContext.Database.GetDbConnection();
+                    using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
-                await transaction.CommitAsync(cancellationToken);
+                    using var alignmentSetInsertCommand = CreateAlignmentSetInsertCommand(connection);
+                    using var alignmentInsertCommand = CreateAlignmentInsertCommand(connection);
+
+                    await InsertAlignmentSetAsync(
+                        alignmentSet,
+                        alignmentSetInsertCommand,
+                        alignmentInsertCommand,
+                        cancellationToken);
+
+                    // Explicitly setting the DatabaseFacade transaction to match
+                    // the underlying DbConnection transaction in case any event handlers
+                    // need to alter data as part of the current transaction:
+                    ProjectDbContext.Database.UseTransaction(transaction);
+                    await _mediator.Publish(new AlignmentSetCreatingEvent(alignmentSetId, ProjectDbContext), cancellationToken);
+                    await transaction.CommitAsync(cancellationToken);
+                    ProjectDbContext.Database.UseTransaction(null);
+                }
+                finally
+                {
+                    await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+                }
 
 #if DEBUG
                 proc.Refresh();
@@ -189,6 +208,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 var parallelCorpusId = ModelHelper.BuildParallelCorpusId(parallelCorpus);
 
+                await _mediator.Publish(new AlignmentSetCreatedEvent(alignmentSetId), cancellationToken);
+
                 return new RequestResult<AlignmentSet>(new AlignmentSet(
                     ModelHelper.BuildAlignmentSetId(alignmentSetFromDb, parallelCorpusId, alignmentSetFromDb.User!),
                     parallelCorpusId,
@@ -203,18 +224,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     message: e.Message
                 );
             }
-            finally
-            {
-                await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
-            }
         }
 
-        private DbCommand CreateAlignmentSetInsertCommand()
+        private DbCommand CreateAlignmentSetInsertCommand(DbConnection connection)
         {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var command = connection.CreateCommand();
             var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.AlignmentSet), columns);
+
+            command.Prepare();
 
             return command;
         }
@@ -238,26 +257,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             foreach (var alignment in alignmentSet.Alignments)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 await InsertAlignmentAsync(alignment, alignmentSetId, alignmentCommand, cancellationToken);
             }
 
             return alignmentSetId;
         }
 
-        private DbCommand CreateAlignmentInsertCommand()
+        private DbCommand CreateAlignmentInsertCommand(DbConnection connection)
         {
-            var command = ProjectDbContext.Database.GetDbConnection().CreateCommand();
+            var command = connection.CreateCommand();
             var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId" };
 
             ApplyColumnsToCommand(command, typeof(Models.Alignment), columns);
+
+            command.Prepare();
 
             return command;
         }
 
         private async Task InsertAlignmentAsync(Models.Alignment alignment, Guid alignmentSetId, DbCommand alignmentCommand, CancellationToken cancellationToken)
         {
-            var converter = new DateTimeOffsetToBinaryConverter();
-
             alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
             alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
             alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;

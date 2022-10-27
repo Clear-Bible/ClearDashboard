@@ -28,13 +28,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public EngineStringDetokenizer Detokenizer => ParallelCorpusId.SourceTokenizedCorpusId?.Detokenizer ?? new EngineStringDetokenizer(new LatinWordDetokenizer());
 
-        public async Task Update(IMediator mediator)
+        public async Task Update(IMediator mediator, CancellationToken token = default)
         {
             var command = new UpdateParallelCorpusCommand(
                 VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
                 ParallelCorpusId);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success && result.Data != null)
             {
                 return;
@@ -47,11 +47,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public static async Task<ParallelCorpus> Get(
             IMediator mediator,
-            ParallelCorpusId parallelCorpusId)
+            ParallelCorpusId parallelCorpusId, 
+            CancellationToken token = default)
         {
             var command = new GetParallelCorpusByParallelCorpusIdQuery(parallelCorpusId);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 var data =  result.Data;

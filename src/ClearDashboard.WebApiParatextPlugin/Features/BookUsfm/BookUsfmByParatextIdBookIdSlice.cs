@@ -30,7 +30,15 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
             // update the isSentenceStart field using Machine's parser
             foreach (var d in data)
             {
-                d.isSentenceStart = SIL.Machine.Utils.StringExtensions.HasSentenceEnding(d.Text);
+                try
+                {
+                    d.isSentenceStart = SIL.Machine.Utils.StringExtensions.HasSentenceEnding(d.Text);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e.Message);
+                }
+                
             }
             
             var queryResult = new RequestResult<List<UsfmVerse>>(new List<UsfmVerse>());
