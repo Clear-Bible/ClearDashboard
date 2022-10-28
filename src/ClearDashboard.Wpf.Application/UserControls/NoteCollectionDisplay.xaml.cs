@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
-using ClearBible.Engine.Persistence;
-using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
@@ -17,16 +13,83 @@ using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A user control that displays a collection of <see cref="Note"/> instances.
+    /// A user control that displays a collection of <see cref="NoteViewModel"/> instances.
     /// </summary>
     public partial class NoteCollectionDisplay : INotifyPropertyChanged
     {
         #region Static Routed Events
+
+        /// <summary>
+        /// Identifies the CloseRequestedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent CloseRequestedEvent = EventManager.RegisterRoutedEvent
+            ("CloseRequested", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the LabelAddedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
+            ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the LabelRemovedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
+            ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
         /// <summary>
         /// Identifies the NoteApplied routed event.
         /// </summary>
         public static readonly RoutedEvent NoteAddedEvent = EventManager.RegisterRoutedEvent
             ("NoteAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationClicked routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationClickedEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationDoubleClicked routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationDoubleClickedEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationLeftButtonDown routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationLeftButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationLeftButtonUp routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationLeftButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationRightButtonDown routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationRightButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationRightButtonUp routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationRightButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationMouseEnter routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationMouseLeaveEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         /// <summary>
         /// Identifies the NoteUpdated routed event.
@@ -45,24 +108,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
             ("LabelSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
-
-        /// <summary>
-        /// Identifies the LabelAddedEvent routed event.
-        /// </summary>
-        public static readonly RoutedEvent LabelAddedEvent = EventManager.RegisterRoutedEvent
-            ("LabelAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
-
-        /// <summary>
-        /// Identifies the LabelRemovedEvent routed event.
-        /// </summary>
-        public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
-            ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
-
-        /// <summary>
-        /// Identifies the CloseRequestedEvent routed event.
-        /// </summary>
-        public static readonly RoutedEvent CloseRequestedEvent = EventManager.RegisterRoutedEvent
-            ("CloseRequested", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -238,6 +283,59 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
+        private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            if (e is NoteAssociationEventArgs noteAssociationArgs)
+            {
+                RaiseEvent(new NoteAssociationEventArgs()
+                {
+                    RoutedEvent = routedEvent,
+                    Note = noteAssociationArgs.Note,
+                    AssociatedEntityId = noteAssociationArgs.AssociatedEntityId
+                });
+            }
+        }
+
+        private void OnNoteAssociationClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationClickedEvent, e);
+        }
+
+        private void OnNoteAssociationDoubleClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationDoubleClickedEvent, e);
+        }
+
+        private void OnNoteAssociationLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationLeftButtonDownEvent, e);
+        }
+
+        private void OnNoteAssociationLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationRightButtonUpEvent, e);
+        }
+        private void OnNoteAssociationRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationRightButtonDownEvent, e);
+        }
+
+        private void OnNoteAssociationRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationRightButtonUpEvent, e);
+        }
+
+        private void OnNoteAssociationMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationMouseEnterEvent, e);
+        }
+
+        private void OnNoteAssociationMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationMouseLeaveEvent, e);
+        }
+
+
         private void OnLabelSelected(object sender, RoutedEventArgs e)
         {
             if (e is LabelEventArgs args)
@@ -341,6 +439,78 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (IEnumerable<NotesLabel>)GetValue(LabelSuggestionsProperty);
             set => SetValue(LabelSuggestionsProperty, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual note association is clicked.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationClicked
+        {
+            add => AddHandler(NoteAssociationClickedEvent, value);
+            remove => RemoveHandler(NoteAssociationClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual note association is clicked two or more times.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationDoubleClicked
+        {
+            add => AddHandler(NoteAssociationDoubleClickedEvent, value);
+            remove => RemoveHandler(NoteAssociationDoubleClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is pressed while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationLeftButtonDown
+        {
+            add => AddHandler(NoteAssociationLeftButtonDownEvent, value);
+            remove => RemoveHandler(NoteAssociationLeftButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is released while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationLeftButtonUp
+        {
+            add => AddHandler(NoteAssociationLeftButtonUpEvent, value);
+            remove => RemoveHandler(NoteAssociationLeftButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is pressed while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationRightButtonDown
+        {
+            add => AddHandler(NoteAssociationRightButtonDownEvent, value);
+            remove => RemoveHandler(NoteAssociationRightButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is released while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationRightButtonUp
+        {
+            add => AddHandler(NoteAssociationRightButtonUpEvent, value);
+            remove => RemoveHandler(NoteAssociationRightButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationMouseEnter
+        {
+            add => AddHandler(NoteAssociationMouseEnterEvent, value);
+            remove => RemoveHandler(NoteAssociationMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer leaves the bounds of a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationMouseLeave
+        {
+            add => AddHandler(NoteAssociationMouseLeaveEvent, value);
+            remove => RemoveHandler(NoteAssociationMouseLeaveEvent, value);
         }
 
         /// <summary>

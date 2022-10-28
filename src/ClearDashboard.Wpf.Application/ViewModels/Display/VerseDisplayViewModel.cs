@@ -11,13 +11,21 @@ using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Extensions;
 using SIL.Machine.Tokenization;
 using SIL.ObjectModel;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
+
+// These need to be specified explicitly to resolve ambiguity with ClearDashboard.DataAccessLayer.Models.
+using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
+using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using Label = ClearDashboard.DAL.Alignment.Notes.Label;
+using Note = ClearDashboard.DAL.Alignment.Notes.Note;
+using Token = ClearBible.Engine.Corpora.Token;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 #if MOCK
 // Additional using statements for mock data
@@ -183,44 +191,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
-        private TranslationSet? TranslationSet { get; set; }
-
-        private AlignmentSet? AlignmentSet { get; set; }
-
-        public IEnumerable<Alignment>? Alignments { get; set; }
-
-        private IReadOnlyList<Token> Tokens { get; set; }
-
-        private IReadOnlyList<Token>? TargetTokens { get; set; } = null;
-        private IEnumerable<Translation>? Translations { get; set; }
+        private IReadOnlyList<Token> SourceTokens { get; set; }
         private EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
+        private bool IsSourceRtl { get; set; }
+        private IReadOnlyList<Token>? TargetTokens { get; set; } = null;
         private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        private Dictionary<IId, IEnumerable<Note>>? AllEntityNotes { get; set; }
-        private bool IsRtl { get; set; }
-
         private bool IsTargetRtl { get; set; }
 
-        /// <summary>
-        /// Gets a collection of <see cref="TokenDisplayViewModel"/>s to be rendered.
-        /// </summary>
-        public TokenDisplayViewModelCollection TokenDisplayViewModels { get; private set; } = new();
+        private TranslationSet? TranslationSet { get; set; }
+        private IEnumerable<Translation>? Translations { get; set; }
 
+        private AlignmentSet? AlignmentSet { get; set; }
+        public IEnumerable<Alignment>? Alignments { get; set; }
+
+        private Dictionary<IId, IEnumerable<Note>>? AllNotes { get; set; }
+
+        private static List<BookId>? _bookIds;
+        private static IEnumerable<BookId> BookIds
+        {
+            get
+            {
+                if (_bookIds == null)
+                {
+                    _bookIds = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
+                }
+                return _bookIds;
+            }
+        }
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
+        /// </summary>
+        public TokenDisplayViewModelCollection SourceTokenDisplayViewModels { get; private set; } = new();
+
+        /// <summary>
+        /// Gets a collection of target <see cref="TokenDisplayViewModel"/>s to be rendered.
+        /// </summary>
         public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
 
         /// <summary>
         /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion of labels.
         /// </summary>
-        public ObservableCollection<Label> LabelSuggestions { get; private set; } = new();
+        public LabelCollection LabelSuggestions { get; private set; } = new();
 
-        #region Public Properties
-
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; } = Guid.NewGuid();
 
         #endregion Public Properties
 
-
         #region Private methods
-        private static IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, ILogger? logger)
+        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer)
         {
             try
             {
@@ -231,18 +252,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var result = detokenizer.Detokenize(tokens);
 #if DEBUG
                 stopwatch.Stop();
-                logger?.LogInformation($"Retrieved padded tokens from {detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Retrieved padded tokens from {detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 return result;
             }
             catch (Exception e)
             {
-                logger?.LogCritical(e.ToString());
+                Logger?.LogCritical(e.ToString());
                 throw;
             }
         }
 
-        private static Translation? GetTranslationForToken(Token token, IEnumerable<Translation>? translations)
+        private Translation? GetTranslationForToken(Token token)
         {
 #if MOCK
             var translationText = (token.SurfaceText != "." && token.SurfaceText != ",")
@@ -250,49 +271,95 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 : String.Empty;
             return new Translation(SourceToken: token, TargetTranslationText: translationText, TranslationOriginatedFrom: GetMockTranslationStatus());
 #else
-            return translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? null;
+            return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? null;
 #endif
         }
 
-        private static NoteViewModelCollection GetNotesForToken(Token token, Dictionary<IId, IEnumerable<Note>>? allEntityNotes)
+        // TODO: localize
+        private static string GetDescriptionForNoteAssociation(IId associatedEntityId)
+        {
+            if (associatedEntityId.GetType() == typeof(TokenId))
+            {
+                if (associatedEntityId is TokenId tokenId)
+                {
+                    var bookNumberString = tokenId.BookNumber.ToString();
+                    var bookId = BookIds.FirstOrDefault(b => b.silCannonBookNum == bookNumberString);
+                    if (bookId != null)
+                    {
+                        return $"Token in {bookId.silCannonBookAbbrev} {tokenId.ChapterNumber}:{tokenId.VerseNumber} word {tokenId.WordNumber} part {tokenId.SubWordNumber}";
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private async Task<NoteViewModelCollection> GetNotesForTokenAsync(Token token)
         {
 #if MOCK
             return GetMockNotes();
 #else
-            var matches = allEntityNotes?.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
-            return matches is { Key: { } } ? new NoteViewModelCollection(matches.Value.Value.Select(n => new NoteViewModel(n))) : new NoteViewModelCollection();
+            var result = new NoteViewModelCollection();
+            var tokenMatch = AllNotes?.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
+            if (tokenMatch is { Key: { } })
+            {
+                var notesList = tokenMatch.Value.Value.OrderBy(n => n.NoteId?.Created).ToList();
+                foreach (var parentNote in notesList.Where(note => !note.IsReply()))
+                {
+                    var noteViewModel = new NoteViewModel(parentNote);
+                    var associatedEntityIds = await parentNote.GetFullDomainEntityIds(Mediator);
+                    foreach (var associatedEntityId in associatedEntityIds)
+                    {
+                        noteViewModel.Associations.Add(new NoteAssociationViewModel
+                        {
+                            AssociatedEntityId = associatedEntityId, 
+                            Description = GetDescriptionForNoteAssociation(associatedEntityId)
+
+                        });
+                    }
+                    result.Add(noteViewModel);
+                }
+
+                foreach (var replyNote in notesList.Where(note => note.IsReply()))
+                {
+                    var parentNote = result.FirstOrDefault(n => n.ThreadId == replyNote.ThreadId);
+                    if (parentNote != null)
+                    {
+                        parentNote.Replies.Add(new NoteViewModel(replyNote));
+                    }
+                    else
+                    {
+                        Logger?.LogError($"Could not find thread ID {replyNote.ThreadId} for reply note ID {replyNote.NoteId}");
+                    }
+                }
+            }
+
+            return result;
 #endif
         }
 
-        private static TokenDisplayViewModelCollection BuildTokenDisplayViewModels(
-            IReadOnlyList<Token> tokens, 
-            EngineStringDetokenizer detokenizer, 
-            IEnumerable<Translation>? translations,
-            Dictionary<IId, IEnumerable<Note>>? allEntityNotes,
-            bool isRtl,
-            bool isSource,
-            ILogger? logger)
+        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
         {
-            var paddedTokens = GetPaddedTokens(tokens, detokenizer, logger);
-
-            var tokenDisplayViewModelCollection = new TokenDisplayViewModelCollection();
-            tokenDisplayViewModelCollection.AddRange(from paddedToken in paddedTokens
-                let translation = GetTranslationForToken(paddedToken.token, translations)
-                let notes = GetNotesForToken(paddedToken.token, allEntityNotes)
-                select new TokenDisplayViewModel
+            var result = new TokenDisplayViewModelCollection();
+            
+            var paddedTokens = GetPaddedTokens(tokens, detokenizer);
+            foreach (var paddedToken in paddedTokens)
+            {
+                result.Add(new TokenDisplayViewModel
                 {
                     Token = paddedToken.token,
                     // For right-to-left languages, the padding before and padding after should be swapped.
                     PaddingBefore = !isRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
                     PaddingAfter = !isRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
-                    Translation = translation,
-                    Notes = notes,
+                    Translation = GetTranslationForToken(paddedToken.token),
+                    Notes = await GetNotesForTokenAsync(paddedToken.token),
                     IsSource = isSource
                 });
-            return tokenDisplayViewModelCollection;
+            }
+            return result;
         }
 
-        private static async Task<IEnumerable<Translation>> GetTranslations(TranslationSet translationSet, IEnumerable<TokenId> tokens, ILogger?logger)
+        private async Task<IEnumerable<Translation>> GetTranslations(TranslationSet translationSet, IEnumerable<TokenId> tokens)
         {
 #if MOCK
             return new List<Translation>();
@@ -306,28 +373,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var result = await translationSet!.GetTranslations(tokens);
 #if DEBUG
                 stopwatch.Stop();
-                logger?.LogInformation($"Retrieved translations in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Retrieved translations in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 return result;
             }
             catch (Exception e)
             {
-                logger?.LogCritical(e.ToString());
+                Logger?.LogCritical(e.ToString());
                 throw;
             }
 #endif
         }
 
-        private static async Task<Dictionary<IId, IEnumerable<Note>>?> GetAllNotes(IMediator mediator)
+        private async Task<Dictionary<IId, IEnumerable<Note>>?> GetAllNotes()
         {
 #if MOCK
             return new Dictionary<IId, IEnumerable<Note>>();
 #else
-            return await Note.GetAllDomainEntityIdNotes(mediator);
+            return await Note.GetAllDomainEntityIdNotes(Mediator);
 #endif
         }
 
-        private static async Task<ObservableCollection<Label>> GetLabelSuggestions(IMediator mediator, ILogger? logger)
+        private async Task<LabelCollection> GetLabelSuggestions()
         {
 #if MOCK
             return MockLabelSuggestions;
@@ -338,16 +405,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                var labels = await Label.GetAll(mediator);
+                var labels = await Label.GetAll(Mediator);
 #if DEBUG
                 stopwatch.Stop();
-                logger?.LogInformation($"Retrieved label suggestions in {stopwatch.ElapsedMilliseconds}ms");
+                Logger?.LogInformation($"Retrieved label suggestions in {stopwatch.ElapsedMilliseconds}ms");
 #endif
-                return new ObservableCollection<Label>(labels.OrderBy(l => l.Text));
+                return new LabelCollection(labels.OrderBy(l => l.Text));
             }
             catch (Exception e)
             {
-                logger?.LogCritical(e.ToString());
+                Logger?.LogCritical(e.ToString());
                 throw;
             }
 #endif
@@ -433,9 +500,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 // If translation propagates to other translations, then we need a fresh call to PopulateTranslations() and to rebuild the token displays.
                 if (translationActionType == TranslationActionTypes.PutPropagate)
                 {
-                    Translations = await GetTranslations(TranslationSet, Tokens.Select(t => t.TokenId), Logger);
+                    Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
 
-                    TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, SourceDetokenizer, Translations, AllEntityNotes, IsRtl, true, Logger);
+                    SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsSourceRtl, true);
                 }
             }
             catch (Exception e)
@@ -445,28 +512,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
 #endif
         }
-
-        ///// <summary>
-        ///// Adds a note to a specified entity.
-        ///// </summary>
-        ///// <param name="note">The <see cref="Note"/> to add.</param>
-        ///// <param name="entityId">The entity ID to which to add the note.</param>
-        ///// <returns>An awaitable <see cref="Task"/>.</returns>
-        //public async Task AddNoteAsync(Note note, IId entityId)
-        //{
-        //    await AddNoteAsync(note, new EntityIdCollection(entityId.ToEnumerable()));
-        //}
-
-        ///// <summary>
-        ///// Adds a note to a collection of entities.
-        ///// </summary>
-        ///// <param name="note">The <see cref="NoteViewModel"/> to add.</param>
-        ///// <param name="entityIds">The entity IDs to which to associate the note.</param>
-        ///// <returns>An awaitable <see cref="Task"/>.</returns>
-        //public async Task AddNoteAsync(NoteViewModel note, EntityIdCollection entityIds)
-        //{
-        //    await AddNoteAsync(note.Note, entityIds);
-        //}
 
         /// <summary>
         /// Adds a note to a collection of entities.
@@ -483,7 +528,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                await note.Note.CreateOrUpdate(Mediator);
+                await note.Entity.CreateOrUpdate(Mediator);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Added note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -493,7 +538,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if DEBUG
                     stopwatch.Restart();
 #endif
-                    await note.Note.AssociateDomainEntity(Mediator, entityId);
+                    await note.Entity.AssociateDomainEntity(Mediator, entityId);
 #if DEBUG
                     stopwatch.Stop();
                     Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
@@ -511,7 +556,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                             await label.CreateOrUpdate(Mediator);
                         }
 
-                        await note.Note.AssociateLabel(Mediator, label);
+                        await note.Entity.AssociateLabel(Mediator, label);
                     }
 #if DEBUG
                     stopwatch.Stop();
@@ -520,7 +565,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 }
                 foreach (var entityId in entityIds)
                 {
-                    var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
+                    var token = SourceTokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
                     token?.NoteAdded(note);
                 }
 #endif
@@ -539,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task UpdateNoteAsync(NoteViewModel note)
         {
-            await UpdateNoteAsync(note.Note);
+            await UpdateNoteAsync(note.Entity);
         }
 
         /// <summary>
@@ -571,17 +616,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             }
         }
 
-        ///// <summary>
-        ///// Deletes a note.
-        ///// </summary>
-        ///// <param name="note">The <see cref="NoteViewModel"/> to delete.</param>
-        ///// <param name="entityIds">The entity IDs from which to remove the note.</param>
-        ///// <returns>An awaitable <see cref="Task"/>.</returns>
-        //public async Task DeleteNoteAsync(NoteViewModel note, EntityIdCollection entityIds)
-        //{
-        //    await DeleteNoteAsync(note.Note, entityIds);
-        //}
-
         /// <summary>
         /// Deletes a note.
         /// </summary>
@@ -599,14 +633,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 #endif
-                await note.Note.Delete(Mediator);
+                await note.Entity.Delete(Mediator);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Deleted note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 foreach (var entityId in entityIds)
                 {
-                    var token = TokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
+                    var token = SourceTokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
                     token?.NoteDeleted(note);
                 }
             }
@@ -636,12 +670,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 async void CreateAssociateLabel()
                 {
-                    var newLabel = await note.Note.CreateAssociateLabel(Mediator, labelText);
+                    var newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText);
                     LabelSuggestions.Add(newLabel);
-                    LabelSuggestions = new ObservableCollection<Label>(LabelSuggestions.OrderBy(l => l.Text));
+                    LabelSuggestions = new LabelCollection(LabelSuggestions.OrderBy(l => l.Text));
                 }
 
-                await App.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
+                // For thread safety, because Note.CreateAssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -672,10 +707,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 async void AssociateLabel()
                 {
-                    await note.Note.AssociateLabel(Mediator, label);
+                    await note.Entity.AssociateLabel(Mediator, label);
                 }
 
-                await App.Current.Dispatcher.InvokeAsync(AssociateLabel);
+                // For thread safety, because Note.AssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(AssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -706,10 +742,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #endif
                 async void DetachLabel()
                 {
-                    await note.Note.DetachLabel(Mediator, label);
+                    await note.Entity.DetachLabel(Mediator, label);
                 }
 
-                await App.Current.Dispatcher.InvokeAsync(DetachLabel);
+                // For thread safety, because Note.CreateAssociateLabel() modifies an observable collection, we need to invoke the operation on the dispatcher.
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(DetachLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -734,19 +771,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public async Task ShowCorpusAsync(
             TokensTextRow textRow, 
-            EngineStringDetokenizer detokenizer, 
+            EngineStringDetokenizer sourceDetokenizer, 
             bool isRtl)
         {
-            Tokens = textRow.Tokens;
-            TranslationSet = null;
-            AlignmentSet = null;
-            SourceDetokenizer = detokenizer;
-            IsRtl = isRtl;
+            SourceTokens = textRow.Tokens;
+            SourceDetokenizer = sourceDetokenizer;
+            IsSourceRtl = isRtl;
             IsTargetRtl = false;
-            AllEntityNotes = await GetAllNotes(Mediator);
-            LabelSuggestions = await GetLabelSuggestions(Mediator, Logger);
 
-            TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, detokenizer, null, AllEntityNotes, IsRtl, true, Logger);
+            TranslationSet = null;
+            
+            AlignmentSet = null;
+
+            AllNotes = await GetAllNotes();
+            LabelSuggestions = await GetLabelSuggestions();
+
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsSourceRtl, true);
         }
 
         public async Task ShowTranslationAsync(
@@ -755,17 +795,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             EngineStringDetokenizer sourceDetokenizer,
             bool isSourceRtl)
         {
-            Tokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
-            TranslationSet = translationSet;
-            AlignmentSet = null;
+            SourceTokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
-            IsRtl = isSourceRtl;
+            IsSourceRtl = isSourceRtl;
             IsTargetRtl = false;
-            AllEntityNotes = await GetAllNotes(Mediator);
-            LabelSuggestions = await GetLabelSuggestions(Mediator, Logger);
-            Translations = await GetTranslations(TranslationSet, Tokens.Select(t => t.TokenId), Logger);
 
-            TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, sourceDetokenizer, Translations, AllEntityNotes, IsRtl, true, Logger);
+            TranslationSet = translationSet;
+            Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
+            
+            AlignmentSet = null;
+            
+            AllNotes = await GetAllNotes();
+            LabelSuggestions = await GetLabelSuggestions();
+
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsSourceRtl, true);
         }
 
         public async Task ShowAlignmentsAsync(
@@ -776,19 +819,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             EngineStringDetokenizer targetDetokenizer,
             bool isTargetRtl)
         {
-            Tokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            SourceTokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            SourceDetokenizer = sourceDetokenizer;
+            IsSourceRtl = isSourceRtl;
+
             TargetTokens = engineParallelTextRow.TargetTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            TargetDetokenizer = targetDetokenizer;
+            IsTargetRtl = isTargetRtl;
+
             TranslationSet = null;
+
             AlignmentSet = alignmentSet;
             Alignments = await alignmentSet.GetAlignments(new List<EngineParallelTextRow>() { engineParallelTextRow });
-            SourceDetokenizer = sourceDetokenizer;
-            IsRtl = isSourceRtl;
-            IsTargetRtl = isTargetRtl;
-            AllEntityNotes = await GetAllNotes(Mediator);
-            LabelSuggestions = await GetLabelSuggestions(Mediator, Logger);
+            
+            AllNotes = await GetAllNotes();
+            LabelSuggestions = await GetLabelSuggestions();
 
-            TokenDisplayViewModels = BuildTokenDisplayViewModels(Tokens, sourceDetokenizer, null, AllEntityNotes, isSourceRtl, true, Logger);
-            TargetTokenDisplayViewModels = BuildTokenDisplayViewModels(TargetTokens, targetDetokenizer, null, AllEntityNotes, isTargetRtl, false, Logger);
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, isSourceRtl, true);
+            TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, targetDetokenizer, isTargetRtl, false);
         }
 
         #endregion
@@ -797,11 +845,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// Default constructor.
         /// </summary>
         /// <remarks>
-        /// Unless the following constructor is used (via dependency injection), then this view model will not be able to perform database operations. 
+        /// Unless the other constructor is used (via dependency injection), then this view model will not be able to perform database operations. 
         /// </remarks>
         public VerseDisplayViewModel()
         {
-            Tokens = new ReadOnlyList<Token>(new List<Token>());
+            SourceTokens = new ReadOnlyList<Token>(new List<Token>());
         }
 
         /// <summary>

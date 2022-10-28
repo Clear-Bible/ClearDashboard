@@ -19,6 +19,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label
             Grid.Row="0"
@@ -135,7 +136,7 @@
             </Button>
         </StackPanel>
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Orientation="Horizontal">
@@ -150,7 +151,6 @@
                 Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
                 Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
             <userControls:LabelSelector
-                Grid.Row="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 VerticalContentAlignment="Center"
@@ -159,6 +159,19 @@
                 LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
         </StackPanel>
-        <TextBlock Grid.Row="3" Text=""></TextBlock>
+        <userControls:NoteAssociationsDisplay 
+                Grid.Row="4" 
+                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" 
+                NoteAssociationClicked="OnNoteAssociationClicked" 
+                NoteAssociationDoubleClicked="OnNoteAssociationDoubleClicked"
+                NoteAssociationLeftButtonDown="OnNoteAssociationLeftButtonDown" 
+                NoteAssociationLeftButtonUp="OnNoteAssociationLeftButtonUp" 
+                NoteAssociationRightButtonDown="OnNoteAssociationRightButtonDown" 
+                NoteAssociationRightButtonUp="OnNoteAssociationRightButtonUp" 
+                NoteAssociationMouseEnter="OnNoteAssociationMouseEnter" 
+                NoteAssociationMouseLeave="OnNoteAssociationMouseLeave" 
+                FontSize="13"
+
+                />
     </Grid>
 </UserControl>

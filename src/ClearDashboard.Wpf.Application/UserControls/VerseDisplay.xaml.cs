@@ -538,7 +538,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 });
                         }
 
-                        verseDisplayViewModel.TokenDisplayViewModels
+                        verseDisplayViewModel.SourceTokenDisplayViewModels
                             .Select(tdm =>
                             {
                                 if (sourceTokens
@@ -576,7 +576,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 }
                 else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0)
                 {
-                    verseDisplayViewModel.TokenDisplayViewModels
+                    verseDisplayViewModel.SourceTokenDisplayViewModels
                         .Select(tdm =>
                         {
                             tdm.IsSelected = false;

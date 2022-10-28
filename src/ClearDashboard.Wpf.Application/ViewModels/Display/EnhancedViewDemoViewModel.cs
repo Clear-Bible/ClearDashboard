@@ -263,9 +263,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            e.TokenDisplayViewModel.IsSelected = true;
-            SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
-            NotePaneVisibility = Visibility.Visible;
+            //e.TokenDisplayViewModel.IsSelected = true;
+            //SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
+            //NotePaneVisibility = Visibility.Visible;
         }
 
         public void NoteCreate(NoteEventArgs e)
@@ -332,6 +332,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 await VerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
             }
             Message = $"Label '{e.Label.Text}' removed for note";
+        }
+
+        public void NoteAssociationClicked(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' clicked";
+        }
+
+        public void NoteAssociationDoubleClicked(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' double-clicked";
+        }
+
+        public void NoteAssociationRightButtonDown(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' right button down";
+        }
+
+        public void NoteAssociationMouseEnter(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' hovered";
+        }
+
+        public void NoteAssociationMouseLeave(NoteAssociationEventArgs e)
+        {
+            Message = string.Empty;
         }
 
         public void CloseNotePaneRequested(RoutedEventArgs args)

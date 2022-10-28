@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
@@ -18,34 +15,11 @@ using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control that displays the details of a single <see cref="Note"/>.
+    /// A control that displays the details of a single <see cref="NoteViewModel"/>.
     /// </summary>
     public partial class NoteDisplay : INotifyPropertyChanged
     {
         #region Static Routed Events
-        /// <summary>
-        /// Identifies the NoteAdded routed event.
-        /// </summary>
-        public static readonly RoutedEvent NoteAddedEvent = EventManager.RegisterRoutedEvent
-            ("NoteAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
-
-        /// <summary>
-        /// Identifies the NoteUpdated routed event.
-        /// </summary>
-        public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
-            ("NoteUpdated", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
-
-        /// <summary>
-        /// Identifies the NoteDeleted routed event.
-        /// </summary>
-        public static readonly RoutedEvent NoteDeletedEvent = EventManager.RegisterRoutedEvent
-            ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
-
-        /// <summary>
-        /// Identifies the LabelSelectedEvent routed event.
-        /// </summary>
-        public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
-            ("LabelSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the LabelAddedEvent routed event.
@@ -58,6 +32,78 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent LabelRemovedEvent = EventManager.RegisterRoutedEvent
             ("LabelRemoved", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the LabelSelectedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LabelSelectedEvent = EventManager.RegisterRoutedEvent
+            ("LabelSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAdded routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAddedEvent = EventManager.RegisterRoutedEvent
+            ("NoteAdded", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationClicked routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationClickedEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationDoubleClicked routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationDoubleClickedEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationDoubleClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationLeftButtonDown routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationLeftButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationLeftButtonUp routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationLeftButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationRightButtonDown routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationRightButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationRightButtonUp routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationRightButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationMouseEnter routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteAssociationMouseLeaveEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteAssociationMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("NoteAssociationMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteDeleted routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteDeletedEvent = EventManager.RegisterRoutedEvent
+            ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteUpdated routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
+            ("NoteUpdated", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -108,17 +154,58 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register(nameof(LabelSuggestions), typeof(IEnumerable<NotesLabel>), typeof(NoteDisplay));
 
-
         /// <summary>
         /// Identifies the Note dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(NoteDisplay));
 
         /// <summary>
+        /// Identifies the NoteAssociationFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontFamilyProperty = DependencyProperty.Register(nameof(NoteAssociationFontFamily), typeof(FontFamily), typeof(NoteDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the NoteAssociationFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontSizeProperty = DependencyProperty.Register(nameof(NoteAssociationFontSize), typeof(double), typeof(NoteDisplay),
+            new PropertyMetadata(15d));
+
+        /// <summary>
+        /// Identifies the NoteFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontStyleProperty = DependencyProperty.Register(nameof(NoteAssociationFontStyle), typeof(FontStyle), typeof(NoteDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the NoteFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontWeightProperty = DependencyProperty.Register(nameof(NoteAssociationFontWeight), typeof(FontWeight), typeof(NoteDisplay),
+            new PropertyMetadata(FontWeights.Normal));
+
+        /// <summary>
+        /// Identifies the NoteAssociationMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationMarginProperty = DependencyProperty.Register(nameof(NoteAssociationMargin), typeof(Thickness), typeof(NoteDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the NoteAssociationPadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationPaddingProperty = DependencyProperty.Register(nameof(NoteAssociationPadding), typeof(Thickness), typeof(NoteDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
         /// Identifies the NoteFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteFontSizeProperty = DependencyProperty.Register(nameof(NoteFontSize), typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(15d));
+
+        /// <summary>
+        /// Identifies the NoteFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteFontFamilyProperty = DependencyProperty.Register(nameof(NoteFontFamily), typeof(FontFamily), typeof(NoteDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
 
         /// <summary>
         /// Identifies the NoteFontStyle dependency property.
@@ -186,7 +273,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty WatermarkProperty = DependencyProperty.Register(nameof(Watermark), typeof(string), typeof(NoteDisplay));
 
         #endregion
-        #region Private event handlers
+        #region Private Event Handlers
 
         private static void OnAddModeChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
@@ -301,6 +388,58 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void DeleteNoteCancelled(object sender, RoutedEventArgs e)
         {
             ConfirmDeletePopup.IsOpen = false;
+        }
+
+        private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
+        {
+            if (e is NoteAssociationEventArgs noteAssociationArgs)
+            {
+                RaiseEvent(new NoteAssociationEventArgs()
+                {
+                    RoutedEvent = routedEvent,
+                    Note = noteAssociationArgs.Note,
+                    AssociatedEntityId = noteAssociationArgs.AssociatedEntityId
+                });
+            }
+        }
+
+        private void OnNoteAssociationClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationClickedEvent, e);
+        }
+
+        private void OnNoteAssociationDoubleClicked(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationDoubleClickedEvent, e);
+        }
+
+        private void OnNoteAssociationLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationLeftButtonDownEvent, e);
+        }
+
+        private void OnNoteAssociationLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationRightButtonUpEvent, e);
+        }
+        private void OnNoteAssociationRightButtonDown(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationRightButtonDownEvent, e);
+        }
+
+        private void OnNoteAssociationRightButtonUp(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationRightButtonUpEvent, e);
+        }
+
+        private void OnNoteAssociationMouseEnter(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationMouseEnterEvent, e);
+        }
+
+        private void OnNoteAssociationMouseLeave(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteAssociationEvent(NoteAssociationMouseLeaveEvent, e);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -430,12 +569,65 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the margin for the note edit box.
+        /// Gets or sets the font size for the note associations.
         /// </summary>
-        public Thickness NoteMargin
+        public FontFamily NoteAssociationFontFamily
         {
-            get => (Thickness)GetValue(NoteMarginProperty);
-            set => SetValue(NoteMarginProperty, value);
+            get => (FontFamily)GetValue(NoteAssociationFontFamilyProperty);
+            set => SetValue(NoteAssociationFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the note associations.
+        /// </summary>
+        public double NoteAssociationFontSize
+        {
+            get => (double)GetValue(NoteAssociationFontSizeProperty);
+            set => SetValue(NoteAssociationFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the note associations.
+        /// </summary>
+        public FontWeight NoteAssociationFontWeight
+        {
+            get => (FontWeight)GetValue(NoteAssociationFontWeightProperty);
+            set => SetValue(NoteAssociationFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the note associations.
+        /// </summary>
+        public FontStyle NoteAssociationFontStyle
+        {
+            get => (FontStyle)GetValue(NoteAssociationFontStyleProperty);
+            set => SetValue(NoteAssociationFontStyleProperty, value);
+        }
+        /// <summary>
+        /// Gets or sets the margin for individual note associations.
+        /// </summary>
+        public Thickness NoteAssociationMargin
+        {
+            get => (Thickness)GetValue(NoteAssociationMarginProperty);
+            set => SetValue(NoteAssociationMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for individual note associations.
+        /// </summary>
+        public Thickness NoteAssociationPadding
+        {
+            get => (Thickness)GetValue(NoteAssociationPaddingProperty);
+            set => SetValue(NoteAssociationPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the note family box.
+        /// </summary>
+        public FontFamily NoteFontFamily
+        {
+            get => (FontFamily)GetValue(NoteFontFamilyProperty);
+            set => SetValue(NoteFontFamilyProperty, value);
         }
 
         /// <summary>
@@ -463,6 +655,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (FontStyle)GetValue(NoteFontStyleProperty);
             set => SetValue(NoteFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin for the note text box.
+        /// </summary>
+        public Thickness NoteMargin
+        {
+            get => (Thickness)GetValue(NoteMarginProperty);
+            set => SetValue(NoteMarginProperty, value);
         }
 
         /// <summary>
@@ -537,10 +738,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(WatermarkProperty, value);
         }
 
-
-
         #endregion
-        #region Public events
+        #region Public Events
 
         /// <summary>
         /// Occurs when a note is applied.
@@ -567,6 +766,78 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(NoteDeletedEvent, value);
             remove => RemoveHandler(NoteDeletedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual note association is clicked.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationClicked
+        {
+            add => AddHandler(NoteAssociationClickedEvent, value);
+            remove => RemoveHandler(NoteAssociationClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual note association is clicked two or more times.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationDoubleClicked
+        {
+            add => AddHandler(NoteAssociationDoubleClickedEvent, value);
+            remove => RemoveHandler(NoteAssociationDoubleClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is pressed while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationLeftButtonDown
+        {
+            add => AddHandler(NoteAssociationLeftButtonDownEvent, value);
+            remove => RemoveHandler(NoteAssociationLeftButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the left mouse button is released while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationLeftButtonUp
+        {
+            add => AddHandler(NoteAssociationLeftButtonUpEvent, value);
+            remove => RemoveHandler(NoteAssociationLeftButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is pressed while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationRightButtonDown
+        {
+            add => AddHandler(NoteAssociationRightButtonDownEvent, value);
+            remove => RemoveHandler(NoteAssociationRightButtonDownEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the right mouse button is released while the mouse pointer is over a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationRightButtonUp
+        {
+            add => AddHandler(NoteAssociationRightButtonUpEvent, value);
+            remove => RemoveHandler(NoteAssociationRightButtonUpEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer enters the bounds of a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationMouseEnter
+        {
+            add => AddHandler(NoteAssociationMouseEnterEvent, value);
+            remove => RemoveHandler(NoteAssociationMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse pointer leaves the bounds of a note association.
+        /// </summary>
+        public event RoutedEventHandler NoteAssociationMouseLeave
+        {
+            add => AddHandler(NoteAssociationMouseLeaveEvent, value);
+            remove => RemoveHandler(NoteAssociationMouseLeaveEvent, value);
         }
 
         /// <summary>
@@ -609,6 +880,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             Loaded += OnLoaded;
         }
-
     }
 }

@@ -8,12 +8,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     {
         public NoteCollection()
         {
-            
         }
 
         public NoteCollection(IEnumerable<Note> notes) : base(notes)
         {
-            
         }
     }
 }

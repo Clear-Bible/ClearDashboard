@@ -88,7 +88,7 @@
             ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
             TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-            Tokens="{Binding VerseDisplayViewModel.TokenDisplayViewModels}"
+            Tokens="{Binding VerseDisplayViewModel.SourceTokenDisplayViewModels}"
             TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
             TranslationFlowDirection="{Binding ElementName=TranslationRtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
             TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -713,9 +713,21 @@
 
             <userControls:NoteCollectionDisplay
                 Title="{Binding SelectedTokens.CombinedSurfaceText}"
-                cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)];                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];                                                            [Event LabelRemoved] = [Action LabelRemoved($eventArgs)];                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];"
+                cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)]; 
+                                    [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            
+                                    [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            
+                                    [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];                                                            
+                                    [Event LabelRemoved] = [Action LabelRemoved($eventArgs)];                                                            
+                                    [Event LabelSelected] = [Action LabelSelected($eventArgs)];                                                            
+                                    [Event LabelAdded] = [Action LabelAdded($eventArgs)];
+                                    [Event NoteAssociationClicked] = [Action NoteAssociationClicked($eventArgs)];
+                                    [Event NoteAssociationDoubleClicked] = [Action NoteAssociationDoubleClicked($eventArgs)];
+                                    [Event NoteAssociationRightButtonDown] = [Action NoteAssociationRightButtonDown($eventArgs)];
+                                    [Event NoteAssociationMouseEnter] = [Action NoteAssociationMouseEnter($eventArgs)];
+                                    [Event NoteAssociationMouseLeave] = [Action NoteAssociationMouseLeave($eventArgs)];
+                                    "
                 EntityIds="{Binding SelectedTokens.EntityIds}"
-                InnerMargin="0,0,0,30"
+                InnerMargin="0,0,0,15"
                 LabelBackground="BlanchedAlmond"
                 LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
