@@ -552,6 +552,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void LoadCanvas()
         {
+            if (ProjectManager.CurrentProject is null)
+            {
+                return;
+            }
+
             ProjectName = ProjectManager.CurrentProject.ProjectName;
 
             // we have already loaded once
@@ -571,6 +576,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 return;
             }
+
+            Stopwatch sw = new();
+            sw.Start();
+
 
             JsonSerializerOptions options = new()
             {
@@ -665,6 +674,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ));
                 }
             }
+
+            sw.Stop();
+            Debug.WriteLine($"LoadCanvas took {sw.ElapsedMilliseconds} ms");
         }
 
 
