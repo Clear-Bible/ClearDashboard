@@ -215,12 +215,12 @@ public class DashboardProjectManager : ProjectManager
                 await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
                 InComingChangesStarted = false;
 
-                //if (requestedVerses.Count > 0)
-                //{
-                CurrentVerse = requestedVerses.Last();
-                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentVerse));
+                if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))//requestedVerses.Count > 0
+                {
+                    CurrentVerse = requestedVerses.Last();
+                    await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentVerse));
+                }
                 //requestedVerses.Clear();
-                //}
             }
         });
 

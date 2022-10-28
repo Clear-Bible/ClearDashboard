@@ -1206,8 +1206,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            if (!DashboardProjectManager.InComingChangesStarted)
-            {
+            //if (!DashboardProjectManager.InComingChangesStarted)
+            //{
                 //DashboardProjectManager.InComingChangesStarted = true;
                 if (CurrentBcv.BibleBookList.Count == 0)
                 {
@@ -1226,7 +1226,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
 
                 //DashboardProjectManager.InComingChangesStarted = false;
-            }
+            //}
         }
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)

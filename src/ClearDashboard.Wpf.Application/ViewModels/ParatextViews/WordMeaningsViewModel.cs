@@ -503,8 +503,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            if (!DashboardProjectManager.InComingChangesStarted)
-            {
+            //if (!DashboardProjectManager.InComingChangesStarted)
+            //{
                 var incomingVerse = message.Verse.PadLeft(9, '0');
 
                 if (_currentVerse == incomingVerse)
@@ -558,7 +558,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                     _ = ReloadWordMeanings();
                 }
-            }
+            //}
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
