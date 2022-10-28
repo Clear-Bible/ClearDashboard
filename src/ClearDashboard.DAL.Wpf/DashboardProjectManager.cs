@@ -100,6 +100,7 @@ public class DashboardProjectManager : ProjectManager
     private readonly INavigationService _navigationService;
 
     private bool _licenseCleared = false;
+    public static bool InComingChangesStarted { get; set; }
 
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
@@ -202,12 +203,25 @@ public class DashboardProjectManager : ProjectManager
 
     protected async Task HookSignalREvents()
     {
+        List<string> requestedVerses= new();
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
-
         {
-            CurrentVerse = verse;
-            await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
+            requestedVerses.Add(verse);
+            if (!InComingChangesStarted)//verse.PadLeft(9,'0') != CurrentVerse && 
+            {
+                InComingChangesStarted = true;
+                CurrentVerse = verse;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
+                InComingChangesStarted = false;
+
+                //if (requestedVerses.Count > 0)
+                //{
+                CurrentVerse = requestedVerses.Last();
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentVerse));
+                //requestedVerses.Clear();
+                //}
+            }
         });
 
         HubProxy.On<ParatextProject>("sendProject", async (project) =>

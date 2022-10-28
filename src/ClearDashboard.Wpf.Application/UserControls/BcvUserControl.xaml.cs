@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -313,7 +315,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 CboBook.SelectedIndex -= 1;
 
-                VerseChange = CurrentBcv.GetVerseId();
+                CboChapter.SelectedIndex = 0;
+
+                CboVerse.SelectedIndex = 0;
             }
         }
 
@@ -321,7 +325,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CboBook.SelectedIndex += 1;
 
-            VerseChange = CurrentBcv.GetVerseId();
+            CboChapter.SelectedIndex = 0;
+
+            CboVerse.SelectedIndex = 0;
         }
 
         private void ChapterUpArrow_Click(object sender, RoutedEventArgs e)
@@ -336,7 +342,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 CboChapter.SelectedIndex = CboChapter.Items.Count - 1;
             }
 
-            VerseChange = CurrentBcv.GetVerseId();
+            CboVerse.SelectedIndex = 0;
         }
 
         private void ChapterDownArrow_Click(object sender, RoutedEventArgs e)
@@ -351,7 +357,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 CboChapter.SelectedIndex = 0;
             }
 
-            VerseChange = CurrentBcv.GetVerseId();
+            CboVerse.SelectedIndex = 0;
         }
 
         private void VerseUpArrow_Click(object sender, RoutedEventArgs e)
@@ -365,8 +371,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 ChapterUpArrow_Click(null, null);
                 CboVerse.SelectedIndex = CboVerse.Items.Count - 1;
             }
-
-            VerseChange = CurrentBcv.GetVerseId();
         }
 
         private void VerseDownArrow_Click(object sender, RoutedEventArgs e)
@@ -520,11 +524,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CboVerse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            
             if (CurrentBcv.GetVerseId() != VerseChange)
             {
                 CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                //DashboardProjectManager.InComingChangesStarted = true;
                 VerseChange = CurrentBcv.GetVerseId();
+                //DashboardProjectManager.InComingChangesStarted = false;
             }
+           
         }
 
 

@@ -503,58 +503,61 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            var incomingVerse = message.Verse.PadLeft(9, '0');
-
-            if (_currentVerse == incomingVerse)
+            if (!DashboardProjectManager.InComingChangesStarted)
             {
-                return;
-            }
+                var incomingVerse = message.Verse.PadLeft(9, '0');
 
-            _currentVerse = incomingVerse;
-            CurrentBcv.SetVerseFromId(_currentVerse);
-            if (_currentVerse.EndsWith("000"))
-            {
-                // a zero based verse
-                TargetInlinesText.Clear();
-                NotifyOfPropertyChange(() => TargetInlinesText);
-                TargetHTML = "";
-                WordData.Clear();
-                NotifyOfPropertyChange(() => WordData);
-            }
-            else
-            {
-                // a normal verse
-                var verse = new Verse
+                if (_currentVerse == incomingVerse)
                 {
-                    VerseBBBCCCVVV = _currentVerse
-                };
-
-                int BookNum;
-                try
-                {
-                    _currentBcv.SetVerseFromId(message.Verse);
-                    BookNum = _currentBcv.BookNum;
-                }
-                catch (Exception)
-                {
-                    Logger.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
-                    BookNum = 01;
+                    return;
                 }
 
-
-                if (BookNum < 40)
+                _currentVerse = incomingVerse;
+                CurrentBcv.SetVerseFromId(_currentVerse);
+                if (_currentVerse.EndsWith("000"))
                 {
-                    _isOT = true;
+                    // a zero based verse
+                    TargetInlinesText.Clear();
+                    NotifyOfPropertyChange(() => TargetInlinesText);
+                    TargetHTML = "";
+                    WordData.Clear();
+                    NotifyOfPropertyChange(() => WordData);
                 }
                 else
                 {
-                    _isOT = false;
+                    // a normal verse
+                    var verse = new Verse
+                    {
+                        VerseBBBCCCVVV = _currentVerse
+                    };
+
+                    int BookNum;
+                    try
+                    {
+                        _currentBcv.SetVerseFromId(message.Verse);
+                        BookNum = _currentBcv.BookNum;
+                    }
+                    catch (Exception)
+                    {
+                        Logger.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
+                        BookNum = 01;
+                    }
+
+
+                    if (BookNum < 40)
+                    {
+                        _isOT = true;
+                    }
+                    else
+                    {
+                        _isOT = false;
+                    }
+
+                    // send to log
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change"), cancellationToken);
+
+                    _ = ReloadWordMeanings();
                 }
-
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Verse Change"), cancellationToken);
-
-                _ = ReloadWordMeanings();
             }
         }
 
