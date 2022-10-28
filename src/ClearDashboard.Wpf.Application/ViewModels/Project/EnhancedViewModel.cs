@@ -206,9 +206,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // push to Paratext
                     if (ParatextSync && !DashboardProjectManager.InComingChangesStarted)
                     {
-                        //Task.Run( () => 
-                        ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None);
-                        //);
+                        Task.Run( () => 
+                        ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None)
+                        );
                     }
 
                     _verseChange = value;
@@ -1217,7 +1217,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
                 {
                     // send to log
-                    //await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
 
                     //if (!DashboardProjectManager.InComingChangesStarted)//uses this to update combo box
                     //{
