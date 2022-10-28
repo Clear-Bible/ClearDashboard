@@ -6,9 +6,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Wpf;
-using System.Security.Policy;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -495,12 +492,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     CboVerse.SelectedIndex = 0;
                     CboChapter.SelectedIndex = 0;
-                    //InComingChangesStarted = true;
                     CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
 
                     CalculateChapters();
                     CalculateVerses();
-                    //InComingChangesStarted = false;
                     somethingChanged = true;
                 }
 
@@ -526,11 +521,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (verseId != "")
                 {
                     CboVerse.SelectedIndex = 0;
-                    //InComingChangesStarted = true;
                     CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
 
                     CalculateVerses();
-                    //InComingChangesStarted = false;
                     somethingChanged = true;
                 }
 
@@ -550,21 +543,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             if (CurrentBcv.GetVerseId() != VerseChange)
             {
                 CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-                //DashboardProjectManager.InComingChangesStarted = true;
                 if (!_bookChangeInProgress && !_chapterChangeInProgress)
                 {
                     VerseChange = CurrentBcv.GetVerseId();
                 }
-                //DashboardProjectManager.InComingChangesStarted = false;
             }
 
             _verseChangeInProgress = false;
         }
 
-        private void UpdateVerseChange(string verse)
-        {
 
-        }
+
 
         // Declare the event
         public event PropertyChangedEventHandler? PropertyChanged;

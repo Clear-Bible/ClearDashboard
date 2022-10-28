@@ -206,21 +206,21 @@ public class DashboardProjectManager : ProjectManager
         List<string> requestedVerses= new();
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
+
         {
             requestedVerses.Add(verse);
-            if (!InComingChangesStarted)//verse.PadLeft(9,'0') != CurrentVerse && 
+            if (!InComingChangesStarted)
             {
                 InComingChangesStarted = true;
                 CurrentVerse = verse;
                 await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
                 InComingChangesStarted = false;
 
-                if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))//requestedVerses.Count > 0
+                if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))
                 {
                     CurrentVerse = requestedVerses.Last();
                     await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentVerse));
                 }
-                //requestedVerses.Clear();
             }
         });
 

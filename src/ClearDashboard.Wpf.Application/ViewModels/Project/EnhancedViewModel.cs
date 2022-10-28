@@ -72,7 +72,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private string? _message;
         private BookInfo? _currentBook;
 
-        
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
@@ -84,9 +83,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         
         private List<ParallelProject> _parallelProjects = new();
         private List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
-        public static bool InComingChangesStarted { get; set; }
-
-
 
         #endregion //Member Variables
 
@@ -1206,27 +1202,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            //if (!DashboardProjectManager.InComingChangesStarted)
-            //{
-                //DashboardProjectManager.InComingChangesStarted = true;
-                if (CurrentBcv.BibleBookList.Count == 0)
-                {
-                    return;
-                }
+            if (CurrentBcv.BibleBookList.Count == 0)
+            {
+                return;
+            }
 
-                if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
-                {
-                    // send to log
-                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+            if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
+            {
+                // send to log
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
 
-                    //if (!DashboardProjectManager.InComingChangesStarted)//uses this to update combo box
-                    //{
-                    CurrentBcv.SetVerseFromId(message.Verse);
-                    //}
-                }
-
-                //DashboardProjectManager.InComingChangesStarted = false;
-            //}
+                CurrentBcv.SetVerseFromId(message.Verse);
+            }
         }
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
