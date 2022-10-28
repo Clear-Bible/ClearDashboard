@@ -645,6 +645,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return;
             }
 
+            Stopwatch sw = new();
+            sw.Start();
 
             var json = ProjectManager.CurrentProject.WindowTabLayout;
 
@@ -751,6 +753,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await Task.Delay(1000);
                 }
             }
+
+            sw.Stop();
+            Logger.LogInformation($"LoadDocuments - Total Load Time {deserialized.Count} documents in {sw.ElapsedMilliseconds} ms");
         }
 
         private async void Init()

@@ -40,6 +40,7 @@ using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearBible.Engine.Exceptions;
+using Mono.Unix.Native;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -676,7 +677,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             sw.Stop();
-            Debug.WriteLine($"LoadCanvas took {sw.ElapsedMilliseconds} ms");
+
+            Debug.WriteLine($"LoadCanvas took {sw.ElapsedMilliseconds} ms ({sw.Elapsed.Seconds} seconds)");
         }
 
 
