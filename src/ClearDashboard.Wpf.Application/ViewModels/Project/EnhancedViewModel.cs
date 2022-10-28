@@ -84,6 +84,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private List<ParallelProject> _parallelProjects = new();
         private List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
+
+
         #endregion //Member Variables
 
         #region Public Properties
@@ -1211,7 +1213,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
-
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
         }
