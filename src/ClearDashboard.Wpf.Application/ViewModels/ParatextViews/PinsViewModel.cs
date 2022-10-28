@@ -953,10 +953,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 return;
             }
-
-            EnhancedViewModel.InComingChangesStarted = true;
+            
             await ExecuteRequest(new SetCurrentVerseCommand(obj.ToString()), CancellationToken.None);
-            EnhancedViewModel.InComingChangesStarted = false;
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
