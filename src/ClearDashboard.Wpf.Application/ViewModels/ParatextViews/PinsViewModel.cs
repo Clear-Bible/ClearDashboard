@@ -563,7 +563,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         rs = LMR.Value.Split(',')
                             .ToList(); // change dictionary values from comma delimited string to List for sorting
                         ky = LMR.Key;
-                        SortRefs(ref rs);                     // sort the List  
+                        SortRefs(ref rs);         //does this remove duplicates?            // sort the List  
                         vl = String.Join(", ", rs); // change List back to comma delimited string
 
                         if (!vl.Contains("missing"))
@@ -573,7 +573,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             if (ndx2 >= 0)
                             {
                                 datrow = GridData[ndx2];
-                                datrow.Refs = vl;
+                                datrow.Refs = vl;//waht if there's already refs here?  or there's already a list of vesrse?
 
                                 if (datrow.Refs != "")
                                 {
@@ -582,7 +582,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     var simprefs = new List<string>();
                                     foreach (var longref in longrefs)
                                     {
-                                        var booksplit = longref.Split(' ').ToList();
+                                        var booksplit = longref.Trim().Split(' ').ToList();
                                         var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
                                         var chapterVerseSplit = booksplit[1].Split(':').ToList();
                                         var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
@@ -590,8 +590,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                         simprefs.Add(bookNum + chapterNum + verseNum);
                                     }
 
-                                    datrow.SimpRefs = simprefs.Count.ToString();
-                                    datrow.VerseList = simprefs;
+                                    datrow.VerseList.AddRange(simprefs);//as opposed to over writing the previous set.  Can we order and remove duplicated from this list?
+                                    datrow.SimpRefs = datrow.VerseList.Count.ToString();
                                 }
                                 else
                                 {

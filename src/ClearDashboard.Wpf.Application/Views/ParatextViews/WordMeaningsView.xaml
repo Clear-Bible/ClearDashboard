@@ -388,7 +388,8 @@
                                     <Run Text="{Binding TotalSenses}" />
                                 </TextBlock>
                             </StackPanel>
-
+                            <!--<Setter Property="Foreground" Value="Gray" />
+                            <Setter Property="Background" Value="LightGray" />-->
                             <Button
                                 Grid.Column="4"
                                 Margin="0,0,35,0"
@@ -397,16 +398,21 @@
                                 BorderThickness="0"
                                 Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
                                 <Button.Style>
-                                    <Style TargetType="Button">
+                                    <Style BasedOn="{StaticResource TransparentStyle}" TargetType="Button">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="Button">
                                                     <Button
+                                                        Width="100"
+                                                        Height="50"
                                                         HorizontalAlignment="Left"
-                                                        VerticalAlignment="Top"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalContentAlignment="Center"
+                                                        Background="LightGray"
                                                         BorderThickness="0"
                                                         Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
-                                                        CommandParameter="{Binding}">
+                                                        CommandParameter="{Binding}"
+                                                        Foreground="Gray">
                                                         <materialDesign:PackIcon Kind="ChevronLeft" />
                                                     </Button>
                                                 </ControlTemplate>
@@ -419,11 +425,16 @@
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="Button">
                                                             <Button
+                                                                Width="100"
+                                                                Height="50"
                                                                 HorizontalAlignment="Left"
-                                                                VerticalAlignment="Top"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalContentAlignment="Center"
+                                                                Background="LightGray"
                                                                 BorderThickness="0"
                                                                 Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
-                                                                CommandParameter="{Binding}">
+                                                                CommandParameter="{Binding}"
+                                                                Foreground="Gray">
                                                                 <materialDesign:PackIcon Kind="ChevronRight" />
                                                             </Button>
                                                         </ControlTemplate>
@@ -610,10 +621,12 @@
                                         Padding="3"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
+                                        Background="Green"
                                         BorderThickness="0"
                                         Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
                                         <Button.Style>
                                             <Style TargetType="Button">
+                                                <Setter Property="Background" Value="Red" />
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="Button">
@@ -622,10 +635,11 @@
                                                                 Padding="3"
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Top"
+                                                                Background="Blue"
                                                                 BorderThickness="0"
                                                                 Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
                                                                 CommandParameter="{Binding}">
-                                                                <materialDesign:PackIcon Kind="ChevronLeft" />
+                                                                <materialDesign:PackIcon Foreground="Pink" Kind="ChevronLeft" />
                                                             </Button>
                                                         </ControlTemplate>
                                                     </Setter.Value>
@@ -633,6 +647,7 @@
 
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
+                                                        <Setter Property="Background" Value="Orange" />
                                                         <Setter Property="Template">
                                                             <Setter.Value>
                                                                 <ControlTemplate TargetType="Button">
@@ -641,10 +656,12 @@
                                                                         Padding="3"
                                                                         HorizontalAlignment="Left"
                                                                         VerticalAlignment="Top"
+                                                                        Background="Purple"
                                                                         BorderThickness="0"
                                                                         Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
-                                                                        CommandParameter="{Binding}">
-                                                                        <materialDesign:PackIcon Kind="ChevronRight" />
+                                                                        CommandParameter="{Binding}"
+                                                                        Foreground="Gray">
+                                                                        <materialDesign:PackIcon Foreground="White" Kind="ChevronRight" />
                                                                     </Button>
                                                                 </ControlTemplate>
                                                             </Setter.Value>
