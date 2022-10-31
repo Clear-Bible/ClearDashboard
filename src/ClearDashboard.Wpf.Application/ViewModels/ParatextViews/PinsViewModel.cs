@@ -224,7 +224,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             try
             {
-                ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+                var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
+                ParatextProxy paratextUtils = new ParatextProxy(logger);
                 if (paratextUtils.IsParatextInstalled())
                 {
                     var paratextInstallPath = paratextUtils.ParatextInstallPath;
@@ -592,7 +593,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                                     var verseList = datrow.VerseList;
                                     verseList.AddRange(simprefs);
-                                    SortRefs(ref verseList);
+                                    //SortRefs(ref verseList);
                                     datrow.VerseList = verseList;
                                     datrow.SimpRefs = datrow.VerseList.Count.ToString();
                                 }
@@ -607,7 +608,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     }
                     catch (Exception ex)
                     {
-
+                        Logger.LogError(ex, "Adding in Verse References from Interlinear_*.xml failed");
                     }
                 }
 

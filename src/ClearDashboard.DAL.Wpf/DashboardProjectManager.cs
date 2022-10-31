@@ -8,6 +8,7 @@ using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
+using Microsoft.Xaml.Behaviors.Layout;
 using SIL.Machine.Tokenization;
 using System;
 using System.Collections.Generic;
@@ -247,7 +248,8 @@ public class DashboardProjectManager : ProjectManager
     {
         string guid = project.Guid;
 
-        ParatextProxy paratextProxy = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+        var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
+        ParatextProxy paratextProxy = new ParatextProxy(logger);
         if (paratextProxy.IsParatextInstalled())
         {
             var path = paratextProxy.ParatextProjectPath;
