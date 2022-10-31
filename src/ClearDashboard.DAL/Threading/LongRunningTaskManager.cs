@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.Threading
+namespace ClearDashboard.DataAccessLayer.Threading
 {
     public class LongRunningTaskManager : IDisposable
     {
@@ -25,6 +26,7 @@ namespace ClearDashboard.Wpf.Application.Threading
                 try
                 {
                     _cancellationTokenSource.Cancel();
+                    return;
 
                 }
                 catch (AggregateException ex)
@@ -34,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.Threading
                 }
             }
 
-            _logger.LogDebug("A previous cancellation was requested.  Ignoring the request.");
+            _logger.LogInformation("A previous cancellation was requested.  Ignoring the request.");
         }
 
         /// <summary>
@@ -44,10 +46,12 @@ namespace ClearDashboard.Wpf.Application.Threading
         /// <returns></returns>
         public bool CancelTask(string taskName)
         {
+            _logger.LogInformation($"Attempting to cancel task named: {taskName}");
             var result = _tasks.ContainsKey(taskName);
 
             if (result)
             {
+                _logger.LogInformation($"Found task named: {taskName}");
                 result = _tasks.TryGetValue(taskName, out var task);
 
                 if (result)
@@ -55,11 +59,20 @@ namespace ClearDashboard.Wpf.Application.Threading
                     var cancellationTokenSource = task!.CancellationTokenSource;
                     if (!cancellationTokenSource!.IsCancellationRequested)
                     {
-                        task.Status = LongRunningTaskStatus.Canceled;
+                        _logger.LogInformation($"Calling cancel on CancellationTokenSource task named: {taskName}.");
+                        task.Status = LongRunningTaskStatus.Cancelled;
                         cancellationTokenSource.Cancel();
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"CancellationTokenSource on task named: {taskName} has already been called.");
                     }
 
                     result = TryRemove(taskName, out _);
+                    if (result)
+                    {
+                        _logger.LogInformation($"Removed task named: {taskName}.");
+                    }
                 }
             }
 
@@ -70,14 +83,18 @@ namespace ClearDashboard.Wpf.Application.Threading
         {
             if (!_tasks.IsEmpty)
             {
-                _logger.LogDebug($"Removing the following {_tasks.Count} tasks:");
+                _logger.LogInformation($"Removing the following {_tasks.Count} tasks:");
                 foreach (var task in _tasks)
                 {
-                    _logger.LogDebug($"\tDisposing {task.Key}");
+                    _logger.LogInformation($"\tDisposing {task.Key}");
                     task.Value!.Dispose();
                 }
                 _tasks.Clear();
 
+            }
+            else
+            {
+                _logger.LogInformation($"No tasks currently being managed.");
             }
         }
 
@@ -107,7 +124,7 @@ namespace ClearDashboard.Wpf.Application.Threading
         //    return _tasks.TryAdd(longRunningTask.Name, longRunningTask);
         //}
 
-        private bool TryRemove(string taskName, out LongRunningTask? value)
+        public bool TryRemove(string taskName, out LongRunningTask? value)
         {
             var result = _tasks.TryRemove(taskName, out value);
             value!.Dispose();
@@ -120,6 +137,10 @@ namespace ClearDashboard.Wpf.Application.Threading
             return _tasks.ContainsKey(taskName);
         }
 
+        public LongRunningTask GetTask(string taskName)
+        {
+            return (_tasks[taskName] ?? default)!;
+        }
       
         public bool TaskComplete(string taskName)
         {
@@ -128,8 +149,8 @@ namespace ClearDashboard.Wpf.Application.Threading
                var result = _tasks.TryRemove(taskName, out var task);
                if (result)
                {
-                   task!.Dispose();
-                   _logger.LogDebug($"Successfully removed task with name '{taskName}';");
+                   task!.Complete();
+                   _logger.LogInformation($"Successfully removed task with name '{taskName}';");
                }
             }
 

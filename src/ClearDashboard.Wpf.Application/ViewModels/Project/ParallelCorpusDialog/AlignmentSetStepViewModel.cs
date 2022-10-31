@@ -8,9 +8,10 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Threading;
 using FluentValidation;
 using FluentValidation.Results;
-using ClearDashboard.Wpf.Application.Threading;
+
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 

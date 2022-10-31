@@ -3,16 +3,14 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using System.Threading;
-using SIL.Machine.Utils;
-using System;
-using ClearDashboard.Wpf.Application.Validators;
 using FluentValidation;
 using FluentValidation.Results;
-using ClearDashboard.Wpf.Application.Threading;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 

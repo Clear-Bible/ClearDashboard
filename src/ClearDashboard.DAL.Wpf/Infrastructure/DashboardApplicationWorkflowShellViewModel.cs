@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
 {
@@ -55,7 +56,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
             set => Set(ref _message, value);
         }
 
-        public async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? exception = null)
+        public async Task SendBackgroundStatus(string name, LongRunningTaskStatus status, CancellationToken cancellationToken, string? description = null, Exception? exception = null)
         {
             Message = !string.IsNullOrEmpty(description) ? description : null;
             var backgroundTaskStatus = new BackgroundTaskStatus

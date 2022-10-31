@@ -6,7 +6,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Threading;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using SIL.Machine.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
@@ -33,7 +33,7 @@ public interface IParallelCorpusDialogViewModel
     Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName);
     Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName);
 
-    Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken,
+    Task SendBackgroundStatus(string name, LongRunningTaskStatus status, CancellationToken cancellationToken,
         string? description = null, Exception? ex = null);
     List<IWorkflowStepViewModel> Steps { get; }
 

@@ -40,6 +40,7 @@ using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.DataAccessLayer.Threading;
 using Mono.Unix.Native;
 
 // ReSharper disable once CheckNamespace
@@ -703,7 +704,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             CancellationTokenSource = new CancellationTokenSource();
             var cancellationToken = CancellationTokenSource.Token;
 
-            await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+            await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                 description: $"Transforming syntax trees...", cancellationToken: cancellationToken);
 
             var syntaxTree = new SyntaxTrees();
@@ -735,7 +736,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 try
                 {
 
-                    await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+                    await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                         description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
                     var corpus = await DAL.Alignment.Corpora.Corpus.Create(
@@ -759,7 +760,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
                     });
 
-                    await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+                    await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
 
@@ -770,7 +771,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Tokenizer.WhitespaceTokenizer.ToString(),
                         cancellationToken);
 
-                    await SendBackgroundStatus(statusName, LongRunningProcessStatus.Completed,
+                    await SendBackgroundStatus(statusName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
 
@@ -787,7 +788,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                     if (!cancellationToken.IsCancellationRequested)
                     {
-                        await SendBackgroundStatus(statusName, LongRunningProcessStatus.Error,
+                        await SendBackgroundStatus(statusName, LongRunningTaskStatus.Failed,
                            exception: ex, cancellationToken: cancellationToken);
 
                     }
@@ -806,7 +807,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        public async Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken, string? description = null, Exception? exception = null)
+        public async Task SendBackgroundStatus(string name, LongRunningTaskStatus status, CancellationToken cancellationToken, string? description = null, Exception? exception = null)
         {
             var backgroundTaskStatus = new BackgroundTaskStatus
             {
@@ -832,7 +833,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             var statusName = "GreekCorpus";
 
-            await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+            await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                 description: $"Transforming syntax trees...", cancellationToken: cancellationToken);
 
 
@@ -863,7 +864,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 _busyState.Add(statusName, true);
                 try
                 {
-                    await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+                    await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                         description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
 
@@ -888,7 +889,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
                     });
 
-                    await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+                    await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
 
@@ -897,7 +898,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Tokenizer.WhitespaceTokenizer.ToString(),
                         cancellationToken);
 
-                    await SendBackgroundStatus(statusName, LongRunningProcessStatus.Completed,
+                    await SendBackgroundStatus(statusName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
 
@@ -916,7 +917,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Logger.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                     if (!cancellationToken.IsCancellationRequested)
                     {
-                        await SendBackgroundStatus(statusName, LongRunningProcessStatus.Error,
+                        await SendBackgroundStatus(statusName, LongRunningTaskStatus.Failed,
                             exception: ex, cancellationToken: cancellationToken);
                     }
                 }
@@ -993,7 +994,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // first time for this corpus
                         if (corpus is null)
                         {
-                            await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+                            await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                                description: $"Creating corpus '{metadata.Name}'...", cancellationToken: cancellationToken);
 #pragma warning disable CS8604
                             corpus = await DAL.Alignment.Corpora.Corpus.Create(
@@ -1016,7 +1017,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                              });
 
 
-                        await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+                        await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                            description: $"Tokenizing and transforming '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
                         var textCorpus = dialogViewModel.SelectedTokenizer switch
@@ -1041,7 +1042,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                .Transform<SetTrainingBySurfaceLowercase>()
                         };
 
-                        await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working,
+                        await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running,
                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
 
@@ -1049,7 +1050,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
                            metadata.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
-                        await SendBackgroundStatus(statusName, LongRunningProcessStatus.Completed,
+                        await SendBackgroundStatus(statusName, LongRunningTaskStatus.Completed,
                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
 
@@ -1066,7 +1067,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         if (!cancellationToken.IsCancellationRequested)
                         {
 
-                            await SendBackgroundStatus(statusName, LongRunningProcessStatus.Error,
+                            await SendBackgroundStatus(statusName, LongRunningTaskStatus.Failed,
                                exception: ex, cancellationToken: cancellationToken);
                         }
                     }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClearDashboard.Wpf.Application.Threading;
+namespace ClearDashboard.DataAccessLayer.Threading;
 
 public class LongRunningTaskException : Exception
 {

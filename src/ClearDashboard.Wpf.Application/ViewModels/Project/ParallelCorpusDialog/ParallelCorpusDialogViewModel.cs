@@ -19,13 +19,13 @@ using System.Collections.Generic;
 using System;
 using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using SIL.Machine.Translation;
 using SIL.Machine.Utils;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using ClearDashboard.Wpf.Application.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
@@ -182,7 +182,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 LongRunningTaskStatus = LongRunningTaskStatus.Running;
                 Logger!.LogInformation($"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'.");
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Working,
+                    LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
 
@@ -191,7 +191,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 Logger!.LogInformation($"Parallelizing source and target corpora");
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Working,
+                    LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'...");
 
@@ -201,14 +201,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 Logger!.LogInformation($"Saving parallelization '{parallelCorpusDisplayName}'");
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Working,
+                    LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Saving parallelization '{parallelCorpusDisplayName}'...");
 
                 ParallelTokenizedCorpus = await ParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!);
 
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Completed,
+                    LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed saving parallelization '{parallelCorpusDisplayName}'.");
 
@@ -222,7 +222,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await SendBackgroundStatus(statusName,
-                        LongRunningProcessStatus.Error,
+                        LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception: ex);
 
@@ -255,7 +255,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             {
                 LongRunningTaskStatus = LongRunningTaskStatus.Running;
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Working,
+                    LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Training SMT Model '{SelectedSmtAlgorithm}'.");
 
@@ -271,13 +271,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     new DelegateProgress(async status =>
                         {
                             var message = $"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}";
-                            await SendBackgroundStatus(statusName, LongRunningProcessStatus.Working, cancellationToken, message);
+                            await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running, cancellationToken, message);
                           Logger!.LogInformation(message);
                         }
                     ), SymmetrizationHeuristic.GrowDiagFinalAnd);
 
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Completed,
+                    LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed SMT Model '{SelectedSmtAlgorithm}'.");
 
@@ -291,7 +291,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await SendBackgroundStatus(statusName,
-                        LongRunningProcessStatus.Error,
+                        LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception: ex);
                 }
@@ -323,7 +323,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             {
                 LongRunningTaskStatus = LongRunningTaskStatus.Running;
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Working,
+                    LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Creating the TranslationSet '{translationSetDisplayName}'...");
 
@@ -338,7 +338,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Completed,
+                    LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed creation of the TranslationSet '{translationSetDisplayName}'.");
                 Logger!.LogInformation($"Completed creating the TranslationSet '{translationSetDisplayName}'");
@@ -351,7 +351,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await SendBackgroundStatus(statusName,
-                        LongRunningProcessStatus.Error,
+                        LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception: ex);
                 }
@@ -387,7 +387,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 LongRunningTaskStatus = LongRunningTaskStatus.Running;
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Working,
+                    LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Aligning corpora and creating the AlignmentSet '{alignmentSetDisplayName}'...");
 
@@ -395,7 +395,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.ToString(),
                     false, new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
                 await SendBackgroundStatus(statusName,
-                    LongRunningProcessStatus.Completed,
+                    LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed creation of the AlignmentSet '{alignmentSetDisplayName}'.");
                
@@ -409,7 +409,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await SendBackgroundStatus(statusName,
-                        LongRunningProcessStatus.Error,
+                        LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception:ex);
                 }

@@ -2,8 +2,6 @@ using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Microsoft.AspNet.SignalR.Client;
@@ -19,6 +17,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 

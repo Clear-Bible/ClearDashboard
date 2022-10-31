@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace ClearDashboard.Wpf.Application.Threading;
+namespace ClearDashboard.DataAccessLayer.Threading;
 
 public class LongRunningTask : IDisposable
 {
@@ -16,8 +16,21 @@ public class LongRunningTask : IDisposable
     public string Name { get; set; }
     public LongRunningTaskStatus Status { get; set; }
 
+    public void Cancel()
+    {
+        Status = LongRunningTaskStatus.Cancelled;
+        CancellationTokenSource?.Cancel();
+    }
+
+    public void Complete()
+    {
+        Status = LongRunningTaskStatus.Completed;
+        Dispose();
+    }
+
     public void Dispose()
     {
         CancellationTokenSource?.Dispose();
+        CancellationTokenSource = null;
     }
 }

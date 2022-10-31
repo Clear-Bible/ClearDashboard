@@ -18,6 +18,7 @@
     xmlns:startup="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Startup"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:threading="clr-namespace:ClearDashboard.DataAccessLayer.Threading;assembly=ClearDashboard.DAL"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -325,19 +326,19 @@
                                                     <Setter Property="Padding" Value="0" />
 
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Working}">
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Running}">
                                                             <Setter Property="Foreground" Value="Orange" />
                                                             <Setter Property="Kind" Value="Autorenew" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Completed}">
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Completed}">
                                                             <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
                                                             <Setter Property="Kind" Value="CheckboxMarkedCircle" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Error}">
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Failed}">
                                                             <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
                                                             <Setter Property="Kind" Value="AlertCircle" />
                                                         </DataTrigger>
-                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.CancelTaskRequested}">
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.CancellationRequested}">
                                                             <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
                                                             <Setter Property="Kind" Value="CloseCircleOutline" />
                                                         </DataTrigger>
@@ -390,7 +391,7 @@
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock">
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static models:LongRunningProcessStatus.Error}">
+                                                            <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Failed}">
                                                                 <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
                                                             </DataTrigger>
                                                         </Style.Triggers>

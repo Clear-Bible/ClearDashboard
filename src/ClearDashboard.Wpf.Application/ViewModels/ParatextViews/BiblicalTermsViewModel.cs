@@ -28,6 +28,7 @@ using Point = System.Windows.Point;
 using Autofac;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using System.Collections.Specialized;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -592,7 +593,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     Name = _taskName,
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
                 }));
             }
             return base.OnDeactivateAsync(close, cancellationToken);
@@ -1050,7 +1051,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 Name = _taskName,
                 Description = "Requesting BiblicalTerms data...",
                 StartTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
+                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
             }));
 
             try
@@ -1081,7 +1082,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Name = _taskName,
                             Description = "BiblicalTerms Loaded",
                             EndTime = DateTime.Now,
-                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
                         }));
                     }
 
@@ -1134,13 +1135,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
+            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
             {
                 _cancellationTokenSource.Cancel();
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
                 await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));

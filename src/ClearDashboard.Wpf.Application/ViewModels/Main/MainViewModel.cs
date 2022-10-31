@@ -42,6 +42,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using Point = System.Drawing.Point;
 using System.Windows.Shell;
 using System.IO.Compression;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -529,7 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Name = "Corpus",
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
                 }), cancellationToken);
 
                

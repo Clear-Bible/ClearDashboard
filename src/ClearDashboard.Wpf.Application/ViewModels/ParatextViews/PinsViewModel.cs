@@ -4,31 +4,30 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using SIL.ObjectModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Xml;
-using Microsoft.Win32;
-using System.IO;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -48,11 +47,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private Lexicon _lexicon = new();
 
         private bool _generateDataRunning = false;
-        private CancellationTokenSource _cancellationTokenSource;
+      //  private CancellationTokenSource _cancellationTokenSource;
         private string _taskName = "PINS";
 
         private readonly DashboardProjectManager? _projectManager;
         private readonly IMediator _mediator;
+        private readonly LongRunningTaskManager _longRunningTaskManager;
 
         private ObservableList<PinsDataTable> GridData { get; } = new();
 
@@ -143,7 +143,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         // ReSharper disable once UnusedMember.Global
         public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
             Title = "⍒ " + LocalizationStrings.Get("Windows_PINS", Logger);
@@ -151,7 +151,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             _projectManager = projectManager;
             _mediator = mediator;
-            _cancellationTokenSource = new CancellationTokenSource();
+            _longRunningTaskManager = longRunningTaskManager;
+            //_cancellationTokenSource = new CancellationTokenSource();
 
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
@@ -181,8 +182,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 Name = _taskName,
                 Description = "Loading PINS data...",
                 StartTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningProcessStatus.Working
-            }));
+                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
+            }), cancellationToken);
 
             // ReSharper disable once MethodSupportsCancellation
             _ = Task.Run(() =>
@@ -194,22 +195,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _ = base.OnActivateAsync(cancellationToken);
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async  Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+          
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_generateDataRunning)
             {
-                _cancellationTokenSource.Cancel();
-                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                var cancelled = _longRunningTaskManager.CancelTask(_taskName);
+                
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
                     Name = _taskName,
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
-                    TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                }));
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+                }), cancellationToken);
             }
-            return base.OnDeactivateAsync(close, cancellationToken);
+            await base.OnDeactivateAsync(close, cancellationToken);
         }
 
 
@@ -220,11 +223,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task<bool> GenerateData()
         {
             _generateDataRunning = true;
-            var cancellationToken = _cancellationTokenSource.Token;
+            
+            var longRunningTask = _longRunningTaskManager.Create(_taskName, LongRunningTaskStatus.Running);
+            var cancellationToken = longRunningTask.CancellationTokenSource.Token;
 
             try
             {
-                ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+                var paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
                 if (paratextUtils.IsParatextInstalled())
                 {
                     var paratextInstallPath = paratextUtils.ParatextInstallPath;
@@ -246,10 +251,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Name = _taskName,
                             EndTime = DateTime.Now,
                             ErrorMessage = "Paratext is not installed",
-                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                        }));
+                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
+                        }), cancellationToken);
 
-                    Logger.LogError("Paratext Not Installed in PINS viewmodel");
+                    Logger!.LogError("Paratext Not Installed in PINS viewmodel");
 
                     // turn off the progress bar
                     ProgressBarVisibility = Visibility.Collapsed;
@@ -258,7 +263,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
 
                 // fix the greek renderings which are inconsistent
-                for (int i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
+                for (var i = _termRenderingsList.TermRendering.Count - 1; i >= 0; i--)
                 {
                     if (_termRenderingsList.TermRendering[i].Renderings == "")
                     {
@@ -274,7 +279,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
-                for (int i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
+                for (var i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
                 {
                     if (_biblicalTermsList.Term[i].Id != "")
                     {
@@ -285,7 +290,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
-                for (int i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
+                for (var i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
                 {
                     if (_allBiblicalTermsList.Term[i].Id != "")
                     {
@@ -300,10 +305,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 // build the data for display
                 foreach (var terms in _termRenderingsList.TermRendering)
                 {
-                    string targetRendering = terms.Renderings;
+                    var targetRendering = terms.Renderings;
                     targetRendering = targetRendering.Replace("||", "; ");
 
-                    string sourceWord = terms.Id;
+                    var sourceWord = terms.Id;
 
                     string biblicalTermsSense;
                     string biblicalTermsSpelling;
@@ -359,7 +364,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                     // peel off the notes
                     var notes = terms.Notes;
-                    string noteList = "";
+                    var noteList = "";
                     if (notes.GetType() == typeof(XmlNode[]))
                     {
                         // convert a list of xmlnodes to at List<>
@@ -373,7 +378,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         cancellationToken.ThrowIfCancellationRequested();
                     }
 
-                    List<string> verseList = new List<string>();
+                    var verseList = new List<string>();
 
                     // check against the BiblicalTermsList
                     var bt = _biblicalTermsList.Term.FindAll(t => t.Id == sourceWord);
@@ -511,20 +516,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     }
                 }
 
-                
+
                 BibleBookDict = BibleBooks.ToDictionary(item => item[2..5], item => item[..2]);
                 var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
                 ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
-                var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories).ToList();
+                var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
+                    .ToList();
                 string tref, lx, lt, li;
-                int bcnt = 0;
+                var bcnt = 0;
                 var lexlang = ProjectManager.CurrentParatextProject.Name;
                 var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
 
-                foreach (string f in bookfilesfiltered)             // loop through books f
+                foreach (var f in bookfilesfiltered) // loop through books f
                 {
-                    projectBookFileData = File.ReadAllLines(f);                       // read file and check
-                    for (int k = 0; k < projectBookFileData.Count(); k++)
+                    projectBookFileData = File.ReadAllLines(f); // read file and check
+                    for (var k = 0; k < projectBookFileData.Count(); k++)
                     {
                         if (projectBookFileData[k].Contains("<item>"))
                         {
@@ -533,17 +539,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 tref = GetTagValue(projectBookFileData[k]);
                                 do
                                 {
-                                    if (projectBookFileData[++k].Contains("<Lexeme"))  // build a dictionary where key = lexeme+gloss, and where value = references
+                                    if (projectBookFileData[++k]
+                                        .Contains(
+                                            "<Lexeme")) // build a dictionary where key = lexeme+gloss, and where value = references
                                     {
                                         lx = lt = li = "";
                                         Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
-                                        if (LexMatRef.ContainsKey(li + lx))     // key already exists so add references to previous value
+                                        if (LexMatRef.ContainsKey(li +
+                                                                  lx)) // key already exists so add references to previous value
                                             LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
-                                        else                                    // this is a new key so create a new key, value pair
+                                        else // this is a new key so create a new key, value pair
                                             LexMatRef.Add(li + lx, tref);
                                     }
-                                }
-                                while (!projectBookFileData[k].Contains("</item>"));
+                                } while (!projectBookFileData[k].Contains("</item>"));
                             }
                         }
                     }
@@ -552,9 +560,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 List<string> rs;
                 string ky, vl;
                 int ndx2;
-                int pndx = 0;
-                string simrefs = "";
-                List<PinsDataTable> results = new List<PinsDataTable>();
+                var pndx = 0;
+                var simrefs = "";
+                var results = new List<PinsDataTable>();
                 PinsDataTable datrow;
                 foreach (var LMR in LexMatRef)
                 {
@@ -563,13 +571,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         rs = LMR.Value.Split(',')
                             .ToList(); // change dictionary values from comma delimited string to List for sorting
                         ky = LMR.Key;
-                        SortRefs(ref rs);                     // sort the List  
+                        SortRefs(ref rs); // sort the List  
                         vl = String.Join(", ", rs); // change List back to comma delimited string
 
                         if (!vl.Contains("missing"))
                         {
                             var objectToFind = GridData.Where(s => s.Match == ky).FirstOrDefault();
-                            ndx2 = GridData.IndexOf(objectToFind);//.FindIndex(s => s.Match == ky);
+                            ndx2 = GridData.IndexOf(objectToFind); //.FindIndex(s => s.Match == ky);
                             if (ndx2 >= 0)
                             {
                                 datrow = GridData[ndx2];
@@ -605,9 +613,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-
+                        Logger.LogCritical("An exception has occurred... swallowing");
+                        // swallow the exception
                     }
                 }
 
@@ -627,8 +636,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         Name = _taskName,
                         EndTime = DateTime.Now,
                         Description = "Loading PINS data...Complete",
-                        TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                    }));
+                        TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+                    }), cancellationToken);
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
             }
             catch (Exception ex)
             {
@@ -640,22 +653,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             Name = _taskName,
                             EndTime = DateTime.Now,
                             ErrorMessage = $"{ex}",
-                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Error
-                        }));
+                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
+                        }), cancellationToken);
                 }
+                //else
+                //{
+                //    Logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
+                //}
             }
             finally
             {
                 _generateDataRunning = false;
-                _cancellationTokenSource.Dispose();
+               
+                _longRunningTaskManager.TaskComplete(_taskName);
+               
+               
+
             }
             return false;
         }
 
         private string GetTagValue(string t)
         {
-            string ttrim = t.TrimStart(' ', '<');            // remove leading blanks and < leaving "tagname>VALUE</tagname>"
-            string[] words = ttrim.Split('<', '>');          // value of simple tag is words[1] (tagname, VALUE, /tagname)
+            var ttrim = t.TrimStart(' ', '<');            // remove leading blanks and < leaving "tagname>VALUE</tagname>"
+            var words = ttrim.Split('<', '>');          // value of simple tag is words[1] (tagname, VALUE, /tagname)
             return words[1];                                 // return second word only
         }
 
@@ -684,8 +705,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             refs = refs
                 .Select(s => s.Trim()) //.ToList();    // trim leading and trailing to ensure valid BBB CCC:VVV
                 .Where(s => s.Length > 0).ToList();    // remove references = "" 
-            List<string> t_list = new List<string>();
-            List<string> t_listOut = new List<string>();
+            var list = new List<string>();
+            var listOut = new List<string>();
             //            string[] book = { "01GEN", "02EXO", "03LEV", "04NUM", "05DEU", "06JOS", "07JDG", "08RUT", "091SA", "102SA", "111KI", "122KI", "131CH", "142CH", "15EZR", "16NEH", "17EST", "18JOB", "19PSA", "20PRO", "21ECC", "22SNG", "23ISA", "24JER", "25LAM", "26EZK", "27DAN", "28HOS", "29JOL", "30AMO", "31OBA", "32JON", "33MIC", "34NAM", "35HAB", "36ZEP", "37HAG", "38ZEC", "39MAL", "41MAT", "42MRK", "43LUK", "44JHN", "45ACT", "46ROM", "471CO", "482COR", "49GAL", "50EPH", "51PHP", "52COL", "531TH", "542TH", "551TI", "562TI", "57TIT", "58PHM", "59HEB", "60JAS", "611PE", "622PE", "631JN", "642JN", "653JN", "66JUD", "67REV", "70TOB", "71JDT", "72ESG", "73WIS", "74SIR", "75BAR", "76LJE", "77S3Y", "78SUS", "79BEL", "80MAN", "81PS2" };
 
             //            var dictbk = book.ToDictionary(item => item[2..5], item => item[..2]);
@@ -695,25 +716,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // lookup 0:2 to get bb from Dictionary and append 0:2
             // take 4: ':' and pad 0's to get ccc
             // take ':' to end and pad 0's to get vvv
-            t_list = refs
+            list = refs
                 .Select(s => BibleBookDict[s[..3]] + s[..3]                // changed from dictbk to BibleBooksDict
                 + s[4..s.IndexOf(':')].PadLeft(3, '0')
                 + s[(s.IndexOf(':') + 1)..].PadLeft(3, '0'))
                 .ToList();
             // formerly s.Substring(0, 3)   s.Substring(4, s.IndexOf(':') - 4)  s.Substring(s.IndexOf(':') + 1)
-            t_list.Sort();
-            t_list = t_list.Distinct().ToList();
+            list.Sort();
+            list = list.Distinct().ToList();
 
             // convert back to standard form (BBB ccc:vvv)  
             // skip 0:1 because don't need book number anymore, leaving BBB in 3:4
             // take 5:7 convert to number to lose leading zeros, then convert back to string for CCC
             // take 8:10 convert to number to lose leading zeros, then convert back to string for VVV
-            t_listOut = t_list
+            listOut = list
                 .Select(s => s[2..5] + " "
                 + Convert.ToInt32(s[5..8]).ToString() + ":"
                 + Convert.ToInt32(s[8..11]).ToString()).ToList();
             // formerly s.Substring(2, 3) s.Substring(5, 3) s.Substing(8, 3)
-            refs = t_listOut;
+            refs = listOut;
         }
 
         private async Task<bool> GetLexicon()
@@ -722,7 +743,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
             if (queryLexiconResult.Success == false)
             {
-                Logger.LogError(queryLexiconResult.Message);
+                Logger!.LogError(queryLexiconResult.Message);
                 return true;
             }
 
@@ -742,7 +763,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
             if (querySsResult.Success == false)
             {
-                Logger.LogError(querySsResult.Message);
+                Logger!.LogError(querySsResult.Message);
                 return true;
             }
 
@@ -897,7 +918,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             dataRow.VerseList.Sort();
 
             // create a list for doing versification processing
-            List<VersificationList> verseList = new List<VersificationList>();
+            var verseList = new List<VersificationList>();
             foreach (var verse in dataRow.VerseList)
             {
                 verseList.Add(new VersificationList
@@ -914,7 +935,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // create the list to display
             foreach (var verse in verseList)
             {
-                string verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
+                var verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(verse.TargetBBBCCCVV);
 
                 var bookNum = int.Parse(verse.TargetBBBCCCVV.Substring(0, 3));
                 var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
@@ -969,16 +990,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             var incomingMessage = message.Status;
 
-            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
+            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
             {
-                _cancellationTokenSource.Cancel();
+
+                //var task = _longRunningTaskManager.GetTask(_taskName);
+                //task.Cancel();
+                _longRunningTaskManager.CancelTask(_taskName);
 
                 // return that your task was cancelled
                 incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed;
+                incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
                 incomingMessage.Description = "Task was cancelled";
 
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
             }
 
             await Task.CompletedTask;
