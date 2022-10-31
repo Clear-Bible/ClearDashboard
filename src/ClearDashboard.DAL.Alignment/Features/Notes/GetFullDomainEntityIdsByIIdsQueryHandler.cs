@@ -17,22 +17,22 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
-     public class GetFullDomainEntityIdsQueryHandler : ProjectDbContextQueryHandler<GetFullDomainEntityIdsQuery,
+     public class GetFullDomainEntityIdsByIIdsQueryHandler : ProjectDbContextQueryHandler<GetFullDomainEntityIdsByIIdsQuery,
         RequestResult<IEnumerable<IId>>, IEnumerable<IId>>
     {
-        public GetFullDomainEntityIdsQueryHandler( 
+        public GetFullDomainEntityIdsByIIdsQueryHandler( 
             ProjectDbContextFactory? projectNameDbContextFactory, 
             IProjectProvider projectProvider, 
-            ILogger<GetFullDomainEntityIdsQueryHandler> logger) 
+            ILogger<GetFullDomainEntityIdsByIIdsQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override async Task<RequestResult<IEnumerable<IId>>> GetDataAsync(GetFullDomainEntityIdsQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<IEnumerable<IId>>> GetDataAsync(GetFullDomainEntityIdsByIIdsQuery request, CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
 
-            var grouped = request.EntityIds
+            var grouped = request.DomainEntityIIds
                 .GroupBy(e => e.GetType().FindEntityIdGenericType()?.Name ?? $"__{e.GetType().Name}")
                 .ToDictionary(g => g.Key, g => g.Select(g => g.Id));
 

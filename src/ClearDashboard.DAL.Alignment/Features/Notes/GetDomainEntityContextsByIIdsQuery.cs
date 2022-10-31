@@ -4,6 +4,6 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
-    public record GetAllNotesQuery() : 
-        ProjectRequestQuery<IEnumerable<Note>>;
+    public record GetDomainEntityContextsByIIdsQuery(IEnumerable<IId> DomainEntityIIds) : 
+        ProjectRequestQuery<Dictionary<IId, Dictionary<string, string>>>;
 }

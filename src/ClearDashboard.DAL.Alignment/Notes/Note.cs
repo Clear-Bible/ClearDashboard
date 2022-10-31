@@ -135,7 +135,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 throw new MediatorErrorEngineException("GetReplyNotes is unsupported for a note that is itself a reply note");
             }
 
-            return (await GetNotesInThread(ThreadId ?? NoteId!, mediator))
+            return (await GetNotesInThread(mediator, ThreadId ?? NoteId!))
                 .Where(note => note.NoteId!.Id != NoteId.Id)
                 .ToList();
         }
@@ -147,7 +147,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 throw new MediatorErrorEngineException("'CreateOrUpdate Note before retrieving domain entity contexts");
             }
 
-            return await GetDomainEntityContexts(this.domainEntityIds_, mediator);
+            return await GetDomainEntityContexts(mediator, this.domainEntityIds_);
         }
 
         public async Task<IEnumerable<IId>> GetFullDomainEntityIds(IMediator mediator)
@@ -157,7 +157,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 throw new MediatorErrorEngineException("'CreateOrUpdate Note before retrieving full domain entity ids");
             }
 
-            return await GetFullDomainEntityIds(this.domainEntityIds_, mediator);
+            return await GetFullDomainEntityIds(mediator, this.domainEntityIds_);
         }
 
         public async Task<Note> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
@@ -360,7 +360,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
         public static async Task<IEnumerable<Note>> GetAllNotes(
             IMediator mediator)
         {
-            var command = new GetAllNotesQuery();
+            var command = new GetNotesByDomainEntityIIdsQuery(null);
 
             var result = await mediator.Send(command);
             if (result.Success)
@@ -373,8 +373,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public static async Task<IOrderedEnumerable<Note>> GetNotesInThread(EntityId<NoteId> threadId,
-            IMediator mediator)
+        public static async Task<IOrderedEnumerable<Note>> GetNotesInThread(
+            IMediator mediator,
+            EntityId<NoteId> threadId)
         {
             var command = new GetNotesInThreadQuery(threadId);
 
@@ -389,9 +390,11 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public static async Task<Dictionary<IId, Dictionary<string, string>>> GetDomainEntityContexts(IEnumerable<IId> entityIds, IMediator mediator)
+        public static async Task<IEnumerable<IId>> GetFullDomainEntityIds(
+            IMediator mediator,
+            IEnumerable<IId> domainEntityIIds)
         {
-            var command = new GetDomainEntityContextsQuery(entityIds);
+            var command = new GetFullDomainEntityIdsByIIdsQuery(domainEntityIIds);
 
             var result = await mediator.Send(command);
             if (result.Success)
@@ -404,9 +407,19 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public static async Task<IEnumerable<IId>> GetFullDomainEntityIds(IEnumerable<IId> entityIds, IMediator mediator)
+        /// <summary>
+        /// Returns domain entity contextual information (e.g. which corpus/tokenized corpus
+        /// a given Token is contained in) for display along with a Note's other details.  
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="domainEntityIIds"></param>
+        /// <returns></returns>
+        /// <exception cref="MediatorErrorEngineException"></exception>
+        public static async Task<Dictionary<IId, Dictionary<string, string>>> GetDomainEntityContexts(
+            IMediator mediator,
+            IEnumerable<IId> domainEntityIIds)
         {
-            var command = new GetFullDomainEntityIdsQuery(entityIds);
+            var command = new GetDomainEntityContextsByIIdsQuery(domainEntityIIds);
 
             var result = await mediator.Send(command);
             if (result.Success)
@@ -419,27 +432,44 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
         }
 
-        public static async Task<Dictionary<IId, IEnumerable<NoteId>>> GetAllDomainEntityIdNoteIds(
-            IMediator mediator)
+        /// <summary>
+        /// Returns all note-associated domain entity ids mapped to their 
+        /// respective associated Note instances.  Does not include Notes
+        /// that are only associated indirectly, i.e. only associated by
+        /// being in a reply thread where the directly-associated note is
+        /// the leading Note.  
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="domainEntityIIds"></param>
+        /// <returns></returns>
+        /// <exception cref="MediatorErrorEngineException"></exception>
+        public static async Task<Dictionary<IId, IEnumerable<NoteId>>> GetDomainEntityNoteIds(
+            IMediator mediator,
+            IEnumerable<IId>? domainEntityIIds = null)
         {
-            var command = new GetAllNotesQuery();
+            var command = new GetNotesByDomainEntityIIdsQuery(domainEntityIIds);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {
-                var domainEntityIdNotesThreads = ToDomainEntityIdNotesThreads(result.Data!);
+                var iidNoteGroups = result.Data!
+                    .Where(note => note.DomainEntityIds.Any())
+                    .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
+                    .GroupBy(pair => pair.iid, new IIdEqualityComparer());
 
-                var idNotes = domainEntityIdNotesThreads
+                if (domainEntityIIds is not null && domainEntityIIds.Any())
+                {
+                    iidNoteGroups = iidNoteGroups.Where(g => domainEntityIIds.Select(d => d.Id).Contains(g.Key.Id));
+                }
+
+                var domainEntityNoteIds = iidNoteGroups
                     .ToDictionary(
-                        iidNotes => iidNotes.Key,
-                        iidNotes => iidNotes.Value
-                            .SelectMany(
-                                kvp => kvp.Value.Append(kvp.Key),
-                                (kvp, note) => note.NoteId!)
-                            .OrderBy(noteId => noteId.Created).AsEnumerable(),
-                    new IIdEqualityComparer());
+                        g => g.Key,
+                        g => g.Select(iidNote => iidNote.note.NoteId!),
+                        new IIdEqualityComparer()
+                    );
 
-                return idNotes;
+                return domainEntityNoteIds;
             }
             else
             {
@@ -461,18 +491,43 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// notes in a thread, Note.ThreadId will contain the NoteId.Id of 
         /// the leading note.  
         /// </summary>
+        /// <see cref="GetDomainEntityNotesThreadsFlattened"/>
         /// <param name="mediator"></param>
         /// <returns></returns>
-        /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<Dictionary<IId, IEnumerable<Note>>> GetAllDomainEntityIdNotes(
             IMediator mediator)
         {
-            var command = new GetAllNotesQuery();
+            return await GetDomainEntityNotesThreadsFlattened(mediator, null);
+        }
+
+        /// <summary>
+        /// Returns all note-associated domain entity ids mapped to their 
+        /// respective associated Note instances.  Note that the Note instances
+        /// for a given domain entity id will include Notes directly associated
+        /// (standalone notes and/or leading notes in a thread) as well as any
+        /// reply notes.  
+        /// 
+        /// To determine which notes are directly associated to a given domain 
+        /// entity id (vs replies), the caller can check which notes have
+        /// Note.IsReply() == false.  To see which leading Note a reply Note
+        /// is a reply to, the Note.ThreadId property can be used:  for all 
+        /// notes in a thread, Note.ThreadId will contain the NoteId.Id of 
+        /// the leading note.  
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="domainEntityIIds">used as filter for keys of returned dictionary</param>
+        /// <returns></returns>
+        /// <exception cref="MediatorErrorEngineException"></exception>
+        public static async Task<Dictionary<IId, IEnumerable<Note>>> GetDomainEntityNotesThreadsFlattened(
+            IMediator mediator,
+            IEnumerable<IId>? domainEntityIIds = null)
+        {
+            var command = new GetNotesByDomainEntityIIdsQuery(null);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {
-                var domainEntityIdNotesThreads = ToDomainEntityIdNotesThreads(result.Data!);
+                var domainEntityIdNotesThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
 
                 var idNotes = domainEntityIdNotesThreads
                     .ToDictionary(
@@ -521,17 +576,19 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// different IsReply() values:  false for the key and true for the values.
         /// </summary>
         /// <param name="mediator"></param>
+        /// <param name="domainEntityIIds">used as filter for keys of returned dictionary</param>
         /// <returns></returns>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<Dictionary<IId, Dictionary<Note, IEnumerable<Note>>>> GetAllDomainEntityIdNotesThreads(
-            IMediator mediator)
+        public static async Task<Dictionary<IId, Dictionary<Note, IEnumerable<Note>>>> GetDomainEntityNotesThreads(
+            IMediator mediator,
+            IEnumerable<IId>? domainEntityIIds = null)
         {
-            var command = new GetAllNotesQuery();
+            var command = new GetNotesByDomainEntityIIdsQuery(null);
 
             var result = await mediator.Send(command);
             if (result.Success)
             {    
-                var domainEntityIdNotesAndThreads = ToDomainEntityIdNotesThreads(result.Data!);
+                var domainEntityIdNotesAndThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
                 return domainEntityIdNotesAndThreads;
             }
             else
@@ -541,20 +598,29 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         }
 
-        private static Dictionary<IId, Dictionary<Note, IEnumerable<Note>>> ToDomainEntityIdNotesThreads(IEnumerable<Note> allNotes)
+        private static Dictionary<IId, Dictionary<Note, IEnumerable<Note>>> ToDomainEntityIdNotesThreads(
+            IEnumerable<Note> allNotes, 
+            IEnumerable<IId>? domainEntityIIds)
         {
             var noteIdNoteThreads = allNotes
                 .GroupBy(keySelector: note => note.ThreadId?.Id ?? note.NoteId!.Id)
                 .ToDictionary(
-                    g => g.Where(note => note.ThreadId == null || note.ThreadId!.Id == note.NoteId!.Id).Single().NoteId!.Id,
+                    g => g.Key,
                     g => g
                         .Where(note => note.ThreadId != null && note.ThreadId!.Id != note.NoteId!.Id)
                         .OrderBy(note => note.NoteId!.Created));
 
-            var domainEntityIdNotesAndThreads = allNotes
+            var iidNoteGroups = allNotes
                 .Where(note => note.DomainEntityIds.Any())
                 .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
-                .GroupBy(pair => pair.iid, new IIdEqualityComparer())
+                .GroupBy(pair => pair.iid, new IIdEqualityComparer());
+
+            if (domainEntityIIds is not null && domainEntityIIds.Any())
+            {
+                iidNoteGroups = iidNoteGroups.Where(g => domainEntityIIds.Select(d => d.Id).Contains(g.Key.Id));
+            }
+
+            var domainEntityIdNotesAndThreads = iidNoteGroups
                 .ToDictionary(
                     g => g.Key!,
                     g => g.ToDictionary(
