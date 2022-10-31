@@ -6,6 +6,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Threading;
 using FluentValidation;
 //using ClearDashboard.Wpf.Validators;
 using FluentValidation.Results;
@@ -102,15 +103,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                     switch (status)
                     {
-                        case ProcessStatus.Completed:
+                        case LongRunningTaskStatus.Completed:
                             await MoveForwards();
                             break;
-                        case ProcessStatus.Failed:
+                        case LongRunningTaskStatus.Failed:
                             ParentViewModel.Cancel();
                             break;
-                        case ProcessStatus.NotStarted:
+                        case LongRunningTaskStatus.NotStarted:
                             break;
-                        case ProcessStatus.Running:
+                        case LongRunningTaskStatus.Running:
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();

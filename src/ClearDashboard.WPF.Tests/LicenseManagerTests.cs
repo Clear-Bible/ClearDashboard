@@ -39,6 +39,8 @@ namespace ClearDashboard.WPF.Tests
             var decryptedLicenseUser = LicenseManager.DecryptedJsonToLicenseUser(decryptedJson);
 
             Assert.Equal(LicenseUserMatchType.Match,LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
+
+            await Task.CompletedTask;
         }
 
         [Fact]
@@ -69,6 +71,8 @@ namespace ClearDashboard.WPF.Tests
             Assert.NotEqual(user.Id.ToString("N"), user.LicenseKey);
 
             //Assert.True(LicenseManager.CompareGivenUserAndDecryptedUser(originalLicenseUser, decryptedLicenseUser));
+
+            await Task.CompletedTask;
         }
 
         [Fact]

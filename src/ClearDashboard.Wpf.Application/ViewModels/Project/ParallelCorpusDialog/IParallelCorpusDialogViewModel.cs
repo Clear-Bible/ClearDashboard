@@ -6,6 +6,7 @@ using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using SIL.Machine.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
@@ -27,10 +28,10 @@ public interface IParallelCorpusDialogViewModel
     AlignmentSet AlignmentSet { get; set; }
     string? CurrentStepTitle { get; set; }
     CancellationTokenSource CreateCancellationTokenSource();
-    Task<ProcessStatus> AddParallelCorpus(string parallelCorpusDisplayName);
-    Task<ProcessStatus> TrainSmtModel();
-    Task<ProcessStatus> AddTranslationSet(string translationSetDisplayName);
-    Task<ProcessStatus> AddAlignmentSet(string alignmentSetDisplayName);
+    Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
+    Task<LongRunningTaskStatus> TrainSmtModel();
+    Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName);
+    Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName);
 
     Task SendBackgroundStatus(string name, LongRunningProcessStatus status, CancellationToken cancellationToken,
         string? description = null, Exception? ex = null);

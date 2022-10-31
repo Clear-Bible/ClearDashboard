@@ -12,6 +12,7 @@ using System;
 using ClearDashboard.Wpf.Application.Validators;
 using FluentValidation;
 using FluentValidation.Results;
+using ClearDashboard.Wpf.Application.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -75,7 +76,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
 
                 switch (processStatus)
                 {
-                    case ProcessStatus.Completed:
+                    case LongRunningTaskStatus.Completed:
                         
                         //if (ParentViewModel.Steps.Count > 3)
                         //{
@@ -89,12 +90,12 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
                         ParentViewModel.Ok();
 
                         break;
-                    case ProcessStatus.Failed:
+                    case LongRunningTaskStatus.Failed:
                         ParentViewModel.Cancel();
                         break;
-                    case ProcessStatus.NotStarted:
+                    case LongRunningTaskStatus.NotStarted:
                         break;
-                    case ProcessStatus.Running:
+                    case LongRunningTaskStatus.Running:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

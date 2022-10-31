@@ -116,6 +116,8 @@ namespace ClearDashboard.WPF.Tests
                 }
 
                 _output.WriteLine("The file was encrypted.");
+
+                await Task.CompletedTask;
             }
             catch (Exception ex)
             {
