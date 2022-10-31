@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Threading
 {
-    public class LongRunningTaskManager
+    public class LongRunningTaskManager : IDisposable
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly ConcurrentDictionary<string, LongRunningTask?> _tasks;
@@ -25,6 +25,7 @@ namespace ClearDashboard.Wpf.Application.Threading
                 try
                 {
                     _cancellationTokenSource.Cancel();
+
                 }
                 catch (AggregateException ex)
                 {
@@ -65,22 +66,23 @@ namespace ClearDashboard.Wpf.Application.Threading
             return result;
         }
 
-        public void ClearTasks()
+        public void DisposeTasks()
         {
             if (!_tasks.IsEmpty)
             {
                 _logger.LogDebug($"Removing the following {_tasks.Count} tasks:");
                 foreach (var task in _tasks)
                 {
-                    _logger.LogDebug($"\t{task.Key}");
+                    _logger.LogDebug($"\tDisposing {task.Key}");
+                    task.Value!.Dispose();
                 }
                 _tasks.Clear();
+
             }
         }
 
         public LongRunningTask Create(string taskName, LongRunningTaskStatus status = LongRunningTaskStatus.NotStarted)
         {
-
             if (!HasTask(taskName))
             {
                 var longRunningTask = new LongRunningTask(taskName, CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token), status);
@@ -99,15 +101,16 @@ namespace ClearDashboard.Wpf.Application.Threading
 
         }
 
-        public bool TryAdd(LongRunningTask longRunningTask)
-        {
-            longRunningTask.Status = LongRunningTaskStatus.Running;
-            return _tasks.TryAdd(longRunningTask.Name, longRunningTask);
-        }
+        //public bool TryAdd(LongRunningTask longRunningTask)
+        //{
+        //    longRunningTask.Status = LongRunningTaskStatus.Running;
+        //    return _tasks.TryAdd(longRunningTask.Name, longRunningTask);
+        //}
 
-        public bool TryRemove(string taskName, out LongRunningTask? value)
+        private bool TryRemove(string taskName, out LongRunningTask? value)
         {
             var result = _tasks.TryRemove(taskName, out value);
+            value!.Dispose();
             return result;
 
         }
@@ -122,14 +125,21 @@ namespace ClearDashboard.Wpf.Application.Threading
         {
             if (HasTask(taskName))
             {
-               var result = _tasks.TryRemove(taskName, out _);
+               var result = _tasks.TryRemove(taskName, out var task);
                if (result)
                {
+                   task!.Dispose();
                    _logger.LogDebug($"Successfully removed task with name '{taskName}';");
                }
             }
 
             return false;
+        }
+
+        public void Dispose()
+        {
+            _cancellationTokenSource.Dispose();
+            DisposeTasks();
         }
     }
 }

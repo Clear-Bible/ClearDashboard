@@ -1,8 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.Threading;
 
-public class LongRunningTask
+public class LongRunningTask : IDisposable
 {
     public LongRunningTask(string name, CancellationTokenSource cancellationTokenSource, LongRunningTaskStatus status = LongRunningTaskStatus.NotStarted)
     {
@@ -11,13 +12,12 @@ public class LongRunningTask
         CancellationTokenSource = cancellationTokenSource;
     }
 
-    //public LongRunningTask()
-    //{
-    //    CancellationTokenSource = new CancellationTokenSource();
-    //    Status = LongRunningTaskStatus.NotStarted;
-    //}
-
     public CancellationTokenSource? CancellationTokenSource { get; private set; }
     public string Name { get; set; }
     public LongRunningTaskStatus Status { get; set; }
+
+    public void Dispose()
+    {
+        CancellationTokenSource?.Dispose();
+    }
 }
