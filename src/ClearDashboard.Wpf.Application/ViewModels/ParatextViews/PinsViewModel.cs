@@ -582,7 +582,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     var simprefs = new List<string>();
                                     foreach (var longref in longrefs)
                                     {
-                                        var booksplit = longref.Split(' ').ToList();
+                                        var booksplit = longref.Trim().Split(' ').ToList();
                                         var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
                                         var chapterVerseSplit = booksplit[1].Split(':').ToList();
                                         var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
@@ -590,8 +590,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                         simprefs.Add(bookNum + chapterNum + verseNum);
                                     }
 
-                                    datrow.SimpRefs = simprefs.Count.ToString();
-                                    datrow.VerseList = simprefs;
+                                    var verseList = datrow.VerseList;
+                                    verseList.AddRange(simprefs);
+                                    SortRefs(ref verseList);
+                                    datrow.VerseList = verseList;
+                                    datrow.SimpRefs = datrow.VerseList.Count.ToString();
                                 }
                                 else
                                 {
