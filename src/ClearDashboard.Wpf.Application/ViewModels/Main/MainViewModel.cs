@@ -645,6 +645,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return;
             }
 
+            Stopwatch sw = new();
+            sw.Start();
 
             var json = ProjectManager.CurrentProject.WindowTabLayout;
 
@@ -751,6 +753,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await Task.Delay(1000);
                 }
             }
+
+            sw.Stop();
+            Logger.LogInformation($"LoadDocuments - Total Load Time {deserialized.Count} documents in {sw.ElapsedMilliseconds} ms");
         }
 
         private async void Init()
@@ -919,30 +924,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 files.Add(destinationScreenShotPath);
             }
 
-            var guid = Guid.NewGuid().ToString();
-            var zipPath = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
-            if (files.Count > 0)
-            {
-                if (File.Exists(zipPath))
-                {
-                    File.Delete(zipPath);
-                }
-
-                ZipFiles zipFiles = new(files, zipPath);
-                var bRet = zipFiles.Zip();
-
-                if (bRet == false)
-                {
-                    Logger.LogError("Error zipping files");
-                    return;
-                }
-            }
-
             // open the message window
-            ShowSlackMessageWindow(zipPath);
+            ShowSlackMessageWindow(files);
         }
 
-        private void ShowSlackMessageWindow(string zipFilePath)
+        private void ShowSlackMessageWindow(List<string> files)
         {
             var localizedString = LocalizationStrings.Get("SlackMessageView_Title", Logger);
 
@@ -954,7 +940,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             settings.Title = $"{localizedString}";
 
             var viewModel = IoC.Get<SlackMessageViewModel>();
-            viewModel.FilePathAttachment = zipFilePath;
+            viewModel.Files = files;
             viewModel.ParatextUser = ProjectManager.ParatextUserName;
 
             IWindowManager manager = new WindowManager();

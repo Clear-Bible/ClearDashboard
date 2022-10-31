@@ -361,3 +361,5 @@ installer/Output/ClearDashboard_0.2.0.0.exe
 installer/Output/ClearDashboardPlugin_1.0.1.exe
 installer/Output/ClearDashboardPlugin_1.0.2.exe
 nuget.config
+installer/Output/ClearDashboard_0.4.1.0.exe
+installer/Output/ClearDashboardPlugin_0.4.1.0.exe

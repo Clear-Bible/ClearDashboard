@@ -40,6 +40,7 @@ using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearBible.Engine.Exceptions;
+using Mono.Unix.Native;
 
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -552,6 +553,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void LoadCanvas()
         {
+            if (ProjectManager.CurrentProject is null)
+            {
+                return;
+            }
+
             ProjectName = ProjectManager.CurrentProject.ProjectName;
 
             // we have already loaded once
@@ -571,6 +577,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 return;
             }
+
+            Stopwatch sw = new();
+            sw.Start();
+
 
             JsonSerializerOptions options = new()
             {
@@ -665,6 +675,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ));
                 }
             }
+
+            sw.Stop();
+
+            Debug.WriteLine($"LoadCanvas took {sw.ElapsedMilliseconds} ms ({sw.Elapsed.Seconds} seconds)");
         }
 
 
