@@ -1,30 +1,28 @@
-﻿using ClearDashboard.Wpf.Application.ViewModels.Main;
+﻿using Caliburn.Micro;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Data.Entity.Core.Objects;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
-using Caliburn.Micro;
 using ObjectQuery = System.Management.ObjectQuery;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
     public class ComputerInfo
     {
-        private readonly ILogger<ComputerInfo> _logger;
-
         #region Member Variables      
+        
+        private readonly ILogger<ComputerInfo> _logger;
 
         #endregion //Member Variables
 
 
         #region Public Properties
-
         #endregion //Public Properties
 
 
@@ -35,6 +33,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             _logger = IoC.Get<ILogger<ComputerInfo>>();
         }
         
+        // ReSharper disable once UnusedMember.Global
         public ComputerInfo(ILogger<ComputerInfo> logger)
         {
             _logger = logger;
@@ -54,10 +53,10 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 Stopwatch sw = new();
                 sw.Start();
-                sb.AppendLine(string.Format("Date Time: {0}", DateTime.Now));
+                sb.AppendLine($"Date Time: {DateTime.Now}");
                 
                 sb = MachineInfo(sb);
-                sb = GetCPUManufacturer(sb);
+                sb = GetCpuManufacturer(sb);
                 sb = GetCpuSpeedInGHz(sb);
                 sb = OperatingSystemInfo(sb);
                 sb = UserInfo(sb);
@@ -72,15 +71,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 elapsed = sw.ElapsedMilliseconds;
             }).ConfigureAwait(false);
 
-
-            if (_logger is not null)
-            {
-                _logger.LogInformation($"GetComputerInfo() took {elapsed} ms");
-            }
+            _logger.LogInformation($"GetComputerInfo() took {elapsed} ms");
 
             if (filePath != "")
             {
-                File.WriteAllText(filePath, sb.ToString());
+                await File.WriteAllTextAsync(filePath, sb.ToString());
             }
             
             return sb;
@@ -88,22 +83,23 @@ namespace ClearDashboard.Wpf.Application.Helpers
         
         private StringBuilder MachineInfo(StringBuilder sb)
         {
-            sb.AppendLine(string.Format("Computer Name: {0}", Environment.MachineName));
-            sb.AppendLine(string.Format("CPU Processor Count: {0}", Environment.ProcessorCount));
+            sb.AppendLine($"Computer Name: {Environment.MachineName}");
+            sb.AppendLine($"CPU Processor Count: {Environment.ProcessorCount}");
             return sb;
         }
 
-        private StringBuilder GetCPUManufacturer(StringBuilder sb)
+        private StringBuilder GetCpuManufacturer(StringBuilder sb)
         {
-            string cpuMan = String.Empty;
-            //create an instance of the Managemnet class with the
+            string? cpuMan = String.Empty;
+            //create an instance of the Management class with the
             //Win32_Processor class
-            ManagementClass mgmt = new ManagementClass("Win32_Processor");
+            ManagementClass managementClass = new ManagementClass("Win32_Processor");
             //create a ManagementObjectCollection to loop through
-            ManagementObjectCollection objCol = mgmt.GetInstances();
+            ManagementObjectCollection objCol = managementClass.GetInstances();
             //start our loop for all processors found
-            foreach (ManagementObject obj in objCol)
+            foreach (var o in objCol)
             {
+                var obj = (ManagementObject)o;
                 if (cpuMan == String.Empty)
                 {
                     // only return manufacturer from first CPU
@@ -111,32 +107,34 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 }
             }
 
-            sb.AppendLine(string.Format("CPU Brand: {0}", cpuMan));
+            sb.AppendLine($"CPU Brand: {cpuMan}");
 
             return sb;
         }
 
         private StringBuilder GetCpuSpeedInGHz(StringBuilder sb)
         {
+            // ReSharper disable once InconsistentNaming
             double? GHz = null;
             using (ManagementClass mc = new ManagementClass("Win32_Processor"))
             {
-                foreach (ManagementObject mo in mc.GetInstances())
+                foreach (var o in mc.GetInstances())
                 {
+                    var mo = (ManagementObject)o;
                     GHz = 0.001 * (UInt32)mo.Properties["CurrentClockSpeed"].Value;
                     break;
                 }
             }
 
-            sb.AppendLine(string.Format("CPU Speed: {0} GHz", GHz));
+            sb.AppendLine($"CPU Speed: {GHz} GHz");
 
             return sb;
         }
 
         private StringBuilder OperatingSystemInfo(StringBuilder sb)
         {
-            sb.AppendLine(string.Format("OS Version: {0}", Environment.OSVersion));
-            sb.AppendLine(string.Format("Is 64-Bit: {0}", Environment.Is64BitOperatingSystem));
+            sb.AppendLine($"OS Version: {Environment.OSVersion}");
+            sb.AppendLine($"Is 64-Bit: {Environment.Is64BitOperatingSystem}");
 
 
             switch (Environment.OSVersion.ToString())
@@ -211,17 +209,17 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         private StringBuilder UserInfo(StringBuilder sb)
         {
-            sb.AppendLine(string.Format("User Name: {0}", Environment.UserName));
-            sb.AppendLine(string.Format("Domain Name: {0}", Environment.UserDomainName));
+            sb.AppendLine($"User Name: {Environment.UserName}");
+            sb.AppendLine($"Domain Name: {Environment.UserDomainName}");
             //sb.AppendLine(string.Format("User Display Name: {0}", System.DirectoryServices.AccountManagement.UserPrincipal.Current.DisplayName));
             return sb;
         }
 
         private StringBuilder LocaleInfo(StringBuilder sb)
         {
-            sb.AppendLine(string.Format("Locale DateTime Format: {0}", System.Globalization.CultureInfo.CurrentCulture));
-            sb.AppendLine(string.Format("Display Language: {0}", System.Globalization.CultureInfo.CurrentUICulture));
-            sb.AppendLine(string.Format("TimeZone: {0}", TimeZoneInfo.Local.Id));
+            sb.AppendLine($"Locale DateTime Format: {CultureInfo.CurrentCulture}");
+            sb.AppendLine($"Display Language: {CultureInfo.CurrentUICulture}");
+            sb.AppendLine($"TimeZone: {TimeZoneInfo.Local.Id}");
             return sb;
         }
 
@@ -229,11 +227,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             var hostName = System.Net.Dns.GetHostName();
 
-            sb.AppendLine(string.Format("DNS Hostname: {0}", hostName));
+            sb.AppendLine($"DNS Hostname: {hostName}");
             System.Net.IPAddress[] ipList = System.Net.Dns.GetHostEntry(hostName).AddressList;
             foreach (var ip in ipList)
             {
-                sb.AppendLine(string.Format("IP Address: {0}", ip));
+                sb.AppendLine($"IP Address: {ip}");
             }
 
             foreach (var ni in NetworkInterface.GetAllNetworkInterfaces()
@@ -242,7 +240,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 foreach (var ip in ni.GetIPProperties().UnicastAddresses)
                 {
-                    sb.AppendLine(string.Format("IP Address: ({0}), {1}", ni.Name, ip.Address.ToString()));
+                    sb.AppendLine($"IP Address: ({ni.Name}), {ip.Address.ToString()}");
                 }
             }
             return sb;
@@ -253,39 +251,43 @@ namespace ClearDashboard.Wpf.Application.Helpers
             var wmiMonitor = new ManagementObject("Win32_VideoController.DeviceID=\"VideoController1\"");
             var width = wmiMonitor["CurrentHorizontalResolution"];
             var height = wmiMonitor["CurrentVerticalResolution"];
-            sb.AppendLine(string.Format("Video Resolutin: {0} x {1}", width, height));
+            sb.AppendLine($"Video Resolution: {width} x {height}");
             return sb;
         }
 
         private StringBuilder RamInfo(StringBuilder sb)
         {
-            ObjectQuery wmi_obj = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
-            var findObj = new ManagementObjectSearcher(wmi_obj);
+            ObjectQuery wmiObj = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
+            var findObj = new ManagementObjectSearcher(wmiObj);
             ManagementObjectCollection ramInfo = findObj.Get();
 
             foreach (var element in ramInfo)
             {
-                sb.AppendLine(string.Format("Total Visible Memory: {0} GB", (Convert.ToDouble(element["TotalVisibleMemorySize"]) / (1024 * 1024)).ToString()));
-                sb.AppendLine(string.Format("Free Physical Memory: {0} GB", (Convert.ToDouble(element["FreePhysicalMemory"]) / (1024 * 1024)).ToString()));
-                sb.AppendLine(string.Format("Total Virtual Memory: {0} GB", (Convert.ToDouble(element["TotalVirtualMemorySize"]) / (1024 * 1024)).ToString()));
-                sb.AppendLine(string.Format("Free Virtual Memory: {0} GB", (Convert.ToDouble(element["FreeVirtualMemory"]) / (1024 * 1024)).ToString()));
+                sb.AppendLine(
+                    $"Total Visible Memory: {(Convert.ToDouble(element["TotalVisibleMemorySize"]) / (1024 * 1024)).ToString(CultureInfo.InvariantCulture)} GB");
+                sb.AppendLine(
+                    $"Free Physical Memory: {(Convert.ToDouble(element["FreePhysicalMemory"]) / (1024 * 1024)).ToString(CultureInfo.InvariantCulture)} GB");
+                sb.AppendLine(
+                    $"Total Virtual Memory: {(Convert.ToDouble(element["TotalVirtualMemorySize"]) / (1024 * 1024)).ToString(CultureInfo.InvariantCulture)} GB");
+                sb.AppendLine(
+                    $"Free Virtual Memory: {(Convert.ToDouble(element["FreeVirtualMemory"]) / (1024 * 1024)).ToString(CultureInfo.InvariantCulture)} GB");
             }
             return sb;
         }
 
         private StringBuilder GetNoRamSlots(StringBuilder sb)
         {
-            int MemSlots = 0;
+            int memSlots = 0;
             ManagementScope oMs = new ManagementScope();
             ObjectQuery oQuery2 = new ObjectQuery("SELECT MemoryDevices FROM Win32_PhysicalMemoryArray");
             ManagementObjectSearcher oSearcher2 = new ManagementObjectSearcher(oMs, oQuery2);
             ManagementObjectCollection oCollection2 = oSearcher2.Get();
-            foreach (ManagementObject obj in oCollection2)
+            foreach (var o in oCollection2)
             {
-                MemSlots = Convert.ToInt32(obj["MemoryDevices"]);
-
+                var obj = (ManagementObject)o;
+                memSlots = Convert.ToInt32(obj["MemoryDevices"]);
             }
-            sb.AppendLine(string.Format("Memory Slots: {0}", MemSlots));
+            sb.AppendLine($"Memory Slots: {memSlots}");
             return sb;
         }
 

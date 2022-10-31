@@ -126,7 +126,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             ComputerInfo computerInfo = new();
             var destinationComputerInfoPath = Path.Combine(Path.GetTempPath(), "computerInfo.log");
 
-            await computerInfo.GetComputerInfo(destinationComputerInfoPath);
+            _ = await computerInfo.GetComputerInfo(destinationComputerInfoPath);
             Files.Add(destinationComputerInfoPath);
 
             var guid = Guid.NewGuid().ToString();
