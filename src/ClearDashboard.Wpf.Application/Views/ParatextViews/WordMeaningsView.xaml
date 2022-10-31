@@ -388,8 +388,7 @@
                                     <Run Text="{Binding TotalSenses}" />
                                 </TextBlock>
                             </StackPanel>
-                            <!--<Setter Property="Foreground" Value="Gray" />
-                            <Setter Property="Background" Value="LightGray" />-->
+
                             <Button
                                 Grid.Column="4"
                                 Margin="0,0,35,0"
