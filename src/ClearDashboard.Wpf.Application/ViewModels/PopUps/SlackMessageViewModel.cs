@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using System.IO;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
@@ -7,6 +9,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Windows;
+using System;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -15,14 +18,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         #region Member Variables   
         private readonly ILogger<SlackMessageViewModel> _logger;
 
+        private string _zipPathAttachment { get; set; } = string.Empty;
+
         #endregion //Member Variables
 
-        
-        
+
+
         #region Public Properties
-        public string FilePathAttachment { get; set; } = string.Empty;
+
         public string ParatextUser { get; set; } = string.Empty;
-        
+        public List<string> Files { get; set; }
+
         #endregion //Public Properties
 
 
@@ -73,6 +79,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
         }
 
+        private Visibility _showOkButton = Visibility.Collapsed;
+
+        public Visibility ShowOkButton
+        {
+            get => _showOkButton;
+            set
+            {
+                _showOkButton = value;
+                NotifyOfPropertyChange(() => ShowOkButton);
+            }
+        }
+        
+
+
         #endregion //Observable Properties
 
 
@@ -102,7 +122,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             {
                 NoInternetVisibility = Visibility.Collapsed;
             }
-            
+
+            ComputerInfo computerInfo = new();
+            var destinationComputerInfoPath = Path.Combine(Path.GetTempPath(), "computerInfo.log");
+
+            _ = await computerInfo.GetComputerInfo(destinationComputerInfoPath);
+            Files.Add(destinationComputerInfoPath);
+
+            var guid = Guid.NewGuid().ToString();
+            _zipPathAttachment = Path.Combine(Path.GetTempPath(), $"{guid}.zip");
+            // zip up everything
+            if (Files.Count > 0)
+            {
+                if (File.Exists(_zipPathAttachment))
+                {
+                    File.Delete(_zipPathAttachment);
+                }
+
+                ZipFiles zipFiles = new(Files, _zipPathAttachment);
+                var succcess = zipFiles.Zip();
+
+                if (succcess == false)
+                {
+                    _logger.LogError("Error zipping files");
+                }
+            }
+
+            ShowOkButton = Visibility.Visible;
+
             base.OnViewLoaded(view);
         }
 
@@ -125,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             string msg = $"*User:* {ParatextUser} \n*Message:* \n{UserMessage}";
             
 
-            SlackMessage slackMessage = new SlackMessage(msg, this.FilePathAttachment, _logger as ILogger<SlackMessage>);
+            SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, _logger as ILogger<SlackMessage>);
             var bSuccess = await slackMessage.SendFileToSlackAsync();
 
             if (bSuccess == true)

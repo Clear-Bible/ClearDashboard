@@ -114,6 +114,7 @@
                 <Button.Style>
                     <Style BasedOn="{StaticResource MaterialDesignRaisedDarkButton}" TargetType="Button">
                         <Setter Property="IsEnabled" Value="True" />
+                        <Setter Property="Visibility" Value="Collapsed" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding NoInternetVisibility}" Value="Visible">
                                 <Setter Property="IsEnabled" Value="False" />
@@ -123,6 +124,9 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding SendSuccessfulVisibility}" Value="Visible">
                                 <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ShowOkButton}" Value="Visible">
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
