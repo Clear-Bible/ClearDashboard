@@ -66,6 +66,14 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 sb = RamInfo(sb);
                 sb = GetNoRamSlots(sb);
 
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                sb.AppendLine($"User's Document Folder: {path}");
+                DirectoryInfo di = new DirectoryInfo(path);
+                var drive = di.Root.ToString().Substring(0, 2);
+
+                sb = GetBitLockerStatus(sb, drive);
+                sb = GetDriveInfo(sb);
+                
                 sw.Stop();
                 
                 elapsed = sw.ElapsedMilliseconds;
@@ -291,6 +299,68 @@ namespace ClearDashboard.Wpf.Application.Helpers
             return sb;
         }
 
+        public StringBuilder GetBitLockerStatus(StringBuilder sb, string drive)
+        {
+            Process process = new Process();
+            process.StartInfo.FileName = "powershell.exe";
+            process.StartInfo.Arguments = $"-command (New-Object -ComObject Shell.Application).NameSpace('{drive}').Self.ExtendedProperty('System.Volume.BitLockerProtection')";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.CreateNoWindow = true;
+            process.Start();
+            StreamReader reader = process.StandardOutput;
+            string output = reader.ReadToEnd().Substring(0, 1); //needed as output would otherwise be 1\r\n (if encrypted)
+            process.WaitForExit();
+
+
+            string status = $"User's Document Drive {drive} is ";
+            switch (output)
+            {
+                case "1":
+                    status += "BitLocker on [Fully Encrypted]";
+                    break;
+                case "2":
+                    status += "BitLocker off [Fully Decrypted]";
+                    break;
+                case "3":
+                    status += "BitLocker Encrypting [Encryption In Progress]";
+                    break;
+                case "4":
+                    status += "BitLocker Decrypting [Decrypting In Progress]";
+                    break;
+                case "5":
+                    status += "BitLocker suspended [Fully Encrypted]";
+                    break;
+                default:
+                    status += $"UNKNOWN CODE {output}";
+                    break;
+            }
+            sb.AppendLine(status);
+
+            return sb;
+        }
+
+
+        private StringBuilder GetDriveInfo(StringBuilder sb)
+        {
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+
+            foreach (DriveInfo d in allDrives)
+            {
+                sb.AppendLine($"Drive {d.Name}");
+                sb.AppendLine($"  Drive type: {d.DriveType}");
+                if (d.IsReady)
+                {
+                    sb.AppendLine($"  Volume label: {d.VolumeLabel}");
+                    sb.AppendLine($"  File system: {d.DriveFormat}");
+                    sb.AppendLine($"  Available space to current user:{d.AvailableFreeSpace, 15} bytes");
+                    sb.AppendLine($"  Total available space:          {d.TotalFreeSpace, 15} bytes");
+                    sb.AppendLine($"  Total size of drive:            {d.TotalSize, 15} bytes ");
+                }
+            }
+            return sb;
+        }
+        
         #endregion // Methods
 
     }
