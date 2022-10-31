@@ -224,7 +224,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             try
             {
-                ParatextProxy paratextUtils = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+                var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
+                ParatextProxy paratextUtils = new ParatextProxy(logger);
                 if (paratextUtils.IsParatextInstalled())
                 {
                     var paratextInstallPath = paratextUtils.ParatextInstallPath;
