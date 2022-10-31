@@ -563,7 +563,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         rs = LMR.Value.Split(',')
                             .ToList(); // change dictionary values from comma delimited string to List for sorting
                         ky = LMR.Key;
-                        SortRefs(ref rs);         //does this remove duplicates?            // sort the List  
+                        SortRefs(ref rs);                     // sort the List  
                         vl = String.Join(", ", rs); // change List back to comma delimited string
 
                         if (!vl.Contains("missing"))
@@ -573,7 +573,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             if (ndx2 >= 0)
                             {
                                 datrow = GridData[ndx2];
-                                datrow.Refs = vl;//waht if there's already refs here?  or there's already a list of vesrse?
+                                datrow.Refs = vl;
 
                                 if (datrow.Refs != "")
                                 {
@@ -590,7 +590,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                         simprefs.Add(bookNum + chapterNum + verseNum);
                                     }
 
-                                    datrow.VerseList.AddRange(simprefs);//as opposed to over writing the previous set.  Can we order and remove duplicated from this list?
+                                    var verseList = datrow.VerseList;
+                                    verseList.AddRange(simprefs);
+                                    SortRefs(ref verseList);
+                                    datrow.VerseList = verseList;
                                     datrow.SimpRefs = datrow.VerseList.Count.ToString();
                                 }
                                 else
