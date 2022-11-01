@@ -248,20 +248,18 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             AutoGenerateColumns="False"
-            CanUserAddRows="False"
             CanUserResizeColumns="True"
-            CanUserResizeRows="False"
             GridLinesVisibility="All"
-            HeadersVisibility="All"
             HorizontalGridLinesBrush="{StaticResource GridBrush}"
             IsReadOnly="True"
             ItemsSource="{Binding BiblicalTermsCollectionView}"
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
+            SelectedCellsChanged="GridVerses_OnSelectedCellsChanged"
             SelectedItem="{Binding SelectedBiblicalTermsData}"
             SelectionMode="Single"
-            SelectionUnit="CellOrRowHeader"
+            SelectionUnit="FullRow"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
             <!--
                 might have to use a dependency property like in BCV
@@ -283,16 +281,6 @@
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
-
-            <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <Label
-                        Height="{Binding Parent}"
-                        VerticalAlignment="Stretch"
-                        Background="LightGray"
-                        Content="Select Row" />
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
 
             <DataGrid.Columns>
                 <!--  rendering note button  -->
