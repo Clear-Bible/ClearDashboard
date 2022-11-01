@@ -28,6 +28,9 @@ using Point = System.Windows.Point;
 using Autofac;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using System.Collections.Specialized;
+using System.Reflection.Metadata;
+using Action = System.Action;
+using SIL.Machine.Matching;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -325,8 +328,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => SelectedBiblicalTermsType);
 
                 // reset the semantic domains & filter
-                FilterText = "";
-                SelectedDomain = null;
+                //FilterText = "";
+                //SelectedDomain = null;
 
                 SwitchedBiblicalTermsType();
             }
@@ -396,7 +399,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        public ICollectionView BiblicalTermsCollectionView { get; set; }
+        public ICollectionView BiblicalTermsCollectionView 
+        { get; 
+            set; }
 
 
         private ObservableCollection<BiblicalTermsData> _biblicalTerms = new();
@@ -648,16 +653,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_lastSelectedBtEnum != _selectedBiblicalTermsType)
             {
-                BiblicalTerms.Clear();
+                try
+                {
+                    //App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+                    //{
+                    //    BiblicalTerms.Clear();
+                    //});
+                    var uiContext = SynchronizationContext.Current;
+                    uiContext.Send(x => BiblicalTerms.Clear(), null);
+
+                }
+                catch (Exception ex)
+                {
+
+                }
                 await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
 
                 if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
                 {
-                    await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
+                    await GetBiblicalTerms(BiblicalTermsType.Project); //.ConfigureAwait(false);
                 }
                 else
                 {
-                    await GetBiblicalTerms(BiblicalTermsType.All).ConfigureAwait(false);
+                    await GetBiblicalTerms(BiblicalTermsType.All);//.ConfigureAwait(false);
 
                 }
 
@@ -1043,7 +1061,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project)
         {
             _getBiblicalTermsRunning = true;
-            var cancellationToken = _cancellationTokenSource.Token;
+            //var cancellationToken = _cancellationTokenSource.Token;
 
             // send to the task started event aggregator for everyone else to hear about a background task starting
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -1058,32 +1076,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
 
-                OnUIThread(() =>
-                {
-                    _biblicalTerms.Clear();
-                });
-
+                //OnUIThread(() => {  });
+                //_biblicalTerms.Clear();
 
                 // deserialize the list
                 var biblicalTermsList = new List<BiblicalTermsData>();
                 try
                 {
-                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), cancellationToken)
+                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), CancellationToken.None)
                         .ConfigureAwait(false);
                     if (result.Success)
                     {
                         biblicalTermsList = result.Data;
 
-                        await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"));
+                        await EventAggregator.PublishOnUIThreadAsync(
+                            new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"));
 
                         // send to the task started event aggregator for everyone else to hear about a background task starting
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                        {
-                            Name = _taskName,
-                            Description = "BiblicalTerms Loaded",
-                            EndTime = DateTime.Now,
-                            TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
-                        }));
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = _taskName,
+                                Description = "BiblicalTerms Loaded",
+                                EndTime = DateTime.Now,
+                                TaskLongRunningProcessStatus = LongRunningProcessStatus.Completed
+                            }));
                     }
 
                 }
@@ -1103,13 +1120,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             foreach (var rendering in biblicalTermsList[i].Renderings)
                             {
                                 _biblicalTerms[i].RenderingString += rendering + " ";
-                                cancellationToken.ThrowIfCancellationRequested();
+                                //cancellationToken.ThrowIfCancellationRequested();
                             }
                         }
 
                         NotifyOfPropertyChange(() => BiblicalTerms);
                     }
                 });
+
+            }
+            catch (Exception ex)
+            {
 
             }
             finally

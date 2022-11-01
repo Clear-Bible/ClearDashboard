@@ -250,7 +250,9 @@
             AutoGenerateColumns="False"
             CanUserAddRows="False"
             CanUserResizeColumns="True"
+            CanUserResizeRows="False"
             GridLinesVisibility="All"
+            HeadersVisibility="All"
             HorizontalGridLinesBrush="{StaticResource GridBrush}"
             IsReadOnly="True"
             ItemsSource="{Binding BiblicalTermsCollectionView}"
@@ -259,9 +261,11 @@
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             SelectedItem="{Binding SelectedBiblicalTermsData}"
             SelectionMode="Single"
-            SelectionUnit="Cell"
+            SelectionUnit="CellOrRowHeader"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
-
+            <!--
+                might have to use a dependency property like in BCV
+            -->
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem
@@ -279,6 +283,16 @@
                     <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                 </Style>
             </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.RowHeaderTemplate>
+                <DataTemplate>
+                    <Label
+                        Height="{Binding Parent}"
+                        VerticalAlignment="Stretch"
+                        Background="LightGray"
+                        Content="Select Row" />
+                </DataTemplate>
+            </DataGrid.RowHeaderTemplate>
 
             <DataGrid.Columns>
                 <!--  rendering note button  -->
