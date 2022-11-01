@@ -33,7 +33,7 @@ using Microsoft.AspNet.SignalR.Client.Http;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
-    public class PinsViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>
+    public class PinsViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>, IHandle<FilterPinsMessage>
     {
 
         #region Member Variables
@@ -990,6 +990,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             await Task.CompletedTask;
         }
+
+        public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
+        {
+            FilterString = message.Message;
+        }
+
 
         #endregion // Methods
     }

@@ -15,6 +15,7 @@
         <StackPanel.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Create Note" Click="OnCreateNote"></MenuItem>
+                <MenuItem Header="Filter Pins" Click="OnFilterPins"></MenuItem>
             </ContextMenu>
         </StackPanel.ContextMenu>
         <Button x:Name="TokenButton"

@@ -20,15 +20,18 @@
             MouseLeftButtonDown="AddButtonClicked">
             +
         </Label>
-        <StackPanel Grid.Column="1" x:Name="LabelStackPanel" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TextBoxVisibility}">
+        <StackPanel
+            x:Name="LabelStackPanel"
+            Grid.Column="1"
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TextBoxVisibility}">
             <TextBox
                 x:Name="LabelTextBox"
                 MinWidth="100"
                 Margin="5,0,0,0"
                 KeyUp="OnLabelTextBoxKeyUp"
-                TextChanged="OnLabelTextChanged"
                 LostFocus="LabelTextBox_OnLostFocus"
-                LostKeyboardFocus="LabelTextBox_OnLostKeyboardFocus"/>
+                LostKeyboardFocus="LabelTextBox_OnLostKeyboardFocus"
+                TextChanged="OnLabelTextChanged" />
             <Popup
                 x:Name="LabelPopup"
                 Height="Auto"
