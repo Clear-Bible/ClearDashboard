@@ -123,7 +123,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             return new List<string>();
         }
 
-        public async Task<IEnumerable<Note>> GetReplyNotes(IMediator mediator)
+        public async Task<IEnumerable<Note>> GetReplyNotes(IMediator mediator, CancellationToken token = default)
         {
             if (NoteId is null)
             {
@@ -135,29 +135,29 @@ namespace ClearDashboard.DAL.Alignment.Notes
                 throw new MediatorErrorEngineException("GetReplyNotes is unsupported for a note that is itself a reply note");
             }
 
-            return (await GetNotesInThread(mediator, ThreadId ?? NoteId!))
+            return (await GetNotesInThread(mediator, ThreadId ?? NoteId!, token))
                 .Where(note => note.NoteId!.Id != NoteId.Id)
                 .ToList();
         }
 
-        public async Task<Dictionary<IId, Dictionary<string, string>>> GetDomainEntityContexts(IMediator mediator)
+        public async Task<Dictionary<IId, Dictionary<string, string>>> GetDomainEntityContexts(IMediator mediator, CancellationToken token = default)
         {
             if (NoteId is null)
             {
                 throw new MediatorErrorEngineException("'CreateOrUpdate Note before retrieving domain entity contexts");
             }
 
-            return await GetDomainEntityContexts(mediator, this.domainEntityIds_);
+            return await GetDomainEntityContexts(mediator, this.domainEntityIds_, token);
         }
 
-        public async Task<IEnumerable<IId>> GetFullDomainEntityIds(IMediator mediator)
+        public async Task<IEnumerable<IId>> GetFullDomainEntityIds(IMediator mediator, CancellationToken token = default)
         {
             if (NoteId is null)
             {
                 throw new MediatorErrorEngineException("'CreateOrUpdate Note before retrieving full domain entity ids");
             }
 
-            return await GetFullDomainEntityIds(mediator, this.domainEntityIds_);
+            return await GetFullDomainEntityIds(mediator, this.domainEntityIds_, token);
         }
 
         public async Task<Note> CreateOrUpdate(IMediator mediator, CancellationToken token = default)
@@ -342,11 +342,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public static async Task<Note> Get(
             IMediator mediator,
-            NoteId noteId)
+            NoteId noteId,
+            CancellationToken token = default)
         {
             var command = new GetNoteByNoteIdQuery(noteId);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 return result.Data!;
@@ -358,11 +359,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
         }
 
         public static async Task<IEnumerable<Note>> GetAllNotes(
-            IMediator mediator)
+            IMediator mediator,
+            CancellationToken token = default)
         {
             var command = new GetNotesByDomainEntityIIdsQuery(null);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 return result.Data!;
@@ -375,11 +377,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public static async Task<IOrderedEnumerable<Note>> GetNotesInThread(
             IMediator mediator,
-            EntityId<NoteId> threadId)
+            EntityId<NoteId> threadId,
+            CancellationToken token = default)
         {
             var command = new GetNotesInThreadQuery(threadId);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 return result.Data!;
@@ -392,11 +395,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
 
         public static async Task<IEnumerable<IId>> GetFullDomainEntityIds(
             IMediator mediator,
-            IEnumerable<IId> domainEntityIIds)
+            IEnumerable<IId> domainEntityIIds,
+            CancellationToken token = default)
         {
             var command = new GetFullDomainEntityIdsByIIdsQuery(domainEntityIIds);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 return result.Data!;
@@ -417,11 +421,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<Dictionary<IId, Dictionary<string, string>>> GetDomainEntityContexts(
             IMediator mediator,
-            IEnumerable<IId> domainEntityIIds)
+            IEnumerable<IId> domainEntityIIds,
+            CancellationToken token = default)
         {
             var command = new GetDomainEntityContextsByIIdsQuery(domainEntityIIds);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 return result.Data!;
@@ -445,11 +450,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<Dictionary<IId, IEnumerable<NoteId>>> GetDomainEntityNoteIds(
             IMediator mediator,
-            IEnumerable<IId>? domainEntityIIds = null)
+            IEnumerable<IId>? domainEntityIIds,
+            CancellationToken token = default)
         {
             var command = new GetNotesByDomainEntityIIdsQuery(domainEntityIIds);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 var iidNoteGroups = result.Data!
@@ -495,9 +501,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <param name="mediator"></param>
         /// <returns></returns>
         public static async Task<Dictionary<IId, IEnumerable<Note>>> GetAllDomainEntityIdNotes(
-            IMediator mediator)
+            IMediator mediator,
+            CancellationToken token = default)
         {
-            return await GetDomainEntityNotesThreadsFlattened(mediator, null);
+            return await GetDomainEntityNotesThreadsFlattened(mediator, null, token);
         }
 
         /// <summary>
@@ -520,11 +527,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<Dictionary<IId, IEnumerable<Note>>> GetDomainEntityNotesThreadsFlattened(
             IMediator mediator,
-            IEnumerable<IId>? domainEntityIIds = null)
+            IEnumerable<IId>? domainEntityIIds,
+            CancellationToken token = default)
         {
             var command = new GetNotesByDomainEntityIIdsQuery(null);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {
                 var domainEntityIdNotesThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
@@ -581,11 +589,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <exception cref="MediatorErrorEngineException"></exception>
         public static async Task<Dictionary<IId, Dictionary<Note, IEnumerable<Note>>>> GetDomainEntityNotesThreads(
             IMediator mediator,
-            IEnumerable<IId>? domainEntityIIds = null)
+            IEnumerable<IId>? domainEntityIIds,
+            CancellationToken token = default)
         {
             var command = new GetNotesByDomainEntityIIdsQuery(null);
 
-            var result = await mediator.Send(command);
+            var result = await mediator.Send(command, token);
             if (result.Success)
             {    
                 var domainEntityIdNotesAndThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
