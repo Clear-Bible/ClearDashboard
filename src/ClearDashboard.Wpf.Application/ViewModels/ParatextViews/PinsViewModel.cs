@@ -599,7 +599,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                                     var verseList = datrow.VerseList;
                                     verseList.AddRange(simprefs);
-                                    //SortRefs(ref verseList);
                                     datrow.VerseList = verseList;
                                     datrow.SimpRefs = datrow.VerseList.Count.ToString();
                                 }
@@ -614,7 +613,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError(ex, "Adding in Verse References from Interlinear_*.xml failed");
+                        Logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                     }
                 }
 
