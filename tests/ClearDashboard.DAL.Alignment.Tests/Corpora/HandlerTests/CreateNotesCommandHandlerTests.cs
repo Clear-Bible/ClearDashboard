@@ -181,7 +181,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             Output.WriteLine("");
             Output.WriteLine("GetAllDomainEntityNotes");
 
-            var domainEntityNotes = await Note.GetDomainEntityNotesThreadsFlattened(Mediator!);
+            var domainEntityNotes = await Note.GetDomainEntityNotesThreadsFlattened(Mediator!, null);
             foreach (var domainEntityNote in domainEntityNotes)
             {
                 Output.WriteLine($"Domain Entity Id - Type: '{domainEntityNote.Key.GetType().GetGenericArguments().First().Name}', Id: '{(domainEntityNote.Key as IId)!.Id}'");
@@ -199,7 +199,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             Output.WriteLine("GetAllDomainEntityIdNoteIds");
 
             var domainEntityIdCount = 0;
-            var domainEntityNoteIds = await Note.GetDomainEntityNoteIds(Mediator!);
+            var domainEntityNoteIds = await Note.GetDomainEntityNoteIds(Mediator!, null);
             foreach (var domainEntityNoteId in domainEntityNoteIds)
             {
                 Output.WriteLine($"Domain Entity Id - Type: '{domainEntityNoteId.Key.GetType().GetGenericArguments().First().Name}', Id: '{(domainEntityNoteId.Key as IId)!.Id}'");
@@ -409,7 +409,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
 
             Output.WriteLine($"\nOutput IId + Notes (hierarchical - Leading Notes containing reply Notes):");
-            var entityNotesAndThreads = await Note.GetDomainEntityNotesThreads(Mediator!);
+            var entityNotesAndThreads = await Note.GetDomainEntityNotesThreads(Mediator!, null);
             foreach (var kvp in entityNotesAndThreads)
             {
                 Output.WriteLine($"\tIId (TokenId): {kvp.Key.Id}");
@@ -438,7 +438,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Contains(standaloneNote2.NoteId, entityNotesAndThreads[sourceTokens![2].TokenId].Select(n => n.Key.NoteId));
 
             Output.WriteLine($"\nOutput IId + Notes (flattened - Leading Notes and reply Notes listed together):");
-            var entityNotes = await Note.GetDomainEntityNotesThreadsFlattened(Mediator!);
+            var entityNotes = await Note.GetDomainEntityNotesThreadsFlattened(Mediator!, null);
             foreach (var kvp in entityNotes)
             {
                 Output.WriteLine($"\tIId (TokenId): {kvp.Key.Id}");
