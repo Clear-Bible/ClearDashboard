@@ -169,7 +169,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the NoteAssociationFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteAssociationFontSizeProperty = DependencyProperty.Register(nameof(NoteAssociationFontSize), typeof(double), typeof(NoteDisplay),
-            new PropertyMetadata(15d));
+            new PropertyMetadata(14d));
 
         /// <summary>
         /// Identifies the NoteFontStyle dependency property.

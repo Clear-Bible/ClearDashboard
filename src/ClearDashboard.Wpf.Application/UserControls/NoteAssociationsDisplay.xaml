@@ -36,8 +36,9 @@
             <TextBlock x:Name="AssociationButton"
                     Background="Transparent" 
                     Foreground="{DynamicResource MaterialDesignBody}" 
+                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
+                    
                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontFamily}" 
-                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}" 
                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontStyle}" 
                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontWeight}" 
                     HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalAlignment}" 
@@ -48,6 +49,7 @@
                     MouseRightButtonDown="OnNoteAssociationRightButtonDown" 
                     MouseRightButtonUp="OnNoteAssociationRightButtonUp" 
                     MouseEnter="OnNoteAssociationMouseEnter" MouseLeave="OnNoteAssociationMouseLeave" 
+                    Text="{Binding Description}"
                     materialDesign:ShadowAssist.ShadowDepth="Depth0" />
         </DataTemplate>
         <ItemsPanelTemplate x:Key="NoteAssociationPanelTemplate">
@@ -59,7 +61,6 @@
             ItemTemplate="{StaticResource NoteAssociationTemplate}"
             ItemsPanel="{StaticResource NoteAssociationPanelTemplate}"
             ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Associations}" />
-
     </StackPanel>
 
 </UserControl>

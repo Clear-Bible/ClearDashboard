@@ -159,6 +159,43 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty LabelSuggestionsProperty = DependencyProperty.Register(nameof(LabelSuggestions), typeof(IEnumerable<NotesLabel>), typeof(NoteCollectionDisplay));
 
         /// <summary>
+        /// Identifies the NoteAssociationFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontFamilyProperty = DependencyProperty.Register(nameof(NoteAssociationFontFamily), typeof(FontFamily), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the NoteAssociationFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontSizeProperty = DependencyProperty.Register(nameof(NoteAssociationFontSize), typeof(double), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(14d));
+
+        /// <summary>
+        /// Identifies the NoteFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontStyleProperty = DependencyProperty.Register(nameof(NoteAssociationFontStyle), typeof(FontStyle), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the NoteFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationFontWeightProperty = DependencyProperty.Register(nameof(NoteAssociationFontWeight), typeof(FontWeight), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(FontWeights.Normal));
+
+        /// <summary>
+        /// Identifies the NoteAssociationMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationMarginProperty = DependencyProperty.Register(nameof(NoteAssociationMargin), typeof(Thickness), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the NoteAssociationPadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteAssociationPaddingProperty = DependencyProperty.Register(nameof(NoteAssociationPadding), typeof(Thickness), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+
+        /// <summary>
         /// Identifies the NoteFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteFontSizeProperty = DependencyProperty.Register(nameof(NoteFontSize), typeof(double), typeof(NoteCollectionDisplay),
@@ -512,6 +549,60 @@ namespace ClearDashboard.Wpf.Application.UserControls
             add => AddHandler(NoteAssociationMouseLeaveEvent, value);
             remove => RemoveHandler(NoteAssociationMouseLeaveEvent, value);
         }
+
+        /// <summary>
+        /// Gets or sets the font size for the note associations.
+        /// </summary>
+        public FontFamily NoteAssociationFontFamily
+        {
+            get => (FontFamily)GetValue(NoteAssociationFontFamilyProperty);
+            set => SetValue(NoteAssociationFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the note associations.
+        /// </summary>
+        public double NoteAssociationFontSize
+        {
+            get => (double)GetValue(NoteAssociationFontSizeProperty);
+            set => SetValue(NoteAssociationFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the note associations.
+        /// </summary>
+        public FontWeight NoteAssociationFontWeight
+        {
+            get => (FontWeight)GetValue(NoteAssociationFontWeightProperty);
+            set => SetValue(NoteAssociationFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the note associations.
+        /// </summary>
+        public FontStyle NoteAssociationFontStyle
+        {
+            get => (FontStyle)GetValue(NoteAssociationFontStyleProperty);
+            set => SetValue(NoteAssociationFontStyleProperty, value);
+        }
+        /// <summary>
+        /// Gets or sets the margin for individual note associations.
+        /// </summary>
+        public Thickness NoteAssociationMargin
+        {
+            get => (Thickness)GetValue(NoteAssociationMarginProperty);
+            set => SetValue(NoteAssociationMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for individual note associations.
+        /// </summary>
+        public Thickness NoteAssociationPadding
+        {
+            get => (Thickness)GetValue(NoteAssociationPaddingProperty);
+            set => SetValue(NoteAssociationPaddingProperty, value);
+        }
+
 
         /// <summary>
         /// Gets or sets the font size for the note text box.

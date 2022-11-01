@@ -734,6 +734,8 @@
                 LabelSuggestions="{Binding VerseDisplayViewModel.LabelSuggestions}"
                 NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 Notes="{Binding SelectedTokens.CombinedNotes}"
+                NoteAssociationFontSize="14"
+
                 TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding NotePaneVisibility}">
                 <userControls:NoteCollectionDisplay.NoteMargin>

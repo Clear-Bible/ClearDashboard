@@ -95,6 +95,7 @@
                     LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
                     Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewNote}"
                     NoteAdded="OnNoteAdded"
+                    NoteAssociationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontSize}"
                     NoteDeleted="OnNoteDeleted"
                     NoteFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteFontSize}"
                     NoteMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteMargin}"

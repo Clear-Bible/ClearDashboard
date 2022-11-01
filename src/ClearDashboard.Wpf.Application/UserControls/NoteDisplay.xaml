@@ -135,32 +135,43 @@
                 Cancel
             </Button>
         </StackPanel>
-        <StackPanel
-            Grid.Row="3"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Orientation="Horizontal">
-            <Label FontSize="11" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">Labels:</Label>
-            <userControls:LabelsDisplay
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
-                LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
-                LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
-                LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
-                LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
-                LabelRemoved="OnLabelRemoved"
-                Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
-                Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
-            <userControls:LabelSelector
-                HorizontalAlignment="Center"
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" FontSize="13" FontWeight="SemiBold"  Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">Labels:</Label>
+            <StackPanel
+                Grid.Row="0"
+                Grid.Column="1"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
-                VerticalContentAlignment="Center"
-                LabelAdded="OnLabelAdded"
-                LabelSelected="OnLabelSelected"
-                LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
-                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
-        </StackPanel>
-        <userControls:NoteAssociationsDisplay 
-                Grid.Row="4" 
+                Orientation="Horizontal">
+                <userControls:LabelsDisplay
+                    FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
+                    LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
+                    LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
+                    LabelMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelMargin}"
+                    LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
+                    LabelRemoved="OnLabelRemoved"
+                    Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
+                    Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
+                <userControls:LabelSelector
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    LabelAdded="OnLabelAdded"
+                    LabelSelected="OnLabelSelected"
+                    LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
+            </StackPanel>
+            <Label Grid.Row="1" Grid.Column="0" FontSize="13" FontWeight="SemiBold">Associations:</Label>
+            <userControls:NoteAssociationsDisplay 
+                Grid.Row="1" Grid.Column="1"  
                 Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" 
                 NoteAssociationClicked="OnNoteAssociationClicked" 
                 NoteAssociationDoubleClicked="OnNoteAssociationDoubleClicked"
@@ -170,8 +181,13 @@
                 NoteAssociationRightButtonUp="OnNoteAssociationRightButtonUp" 
                 NoteAssociationMouseEnter="OnNoteAssociationMouseEnter" 
                 NoteAssociationMouseLeave="OnNoteAssociationMouseLeave" 
-                FontSize="13"
-
-                />
+                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontFamily}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontSize}"
+                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontStyle}"
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontWeight}"
+                InnerMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationMargin}"
+                InnerPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationPadding}"
+            />
+        </Grid>
     </Grid>
 </UserControl>
