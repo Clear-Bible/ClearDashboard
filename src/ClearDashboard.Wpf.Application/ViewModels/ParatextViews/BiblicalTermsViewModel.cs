@@ -1,11 +1,13 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Interfaces;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -23,30 +25,27 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
 using Point = System.Windows.Point;
-using Autofac;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using System.Collections.Specialized;
-using ClearDashboard.DataAccessLayer.Threading;
+
+// ReSharper disable InconsistentNaming
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     /// <summary>
     /// 
     /// </summary>
-    public class BiblicalTermsViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>, IWorkspace
+    public class BiblicalTermsViewModel : ToolViewModel 
     {
+        private readonly LongRunningTaskManager _longRunningTaskManager;
+
         #region Member Variables
 
         BiblicalTermsView _view;
-        CancellationTokenSource _cancellationTokenSource = null;
+    
         private bool _getBiblicalTermsRunning = false;
-        private string _taskName = "BiblicalTerms";
+        private const string TaskName = "BiblicalTerms";
 
-        ILogger IWorkspace.Logger => throw new NotImplementedException();
-        INavigationService IWorkspace.NavigationService => throw new NotImplementedException();
-
+     
         public enum SelectedBtEnum
         {
             // ReSharper disable once UnusedMember.Local
@@ -501,15 +500,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         public BiblicalTermsViewModel(INavigationService navigationService, ILogger<BiblicalTermsViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
+            _longRunningTaskManager = longRunningTaskManager;
             Title = "🕮 " + LocalizationStrings.Get("Windows_BiblicalTerms", Logger);
             ContentId = "BIBLICALTERMS";
             DockSide = EDockSide.Bottom;
-            _cancellationTokenSource = new CancellationTokenSource();
-
-            ClearFilterCommand = new RelayCommand(ClearFilter);
+           ClearFilterCommand = new RelayCommand(ClearFilter);
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -522,13 +520,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
 
             _view = (BiblicalTermsView)view;
-            Logger.LogInformation("OnViewAttached");
+            Logger!.LogInformation("OnViewAttached");
             base.OnViewAttached(view, context);
         }
 
         protected override void OnViewLoaded(object view)
         {
-            Logger.LogInformation("OnViewLoaded");
+            Logger!.LogInformation("OnViewLoaded");
             base.OnViewLoaded(view);
         }
 
@@ -581,22 +579,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             base.OnViewReady(view);
         }
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async  Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
             if (_getBiblicalTermsRunning)
             {
-                _cancellationTokenSource.Cancel();
-                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                var cancelled = _longRunningTaskManager.CancelTask(TaskName);
+
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                 {
-                    Name = _taskName,
+                    Name = TaskName,
                     Description = "Task was cancelled",
                     EndTime = DateTime.Now,
                     TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-                }));
+                }), cancellationToken);
             }
-            return base.OnDeactivateAsync(close, cancellationToken);
+            await base.OnDeactivateAsync(close, cancellationToken);
         }
 
 
@@ -1043,16 +1042,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project)
         {
             _getBiblicalTermsRunning = true;
-            var cancellationToken = _cancellationTokenSource.Token;
+          
+            var task = _longRunningTaskManager.Create(TaskName, LongRunningTaskStatus.Running);
+            var cancellationToken = task.CancellationTokenSource!.Token;
 
             // send to the task started event aggregator for everyone else to hear about a background task starting
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
-                Name = _taskName,
+                Name = TaskName,
                 Description = "Requesting BiblicalTerms data...",
                 StartTime = DateTime.Now,
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
-            }));
+            }), cancellationToken);
 
             try
             {
@@ -1074,49 +1075,67 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     {
                         biblicalTermsList = result.Data;
 
-                        await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"));
+                        await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"), cancellationToken);
 
                         // send to the task started event aggregator for everyone else to hear about a background task starting
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                         {
-                            Name = _taskName,
+                            Name = TaskName,
                             Description = "BiblicalTerms Loaded",
                             EndTime = DateTime.Now,
                             TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-                        }));
-                    }
+                        }), cancellationToken);
 
-                }
-                catch (Exception e)
-                {
-                    Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
-                }
 
-                OnUIThread(() =>
-                {
-                    if (biblicalTermsList.Count > 0)
-                    {
-                        for (var i = 0; i < biblicalTermsList.Count; i++)
+                        OnUIThread(() =>
                         {
-                            _biblicalTerms.Add(biblicalTermsList[i]);
-
-                            foreach (var rendering in biblicalTermsList[i].Renderings)
+                            if (biblicalTermsList.Count > 0)
                             {
-                                _biblicalTerms[i].RenderingString += rendering + " ";
-                                cancellationToken.ThrowIfCancellationRequested();
-                            }
-                        }
+                                for (var i = 0; i < biblicalTermsList.Count; i++)
+                                {
+                                    _biblicalTerms.Add(biblicalTermsList[i]);
 
-                        NotifyOfPropertyChange(() => BiblicalTerms);
+                                    foreach (var rendering in biblicalTermsList[i].Renderings)
+                                    {
+                                        _biblicalTerms[i].RenderingString += rendering + " ";
+                                        cancellationToken.ThrowIfCancellationRequested();
+                                    }
+                                }
+
+                                NotifyOfPropertyChange(() => BiblicalTerms);
+                            }
+                        });
                     }
-                });
+
+                }
+                catch (OperationCanceledException ex)
+                {
+                    Logger!.LogInformation("BiblicalTermsViewModel.GetBiblicalTerms() - an exception was thrown -> cancellation was requested.");
+                }
+                catch (Exception ex)
+                {
+                    Logger!.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {ex.Message}");
+
+                    if (!cancellationToken.IsCancellationRequested)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
+                            new BackgroundTaskStatus
+                            {
+                                Name = TaskName,
+                                EndTime = DateTime.Now,
+                                ErrorMessage = $"{ex}",
+                                TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
+                            }), cancellationToken);
+                    }
+                }
+
 
             }
             finally
             {
                 await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
                 _getBiblicalTermsRunning = false;
-                _cancellationTokenSource.Dispose();
+                _longRunningTaskManager.TaskComplete(TaskName);
             }
         }
 
@@ -1130,26 +1149,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             LaunchMirrorView<BiblicalTermsView>.Show(this, actualWidth, actualHeight);
         }
-
-        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-        {
-            var incomingMessage = message.Status;
-
-            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
-            {
-                _cancellationTokenSource.Cancel();
-
-                // return that your task was cancelled
-                incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                incomingMessage.Description = "Task was cancelled";
-
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage));
-            }
-
-            await Task.CompletedTask;
-        }
-
         #endregion // Methods
     }
 }

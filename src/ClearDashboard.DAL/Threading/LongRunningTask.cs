@@ -20,6 +20,7 @@ public class LongRunningTask : IDisposable
     {
         Status = LongRunningTaskStatus.Cancelled;
         CancellationTokenSource?.Cancel();
+        Dispose();
     }
 
     public void Complete()

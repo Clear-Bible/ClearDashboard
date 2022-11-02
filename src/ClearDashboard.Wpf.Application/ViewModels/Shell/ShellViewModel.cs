@@ -47,12 +47,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
         private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(5);
         private readonly int _completedRemovalSeconds = 45;
-        private bool _firstPass;
+        private bool _collapseTasksView;
 
         private UpdateFormat? _updateData;
 
         private Timer? _timer;
-        private bool _firstRun;
+        private bool _cleanUpOldBackgroundTasks;
 
 
         private string? _paratextUserName;
@@ -211,22 +211,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
             // setup timer to clean up old background tasks
-            _timer = new((_) =>
-            {
-                if (_firstRun)
-                {
-                    CleanUpOldBackgroundTasks();
-                }
-                else
-                {
-                    _firstRun = true;
-                }
-            }, null, _startTimeSpan, _periodTimeSpan);
+            _timer = new Timer(TimerElapsed, null, _startTimeSpan, _periodTimeSpan);
 
             LoadingApplication = true;
             NavigationService!.Navigated += NavigationServiceOnNavigated;
 
             //BogusData();
+        }
+
+        private void TimerElapsed(object? state)
+        {
+            if (_cleanUpOldBackgroundTasks)
+            {
+                CleanUpOldBackgroundTasks();
+            }
+            else
+            {
+                _cleanUpOldBackgroundTasks = true;
+            }
         }
 
         private bool _loadingApplication;
@@ -329,7 +331,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #region Caliburn.Micro overrides
 
 
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async  Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             NavigationService!.Navigated -= NavigationServiceOnNavigated;
             Logger!.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
@@ -339,10 +341,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             mainViewModel?.DeactivateAsync(true);
 
             _longRunningTaskManager.CancelAllTasks();
+
+            await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
             _longRunningTaskManager.Dispose();
 
             ProjectManager?.Dispose();
-            return base.OnDeactivateAsync(close, cancellationToken);
+            await base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion
@@ -375,8 +379,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             //string jsonString = JsonSerializer.Serialize(updateJson, options);
             //File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
 
-            var bInterent = await NetworkHelper.IsConnectedToInternet();           // check internet connection
-            if (!bInterent)
+            var connectedToInternet = await NetworkHelper.IsConnectedToInternet();           // check internet connection
+            if (!connectedToInternet)
             {
                 return;
             }
@@ -385,7 +389,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             Stream stream;
             try
             {
-                WebClient webClient = new WebClient();
+                var webClient = new WebClient();
                 stream = await webClient.OpenReadTaskAsync(new Uri("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/main/ClearDashboard.json", UriKind.Absolute));
             }
             catch (Exception)
@@ -546,40 +550,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             // auto close task view if nothing is in the queue
             if (_backgroundTaskStatuses.Count == 0)
             {
-                if (_firstPass)
+                if (_collapseTasksView)
                 {
                     ShowTaskView = Visibility.Collapsed;
-                    _firstPass = false;
+                    _collapseTasksView = false;
                 }
 
-                _firstPass = true;
+                _collapseTasksView = true;
                 return;
             }
 
+            var taskRemoved = false;
+            var presentTime = DateTime.Now;
 
-            bool bFound = false;
-            DateTime presentTime = DateTime.Now;
-
-            for (int i = _backgroundTaskStatuses.Count - 1; i >= 0; i--)
+            for (var index = _backgroundTaskStatuses.Count - 1; index >= 0; index--)
             {
-                TimeSpan ts = presentTime - _backgroundTaskStatuses[i].EndTime;
+                var timeSpan = presentTime - _backgroundTaskStatuses[index].EndTime;
 
                 // if completed task remove it
-                if (_backgroundTaskStatuses[i].TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed && ts.TotalSeconds > _completedRemovalSeconds)
+                if (_backgroundTaskStatuses[index].TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed && timeSpan.TotalSeconds > _completedRemovalSeconds)
                 {
+                    var index1 = index;
                     OnUIThread(() =>
                     {
-                        if (i < _backgroundTaskStatuses.Count)
+                        if (index1 < _backgroundTaskStatuses.Count)
                         {
-                            _backgroundTaskStatuses.RemoveAt(i);
+                            _backgroundTaskStatuses.RemoveAt(index1);
                         }
                     });
 
-                    bFound = true;
+                    taskRemoved = true;
                 }
             }
 
-            if (bFound)
+            if (taskRemoved)
             {
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
             }
@@ -628,18 +632,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
-        public async void CancelTask(BackgroundTaskStatus task)
+        public async void CancelTask(BackgroundTaskStatus status)
         {
             // update the task entry to show cancelling
-            var taskToCancel = _backgroundTaskStatuses.FirstOrDefault(t => t.Name == task.Name);
-            if (taskToCancel != null)
+            var backgroundTaskStatus = _backgroundTaskStatuses.FirstOrDefault(t => t.Name == status.Name);
+            if (backgroundTaskStatus != null)
             {
-                taskToCancel.TaskLongRunningProcessStatus = LongRunningTaskStatus.CancellationRequested;
-                taskToCancel.EndTime = DateTime.Now;
+                //taskToCancel.TaskLongRunningProcessStatus = LongRunningTaskStatus.CancellationRequested;
+                //taskToCancel.EndTime = DateTime.Now;
+
+                var task = _longRunningTaskManager.CancelTask(status.Name);
+
+                backgroundTaskStatus.EndTime = DateTime.Now;
+                backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
+
+                //TODO:  Localize
+                backgroundTaskStatus.Description = "Task was cancelled";
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
+
+                ToggleSpinner();
             }
 
-            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(taskToCancel));
+            //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(taskToCancel));
         }
 
         public async void StartBackgroundTask()
@@ -684,12 +698,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var incomingMessage = message.Status;
 
             // check for duplicate entries
-            bool bFound = false;
+            var taskExists = false;
             foreach (var status in BackgroundTaskStatuses)
             {
                 if (status.Name == incomingMessage.Name)
                 {
-                    bFound = true;
+                    taskExists = true;
 
                     status.Description = incomingMessage.Description;
                     if (incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
@@ -703,14 +717,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 }
             }
 
-            if (bFound == false)
+            if (taskExists == false)
             {
                 BackgroundTaskStatuses.Add(incomingMessage);
             }
 
 
+            ToggleSpinner();
+
+
+            // check if the message is for the bogus task
+            //if (incomingMessage.Name == "BOGUS TASK TO CANCEL" && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
+            //{
+            //    // return that your task was cancelled
+            //    incomingMessage.EndTime = DateTime.Now;
+            //    incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
+            //    incomingMessage.Description = "Task was cancelled";
+
+            //    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
+
+            //}
+
+            await Task.CompletedTask;
+        }
+
+        private void ToggleSpinner()
+        {
             // check to see if all are completed so we can turn off spinner
-            var runningTasks = BackgroundTaskStatuses.Where(p => p.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running).ToList();
+            var runningTasks = BackgroundTaskStatuses
+                .Where(p => p.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running).ToList();
             if (runningTasks.Count > 0)
             {
                 ShowSpinner = Visibility.Visible;
@@ -719,28 +754,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             {
                 ShowSpinner = Visibility.Collapsed;
             }
-
-
-            // check if the message is for the bogus task
-            if (incomingMessage.Name == "BOGUS TASK TO CANCEL" && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
-            {
-                // return that your task was cancelled
-                incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                incomingMessage.Description = "Task was cancelled";
-
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
-
-            }
-
-            await Task.CompletedTask;
         }
 
         #endregion
 
         public async Task HandleAsync(GetApplicationWindowSettings message, CancellationToken cancellationToken)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings));
+            await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings), cancellationToken);
         }
     }
 }

@@ -31,7 +31,7 @@ using System.Xml;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
-    public class PinsViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>
+    public class PinsViewModel : ToolViewModel 
     {
 
         #region Member Variables
@@ -152,8 +152,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _projectManager = projectManager;
             _mediator = mediator;
             _longRunningTaskManager = longRunningTaskManager;
-            //_cancellationTokenSource = new CancellationTokenSource();
-
+            
             // wire up the commands
             ClearFilterCommand = new RelayCommand(ClearFilter);
             VerseButtonCommand = new RelayCommand(VerseButtonClick);
@@ -161,7 +160,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
 
             // pull out the project font family
-            if (ProjectManager.CurrentParatextProject is not null)
+            if (ProjectManager!.CurrentParatextProject is not null)
             {
                 var paratextProject = ProjectManager.CurrentParatextProject;
                 FontFamily = paratextProject.Language.FontFamily;
@@ -656,10 +655,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
                         }), cancellationToken);
                 }
-                //else
-                //{
-                //    Logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
-                //}
+            
             }
             finally
             {
@@ -785,7 +781,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     CancellationToken.None).ConfigureAwait(false);
             if (queryAbtResult.Success == false)
             {
-                Logger.LogError(queryAbtResult.Message);
+                Logger!.LogError(queryAbtResult.Message);
                 return true;
             }
 
@@ -807,7 +803,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     CancellationToken.None).ConfigureAwait(false);
             if (queryBtResult.Success == false)
             {
-                Logger.LogError(queryBtResult.Message);
+                Logger!.LogError(queryBtResult.Message);
                 return true;
             }
 
@@ -827,7 +823,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (queryResult.Success == false)
             {
-                Logger.LogError(queryResult.Message);
+                Logger!.LogError(queryResult.Message);
                 return true;
             }
 
@@ -985,29 +981,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
         }
-
-        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-        {
-            var incomingMessage = message.Status;
-
-            if (incomingMessage.Name == _taskName && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
-            {
-
-                //var task = _longRunningTaskManager.GetTask(_taskName);
-                //task.Cancel();
-                _longRunningTaskManager.CancelTask(_taskName);
-
-                // return that your task was cancelled
-                incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                incomingMessage.Description = "Task was cancelled";
-
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
-            }
-
-            await Task.CompletedTask;
-        }
-
+      
         #endregion // Methods
     }
 

@@ -79,7 +79,7 @@ namespace ClearDashboard.DataAccessLayer.Threading
             return result;
         }
 
-        public void DisposeTasks()
+        private void DisposeTasks()
         {
             if (!_tasks.IsEmpty)
             {
@@ -124,7 +124,7 @@ namespace ClearDashboard.DataAccessLayer.Threading
         //    return _tasks.TryAdd(longRunningTask.Name, longRunningTask);
         //}
 
-        public bool TryRemove(string taskName, out LongRunningTask? value)
+        private bool TryRemove(string taskName, out LongRunningTask? value)
         {
             var result = _tasks.TryRemove(taskName, out value);
             value!.Dispose();
@@ -159,6 +159,10 @@ namespace ClearDashboard.DataAccessLayer.Threading
 
         public void Dispose()
         {
+            if (!_cancellationTokenSource.IsCancellationRequested)
+            {
+                _cancellationTokenSource.Cancel();
+            }
             _cancellationTokenSource.Dispose();
             DisposeTasks();
         }

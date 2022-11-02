@@ -103,6 +103,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly IWindowManager _windowManager;
+        private readonly LongRunningTaskManager _longRunningTaskManager;
+
         /// <summary>
         /// This is the network that is displayed in the window.
         /// It is the main part of the view-model.
@@ -329,11 +331,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public ProjectDesignSurfaceViewModel(INavigationService navigationService, IWindowManager windowManager,
 #pragma warning restore CS8618
             ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager,
-            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
+            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
         {
 
             _windowManager = windowManager;
+            _longRunningTaskManager = longRunningTaskManager;
 
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
@@ -945,28 +948,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             Logger.LogInformation("AddParatextCorpus called.");
             LongProcessRunning = true;
-            CancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = CancellationTokenSource.Token;
+            //CancellationTokenSource = new CancellationTokenSource();
+            //var cancellationToken = CancellationTokenSource.Token;
 
-
-
-            // await ProjectManager.InvokeDialog<AddParatextCorpusDialogViewModel>(
-            //     DashboardProjectManager.NewProjectDialogSettings, (Func<AddParatextCorpusDialogViewModel, Task<bool>>)Callback);
+         
             var dialogViewModel = LifetimeScope.Resolve<AddParatextCorpusDialogViewModel>();
             var result = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
 
-            //  async Task<bool> Callback(AddParatextCorpusDialogViewModel dialogViewModel)
             if (result)
             {
 
-                //IsBusy = true;
+                //IsBusy = true; 
 
                 var metadata = dialogViewModel.SelectedProject;
                 var statusName = $"{metadata.Name}";
                 _busyState.Add(statusName, true);
 
+                var task = _longRunningTaskManager.Create(statusName, LongRunningTaskStatus.Running);
+                var cancellationToken = task.CancellationTokenSource!.Token;
                 _ = await Task.Factory.StartNew(async () =>
                 {
+                    
                     try
                     {
                         DAL.Alignment.Corpora.Corpus? corpus = null;
@@ -1073,7 +1075,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     finally
                     {
-                        CancellationTokenSource.Dispose();
+                        _longRunningTaskManager.CancelTask(statusName);
                         LongProcessRunning = false;
                         //IsBusy = false;
                         _busyState.Remove(statusName);
