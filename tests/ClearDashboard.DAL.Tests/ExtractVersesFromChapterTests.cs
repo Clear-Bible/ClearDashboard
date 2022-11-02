@@ -48,7 +48,7 @@ namespace ClearDashboard.DAL.Tests
                      VerseBBBCCCVVV = fileInfo.Name.Substring(0, 2) + "0" + fileInfo.Name.Substring(2, 2) + "002",
                 };
 
-                var verseList = ExtractVersesFromChapter.ParseUSFM(logger, project, verse);
+                var verseList = ExtractVersesFromChapter.ParseUSFM(project, verse);
 
                 // get it corresponding verse text file
                 string fileCheckPath = Path.Combine(startupPath, "MockData", "VerseText", fileInfo.Name.Substring(0, fileInfo.Name.Length - fileInfo.Extension.Length) + ".txt");

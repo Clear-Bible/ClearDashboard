@@ -19,6 +19,9 @@ using Microsoft.EntityFrameworkCore;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using SIL.Machine.Translation;
 using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
+using ClearDashboard.DAL.Alignment.BackgroundServices;
+using Autofac;
+using System.Threading;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -171,18 +174,18 @@ public class CreateNotesCommandHandlerTests : TestBase
                 }
                 foreach (var nd in n.DomainEntityIds)
                 {
-                    Output.WriteLine($"\tDomain Entity Id - Type: '{nd.GetType().GetGenericArguments().First().Name}', Id: '{nd}'");
+                    Output.WriteLine($"\tDomain Entity Id - Type: '{nd.GetType().GetGenericArguments().First().Name}', Id: '{nd.Id}'");
                 }
             }
 
             Output.WriteLine("");
+            Output.WriteLine("GetAllDomainEntityNotes");
 
-            var domainEntityIdCount = 0;
-            var domainEntityIdNotes = await Note.GetAllDomainEntityIdNotes(Mediator!);
-            foreach (var domainEntityIdNote in domainEntityIdNotes)
+            var domainEntityNotes = await Note.GetDomainEntityNotesThreadsFlattened(Mediator!, null);
+            foreach (var domainEntityNote in domainEntityNotes)
             {
-                Output.WriteLine($"Domain Entity Id - Type: '{domainEntityIdNote.Key.GetType().GetGenericArguments().First().Name}', Id: '{(domainEntityIdNote.Key as IId)!.Id}'");
-                foreach (var n in domainEntityIdNote.Value)
+                Output.WriteLine($"Domain Entity Id - Type: '{domainEntityNote.Key.GetType().GetGenericArguments().First().Name}', Id: '{(domainEntityNote.Key as IId)!.Id}'");
+                foreach (var n in domainEntityNote.Value)
                 {
                     Output.WriteLine($"\tNote - Text: '{n.Text}', Id: '{n.NoteId!.Id}'");
                     foreach (var l in n.Labels)
@@ -190,8 +193,26 @@ public class CreateNotesCommandHandlerTests : TestBase
                         Output.WriteLine($"\t\tLabel - Text: '{l.Text}', Id: '{l.LabelId!.Id}'");
                     }
                 }
+            }
+
+            Output.WriteLine("");
+            Output.WriteLine("GetAllDomainEntityIdNoteIds");
+
+            var domainEntityIdCount = 0;
+            var domainEntityNoteIds = await Note.GetDomainEntityNoteIds(Mediator!, null);
+            foreach (var domainEntityNoteId in domainEntityNoteIds)
+            {
+                Output.WriteLine($"Domain Entity Id - Type: '{domainEntityNoteId.Key.GetType().GetGenericArguments().First().Name}', Id: '{(domainEntityNoteId.Key as IId)!.Id}'");
+                foreach (var n in domainEntityNoteId.Value)
+                {
+                    Output.WriteLine($"\tNote - Id: '{n.Id}'");
+                }
                 domainEntityIdCount++;
             }
+
+            var filteredDomainEntityNoteIds = await Note.GetDomainEntityNoteIds(
+                Mediator!,
+                new List<IId>() { targetTokenizedTextCorpus.TokenizedTextCorpusId, sourceTokens[4].TokenId });
 
             ProjectDbContext.ChangeTracker.Clear();
 
@@ -215,7 +236,13 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Equal(2, ProjectDbContext.Notes.Count());
             Assert.Equal(2, allNotes.Count());
 
-            Assert.Equal(5, domainEntityIdCount);
+            Assert.Equal(5, domainEntityNoteIds.Count);
+            Assert.Equal(2, filteredDomainEntityNoteIds.Count);
+            Assert.Contains(targetTokenizedTextCorpus.TokenizedTextCorpusId.Id, filteredDomainEntityNoteIds.Keys.Select(i => i.Id));
+            Assert.Contains(sourceTokens[4].TokenId.Id, filteredDomainEntityNoteIds.Keys.Select(i => i.Id));
+            var distinctFilteredNoteIds = filteredDomainEntityNoteIds.SelectMany(kvp => kvp.Value.Select(noteId => noteId.Id)).Distinct();
+            Assert.Single(distinctFilteredNoteIds);
+            Assert.Equal(note.NoteId!.Id, distinctFilteredNoteIds.First());
             Assert.Equal(4, ProjectDbContext.LabelNoteAssociations.Count());
             Assert.Equal(6, ProjectDbContext.NoteDomainEntityAssociations.Count());
 
@@ -323,10 +350,13 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.True(leadingNote.NoteId!.IdEquals(replyNote1.ThreadId));
             Assert.True(leadingNote.NoteId!.IdEquals(replyNote4.ThreadId));
 
-            var allNotesInThread1 = await Note.GetNotesInThread(new EntityId<NoteId>() { Id = leadingNote.NoteId!.Id }, Mediator!);
+            var allNotesInThread1 = await Note.GetNotesInThread(Mediator!, new EntityId<NoteId>() { Id = leadingNote.NoteId!.Id });
             Assert.Equal(5, allNotesInThread1.Count());
 
-            var allNotesInThread2 = await Note.GetNotesInThread(new EntityId<NoteId>() { Id = replyNote3.ThreadId!.Id }, Mediator!);
+            var replyNotes1 = await leadingNote.GetReplyNotes(Mediator!);
+            Assert.Equal(4, replyNotes1.Count());
+
+            var allNotesInThread2 = await Note.GetNotesInThread(Mediator!, new EntityId<NoteId>() { Id = replyNote3.ThreadId!.Id });
             Assert.Equal(5, allNotesInThread2.Count());
 
             var position = 0;
@@ -339,9 +369,19 @@ public class CreateNotesCommandHandlerTests : TestBase
                 position++;
             }
 
+            position = 0;
+            Output.WriteLine("Leading note replies:");
+            foreach (var n in replyNotes1)
+            {
+                Assert.Equal($"reply note {position + 1}", n.Text);
+                Output.WriteLine($"\t{n.Text}");
+
+                position++;
+            }
+
             await replyNote1.Delete(Mediator!);
 
-            var allNotesInThread3 = await Note.GetNotesInThread(new EntityId<NoteId>() { Id = leadingNote.NoteId!.Id }, Mediator!);
+            var allNotesInThread3 = await Note.GetNotesInThread(Mediator!, new EntityId<NoteId>() { Id = leadingNote.NoteId!.Id });
             Assert.Equal(4, allNotesInThread3.Count());
 
             position = 0;
@@ -354,8 +394,22 @@ public class CreateNotesCommandHandlerTests : TestBase
                 position++;
             }
 
+            var replyNotes2 = await leadingNote.GetReplyNotes(Mediator!);
+            Assert.Equal(3, replyNotes2.Count());
+
+            position = 0;
+            Output.WriteLine("Leading note replies (after deleting '1'):");
+            foreach (var n in replyNotes2)
+            {
+                Assert.Equal($"reply note {position+2}", n.Text);
+                Output.WriteLine($"\t{n.Text}");
+
+                position++;
+            }
+
+
             Output.WriteLine($"\nOutput IId + Notes (hierarchical - Leading Notes containing reply Notes):");
-            var entityNotesAndThreads = await Note.GetAllDomainEntityIdNotesThreads(Mediator!);
+            var entityNotesAndThreads = await Note.GetDomainEntityNotesThreads(Mediator!, null);
             foreach (var kvp in entityNotesAndThreads)
             {
                 Output.WriteLine($"\tIId (TokenId): {kvp.Key.Id}");
@@ -384,7 +438,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Contains(standaloneNote2.NoteId, entityNotesAndThreads[sourceTokens![2].TokenId].Select(n => n.Key.NoteId));
 
             Output.WriteLine($"\nOutput IId + Notes (flattened - Leading Notes and reply Notes listed together):");
-            var entityNotes = await Note.GetAllDomainEntityIdNotes(Mediator!);
+            var entityNotes = await Note.GetDomainEntityNotesThreadsFlattened(Mediator!, null);
             foreach (var kvp in entityNotes)
             {
                 Output.WriteLine($"\tIId (TokenId): {kvp.Key.Id}");
@@ -412,6 +466,93 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Contains(leadingNote.NoteId, noteIdsInEntityNotes);
             Assert.DoesNotContain(leadingNote2.NoteId, noteIdsInEntityNotes);
             Assert.DoesNotContain(replyNote21.NoteId, noteIdsInEntityNotes);
+
+
+            Output.WriteLine($"\nFiltered Output IId + Notes (flattened - Leading Notes and reply Notes listed together):");
+            var filteredEntityNotes = await Note.GetDomainEntityNotesThreadsFlattened(
+                Mediator!, 
+                new List<IId>() { sourceTokens![1].TokenId });
+            foreach (var kvp in filteredEntityNotes)
+            {
+                Output.WriteLine($"\tIId (TokenId): {kvp.Key.Id}");
+                foreach (var kvp2 in kvp.Value)
+                {
+                    Output.WriteLine($"\t\tNote name: {kvp2.Text}");
+                }
+            }
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__GetDomainEntityContexts()
+    {
+        try
+        {
+            var sourceCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource", Guid.NewGuid().ToString());
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpus.CorpusId, "test", "tokenization");
+            var targetCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 1.1",
+                "grc",
+                "Resource", Guid.NewGuid().ToString());
+            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleGreekCorpus()
+                .Create(Mediator!, targetCorpus.CorpusId, "test", "tokenization");
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
+            var translationCommandable = new TranslationCommands();
+            using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
+                SmtModelType.FastAlign,
+                parallelTextCorpus,
+                null,
+                SymmetrizationHeuristic.GrowDiagFinalAnd);
+            var alignmentModel = translationCommandable.PredictAllAlignedTokenIdPairs(smtWordAlignmentModel, parallelTextCorpus).ToList();
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+            var n = await new Note() { Text = "everything note!" }.CreateOrUpdate(Mediator!);
+
+            await n.AssociateDomainEntity(Mediator!, sourceCorpus.CorpusId);
+            await n.AssociateDomainEntity(Mediator!, sourceTokenizedTextCorpus.TokenizedTextCorpusId);
+            await n.AssociateDomainEntity(Mediator!, targetTokenizedTextCorpus.TokenizedTextCorpusId);
+            await n.AssociateDomainEntity(Mediator!, parallelCorpus.ParallelCorpusId);
+            await n.AssociateDomainEntity(Mediator!, alignmentSet.AlignmentSetId);
+            await n.AssociateDomainEntity(Mediator!, translationSet.TranslationSetId);
+
+            var alignments = ProjectDbContext!.Alignments.Include(a => a.SourceTokenComponent).Where(a => a.AlignmentSetId == alignmentSet.AlignmentSetId.Id).Take(3);
+            foreach (var a in alignments)
+            {
+                await n.AssociateDomainEntity(Mediator!, new AlignmentId(a.Id, "boo", "boo", ModelHelper.BuildTokenId(a.SourceTokenComponent!)));
+            }
+
+            var domainEntityContexts = await n.GetDomainEntityContexts(Mediator!);
+            foreach (var kvp in domainEntityContexts)
+            {
+                Output.WriteLine("");
+                Output.WriteLine($"EntityId<{kvp.Key.GetType().FindEntityIdGenericType()?.Name}>:  '{kvp.Key.Id}'");
+                foreach (var kvp2 in kvp.Value)
+                {
+                    Output.WriteLine($"\t{kvp2.Key}: '{kvp2.Value}'");
+                }
+            }
+
+            var entityIds = new List<IId>() { translationSet.TranslationSetId, parallelCorpus.ParallelCorpusId };
+            entityIds.Add(new BadId() { Id = Guid.NewGuid() });
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => Note.GetDomainEntityContexts(Mediator!, entityIds));
         }
         finally
         {
@@ -479,7 +620,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             var entityIds = new List<IId>() { translationSet.TranslationSetId, parallelCorpus.ParallelCorpusId };
             entityIds.Add(new BadId() { Id = Guid.NewGuid() });
 
-            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => Note.GetFullDomainEntityIds(entityIds, Mediator!));
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => Note.GetFullDomainEntityIds(Mediator!, entityIds));
         }
         finally
         {

@@ -170,9 +170,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             }
 
             string msg = $"*User:* {ParatextUser} \n*Message:* \n{UserMessage}";
-            
 
-            SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, _logger as ILogger<SlackMessage>);
+            var logger = LifetimeScope.Resolve<ILogger<SlackMessage>>();
+            SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger);
             var bSuccess = await slackMessage.SendFileToSlackAsync();
 
             if (bSuccess == true)

@@ -630,9 +630,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (verses.Count > 0)
             {
+                var logger = LifetimeScope.Resolve<ILogger<VersePopUpViewModel>>();
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
-                    new VersePopUpViewModel(NavigationService, Logger as ILogger<VersePopUpViewModel>, ProjectManager, EventAggregator, Mediator,
+                    new VersePopUpViewModel(NavigationService, logger, ProjectManager, EventAggregator, Mediator,
                         verses[0], LifetimeScope) ,null, null);
             }
         }
