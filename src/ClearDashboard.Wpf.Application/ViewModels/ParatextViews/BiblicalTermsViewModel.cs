@@ -309,8 +309,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 _selectedDomain = value;
                 NotifyOfPropertyChange(() => SelectedDomain);
-
-                ShowThreadInformation("Selected Domain");
+                
                 //refresh the biblicalterms collection so the filter runs
                 if (BiblicalTermsCollectionView is not null)
                 {
@@ -334,7 +333,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 FilterText = "";
                 //SelectedDomain = null;
-                ShowThreadInformation("Selected Biblical Terms");
                 SwitchedBiblicalTermsType();
             }
         }
@@ -414,7 +412,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             get => _biblicalTerms;
             set
             {
-                ShowThreadInformation("Biblical Terms");
                 _biblicalTerms = value;
                 NotifyOfPropertyChange(() => BiblicalTerms);
             }
@@ -565,10 +562,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             RenderingFilter = drv;
 
             // setup the collectionview that binds to the data grid
-            ShowThreadInformation("OnViewReady");
             OnUIThread(() =>
             {
-                ShowThreadInformation("ONUITHREAD OnViewReady");
                 BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
 
                 // setup the method that we go to for filtering
