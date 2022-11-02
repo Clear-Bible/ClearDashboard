@@ -50,6 +50,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Set(ref _parallelCorpusDisplayName, value);
                 ValidationResult = Validator.Validate(this);
                 CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+
+                ParentViewModel.CurrentProject = value;
             }
         }
 
@@ -57,7 +59,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         {
             ParentViewModel.CurrentStepTitle =
                 LocalizationStrings.Get("ParallelCorpusDialog_AddParallelRelationship", Logger);
-
+            
             ParallelCorpusDisplayName =
                 $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name}";
             return base.OnActivateAsync(cancellationToken);

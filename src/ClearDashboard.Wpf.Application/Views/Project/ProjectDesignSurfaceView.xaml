@@ -428,6 +428,9 @@
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Resource}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceProject}" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Daughter}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceDaughter}" />
+                                        </DataTrigger>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
                                         </DataTrigger>

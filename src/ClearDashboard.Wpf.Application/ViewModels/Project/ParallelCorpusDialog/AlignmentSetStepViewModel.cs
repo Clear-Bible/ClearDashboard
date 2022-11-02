@@ -74,6 +74,12 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
     {
         ParentViewModel.CurrentStepTitle =
             LocalizationStrings.Get("ParallelCorpusDialog_AddAlignmentSet", Logger);
+
+        var alignment = LocalizationStrings.Get("AddParatextCorpusDialog_Alignment", Logger); 
+
+        AlignmentSetDisplayName =
+            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} -> {ParentViewModel.TargetCorpusNodeViewModel.Name} {alignment}";
+
         return base.OnActivateAsync(cancellationToken);
     }
 
