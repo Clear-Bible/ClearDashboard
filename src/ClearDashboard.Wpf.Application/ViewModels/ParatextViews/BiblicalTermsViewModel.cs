@@ -401,9 +401,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        public ICollectionView BiblicalTermsCollectionView 
-        { get; 
-            set; }
+        public ICollectionView BiblicalTermsCollectionView { get; set; }
 
 
         private ObservableCollection<BiblicalTermsData> _biblicalTerms = new();
@@ -658,17 +656,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             if (_lastSelectedBtEnum != _selectedBiblicalTermsType)
             {
                 
-                try
-                {
+                //try
+                //{
                     OnUIThread(() =>
                     {
                         BiblicalTerms.Clear();
                     });
-                }
-                catch (Exception ex)
-                {
+                //}
+                //catch (Exception ex)
+                //{
 
-                }
+                //}
                 await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
 
                 if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
@@ -1081,10 +1079,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
 
-                OnUIThread(() =>
-                {
-                    _biblicalTerms.Clear();
-                });
+                OnUIThread(() => { _biblicalTerms.Clear(); });
 
                 // deserialize the list
                 var biblicalTermsList = new List<BiblicalTermsData>();
