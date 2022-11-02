@@ -29,8 +29,10 @@ using Autofac;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using System.Collections.Specialized;
 using System.Reflection.Metadata;
+using System.Windows.Threading;
 using Action = System.Action;
 using SIL.Machine.Matching;
+using System.Windows.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -307,7 +309,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 _selectedDomain = value;
                 NotifyOfPropertyChange(() => SelectedDomain);
-
+                
                 //refresh the biblicalterms collection so the filter runs
                 if (BiblicalTermsCollectionView is not null)
                 {
@@ -328,9 +330,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => SelectedBiblicalTermsType);
 
                 // reset the semantic domains & filter
-                FilterText = "";//
-                SelectedDomain = null;//
 
+                FilterText = "";
+                //SelectedDomain = null;
                 SwitchedBiblicalTermsType();
             }
         }
@@ -558,10 +560,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             RenderingFilter = drv;
 
             // setup the collectionview that binds to the data grid
-            BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
+            OnUIThread(() =>
+            {
+                BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
 
-            // setup the method that we go to for filtering
-            BiblicalTermsCollectionView.Filter = FilterGridItems;
+                // setup the method that we go to for filtering
+                BiblicalTermsCollectionView.Filter = FilterGridItems;
+            });
+            
 
             NotifyOfPropertyChange(() => BiblicalTermsCollectionView);
 
@@ -641,8 +647,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-
-
         /// <summary>
         /// User has switched the toggle for All/Project Biblical Terms
         /// </summary>
@@ -651,15 +655,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_lastSelectedBtEnum != _selectedBiblicalTermsType)
             {
+                
                 //try
                 //{
-                //    App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
-                //    {
-                BiblicalTerms.Clear();
-                    //});
-                    //var uiContext = SynchronizationContext.Current;
-                    //uiContext.Send(x => BiblicalTerms.Clear(), null);
-
+                    OnUIThread(() =>
+                    {
+                        BiblicalTerms.Clear();
+                    });
                 //}
                 //catch (Exception ex)
                 //{
@@ -1059,7 +1061,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project)
         {
             _getBiblicalTermsRunning = true;
+          
             var cancellationToken = _cancellationTokenSource.Token;
+                
+
 
             // send to the task started event aggregator for everyone else to hear about a background task starting
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -1119,11 +1124,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 cancellationToken.ThrowIfCancellationRequested();
                             }
                         }
-
                         NotifyOfPropertyChange(() => BiblicalTerms);
                     }
                 });
-
             }
             //catch (Exception ex)
             //{
@@ -1133,7 +1136,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);
                 _getBiblicalTermsRunning = false;
-                _cancellationTokenSource.Dispose();
+                //_cancellationTokenSource.Dispose(); Need to disable control while loading things
             }
         }
 
