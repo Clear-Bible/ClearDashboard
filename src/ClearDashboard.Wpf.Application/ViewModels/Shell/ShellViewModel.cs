@@ -89,8 +89,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             set
             {
                 Set(ref _windowSettings, value);
-                EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings));
+                
             }
+        }
+
+        public async Task SetWindowsSettings(WindowSettings windowSettings)
+        {
+            WindowSettings = windowSettings;
+            await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings));
         }
 
         private Visibility _showSpinner = Visibility.Collapsed;

@@ -27,6 +27,7 @@ public interface IParallelCorpusDialogViewModel
     IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
     AlignmentSet AlignmentSet { get; set; }
     string? CurrentStepTitle { get; set; }
+    string? CurrentProject { get; set; }
     CancellationTokenSource CreateCancellationTokenSource();
     Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
     Task<LongRunningTaskStatus> TrainSmtModel();

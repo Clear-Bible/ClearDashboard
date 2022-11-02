@@ -985,7 +985,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             LaunchMirrorView<PinsView>.Show(this, actualWidth, actualHeight);
         }
-      
+
+        public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
+        {
+            FilterString = message.Message;
+        }
+
         #endregion // Methods
     }
 

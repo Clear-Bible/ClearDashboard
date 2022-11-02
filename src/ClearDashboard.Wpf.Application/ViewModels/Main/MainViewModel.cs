@@ -888,13 +888,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 try
                 {
-                    Rectangle bounds = new Rectangle(_windowSettings.Left, _windowSettings.Top, _windowSettings.Width,
-                        _windowSettings.Height);
-                    using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+                    var bounds = new Rectangle((int)_windowSettings.Left, (int)_windowSettings.Top, (int)_windowSettings.Width,
+                        (int)_windowSettings.Height);
+                    using (var bitmap = new Bitmap(bounds.Width, bounds.Height))
                     {
-                        using (Graphics g = Graphics.FromImage(bitmap))
+                        using (var graphics = Graphics.FromImage(bitmap))
                         {
-                            g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                            graphics.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
                         }
 
 
