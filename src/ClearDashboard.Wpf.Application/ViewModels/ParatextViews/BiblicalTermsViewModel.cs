@@ -328,8 +328,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => SelectedBiblicalTermsType);
 
                 // reset the semantic domains & filter
-                //FilterText = "";
-                //SelectedDomain = null;
+                FilterText = "";//
+                SelectedDomain = null;//
 
                 SwitchedBiblicalTermsType();
             }
@@ -399,9 +399,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        public ICollectionView BiblicalTermsCollectionView 
-        { get; 
-            set; }
+        public ICollectionView BiblicalTermsCollectionView { get; set; }
 
 
         private ObservableCollection<BiblicalTermsData> _biblicalTerms = new();
@@ -653,29 +651,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_lastSelectedBtEnum != _selectedBiblicalTermsType)
             {
-                try
-                {
-                    //App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
-                    //{
-                    //    BiblicalTerms.Clear();
+                //try
+                //{
+                //    App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+                //    {
+                BiblicalTerms.Clear();
                     //});
-                    var uiContext = SynchronizationContext.Current;
-                    uiContext.Send(x => BiblicalTerms.Clear(), null);
+                    //var uiContext = SynchronizationContext.Current;
+                    //uiContext.Send(x => BiblicalTerms.Clear(), null);
 
-                }
-                catch (Exception ex)
-                {
+                //}
+                //catch (Exception ex)
+                //{
 
-                }
+                //}
                 await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
 
                 if (_selectedBiblicalTermsType == SelectedBtEnum.OptionProject)
                 {
-                    await GetBiblicalTerms(BiblicalTermsType.Project); //.ConfigureAwait(false);
+                    await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);//
                 }
                 else
                 {
-                    await GetBiblicalTerms(BiblicalTermsType.All);//.ConfigureAwait(false);
+                    await GetBiblicalTerms(BiblicalTermsType.All).ConfigureAwait(false);//
 
                 }
 
@@ -1061,7 +1059,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project)
         {
             _getBiblicalTermsRunning = true;
-            //var cancellationToken = _cancellationTokenSource.Token;
+            var cancellationToken = _cancellationTokenSource.Token;
 
             // send to the task started event aggregator for everyone else to hear about a background task starting
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
@@ -1076,21 +1074,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 await SetProgressBarVisibilityAsync(Visibility.Visible).ConfigureAwait(false);
 
-                //OnUIThread(() => {  });
-                //_biblicalTerms.Clear();
+                OnUIThread(() => { _biblicalTerms.Clear(); });
 
                 // deserialize the list
                 var biblicalTermsList = new List<BiblicalTermsData>();
                 try
                 {
-                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), CancellationToken.None)
+                    var result = await ExecuteRequest(new GetBiblicalTermsByTypeQuery(type), cancellationToken)
                         .ConfigureAwait(false);
                     if (result.Success)
                     {
                         biblicalTermsList = result.Data;
 
-                        await EventAggregator.PublishOnUIThreadAsync(
-                            new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"));
+                        await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"));
 
                         // send to the task started event aggregator for everyone else to hear about a background task starting
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -1120,7 +1116,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             foreach (var rendering in biblicalTermsList[i].Renderings)
                             {
                                 _biblicalTerms[i].RenderingString += rendering + " ";
-                                //cancellationToken.ThrowIfCancellationRequested();
+                                cancellationToken.ThrowIfCancellationRequested();
                             }
                         }
 
@@ -1129,10 +1125,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 });
 
             }
-            catch (Exception ex)
-            {
+            //catch (Exception ex)
+            //{
 
-            }
+            //}
             finally
             {
                 await SetProgressBarVisibilityAsync(Visibility.Hidden).ConfigureAwait(false);

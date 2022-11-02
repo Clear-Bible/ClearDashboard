@@ -256,7 +256,6 @@
             ScrollViewer.CanContentScroll="True"
             ScrollViewer.HorizontalScrollBarVisibility="Visible"
             ScrollViewer.VerticalScrollBarVisibility="Auto"
-            SelectedCellsChanged="GridVerses_OnSelectedCellsChanged"
             SelectedItem="{Binding SelectedBiblicalTermsData}"
             SelectionMode="Single"
             SelectionUnit="FullRow"
