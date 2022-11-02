@@ -36,6 +36,12 @@ using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using DockingManager = AvalonDock.DockingManager;
 using System.Dynamic;
 using ClearApplicationFoundation.LogHelpers;
+using System.Drawing.Imaging;
+using System.Drawing;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using Point = System.Drawing.Point;
+using System.Windows.Shell;
+using System.IO.Compression;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -48,7 +54,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<UiLanguageChangedMessage>,
                 IHandle<ActiveDocumentMessage>,
                 IHandle<ShowParallelTranslationWindowMessage>,
-                IHandle<CloseDockingPane>
+                IHandle<CloseDockingPane>,
+                IHandle<ApplicationWindowSettings>
     {
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
@@ -65,6 +72,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
+
+        private WindowSettings _windowSettings;
+
 
         #endregion //Member Variables
 
@@ -492,7 +502,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-
+            
             base.OnViewLoaded(view);
         }
 
@@ -635,6 +645,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return;
             }
 
+            Stopwatch sw = new();
+            sw.Start();
 
             var json = ProjectManager.CurrentProject.WindowTabLayout;
 
@@ -741,6 +753,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await Task.Delay(1000);
                 }
             }
+
+            sw.Stop();
+            Logger.LogInformation($"LoadDocuments - Total Load Time {deserialized.Count} documents in {sw.ElapsedMilliseconds} ms");
         }
 
         private async void Init()
@@ -817,38 +832,119 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Methods
 
-        private void GatherLogs()
+        private async void GatherLogs()
         {
-            return;
+            // get the application window size from shellviewmodel
+            await EventAggregator.PublishOnUIThreadAsync(new GetApplicationWindowSettings());
+            
+            var destinationParatextLogPath = Path.Combine(Path.GetTempPath(), "paratext.log");
+            var destinationDashboardLogPath = Path.Combine(Path.GetTempPath(), "dashboard.log");
+
+            var destinationScreenShotPath = Path.Combine(Path.GetTempPath(), "screenshot.jpg");
+            if (File.Exists(destinationScreenShotPath))
+            {
+                File.Delete(destinationScreenShotPath);
+            }
 
 
-            LogReporting logReporting = new LogReporting();
-
-            // get the paratext log file
+            // get the paratext log file path
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Paratext93", "ParatextLog.log");
 
             if (File.Exists(path))
             {
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                // the file is probably locked by Paratext so we can't read it so make a copy of it
+                try
                 {
-                    using (StreamReader sr = new StreamReader(fs))
-                    {
-                        var logData = sr.ReadToEnd();
-                    }
+                    var sourceFile = new FileInfo(path);
+                    sourceFile.CopyTo(destinationParatextLogPath, true);
                 }
-
-
-
-                var log = File.ReadAllText(path);
-                if (log != "")
+                catch (Exception e)
                 {
-                    logReporting.ParatextLog = log;
+                    Logger.LogError(e.Message);
+                    destinationParatextLogPath = "";
                 }
             }
 
             // get the Dashboard log file
             var dashboardLogPath = IoC.Get<CaptureFilePathHook>();
 
+            if (File.Exists(dashboardLogPath.Path))
+            {
+                try
+                {
+                    var sourceLogFile = new FileInfo(dashboardLogPath.Path);
+                    sourceLogFile.CopyTo(destinationDashboardLogPath, true);
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e.Message);
+                    destinationDashboardLogPath = "";
+                }
+            }
+            
+            // get a screenshot of the application
+            if (_windowSettings is not null)
+            {
+                try
+                {
+                    Rectangle bounds = new Rectangle(_windowSettings.Left, _windowSettings.Top, _windowSettings.Width,
+                        _windowSettings.Height);
+                    using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+                    {
+                        using (Graphics g = Graphics.FromImage(bitmap))
+                        {
+                            g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                        }
+
+
+                        bitmap.Save(destinationScreenShotPath, ImageFormat.Jpeg);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.LogError(e.Message);
+                    destinationScreenShotPath = "";
+                }
+            }
+
+            
+            List<string> files = new();
+            if (destinationParatextLogPath != "")
+            {
+                files.Add(destinationParatextLogPath);
+            }
+
+            if (destinationDashboardLogPath != "")
+            {
+                files.Add(destinationDashboardLogPath);
+            }
+
+            if (destinationScreenShotPath != "")
+            {
+                files.Add(destinationScreenShotPath);
+            }
+
+            // open the message window
+            ShowSlackMessageWindow(files);
+        }
+
+        private void ShowSlackMessageWindow(List<string> files)
+        {
+            var localizedString = LocalizationStrings.Get("SlackMessageView_Title", Logger);
+
+            dynamic settings = new ExpandoObject();
+            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            settings.ResizeMode = ResizeMode.NoResize;
+            settings.MinWidth = 500;
+            settings.MinHeight = 500;
+            settings.Title = $"{localizedString}";
+
+            var viewModel = IoC.Get<SlackMessageViewModel>();
+            viewModel.Files = files;
+            viewModel.ParatextUser = ProjectManager.ParatextUserName;
+
+            IWindowManager manager = new WindowManager();
+            manager.ShowDialogAsync(viewModel, null, settings);
         }
 
         private void ShowAboutWindow()
@@ -1868,6 +1964,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
+            return Task.CompletedTask;
+        }
+
+        // capture the window settings for if we do a screenshot
+        public Task HandleAsync(ApplicationWindowSettings message, CancellationToken cancellationToken)
+        {
+            _windowSettings = message.WindowSettings;
             return Task.CompletedTask;
         }
     }

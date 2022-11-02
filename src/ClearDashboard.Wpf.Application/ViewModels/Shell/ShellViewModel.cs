@@ -30,11 +30,15 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ClearDashboard.DataAccessLayer.Models.Common;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
-    public class ShellViewModel : DashboardApplicationScreen, IShellViewModel, IHandle<ParatextConnectedMessage>, IHandle<UserMessage>,
-       IHandle<BackgroundTaskChangedMessage>
+    public class ShellViewModel : DashboardApplicationScreen, IShellViewModel, 
+        IHandle<ParatextConnectedMessage>, 
+        IHandle<UserMessage>, 
+        IHandle<BackgroundTaskChangedMessage>, 
+        IHandle<GetApplicationWindowSettings>
     {
         private readonly TranslationSource? _translationSource;
         private readonly INavigationService _navigationService;
@@ -97,6 +101,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #endregion
 
         #region ObservableProps
+
+        private WindowSettings _windowSettings;
+        public WindowSettings WindowSettings
+        {
+            get => _windowSettings;
+            set
+            {
+                _windowSettings = value;
+                NotifyOfPropertyChange(() => WindowSettings);
+
+                EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings));
+            }
+        }
+
+
 
         private Visibility _showSpinner = Visibility.Collapsed;
         public Visibility ShowSpinner
@@ -417,8 +436,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             //string jsonString = JsonSerializer.Serialize(updateJson, options);
             //File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
 
-            var bInterent = await CheckForInternetConnection();
-
+            var bInterent = await NetworkHelper.IsConnectedToInternet();           // check internet connection
             if (!bInterent)
             {
                 return;
@@ -517,21 +535,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 return true;
             }
             return false;
-        }
-
-        public async Task<bool> CheckForInternetConnection()
-        {
-            try
-            {
-                WebClient webClient = new WebClient();
-
-                Stream stream = await webClient.OpenReadTaskAsync(new Uri("http://google.com/generate_204", UriKind.Absolute));
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
         }
 
         public void ClickUpdateLink()
@@ -795,5 +798,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         #endregion
+
+        public async Task HandleAsync(GetApplicationWindowSettings message, CancellationToken cancellationToken)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings));
+        }
     }
 }

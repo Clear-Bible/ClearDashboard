@@ -132,7 +132,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _dt.Columns.Add("Highlight", typeof(bool));
             _dt.Columns.Add("Verse", typeof(string));
             _dt.Columns.Add(project.TargetProject.Name, typeof(string));
-            var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, project.TargetProject, _verse.Entity);
+            var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(project.TargetProject, _verse.Entity);
 
             foreach (var verse in verses)
             {
@@ -162,7 +162,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             // add each back translation to grid
             foreach (var btProject in project.BackTranslationProjects)
             {
-                verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(Logger, btProject, _verse.Entity);
+                verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(btProject, _verse.Entity);
                 if (verses.Count > 0)
                 {
                     _dt.Columns.Add(btProject.Name);

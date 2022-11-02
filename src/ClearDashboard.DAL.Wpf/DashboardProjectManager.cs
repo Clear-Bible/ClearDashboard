@@ -2,11 +2,13 @@ using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
+using Microsoft.Xaml.Behaviors.Layout;
 using SIL.Machine.Tokenization;
 using System;
 using System.Collections.Generic;
@@ -20,6 +22,10 @@ using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
+
+
+public record GetApplicationWindowSettings();
+public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
 public record ShowTokenizationWindowMessage(
     string ParatextProjectId, 
@@ -95,6 +101,7 @@ public class DashboardProjectManager : ProjectManager
     private readonly INavigationService _navigationService;
 
     private bool _licenseCleared = false;
+    public static bool InComingChangesStarted { get; set; }
 
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
@@ -192,16 +199,30 @@ public class DashboardProjectManager : ProjectManager
     protected override async Task PublishParatextUser(User user)
     {
         await EventAggregator.PublishOnUIThreadAsync(new UserMessage(user));
+        this.ParatextUserName = user.ParatextUserName;
     }
 
     protected async Task HookSignalREvents()
     {
+        List<string> requestedVerses= new();
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
 
         {
-            CurrentVerse = verse;
-            await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
+            requestedVerses.Add(verse);
+            if (!InComingChangesStarted)
+            {
+                InComingChangesStarted = true;
+                CurrentVerse = verse;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
+                InComingChangesStarted = false;
+
+                if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))
+                {
+                    CurrentVerse = requestedVerses.Last();
+                    await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentVerse));
+                }
+            }
         });
 
         HubProxy.On<ParatextProject>("sendProject", async (project) =>
@@ -227,7 +248,8 @@ public class DashboardProjectManager : ProjectManager
     {
         string guid = project.Guid;
 
-        ParatextProxy paratextProxy = new ParatextProxy(Logger as ILogger<ParatextProxy>);
+        var logger = LifetimeScope.Resolve<ILogger<ParatextProxy>>();
+        ParatextProxy paratextProxy = new ParatextProxy(logger);
         if (paratextProxy.IsParatextInstalled())
         {
             var path = paratextProxy.ParatextProjectPath;

@@ -556,6 +556,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 _ = ReloadWordMeanings();
             }
+            
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)

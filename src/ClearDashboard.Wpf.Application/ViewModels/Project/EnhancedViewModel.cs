@@ -3,7 +3,6 @@ using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
-using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
@@ -36,7 +35,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
-using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
@@ -72,7 +70,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private string? _message;
         private BookInfo? _currentBook;
 
-        public static bool InComingChangesStarted { get; set; }
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
@@ -201,11 +198,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else if (_verseChange != value)
                 {
+                    ProjectManager.CurrentVerse = value;
                     // push to Paratext
-                    if (ParatextSync && !InComingChangesStarted)
+                    if (ParatextSync && !DashboardProjectManager.InComingChangesStarted)
                     {
-                        _ = Task.Run(() =>
-                            ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
+                        Task.Run( () => 
+                        ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None)
+                        );
                     }
 
                     _verseChange = value;
@@ -398,6 +397,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private async Task VerseChangeRerender()
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
             for (var i = 0; i < _tokenProjects.Count; i++)
             {
                 ProgressBarVisibility = Visibility.Visible;
@@ -415,6 +417,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await ShowParallelTranslation(_parallelMessages[i], _cancellationTokenSource.Token,
                     _cancellationTokenSource.Token);
             }
+
+            sw.Stop();
+            _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
 
         private void MoveCorpusUp(object obj)
@@ -1212,13 +1217,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
-                
-                if (InComingChangesStarted)
-                {
-                    CurrentBcv.SetVerseFromId(message.Verse);
-                }
+                CurrentBcv.SetVerseFromId(message.Verse);
             }
-
         }
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
@@ -1228,13 +1228,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
 
-                InComingChangesStarted = true;
+                DashboardProjectManager.InComingChangesStarted = true;
 
                 // set the CurrentBcv prior to listening to the event
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
                 NotifyOfPropertyChange(() => CurrentBcv);
-                InComingChangesStarted = false;
+                DashboardProjectManager.InComingChangesStarted = false;
             }
             else
             {

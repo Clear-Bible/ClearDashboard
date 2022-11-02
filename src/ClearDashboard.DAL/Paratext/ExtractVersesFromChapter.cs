@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ClearDashboard.DataAccessLayer.Models;
+using Autofac.Core.Lifetime;
+using Caliburn.Micro;
 
 namespace ClearDashboard.DataAccessLayer.Paratext
 {
@@ -19,16 +21,17 @@ namespace ClearDashboard.DataAccessLayer.Paratext
         /// <param name="verse">the verse from which we want to extract the chapter</param>
         /// <param name="paratextProject"></param>
         /// <returns></returns>
-        public static List<string> ParseUSFM(ILogger logger, ParatextProject project, Verse verse)
+        public static List<string> ParseUSFM(ParatextProject project, Verse verse)
         {
-            ParatextProxy paratextUtils = new ParatextProxy(logger as ILogger<ParatextProxy>);
+            var logger = IoC.Get<ILogger<ParatextProxy>>();
+            ParatextProxy paratextUtils = new ParatextProxy(logger);
             string projectPath = "";
             if (paratextUtils.IsParatextInstalled())
             {
                 projectPath = paratextUtils.ParatextProjectPath;
             }
 
-            var stylesheetPath = GetStyleSheetPath(logger, project);
+            var stylesheetPath = GetStyleSheetPath(project);
             string usfmBookPath = GetUsfmBookPath(project, verse, projectPath);
 
             if (usfmBookPath == String.Empty || stylesheetPath == String.Empty)
@@ -132,11 +135,12 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return lines;
         }
 
-        private static string GetStyleSheetPath(ILogger logger, ParatextProject project)
+        private static string GetStyleSheetPath(ParatextProject project)
         {
             // get the standard Paratext one
             string stylesheetPath = "";
-            ParatextProxy paratextUtils = new ParatextProxy(logger as ILogger<ParatextProxy>);
+            var logger = IoC.Get<ILogger<ParatextProxy>>();
+            ParatextProxy paratextUtils = new ParatextProxy(logger);
             if (paratextUtils.IsParatextInstalled())
             {
                 var projectPath = paratextUtils.ParatextProjectPath;

@@ -26,6 +26,7 @@ using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
+using ControlzEx.Standard;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -51,7 +52,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
                 Detokenizer = corpus.Detokenizer;
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved parallel corpus {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Retrieved parallel corpus {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms ({stopwatch.Elapsed.Seconds} seconds)");
                 return corpus;
             }
             catch (Exception e)
@@ -71,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var verse = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), 0, 0);
                 var row = verse.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved parallel corpus verse {bbbcccvvv} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Retrieved parallel corpus verse {bbbcccvvv} in {stopwatch.ElapsedMilliseconds} ms ({stopwatch.Elapsed.Seconds} seconds)");
                 return row;
             }
             catch (Exception e)
@@ -90,7 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var translationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!);
                 var translationSet = await TranslationSet.Get(translationSetIds.First().translationSetId, Mediator!);
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved first translation set {translationSet.TranslationSetId.Id} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Retrieved first translation set {translationSet.TranslationSetId.Id} in {stopwatch.ElapsedMilliseconds} ms ({stopwatch.Elapsed.Seconds} seconds)");
                 return translationSet;
             }
             catch (Exception e)
