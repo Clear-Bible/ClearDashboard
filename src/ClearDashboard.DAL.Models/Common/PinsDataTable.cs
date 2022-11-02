@@ -7,6 +7,7 @@
         public Guid Id { get; set; }
         public string OriginID { get; set; } = string.Empty;
         public string XmlSource { get; set; } = string.Empty;
+        public string XmlPath { get; set; } = string.Empty;
         public string Source { get; set; } = string.Empty;
         public string Lform { get; set; } = string.Empty;
         public string Gloss { get; set; } = string.Empty;

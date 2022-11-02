@@ -34,6 +34,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
@@ -1413,6 +1414,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             //WORKS
             DisplayNote(e.TokenDisplayViewModel);
+        }
+
+        public void FilterPins(object sender, NoteEventArgs e)
+        {
+            //WORKS
+            EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
         #endregion

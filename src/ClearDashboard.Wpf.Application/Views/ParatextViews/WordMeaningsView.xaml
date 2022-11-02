@@ -440,6 +440,9 @@
                                                     </Setter.Value>
                                                 </Setter>
                                             </DataTrigger>
+                                            <DataTrigger Binding="{Binding TotalSenses}" Value="1">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Button.Style>
@@ -620,12 +623,10 @@
                                         Padding="3"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
-                                        Background="Green"
                                         BorderThickness="0"
                                         Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}">
                                         <Button.Style>
                                             <Style TargetType="Button">
-                                                <Setter Property="Background" Value="Red" />
                                                 <Setter Property="Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="Button">
@@ -634,11 +635,10 @@
                                                                 Padding="3"
                                                                 HorizontalAlignment="Left"
                                                                 VerticalAlignment="Top"
-                                                                Background="Blue"
                                                                 BorderThickness="0"
                                                                 Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
                                                                 CommandParameter="{Binding}">
-                                                                <materialDesign:PackIcon Foreground="Pink" Kind="ChevronLeft" />
+                                                                <materialDesign:PackIcon Kind="ChevronLeft" />
                                                             </Button>
                                                         </ControlTemplate>
                                                     </Setter.Value>
@@ -646,7 +646,6 @@
 
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding DataContext.ButtonVisibility, ElementName=LVSenses}" Value="Hidden">
-                                                        <Setter Property="Background" Value="Orange" />
                                                         <Setter Property="Template">
                                                             <Setter.Value>
                                                                 <ControlTemplate TargetType="Button">
@@ -655,12 +654,10 @@
                                                                         Padding="3"
                                                                         HorizontalAlignment="Left"
                                                                         VerticalAlignment="Top"
-                                                                        Background="Purple"
                                                                         BorderThickness="0"
                                                                         Command="{Binding DataContext.LaunchSensesCommand, ElementName=LVSenses}"
-                                                                        CommandParameter="{Binding}"
-                                                                        Foreground="Gray">
-                                                                        <materialDesign:PackIcon Foreground="White" Kind="ChevronRight" />
+                                                                        CommandParameter="{Binding}">
+                                                                        <materialDesign:PackIcon Kind="ChevronRight" />
                                                                     </Button>
                                                                 </ControlTemplate>
                                                             </Setter.Value>

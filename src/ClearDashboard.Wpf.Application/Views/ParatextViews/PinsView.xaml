@@ -177,7 +177,8 @@
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Path='XmlSource'}" />
+                                    Text="{Binding Path='XmlSource'}"
+                                    ToolTip="{Binding Path='XmlPath'}" />
                             </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
