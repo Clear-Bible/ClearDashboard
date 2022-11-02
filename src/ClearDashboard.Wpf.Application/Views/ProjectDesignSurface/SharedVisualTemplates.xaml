@@ -21,6 +21,10 @@
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="PaleGoldenrod" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="nodeFillBrushReferenceDaughter" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="RosyBrown" />
+    </LinearGradientBrush>
     <LinearGradientBrush x:Key="nodeFillBrushReferenceUnknown" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="Silver" />

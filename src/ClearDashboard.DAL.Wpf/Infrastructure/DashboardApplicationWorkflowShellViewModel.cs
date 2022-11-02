@@ -13,6 +13,7 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
     public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel, IDialog
     {
         private string? _currentStepTitle;
+        private string? _currentProject;
         private DialogMode _dialogMode;
 
         public DashboardApplicationWorkflowShellViewModel()
@@ -45,6 +46,16 @@ namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
             {
                 Set(ref _currentStepTitle, value);
                 Title = $"{DisplayName} - {_currentStepTitle}";
+            }
+        }
+
+        public string? CurrentProject
+        {
+            get => _currentProject;
+            set
+            {
+                Set(ref _currentProject, value);
+                Title = $"{DisplayName} - {_currentProject}";
             }
         }
 

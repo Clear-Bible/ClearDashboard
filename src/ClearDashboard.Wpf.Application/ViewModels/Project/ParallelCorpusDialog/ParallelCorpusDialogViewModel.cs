@@ -50,6 +50,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
         AlignmentSet AlignmentSet { get; set; }
         string? CurrentStepTitle { get; set; }
+        string? CurrentProject { get; set; }
         CancellationTokenSource CreateCancellationTokenSource();
         Task<ProcessStatus> AddParallelCorpus(string parallelCorpusDisplayName);
         Task<ProcessStatus> TrainSmtModel();
