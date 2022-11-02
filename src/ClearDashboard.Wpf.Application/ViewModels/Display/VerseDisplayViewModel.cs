@@ -294,13 +294,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return string.Empty;
         }
 
-        private async Task<NoteViewModelCollection> GetNotesForTokenAsync(Token token)
+        private async Task<NoteViewModelCollection> GetNotesForEntityAsync(IId entityId)
         {
 #if MOCK
             return GetMockNotes();
 #else
             var result = new NoteViewModelCollection();
-            var tokenMatch = AllNotes?.FirstOrDefault(kvp => kvp.Key.Id == token.TokenId.Id);
+            var tokenMatch = AllNotes?.FirstOrDefault(kvp => kvp.Key.Id == entityId.Id);
             if (tokenMatch is { Key: { } })
             {
                 var notesList = tokenMatch.Value.Value.OrderBy(n => n.NoteId?.Created).ToList();
@@ -352,7 +352,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     PaddingBefore = !isRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
                     PaddingAfter = !isRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
                     Translation = GetTranslationForToken(paddedToken.token),
-                    Notes = await GetNotesForTokenAsync(paddedToken.token),
+                    Notes = await GetNotesForEntityAsync(paddedToken.token.TokenId),
                     IsSource = isSource
                 });
             }

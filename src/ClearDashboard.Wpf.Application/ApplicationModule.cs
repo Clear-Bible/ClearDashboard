@@ -108,6 +108,8 @@ namespace ClearDashboard.Wpf.Application
                 .Named<CancellationTokenSource>("linked_application_token_source")
                 .InstancePerDependency();
 
+            //builder.RegisterType<NotesManager>().AsSelf().SingleInstance()
+
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
             builder.RegisterValidationDependencies();
