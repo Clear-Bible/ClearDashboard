@@ -134,15 +134,15 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
         private void ApplicationWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            var vm = (ShellViewModel)this.DataContext;
-            WindowSettings windowSettings = new WindowSettings
+            var shellViewModel = (ShellViewModel)this.DataContext;
+            var windowSettings = new WindowSettings
             {
                 Height = (int)this.Height,
                 Width = (int)this.Width,
                 Left = (int)this.Left,
                 Top = (int)this.Top,
             };
-            vm.WindowSettings = windowSettings;
+            shellViewModel.WindowSettings = windowSettings;
         }
     }
 }
