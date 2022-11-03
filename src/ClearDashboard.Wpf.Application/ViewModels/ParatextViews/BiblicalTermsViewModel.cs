@@ -304,7 +304,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 _selectedDomain = value;
                 NotifyOfPropertyChange(() => SelectedDomain);
-
+                
                 //refresh the biblicalterms collection so the filter runs
                 if (BiblicalTermsCollectionView is not null)
                 {
@@ -325,9 +325,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => SelectedBiblicalTermsType);
 
                 // reset the semantic domains & filter
-                FilterText = "";//
-                SelectedDomain = null;//
 
+                FilterText = "";
+                //SelectedDomain = null;
                 SwitchedBiblicalTermsType();
             }
         }
@@ -554,10 +554,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             RenderingFilter = drv;
 
             // setup the collectionview that binds to the data grid
-            BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
+            OnUIThread(() =>
+            {
+                BiblicalTermsCollectionView = CollectionViewSource.GetDefaultView(_biblicalTerms);
 
-            // setup the method that we go to for filtering
-            BiblicalTermsCollectionView.Filter = FilterGridItems;
+                // setup the method that we go to for filtering
+                BiblicalTermsCollectionView.Filter = FilterGridItems;
+            });
+            
 
             NotifyOfPropertyChange(() => BiblicalTermsCollectionView);
 
@@ -638,8 +642,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-
-
         /// <summary>
         /// User has switched the toggle for All/Project Biblical Terms
         /// </summary>
@@ -648,15 +650,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_lastSelectedBtEnum != _selectedBiblicalTermsType)
             {
+                
                 //try
                 //{
-                //    App.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
-                //    {
-                BiblicalTerms.Clear();
-                    //});
-                    //var uiContext = SynchronizationContext.Current;
-                    //uiContext.Send(x => BiblicalTerms.Clear(), null);
-
+                    OnUIThread(() =>
+                    {
+                        BiblicalTerms.Clear();
+                    });
                 //}
                 //catch (Exception ex)
                 //{

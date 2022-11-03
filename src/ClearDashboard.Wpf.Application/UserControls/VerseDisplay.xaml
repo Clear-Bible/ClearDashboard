@@ -15,6 +15,7 @@
                 HorizontalAlignment="Left"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
+                TranslateQuick="OnTranslateQuick"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteCreate="OnNoteCreate"
