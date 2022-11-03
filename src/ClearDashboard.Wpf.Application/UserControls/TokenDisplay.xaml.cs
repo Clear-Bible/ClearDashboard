@@ -318,6 +318,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent FilterPinsEvent = EventManager.RegisterRoutedEvent
             ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
+        /// <summary>
+        /// Identifies the TranslateQuickEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslateQuickEvent = EventManager.RegisterRoutedEvent
+            ("TranslateQuick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
         #endregion Static RoutedEvents
         #region Public Events
         /// <summary>
@@ -563,6 +569,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(FilterPinsEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when the user requests to translate quick.
+        /// </summary>
+        public event RoutedEventHandler TranslateQuick
+        {
+            add => AddHandler(TranslateQuickEvent, value);
+            remove => RemoveHandler(TranslateQuickEvent, value);
+        }
+
         #endregion
         #region Private Event Handlers
         /// <summary>
@@ -762,6 +777,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnFilterPins(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(FilterPinsEvent, e);
+        }
+
+        private void OnTranslateQuick(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(TranslateQuickEvent, e);//Rename RaiseNoteEvent
+
         }
 
         #endregion
