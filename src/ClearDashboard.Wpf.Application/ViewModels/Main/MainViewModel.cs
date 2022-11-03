@@ -55,7 +55,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ActiveDocumentMessage>,
                 IHandle<ShowParallelTranslationWindowMessage>,
                 IHandle<CloseDockingPane>,
-                IHandle<ApplicationWindowSettings>
+                IHandle<ApplicationWindowSettings>,
+                IHandle<FilterPinsMessage>
     {
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
@@ -1971,6 +1972,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public Task HandleAsync(ApplicationWindowSettings message, CancellationToken cancellationToken)
         {
             _windowSettings = message.WindowSettings;
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
+        {
+            UnHideWindow("PINS");
             return Task.CompletedTask;
         }
     }
