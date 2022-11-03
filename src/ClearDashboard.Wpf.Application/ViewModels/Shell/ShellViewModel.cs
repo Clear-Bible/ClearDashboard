@@ -18,9 +18,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
@@ -36,23 +34,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public class ShellViewModel : DashboardApplicationScreen, IShellViewModel,
         IHandle<ParatextConnectedMessage>,
         IHandle<UserMessage>,
-        IHandle<BackgroundTaskChangedMessage>,
         IHandle<GetApplicationWindowSettings>
     {
-        private readonly TranslationSource? _translationSource;
-        private readonly LongRunningTaskManager _longRunningTaskManager;
-
 
         #region Properties
-        private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
-        private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(5);
-        private readonly int _completedRemovalSeconds = 45;
-        private bool _collapseTasksView;
+
+        public BackgroundTasksViewModel BackgroundTasksViewModel { get; }
+
+        private readonly TranslationSource? _translationSource;
 
         private UpdateFormat? _updateData;
-
-        private Timer? _timer;
-        private bool _cleanUpOldBackgroundTasks;
 
 
         private string? _paratextUserName;
@@ -86,11 +77,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         public WindowSettings WindowSettings
         {
             get => _windowSettings;
-            set
-            {
-                Set(ref _windowSettings, value);
-                
-            }
+            set => Set(ref _windowSettings, value);
         }
 
         public async Task SetWindowsSettings(WindowSettings windowSettings)
@@ -112,14 +99,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             get => _showTaskView;
             set => Set(ref _showTaskView, value);
         }
-
-        private ObservableCollection<BackgroundTaskStatus> _backgroundTaskStatuses = new();
-        public ObservableCollection<BackgroundTaskStatus> BackgroundTaskStatuses
-        {
-            get => _backgroundTaskStatuses;
-            set => Set(ref _backgroundTaskStatuses, value);
-        }
-
 
         private LanguageTypeValue _selectedLanguage;
         public LanguageTypeValue SelectedLanguage
@@ -198,17 +177,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         public ShellViewModel()
         {
             // no-op
-
-            BogusData();
         }
 
         public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
             ILogger<ShellViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
-            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
+            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, BackgroundTasksViewModel backgroundTasksViewModel )
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            BackgroundTasksViewModel = backgroundTasksViewModel;
             _translationSource = translationSource;
-            _longRunningTaskManager = longRunningTaskManager;
 
             Logger.LogInformation("'ShellViewModel' ctor called.");
 
@@ -216,26 +193,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
             Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
 
-            // setup timer to clean up old background tasks
-            _timer = new Timer(TimerElapsed, null, _startTimeSpan, _periodTimeSpan);
 
             LoadingApplication = true;
             NavigationService!.Navigated += NavigationServiceOnNavigated;
-
-            //BogusData();
         }
 
-        private void TimerElapsed(object? state)
-        {
-            if (_cleanUpOldBackgroundTasks)
-            {
-                CleanUpOldBackgroundTasks();
-            }
-            else
-            {
-                _cleanUpOldBackgroundTasks = true;
-            }
-        }
+     
 
         private bool _loadingApplication;
         public bool LoadingApplication
@@ -259,41 +222,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
         }
 
-        private void BogusData()
-        {
-            // make some bogus task data
-            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
-            {
-                Name = "Background Task 1",
-                Description = "Something longer that goes in here that is pretty darn long",
-                StartTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
-            });
-            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
-            {
-                Name = "Background Task 2",
-                Description = "Something longer that goes in here",
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
-            });
-            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
-            {
-                Name = "Background Task 3",
-                Description = "Something longer that goes in here",
-                StartTime = DateTime.Now,
-                EndTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-            });
-            BackgroundTaskStatuses.Add(new BackgroundTaskStatus
-            {
-                Name = "Background Task 4",
-                Description = "Something longer that goes in here which is also pretty darn long",
-                StartTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
-            });
-        }
-
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             return base.OnInitializeAsync(cancellationToken);
@@ -303,6 +231,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             InitializeProjectManager();
             CheckForProgramUpdates();
+            await BackgroundTasksViewModel.ActivateAsync();
             await base.OnActivateAsync(cancellationToken);
         }
 
@@ -344,12 +273,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             // HACK:  Force the MainViewModel singleton to properly deactivate
             var mainViewModel = IoC.Get<MainViewModel>();
-            mainViewModel?.DeactivateAsync(true);
+            await mainViewModel!.DeactivateAsync(true);
 
-            if (_longRunningTaskManager.HasTasks())
-            {
-                _longRunningTaskManager.CancelAllTasks();
-            }
+            // deactivate the BackgroiundTaskViewModel
+            await BackgroundTasksViewModel.DeactivateAsync(true);
 
             await base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -403,7 +330,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
 
             _updateData = await JsonSerializer.DeserializeAsync<UpdateFormat>(stream);
-            bool isNewer = CheckWebVersion(_updateData.Version);
+            var isNewer = CheckWebVersion(_updateData.Version);
 
             if (isNewer)
             {
@@ -421,58 +348,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var ver = webVersion.Split('.');
             Version webVer;
 
-            if (ver.Length == 4)
+            switch (ver.Length)
             {
-                try
+                case 4:
+                    try
+                    {
+                        webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), Convert.ToInt32(ver[3]));
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+
+                    break;
+                case 3:
+                    try
+                    {
+                        webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), 0);
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+
+                    break;
+                case 2:
+                    try
+                    {
+                        webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), 0, 0);
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+
+                    break;
+                default:
                 {
-                    webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), Convert.ToInt32(ver[3]));
+                    if (ver.Length == 2)
+                    {
+                        try
+                        {
+                            webVer = new Version(Convert.ToInt32(ver[0]), 0, 0, 0);
+                        }
+                        catch (Exception)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    break;
                 }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-            else if (ver.Length == 3)
-            {
-                try
-                {
-                    webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), 0);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-            else if (ver.Length == 2)
-            {
-                try
-                {
-                    webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), 0, 0);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-            else if (ver.Length == 2)
-            {
-                try
-                {
-                    webVer = new Version(Convert.ToInt32(ver[0]), 0, 0, 0);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
             }
 
 
             //get the assembly version
-            Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
 
             // compare
             var result = webVer.CompareTo(thisVersion);
@@ -494,7 +429,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             try
             {
-                ProcessStartInfo psi = new ProcessStartInfo
+                var psi = new ProcessStartInfo
                 {
                     FileName = UpdateUrl.AbsoluteUri,
                     UseShellExecute = true
@@ -529,72 +464,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         /// <summary>
         /// Button click for the background tasks on the status bar
         /// </summary>
-        public void BackgroundTasks()
+        public async void BackgroundTasks()
         {
-            if (ShowTaskView == Visibility.Collapsed)
-            {
-                ShowTaskView = Visibility.Visible;
-            }
-            else
-            {
-                ShowTaskView = Visibility.Collapsed;
-            }
-
+           await EventAggregator!.PublishOnUIThreadAsync(new ToggleBackgroundTasksVisibilityMessage());
         }
-
-        public void CloseTaskBox()
-        {
-            ShowTaskView = Visibility.Collapsed;
-        }
-
-        /// <summary>
-        /// Cleanup Background tasks that are completed and don't have errors
-        /// </summary>
-        private void CleanUpOldBackgroundTasks()
-        {
-            // auto close task view if nothing is in the queue
-            if (_backgroundTaskStatuses.Count == 0)
-            {
-                if (_collapseTasksView)
-                {
-                    ShowTaskView = Visibility.Collapsed;
-                    _collapseTasksView = false;
-                }
-
-                _collapseTasksView = true;
-                return;
-            }
-
-            var taskRemoved = false;
-            var presentTime = DateTime.Now;
-
-            for (var index = _backgroundTaskStatuses.Count - 1; index >= 0; index--)
-            {
-                var timeSpan = presentTime - _backgroundTaskStatuses[index].EndTime;
-
-                // if completed task remove it
-                if (_backgroundTaskStatuses[index].TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed && timeSpan.TotalSeconds > _completedRemovalSeconds)
-                {
-                    var index1 = index;
-                    OnUIThread(() =>
-                    {
-                        if (index1 < _backgroundTaskStatuses.Count)
-                        {
-                            _backgroundTaskStatuses.RemoveAt(index1);
-                        }
-                    });
-
-                    taskRemoved = true;
-                }
-            }
-
-            if (taskRemoved)
-            {
-                NotifyOfPropertyChange(() => BackgroundTaskStatuses);
-            }
-        }
-
-
 
         public void SetLanguage()
         {
@@ -602,7 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             if (string.IsNullOrEmpty(culture))
             {
                 var cultureName = "";
-                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
+                var currentCulture = Thread.CurrentThread.CurrentCulture;
                 if (currentCulture.Parent.Name is not "zh" or "pt")
                 {
                     cultureName = currentCulture.Name;//.Parent
@@ -627,50 +500,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
             if (languageFlowDirection.isRTL)
             {
-                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
+                ProjectManager!.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
             }
             else
             {
-                ProjectManager.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
+                ProjectManager!.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
             }
 
             WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
         }
 
-        public async void CancelTask(BackgroundTaskStatus status)
-        {
-            // update the task entry to show cancelling
-            var backgroundTaskStatus = _backgroundTaskStatuses.FirstOrDefault(t => t.Name == status.Name);
-            if (backgroundTaskStatus != null)
-            {
-                //taskToCancel.TaskLongRunningProcessStatus = LongRunningTaskStatus.CancellationRequested;
-                //taskToCancel.EndTime = DateTime.Now;
-
-                var task = _longRunningTaskManager.CancelTask(status.Name);
-
-                backgroundTaskStatus.EndTime = DateTime.Now;
-                backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-
-                //TODO:  Localize
-                backgroundTaskStatus.Description = "Task was cancelled";
-                NotifyOfPropertyChange(() => BackgroundTaskStatuses);
-
-                ToggleSpinner();
-            }
-
-            //await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(taskToCancel));
-        }
-
-        public async void StartBackgroundTask()
-        {
-            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-            {
-                Name = "BOGUS TASK TO CANCEL",
-                Description = "Try cancelling me",
-                StartTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
-            }));
-        }
 
         private async Task SendUiLanguageChangeMessage(string language)
         {
@@ -698,74 +537,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await Task.CompletedTask;
         }
 
-        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-        {
-            var incomingMessage = message.Status;
-
-            // check for duplicate entries
-            var taskExists = false;
-            foreach (var status in BackgroundTaskStatuses)
-            {
-                if (status.Name == incomingMessage.Name)
-                {
-                    taskExists = true;
-
-                    status.Description = incomingMessage.Description;
-                    if (incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
-                    {
-                        status.Description = incomingMessage.ErrorMessage;
-                    }
-                    status.TaskLongRunningProcessStatus = incomingMessage.TaskLongRunningProcessStatus;
-
-                    NotifyOfPropertyChange(() => BackgroundTaskStatuses);
-                    break;
-                }
-            }
-
-            if (taskExists == false)
-            {
-                BackgroundTaskStatuses.Add(incomingMessage);
-            }
-
-
-            ToggleSpinner();
-
-
-            // check if the message is for the bogus task
-            //if (incomingMessage.Name == "BOGUS TASK TO CANCEL" && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
-            //{
-            //    // return that your task was cancelled
-            //    incomingMessage.EndTime = DateTime.Now;
-            //    incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-            //    incomingMessage.Description = "Task was cancelled";
-
-            //    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
-
-            //}
-
-            await Task.CompletedTask;
-        }
-
-        private void ToggleSpinner()
-        {
-            // check to see if all are completed so we can turn off spinner
-            var runningTasks = BackgroundTaskStatuses
-                .Where(p => p.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running).ToList();
-            if (runningTasks.Count > 0)
-            {
-                ShowSpinner = Visibility.Visible;
-            }
-            else
-            {
-                ShowSpinner = Visibility.Collapsed;
-            }
-        }
-
-        #endregion
-
         public async Task HandleAsync(GetApplicationWindowSettings message, CancellationToken cancellationToken)
         {
             await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings), cancellationToken);
         }
+
+        #endregion
     }
 }

@@ -17,58 +17,16 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
     {
         private readonly ILogger<ShellView> _logger;
 
-        //// The enum flag for DwmSetWindowAttribute's second parameter, which tells the function what attribute to set.
-        //// Copied from dwmapi.h
-        //public enum Dwmwindowattribute
-        //{
-        //    DwmwaWindowCornerPreference = 33
-        //}
-
-        //// The DWM_WINDOW_CORNER_PREFERENCE enum for DwmSetWindowAttribute's third parameter, which tells the function
-        //// what value of the enum to set.
-        //// Copied from dwmapi.h
-        //public enum DwmWindowCornerPreference
-        //{
-        //    DwmwcpDefault = 0,
-        //    DwmwcpDoNotRound = 1,
-        //    DwmwcpRound = 2,
-        //    DwmwcpRoundSmall = 3
-        //}
-
-        //// Import dwmapi.dll and define DwmSetWindowAttribute in C# corresponding to the native function.
-        //[DllImport("dwmapi.dll", CharSet = CharSet.Unicode, PreserveSig = false)]
-        //internal static extern void DwmSetWindowAttribute(IntPtr hwnd,
-        //    Dwmwindowattribute attribute,
-        //    ref DwmWindowCornerPreference pvAttribute,
-        //    uint cbAttribute);
-
         public ShellView(ILogger<ShellView> logger)
         {
             _logger = logger;
             InitializeComponent();
 
-
-           
-
-            if (Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark)
-            {
-                Toggle.IsChecked = true;
-            }
-            else
-            {
-                Toggle.IsChecked = false;
-            } 
+            Toggle.IsChecked = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark; 
 
             RoundCorners();
         }
-
-        //private void RoundCorners()
-        //{
-        //    var hWnd = new WindowInteropHelper(GetWindow(this)!).EnsureHandle();
-        //    var preference = DwmWindowCornerPreference.DwmwcpRound;
-        //    DwmSetWindowAttribute(hWnd, Dwmwindowattribute.DwmwaWindowCornerPreference, ref preference, sizeof(uint));
-        //}
-
+        
         private void OnWindowClosing(object? sender, System.ComponentModel.CancelEventArgs e)
         {
 
@@ -98,8 +56,8 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
             _logger.LogInformation("ShellView loaded.");
 
-            // force the background task window to be on top of the bootstraper inserted frame
-            Panel.SetZIndex(this.TaskView, 10);
+            // force the background task window to be on top of the bootstrapper inserted frame
+           // Panel.SetZIndex(this.BackgroundTasksView, 10);
         }
 
         private void Toggle_Checked(object sender, RoutedEventArgs e) => SetTheme();

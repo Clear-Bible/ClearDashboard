@@ -14,6 +14,7 @@ using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellView
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -25,6 +26,7 @@ namespace ClearDashboard.Wpf.Application
             // IMPORTANT!  - override the default ShellViewModel from the foundation.
             builder.RegisterType<ShellViewModel>().As<IShellViewModel>().SingleInstance();
             builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<BackgroundTasksViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<ProjectDesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
             //builder.RegisterType<DesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
         }
