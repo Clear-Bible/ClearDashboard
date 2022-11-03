@@ -346,12 +346,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var mainViewModel = IoC.Get<MainViewModel>();
             mainViewModel?.DeactivateAsync(true);
 
-            _longRunningTaskManager.CancelAllTasks();
+            if (_longRunningTaskManager.HasTasks())
+            {
+                _longRunningTaskManager.CancelAllTasks();
+            }
 
-            await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
-            _longRunningTaskManager.Dispose();
-
-            ProjectManager?.Dispose();
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 

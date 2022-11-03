@@ -58,6 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>
     {
+        private readonly LongRunningTaskManager _longRunningTaskManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
 #nullable disable
@@ -392,8 +393,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
         // ReSharper disable once UnusedMember.Global
-        public MainViewModel(INavigationService navigationService, ILogger<MainViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IWindowManager windowManager, ILifetimeScope lifetimeScope)
+        public MainViewModel(INavigationService navigationService, 
+                             ILogger<MainViewModel> logger, 
+                             DashboardProjectManager projectManager, 
+                             IEventAggregator eventAggregator, 
+                             IWindowManager windowManager, 
+                             ILifetimeScope lifetimeScope,
+                             LongRunningTaskManager longRunningTaskManager)
         {
+            _longRunningTaskManager = longRunningTaskManager;
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
             EventAggregator = eventAggregator;
@@ -517,27 +525,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 OkSave();
             }
 
-            //we need to cancel running background processes
-            //check a bool to see if it already cancelled or already completed
-            if (_projectDesignSurfaceViewModel.LongProcessRunning)
-            {
-#pragma warning disable CS8602
-                // ReSharper disable once PossibleNullReferenceException
-                _projectDesignSurfaceViewModel.CancellationTokenSource.Cancel();
-#pragma warning restore CS8602
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                {
-                    Name = "Corpus",
-                    Description = "Task was cancelled",
-                    EndTime = DateTime.Now,
-                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-                }), cancellationToken);
+            ////we need to cancel running background processes
+            ////check a bool to see if it already cancelled or already completed
+            //if (_longRunningTaskManager.HasTasks())
+            //{
+
+            //    _longRunningTaskManager.CancelAllTasks();
+
+            //    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            //    {
+            //        Name = "Corpus",
+            //        Description = "Task was cancelled",
+            //        EndTime = DateTime.Now,
+            //        TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+            //    }), cancellationToken);
 
                
-            }
+            //}
 
             // save the open document windows
-            List<SerializedEnhancedView> serializedEnhancedViews = new List<SerializedEnhancedView>();
+            var serializedEnhancedViews = new List<SerializedEnhancedView>();
             foreach (var window in Items)
             {
                 if (window is EnhancedViewModel)
@@ -1815,7 +1822,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
         {
-            if (!_projectDesignSurfaceViewModel.LongProcessRunning)
+            if (!_longRunningTaskManager.HasTasks())
             {
                 if (menuItem.Id == "NewID")
                 {

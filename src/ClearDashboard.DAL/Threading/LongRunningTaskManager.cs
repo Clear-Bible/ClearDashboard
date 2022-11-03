@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Microsoft.Extensions.Logging;
@@ -137,21 +138,26 @@ namespace ClearDashboard.DataAccessLayer.Threading
             return _tasks.ContainsKey(taskName);
         }
 
+        public bool HasTasks()
+        {
+            return _tasks.Any();
+        }
+
         public LongRunningTask GetTask(string taskName)
         {
             return (_tasks[taskName] ?? default)!;
         }
-      
+
         public bool TaskComplete(string taskName)
         {
             if (HasTask(taskName))
             {
-               var result = _tasks.TryRemove(taskName, out var task);
-               if (result)
-               {
-                   task!.Complete();
-                   _logger.LogInformation($"Successfully removed task with name '{taskName}';");
-               }
+                var result = _tasks.TryRemove(taskName, out var task);
+                if (result)
+                {
+                    task!.Complete();
+                    _logger.LogInformation($"Successfully removed task with name '{taskName}';");
+                }
             }
 
             return false;

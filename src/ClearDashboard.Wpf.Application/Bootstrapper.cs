@@ -1,7 +1,10 @@
 ﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Caliburn.Micro;
 using ClearApplicationFoundation;
+using ClearDashboard.DAL.Alignment.BackgroundServices;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Wpf.Extensions;
-using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
@@ -9,39 +12,23 @@ using ClearDashboard.Wpf.Application.Validators;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
-using Microsoft.Extensions.Hosting;
 using DashboardApplication = System.Windows.Application;
-using Autofac.Extensions.DependencyInjection;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using Caliburn.Micro;
-using MediatR;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Wpf;
-using System.Net;
-using SIL.Machine.Utils;
-using ClearDashboard.DAL.Alignment.Features.Denormalization;
-using ClearDashboard.DataAccessLayer.Models;
-using System.Data.Common;
-using System.Xml.Linq;
-using ClearDashboard.DAL.Alignment.BackgroundServices;
-using Autofac.Core.Lifetime;
 
 namespace ClearDashboard.Wpf.Application
 {
     internal class Bootstrapper : FoundationBootstrapper
     {
         private readonly IHost _host;
-        public Bootstrapper() : base()
+        public Bootstrapper() 
         {
             // Autofac container should already be built by call to base() constructor
             // (which calls Caliburn.Micro "Initialize", which calls FoundationBootstrapper
@@ -115,16 +102,8 @@ namespace ClearDashboard.Wpf.Application
             var selectedLanguage = Settings.Default.language_code;
             if (string.IsNullOrEmpty(selectedLanguage))
             {
-                var cultureName = "";
-                CultureInfo currentCulture = Thread.CurrentThread.CurrentCulture;
-                if (currentCulture.Parent.Name is not "zh" or "pt")
-                {
-                    cultureName = currentCulture.Parent.Name;
-                }
-                else
-                {
-                    cultureName = currentCulture.Name;
-                }
+                var currentCulture = Thread.CurrentThread.CurrentCulture;
+                var cultureName = currentCulture.Parent.Name is not "zh" or "pt" ? currentCulture.Parent.Name : currentCulture.Name;
 
                 try
                 {
@@ -152,7 +131,7 @@ namespace ClearDashboard.Wpf.Application
             }
             else
             {
-                throw new NullReferenceException("'TranslationSource' needs to registered with the DI container.");
+                throw new NullReferenceException("'TranslationSource' needs to be registered with the DI container.");
             }
         }
 
@@ -173,9 +152,6 @@ namespace ClearDashboard.Wpf.Application
 
         protected override async Task NavigateToMainWindow()
         {
-            //EnsureApplicationMainWindowVisible();
-            //NavigateToViewModel<EnhancedViewDemoViewModel>();
-            
             await ShowStartupDialog<StartupDialogViewModel, MainViewModel>();
         }
 
@@ -225,10 +201,16 @@ namespace ClearDashboard.Wpf.Application
         #region Application exit
         protected override void OnExit(object sender, EventArgs e)
         {
+            Logger?.LogInformation("ClearDashboard application is exiting.");
+
+            Logger?.LogInformation("Disposing ILifetimeScope" );
+            var lifetimeScope = Container!.Resolve<ILifetimeScope>();
+            lifetimeScope.Dispose();
+
             _host.StopAsync(TimeSpan.FromSeconds(5));
             _host.Dispose();
 
-            Logger?.LogInformation("ClearDashboard application is exiting.");
+           
             base.OnExit(sender, e);
         }
         #endregion
