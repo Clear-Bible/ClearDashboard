@@ -41,7 +41,7 @@
             <Grid Name="GridLayout">
                 <!--  BackGround Tasks  -->
                 <ListView
-                    x:Name="RadioButtonGroupChoiceChipOutline"
+                    x:Name="TasksListView"
                     Margin="5"
                     VerticalContentAlignment="Top"
                     materialDesign:RippleAssist.IsDisabled="True"
@@ -98,6 +98,7 @@
                                             Height="20"
                                             Margin="4"
                                             Padding="0"
+                                            cm:Action.TargetWithoutContext="{Binding ElementName=TasksListView, Path=DataContext}"
                                             cm:Message.Attach="[Event Click] = [Action CancelTask($this)]"
                                             materialDesign:RippleAssist.Feedback="Transparent"
                                             IsEnabled="{Binding TaskLongRunningProcessStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
