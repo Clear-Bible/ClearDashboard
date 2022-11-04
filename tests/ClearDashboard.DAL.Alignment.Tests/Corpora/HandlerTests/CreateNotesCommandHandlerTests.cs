@@ -532,6 +532,11 @@ public class CreateNotesCommandHandlerTests : TestBase
             await n.AssociateDomainEntity(Mediator!, alignmentSet.AlignmentSetId);
             await n.AssociateDomainEntity(Mediator!, translationSet.TranslationSetId);
 
+            var tokenIds = sourceTokenizedTextCorpus.GetRows(new List<string>() { "MAT" }).Cast<TokensTextRow>().First().Tokens.Take(2).Select(t => t.TokenId);
+
+            await n.AssociateDomainEntity(Mediator!, tokenIds.First());
+            await n.AssociateDomainEntity(Mediator!, tokenIds.Skip(1).First());
+
             var alignments = ProjectDbContext!.Alignments.Include(a => a.SourceTokenComponent).Where(a => a.AlignmentSetId == alignmentSet.AlignmentSetId.Id).Take(3);
             foreach (var a in alignments)
             {

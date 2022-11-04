@@ -68,7 +68,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                     case true when kvp.Key == typeof(TokenId).Name:
                         var modelTypeNames = ProjectDbContext!.TokenComponents
                             .Where(e => kvp.Value.Select(ids => ids.Id).Contains(e.Id))
-                            .Select(e => new { Id = e.Id, e.GetType().Name });
+                            .Select(e => new { Id = e.Id, e.GetType().Name })
+                            .ToList();
 
                         var tokenIds = modelTypeNames
                             .Where(e => e.Name == "Token")
@@ -277,8 +278,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         {
             var domainEntityContext = new Dictionary<string, string>();
 
-            domainEntityContext.Add("Corpus.DisplayName", tokenComponent.Tokenization!.Corpus!.DisplayName ?? string.Empty);
-            domainEntityContext.Add("TokenizedCorpus.DisplayName", tokenComponent.Tokenization!.DisplayName ?? string.Empty);
+            domainEntityContext.Add("Corpus.DisplayName", tokenComponent.Tokenization!.Corpus!.DisplayName ?? tokenComponent.Tokenization!.Corpus!.Name ?? string.Empty);
+            domainEntityContext.Add("TokenizedCorpus.DisplayName", tokenComponent.Tokenization!.DisplayName ?? tokenComponent.Tokenization!.Corpus!.Name ?? string.Empty);
             AddTokenComponentContext(tokenComponent, bookNumbersToAbbreviations, domainEntityContext);
 
             if (tokenComponent.GetType() == typeof(Models.Token))

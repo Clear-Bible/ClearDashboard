@@ -262,6 +262,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotePaneVisibility = Visibility.Visible;
         }
 
+        public void FilterPins(NoteEventArgs e)
+        {
+            NotePaneVisibility = Visibility.Visible;
+        }
+
+        public void TranslateQuick(NoteEventArgs e)
+        {
+            NotePaneVisibility = Visibility.Visible;
+        }
+
         public async Task TranslationApplied(TranslationEventArgs e)
         {
             await VerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);

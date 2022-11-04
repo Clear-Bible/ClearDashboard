@@ -3,6 +3,7 @@ using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using SIL.IO.FileLock;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
@@ -52,7 +53,7 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
             var target = contextMenu.PlacementTarget;
             var item = (DataGrid)target;
 
-            var columnIndex = item.SelectedCells[0].Column.DisplayIndex;
+            var columnIndex = item.CurrentColumn.DisplayIndex;
 
             var cells = item.SelectedCells;
             var selectedItem = cells[0].Item;

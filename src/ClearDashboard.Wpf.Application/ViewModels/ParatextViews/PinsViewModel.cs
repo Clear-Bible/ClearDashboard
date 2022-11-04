@@ -29,10 +29,11 @@ using System.Windows.Input;
 using System.Xml;
 using Microsoft.Win32;
 using System.IO;
+using Microsoft.AspNet.SignalR.Client.Http;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
-    public class PinsViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>
+    public class PinsViewModel : ToolViewModel, IHandle<BackgroundTaskChangedMessage>, IHandle<FilterPinsMessage>
     {
 
         #region Member Variables
@@ -46,6 +47,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private BiblicalTermsList _allBiblicalTermsList = new();
         private SpellingStatus _spellingStatus = new();
         private Lexicon _lexicon = new();
+        private string _paratextInstallPath = "";
 
         private bool _generateDataRunning = false;
         private CancellationTokenSource _cancellationTokenSource;
@@ -228,13 +230,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 ParatextProxy paratextUtils = new ParatextProxy(logger);
                 if (paratextUtils.IsParatextInstalled())
                 {
-                    var paratextInstallPath = paratextUtils.ParatextInstallPath;
+                    _paratextInstallPath = paratextUtils.ParatextInstallPath;
 
                     // run getting and deserializing all of these resources in parallel
                     await Task.WhenAll(
                         GetTermRenderings(),
-                        GetBiblicalTerms(paratextInstallPath),
-                        GetAllBiblicalTerms(paratextInstallPath),
+                        GetBiblicalTerms(_paratextInstallPath),
+                        GetAllBiblicalTerms(_paratextInstallPath),
                         GetSpellingStatus(),
                         GetLexicon());
                 }
@@ -394,6 +396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         {
                             Id = Guid.NewGuid(),
                             XmlSource = "BT",
+                            XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\BiblicalTerms.xml"),
                             Code = "KeyTerm",
                             OriginID = terms.Id,
                             Gloss = gloss,
@@ -431,6 +434,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             {
                                 Id = Guid.NewGuid(),
                                 XmlSource = "ABT",
+                                XmlPath = Path.Combine(_paratextInstallPath, @"Terms\Lists\AllBiblicalTerms.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -458,6 +462,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             {
                                 Id = Guid.NewGuid(),
                                 XmlSource = "TR",
+                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath, "TermRenderings.xml"),
                                 Code = "KeyTerm",
                                 OriginID = terms.Id,
                                 Gloss = gloss,
@@ -492,6 +497,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             {
                                 Id = Guid.NewGuid(),
                                 XmlSource = "LX",
+                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject.DirectoryPath, "Lexicon.xml"),
                                 Code = senseEntry.Id,
                                 Gloss = senseEntry.Gloss.Text,
                                 Lang = senseEntry.Gloss.Language,
@@ -593,7 +599,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                                     var verseList = datrow.VerseList;
                                     verseList.AddRange(simprefs);
-                                    //SortRefs(ref verseList);
                                     datrow.VerseList = verseList;
                                     datrow.SimpRefs = datrow.VerseList.Count.ToString();
                                 }
@@ -608,7 +613,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError(ex, "Adding in Verse References from Interlinear_*.xml failed");
+                        Logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                     }
                 }
 
@@ -984,6 +989,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             await Task.CompletedTask;
         }
+
+        public async Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
+        {
+            FilterString = message.Message;
+        }
+
 
         #endregion // Methods
     }

@@ -539,6 +539,12 @@
                                                         <i:EventTrigger EventName="NoteCreate">
                                                             <i:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
+                                                        <i:EventTrigger EventName="FilterPins">
+                                                            <i:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="TranslateQuick">
+                                                            <i:CallMethodAction MethodName="TranslateQuick" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                        </i:EventTrigger>
                                                     </i:Interaction.Triggers>
                                                 </userControls:VerseDisplay>
                                             </DataTemplate>

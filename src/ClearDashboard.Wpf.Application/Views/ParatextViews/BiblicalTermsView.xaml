@@ -248,7 +248,6 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             AutoGenerateColumns="False"
-            CanUserAddRows="False"
             CanUserResizeColumns="True"
             GridLinesVisibility="All"
             HorizontalGridLinesBrush="{StaticResource GridBrush}"
@@ -259,9 +258,11 @@
             ScrollViewer.VerticalScrollBarVisibility="Auto"
             SelectedItem="{Binding SelectedBiblicalTermsData}"
             SelectionMode="Single"
-            SelectionUnit="Cell"
+            SelectionUnit="FullRow"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
-
+            <!--
+                might have to use a dependency property like in BCV
+            -->
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem

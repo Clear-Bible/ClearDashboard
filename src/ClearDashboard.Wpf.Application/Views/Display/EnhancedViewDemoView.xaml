@@ -69,16 +69,18 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="50,10"
-            cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];
-                                [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];                                                        
-                                [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];                                                        
-                                [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];                                                        
-                                [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];                                                        
-                                [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];                                                        
-                                [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];                                                        
-                                [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];                                                        
-                                [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];                                                        
-                                [Event NoteCreate] = [Action NoteCreate($eventArgs)]"
+            cal:Message.Attach="[Event TokenClicked] = [Action TokenClicked($eventArgs)];                                 
+            [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];                                                                                         
+            [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];                                                                                         
+            [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];                                                                                         
+            [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];                                                                                         
+            [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];                                                                                         
+            [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];                                                                                         
+            [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];                                                                                         
+            [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];                                                                                         
+            [Event NoteCreate] = [Action NoteCreate($eventArgs)]                                 
+            [Event FilterPins] = [Action FilterPins($eventArgs)]
+            [Event TranslateQuick] = [Action TranslateQuick($eventArgs)]"
             FlowDirection="{Binding ElementName=RtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
             FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

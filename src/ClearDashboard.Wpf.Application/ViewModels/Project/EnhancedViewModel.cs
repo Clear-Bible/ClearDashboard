@@ -34,11 +34,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using ClearDashboard.Wpf.Application.Services;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using System.Net.Http;
 using ClearDashboard.Wpf.Application.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
@@ -1416,6 +1418,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public void NoteCreate(object sender, NoteEventArgs e)
         {
             NoteControlVisibility = Visibility.Visible;
+        }
+
+        public void FilterPins(object sender, NoteEventArgs e)
+        {
+            //WORKS
+            EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
+        }
+
+        public void TranslateQuick(object sender, NoteEventArgs e)
+        {
+            try
+            {
+                var surfaceText = e.SelectedTokens.CombinedSurfaceText.Replace(',', ' ');
+                var result = TranslateText(surfaceText);
+                Message = $"Quick Translation: '{result}'";
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "Quick translation failed.");
+            }
+        }
+        
+        public string TranslateText(string input)
+        {
+          string url = String.Format
+          ("https://translate.googleapis.com/translate_a/single?client=gtx&sl={0}&tl={1}&dt=t&q={2}", "auto", "en", Uri.EscapeUriString(input));
+          HttpClient httpClient = new HttpClient();
+          string result = httpClient.GetStringAsync(url).Result;
+
+          var items = result.Split("\"");
+          var translation = items[1];
+          return translation;
         }
 
         #endregion

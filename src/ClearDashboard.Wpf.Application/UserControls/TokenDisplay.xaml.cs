@@ -311,6 +311,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent NoteCreateEvent = EventManager.RegisterRoutedEvent
             ("NoteCreate", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+       
+        /// <summary>
+        /// Identifies the FilterPinsEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent FilterPinsEvent = EventManager.RegisterRoutedEvent
+            ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslateQuickEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslateQuickEvent = EventManager.RegisterRoutedEvent
+            ("TranslateQuick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         #endregion Static RoutedEvents
         #region Public Events
@@ -548,6 +560,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(NoteCreateEvent, value);
         }
 
+        /// <summary>
+        /// Occurs when the user requests to filter pins.
+        /// </summary>
+        public event RoutedEventHandler FilterPins
+        {
+            add => AddHandler(FilterPinsEvent, value);
+            remove => RemoveHandler(FilterPinsEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to translate quick.
+        /// </summary>
+        public event RoutedEventHandler TranslateQuick
+        {
+            add => AddHandler(TranslateQuickEvent, value);
+            remove => RemoveHandler(TranslateQuickEvent, value);
+        }
+
         #endregion
         #region Private Event Handlers
         /// <summary>
@@ -741,6 +771,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnCreateNote(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(NoteCreateEvent, e);
+
+        }
+
+        private void OnFilterPins(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(FilterPinsEvent, e);
+        }
+
+        private void OnTranslateQuick(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(TranslateQuickEvent, e);//Rename RaiseNoteEvent
 
         }
 
