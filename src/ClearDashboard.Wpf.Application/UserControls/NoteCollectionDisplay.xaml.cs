@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
