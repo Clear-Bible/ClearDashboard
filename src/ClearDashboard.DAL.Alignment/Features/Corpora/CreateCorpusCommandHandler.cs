@@ -56,8 +56,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             ProjectDbContext.Corpa.Add(modelCorpus);
 
-            // NB:  passing in the cancellation token to SaveChangesAsync.
-            await ProjectDbContext.SaveChangesAsync(cancellationToken);
+            try
+            {
+                // NB:  passing in the cancellation token to SaveChangesAsync.
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);
+            } 
+            catch (OperationCanceledException)
+            {
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (canceled)");
+#endif
+                return new RequestResult<Corpus>
+                (
+                    success: false,
+                    message: "Operation canceled",
+                    canceled: true
+                );
+            }
 
 #if DEBUG
             sw.Stop();

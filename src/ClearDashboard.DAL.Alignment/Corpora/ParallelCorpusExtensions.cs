@@ -53,7 +53,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             if (createParallelCorpusCommandResult.Success && createParallelCorpusCommandResult.Data != null)
             {
-                return createParallelCorpusCommandResult.Data;
+                return await ParallelCorpus.Get(mediator, createParallelCorpusCommandResult.Data, token);
             }
             else
             {

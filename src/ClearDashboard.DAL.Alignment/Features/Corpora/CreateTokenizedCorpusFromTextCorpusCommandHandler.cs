@@ -6,16 +6,21 @@ using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using SIL.EventsAndDelegates;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Text.Json;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
+using System.Threading;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
+using SIL.Machine.Corpora;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
@@ -86,119 +91,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 tokenizedCorpus.CustomVersData = writer.ToString();
             }
 
-            // ITextCorpus Text ids always book ids/abbreviations:  
-            var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
-            var tokenizationId = Guid.Empty;
-
-            //var connectionWasOpen = ProjectDbContext.Database.GetDbConnection().State == ConnectionState.Open; 
-            //if (!connectionWasOpen)
-            //{
-                await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
-            //}
-           
             try
             {
-                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
-                // mostly using database connection-level functions, commands, paramters etc.
-                using var connection = ProjectDbContext.Database.GetDbConnection();
-                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
-
-                using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand(connection);
-                using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(connection); 
-
-                await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
-                tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
-
-                var tokenCount = 0;
-
-                foreach (var bookId in bookIds)
-                {
-                    var ttrs = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
-
-                    var dups = ttrs
-                        .SelectMany(ttr => ttr.Tokens)
-                        .SelectMany(t => (t is CompositeToken token) ? token.Tokens : new List<Token>() { t })
-                        .GroupBy(t => t.TokenId)
-                        .Where(g => g.Count() > 1)
-                        .Select(g => g.Key);
-
-                    if (dups.Any())
-                    {
-                        throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpus.Name}' book '{bookId}'");
-                    }
-
-                    var bookTokens = ttrs
-                        .SelectMany(ttr => ttr.Tokens)
-                        .Select(token =>
-                        {
-                            if (token is CompositeToken compositeToken)
-                            {
-                                tokenCount++;
-                                return new Models.TokenComposite
-                                {
-                                    Id = compositeToken.TokenId.Id,
-                                    TokenizationId = tokenizationId,
-                                    TrainingText = compositeToken.TrainingText,
-                                    EngineTokenId = compositeToken.TokenId.ToString(),
-                                    Tokens = compositeToken.GetPositionalSortedBaseTokens()
-                                        .Select(childToken =>
-                                        {
-                                            tokenCount++;
-                                            return new Models.Token
-                                            {
-                                                Id = childToken.TokenId.Id,
-                                                TokenizationId = tokenizationId,
-                                                TrainingText = childToken.TrainingText,
-                                                EngineTokenId = childToken.TokenId.ToString(),
-                                                BookNumber = childToken.TokenId.BookNumber,
-                                                ChapterNumber = childToken.TokenId.ChapterNumber,
-                                                VerseNumber = childToken.TokenId.VerseNumber,
-                                                WordNumber = childToken.TokenId.WordNumber,
-                                                SubwordNumber = childToken.TokenId.SubWordNumber,
-                                                SurfaceText = childToken.SurfaceText,
-                                                PropertiesJson = childToken.ExtendedProperties
-                                            };
-                                        }).ToList()
-                                };
-                            }
-                            else
-                            {
-                                tokenCount++;
-                                return new Models.Token
-                                {
-                                    Id = token.TokenId.Id,
-                                    TokenizationId = tokenizationId,
-                                    TrainingText = token.TrainingText,
-                                    EngineTokenId = token.TokenId.ToString(),
-                                    BookNumber = token.TokenId.BookNumber,
-                                    ChapterNumber = token.TokenId.ChapterNumber,
-                                    VerseNumber = token.TokenId.VerseNumber,
-                                    WordNumber = token.TokenId.WordNumber,
-                                    SubwordNumber = token.TokenId.SubWordNumber,
-                                    SurfaceText = token.SurfaceText,
-                                    PropertiesJson = token.ExtendedProperties
-                                } as Models.TokenComponent;
-                            }
-                        });
-
-                    await InsertTokenComponentsAsync(
-                            bookTokens, 
-                            tokenComponentInsertCommand, 
-                            cancellationToken);
-                }
-
-                
-                await transaction.CommitAsync(cancellationToken);
-
-                var tokenizedCorpusDb = ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext!)
-                    .First(tc => tc.Id == tokenizationId);
-                var tokenizedTextCorpus = new TokenizedTextCorpus(
-                    ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
-                    request.CorpusId,
-                    _mediator,
-                    bookIds);
-
-                //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+                var (tokenizedTextCorpus, tokenCount) = await CreateTokenizedTextCorpus(
+                    tokenizedCorpus,
+                    corpus,
+                    request.TextCorpus,
+                    cancellationToken);
 
 #if DEBUG
                 proc.Refresh();
@@ -207,24 +106,157 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 sw.Stop();
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [token count: {tokenCount}]");
 #endif
-
                 return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
+            }
+            catch (OperationCanceledException)
+            {
+                return new RequestResult<TokenizedTextCorpus>
+                (
+                    success: false,
+                    message: "Operation canceled",
+                    canceled: true
+                );
             }
             catch (Exception ex)
             {
                 return new RequestResult<TokenizedTextCorpus>
                 (
                     success: false,
-                    message: $"Error saving tokenized corpus / tokens to database '{ex.ToString()}'"
+                    message: $"Error saving tokenized corpus / tokens to database '{ex}'"
                 );
+            }
+        }
+
+        private async Task<(TokenizedTextCorpus, int)> CreateTokenizedTextCorpus(Models.TokenizedCorpus tokenizedCorpus, Models.Corpus corpus, ITextCorpus textCorpus, CancellationToken cancellationToken)
+        {
+            var bookIds = textCorpus.Texts.Select(t => t.Id).ToList();
+            var tokenCount = 0;
+
+            //var connectionWasOpen = ProjectDbContext.Database.GetDbConnection().State == ConnectionState.Open; 
+            //if (!connectionWasOpen)
+            //{
+            await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+            //}
+
+            try
+            {
+                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
+                // mostly using database connection-level functions, commands, paramters etc.
+                using var connection = ProjectDbContext.Database.GetDbConnection();
+                using var transaction = await connection.BeginTransactionAsync(cancellationToken);
+                using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand(connection);
+                using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(connection);
+
+                await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
+                var tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
+
+                foreach (var bookId in bookIds)
+                {
+                    var ttrs = textCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+
+                    var dups = ttrs
+                        .SelectMany(ttr => ttr.Tokens)
+                        .SelectMany(t => (t is CompositeToken token) ? token.Tokens : new List<Token>() { t })
+                            .GroupBy(t => t.TokenId)
+                            .Where(g => g.Count() > 1)
+                            .Select(g => g.Key);
+
+                    if (dups.Any())
+                    {
+                        throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpus.Name}' book '{bookId}'");
+                    }
+
+                    var (bookTokens, btTokenCount) = GetBookTokens(ttrs, tokenizationId);
+
+                    await InsertTokenComponentsAsync(
+                            bookTokens,
+                            tokenComponentInsertCommand,
+                            cancellationToken);
+
+                    tokenCount += btTokenCount;
+                }
+
+                await transaction.CommitAsync(cancellationToken);
+
+                var tokenizedCorpusDb = ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext!)
+                    .First(tc => tc.Id == tokenizationId);
+                var tokenizedTextCorpus = new TokenizedTextCorpus(
+                    ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
+                    new CorpusId(corpus.Id),
+                    _mediator,
+                    bookIds);
+
+//               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+
+                return (tokenizedTextCorpus, tokenCount);
             }
             finally
             {
                 //if (!connectionWasOpen)
                 //{
-                    await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+                await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
                 //}
             }
+        }
+
+        private static (IEnumerable<Models.TokenComponent>, int) GetBookTokens(IEnumerable<TokensTextRow> ttrs, Guid tokenizationId)
+        {
+            var tokenCount = 0;
+            var bookTokens = ttrs
+                .SelectMany(ttr => ttr.Tokens)
+                .Select(token =>
+                {
+                    if (token is CompositeToken compositeToken)
+                    {
+                        tokenCount++;
+                        return new Models.TokenComposite
+                        {
+                            Id = compositeToken.TokenId.Id,
+                            TokenizationId = tokenizationId,
+                            TrainingText = compositeToken.TrainingText,
+                            EngineTokenId = compositeToken.TokenId.ToString(),
+                            Tokens = compositeToken.GetPositionalSortedBaseTokens()
+                                .Select(childToken =>
+                                {
+                                    tokenCount++;
+                                    return new Models.Token
+                                    {
+                                        Id = childToken.TokenId.Id,
+                                        TokenizationId = tokenizationId,
+                                        TrainingText = childToken.TrainingText,
+                                        EngineTokenId = childToken.TokenId.ToString(),
+                                        BookNumber = childToken.TokenId.BookNumber,
+                                        ChapterNumber = childToken.TokenId.ChapterNumber,
+                                        VerseNumber = childToken.TokenId.VerseNumber,
+                                        WordNumber = childToken.TokenId.WordNumber,
+                                        SubwordNumber = childToken.TokenId.SubWordNumber,
+                                        SurfaceText = childToken.SurfaceText,
+                                        PropertiesJson = childToken.ExtendedProperties
+                                    };
+                                }).ToList()
+                        };
+                    }
+                    else
+                    {
+                        tokenCount++;
+                        return new Models.Token
+                        {
+                            Id = token.TokenId.Id,
+                            TokenizationId = tokenizationId,
+                            TrainingText = token.TrainingText,
+                            EngineTokenId = token.TokenId.ToString(),
+                            BookNumber = token.TokenId.BookNumber,
+                            ChapterNumber = token.TokenId.ChapterNumber,
+                            VerseNumber = token.TokenId.VerseNumber,
+                            WordNumber = token.TokenId.WordNumber,
+                            SubwordNumber = token.TokenId.SubWordNumber,
+                            SurfaceText = token.SurfaceText,
+                            PropertiesJson = token.ExtendedProperties
+                        } as Models.TokenComponent;
+                    }
+                });
+
+            return (bookTokens, tokenCount);
         }
 
         private static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)

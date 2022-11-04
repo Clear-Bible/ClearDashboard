@@ -12,11 +12,12 @@ using SIL.Extensions;
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Diagnostics;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class CreateParallelCorpusCommandHandler : ProjectDbContextCommandHandler<CreateParallelCorpusCommand,
-        RequestResult<ParallelCorpus>, ParallelCorpus>
+        RequestResult<ParallelCorpusId>, ParallelCorpusId>
     {
         private readonly IMediator _mediator;
 
@@ -28,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<ParallelCorpus>> SaveDataAsync(CreateParallelCorpusCommand request,
+        protected override async Task<RequestResult<ParallelCorpusId>> SaveDataAsync(CreateParallelCorpusCommand request,
             CancellationToken cancellationToken)
         {
 #if DEBUG
@@ -48,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             if (sourceTokenizedCorpus == null || targetTokenizedCorpus == null)
             {
-                return new RequestResult<ParallelCorpus>
+                return new RequestResult<ParallelCorpusId>
                 (
                     success: false,
                     message: sourceTokenizedCorpus == null ?
@@ -140,7 +141,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
             catch (NullReferenceException e)
             {
-                return new RequestResult<ParallelCorpus>
+                return new RequestResult<ParallelCorpusId>
                 (
                     success: false,
                     message: e.Message
@@ -148,25 +149,34 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
             ProjectDbContext.ParallelCorpa.Add(parallelCorpusModel);
-            await ProjectDbContext.SaveChangesAsync(cancellationToken);
+
+            try
+            {
+                await ProjectDbContext.SaveChangesAsync(cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (canceled)");
+#endif
+                return new RequestResult<ParallelCorpusId>
+                (
+                    success: false,
+                    message: "Operation canceled",
+                    canceled: true
+                );
+            }
 
 #if DEBUG
             proc.Refresh();
             Logger.LogInformation($"Private memory usage (AFTER INSERT): {proc.PrivateMemorySize64}");
 
             sw.Stop();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Parallel corpus save (end)");
-            sw.Restart();
-#endif
-
-            var parallelCorpus = await ParallelCorpus.Get(_mediator, new ParallelCorpusId(parallelCorpusModel.Id));
-
-#if DEBUG
-            sw.Stop();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
 #endif
 
-            return new RequestResult<ParallelCorpus>(parallelCorpus);
+            return new RequestResult<ParallelCorpusId>(new ParallelCorpusId(parallelCorpusModel.Id));
         }
     }
 }
