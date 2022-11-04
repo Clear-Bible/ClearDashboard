@@ -208,10 +208,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
             SelectedTokens = e.SelectedTokens;
-            var notes = await NoteManager.GetNoteDetailsAsync(SelectedTokens.NoteIds);
+            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
-
+            Message = $"'{e.TokenDisplayViewModel.SurfaceText}' token ({e.TokenDisplayViewModel.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
