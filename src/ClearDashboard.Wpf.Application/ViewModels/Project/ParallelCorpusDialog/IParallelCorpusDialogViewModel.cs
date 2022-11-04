@@ -28,7 +28,6 @@ public interface IParallelCorpusDialogViewModel
     AlignmentSet AlignmentSet { get; set; }
     string? CurrentStepTitle { get; set; }
     string? CurrentProject { get; set; }
-    CancellationTokenSource CreateCancellationTokenSource();
     Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
     Task<LongRunningTaskStatus> TrainSmtModel();
     Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName);
@@ -40,6 +39,5 @@ public interface IParallelCorpusDialogViewModel
 
     void Ok();
     void Cancel();
-    CancellationTokenSource? CancellationTokenSource { get; }
 
 }

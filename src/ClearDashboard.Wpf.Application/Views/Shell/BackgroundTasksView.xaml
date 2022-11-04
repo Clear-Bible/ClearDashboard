@@ -18,13 +18,14 @@
           
              Width="300"
              Height="200"
-             Margin="5">
+             Margin="5"
+             Background="Transparent">
 
     <UserControl.Resources>
         <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="180" ></RowDefinition>
             <RowDefinition Height="20"></RowDefinition>
@@ -173,9 +174,11 @@
                 </TextBlock>
                 <Button
                     x:Name="CloseTaskBox"
+                    cm:Message.Attach="CloseTaskBox"
                     Width="16"
                     Height="16"
                     Padding="0"
+                    Margin="4"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top">
                     X

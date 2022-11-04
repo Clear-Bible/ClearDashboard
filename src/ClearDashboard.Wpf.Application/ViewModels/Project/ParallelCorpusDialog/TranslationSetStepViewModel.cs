@@ -65,7 +65,6 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
     public async void Add()
     {
         CanAdd = false;
-        ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {
             try
@@ -89,6 +88,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
 
                         break;
                     case LongRunningTaskStatus.Failed:
+                    case LongRunningTaskStatus.Cancelled:
                         ParentViewModel.Cancel();
                         break;
                     case LongRunningTaskStatus.NotStarted:
@@ -103,7 +103,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
             {
                 ParentViewModel!.Cancel();
             }
-        }, ParentViewModel!.CancellationTokenSource!.Token);
+        }, CancellationToken.None);
 
     }
 

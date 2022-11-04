@@ -102,7 +102,6 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
     public async void Add()
     {
         CanAdd = false;
-        ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {
             try
@@ -123,6 +122,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
 
                         break;
                     case LongRunningTaskStatus.Failed:
+                    case LongRunningTaskStatus.Cancelled:
                         ParentViewModel.Cancel();
                         break;
                     case LongRunningTaskStatus.NotStarted:
@@ -138,7 +138,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
             {
                 ParentViewModel!.Cancel();
             }
-        }, ParentViewModel!.CancellationTokenSource!.Token);
+        }, CancellationToken.None);
     }
 
     protected override ValidationResult? Validate()

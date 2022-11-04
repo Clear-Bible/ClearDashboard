@@ -96,7 +96,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async void Create()
         {
             CanCreate = false;
-            ParentViewModel!.CreateCancellationTokenSource();
             _ = await Task.Factory.StartNew(async () =>
             {
                 try
@@ -109,6 +108,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                             await MoveForwards();
                             break;
                         case LongRunningTaskStatus.Failed:
+                        case LongRunningTaskStatus.Cancelled:
                             ParentViewModel.Cancel();
                             break;
                         case LongRunningTaskStatus.NotStarted:
@@ -123,7 +123,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 {
                     ParentViewModel!.Cancel();
                 }
-            }, ParentViewModel!.CancellationTokenSource!.Token);
+            }, CancellationToken.None);
         }
 
         protected override ValidationResult? Validate()

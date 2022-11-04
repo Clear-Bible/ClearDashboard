@@ -3,61 +3,79 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Exceptions;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Translation;
+using SIL.Machine.Utils;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Exceptions;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
-using System.Collections.Generic;
-using System;
-using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
-using SIL.Machine.Translation;
-using SIL.Machine.Utils;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
-using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
+   
     public class ParallelCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParallelCorpusDialogViewModel
     {
+
+        internal class TaskNames
+        {
+            public const string AlignmentSet = "AlignmentSet";
+            public const string ParallelCorpus = "ParallelCorpus";
+            public const string TrainingSmtModel = "TrainingSMTModel";
+            public const string TranslationSet = "TranslationSet";
+        }
+
+
+      
 
         public ParallelCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time 
-           // ParallelCorpus = new ParallelCorpus();
-            LongRunningTaskStatus = LongRunningTaskStatus.NotStarted;
         }
 
-        //parameters.Add(new NamedParameter("dialogMode", DialogMode.Add));
-        //parameters.Add(new NamedParameter("connectionViewModel", newConnection));
-        //parameters.Add(new NamedParameter("sourceCorpusNodeViewModel", sourceCorpusNode));
-        //parameters.Add(new NamedParameter("targetCorpusNodeViewModel", targetCorpusNode));
-
-        public ParallelCorpusDialogViewModel(DialogMode dialogMode, ConnectionViewModel connectionViewModel, CorpusNodeViewModel sourceCorpusNodeViewModel, CorpusNodeViewModel targetCorpusNodeViewModel, DashboardProjectManager? projectManager, INavigationService navigationService, ILogger<ParallelCorpusDialogViewModel> logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        
+        public ParallelCorpusDialogViewModel(DialogMode dialogMode, 
+                                ConnectionViewModel connectionViewModel, 
+                                CorpusNodeViewModel sourceCorpusNodeViewModel, 
+                                CorpusNodeViewModel targetCorpusNodeViewModel, 
+                                DashboardProjectManager? projectManager, 
+                                INavigationService navigationService, 
+                                ILogger<ParallelCorpusDialogViewModel> logger,
+                                IEventAggregator eventAggregator, 
+                                IMediator mediator, 
+                                ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager) 
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            _longRunningTaskManager = longRunningTaskManager;
             CanOk = true;
-            DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger);
+
+            DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger!);
 
             DialogMode = dialogMode;
             ConnectionViewModel = connectionViewModel;
             SourceCorpusNodeViewModel = sourceCorpusNodeViewModel;
             TargetCorpusNodeViewModel = targetCorpusNodeViewModel;
-
-            LongRunningTaskStatus = LongRunningTaskStatus.NotStarted;
             SelectedSmtAlgorithm = SmtModelType.FastAlign;
         }
+
+        private readonly LongRunningTaskManager _longRunningTaskManager;
+        public LongRunningTask CurrentLongRunningTask { get; set; }
 
         public CorpusNodeViewModel SourceCorpusNodeViewModel
         {
@@ -115,10 +133,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
 
-        public bool CanCancel => true /* can always cancel */;
+        public bool CanCancel => (CurrentTask != null && CurrentTask.Status != LongRunningTaskStatus.Running ) /* can always cancel */;
         public async void Cancel()
         {
+            CancelCurrentTask();
+
             await TryCloseAsync(false);
+        }
+
+        private void CancelCurrentTask()
+        {
+            if (CurrentTask is { Status: LongRunningTaskStatus.Running })
+            {
+                Logger!.LogInformation($"Cancelling {CurrentTask.Name}");
+                CurrentTask.Cancel();
+            }
+        }
+
+        // The user clicked the close button for the dialog.
+        public void OnClose(CancelEventArgs args)
+        {
+            if (args.Cancel)
+            {
+                Logger!.LogInformation("OnClose() called with 'Cancel' set to true");
+                CancelCurrentTask();
+            }
         }
 
 
@@ -141,18 +180,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public EngineParallelTextCorpus ParallelTextCorpus { get; set; }
 
-        // ReSharper disable once RedundantDefaultMemberInitializer
-        public CancellationTokenSource? CancellationTokenSource { get; private set; }
-        public bool LongProcessRunning;
         private ConnectionViewModel _connectionViewModel;
 
-        public LongRunningTaskStatus LongRunningTaskStatus { get; set; }
+        public LongRunningTask? CurrentTask { get; set; }
 
-        public CancellationTokenSource CreateCancellationTokenSource()
-        {
-            CancellationTokenSource = new CancellationTokenSource();
-            return CancellationTokenSource;
-        }
+   
 
         public async Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName)
         {
@@ -171,76 +203,107 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 
             IsBusy = true;
-            CancellationTokenSource ??= new CancellationTokenSource();
 
-            var cancellationToken = CancellationTokenSource.Token;
-
-            var statusName = "ParallelCorpus";
+            var taskName = "ParallelCorpus";
+            CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
+            var cancellationToken = CurrentTask!.CancellationTokenSource!.Token;
 
             try
             {
-                LongRunningTaskStatus = LongRunningTaskStatus.Running;
-                Logger!.LogInformation($"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'.");
-                await SendBackgroundStatus(statusName,
+                
+                Logger!.LogInformation(
+                    $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'.");
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
 
-                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
-                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
+                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator,
+                    new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
+                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator,
+                    new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
 
                 Logger!.LogInformation($"Parallelizing source and target corpora");
-                await SendBackgroundStatus(statusName,
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Parallelizing source and target corpora for '{parallelCorpusDisplayName}'...");
 
                 // TODO:  Ask Chris/Russell how to go from models VerseMapping to Engine VerseMapping
-                ParallelTextCorpus = await Task.Run(async () => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new List<ClearBible.Engine.Corpora.VerseMapping>()), cancellationToken);
+                ParallelTextCorpus =
+                    await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
+                            new List<ClearBible.Engine.Corpora.VerseMapping>()), cancellationToken);
 
+                cancellationToken.ThrowIfCancellationRequested();
 
                 Logger!.LogInformation($"Saving parallelization '{parallelCorpusDisplayName}'");
-                await SendBackgroundStatus(statusName,
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Saving parallelization '{parallelCorpusDisplayName}'...");
 
-                ParallelTokenizedCorpus = await ParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!);
+                ParallelTokenizedCorpus = await ParallelTextCorpus.Create(parallelCorpusDisplayName, Mediator!, cancellationToken);
 
-                await SendBackgroundStatus(statusName,
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed saving parallelization '{parallelCorpusDisplayName}'.");
 
-                Logger.LogInformation($"Completed saving parallelization '{parallelCorpusDisplayName}'");
+                Logger!.LogInformation($"Completed saving parallelization '{parallelCorpusDisplayName}'");
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Completed;
+                CurrentTask.Status = LongRunningTaskStatus.Completed;
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger!.LogInformation($"AddParallelCorpus - operation canceled.");
+                
+            }
+            catch (MediatorErrorEngineException ex)
+            {
+                if (ex.Message.Contains("The operation was canceled."))
+                {
+                    Logger!.LogInformation($"AddParallelCorpus - operation canceled.");
+                }
+                else
+                {
+                    Logger!.LogError(ex, "An unexpected Engine exception was thrown.");
+                }
+
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"An unexpected error occurred while creating the ParallelCorpus.");
+                Logger!.LogError(ex, $"An unexpected error occurred while creating the ParallelCorpus.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await SendBackgroundStatus(statusName,
+                    await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception: ex);
 
                 }
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Failed;
+                CurrentTask.Status = LongRunningTaskStatus.Failed;
             }
             finally
             {
-                CancellationTokenSource.Dispose();
-                LongProcessRunning = false;
+                _longRunningTaskManager.TaskComplete(taskName);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    CurrentTask.Status = LongRunningTaskStatus.Cancelled;
+
+                    await SendBackgroundStatus(taskName,
+                        LongRunningTaskStatus.Completed,
+                        cancellationToken,
+                        $"Parallelization was canceled.'{parallelCorpusDisplayName}'.");
+                }
+
                 IsBusy = false;
                 Message = string.Empty;
             }
 
             PlaySound.PlaySoundFromResource(null, null);
 
-            return LongRunningTaskStatus;
+            return CurrentTask.Status;
         }
 
 
@@ -248,20 +311,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> TrainSmtModel()
         {
             IsBusy = true;
-            CancellationTokenSource ??= new CancellationTokenSource();
-            var cancellationToken = CancellationTokenSource.Token;
-            var statusName = " TrainingSMTModel";
+            var taskName = " TrainingSMTModel"; 
+            CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
+            var cancellationToken = CurrentTask.CancellationTokenSource.Token;
             try
             {
-                LongRunningTaskStatus = LongRunningTaskStatus.Running;
-                await SendBackgroundStatus(statusName,
+                CurrentTask.Status = LongRunningTaskStatus.Running;
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Training SMT Model '{SelectedSmtAlgorithm}'.");
 
                 Logger!.LogInformation($"Training SMT Model '{SelectedSmtAlgorithm}'.");
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Completed;
+                CurrentTask.Status = LongRunningTaskStatus.Completed;
 
                 TranslationCommandable = new TranslationCommands();
 
@@ -270,13 +333,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     ParallelTextCorpus,
                     new DelegateProgress(async status =>
                         {
-                            var message = $"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}";
-                            await SendBackgroundStatus(statusName, LongRunningTaskStatus.Running, cancellationToken, message);
-                          Logger!.LogInformation(message);
+                            var message =
+                                $"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}";
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
+                                message);
+                            Logger!.LogInformation(message);
+
+
+                            // CODE REVIEW:  Is this a good idea? NO!
+                            //cancellationToken.ThrowIfCancellationRequested();
                         }
                     ), SymmetrizationHeuristic.GrowDiagFinalAnd);
 
-                await SendBackgroundStatus(statusName,
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed SMT Model '{SelectedSmtAlgorithm}'.");
@@ -285,30 +354,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 
             }
+            catch (OperationCanceledException ex)
+            {
+                Logger!.LogInformation($"TrainSmtModel - operation canceled.");
+            }
+            catch (MediatorErrorEngineException ex)
+            {
+                if (ex.Message.Contains("The operation was canceled."))
+                {
+                    Logger!.LogInformation($"TrainSmtModel - operation canceled.");
+                }
+                else
+                {
+                    Logger!.LogError(ex, "An unexpected Engine exception was thrown.");
+                }
+
+            }
             catch (Exception ex)
             {
                 Logger!.LogError(ex, $"An unexpected error occurred while training the SMT model.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await SendBackgroundStatus(statusName,
+                    await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception: ex);
                 }
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Failed;
+                CurrentTask.Status = LongRunningTaskStatus.Failed;
             }
             finally
             {
-                CancellationTokenSource.Dispose();
-                LongProcessRunning = false;
+                _longRunningTaskManager.TaskComplete(taskName);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    CurrentTask.Status = LongRunningTaskStatus.Cancelled;
+                    await SendBackgroundStatus(taskName,
+                        LongRunningTaskStatus.Completed,
+                        cancellationToken,
+                        $"Training the SMT Model was canceled.'{SelectedSmtAlgorithm}'.");
+                }
                 IsBusy = false;
                 Message = string.Empty;
             }
 
             PlaySound.PlaySoundFromResource(null, null);
 
-            return LongRunningTaskStatus;
+            return CurrentTask.Status;
         }
 
 
@@ -316,59 +408,83 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
         {
             IsBusy = true;
-            CancellationTokenSource ??= new CancellationTokenSource();
-            var cancellationToken = CancellationTokenSource.Token;
-            var statusName = "TranslationSet";
+            var taskName = "TranslationSet";
+            CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
+            var cancellationToken = CurrentTask.CancellationTokenSource.Token;
             try
             {
-                LongRunningTaskStatus = LongRunningTaskStatus.Running;
-                await SendBackgroundStatus(statusName,
+                CurrentTask.Status = LongRunningTaskStatus.Running;
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Creating the TranslationSet '{translationSetDisplayName}'...");
 
                 var translationModel = WordAlignmentModel.GetTranslationTable();
-                //TranslationSet = await translationModel.Create(translationSetDisplayName,
-                //   SelectedSmtAlgorithm.ToString(), new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
 
+                cancellationToken.ThrowIfCancellationRequested();
+                
                 // RUSSELL - code review
                 TranslationSet = await TranslationSet.Create(null, AlignmentSet.AlignmentSetId,
-                    translationSetDisplayName, new Dictionary<string, object>(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
+                    translationSetDisplayName, new Dictionary<string, object>(),
+                    ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
 
 
 
-                await SendBackgroundStatus(statusName,
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed creation of the TranslationSet '{translationSetDisplayName}'.");
                 Logger!.LogInformation($"Completed creating the TranslationSet '{translationSetDisplayName}'");
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Completed;
+                CurrentTask.Status = LongRunningTaskStatus.Completed;
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger!.LogInformation($"AddTranslationSet - operation canceled.");
+            }
+            catch (MediatorErrorEngineException ex)
+            {
+                if (ex.Message.Contains("The operation was canceled."))
+                {
+                    Logger!.LogInformation($"AddTranslationSet - operation canceled.");
+                }
+                else
+                {
+                    Logger!.LogError(ex, "An unexpected Engine exception was thrown.");
+                }
+
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"An unexpected error occurred while creating creating the TranslationSet.");
+                Logger!.LogError(ex, $"An unexpected error occurred while creating creating the TranslationSet.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await SendBackgroundStatus(statusName,
+                    await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception: ex);
                 }
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Failed;
+                CurrentTask.Status = LongRunningTaskStatus.Failed;
             }
             finally
             {
-                CancellationTokenSource.Dispose();
-                LongProcessRunning = false;
+                _longRunningTaskManager.TaskComplete(taskName);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    CurrentTask.Status = LongRunningTaskStatus.Cancelled;
+                    await SendBackgroundStatus(taskName,
+                        LongRunningTaskStatus.Completed,
+                        cancellationToken,
+                        $"Creation of the TranslationSet was canceled.'{translationSetDisplayName}'.");
+                }
                 IsBusy = false;
                 Message = string.Empty;
             }
 
             PlaySound.PlaySoundFromResource(null, null);
 
-            return LongRunningTaskStatus;
+            return CurrentTask.Status;
 
         }
 
@@ -379,56 +495,91 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName)
         {
             IsBusy = true;
-            CancellationTokenSource ??= new CancellationTokenSource();
-            var cancellationToken = CancellationTokenSource.Token;
-            var statusName = "AlignmentSet";
+   
+            var taskName = "AlignmentSet";
+            CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
+            var cancellationToken = CurrentTask.CancellationTokenSource.Token;
             try
             {
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Running;
-                await SendBackgroundStatus(statusName,
+                CurrentTask.Status = LongRunningTaskStatus.Running;
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
                     $"Aligning corpora and creating the AlignmentSet '{alignmentSetDisplayName}'...");
 
-                AlignedTokenPairs = TranslationCommandable.PredictAllAlignedTokenIdPairs(WordAlignmentModel, ParallelTextCorpus);
+                AlignedTokenPairs =
+                    TranslationCommandable.PredictAllAlignedTokenIdPairs(WordAlignmentModel, ParallelTextCorpus);
+
+                cancellationToken.ThrowIfCancellationRequested();
+
                 AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.ToString(),
-                    false, new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator);
-                await SendBackgroundStatus(statusName,
+                    false, new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
+                await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
                     cancellationToken,
                     $"Completed creation of the AlignmentSet '{alignmentSetDisplayName}'.");
-               
+
                 Logger!.LogInformation($"Completed creating the AlignmentSet '{alignmentSetDisplayName}'");
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Completed;
+               CurrentTask.Status = LongRunningTaskStatus.Completed;
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger!.LogInformation($"AddAlignmentSet - operation canceled.");
+            }
+            catch (MediatorErrorEngineException ex)
+            {
+                if (ex.Message.Contains("The operation was canceled."))
+                {
+                    Logger!.LogInformation($"AddAlignmentSet - operation canceled.");
+                }
+                else
+                {
+                    Logger!.LogError(ex, "An unexpected Engine exception was thrown.");
+                }
+
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, $"An unexpected error occurred while creating creating the AlignmentSet.");
+                Logger!.LogError(ex, $"An unexpected error occurred while creating creating the AlignmentSet.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await SendBackgroundStatus(statusName,
+                    await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
                         exception:ex);
                 }
 
-                LongRunningTaskStatus = LongRunningTaskStatus.Failed;
+                CurrentTask.Status = LongRunningTaskStatus.Failed;
             }
             finally
             {
-                CancellationTokenSource.Dispose();
-                LongProcessRunning = false;
+                _longRunningTaskManager.TaskComplete(taskName);
+
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    CurrentTask.Status = LongRunningTaskStatus.Cancelled;
+                    await SendBackgroundStatus(taskName,
+                        LongRunningTaskStatus.Completed,
+                        cancellationToken,
+                        $"Creation of the AlignmentSet was canceled.'{alignmentSetDisplayName}'.");
+                }
                 IsBusy = false;
                 Message = string.Empty;
             }
 
             PlaySound.PlaySoundFromResource(null, null);
 
-            return LongRunningTaskStatus;
+            return CurrentTask.Status;
         }
 
-
+        /// <summary>
+        /// Button click for the background tasks on the status bar
+        /// </summary>
+        public async void BackgroundTasks()
+        {
+            await EventAggregator!.PublishOnUIThreadAsync(new ToggleBackgroundTasksVisibilityMessage());
+        }
     }
 }

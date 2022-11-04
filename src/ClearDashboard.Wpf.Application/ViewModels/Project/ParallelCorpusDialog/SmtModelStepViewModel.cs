@@ -63,7 +63,6 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
     public async void Train()
     {
         CanTrain = false;
-        ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {
             try
@@ -76,6 +75,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
                         await MoveForwards();
                         break;
                     case LongRunningTaskStatus.Failed:
+                    case LongRunningTaskStatus.Cancelled:
                         ParentViewModel.Cancel();
                         break;
                     case LongRunningTaskStatus.NotStarted:
@@ -90,6 +90,6 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
             {
                 ParentViewModel!.Cancel();
             }
-        }, ParentViewModel!.CancellationTokenSource!.Token);
+        }, CancellationToken.None);
     }
 }

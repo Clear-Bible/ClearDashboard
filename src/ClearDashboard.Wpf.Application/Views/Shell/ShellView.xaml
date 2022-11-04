@@ -248,7 +248,8 @@
                                     StaysOpen="True"
                                     AllowsTransparency="True"
                                     VerticalOffset="12"
-                                    HorizontalOffset="270">
+                                    HorizontalOffset="270"
+                                    IsTopmost="False">
             <shell1:BackgroundTasksView x:Name="BackgroundTasksView"  
                                                DataContext="{Binding BackgroundTasksViewModel}"/>
 

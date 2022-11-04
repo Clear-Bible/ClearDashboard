@@ -40,6 +40,7 @@ using ClearBible.Macula.PropertiesSources.Tokenization;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DataAccessLayer.Threading;
+using System.Dynamic;
 
 
 // ReSharper disable once CheckNamespace
@@ -159,7 +160,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Observable Properties
 
-        private ObservableCollection<DAL.Alignment.Corpora.Corpus> Corpora { get; set; }
+        private BindableCollection<DAL.Alignment.Corpora.Corpus> Corpora { get; set; }
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -336,7 +337,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
-            Corpora = new ObservableCollection<DAL.Alignment.Corpora.Corpus>();
+            Corpora = new BindableCollection<DAL.Alignment.Corpora.Corpus>();
         }
 
         //protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -1838,51 +1839,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             var dialogViewModel = LifetimeScope?.Resolve<ParallelCorpusDialogViewModel>(parameters);
 
-            var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
-
-            PlaySound.PlaySoundFromResource(null, null);
-
-            if (success)
+            try
             {
-                // get TranslationSet , etc from the dialogViewModel
-                var translationSet = dialogViewModel.TranslationSet;
+                var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
 
-                if (translationSet != null)
+                PlaySound.PlaySoundFromResource(null, null);
+
+                if (success)
                 {
-                    newConnection.TranslationSetInfo.Add(new TranslationSetInfo
+                    // get TranslationSet , etc from the dialogViewModel
+                    var translationSet = dialogViewModel!.TranslationSet;
+
+                    if (translationSet != null)
                     {
-                        DisplayName = translationSet.TranslationSetId.DisplayName,
-                        TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
-                        ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
-                        ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
-                        AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
-                        AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
-                    });
+                        newConnection.TranslationSetInfo.Add(new TranslationSetInfo
+                        {
+                            DisplayName = translationSet.TranslationSetId.DisplayName,
+                            TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
+                            ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
+                            ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
+                            AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
+                            AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
+                        });
+                    }
+
+                    var alignmentSet = dialogViewModel.AlignmentSet;
+                    if (alignmentSet != null)
+                    {
+                        newConnection.AlignmentSetInfo.Add(new AlignmentSetInfo
+                        {
+                            DisplayName = alignmentSet.AlignmentSetId.DisplayName,
+                            AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
+                            ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
+                            ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString(),
+                        });
+                    }
+
+                    newConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
+                    newConnection.ParallelCorpusDisplayName =
+                        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
+                    CreateConnectionMenu(newConnection);
+
+                }
+                else
+                {
+                    DeleteConnection(newConnection);
                 }
 
-                var alignmentSet = dialogViewModel.AlignmentSet;
-                if (alignmentSet != null)
-                {
-                    newConnection.AlignmentSetInfo.Add(new AlignmentSetInfo
-                    {
-                        DisplayName = alignmentSet.AlignmentSetId.DisplayName,
-                        AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
-                        ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
-                        ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString(),
-                    });
-                }
-
-                newConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
-                newConnection.ParallelCorpusDisplayName =
-                    dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
-                CreateConnectionMenu(newConnection);
+            }
+            finally
+            {
                 await SaveCanvas();
             }
-            else
-            {
-                dialogViewModel.CancellationTokenSource?.Cancel();
 
-            }
+         
         }
 
         /// <summary>
@@ -1999,7 +2009,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //
             // Add the node to the view-model.
             //
-            DesignSurface.CorpusNodes.Add(node);
+            OnUIThread(() =>
+            {
+                DesignSurface.CorpusNodes.Add(node);
+            });
+          
             EventAggregator.PublishOnUIThreadAsync(new CorpusAddedMessage(node.ParatextProjectId));
 
             return node;
