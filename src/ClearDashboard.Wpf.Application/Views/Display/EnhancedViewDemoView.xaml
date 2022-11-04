@@ -707,7 +707,7 @@
             <userControls:TranslationSelector
                 cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];"
                 SelectedItem="{Binding CurrentTranslationOption}"
-                TokenDisplayViewModel="{Binding CurrentToken}"
+                TokenDisplayViewModel="{Binding TokenForTranslation}"
                 TranslationOptions="{Binding TranslationOptions}"
                 Visibility="{Binding TranslationPaneVisibility}" />
 
@@ -731,7 +731,7 @@
                 LabelBackground="BlanchedAlmond"
                 LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                LabelSuggestions="{Binding VerseDisplayViewModel.LabelSuggestions}"
+                LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
                 NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 Notes="{Binding SelectedTokens.CombinedNotes}"
                 NoteAssociationFontSize="14"

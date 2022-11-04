@@ -23,7 +23,6 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
-            <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
             <converters:WidthSubtraction x:Key="WidthSubtraction" />
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
             <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
@@ -596,7 +595,7 @@
                         <userControls:TranslationSelector
                             Margin="2,5"
                             SelectedItem="{Binding CurrentTranslationOption}"
-                            TokenDisplayViewModel="{Binding CurrentToken}"
+                            TokenDisplayViewModel="{Binding TokenForTranslation}"
                             TranslationOptions="{Binding TranslationOptions}"
                             Visibility="{Binding TranslationControlVisibility}">
                             <i:Interaction.Triggers>
@@ -617,7 +616,7 @@
                             LabelBackground="BlanchedAlmond"
                             LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            LabelSuggestions="{Binding LabelSuggestions}"
+                            LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
                             NoteAssociationFontSize="14"
                             NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             Notes="{Binding SelectedTokens.CombinedNotes}"
