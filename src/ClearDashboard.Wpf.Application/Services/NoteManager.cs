@@ -14,11 +14,14 @@ using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using SIL.Extensions;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
     public sealed class NoteManager : PropertyChangedBase
     {
+        private NoteIdCollection _currentNoteIds = new();
+        private NoteViewModelCollection _currentNotes = new();
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
 
@@ -28,8 +31,7 @@ namespace ClearDashboard.Wpf.Application.Services
             if (associatedEntityId is TokenId tokenId)
             {
                 var sb = new StringBuilder();
-                sb.Append($"Tokenized Corpus {entityContext[EntityContextKeys.Corpus.DisplayName]} - {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
-                sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
+                sb.Append($"Tokenized Corpus {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
                 sb.Append($" {entityContext[EntityContextKeys.TokenId.BookId]} {entityContext[EntityContextKeys.TokenId.ChapterNumber]}:{entityContext[EntityContextKeys.TokenId.VerseNumber]}");
                 sb.Append($" word {entityContext[EntityContextKeys.TokenId.WordNumber]} part {entityContext[EntityContextKeys.TokenId.SubwordNumber]}");
                 return sb.ToString();
@@ -64,6 +66,18 @@ namespace ClearDashboard.Wpf.Application.Services
         /// Gets a collection of <see cref="Label"/>s that can be used for auto-completion.
         /// </summary>
         public LabelCollection LabelSuggestions { get; private set; } = new();
+
+        public NoteIdCollection CurrentNoteIds
+        {
+            get => _currentNoteIds;
+            private set => Set(ref _currentNoteIds, value);
+        }
+
+        public NoteViewModelCollection CurrentNotes
+        {
+            get => _currentNotes;
+            private set => Set(ref _currentNotes, value);
+        }
 
         /// <summary>
         /// Determines whether the specified entity ID has at least one note associated to it.
@@ -142,7 +156,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 var noteViewModel = new NoteViewModel(note);
 
                 var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
-                var domainEntityContexts = await note.GetDomainEntityContexts(Mediator);
+                var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
                 foreach (var associatedEntityId in associatedEntityIds)
                 {
                     var association = new NoteAssociationViewModel
@@ -202,6 +216,12 @@ namespace ClearDashboard.Wpf.Application.Services
             return result;
         }
 
+
+        public async Task SetCurrentNoteIds(NoteIdCollection noteIds)
+        {
+            CurrentNoteIds = noteIds;
+            CurrentNotes = await GetNoteDetailsAsync(noteIds);
+        }
 
         /// <summary>
         /// Adds a note to a collection of entities.
