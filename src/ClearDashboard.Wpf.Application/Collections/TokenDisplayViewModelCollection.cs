@@ -3,16 +3,34 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.Wpf.Application.ViewModels.Display;
+using SIL.Extensions;
+using SIL.Machine.DataStructures;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Display
+namespace ClearDashboard.Wpf.Application.Collections
 {
-    public class TokenDisplayViewModelCollection : ObservableCollection<TokenDisplayViewModel>, INotifyPropertyChanged
+    public class TokenDisplayViewModelCollection : BindableCollection<TokenDisplayViewModel>
     {
         public NoteViewModelCollection CombinedNotes { get; private set; } = new();
 
         public string CombinedSurfaceText { get; private set; } = string.Empty;
 
-        public EntityIdCollection EntityIds { get; private set; } = new(); 
+        public EntityIdCollection EntityIds => new(Items.Select(t => t.Token.TokenId));
+
+        public NoteIdCollection NoteIds
+        {
+            get
+            {
+                var result = new NoteIdCollection();
+                foreach (var ids in Items.Select(i => i.NoteIds))
+                {
+                    result.AddDistinct(ids);
+                }
+                return result;
+            }
+        }
 
         public TokenDisplayViewModelCollection()
         {
@@ -41,8 +59,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             CombinedSurfaceText = string.Join(", ", Items.Select(t => t.SurfaceText));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(CombinedSurfaceText)));
 
-            EntityIds = new EntityIdCollection(Items.Select(t => t.Token.TokenId));
+            //EntityIds = new EntityIdCollection(Items.Select(t => t.Token.TokenId));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(EntityIds)));
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(NoteIds)));
         }
     }
 }
