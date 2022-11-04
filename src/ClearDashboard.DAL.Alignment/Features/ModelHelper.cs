@@ -12,10 +12,11 @@ namespace ClearDashboard.DAL.Alignment.Features
 {
     public static class ModelHelper
     {
-        public static CompositeToken BuildCompositeToken(Guid tokenCompositeId, IEnumerable<Models.Token> tokens)
+        public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> tokens)
         {
             var ct = new CompositeToken(tokens.Select(t => BuildToken(t)));
-            ct.TokenId.Id = tokenCompositeId;
+            ct.TokenId.Id = tokenComposite.Id;
+            ct.ExtendedProperties = tokenComposite.ExtendedProperties;
 
             return ct;
         }
@@ -28,6 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Features
 
                 var ct = new CompositeToken(tokenComposite.Tokens.Select(t => BuildToken(t)));
                 ct.TokenId.Id = tokenComponent.Id;
+                ct.ExtendedProperties = tokenComponent.ExtendedProperties;
 
                 return ct;
             }
@@ -39,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                     token.SurfaceText ?? string.Empty,
                     token.TrainingText ?? string.Empty)
                 {
-                    ExtendedProperties = token.PropertiesJson
+                    ExtendedProperties = token.ExtendedProperties
                 };
             }
         }
@@ -50,7 +52,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 var tokenComposite = (tokenComponent as Models.TokenComposite)!;
                 return new CompositeTokenId(tokenComposite.Tokens.Select(t => BuildToken(t)))
                 {
-                    Id = tokenComponent.Id
+                    Id = tokenComponent.Id,
                 };
             }
             else

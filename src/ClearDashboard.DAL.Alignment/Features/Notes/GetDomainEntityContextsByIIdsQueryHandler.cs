@@ -13,7 +13,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Linq;
-using SIL.Machine.FiniteState;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;

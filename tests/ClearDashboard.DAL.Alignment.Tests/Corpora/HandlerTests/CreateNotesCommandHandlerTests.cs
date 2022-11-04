@@ -22,6 +22,7 @@ using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
 using ClearDashboard.DAL.Alignment.BackgroundServices;
 using Autofac;
 using System.Threading;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using System.Xml.Serialization;
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
@@ -63,6 +64,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<User> Users => Set<User>();
         public virtual DbSet<Verse> Verses => Set<Verse>();
         public virtual DbSet<VerseMapping> VerseMappings => Set<VerseMapping>();
+        public virtual DbSet<VerseRow> VerseRows => Set<VerseRow>();
         //public virtual DbSet<VerseMappingVerseAssociation> VerseMappingVerseAssociations => Set<VerseMappingVerseAssociation>();
 
         //public virtual DbSet<ParallelTokenizedCorpus> ParallelTokenizedCorpa => Set<ParallelTokenizedCorpus>();

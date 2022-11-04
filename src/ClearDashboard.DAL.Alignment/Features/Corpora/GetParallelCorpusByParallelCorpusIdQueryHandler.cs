@@ -46,6 +46,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         .ThenInclude(vm => vm.Verses)
                             .ThenInclude(v => v.TokenVerseAssociations)
                                 .ThenInclude(tva => tva.TokenComponent)
+                    .Include(pc => pc.TokenComposites)
+                        .ThenInclude(tc => tc.VerseRow)
+                    .Include(pc => pc.TokenComposites)
+                        .ThenInclude(tc => tc.Tokens)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
             var invalidArgMsg = "";
@@ -88,28 +92,49 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             .Where(v => v.CorpusId == sourceCorpusId)
                             .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
                             .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))
-                            .Select(v => new Verse(
-                                bookNumbersToAbbreviations[(int)v.BookNumber!],
-                                (int)v.ChapterNumber!,
-                                (int)v.VerseNumber!,
-                                v.TokenVerseAssociations
+                            .Select(v => 
+                            {
+                                var currentBCV = VerseBCV(v);
+
+                                var sourceTokens = v.TokenVerseAssociations
                                     .Where(tva => tva.TokenComponent != null)
                                     .OrderBy(tva => tva.Position)
                                     .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
-                            ));
+                                    .Union(parallelCorpus.TokenComposites
+                                        .Where(tc => tc.TokenizationId == parallelCorpus.SourceTokenizedCorpusId)
+                                        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
+                                        .Select(tc => ModelHelper.BuildTokenId(tc)));
+
+                                return new Verse(
+                                    bookNumbersToAbbreviations[(int)v.BookNumber!],
+                                    (int)v.ChapterNumber!,
+                                    (int)v.VerseNumber!,
+                                    sourceTokens);
+                            });
+
                         var targetVerses = vm.Verses
                             .Where(v => v.CorpusId == targetCorpusId)
                             .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
                             .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))
-                            .Select(v => new Verse(
-                                bookNumbersToAbbreviations[(int)v.BookNumber!],
-                                (int)v.ChapterNumber!,
-                                (int)v.VerseNumber!,
-                                v.TokenVerseAssociations
+                            .Select(v =>
+                            {
+                                var currentBCV = VerseBCV(v);
+
+                                var targetTokens = v.TokenVerseAssociations
                                     .Where(tva => tva.TokenComponent != null)
                                     .OrderBy(tva => tva.Position)
                                     .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
-                            ));
+                                    .Union(parallelCorpus.TokenComposites
+                                        .Where(tc => tc.TokenizationId == parallelCorpus.TargetTokenizedCorpusId)
+                                        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
+                                        .Select(tc => ModelHelper.BuildTokenId(tc)));
+
+                                return new Verse(
+                                    bookNumbersToAbbreviations[(int)v.BookNumber!],
+                                    (int)v.ChapterNumber!,
+                                    (int)v.VerseNumber!,
+                                    targetTokens);
+                            });
 
                         return new VerseMapping(sourceVerses, targetVerses);
                     });
@@ -136,6 +161,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     message: e.Message
                 );
             }
+        }
+
+        private static string VerseBCV(Models.Verse v)
+        {
+            return $"{v.BookNumber:000}{v.ChapterNumber:000}{v.VerseNumber:000}";
         }
     }
 }

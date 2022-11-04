@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using SIL.Scripture;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
@@ -104,6 +105,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 using var transaction = await connection.BeginTransactionAsync(cancellationToken);
 
                 using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand(connection);
+                using var verseRowInsertCommand = CreateVerseRowInsertCommand(connection);
                 using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(connection); 
 
                 await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
@@ -127,62 +129,103 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", dups)}", message: $"Engine token Id duplicates found in corpus '{corpus.Name}' book '{bookId}'");
                     }
 
-                    var bookTokens = ttrs
+                    var multiVerseSpanningComposites = ttrs
                         .SelectMany(ttr => ttr.Tokens)
-                        .Select(token =>
+                        .Where(ct => ct is CompositeToken)
+                        .Select(ct => (ct as CompositeToken)!.Tokens
+                            .GroupBy(token => new { token.TokenId.BookNumber, token.TokenId.ChapterNumber, token.TokenId.VerseNumber }))
+                            .Where(g2 => g2.Count() > 1)
+                            .Select(g2 => g2
+                                .Select(g => new { bcv = g.Key, Count = g.Count() }));
+
+                    if (multiVerseSpanningComposites.Any())
+                    {
+                        throw new Exception($"TokensTextRow for book '{bookId}' contains CompositeToken(s) having child tokens from more than one book-chapter-verse");
+                    }
+
+                    var verseRows = ttrs
+                        .Where(ttr => ttr.IsEmpty == false)
+                        .Select(ttr =>
                         {
-                            if (token is CompositeToken compositeToken)
+                            var verseRowId = Guid.NewGuid(); //TEMP
+                            var (b, c, v) = (
+                                ((VerseRef)ttr.Ref).BookNum,
+                                ((VerseRef)ttr.Ref).ChapterNum,
+                                ((VerseRef)ttr.Ref).VerseNum);
+                            
+                            return new Models.VerseRow
                             {
-                                tokenCount++;
-                                return new Models.TokenComposite
-                                {
-                                    Id = compositeToken.TokenId.Id,
-                                    TokenizationId = tokenizationId,
-                                    TrainingText = compositeToken.TrainingText,
-                                    EngineTokenId = compositeToken.TokenId.ToString(),
-                                    Tokens = compositeToken.GetPositionalSortedBaseTokens()
-                                        .Select(childToken =>
+                                Id = verseRowId,
+                                TokenizationId = tokenizationId,
+                                BookChapterVerse = $"{b:000}{c:000}{v:000}",
+                                OriginalText = ttr.Text,
+                                IsSentenceStart = ttr.IsSentenceStart,
+                                IsInRange = ttr.IsInRange,
+                                IsRangeStart = ttr.IsRangeStart,
+                                IsEmpty = ttr.IsEmpty,
+                                TokenComponents = ttr.Tokens
+                                    .Select(token =>
+                                    {
+                                        if (token is CompositeToken compositeToken)
+                                        {
+                                            tokenCount++;
+                                            return new Models.TokenComposite
+                                            {
+                                                Id = compositeToken.TokenId.Id,
+                                                VerseRowId = verseRowId,
+                                                TokenizationId = tokenizationId,
+                                                TrainingText = compositeToken.TrainingText,
+                                                ExtendedProperties = compositeToken.ExtendedProperties,
+                                                EngineTokenId = compositeToken.TokenId.ToString(),
+                                                Tokens = compositeToken.GetPositionalSortedBaseTokens()
+                                                    .Select(childToken =>
+                                                    {
+                                                        tokenCount++;
+                                                        return new Models.Token
+                                                        {
+                                                            Id = childToken.TokenId.Id,
+                                                            VerseRowId = verseRowId,
+                                                            TokenizationId = tokenizationId,
+                                                            TrainingText = childToken.TrainingText,
+                                                            EngineTokenId = childToken.TokenId.ToString(),
+                                                            BookNumber = childToken.TokenId.BookNumber,
+                                                            ChapterNumber = childToken.TokenId.ChapterNumber,
+                                                            VerseNumber = childToken.TokenId.VerseNumber,
+                                                            WordNumber = childToken.TokenId.WordNumber,
+                                                            SubwordNumber = childToken.TokenId.SubWordNumber,
+                                                            SurfaceText = childToken.SurfaceText,
+                                                            ExtendedProperties = childToken.ExtendedProperties
+                                                        };
+                                                    }).ToList()
+                                            };
+                                        }
+                                        else
                                         {
                                             tokenCount++;
                                             return new Models.Token
                                             {
-                                                Id = childToken.TokenId.Id,
+                                                Id = token.TokenId.Id,
+                                                VerseRowId = verseRowId,
                                                 TokenizationId = tokenizationId,
-                                                TrainingText = childToken.TrainingText,
-                                                EngineTokenId = childToken.TokenId.ToString(),
-                                                BookNumber = childToken.TokenId.BookNumber,
-                                                ChapterNumber = childToken.TokenId.ChapterNumber,
-                                                VerseNumber = childToken.TokenId.VerseNumber,
-                                                WordNumber = childToken.TokenId.WordNumber,
-                                                SubwordNumber = childToken.TokenId.SubWordNumber,
-                                                SurfaceText = childToken.SurfaceText,
-                                                PropertiesJson = childToken.ExtendedProperties
-                                            };
-                                        }).ToList()
-                                };
-                            }
-                            else
-                            {
-                                tokenCount++;
-                                return new Models.Token
-                                {
-                                    Id = token.TokenId.Id,
-                                    TokenizationId = tokenizationId,
-                                    TrainingText = token.TrainingText,
-                                    EngineTokenId = token.TokenId.ToString(),
-                                    BookNumber = token.TokenId.BookNumber,
-                                    ChapterNumber = token.TokenId.ChapterNumber,
-                                    VerseNumber = token.TokenId.VerseNumber,
-                                    WordNumber = token.TokenId.WordNumber,
-                                    SubwordNumber = token.TokenId.SubWordNumber,
-                                    SurfaceText = token.SurfaceText,
-                                    PropertiesJson = token.ExtendedProperties
-                                } as Models.TokenComponent;
-                            }
+                                                TrainingText = token.TrainingText,
+                                                EngineTokenId = token.TokenId.ToString(),
+                                                BookNumber = token.TokenId.BookNumber,
+                                                ChapterNumber = token.TokenId.ChapterNumber,
+                                                VerseNumber = token.TokenId.VerseNumber,
+                                                WordNumber = token.TokenId.WordNumber,
+                                                SubwordNumber = token.TokenId.SubWordNumber,
+                                                SurfaceText = token.SurfaceText,
+                                                ExtendedProperties = token.ExtendedProperties
+                                            } as Models.TokenComponent;
+                                        }
+                                    })
+                                .ToList()
+                            };
                         });
 
-                    await InsertTokenComponentsAsync(
-                            bookTokens, 
+                    await InsertVerseRowsAsync(
+                            verseRows, 
+                            verseRowInsertCommand,
                             tokenComponentInsertCommand, 
                             cancellationToken);
                 }
@@ -196,7 +239,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
                     request.CorpusId,
                     _mediator,
-                    bookIds);
+                    bookIds,
+                    request.Versification);
 
                 //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
 
@@ -227,16 +271,52 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
         }
 
+        private static DbCommand CreateVerseRowInsertCommand(DbConnection connection)
+        {
+            var command = connection.CreateCommand();
+            var columns = new string[] { "Id", "BookChapterVerse", "OriginalText", "TokenizationId", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty" };
+
+            ApplyColumnsToCommand(command, typeof(Models.VerseRow), columns);
+
+            command.Prepare();
+
+            return command;
+        }
+
+        private static async Task InsertVerseRowAsync(Models.VerseRow verseRow, DbCommand verseRowCmd, CancellationToken cancellationToken)
+        {
+            verseRowCmd.Parameters["@Id"].Value = verseRow.Id;
+            verseRowCmd.Parameters["@BookChapterVerse"].Value = verseRow.BookChapterVerse;
+            verseRowCmd.Parameters["@OriginalText"].Value = verseRow.OriginalText;
+            verseRowCmd.Parameters["@IsSentenceStart"].Value = verseRow.IsSentenceStart;
+            verseRowCmd.Parameters["@IsInRange"].Value = verseRow.IsInRange;
+            verseRowCmd.Parameters["@IsRangeStart"].Value = verseRow.IsRangeStart;
+            verseRowCmd.Parameters["@IsEmpty"].Value = verseRow.IsEmpty;
+            verseRowCmd.Parameters["@TokenizationId"].Value = verseRow.TokenizationId;
+
+            _ = await verseRowCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
+
         private static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "TokenizationId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "PropertiesJson", "TokenCompositeId" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizationId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "TokenCompositeId" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
 
             command.Prepare();
 
             return command;
+        }
+        private static async Task InsertVerseRowsAsync(IEnumerable<Models.VerseRow> verseRows, DbCommand verseRowCmd, DbCommand componentCmd, CancellationToken cancellationToken)
+        {
+            foreach (var verseRow in verseRows)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                await InsertVerseRowAsync(verseRow, verseRowCmd, cancellationToken);
+                await InsertTokenComponentsAsync(verseRow.TokenComponents, componentCmd, cancellationToken);
+            }
         }
 
         private static async Task InsertTokenComponentsAsync(IEnumerable<Models.TokenComponent> tokenComponents, DbCommand componentCmd, CancellationToken cancellationToken)
@@ -252,6 +332,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                     foreach (var token in tokenComposite.Tokens)
                     {
+                        cancellationToken.ThrowIfCancellationRequested();
                         await InsertTokenAsync(token, tokenComposite.Id, componentCmd, cancellationToken);
                     }
                 }
@@ -267,6 +348,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@Id"].Value = token.Id;
             componentCmd.Parameters["@EngineTokenId"].Value = token.EngineTokenId;
             componentCmd.Parameters["@TrainingText"].Value = token.TrainingText;
+            componentCmd.Parameters["@VerseRowId"].Value = token.VerseRowId;
             componentCmd.Parameters["@TokenizationId"].Value = token.TokenizationId;
             componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = token.BookNumber;
@@ -275,7 +357,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@WordNumber"].Value = token.WordNumber;
             componentCmd.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
             componentCmd.Parameters["@SurfaceText"].Value = token.SurfaceText;
-            componentCmd.Parameters["@PropertiesJson"].Value = (token.PropertiesJson != null) ? token.PropertiesJson : DBNull.Value;
+            componentCmd.Parameters["@ExtendedProperties"].Value = (token.ExtendedProperties != null) ? token.ExtendedProperties : DBNull.Value;
             componentCmd.Parameters["@TokenCompositeId"].Value = (tokenCompositeId != null) ? tokenCompositeId : DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -284,6 +366,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@Id"].Value = tokenComposite.Id;
             componentCmd.Parameters["@EngineTokenId"].Value = tokenComposite.EngineTokenId;
             componentCmd.Parameters["@TrainingText"].Value = tokenComposite.TrainingText;
+            componentCmd.Parameters["@VerseRowId"].Value = tokenComposite.VerseRowId;
+            componentCmd.Parameters["@ExtendedProperties"].Value = (tokenComposite.ExtendedProperties != null) ? tokenComposite.ExtendedProperties : DBNull.Value;
             componentCmd.Parameters["@TokenizationId"].Value = tokenComposite.TokenizationId;
             componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = DBNull.Value;
@@ -292,7 +376,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@WordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SubwordNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@SurfaceText"].Value = DBNull.Value;
-            componentCmd.Parameters["@PropertiesJson"].Value = DBNull.Value;
             componentCmd.Parameters["@TokenCompositeId"].Value = DBNull.Value;
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }

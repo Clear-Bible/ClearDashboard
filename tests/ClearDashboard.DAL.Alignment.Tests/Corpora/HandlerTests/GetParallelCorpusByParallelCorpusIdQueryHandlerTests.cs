@@ -1,5 +1,4 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DataAccessLayer.Annotations;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Tokenization;
@@ -18,6 +17,7 @@ using Xunit.Abstractions;
 
 using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Data.Sqlite;
+using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -90,6 +90,49 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             // Save:
             var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
+            var sourceTokensForComposite = ProjectDbContext.Tokens
+                .Where(t => t.TokenizationId == sourceTokenizedCorpus.Id)
+                .Take(10)
+                .ToList()
+                .GroupBy(t => t.VerseRowId)
+                .First();
+            var targetTokensForComposite = ProjectDbContext.Tokens
+                .Where(t => t.TokenizationId == targetTokenizedCorpus.Id)
+                .Take(10)
+                .ToList()
+                .GroupBy(t => t.VerseRowId)
+                .First();
+
+            var sourceTokenComposite = new Models.TokenComposite()
+            {
+                Id = Guid.NewGuid(),
+                EngineTokenId = "0101010101-999",
+                VerseRowId = sourceTokensForComposite.Key,
+                TokenizationId = sourceTokenizedCorpus.Id,
+                ParallelCorpusId = parallelTokenizedCorpus.ParallelCorpusId.Id
+            };
+            var targetTokenComposite = new Models.TokenComposite()
+            {
+                Id = Guid.NewGuid(),
+                EngineTokenId = "0101010101-9999",
+                VerseRowId = targetTokensForComposite.Key,
+                TokenizationId = targetTokenizedCorpus.Id,
+                ParallelCorpusId = parallelTokenizedCorpus.ParallelCorpusId.Id
+            };
+            ProjectDbContext.TokenComponents.Add(targetTokenComposite);
+            ProjectDbContext.TokenComponents.Add(sourceTokenComposite);
+
+            foreach (var t in sourceTokensForComposite.Select(t => t).Take(3))
+            {
+                t.TokenCompositeId = sourceTokenComposite.Id;
+            }
+            foreach (var t in targetTokensForComposite.Select(t => t).Take(2))
+            {
+                t.TokenCompositeId = targetTokenComposite.Id;
+            }
+
+            _ = await ProjectDbContext.SaveChangesAsync();
+
             // Clear ProjectDbContext:
             ProjectDbContext.ChangeTracker.Clear();
 
@@ -129,12 +172,43 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                 Output.WriteLine($"TokenVerseAssocation (source) book {tokenId.BookNumber}, chapter {tokenId.ChapterNumber}, verse: {tokenId.VerseNumber}");
             }
 
+            var sct = queryResult.Data.verseMappings
+                .SelectMany(vm => vm.SourceVerses
+                    .SelectMany(sv => sv.TokenIds))
+                .Where(t => t.Id == sourceTokenComposite.Id);
+            Assert.Single(sct);
+            Assert.True(sct.First() is CompositeTokenId);
+            Output.WriteLine($"\nComposite (source): {sct.First()}");
+
             Output.WriteLine("");
 
             foreach (var tokenId in targetTokenIdsFirstMappingFirstVerse)
             {
                 Output.WriteLine($"TokenVerseAssocation (target) book {tokenId.BookNumber}, chapter {tokenId.ChapterNumber}, verse: {tokenId.VerseNumber}");
             }
+
+            var tct = queryResult.Data.verseMappings
+                .SelectMany(vm => vm.TargetVerses
+                    .SelectMany(sv => sv.TokenIds))
+                .Where(t => t.Id == targetTokenComposite.Id);
+            Assert.Single(tct);
+            Assert.True(tct.First() is CompositeTokenId);
+            Output.WriteLine($"\nComposite (target): {tct.First()}");
+
+            // Get tokenized corpus tokens to make sure these parallel corpus composites are not included:
+            var sourceBookId = Canon.BookNumberToId(sourceTokenComposite.Tokens.First().BookNumber);
+            var targetBookId = Canon.BookNumberToId(targetTokenComposite.Tokens.First().BookNumber);
+
+            var tcsQuery = new GetTokensByTokenizedCorpusIdAndBookIdQuery(sourceTokenizedTextCorpus.TokenizedTextCorpusId, sourceBookId);
+            var tcsQueryResult = await Mediator!.Send(tcsQuery);
+
+            var tctQuery = new GetTokensByTokenizedCorpusIdAndBookIdQuery(targetTokenizedTextCorpus.TokenizedTextCorpusId, targetBookId);
+            var tctQueryResult = await Mediator!.Send(tctQuery);
+
+            Assert.NotEmpty(tcsQueryResult.Data!.SelectMany(vt => vt.Tokens));
+            Assert.NotEmpty(tctQueryResult.Data!.SelectMany(vt => vt.Tokens));
+            Assert.Empty(tcsQueryResult.Data!.SelectMany(vt => vt.Tokens.Where(t => t.TokenId.Id == sourceTokenComposite.Id)));
+            Assert.Empty(tctQueryResult.Data!.SelectMany(vt => vt.Tokens.Where(t => t.TokenId.Id == targetTokenComposite.Id)));
         }
         finally
         {
