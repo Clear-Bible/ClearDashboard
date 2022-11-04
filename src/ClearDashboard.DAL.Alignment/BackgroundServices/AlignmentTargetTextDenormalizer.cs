@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.DAL.Alignment.BackgroundServices
 {
@@ -184,7 +185,7 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
         public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
             if (message.Status.Name == LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", _logger) && 
-                message.Status.TaskLongRunningProcessStatus == LongRunningProcessStatus.CancelTaskRequested)
+                message.Status.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
             {
                 if (!ExecuteTask.IsCompleted)
                 {

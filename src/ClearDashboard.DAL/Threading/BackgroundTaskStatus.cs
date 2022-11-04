@@ -1,15 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ClearDashboard.DataAccessLayer.Models
+namespace ClearDashboard.DataAccessLayer.Threading
 {
-    public enum LongRunningProcessStatus
-    {
-        Working,
-        Completed,
-        Error,
-        CancelTaskRequested,
-    }
+  
 
 
     public class BackgroundTaskStatus : INotifyPropertyChanged
@@ -25,8 +20,8 @@ namespace ClearDashboard.DataAccessLayer.Models
             }
         }
 
-        private LongRunningProcessStatus _taskLongRunningProcessStatus = LongRunningProcessStatus.Working;
-        public LongRunningProcessStatus TaskLongRunningProcessStatus
+        private LongRunningTaskStatus _taskLongRunningProcessStatus = LongRunningTaskStatus.Running;
+        public LongRunningTaskStatus TaskLongRunningProcessStatus
         {
             get => _taskLongRunningProcessStatus;
             set

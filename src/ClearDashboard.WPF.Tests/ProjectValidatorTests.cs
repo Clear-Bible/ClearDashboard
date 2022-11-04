@@ -32,7 +32,7 @@ namespace ClearDashboard.WPF.Tests
             {
                 ProjectName = Guid.NewGuid().ToString(),
             };
-            var projectValidator = new ProjectValidator(_logger);
+            var projectValidator = new ProjectValidator(_logger!);
 
             var results = projectValidator.Validate(project);
 
@@ -55,7 +55,7 @@ namespace ClearDashboard.WPF.Tests
                     ProjectName = projectName,
                 };
 
-                var projectValidator = new ProjectValidator(_logger);
+                var projectValidator = new ProjectValidator(_logger!);
                 var results = projectValidator.Validate(project);
 
                 Assert.False(results.IsValid);
@@ -87,7 +87,7 @@ namespace ClearDashboard.WPF.Tests
                 ProjectName = "!BANG"
             };
 
-            var projectValidator = new ProjectValidator(_logger);
+            var projectValidator = new ProjectValidator(_logger!);
             var results = projectValidator.Validate(project);
 
             Assert.False(results.IsValid);

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -95,7 +96,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async void Create()
         {
             CanCreate = false;
-            ParentViewModel!.CreateCancellationTokenSource();
             _ = await Task.Factory.StartNew(async () =>
             {
                 try
@@ -104,15 +104,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                     switch (status)
                     {
-                        case ProcessStatus.Completed:
+                        case LongRunningTaskStatus.Completed:
                             await MoveForwards();
                             break;
-                        case ProcessStatus.Failed:
+                        case LongRunningTaskStatus.Failed:
+                        case LongRunningTaskStatus.Cancelled:
                             ParentViewModel.Cancel();
                             break;
-                        case ProcessStatus.NotStarted:
+                        case LongRunningTaskStatus.NotStarted:
                             break;
-                        case ProcessStatus.Running:
+                        case LongRunningTaskStatus.Running:
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -122,7 +123,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 {
                     ParentViewModel!.Cancel();
                 }
-            }, ParentViewModel!.CancellationTokenSource!.Token);
+            }, CancellationToken.None);
         }
 
         protected override ValidationResult? Validate()

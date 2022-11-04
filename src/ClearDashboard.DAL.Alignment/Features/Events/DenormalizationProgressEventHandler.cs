@@ -17,6 +17,7 @@ using ClearDashboard.DAL.Alignment.Translation;
 using Caliburn.Micro;
 using SIL.Machine.Utils;
 using System.IO;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.DAL.Alignment.Features.Events
 {

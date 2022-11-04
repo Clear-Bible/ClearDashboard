@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.DAL.Alignment.BackgroundServices
 {
@@ -43,25 +44,25 @@ namespace ClearDashboard.DAL.Alignment.BackgroundServices
                 string.Format(message, status.PercentCompleted) :
                 message;
 
-            SendReport(LongRunningProcessStatus.Working, description, null);
+            SendReport(LongRunningTaskStatus.Running, description, null);
         }
 
         public void ReportCompleted(string? description = null)
         {
-            SendReport(LongRunningProcessStatus.Completed, description, null);
+            SendReport(LongRunningTaskStatus.Completed, description, null);
         }
 
         public void ReportException(Exception exception)
         {
-            SendReport(LongRunningProcessStatus.Error, null, exception);
+            SendReport(LongRunningTaskStatus.Failed, null, exception);
         }
 
         public void ReportCancelRequestReceived(string? description = null)
         {
-            SendReport(LongRunningProcessStatus.CancelTaskRequested, description, null);
+            SendReport(LongRunningTaskStatus.CancellationRequested, description, null);
         }
 
-        private async void SendReport(LongRunningProcessStatus processStatus, string? description, Exception? exception)
+        private async void SendReport(LongRunningTaskStatus processStatus, string? description, Exception? exception)
         {
             if (exception is not null || description is not null)
             {
