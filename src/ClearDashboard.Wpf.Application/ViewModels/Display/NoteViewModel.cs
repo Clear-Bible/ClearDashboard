@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.Wpf.Application.Collections;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
