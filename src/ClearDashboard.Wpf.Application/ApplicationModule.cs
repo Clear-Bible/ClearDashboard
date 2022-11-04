@@ -13,6 +13,7 @@ using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -108,7 +109,7 @@ namespace ClearDashboard.Wpf.Application
                 .Named<CancellationTokenSource>("linked_application_token_source")
                 .InstancePerDependency();
 
-            //builder.RegisterType<NotesManager>().AsSelf().SingleInstance()
+            builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
