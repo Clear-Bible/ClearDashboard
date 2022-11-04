@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
