@@ -11,6 +11,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
@@ -33,10 +34,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Services;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.Wpf.Application.Extensions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -92,6 +95,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public List<string> WorkingJobs { get; set; } = new();
 
+        public NoteManager NoteManager { get; set; }
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
         public VerseDisplayViewModel SelectedVerseDisplayViewModel
@@ -286,15 +290,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public IEnumerable<Translation> CurrentTranslations { get; set; }
 
-        private IEnumerable<Label> _labelSuggestions;
-        public IEnumerable<Label> LabelSuggestions
-        {
-            get => _labelSuggestions;
-            set => Set(ref _labelSuggestions, value);
-        }
+        //private IEnumerable<Label> _labelSuggestions;
+        //public IEnumerable<Label> LabelSuggestions
+        //{
+        //    get => _labelSuggestions;
+        //    set => Set(ref _labelSuggestions, value);
+        //}
 
         private TokenDisplayViewModel _currentToken;
-        public TokenDisplayViewModel CurrentToken
+        public TokenDisplayViewModel TokenForTranslation
         {
             get => _currentToken;
             set => Set(ref _currentToken, value);
@@ -330,7 +334,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
+            DashboardProjectManager? projectManager, NoteManager noteManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope, IServiceProvider serviceProvider) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
@@ -339,6 +343,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             _logger = logger;
             _projectManager = projectManager;
+            NoteManager = noteManager;
             _serviceProvider = serviceProvider;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
@@ -712,11 +717,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         verses.Add(verseDisplayViewModel);
                     }
 
-                    if (verses.Any())
-                    {
-                        // Label suggestions are the same for each VerseDisplayViewModel
-                        LabelSuggestions = verses.First().LabelSuggestions;
-                    }
+                    //if (verses.Any())
+                    //{
+                    //    // Label suggestions are the same for each VerseDisplayViewModel
+                    //    LabelSuggestions = verses.First().LabelSuggestions;
+                    //}
 
                     OnUIThread(() =>
                     {
@@ -1005,11 +1010,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     versesOut.Add(verseDisplayViewModel);
                 }
 
-                if (versesOut.Any())
-                {
-                    // Label suggestions are the same for each VerseDisplayViewModel
-                    LabelSuggestions = versesOut.First().LabelSuggestions;
-                }
+                //if (versesOut.Any())
+                //{
+                //    // Label suggestions are the same for each VerseDisplayViewModel
+                //    LabelSuggestions = versesOut.First().LabelSuggestions;
+                //}
 
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
@@ -1410,8 +1415,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteCreate(object sender, NoteEventArgs e)
         {
-            //WORKS
-            DisplayNote(e.TokenDisplayViewModel);
+            NoteControlVisibility = Visibility.Visible;
         }
 
         #endregion
@@ -1476,7 +1480,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             OnUIThread(async () =>
             {
-                await SelectedVerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+                await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
                 NotifyOfPropertyChange(() => VersesDisplay);
             });
 
@@ -1497,7 +1501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 return;
             }
 
-            await SelectedVerseDisplayViewModel.UpdateNoteAsync(e.Note);
+            await NoteManager.UpdateNoteAsync(e.Note);
             Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
@@ -1515,7 +1519,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 OnUIThread(async () =>
                 {
-                    await SelectedVerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+                    await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
                     NotifyOfPropertyChange(() => VersesDisplay);
                 });
             }
@@ -1539,7 +1543,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // If this is a new note, we'll handle the labels when the note is added.
             if (e.Note.NoteId != null)
             {
-                await SelectedVerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
+                await NoteManager.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
             }
             Message = $"Label '{e.Label.Text}' added for note";
         }
@@ -1554,7 +1558,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             if (e.Note.NoteId != null)
             {
-                await SelectedVerseDisplayViewModel.AssociateNoteLabelAsync(e.Note, e.Label);
+                await NoteManager.AssociateNoteLabelAsync(e.Note, e.Label);
             }
             Message = $"Label '{e.Label.Text}' selected for note";
         }
@@ -1570,7 +1574,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //WORKS
             if (e.Note.NoteId != null)
             {
-                await SelectedVerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
+                await NoteManager.DetachNoteLabel(e.Note, e.Label);
             }
             Message = $"Label '{e.Label.Text}' removed for note";
         }
@@ -1597,21 +1601,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         private Visibility _translationControlVisibility = Visibility.Collapsed;
-
         public Visibility TranslationControlVisibility
         {
             get => _translationControlVisibility;
             set => Set(ref _translationControlVisibility, value);
         }
-
-
-        private void DisplayNote(TokenDisplayViewModel tokenDisplayViewModel)
-        {
-            // WORKS
-            CurrentToken = tokenDisplayViewModel;
-            NoteControlVisibility = Visibility.Visible;
-        }
-
         
         private async void DisplayTranslation(TranslationEventArgs e)
         {
@@ -1625,7 +1619,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
 
-                CurrentToken = e.TokenDisplayViewModel;
+                TokenForTranslation = e.TokenDisplayViewModel;
                 TranslationOptions = await SelectedVerseDisplayViewModel.GetTranslationOptionsAsync(e.Translation);
                 CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText);
 
@@ -1641,19 +1635,4 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion
 
     }
-
-
-    static class CancelExtension
-    {
-        public static IEnumerable<T> WithCancellation<T>(this IEnumerable<T> en, CancellationToken token)
-        {
-            foreach (var item in en)
-            {
-                token.ThrowIfCancellationRequested();
-                yield return item;
-            }
-        }
-    }
-
-    
 }
