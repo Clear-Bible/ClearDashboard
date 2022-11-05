@@ -296,7 +296,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
-        public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register("TargetVisibility", typeof(Visibility), typeof(VerseDisplay));
+        public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register("TargetVisibility", typeof(Visibility), typeof(VerseDisplay),
+            new PropertyMetadata(Visibility.Collapsed));
 
 
         /// <summary>
