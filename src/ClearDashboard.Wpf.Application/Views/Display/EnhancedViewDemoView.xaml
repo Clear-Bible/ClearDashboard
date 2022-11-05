@@ -35,7 +35,7 @@
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="500" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -729,7 +729,7 @@
                                     [Event NoteAssociationMouseLeave] = [Action NoteAssociationMouseLeave($eventArgs)];
                                     "
                 EntityIds="{Binding SelectedTokens.EntityIds}"
-                InnerMargin="0,0,0,15"
+                InnerMargin="0,0,0,25"
                 LabelBackground="BlanchedAlmond"
                 LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

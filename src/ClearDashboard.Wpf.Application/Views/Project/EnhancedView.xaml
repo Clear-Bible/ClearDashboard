@@ -618,14 +618,15 @@
                             Title="{Binding Path=SelectedTokens.CombinedSurfaceText}"
                             Margin="0,5"
                             EntityIds="{Binding Path=SelectedTokens.EntityIds}"
-                            InnerMargin="0,0,0,30"
+                            InnerMargin="0,0,0,25"
                             LabelBackground="BlanchedAlmond"
                             LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                            NoteAssociationFontSize="14"
                             NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            Notes="{Binding SelectedTokens.CombinedNotes}"
+                            Notes="{Binding NoteManager.CurrentNotes}"
+                            NoteAssociationFontSize="13"
+                            NoteAssociationMargin="5,5,0,0"
                             TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             Visibility="{Binding NoteControlVisibility}">
 
