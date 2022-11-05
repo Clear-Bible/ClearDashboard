@@ -1349,8 +1349,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #endregion // Methods
 
-        
-        
+
+
 
         #region Event Handlers
 
@@ -1358,16 +1358,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenClicked(object sender, TokenEventArgs e)
         {
-            // WORKS
+            Task.Run(() => TokenClickedAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenClickedAsync(TokenEventArgs e)
+        {
             SelectedTokens = e.SelectedTokens;
-            if (SelectedTokens.Any(t => t.HasNote))
-            {
-                NoteControlVisibility = Visibility.Visible;
-            }
-            else
-            {
-                NoteControlVisibility = Visibility.Collapsed;
-            }
+            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
+            NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId})";
         }
 
@@ -1379,13 +1377,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
-
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
         }
 
         public void TokenMouseLeave(object sender, TokenEventArgs e)
         {
-            //WORKS
             Message = string.Empty;
         }
 
