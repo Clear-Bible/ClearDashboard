@@ -195,7 +195,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty NoteAssociationPaddingProperty = DependencyProperty.Register(nameof(NoteAssociationPadding), typeof(Thickness), typeof(NoteCollectionDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
-
         /// <summary>
         /// Identifies the NoteFontSize dependency property.
         /// </summary>

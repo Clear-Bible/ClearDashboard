@@ -496,6 +496,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Hidden : Visibility.Visible;
         public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Hidden;
         public Visibility LabelSelectorVisibility => AddMode ? Visibility.Hidden : Visibility.Visible;
+        public Visibility AssociationsVisibility => AddMode ? Visibility.Hidden : Visibility.Visible;
 
         /// <summary>
         /// Gets or sets the collection of <see cref="EntityId{T}"/> associated with the note.

@@ -169,7 +169,7 @@
                     LabelSuggestions="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSuggestions}"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}" />
             </StackPanel>
-            <Label Grid.Row="1" Grid.Column="0" FontSize="13" FontWeight="SemiBold">Associations:</Label>
+            <Label Grid.Row="1" Grid.Column="0" FontSize="13" FontWeight="SemiBold" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">Associations:</Label>
             <userControls:NoteAssociationsDisplay 
                 Grid.Row="1" Grid.Column="1"  
                 Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" 
@@ -187,6 +187,7 @@
                 FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontWeight}"
                 InnerMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationMargin}"
                 InnerPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationPadding}"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}"
             />
         </Grid>
     </Grid>
