@@ -72,15 +72,18 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var command =
                 new CreateParallelCorpusCommand(new TokenizedTextCorpusId(sourceTokenizedCorpusId),
                     new TokenizedTextCorpusId(targetTokenizedCorpusId), verseMappings, "awesome parallel corpus");
-            var result = await Mediator.Send(command);
+            var createResult = await Mediator.Send(command);
 
             ProjectDbContext.ChangeTracker.Clear();
 
             // General assertions
-            Assert.NotNull(result);
-            Assert.True(result.Success);
-            Assert.Equal("Success", result.Message);
-            Assert.NotNull(result.Data);
+            Assert.NotNull(createResult);
+            Assert.True(createResult.Success);
+            Assert.Equal("Success", createResult.Message);
+            Assert.NotNull(createResult.Data);
+
+            var returnedParallelCorpus = await ParallelCorpus.Get(Mediator, createResult.Data);
+            Assert.NotNull(returnedParallelCorpus);
 
             // Validate persisted ParallelCorpus data
 
@@ -101,7 +104,6 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.Equal("New Testament 2", theParallelCorporaEntry.TargetTokenizedCorpus?.Corpus?.Name);
 
             // Validate returned ParallelCorpus Data
-            var returnedParallelCorpus = result.Data;
             Assert.NotNull(returnedParallelCorpus);
             Assert.NotNull(returnedParallelCorpus!.SourceCorpus);
             Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",

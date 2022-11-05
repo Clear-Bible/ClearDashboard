@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using MediatR;
 
@@ -29,15 +30,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new CreateOrUpdateLabelCommand(LabelId, Text);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                LabelId = result.Data!;
-                return this;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
+
+            LabelId = result.Data!;
+            return this;
         }
 
         public async void Delete(IMediator mediator, CancellationToken token = default)
@@ -50,10 +46,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new DeleteLabelAndAssociationsByLabelIdCommand(LabelId);
 
             var result = await mediator.Send(command, token);
-            if (!result.Success)
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
         }
 
         public static async Task<IEnumerable<Label>> GetAll(
@@ -62,14 +55,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetAllLabelsQuery();
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
+
+            return result.Data!;
         }
 
         public static async Task<IEnumerable<Label>> Get(
@@ -79,14 +67,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetLabelsByPartialTextQuery(partialText);
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
     }
 }

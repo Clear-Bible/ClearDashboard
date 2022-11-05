@@ -8,5 +8,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         TokenizedTextCorpusId SourceTokenizedCorpusId,
         TokenizedTextCorpusId TargetTokenizedCorpusId,
         IEnumerable<VerseMapping> VerseMappings,
-        string? DisplayName) : ProjectRequestCommand<ParallelCorpus>;
+        string? DisplayName) : ProjectRequestCommand<ParallelCorpusId>;
 }

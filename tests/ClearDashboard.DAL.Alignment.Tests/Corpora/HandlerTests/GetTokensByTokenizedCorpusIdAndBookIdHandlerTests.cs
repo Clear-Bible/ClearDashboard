@@ -94,8 +94,8 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
             Assert.NotNull(result);
             Assert.False(result.Success);
             Assert.Null(result.Data);
-            Assert.StartsWith(
-                "System.Exception: Unable to map book abbreviation: BARF to book number.",
+            Assert.Contains(
+                "Unable to map book abbreviation: BARF to book number",
                 result.Message
             );
         }
@@ -121,8 +121,8 @@ public class GetTokensByTokenizedCorpusIdAndBookIdHandlerTests : TestBase
 
             Assert.NotNull(result);
             Assert.False(result.Success);
-            Assert.StartsWith(
-                "System.Exception: Tokenized Corpus 00000000-0000-0000-0000-000000000000 does not exist.",
+            Assert.Contains(
+                "Tokenized Corpus 00000000-0000-0000-0000-000000000000 does not exist.",
                 result.Message);
             Assert.Null(result.Data);
         }

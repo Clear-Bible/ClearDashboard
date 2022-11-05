@@ -2,6 +2,7 @@
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Tokenization;
@@ -16,14 +17,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             GetAllParallelCorpusIds( IMediator mediator)
         {
             var result = await mediator.Send(new GetAllParallelCorpusIdsQuery());
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public EngineStringDetokenizer Detokenizer => ParallelCorpusId.SourceTokenizedCorpusId?.Detokenizer ?? new EngineStringDetokenizer(new LatinWordDetokenizer());
@@ -35,14 +31,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 ParallelCorpusId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success && result.Data != null)
-            {
-                return;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
         }
 
         public static async Task<ParallelCorpus> Get(
@@ -53,19 +42,14 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetParallelCorpusByParallelCorpusIdQuery(parallelCorpusId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                var data =  result.Data;
-                return new ParallelCorpus(
-                    await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId), 
-                    await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId), 
-                    data.verseMappings, 
-                    data.parallelCorpusId);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            var data =  result.Data;
+            return new ParallelCorpus(
+                await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId), 
+                await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId), 
+                data.verseMappings, 
+                data.parallelCorpusId);
         }
 
         internal ParallelCorpus(

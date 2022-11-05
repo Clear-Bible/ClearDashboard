@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 
@@ -43,14 +44,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<IEnumerable<CorpusId>> GetAllCorpusIds(IMediator mediator)
         {
             var result = await mediator.Send(new GetAllCorpusIdsQuery());
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public static async Task<Corpus> Create(
@@ -65,14 +61,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType, ParatextId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return await Corpus.Get(mediator, result.Data!);
         }
 
         public static async Task<IEnumerable<Corpus>> GetAll(IMediator mediator)
@@ -80,15 +71,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetAllCorporaQuery();
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
 
+            return result.Data!;
         }
         public static async Task<Corpus> Get(
             IMediator mediator,
@@ -97,14 +82,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetCorpusByCorpusIdQuery(corpusId);
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
     }
 }

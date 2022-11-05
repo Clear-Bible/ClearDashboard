@@ -137,93 +137,81 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 }
             }
 
+            var alignmentSetId = Guid.NewGuid();
+            var alignmentSet = new Models.AlignmentSet
+            {
+                Id = alignmentSetId,
+                ParallelCorpusId = request.ParallelCorpusId.Id,
+                DisplayName = request.DisplayName,
+                SmtModel = request.SmtModel,
+                IsSyntaxTreeAlignerRefined = request.IsSyntaxTreeAlignerRefined,
+                Metadata = request.Metadata,
+                //DerivedFrom = ,
+                //EngineWordAlignment = ,
+                Alignments = request.Alignments
+                    .Select(al => new Models.Alignment
+                    {
+                        SourceTokenComponentId = al.AlignedTokenPair.SourceToken.TokenId.Id,
+                        TargetTokenComponentId = al.AlignedTokenPair.TargetToken.TokenId.Id,
+                        Score = al.AlignedTokenPair.Score,
+                        AlignmentVerification = verificationTypes[al.Verification],
+                        AlignmentOriginatedFrom = originatedTypes[al.OriginatedFrom]
+                    }).ToList()
+            };
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+
             try
             {
-                var alignmentSetId = Guid.NewGuid();
-                var alignmentSet = new Models.AlignmentSet
-                {
-                    Id = alignmentSetId,
-                    ParallelCorpusId = request.ParallelCorpusId.Id,
-                    DisplayName = request.DisplayName,
-                    SmtModel = request.SmtModel,
-                    IsSyntaxTreeAlignerRefined = request.IsSyntaxTreeAlignerRefined,
-                    Metadata = request.Metadata,
-                    //DerivedFrom = ,
-                    //EngineWordAlignment = ,
-                    Alignments = request.Alignments
-                        .Select(al => new Models.Alignment
-                        {
-                            SourceTokenComponentId = al.AlignedTokenPair.SourceToken.TokenId.Id,
-                            TargetTokenComponentId = al.AlignedTokenPair.TargetToken.TokenId.Id,
-                            Score = al.AlignedTokenPair.Score,
-                            AlignmentVerification = verificationTypes[al.Verification],
-                            AlignmentOriginatedFrom = originatedTypes[al.OriginatedFrom]
-                        }).ToList()
-                };
+                // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
+                // mostly using database connection-level functions, commands, paramters etc.
+                using var connection = ProjectDbContext.Database.GetDbConnection();
+                using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
 
-                cancellationToken.ThrowIfCancellationRequested();
+                using var alignmentSetInsertCommand = CreateAlignmentSetInsertCommand(connection);
+                using var alignmentInsertCommand = CreateAlignmentInsertCommand(connection);
 
-                await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+                await InsertAlignmentSetAsync(
+                    alignmentSet,
+                    alignmentSetInsertCommand,
+                    alignmentInsertCommand,
+                    cancellationToken);
 
-                try
-                {
-                    // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
-                    // mostly using database connection-level functions, commands, paramters etc.
-                    using var connection = ProjectDbContext.Database.GetDbConnection();
-                    using var transaction = await ProjectDbContext.Database.GetDbConnection().BeginTransactionAsync(cancellationToken);
-
-                    using var alignmentSetInsertCommand = CreateAlignmentSetInsertCommand(connection);
-                    using var alignmentInsertCommand = CreateAlignmentInsertCommand(connection);
-
-                    await InsertAlignmentSetAsync(
-                        alignmentSet,
-                        alignmentSetInsertCommand,
-                        alignmentInsertCommand,
-                        cancellationToken);
-
-                    // Explicitly setting the DatabaseFacade transaction to match
-                    // the underlying DbConnection transaction in case any event handlers
-                    // need to alter data as part of the current transaction:
-                    ProjectDbContext.Database.UseTransaction(transaction);
-                    await _mediator.Publish(new AlignmentSetCreatingEvent(alignmentSetId, ProjectDbContext), cancellationToken);
-                    await transaction.CommitAsync(cancellationToken);
-                    ProjectDbContext.Database.UseTransaction(null);
-                }
-                finally
-                {
-                    await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
-                }
+                // Explicitly setting the DatabaseFacade transaction to match
+                // the underlying DbConnection transaction in case any event handlers
+                // need to alter data as part of the current transaction:
+                ProjectDbContext.Database.UseTransaction(transaction);
+                await _mediator.Publish(new AlignmentSetCreatingEvent(alignmentSetId, ProjectDbContext), cancellationToken);
+                await transaction.CommitAsync(cancellationToken);
+                ProjectDbContext.Database.UseTransaction(null);
+            }
+            finally
+            {
+                await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+            }
 
 #if DEBUG
-                proc.Refresh();
-                Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
 
-                sw.Stop();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
 #endif
 
-                var alignmentSetFromDb = ProjectDbContext!.AlignmentSets
-                    .Include(ast => ast.User)
-                    .First(ast => ast.Id == alignmentSetId);
+            var alignmentSetFromDb = ProjectDbContext!.AlignmentSets
+                .Include(ast => ast.User)
+                .First(ast => ast.Id == alignmentSetId);
 
-                var parallelCorpusId = ModelHelper.BuildParallelCorpusId(parallelCorpus);
+            var parallelCorpusId = ModelHelper.BuildParallelCorpusId(parallelCorpus);
 
-                await _mediator.Publish(new AlignmentSetCreatedEvent(alignmentSetId), cancellationToken);
+            await _mediator.Publish(new AlignmentSetCreatedEvent(alignmentSetId), cancellationToken);
 
-                return new RequestResult<AlignmentSet>(new AlignmentSet(
-                    ModelHelper.BuildAlignmentSetId(alignmentSetFromDb, parallelCorpusId, alignmentSetFromDb.User!),
-                    parallelCorpusId,
-                    _mediator));
-
-            }
-            catch (Exception e)
-            {
-                return new RequestResult<Alignment.Translation.AlignmentSet>
-                (
-                    success: false,
-                    message: e.Message
-                );
-            }
+            return new RequestResult<AlignmentSet>(new AlignmentSet(
+                ModelHelper.BuildAlignmentSetId(alignmentSetFromDb, parallelCorpusId, alignmentSetFromDb.User!),
+                parallelCorpusId,
+                _mediator));
         }
 
         private DbCommand CreateAlignmentSetInsertCommand(DbConnection connection)

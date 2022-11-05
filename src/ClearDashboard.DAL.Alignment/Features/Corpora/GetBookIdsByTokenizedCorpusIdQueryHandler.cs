@@ -61,10 +61,19 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                 x => x.silCannonBookAbbrev);
 
-
         var bookAbbreviations = new List<string>();
         foreach (var bookNumber in bookNumbers)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
+                (
+                    success: false,
+                    message: "Operation canceled",
+                    canceled: true
+                );
+            }
+
             if (!bookNumbersToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
                 return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
@@ -82,7 +91,6 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         {
             // FIXME - what do I do here to pull the CustomVersData into versification?
         }
-
 
         return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
             ((

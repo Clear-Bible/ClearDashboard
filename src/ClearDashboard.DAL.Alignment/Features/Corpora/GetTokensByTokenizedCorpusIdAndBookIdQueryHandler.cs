@@ -30,89 +30,80 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 <IEnumerable<VerseTokens>>>
             GetDataAsync(GetTokensByTokenizedCorpusIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
-            try
+            var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
+
+            // We do a ToList() here to avoid 'cannot create expression tree'
+            // errors in the VerseTokens GroupBy below
+            var bookNumberAsPaddedString = $"{bookNumberForAbbreviation:000}";
+            var verseRows = ProjectDbContext.VerseRows
+                .Include(vr => vr.TokenComponents)
+                .Where(vr => vr.TokenizationId == request.TokenizedCorpusId.Id)
+                .Where(vr => vr.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
+                .OrderBy(vr => vr.BookChapterVerse)
+                .ToList();
+
+            if (!verseRows.Any() && ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id) == null)
             {
+                throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
+            }
 
-                var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
+            var verseTokens = verseRows
+                .Select(vr => {
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                // We do a ToList() here to avoid 'cannot create expression tree'
-                // errors in the VerseTokens GroupBy below
-                var bookNumberAsPaddedString = $"{bookNumberForAbbreviation:000}";
-                var verseRows = ProjectDbContext.VerseRows
-                    .Include(vr => vr.TokenComponents)
-                    .Where(vr => vr.TokenizationId == request.TokenizedCorpusId.Id)
-                    .Where(vr => vr.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
-                    .OrderBy(vr => vr.BookChapterVerse)
-                    .ToList();
+                    var chapter = int.Parse(vr.BookChapterVerse!.Substring(3, 3)).ToString();
+                    var verse = int.Parse(vr.BookChapterVerse!.Substring(6, 3)).ToString();
 
-                if (!verseRows.Any() && ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == request.TokenizedCorpusId.Id) == null)
-                {
-                    throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
-                }
+                    var tokenCompositeMap = vr.TokenComponents
+                        .Where(tc => tc is Models.TokenComposite)
+                        .Where(tc => (tc as Models.TokenComposite)!.ParallelCorpusId == null)
+                        .ToDictionary(
+                            tc => (tc as Models.TokenComposite)!.Id,
+                            tc => (tc as Models.TokenComposite)!);
 
-                var verseTokens = verseRows
-                    .Select(vr => {
-                        var chapter = int.Parse(vr.BookChapterVerse!.Substring(3, 3)).ToString();
-                        var verse = int.Parse(vr.BookChapterVerse!.Substring(6, 3)).ToString();
-
-                        var tokenCompositeMap = vr.TokenComponents
-                            .Where(tc => tc is Models.TokenComposite)
-                            .Where(tc => (tc as Models.TokenComposite)!.ParallelCorpusId == null)
-                            .ToDictionary(
-                                tc => (tc as Models.TokenComposite)!.Id,
-                                tc => (tc as Models.TokenComposite)!);
-
-                        var tokens = vr.TokenComponents
-                            .Where(tc => tc is Models.Token)
-                            .GroupBy(tc => (tc as Models.Token)!.TokenCompositeId)
-                            .SelectMany(g =>
+                    var tokens = vr.TokenComponents
+                        .Where(tc => tc is Models.Token)
+                        .GroupBy(tc => (tc as Models.Token)!.TokenCompositeId)
+                        .SelectMany(g =>
+                        {
+                            if (g.Key != null)
                             {
-                                if (g.Key != null)
+                                // Only TokenComposites with a null ParallelCorpusId 
+                                // are in the dictionary, therefore this should filter
+                                // out non-null ones:
+                                if (tokenCompositeMap.TryGetValue((Guid)g.Key!, out var tokenComposite))
                                 {
-                                    // Only TokenComposites with a null ParallelCorpusId 
-                                    // are in the dictionary, therefore this should filter
-                                    // out non-null ones:
-                                    if (tokenCompositeMap.TryGetValue((Guid)g.Key!, out var tokenComposite))
+                                    return new[]
                                     {
-                                        return new[]
-                                        {
-                                            ModelHelper.BuildCompositeToken(tokenComposite, g.Select(t => (t as Models.Token)!))
-                                        };
-                                    }
-                                    else
-                                    {
-                                        return Enumerable.Empty<Token>();
-                                    }
+                                        ModelHelper.BuildCompositeToken(tokenComposite, g.Select(t => (t as Models.Token)!))
+                                    };
                                 }
                                 else
                                 {
-                                    return g.Select(t => ModelHelper.BuildToken(t));
+                                    return Enumerable.Empty<Token>();
                                 }
-                            })
-                            .ToList();
+                            }
+                            else
+                            {
+                                return g.Select(t => ModelHelper.BuildToken(t));
+                            }
+                        })
+                        .ToList();
                                 
-                        return new VerseTokens(
-                            chapter,
-                            verse,
-                            tokens,
-                            vr.IsSentenceStart);
-                    }).ToList();
+                    return new VerseTokens(
+                        chapter,
+                        verse,
+                        tokens,
+                        vr.IsSentenceStart);
+                }).ToList();
 
-                // need an await to get the compiler to be 'quiet'
-                await Task.CompletedTask;
+            // need an await to get the compiler to be 'quiet'
+            await Task.CompletedTask;
 
-                return new RequestResult<IEnumerable<VerseTokens>>
-                (
-                    verseTokens
-                );
-            }
-            catch (Exception ex)
-            {
-                return new RequestResult<IEnumerable<VerseTokens>>
-                    (result: null, success: false, message: ex.ToString());
-            }
-
-           
+            return new RequestResult<IEnumerable<VerseTokens>>
+            (
+                verseTokens
+            );
         }
 
         private static int GetBookNumberForSILAbbreviation(string silBookAbbreviation)

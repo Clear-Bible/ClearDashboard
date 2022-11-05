@@ -7,7 +7,7 @@
         }
 
         #nullable enable
-        public RequestResult(T? result = default, bool success = true, string message = "Success") : base(result, success, message)
+        public RequestResult(T? result = default, bool success = true, string message = "Success", bool canceled = false) : base(result, success, message, canceled)
         {
         }
     }

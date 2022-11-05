@@ -59,9 +59,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                     x => x.silCannonBookAbbrev);
 
+            var domainEntityContexts = BuildDomainEntityContexts(
+                grouped, 
+                bookNumbersToAbbreviations, 
+                cancellationToken);
+
+            return new RequestResult<Dictionary<IId, Dictionary<string, string>>>(domainEntityContexts);
+        }
+
+        private Dictionary<IId, Dictionary<string, string>> BuildDomainEntityContexts(
+            Dictionary<string, IEnumerable<(IId IId, Guid Id)>> grouped, 
+            Dictionary<int, string> bookNumbersToAbbreviations,
+            CancellationToken cancellationToken)
+        {
             var domainEntityContexts = new Dictionary<IId, Dictionary<string, string>>();
             foreach (var kvp in grouped)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 switch (true)
                 {
                     case true when kvp.Key == typeof(TokenId).Name:
@@ -80,7 +95,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                                 .Include(t => t.Tokenization)
                                     .ThenInclude(tc => tc!.Corpus)
                                 .Where(e => kvp.Value.Select(ids => ids.Id).Contains(e.Id))
-                                .ForEach(e => 
+                                .ForEach(e =>
                                     domainEntityContexts.Add(
                                         new EntityId<TokenId>() { Id = e.Id },
                                         BuildTokenComponentContext(e, bookNumbersToAbbreviations))
@@ -98,7 +113,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                                 .Include(t => t.Tokenization)
                                     .ThenInclude(tc => tc!.Corpus)
                                 .Where(e => kvp.Value.Select(ids => ids.Id).Contains(e.Id))
-                                .ForEach(e => 
+                                .ForEach(e =>
                                     domainEntityContexts.Add(
                                         new EntityId<TokenId>() { Id = e.Id },
                                         BuildTokenComponentContext(e, bookNumbersToAbbreviations))
@@ -118,7 +133,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                                 };
 
                                 domainEntityContexts.Add(new EntityId<CorpusId>() { Id = e.Id }, domainEntityContext);
-                            }); 
+                            });
                         break;
 
                     case true when kvp.Key == typeof(TokenizedTextCorpusId).Name:
@@ -202,7 +217,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                             .Include(a => a.SourceTokenComponent)
                             .Include(a => a.TranslationSet)
                             .Where(e => kvp.Value.Select(ids => ids.Id).Contains(e.Id))
-                            .ForEach(e => {
+                            .ForEach(e =>
+                            {
                                 var domainEntityContext = new Dictionary<string, string>
                                 {
                                     { "TranslationSet.DisplayName", e.TranslationSet!.DisplayName ?? string.Empty }
@@ -260,15 +276,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                         break;
 
                     default:
-                        return new RequestResult<Dictionary<IId, Dictionary<string, string>>>
-                        (
-                            success: false,
-                            message: $"Unsupported domain entity id type found:  {kvp.Key}"
-                        );
+                        throw new ArgumentException($"Unsupported domain entity id type found:  {kvp.Key}");
                 }
             }
 
-            return new RequestResult<Dictionary<IId, Dictionary<string, string>>>(domainEntityContexts);
+            return domainEntityContexts;
         }
 
         private Dictionary<string, string> BuildTokenComponentContext(

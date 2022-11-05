@@ -4,12 +4,14 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.EventsAndDelegates;
 using System.Diagnostics;
 using System.Linq;
+
+//USE TO ACCESS Models
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -77,95 +79,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations '{translationSet.DisplayName}' (end)");
             sw.Restart();
 #endif
-
             // For any token ids not found in Translations:
             if (tokenGuidsNotFound.Any())
             {
-                var combined = translations.ToList();
-
-                if (ProjectDbContext!.TranslationModelEntries
-                    .Where(tme => tme.TranslationSetId == request.TranslationSetId.Id).Count() > 0)
-                {
-                    var translationModelEntries = ProjectDbContext!.TranslationModelEntries
-                         .Include(tm => tm.TargetTextScores)
-                         .Join(
-                             ProjectDbContext!.TokenComponents
-                                 .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
-                                 .Where(tc => tokenGuidsNotFound.Contains(tc.Id)),
-                             tm => tm.SourceText,
-                             tc => tc.TrainingText ?? "",
-                             (tm, tc) => new { tm, tc })
-                         .Where(tmtc => tmtc.tm.TranslationSetId == request.TranslationSetId.Id)
-                         .Select(tmtc => new Alignment.Translation.Translation(
-                             ModelHelper.BuildToken(tmtc.tc),
-                             tmtc.tm.TargetTextScores.OrderByDescending(tts => tts.Score).First().Text ?? string.Empty,
-                             "FromTranslationModel"));
-
-                    combined.AddRange(translationModelEntries);
-
-#if DEBUG
-                    sw.Stop();
-                    Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve TranslationModel '{translationSet.DisplayName}' (end)");
-                    sw.Restart();
-#endif
-                }
-                else
-                {
-                    if (ProjectDbContext.AlignmentSetDenormalizationTasks.Any(a => a.AlignmentSetId == translationSet.AlignmentSetId))
-                    {
-                        var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
-                            .Where(tc => tc.TokenizationId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
-                            .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
-                            .Where(tc => tc.TrainingText != null)
-                            .ToList()
-                            .GroupBy(tc => tc.TrainingText!)
-                            .ToDictionary(g => g.Key, g => g.Select(i => i));
-
-                        var sourceTextToTopTargetTrainingText = ProjectDbContext!.Alignments
-                            .Include(a => a.SourceTokenComponent)
-                            .Include(a => a.TargetTokenComponent)
-                            .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
-                            .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
-                            .ToList()
-                            .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
-                            .ToDictionary(g => g.Key, g => g
-                                .GroupBy(a => a.TargetTokenComponent!.TrainingText)
-                                .OrderByDescending(g => g.Count())
-                                .First().Key);
-
-                        combined.AddRange(sourceTextToTopTargetTrainingText
-                            .SelectMany(kvp => sourceTokenTrainingTexts[kvp.Key]
-                                .Select(s =>
-                                    new Alignment.Translation.Translation(
-                                            ModelHelper.BuildToken(s),
-                                            kvp.Value,
-                                            "FromAlignmentModel"))
-                                ));
-
-#if DEBUG
-                        sw.Stop();
-                        Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from Alignment model '{translationSet.DisplayName}' (end)");
-                        sw.Restart();
-#endif
-                    }
-                    else
-                    {
-                        var translationsFromAlignmentModel = ProjectDbContext.AlignmentTopTargetTrainingTexts
-                            .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
-                            .Where(a => tokenGuidsNotFound.Contains(a.SourceTokenComponentId))
-                            .Select(a => new Alignment.Translation.Translation(
-                                ModelHelper.BuildToken(a.SourceTokenComponent!),
-                                a.TopTargetTrainingText,
-                                "FromAlignmentModel"));
-
-                        combined.AddRange(translationsFromAlignmentModel.ToList());
-#if DEBUG
-                        sw.Stop();
-                        Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from denormalized Alignment model '{translationSet.DisplayName}' (end)");
-                        sw.Restart();
-#endif
-                    }
-                }
+                var combined = CombineModelTranslations(
+                    translations, 
+                    tokenGuidsNotFound, 
+                    translationSet, 
+                    cancellationToken);
 
                 var tokensIdsNotFound = request.TokenIds
                     .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid.Id))
@@ -178,9 +99,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                         .Where(tc => tokensIdsNotFound.Contains(tc.Id))
                         .Select(tc => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(tc),
-                            null,
+                            string.Empty,
                             "FromAlignmentModel")).ToList());
-                    //                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
+//                    throw new InvalidDataEngineException(name: "Token.Ids", value: $"{string.Join(",", tokenGuidsNotFound)}", message: "Token Ids not found in Translation Model");
                 }
 #if DEBUG
                 sw.Stop();
@@ -196,5 +117,108 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 return new RequestResult<IEnumerable<Alignment.Translation.Translation>>(translations.OrderBy(t => t.SourceToken.TokenId.ToString()).ToList());
             }
         }
-     }
+
+        private List<Alignment.Translation.Translation> CombineModelTranslations(
+            IEnumerable<Alignment.Translation.Translation> translations, 
+            IEnumerable<Guid> tokenGuidsNotFound, 
+            Models.TranslationSet translationSet,
+            CancellationToken cancellationToken)
+        {
+#if DEBUG
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Add model translations (start)");
+#endif
+            var combined = translations.ToList();
+
+            if (ProjectDbContext!.TranslationModelEntries
+                .Where(tme => tme.TranslationSetId == translationSet.Id).Count() > 0)
+            {
+                var translationModelEntries = ProjectDbContext!.TranslationModelEntries
+                    .Include(tm => tm.TargetTextScores)
+                    .Join(
+                        ProjectDbContext!.TokenComponents
+                            .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                            .Where(tc => tokenGuidsNotFound.Contains(tc.Id)),
+                        tm => tm.SourceText,
+                        tc => tc.TrainingText ?? "",
+                        (tm, tc) => new { tm, tc })
+                    .Where(tmtc => tmtc.tm.TranslationSetId == translationSet.Id)
+                    .Select(tmtc => new Alignment.Translation.Translation(
+                        ModelHelper.BuildToken(tmtc.tc),
+                        tmtc.tm.TargetTextScores.OrderByDescending(tts => tts.Score).First().Text ?? string.Empty,
+                        "FromTranslationModel"));
+
+                combined.AddRange(translationModelEntries);
+
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve TranslationModel '{translationSet.DisplayName}' (end)");
+#endif
+            }
+            else
+            {
+                if (ProjectDbContext.AlignmentSetDenormalizationTasks.Any(a => a.AlignmentSetId == translationSet.AlignmentSetId))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
+                        .Where(tc => tc.TokenizationId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
+                        .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
+                        .Where(tc => tc.TrainingText != null)
+                        .ToList()
+                        .GroupBy(tc => tc.TrainingText!)
+                        .ToDictionary(g => g.Key, g => g.Select(i => i));
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var sourceTextToTopTargetTrainingText = ProjectDbContext!.Alignments
+                        .Include(a => a.SourceTokenComponent)
+                        .Include(a => a.TargetTokenComponent)
+                        .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
+                        .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
+                        .ToList()
+                        .GroupBy(a => a.SourceTokenComponent!.TrainingText!)
+                        .ToDictionary(g => g.Key, g => g
+                            .GroupBy(a => a.TargetTokenComponent!.TrainingText)
+                            .OrderByDescending(g => g.Count())
+                            .First().Key);
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    combined.AddRange(sourceTextToTopTargetTrainingText
+                        .SelectMany(kvp => sourceTokenTrainingTexts[kvp.Key]
+                            .Select(s =>
+                                new Alignment.Translation.Translation(
+                                        ModelHelper.BuildToken(s),
+                                        kvp.Value!,
+                                        "FromAlignmentModel"))
+                            ));
+
+#if DEBUG
+                    sw.Stop();
+                    Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from Alignment model '{translationSet.DisplayName}' (end)");
+#endif
+                }
+                else
+                {
+                    var translationsFromAlignmentModel = ProjectDbContext.AlignmentTopTargetTrainingTexts
+                        .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
+                        .Where(a => tokenGuidsNotFound.Contains(a.SourceTokenComponentId))
+                        .Select(a => new Alignment.Translation.Translation(
+                            ModelHelper.BuildToken(a.SourceTokenComponent!),
+                            a.TopTargetTrainingText,
+                            "FromAlignmentModel"));
+
+                    combined.AddRange(translationsFromAlignmentModel.ToList());
+#if DEBUG
+                    sw.Stop();
+                    Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from denormalized Alignment model '{translationSet.DisplayName}' (end)");
+#endif
+                }
+            }
+
+            return combined;
+        }
+    }
 }

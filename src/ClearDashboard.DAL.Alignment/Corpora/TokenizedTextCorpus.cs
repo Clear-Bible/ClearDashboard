@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
@@ -33,14 +34,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId corpusId)
         {
             var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
         public static async Task<TokenizedTextCorpus> Get(
             IMediator mediator,
@@ -49,14 +45,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpusId);
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, result.Data.corpusId, mediator, result.Data.bookIds, result.Data.versification);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, result.Data.corpusId, mediator, result.Data.bookIds, result.Data.versification);
         }
     }
 }

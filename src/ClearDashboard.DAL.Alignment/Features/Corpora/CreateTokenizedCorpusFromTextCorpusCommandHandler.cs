@@ -6,9 +6,12 @@ using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
+using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using SIL.EventsAndDelegates;
+using SIL.Machine.Corpora;
 using SIL.Scripture;
 using System.Data;
 using System.Data.Common;
@@ -87,16 +90,34 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 tokenizedCorpus.CustomVersData = writer.ToString();
             }
 
-            // ITextCorpus Text ids always book ids/abbreviations:  
-            var bookIds = request.TextCorpus.Texts.Select(t => t.Id).ToList();
-            var tokenizationId = Guid.Empty;
+            var (tokenizedTextCorpus, tokenCount) = await CreateTokenizedTextCorpus(
+                tokenizedCorpus,
+                corpus,
+                request.TextCorpus,
+                request.Versification,
+                cancellationToken);
+
+#if DEBUG
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
+
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [token count: {tokenCount}]");
+#endif
+            return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
+        }
+
+        private async Task<(TokenizedTextCorpus, int)> CreateTokenizedTextCorpus(Models.TokenizedCorpus tokenizedCorpus, Models.Corpus corpus, ITextCorpus textCorpus, ScrVers versification, CancellationToken cancellationToken)
+        {
+            var bookIds = textCorpus.Texts.Select(t => t.Id).ToList();
+            var tokenCount = 0;
 
             //var connectionWasOpen = ProjectDbContext.Database.GetDbConnection().State == ConnectionState.Open; 
             //if (!connectionWasOpen)
             //{
-                await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+            await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
             //}
-           
+
             try
             {
                 // Generally follows https://docs.microsoft.com/en-us/dotnet/standard/data/sqlite/bulk-insert
@@ -106,16 +127,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 using var tokenizedCorpusInsertCommand = CreateTokenizedCorpusInsertCommand(connection);
                 using var verseRowInsertCommand = CreateVerseRowInsertCommand(connection);
-                using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(connection); 
+                using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(connection);
 
                 await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
-                tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
-
-                var tokenCount = 0;
+                var tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
 
                 foreach (var bookId in bookIds)
                 {
-                    var ttrs = request.TextCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+                    var ttrs = textCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
 
                     var dups = ttrs
                         .SelectMany(ttr => ttr.Tokens)
@@ -143,132 +162,125 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         throw new Exception($"TokensTextRow for book '{bookId}' contains CompositeToken(s) having child tokens from more than one book-chapter-verse");
                     }
 
-                    var verseRows = ttrs
-                        .Where(ttr => ttr.IsEmpty == false)
-                        .Select(ttr =>
-                        {
-                            var verseRowId = Guid.NewGuid(); //TEMP
-                            var (b, c, v) = (
-                                ((VerseRef)ttr.Ref).BookNum,
-                                ((VerseRef)ttr.Ref).ChapterNum,
-                                ((VerseRef)ttr.Ref).VerseNum);
-                            
-                            return new Models.VerseRow
-                            {
-                                Id = verseRowId,
-                                TokenizationId = tokenizationId,
-                                BookChapterVerse = $"{b:000}{c:000}{v:000}",
-                                OriginalText = ttr.Text,
-                                IsSentenceStart = ttr.IsSentenceStart,
-                                IsInRange = ttr.IsInRange,
-                                IsRangeStart = ttr.IsRangeStart,
-                                IsEmpty = ttr.IsEmpty,
-                                TokenComponents = ttr.Tokens
-                                    .Select(token =>
-                                    {
-                                        if (token is CompositeToken compositeToken)
-                                        {
-                                            tokenCount++;
-                                            return new Models.TokenComposite
-                                            {
-                                                Id = compositeToken.TokenId.Id,
-                                                VerseRowId = verseRowId,
-                                                TokenizationId = tokenizationId,
-                                                TrainingText = compositeToken.TrainingText,
-                                                ExtendedProperties = compositeToken.ExtendedProperties,
-                                                EngineTokenId = compositeToken.TokenId.ToString(),
-                                                Tokens = compositeToken.GetPositionalSortedBaseTokens()
-                                                    .Select(childToken =>
-                                                    {
-                                                        tokenCount++;
-                                                        return new Models.Token
-                                                        {
-                                                            Id = childToken.TokenId.Id,
-                                                            VerseRowId = verseRowId,
-                                                            TokenizationId = tokenizationId,
-                                                            TrainingText = childToken.TrainingText,
-                                                            EngineTokenId = childToken.TokenId.ToString(),
-                                                            BookNumber = childToken.TokenId.BookNumber,
-                                                            ChapterNumber = childToken.TokenId.ChapterNumber,
-                                                            VerseNumber = childToken.TokenId.VerseNumber,
-                                                            WordNumber = childToken.TokenId.WordNumber,
-                                                            SubwordNumber = childToken.TokenId.SubWordNumber,
-                                                            SurfaceText = childToken.SurfaceText,
-                                                            ExtendedProperties = childToken.ExtendedProperties
-                                                        };
-                                                    }).ToList()
-                                            };
-                                        }
-                                        else
-                                        {
-                                            tokenCount++;
-                                            return new Models.Token
-                                            {
-                                                Id = token.TokenId.Id,
-                                                VerseRowId = verseRowId,
-                                                TokenizationId = tokenizationId,
-                                                TrainingText = token.TrainingText,
-                                                EngineTokenId = token.TokenId.ToString(),
-                                                BookNumber = token.TokenId.BookNumber,
-                                                ChapterNumber = token.TokenId.ChapterNumber,
-                                                VerseNumber = token.TokenId.VerseNumber,
-                                                WordNumber = token.TokenId.WordNumber,
-                                                SubwordNumber = token.TokenId.SubWordNumber,
-                                                SurfaceText = token.SurfaceText,
-                                                ExtendedProperties = token.ExtendedProperties
-                                            } as Models.TokenComponent;
-                                        }
-                                    })
-                                .ToList()
-                            };
-                        });
+                    var (verseRows, btTokenCount) = GetVerseRows(ttrs, tokenizationId);
 
                     await InsertVerseRowsAsync(
-                            verseRows, 
+                            verseRows,
                             verseRowInsertCommand,
-                            tokenComponentInsertCommand, 
+                            tokenComponentInsertCommand,
                             cancellationToken);
+
+                    tokenCount += btTokenCount;
                 }
 
-                
+
                 await transaction.CommitAsync(cancellationToken);
 
                 var tokenizedCorpusDb = ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext!)
                     .First(tc => tc.Id == tokenizationId);
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
                     ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
-                    request.CorpusId,
+                    new CorpusId(corpus.Id),
                     _mediator,
                     bookIds,
-                    request.Versification);
+                    versification);
 
-                //               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
-
-#if DEBUG
-                proc.Refresh();
-                Logger.LogInformation($"Private memory usage (AFTER BULK INSERT): {proc.PrivateMemorySize64}");
-
-                sw.Stop();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [token count: {tokenCount}]");
-#endif
-
-                return new RequestResult<TokenizedTextCorpus>(tokenizedTextCorpus);
-            }
-            catch (Exception ex)
-            {
-                return new RequestResult<TokenizedTextCorpus>
-                (
-                    success: false,
-                    message: $"Error saving tokenized corpus / tokens to database '{ex.ToString()}'"
-                );
+//               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+                return (tokenizedTextCorpus, tokenCount);
             }
             finally
             {
                 //if (!connectionWasOpen)
                 //{
-                    await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+                await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
                 //}
             }
+        }
+
+        private static (IEnumerable<Models.VerseRow>, int) GetVerseRows(IEnumerable<TokensTextRow> ttrs, Guid tokenizationId)
+        {
+            var tokenCount = 0;
+            var verseRows = ttrs
+                .Where(ttr => ttr.IsEmpty == false)
+                .Select(ttr =>
+                {
+                    var verseRowId = Guid.NewGuid(); //TEMP
+                    var (b, c, v) = (
+                        ((VerseRef)ttr.Ref).BookNum,
+                        ((VerseRef)ttr.Ref).ChapterNum,
+                        ((VerseRef)ttr.Ref).VerseNum);
+
+                    return new Models.VerseRow
+                    {
+                        Id = verseRowId,
+                        TokenizationId = tokenizationId,
+                        BookChapterVerse = $"{b:000}{c:000}{v:000}",
+                        OriginalText = ttr.Text,
+                        IsSentenceStart = ttr.IsSentenceStart,
+                        IsInRange = ttr.IsInRange,
+                        IsRangeStart = ttr.IsRangeStart,
+                        IsEmpty = ttr.IsEmpty,
+                        TokenComponents = ttr.Tokens
+                            .Select(token =>
+                            {
+                                if (token is CompositeToken compositeToken)
+                                {
+                                    tokenCount++;
+                                    return new Models.TokenComposite
+                                    {
+                                        Id = compositeToken.TokenId.Id,
+                                        VerseRowId = verseRowId,
+                                        TokenizationId = tokenizationId,
+                                        TrainingText = compositeToken.TrainingText,
+                                        ExtendedProperties = compositeToken.ExtendedProperties,
+                                        EngineTokenId = compositeToken.TokenId.ToString(),
+                                        Tokens = compositeToken.GetPositionalSortedBaseTokens()
+                                            .Select(childToken =>
+                                            {
+                                                tokenCount++;
+                                                return new Models.Token
+                                                {
+                                                    Id = childToken.TokenId.Id,
+                                                    VerseRowId = verseRowId,
+                                                    TokenizationId = tokenizationId,
+                                                    TrainingText = childToken.TrainingText,
+                                                    EngineTokenId = childToken.TokenId.ToString(),
+                                                    BookNumber = childToken.TokenId.BookNumber,
+                                                    ChapterNumber = childToken.TokenId.ChapterNumber,
+                                                    VerseNumber = childToken.TokenId.VerseNumber,
+                                                    WordNumber = childToken.TokenId.WordNumber,
+                                                    SubwordNumber = childToken.TokenId.SubWordNumber,
+                                                    SurfaceText = childToken.SurfaceText,
+                                                    ExtendedProperties = childToken.ExtendedProperties
+                                                };
+                                            }).ToList()
+                                    };
+                                }
+                                else
+                                {
+                                    tokenCount++;
+                                    return new Models.Token
+                                    {
+                                        Id = token.TokenId.Id,
+                                        VerseRowId = verseRowId,
+                                        TokenizationId = tokenizationId,
+                                        TrainingText = token.TrainingText,
+                                        EngineTokenId = token.TokenId.ToString(),
+                                        BookNumber = token.TokenId.BookNumber,
+                                        ChapterNumber = token.TokenId.ChapterNumber,
+                                        VerseNumber = token.TokenId.VerseNumber,
+                                        WordNumber = token.TokenId.WordNumber,
+                                        SubwordNumber = token.TokenId.SubWordNumber,
+                                        SurfaceText = token.SurfaceText,
+                                        ExtendedProperties = token.ExtendedProperties
+                                    } as Models.TokenComponent;
+                                }
+                            })
+                        .ToList()
+                    };
+                });
+
+            return (verseRows, tokenCount);
         }
 
         private static DbCommand CreateVerseRowInsertCommand(DbConnection connection)

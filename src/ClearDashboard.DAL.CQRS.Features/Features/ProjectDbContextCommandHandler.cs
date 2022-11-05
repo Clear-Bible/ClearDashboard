@@ -57,11 +57,20 @@ public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData>
                 return await SaveDataAsync(request, cancellationToken);
             }
         }
+        catch (OperationCanceledException)
+        {
+            return new TResponse
+            {
+                Message = "Operation Canceled",
+                Success = false,
+                Canceled = true
+            };
+        }
         catch (Exception ex)
         {
             return new TResponse
             {
-                Message = ex.Message,
+                Message = $"Exception type: {ex.GetType().Name}, having message: {ex.Message}",
                 Success = false
             };
         }
