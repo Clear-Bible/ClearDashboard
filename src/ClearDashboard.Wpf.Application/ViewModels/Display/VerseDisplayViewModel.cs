@@ -55,7 +55,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// </summary>
         public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
 
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         #endregion Public Properties
 
