@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -9,6 +10,7 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 
@@ -24,9 +26,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     /// <summary>
     /// A class containing the needed information to render a verse of <see cref="Token"/>s in the UI.
     /// </summary>
-    public class VerseDisplayViewModel : PropertyChangedBase
+    public class VerseDisplayViewModel : PropertyChangedBase, 
+        IHandle<SelectionUpdatedMessage>,
+        IHandle<NoteAddedMessage>,
+        IHandle<NoteDeletedMessage>
     {
         private NoteManager NoteManager { get; }
+        private IEventAggregator EventAggregator { get; }
 
         private ILogger<VerseDisplayViewModel>? Logger { get; }
 
@@ -132,6 +138,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         }
 
         #endregion
+
+        #region Event Handlers
+        public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            var selectedTokens = SourceTokenDisplayViewModels.Where(t => t.IsSelected);
+            foreach (var token in selectedTokens)
+            {
+                if (!message.SelectedTokens.Contains(token))
+                {
+                    token.IsSelected = false;
+                }
+            }
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId)))
+            {
+                token.NoteAdded(message.Note);
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(NoteDeletedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId)))
+            {
+                token.NoteDeleted(message.Note);
+            }
+
+            await Task.CompletedTask;
+        }
+
+        #endregion
+
         #region Public API
 
         /// <summary>
@@ -283,16 +326,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             
         }
+
         /// <summary>
         /// Constructor used via dependency injection.
         /// </summary>
         /// <param name="noteManager"></param>
         /// <param name="logger"></param>
         // ReSharper disable once UnusedMember.Global
-        public VerseDisplayViewModel(NoteManager noteManager, ILogger<VerseDisplayViewModel>? logger)
+        public VerseDisplayViewModel(NoteManager noteManager, IEventAggregator eventAggregator, ILogger<VerseDisplayViewModel>? logger)
         {
             NoteManager = noteManager;
+            EventAggregator = eventAggregator;
             Logger = logger;
+
+            EventAggregator.SubscribeOnUIThread(this);
         }
+
     }
 }
