@@ -79,6 +79,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             set => Set(ref _isSelected, value);
         }
 
+        private bool _isNoteSelected;
+        /// <summary>
+        /// Gets or sets whether a note to which the token is associated is displayed.
+        /// </summary>
+        public bool IsNoteSelected
+        {
+            get => _isNoteSelected;
+            set => Set(ref _isNoteSelected, value);
+        }
+
         public bool HasNote => NoteIds.Any();
 
         public void NoteAdded(NoteViewModel note)
