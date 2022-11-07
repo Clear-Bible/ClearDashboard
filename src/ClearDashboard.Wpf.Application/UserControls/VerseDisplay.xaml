@@ -83,6 +83,7 @@
                 ItemTemplate="{StaticResource TokenBubble}"
                 ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Tokens}" />
+            <!--FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsRtl}"-->
         </Border>
         <Border
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensMargin}"
@@ -92,6 +93,7 @@
             BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensBorderThickness}"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
             <ItemsControl
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsTargetRtl}"
                 ItemTemplate="{StaticResource TokenBubble}"
                 ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"

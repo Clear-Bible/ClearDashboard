@@ -283,9 +283,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TargetTokensProperty = DependencyProperty.Register(nameof(TargetTokens), typeof(IEnumerable), typeof(VerseDisplay),
             new PropertyMetadata(null, OnTargetTokensChanged));
 
+        private static int num = 0;
+
         public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var verseDisplay = (VerseDisplay)d;
+            num++;
+            if (num%2 == 1)// &&
+               // verseDisplay.TargetTokens.ToEnumerable().ToList().Count == 0)
+            {//Top
+                //verseDisplay.IsRtl = FlowDirection.RightToLeft; //verseDisplay.FlowDirection;
+            }
+            else
+            {//Bottom
+                verseDisplay.IsTargetRtl = FlowDirection.RightToLeft; //verseDisplay.FlowDirection;
+            }
 
             if (verseDisplay.TargetTokens != null)
             {
@@ -300,6 +312,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register(nameof(TargetVisibility), typeof(Visibility), typeof(VerseDisplay),
             new PropertyMetadata(Visibility.Collapsed));
+
+        public static readonly DependencyProperty IsRtlProperty = DependencyProperty.Register(nameof(IsRtl), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        public static readonly DependencyProperty IsTargetRtlProperty = DependencyProperty.Register(nameof(IsTargetRtl), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
 
 
         /// <summary>
@@ -1110,6 +1128,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Visibility)GetValue(TargetVisibilityProperty);
             set => SetValue(TargetVisibilityProperty, value);
+        }
+
+        public FlowDirection IsRtl
+        {
+            get => (FlowDirection)GetValue(IsRtlProperty);
+            set => SetValue(IsRtlProperty, value);
+        }
+        public FlowDirection IsTargetRtl
+        {
+            get => (FlowDirection)GetValue(IsTargetRtlProperty);
+            set => SetValue(IsTargetRtlProperty, value);
         }
 
         /// <summary>
