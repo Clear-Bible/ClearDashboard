@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.Resources;
 using System.Text.Json;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Threading;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -411,7 +412,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
         {
             await _mediator.Publish(
                 new DenormalizationProgressEvent(
-                    status: LongRunningProcessStatus.Working, 
+                    status: LongRunningTaskStatus.Running, 
                     name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger), 
                     description: string.Format(LocalizationStrings.Get(key, Logger), args) ?? string.Empty), 
                 cancellationToken);
@@ -420,7 +421,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
         {
             await _mediator.Publish(
                 new DenormalizationProgressEvent(
-                    status: LongRunningProcessStatus.Completed,
+                    status: LongRunningTaskStatus.Completed,
                     name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger)),
                 cancellationToken);
         }
@@ -428,7 +429,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
         {
             await _mediator.Publish(
                 new DenormalizationProgressEvent(
-                    status: LongRunningProcessStatus.Completed,
+                    status: LongRunningTaskStatus.Completed,
                     name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger),
                     exception: ex),
                 cancellationToken);
@@ -437,7 +438,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
         {
             await _mediator.Publish(
                 new DenormalizationProgressEvent(
-                    status: LongRunningProcessStatus.CancelTaskRequested,
+                    status: LongRunningTaskStatus.CancellationRequested,
                     name: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_BackgroundTaskName", Logger),
                     description: LocalizationStrings.Get("Denormalization_AlignmentTopTargets_RunCancelled", Logger)),
                 cancellationToken);

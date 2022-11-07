@@ -22,6 +22,7 @@
     <ProjectReference Include="..\ClearDashboard.DAL.CQRS\ClearDashboard.DAL.CQRS.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Interfaces\ClearDashboard.DAL.Interfaces.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
     <ProjectReference Include="..\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
   </ItemGroup>
 

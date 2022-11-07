@@ -6,7 +6,6 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Interfaces;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -23,7 +22,7 @@ using ClearDashboard.Wpf.Application.Views.ParatextViews;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
-    public class WordMeaningsViewModel : ToolViewModel, IWorkspace, IHandle<VerseChangedMessage>
+    public class WordMeaningsViewModel : ToolViewModel, IHandle<VerseChangedMessage>
     {
 
         #region Member Variables
@@ -239,10 +238,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public ICommand LaunchSensesCommand { get; set; }
         public ICommand GoBackCommand { get; set; }
 
-        ILogger IWorkspace.Logger => throw new NotImplementedException();
-
-        INavigationService IWorkspace.NavigationService => throw new NotImplementedException();
-
         #endregion
 
         #region Constructor
@@ -343,13 +338,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             if (CurrentBcv.BookNum < 40)
             {
                 // Hebrew link
-                string hebrewPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fhe$2F";
+                var hebrewPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fhe$2F";
                 LaunchWebPage.TryOpenUrl(hebrewPrefix + marbleResource.LogosRef);
             }
             else
             {
                 // Greek link
-                string greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
+                var greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
                 LaunchWebPage.TryOpenUrl(greekPrefix + marbleResource.LogosRef);
             }
         }
@@ -417,7 +412,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // SDBH & SDBG support the following language codes:
             // en, fr, sp, pt, sw, zht, zhs
 
-            string languageCode = "";
+            var languageCode = "";
 
             switch (_translationSource.Language)
             {
@@ -442,7 +437,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryResult = await ExecuteRequest(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
             if (queryResult.Success == false)
             {
-                Logger.LogError(queryResult.Message);
+                Logger!.LogError(queryResult.Message);
                 return;
             }
 

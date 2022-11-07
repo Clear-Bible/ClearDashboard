@@ -13,6 +13,9 @@ using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -24,6 +27,7 @@ namespace ClearDashboard.Wpf.Application
             // IMPORTANT!  - override the default ShellViewModel from the foundation.
             builder.RegisterType<ShellViewModel>().As<IShellViewModel>().SingleInstance();
             builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<BackgroundTasksViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<ProjectDesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
             //builder.RegisterType<DesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
         }
@@ -101,12 +105,16 @@ namespace ClearDashboard.Wpf.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<CancellationTokenSource>().Named<CancellationTokenSource>("root_application_token_source").SingleInstance();
-            builder
-                .Register(c => CancellationTokenSource.CreateLinkedTokenSource(
-                    c.ResolveNamed<CancellationTokenSource>("root_application_token_source").Token))
-                .Named<CancellationTokenSource>("linked_application_token_source")
-                .InstancePerDependency();
+            //builder.RegisterType<CancellationTokenSource>().Named<CancellationTokenSource>("root_application_token_source").SingleInstance();
+            //builder
+            //    .Register(c => CancellationTokenSource.CreateLinkedTokenSource(
+            //        c.ResolveNamed<CancellationTokenSource>("root_application_token_source").Token))
+            //    .Named<CancellationTokenSource>("linked_application_token_source")
+            //    .InstancePerDependency();
+
+            builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
+
+            builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();

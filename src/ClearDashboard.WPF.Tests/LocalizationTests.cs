@@ -22,7 +22,7 @@ namespace ClearDashboard.WPF.Tests
         public void GetLocalizedStringTest()
         {
             var logger = ServiceProvider.GetService<ILogger<LocalizationTests>>();
-            var text = LocalizationStrings.Get("Landing_NewProject", logger);
+            var text = LocalizationStrings.Get("Landing_NewProject", logger!);
             Assert.Equal("New Project", text);
 
 

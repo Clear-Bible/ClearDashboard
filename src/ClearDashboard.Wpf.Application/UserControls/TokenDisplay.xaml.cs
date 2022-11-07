@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Data.SqlTypes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Xml.Linq;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Events;
@@ -23,136 +21,136 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(TokenDisplay),
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(TokenDisplay),
             new PropertyMetadata(Orientation.Horizontal, OnLayoutChanged));
         
         /// <summary>
         /// Identifies the TokenMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register("TokenMargin", typeof(Thickness), typeof(TokenDisplay),
+        public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register(nameof(TokenMargin), typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the TokenBackground dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenBackgroundProperty = DependencyProperty.Register("TokenBackground", typeof(Brush), typeof(TokenDisplay),
+        public static readonly DependencyProperty TokenBackgroundProperty = DependencyProperty.Register(nameof(TokenBackground), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.Transparent));
 
         /// <summary>
         /// Identifies the SelectedTokenBackground dependency property.
         /// </summary>
-        public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register("SelectedTokenBackground", typeof(Brush), typeof(TokenDisplay),
+        public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register(nameof(SelectedTokenBackground), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.LightSteelBlue));
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register("HorizontalSpacing", typeof(double), typeof(TokenDisplay),
+        public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register(nameof(HorizontalSpacing), typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(5d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TokenVerticalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register("TokenVerticalSpacing", typeof(double), typeof(TokenDisplay),
+        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register(nameof(TokenVerticalSpacing), typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(4d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the NoteIndicatorMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorMarginProperty = DependencyProperty.Register("NoteIndicatorMargin", typeof(Thickness), typeof(TokenDisplay),
+        public static readonly DependencyProperty NoteIndicatorMarginProperty = DependencyProperty.Register(nameof(NoteIndicatorMargin), typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the NoteIndicatorHeight dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register("NoteIndicatorHeight", typeof(double), typeof(TokenDisplay),
+        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register(nameof(NoteIndicatorHeight), typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(3d, OnLayoutChanged));
         
         /// <summary>
         /// Identifies the NoteIndicatorColor dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register("NoteIndicatorColor", typeof(Brush), typeof(TokenDisplay),
+        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register(nameof(NoteIndicatorColor), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.LightGray));
 
         /// <summary>
         /// Identifies the TranslationMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register("TranslationMargin", typeof(Thickness), typeof(TokenDisplay),
+        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register(nameof(TranslationMargin), typeof(Thickness), typeof(TokenDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the TranslationVerticalSpacing dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register("TranslationVerticalSpacing", typeof(double), typeof(TokenDisplay),
+        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register(nameof(TranslationVerticalSpacing), typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(10d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationAlignment dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register("TranslationAlignment", typeof(HorizontalAlignment), typeof(TokenDisplay),
+        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register(nameof(TranslationAlignment), typeof(HorizontalAlignment), typeof(TokenDisplay),
             new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationFontFamily dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register("TranslationFontFamily", typeof(FontFamily), typeof(TokenDisplay),
+        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register(nameof(TranslationFontFamily), typeof(FontFamily), typeof(TokenDisplay),
             new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
 
         /// <summary>
         /// Identifies the TranslationFlowDirection dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFlowDirectionProperty = DependencyProperty.Register("TranslationFlowDirection", typeof(FlowDirection), typeof(TokenDisplay),
+        public static readonly DependencyProperty TranslationFlowDirectionProperty = DependencyProperty.Register(nameof(TranslationFlowDirection), typeof(FlowDirection), typeof(TokenDisplay),
             new PropertyMetadata(FlowDirection.LeftToRight));
 
         /// <summary>
         /// Identifies the TranslationFontSize dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register("TranslationFontSize", typeof(double), typeof(TokenDisplay),
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register(nameof(TranslationFontSize), typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(16d));
 
         /// <summary>
         /// Identifies the ShowTranslation dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register("ShowTranslation", typeof(bool), typeof(TokenDisplay),
+        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register(nameof(ShowTranslation), typeof(bool), typeof(TokenDisplay),
             new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationVisibility dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register("TranslationVisibility", typeof(Visibility), typeof(TokenDisplay),
+        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register(nameof(TranslationVisibility), typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// Identifies the ShowNoteIndicator dependency property.
         /// </summary>
-        public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register("ShowNoteIndicator", typeof(bool), typeof(TokenDisplay),
+        public static readonly DependencyProperty ShowNoteIndicatorProperty = DependencyProperty.Register(nameof(ShowNoteIndicator), typeof(bool), typeof(TokenDisplay),
             new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the NoteIndicatorVisibility dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register("NoteIndicatorVisibility", typeof(Visibility), typeof(TokenDisplay),
+        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register(nameof(NoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Visible));
 
         /// <summary>
         /// Identifies the SurfaceText dependency property.
         /// </summary>
-        public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register("SurfaceText", typeof(string), typeof(TokenDisplay));
+        public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register(nameof(SurfaceText), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the ExtendedProperties dependency property.
         /// </summary>
-        public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register("ExtendedProperties", typeof(string), typeof(TokenDisplay));
+        public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register(nameof(ExtendedProperties), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TargetTranslationText dependency property.
         /// </summary>
-        public static readonly DependencyProperty TargetTranslationTextProperty = DependencyProperty.Register("TargetTranslationText", typeof(string), typeof(TokenDisplay));
+        public static readonly DependencyProperty TargetTranslationTextProperty = DependencyProperty.Register(nameof(TargetTranslationText), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the TranslationColor dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationColorProperty = DependencyProperty.Register("TranslationColor", typeof(Brush), typeof(TokenDisplay));
+        public static readonly DependencyProperty TranslationColorProperty = DependencyProperty.Register(nameof(TranslationColor), typeof(Brush), typeof(TokenDisplay));
 
         #endregion Static DependencyProperties
         #region Static RoutedEvents
@@ -614,16 +612,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay,
+                TokenDisplayViewModel = tokenDisplay!,
                 ModifierKeys = Keyboard.Modifiers
             });
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            //TokenDisplayViewModel.IsSelected = true;
-            //CalculateLayout();
-
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
@@ -673,7 +668,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay,
+                TokenDisplayViewModel = tokenDisplay!,
                 Translation = tokenDisplay?.Translation
             });
         }
@@ -729,7 +724,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay
+                TokenDisplayViewModel = tokenDisplay!
             });
         }
 
@@ -858,7 +853,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
-        /// This is a relative factor that will ultimately depend on the token's <see cref="TokenDisplayViewModel.PaddingBefore"/> and <see cref="TokenDisplayViewModel.PaddingAfter"/> values.
+        /// This is a relative factor that will ultimately depend on the token's PaddingBefore and PaddingAfter values.
         /// </remarks>
         public double HorizontalSpacing
         {
@@ -889,8 +884,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public HorizontalAlignment TranslationAlignment
         {
-            get => (HorizontalAlignment) GetValue(HorizontalAlignmentProperty);
-            set => SetValue(HorizontalAlignmentProperty, value);
+            get => (HorizontalAlignment) GetValue(TranslationAlignmentProperty);
+            set => SetValue(TranslationAlignmentProperty, value);
         }
 
         /// <summary>
@@ -952,7 +947,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the whether to showTranslation the note indicator.
+        /// Gets or sets the whether to show the note indicator.
         /// </summary>
         public bool ShowNoteIndicator
         {
@@ -985,7 +980,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public TokenDisplayViewModel TokenDisplayViewModel => (TokenDisplayViewModel) DataContext;
 
         /// <summary>
-        /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its <see cref="DataAccessLayer.Models.TranslationState"./>
+        /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its TranslationState.
         /// </summary>
         /// <remarks>
         /// This should normally not be set directly; the value is based on the TranslationState:

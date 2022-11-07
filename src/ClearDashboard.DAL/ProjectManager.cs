@@ -197,7 +197,7 @@ namespace ClearDashboard.DataAccessLayer
 
         public void Dispose()
         {
-            LifetimeScope.Dispose();
+           //no-op for now  
         }
 
 
