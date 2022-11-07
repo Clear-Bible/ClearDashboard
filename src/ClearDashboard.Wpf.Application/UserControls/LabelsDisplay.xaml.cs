@@ -10,9 +10,9 @@ using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
-    /// A control for displaying a collection of <see cref="System.Windows.Controls.Label"/> values.
+    /// A control for displaying a collection of <see cref="NotesLabel"/> values.
     /// </summary>
-    public partial class LabelsDisplay : UserControl
+    public partial class LabelsDisplay
     {
         #region Static Routed Events
         /// <summary>
@@ -26,36 +26,35 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Identifies the Note dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register("Note", typeof(Note), typeof(LabelsDisplay));
+        public static readonly DependencyProperty NoteProperty = DependencyProperty.Register(nameof(Note), typeof(NoteViewModel), typeof(LabelsDisplay));
 
         /// <summary>
         /// Identifies the Orientation dependency property.
         /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(LabelsDisplay));
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(LabelsDisplay));
+
+        /// <summary>
+        /// Identifies the LabelBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelBackgroundProperty = DependencyProperty.Register("LabelBackground", typeof(SolidColorBrush), typeof(LabelsDisplay));
+
+        /// <summary>
+        /// Identifies the LabelCornerRadius dependency property.
+        /// </summary>
+        public static readonly DependencyProperty LabelCornerRadiusProperty = DependencyProperty.Register(nameof(LabelCornerRadius), typeof(CornerRadius), typeof(LabelsDisplay),
+            new PropertyMetadata(new CornerRadius(0)));
 
         /// <summary>
         /// Identifies the LabelMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelMarginProperty = DependencyProperty.Register("LabelMargin", typeof(Thickness), typeof(LabelsDisplay),
+        public static readonly DependencyProperty LabelMarginProperty = DependencyProperty.Register(nameof(LabelMargin), typeof(Thickness), typeof(LabelsDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
         /// Identifies the LabelPadding dependency property.
         /// </summary>
-        public static readonly DependencyProperty LabelPaddingProperty = DependencyProperty.Register("LabelPadding", typeof(Thickness), typeof(LabelsDisplay),
+        public static readonly DependencyProperty LabelPaddingProperty = DependencyProperty.Register(nameof(LabelPadding), typeof(Thickness), typeof(LabelsDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
-
-        /// <summary>
-        /// Identifies the LabelCornerRadius dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LabelCornerRadiusProperty = DependencyProperty.Register("LabelCornerRadius", typeof(CornerRadius), typeof(LabelsDisplay),
-            new PropertyMetadata(new CornerRadius(0)));
-
-        /// <summary>
-        /// Identifies the LabelBackground dependency property.
-        /// </summary>
-        public static readonly DependencyProperty LabelBackgroundProperty = DependencyProperty.Register("LabelBackground", typeof(SolidColorBrush), typeof(LabelsDisplay)
-            );
 
         /// <summary>
         /// Identifies the Labels dependency property.
@@ -79,17 +78,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var control = e.Source as FrameworkElement;
             var label = control?.DataContext as NotesLabel;
-            RaiseLabelEvent(LabelRemovedEvent, label);
+
+            if (label != null)
+            {
+                RaiseLabelEvent(LabelRemovedEvent, label);
+            }
         }
 
         #endregion
         #region Public properties
+
         /// <summary>
-        /// Gets or sets the <see cref="Note"/> that the labels are associated with.
+        /// Gets or sets the <see cref="NoteViewModel"/> that the labels are associated with.
         /// </summary>
-        public Note Note
+        public NoteViewModel Note
         {
-            get => (Note)GetValue(NoteProperty);
+            get => (NoteViewModel) GetValue(NoteProperty);
             set => SetValue(NoteProperty, value);
         }
 
