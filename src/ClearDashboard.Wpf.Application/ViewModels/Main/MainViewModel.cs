@@ -402,7 +402,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                              IEventAggregator eventAggregator, 
                              IWindowManager windowManager, 
                              ILifetimeScope lifetimeScope,
-                             NoteManager noteManager
+                             NoteManager noteManager,
                              LongRunningTaskManager longRunningTaskManager)
         {
             _longRunningTaskManager = longRunningTaskManager;
