@@ -201,16 +201,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return modifiers;
         }
 
-        private void UpdateSelection(TokenDisplayViewModelCollection selectedTokens, bool addToSelection)
+        private void UpdateSelection(TokenDisplayViewModel token, TokenDisplayViewModelCollection selectedTokens, bool addToSelection)
         {
             if (addToSelection)
             {
-                foreach (var token in selectedTokens)
+                foreach (var selectedToken in selectedTokens)
                 {
-                    if (!SelectedTokens.Contains(token))
+                    if (!SelectedTokens.Contains(selectedToken))
                     {
-                        SelectedTokens.Add(token);
+                        SelectedTokens.Add(selectedToken);
                     }
+                }
+                if (!token.IsSelected)
+                {
+                    SelectedTokens.Remove(token);
                 }
             }
             else
@@ -229,7 +233,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
+            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel.SurfaceText}' token ({e.TokenDisplayViewModel.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
@@ -242,7 +246,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public async Task TokenRightButtonDownAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.SelectedTokens, false);
+            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, false);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";

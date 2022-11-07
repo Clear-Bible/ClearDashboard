@@ -1357,16 +1357,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region VerseDisplayControl
 
-        private void UpdateSelection(TokenDisplayViewModelCollection selectedTokens, ModifierKeys modifierKeys)
+        private void UpdateSelection(TokenDisplayViewModel token, TokenDisplayViewModelCollection selectedTokens, bool addToSelection)
         {
-            if ((modifierKeys & ModifierKeys.Control) > 0)
+            if (addToSelection)
             {
-                foreach (var token in selectedTokens)
+                foreach (var selectedToken in selectedTokens)
                 {
-                    if (!SelectedTokens.Contains(token))
+                    if (!SelectedTokens.Contains(selectedToken))
                     {
-                        SelectedTokens.Add(token);
+                        SelectedTokens.Add(selectedToken);
                     }
+                }
+
+                if (!token.IsSelected)
+                {
+                    SelectedTokens.Remove(token);
                 }
             }
             else
@@ -1383,7 +1388,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.SelectedTokens, e.ModifierKeys);
+            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId})";
@@ -1391,7 +1396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
         {
-            SelectedTokens = e.SelectedTokens;
+            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, false);
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
         }
 
