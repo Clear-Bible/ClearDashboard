@@ -71,6 +71,8 @@ public record LogActivityMessage(string Message);
 
 public record FilterPinsMessage(string Message);
 
+public record CreateProjectMessage(string Message);
+
 
 
 #region ProjectDesignSurfaceMessages

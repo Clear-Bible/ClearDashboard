@@ -1183,6 +1183,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
+                    IsRtl = message.IsRTL,
+                    IsTargetRtl = (bool)message.IsTargetRTL
                 });
 
                 // add to the grouping for saving

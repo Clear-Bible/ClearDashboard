@@ -1826,6 +1826,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
                         ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
                         ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString(),
+                        IsRtl = newConnection.SourceConnector.ParentNode.IsRTL,
+                        IsTargetRtl = newConnection.DestinationConnector.ParentNode.IsRTL
                     });
                 }
 
