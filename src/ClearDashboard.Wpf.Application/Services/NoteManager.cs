@@ -11,10 +11,9 @@ using System.Diagnostics;
 using System.Text;
 using Caliburn.Micro;
 using Microsoft.Extensions.Logging;
-using Nito.AsyncEx;
 using SIL.Extensions;
 using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -22,6 +21,7 @@ namespace ClearDashboard.Wpf.Application.Services
     {
         private NoteIdCollection _currentNoteIds = new();
         private NoteViewModelCollection _currentNotes = new();
+        private IEventAggregator EventAggregator { get; }
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
 
@@ -272,11 +272,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     Logger?.LogInformation($"Associated labels with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 }
-                foreach (var entityId in entityIds)
-                {
-                    //var token = SourceTokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
-                    //token?.NoteAdded(note);
-                }
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteAddedMessage(note, entityIds));
             }
             catch (Exception e)
             {
@@ -330,11 +327,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 Logger?.LogInformation($"Deleted note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
-                foreach (var entityId in entityIds)
-                {
-                    //var token = SourceTokenDisplayViewModels.FirstOrDefault(vt => vt.Token.TokenId.Id == entityId.Id);
-                   // token?.NoteDeleted(note);
-                }
+                await EventAggregator.PublishOnUIThreadAsync(new NoteDeletedMessage(note, entityIds));
             }
             catch (Exception e)
             {
@@ -447,8 +440,9 @@ namespace ClearDashboard.Wpf.Application.Services
             LabelSuggestions = await GetLabelSuggestionsAsync();
         }
 
-        public NoteManager(ILogger<NoteManager>? logger, IMediator mediator)
+        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator)
         {
+            EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
         }
