@@ -444,6 +444,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 SelectedTokens.Add(token);
             }
+            else
+            {
+                SelectedTokens.Remove(token);
+            }
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
