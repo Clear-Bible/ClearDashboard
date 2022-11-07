@@ -14,7 +14,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? LanguageName { get; set; }
         public string? ProjectPath { get; set; }
         public bool IsRtl { get; set; }
-        public FontFamily FontFamily { get; set; }
+        public FontFamily FontFamily { get; set; } = new FontFamily("Roboto");
 
         public bool HasProjectPath => !string.IsNullOrEmpty(ProjectPath);
 

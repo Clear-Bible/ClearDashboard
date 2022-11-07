@@ -121,7 +121,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
         var gloss = LocalizationStrings.Get("AddParatextCorpusDialog_Interlinear", Logger);
 
         TranslationSetDisplayName =
-            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} -> {ParentViewModel.TargetCorpusNodeViewModel.Name} {gloss}";
+            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {gloss}";
 
         return base.OnActivateAsync(cancellationToken);
     }

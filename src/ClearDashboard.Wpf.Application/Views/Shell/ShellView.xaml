@@ -245,7 +245,7 @@
         <userControls:AnchoredPopup
             Grid.Row="1"
             AllowsTransparency="True"
-            HorizontalOffset="270"
+            HorizontalOffset="{Binding PopupHorizontalOffset}"
             IsOpen="{Binding BackgroundTasksViewModel.ShowPopup}"
             IsTopmost="False"
             Placement="Top"

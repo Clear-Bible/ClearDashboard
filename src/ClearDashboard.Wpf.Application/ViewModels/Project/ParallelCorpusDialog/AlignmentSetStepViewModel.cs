@@ -80,7 +80,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
         var alignment = LocalizationStrings.Get("AddParatextCorpusDialog_Alignment", Logger); 
 
         AlignmentSetDisplayName =
-            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} -> {ParentViewModel.TargetCorpusNodeViewModel.Name} {alignment}";
+            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {alignment}";
 
         return base.OnActivateAsync(cancellationToken);
     }

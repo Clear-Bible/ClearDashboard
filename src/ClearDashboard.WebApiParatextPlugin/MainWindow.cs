@@ -558,18 +558,27 @@ namespace ClearDashboard.WebApiParatextPlugin
             var projects = _host.GetAllProjects(true);
 
 
-            var metadata=  projects.Select(project => new ParatextProjectMetadata
+            var metadata=  projects.Select(project =>
                 {
-                    Id = project.ID,
-                    LanguageName = project.LanguageName,
-                    Name = project.ShortName,
-                    LongName = project.LongName,
-                    //FontFamily = project.Language.FontFamily,
-                    CorpusType = DetermineCorpusType(project.Type),
-                    IsRtl = project.Language.IsRtoL,
-                    AvailableBooks = project.GetAvailableBooks(),
-            })
-                .ToList();
+                    var metaData = new ParatextProjectMetadata
+                    {
+                        Id = project.ID,
+                        LanguageName = project.LanguageName,
+                        Name = project.ShortName,
+                        LongName = project.LongName,
+                        CorpusType = DetermineCorpusType(project.Type),
+                        IsRtl = project.Language.IsRtoL,
+                        AvailableBooks = project.GetAvailableBooks(),
+                    };
+
+                    var fontFamily = project.Language.Font.FontFamily;
+
+                    if (fontFamily != "")
+                    {
+                        metaData.FontFamily = new FontFamily(fontFamily);
+                    }
+                    return metaData;
+                }).ToList();
 
             var projectNames = metadata.Select(project => project.Name).ToList();
 
