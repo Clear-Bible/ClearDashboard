@@ -204,7 +204,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             IsBusy = true;
 
-            var taskName = "ParallelCorpus";
+            var taskName = TaskNames.ParallelCorpus;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask!.CancellationTokenSource!.Token;
 
@@ -218,9 +218,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
 
-                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator,
+                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
                     new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
-                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator,
+                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
                     new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
 
                 Logger!.LogInformation($"Parallelizing source and target corpora");
@@ -311,7 +311,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> TrainSmtModel()
         {
             IsBusy = true;
-            var taskName = " TrainingSMTModel"; 
+            var taskName = TaskNames.TrainingSmtModel; 
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask.CancellationTokenSource.Token;
             try
@@ -408,7 +408,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
         {
             IsBusy = true;
-            var taskName = "TranslationSet";
+            var taskName = TaskNames.TranslationSet;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask.CancellationTokenSource.Token;
             try
@@ -495,8 +495,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName)
         {
             IsBusy = true;
-   
-            var taskName = "AlignmentSet";
+
+            var taskName = TaskNames.AlignmentSet;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask.CancellationTokenSource.Token;
             try

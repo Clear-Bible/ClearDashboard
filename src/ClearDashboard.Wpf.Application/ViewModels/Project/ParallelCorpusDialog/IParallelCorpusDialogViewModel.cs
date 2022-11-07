@@ -35,7 +35,7 @@ public interface IParallelCorpusDialogViewModel
 
     Task SendBackgroundStatus(string name, LongRunningTaskStatus status, CancellationToken cancellationToken,
         string? description = null, Exception? ex = null);
-    List<IWorkflowStepViewModel> Steps { get; }
+    List<IWorkflowStepViewModel>? Steps { get; }
 
     void Ok();
     void Cancel();
