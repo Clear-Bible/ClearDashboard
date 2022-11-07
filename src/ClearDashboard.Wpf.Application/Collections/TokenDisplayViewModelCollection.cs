@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using SIL.Extensions;
@@ -39,6 +40,15 @@ namespace ClearDashboard.Wpf.Application.Collections
         public TokenDisplayViewModelCollection(TokenDisplayViewModel token) : this()
         {
             Add(token);
+        }
+
+        public void Remove(TokenId tokenId)
+        {
+            var existing = Items.FirstOrDefault(i => i.Token.TokenId.IdEquals(tokenId));
+            if (existing != null)
+            {
+                Items.Remove(existing);
+            }
         }
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
