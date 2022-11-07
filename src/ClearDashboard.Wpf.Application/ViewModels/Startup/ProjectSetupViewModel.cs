@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using System.Threading;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -13,7 +15,7 @@ using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
-    public class ProjectSetupViewModel : DashboardApplicationValidatingWorkflowStepViewModel<StartupDialogViewModel,DataAccessLayer.Models.Project>
+    public class ProjectSetupViewModel : DashboardApplicationValidatingWorkflowStepViewModel<StartupDialogViewModel,DataAccessLayer.Models.Project>, IHandle<CreateProjectMessage>
     {
         private Visibility _alertVisibility = Visibility.Visible;
         public Visibility AlertVisibility
@@ -69,9 +71,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ProjectManager.CurrentDashboardProject.IsNew = true;
            
             ParentViewModel!.ExtraData = ProjectManager.CurrentDashboardProject;
-
-
             ParentViewModel?.Ok();
+        }
+
+        public void Create(string name)
+        {
+            ProjectName = name;
+            Create();
         }
 
         private bool CheckIfConnectedToParatext()
@@ -136,6 +142,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             return (!string.IsNullOrEmpty(ProjectName)) ? Validator.Validate(Project) : null;
         }
 
-  
+
+        public Task HandleAsync(CreateProjectMessage message, CancellationToken cancellationToken)
+        {
+            Create(message.Message);
+            return Task.CompletedTask;
+        }
     }
 }
