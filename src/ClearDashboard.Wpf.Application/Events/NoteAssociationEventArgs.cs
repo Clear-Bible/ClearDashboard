@@ -1,12 +1,13 @@
 ﻿using System.Windows;
-using ClearDashboard.DAL.Alignment.Notes;
+using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application.Events
 {
-    public class LabelEventArgs : RoutedEventArgs
+    public class NoteAssociationEventArgs : RoutedEventArgs
     {
-        public Label Label { get; set; } = new();
         public NoteViewModel Note { get; set; } = new();
+        public IId AssociatedEntityId { get; set; } = new EmptyEntityId();
     }
 }

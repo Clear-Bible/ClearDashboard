@@ -4,25 +4,26 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Annotations;
+using ClearDashboard.Wpf.Application.Collections;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.
     /// </summary>
-    public class TokenDisplayViewModel : INotifyPropertyChanged
+    public class TokenDisplayViewModel : PropertyChangedBase
     {
-        private bool _isSelected = false;
-
         /// <summary>
         /// The token itself.
         /// </summary>
-        public Token Token { get; set; }
+        public Token Token { get; }
 
         public bool IsSource { get; set; }
 
@@ -47,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public string SurfaceText => Token.SurfaceText;
 
         /// <summary>
-        /// The extended propertiesof the token to be displayed.
+        /// The extended properties of the token to be displayed.
         /// </summary>
         public string? ExtendedProperties => Token.ExtendedProperties;
 
@@ -62,52 +63,61 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public string TranslationState => Translation?.OriginatedFrom ?? string.Empty;
 
         /// <summary>
-        /// A list of <see cref="Note"/>s for the token.
+        /// A list of <see cref="NoteViewModel"/>s for the token.
         /// </summary>
-        public NoteCollection Notes { get; set; } = new();
+        public NoteViewModelCollection Notes { get; set; } = new();
 
+        public NoteIdCollection NoteIds { get; set; } = new();
+
+        private bool _isSelected;
         /// <summary>
         /// Gets or sets whether this token is selected.
         /// </summary>
         public bool IsSelected
         {
             get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                OnPropertyChanged(nameof(IsSelected));
-            }
+            set => Set(ref _isSelected, value);
         }
 
-        public bool HasNote => Notes.Any();
-
-        public void NoteAdded(Note note)
+        private bool _isNoteSelected;
+        /// <summary>
+        /// Gets or sets whether a note to which the token is associated is displayed.
+        /// </summary>
+        public bool IsNoteSelected
         {
-            Notes.Add(note);
-            OnPropertyChanged(nameof(Notes));
-            OnPropertyChanged(nameof(HasNote));
+            get => _isNoteSelected;
+            set => Set(ref _isNoteSelected, value);
         }
 
-        public void NoteDeleted(Note note)
+        public bool HasNote => NoteIds.Any();
+
+        public void NoteAdded(NoteViewModel note)
         {
-            Notes.Remove(note);
-            OnPropertyChanged(nameof(Notes));
-            OnPropertyChanged(nameof(HasNote));
+            //Notes.Add(note);
+            NoteIds.AddDistinct(note.NoteId);
+            //NotifyOfPropertyChange(nameof(Notes));
+            NotifyOfPropertyChange(nameof(HasNote));
+        }
+
+        public void NoteDeleted(NoteViewModel note)
+        {
+            //Notes.Remove(note);
+            NoteIds.RemoveIfExists(note.NoteId);
+            //NotifyOfPropertyChange(nameof(Notes));
+            NotifyOfPropertyChange(nameof(HasNote));
         }
 
         public void TranslationApplied(Translation translation)
         {
             Translation = translation;
-            OnPropertyChanged(nameof(Translation));
-            OnPropertyChanged(nameof(TargetTranslationText));
-            OnPropertyChanged(nameof(TranslationState));
+            NotifyOfPropertyChange(nameof(Translation));
+            NotifyOfPropertyChange(nameof(TargetTranslationText));
+            NotifyOfPropertyChange(nameof(TranslationState));
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        public TokenDisplayViewModel(Token token)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Token = token;
         }
     }
 }

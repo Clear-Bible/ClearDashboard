@@ -26,16 +26,16 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-        <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
-        <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
-        <userControls:ThicknessConverter x:Key="ThicknessConverter" />
+        <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+        <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+        <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+        <converters:ThicknessConverter x:Key="ThicknessConverter" />
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Page.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="500" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -78,8 +78,8 @@
             [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];                                                                                         
             [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];                                                                                         
             [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];                                                                                         
-            [Event NoteCreate] = [Action NoteCreate($eventArgs)]                                 
-            [Event FilterPins] = [Action FilterPins($eventArgs)]
+            [Event NoteCreate] = [Action NoteCreate($eventArgs)];                                 
+            [Event FilterPins] = [Action FilterPins($eventArgs)];
             [Event TranslateQuick] = [Action TranslateQuick($eventArgs)]"
             FlowDirection="{Binding ElementName=RtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
             FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -90,7 +90,7 @@
             ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
             TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-            Tokens="{Binding VerseDisplayViewModel.TokenDisplayViewModels}"
+            Tokens="{Binding VerseDisplayViewModel.SourceTokenDisplayViewModels}"
             TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
             TranslationFlowDirection="{Binding ElementName=TranslationRtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
             TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -709,22 +709,35 @@
             <userControls:TranslationSelector
                 cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];"
                 SelectedItem="{Binding CurrentTranslationOption}"
-                TokenDisplayViewModel="{Binding CurrentToken}"
+                TokenDisplayViewModel="{Binding TokenForTranslation}"
                 TranslationOptions="{Binding TranslationOptions}"
                 Visibility="{Binding TranslationPaneVisibility}" />
 
             <userControls:NoteCollectionDisplay
                 Title="{Binding SelectedTokens.CombinedSurfaceText}"
-                cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)];                                                            [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];                                                            [Event LabelRemoved] = [Action LabelRemoved($eventArgs)];                                                            [Event LabelSelected] = [Action LabelSelected($eventArgs)];                                                            [Event LabelAdded] = [Action LabelAdded($eventArgs)];"
-                EntityId="{Binding CurrentToken.Token.TokenId}"
+                cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)]; 
+                                    [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            
+                                    [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            
+                                    [Event NoteDeleted] = [Action NoteDeleted($eventArgs)];                                                            
+                                    [Event LabelRemoved] = [Action LabelRemoved($eventArgs)];                                                            
+                                    [Event LabelSelected] = [Action LabelSelected($eventArgs)];                                                            
+                                    [Event LabelAdded] = [Action LabelAdded($eventArgs)];
+                                    [Event NoteAssociationClicked] = [Action NoteAssociationClicked($eventArgs)];
+                                    [Event NoteAssociationDoubleClicked] = [Action NoteAssociationDoubleClicked($eventArgs)];
+                                    [Event NoteAssociationRightButtonDown] = [Action NoteAssociationRightButtonDown($eventArgs)];
+                                    [Event NoteAssociationMouseEnter] = [Action NoteAssociationMouseEnter($eventArgs)];
+                                    [Event NoteAssociationMouseLeave] = [Action NoteAssociationMouseLeave($eventArgs)];
+                                    "
                 EntityIds="{Binding SelectedTokens.EntityIds}"
-                InnerMargin="0,0,0,30"
+                InnerMargin="0,0,0,25"
                 LabelBackground="BlanchedAlmond"
                 LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                LabelSuggestions="{Binding VerseDisplayViewModel.LabelSuggestions}"
+                LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
                 NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                Notes="{Binding SelectedTokens.CombinedNotes}"
+                Notes="{Binding NoteManager.CurrentNotes}"
+                NoteAssociationFontSize="13"
+                NoteAssociationMargin="5,5,0,0"
                 TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding NotePaneVisibility}">
                 <userControls:NoteCollectionDisplay.NoteMargin>

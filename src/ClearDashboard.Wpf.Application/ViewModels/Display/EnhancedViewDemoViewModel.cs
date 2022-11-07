@@ -22,10 +22,11 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using SIL.Extensions;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
-using ControlzEx.Standard;
+using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -108,14 +109,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager!.LoadProject("EnhancedViewDemo");
-                var row = await GetVerseTextRow(40001001);
+                //await ProjectManager!.LoadProject("EnhancedViewDemo");
+                await ProjectManager!.LoadProject("EnhancedViewDemo2");
+                //var row = await GetVerseTextRow(40001001);
+                var row = await GetVerseTextRow(001001001);
                 var translationSet = await GetFirstTranslationSet();
                 //await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
 
-                //var books = ClearBible.Engine.Persistence.FileGetBookIds.BookIds;
-                //var bookId = books.FirstOrDefault(b => b.silCannonBookNum == 1);
-                //bookId.
                 await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
@@ -131,51 +131,52 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private IServiceProvider ServiceProvider { get; }
 
-        public VerseDisplayViewModel VerseDisplayViewModel { get; set; } = new();
-        private string _message = string.Empty;
-        private Visibility _notePaneVisibility = Visibility.Collapsed;
-        private Visibility _translationPaneVisibility = Visibility.Collapsed;
-        private TokenDisplayViewModel _currentToken;
-        private IEnumerable<TranslationOption> _translationOptions;
-        private TranslationOption? _currentTranslationOption;
-        private TokenDisplayViewModelCollection _selectedTokens = new();
+        public NoteManager NoteManager { get; }
+        public VerseDisplayViewModel VerseDisplayViewModel { get; set; }
 
+        private string _message = string.Empty;
         public string Message
         {
             get => _message;
             set => Set(ref _message, value);
         }
 
-        public TokenDisplayViewModel CurrentToken
+        private TokenDisplayViewModel _tokenForTranslation;
+        public TokenDisplayViewModel TokenForTranslation
         {
-            get => _currentToken;
-            set => Set(ref _currentToken, value);
+            get => _tokenForTranslation;
+            set => Set(ref _tokenForTranslation, value);
         }
 
+        private TokenDisplayViewModelCollection _selectedTokens = new();
         public TokenDisplayViewModelCollection SelectedTokens
         {
             get => _selectedTokens;
             set => Set(ref _selectedTokens, value);
         }
 
+        private IEnumerable<TranslationOption> _translationOptions;
         public IEnumerable<TranslationOption> TranslationOptions
         {
             get => _translationOptions;
             set => Set(ref _translationOptions, value);
         }
 
+        private TranslationOption? _currentTranslationOption;
         public TranslationOption? CurrentTranslationOption
         {
             get => _currentTranslationOption;
             set => Set(ref _currentTranslationOption, value);
         }
 
+        private Visibility _notePaneVisibility = Visibility.Collapsed;
         public Visibility NotePaneVisibility
         {
             get => _notePaneVisibility;
             set => Set(ref _notePaneVisibility, value);
         }
 
+        private Visibility _translationPaneVisibility = Visibility.Collapsed;
         public Visibility TranslationPaneVisibility
         {
             get => _translationPaneVisibility;
@@ -184,7 +185,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task DisplayTranslationPane(TranslationEventArgs e)
         {
-            CurrentToken = e.TokenDisplayViewModel;
+            TokenForTranslation = e.TokenDisplayViewModel;
             TranslationOptions = await VerseDisplayViewModel.GetTranslationOptionsAsync(e.Translation);
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
             TranslationPaneVisibility = Visibility.Visible;
@@ -200,25 +201,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return modifiers;
         }
 
+        private void UpdateSelection(TokenDisplayViewModel token, TokenDisplayViewModelCollection selectedTokens, bool addToSelection)
+        {
+            if (addToSelection)
+            {
+                foreach (var selectedToken in selectedTokens)
+                {
+                    if (!SelectedTokens.Contains(selectedToken))
+                    {
+                        SelectedTokens.Add(selectedToken);
+                    }
+                }
+                if (!token.IsSelected)
+                {
+                    SelectedTokens.Remove(token);
+                }
+            }
+            else
+            {
+                SelectedTokens = selectedTokens;
+            }
+            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
+        }
+
         #region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
         {
-            SelectedTokens = e.SelectedTokens;
-            if (SelectedTokens.Any(t => t.HasNote))
-            {
-                NotePaneVisibility = Visibility.Visible;
-            }
-            else
-            {
-                NotePaneVisibility = Visibility.Collapsed;
-            }
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
+            Task.Run(() => TokenClickedAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenClickedAsync(TokenEventArgs e)
+        {
+            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
+            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
+            NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
+            Message = $"'{e.TokenDisplayViewModel.SurfaceText}' token ({e.TokenDisplayViewModel.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
         {
-            SelectedTokens = e.SelectedTokens;
+            Task.Run(() => TokenRightButtonDownAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenRightButtonDownAsync(TokenEventArgs e)
+        {
+            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, false);
+            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
+            NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
         }
 
@@ -257,9 +287,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteMouseEnter(NoteEventArgs e)
         {
-            e.TokenDisplayViewModel.IsSelected = true;
-            SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
-            NotePaneVisibility = Visibility.Visible;
         }
 
         public void NoteCreate(NoteEventArgs e)
@@ -294,19 +321,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         
         public async Task NoteAdded(NoteEventArgs e)
         {
-            await VerseDisplayViewModel.AddNoteAsync(e.Note, e.EntityIds);
+            await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ",e.EntityIds.Select(id => id.ToString()))}";
         }
 
         public async Task NoteUpdated(NoteEventArgs e)
         {
-            await VerseDisplayViewModel.UpdateNoteAsync(e.Note);
+            await NoteManager.UpdateNoteAsync(e.Note);
             Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
         public async Task NoteDeleted(NoteEventArgs e)
         {
-            await VerseDisplayViewModel.DeleteNoteAsync(e.Note, e.EntityIds);
+            await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
             Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
         }
 
@@ -315,7 +342,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             // If this is a new note, we'll handle any labels when the note is added.
             if (e.Note.NoteId != null)
             {
-                await VerseDisplayViewModel.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
+                await NoteManager.CreateAssociateNoteLabelAsync(e.Note, e.Label.Text);
             }
             Message = $"Label '{e.Label.Text}' added for note";
         }
@@ -324,7 +351,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             if (e.Note.NoteId != null)
             {
-                await VerseDisplayViewModel.AssociateNoteLabelAsync(e.Note, e.Label);
+                await NoteManager.AssociateNoteLabelAsync(e.Note, e.Label);
             }
             Message = $"Label '{e.Label.Text}' selected for note";
         }
@@ -333,9 +360,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             if (e.Note.NoteId != null)
             {
-                await VerseDisplayViewModel.DetachNoteLabel(e.Note, e.Label);
+                await NoteManager.DetachNoteLabel(e.Note, e.Label);
             }
             Message = $"Label '{e.Label.Text}' removed for note";
+        }
+
+        public void NoteAssociationClicked(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' clicked";
+        }
+
+        public void NoteAssociationDoubleClicked(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' double-clicked";
+        }
+
+        public void NoteAssociationRightButtonDown(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' right button down";
+        }
+
+        public void NoteAssociationMouseEnter(NoteAssociationEventArgs e)
+        {
+            Message = $"Note association '{e.AssociatedEntityId}' hovered";
+        }
+
+        public void NoteAssociationMouseLeave(NoteAssociationEventArgs e)
+        {
+            Message = string.Empty;
         }
 
         public void CloseNotePaneRequested(RoutedEventArgs args)
@@ -360,9 +412,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
         }
 
-        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            NoteManager = noteManager;
             ServiceProvider = serviceProvider;
         }
 #pragma warning restore CS8618

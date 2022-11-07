@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -112,6 +113,8 @@ namespace ClearDashboard.Wpf.Application
             //    .InstancePerDependency();
 
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
+
+            builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();

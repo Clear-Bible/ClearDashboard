@@ -43,6 +43,7 @@ using Point = System.Drawing.Point;
 using System.Windows.Shell;
 using System.IO.Compression;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -62,6 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
+        private NoteManager NoteManager { get; }
 #nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
@@ -400,11 +402,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                              IEventAggregator eventAggregator, 
                              IWindowManager windowManager, 
                              ILifetimeScope lifetimeScope,
+                             NoteManager noteManager,
                              LongRunningTaskManager longRunningTaskManager)
         {
             _longRunningTaskManager = longRunningTaskManager;
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
+            NoteManager = noteManager;
             EventAggregator = eventAggregator;
             ProjectManager = projectManager;
             Logger = logger;
@@ -501,9 +505,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     await ProjectManager.LoadProject(Parameter.ProjectName);
                 }
+
+                await NoteManager.InitializeAsync();
             }
-
-
 
             await base.OnInitializeAsync(cancellationToken);
         }
