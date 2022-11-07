@@ -564,6 +564,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     LanguageName = project.LanguageName,
                     Name = project.ShortName,
                     LongName = project.LongName,
+                    //FontFamily = project.Language.FontFamily,
                     CorpusType = DetermineCorpusType(project.Type),
                     IsRtl = project.Language.IsRtoL,
                     AvailableBooks = project.GetAvailableBooks(),

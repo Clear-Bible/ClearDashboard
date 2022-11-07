@@ -1,4 +1,5 @@
 ﻿
+using System.Drawing;
 using SIL.Scripture;
 
 namespace ClearDashboard.DataAccessLayer.Models
@@ -13,6 +14,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? LanguageName { get; set; }
         public string? ProjectPath { get; set; }
         public bool IsRtl { get; set; }
+        public FontFamily FontFamily { get; set; }
 
         public bool HasProjectPath => !string.IsNullOrEmpty(ProjectPath);
 

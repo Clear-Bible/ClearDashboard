@@ -104,8 +104,23 @@ namespace ClearDashboard.Wpf.Application.Models
             get => _verses;
             set => Set(ref _verses, value);
         }
+
         
-        
+        private FontFamily _fontFamily;
+        public FontFamily FontFamily
+        {
+            get => _fontFamily;
+            set => Set(ref _fontFamily, value);
+        }
+
+        private FontFamily _translationFontFamily;
+        public FontFamily TranslationFontFamily
+        {
+            get => _translationFontFamily;
+            set => Set(ref _translationFontFamily, value);
+        }
+
+
         private bool _showTranslation;
         public bool ShowTranslation
         {

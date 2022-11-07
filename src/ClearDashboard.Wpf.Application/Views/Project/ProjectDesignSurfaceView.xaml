@@ -419,20 +419,20 @@
                             <Rectangle.Style>
                                 <Style TargetType="Rectangle">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Standard}">
-                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushStandardProject}" />
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Auxiliary}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceAuxilary}" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.BackTranslation}">
-                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushBacktranslationProject}" />
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushBacktranslation}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Resource}">
-                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceProject}" />
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ConsultantNotes}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceConsultantNotes}" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Daughter}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceDaughter}" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
-                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Dictionary}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceDictionary}" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptHebrew}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
@@ -440,6 +440,34 @@
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ManuscriptGreek}">
                                             <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Resource}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceResource}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Standard}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushStandard}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.StudyBible}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushStudyBible}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.StudyBibleAdditions}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushStudyBibleAdditions}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.SourceLanguage}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.TransliterationManual}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.TransliterationWithEncoder}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Unknown}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceUnknown}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Xml}">
+                                            <Setter Property="Fill" Value="{StaticResource nodeFillBrushReferenceManuscript}" />
+                                        </DataTrigger>
+
                                     </Style.Triggers>
                                 </Style>
                             </Rectangle.Style>

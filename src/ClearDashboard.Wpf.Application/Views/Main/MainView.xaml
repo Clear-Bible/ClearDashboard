@@ -34,7 +34,7 @@
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
 
-    <!--cm:Message.Attach="[Event OnWindowSizeChanged] = [Action OnWindowSizeChanged]"-->
+    <!--  cm:Message.Attach="[Event OnWindowSizeChanged] = [Action OnWindowSizeChanged]"  -->
 
     <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
