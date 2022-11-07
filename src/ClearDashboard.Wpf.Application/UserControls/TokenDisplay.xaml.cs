@@ -952,7 +952,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the whether to showTranslation the note indicator.
+        /// Gets or sets the whether to show the note indicator.
         /// </summary>
         public bool ShowNoteIndicator
         {
