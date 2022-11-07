@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Annotations;
@@ -82,15 +83,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public void NoteAdded(NoteViewModel note)
         {
-            Notes.Add(note);
-            NotifyOfPropertyChange(nameof(Notes));
+            //Notes.Add(note);
+            NoteIds.AddDistinct(note.NoteId);
+            //NotifyOfPropertyChange(nameof(Notes));
             NotifyOfPropertyChange(nameof(HasNote));
         }
 
         public void NoteDeleted(NoteViewModel note)
         {
-            Notes.Remove(note);
-            NotifyOfPropertyChange(nameof(Notes));
+            //Notes.Remove(note);
+            NoteIds.RemoveIfExists(note.NoteId);
+            //NotifyOfPropertyChange(nameof(Notes));
             NotifyOfPropertyChange(nameof(HasNote));
         }
 
