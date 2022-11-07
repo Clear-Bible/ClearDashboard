@@ -42,6 +42,7 @@ using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using System.Net.Http;
 using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -1356,6 +1357,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region VerseDisplayControl
 
+        private void UpdateSelection(TokenDisplayViewModelCollection selectedTokens, ModifierKeys modifierKeys)
+        {
+            if ((modifierKeys & ModifierKeys.Control) > 0)
+            {
+                foreach (var token in selectedTokens)
+                {
+                    if (!SelectedTokens.Contains(token))
+                    {
+                        SelectedTokens.Add(token);
+                    }
+                }
+            }
+            else
+            {
+                SelectedTokens = selectedTokens;
+            }
+            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
+        }
+
         public void TokenClicked(object sender, TokenEventArgs e)
         {
             Task.Run(() => TokenClickedAsync(e).GetAwaiter());
@@ -1363,7 +1383,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            SelectedTokens = e.SelectedTokens;
+            UpdateSelection(e.SelectedTokens, e.ModifierKeys);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId})";

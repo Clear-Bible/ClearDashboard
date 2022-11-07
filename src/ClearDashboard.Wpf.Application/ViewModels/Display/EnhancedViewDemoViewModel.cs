@@ -26,6 +26,7 @@ using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -108,8 +109,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager!.LoadProject("EnhancedViewDemo");
-                var row = await GetVerseTextRow(40001001);
+                //await ProjectManager!.LoadProject("EnhancedViewDemo");
+                await ProjectManager!.LoadProject("EnhancedViewDemo2");
+                //var row = await GetVerseTextRow(40001001);
+                var row = await GetVerseTextRow(001001001);
                 var translationSet = await GetFirstTranslationSet();
                 //await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
 
@@ -198,6 +201,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return modifiers;
         }
 
+        private void UpdateSelection(TokenDisplayViewModelCollection selectedTokens, bool addToSelection)
+        {
+            if (addToSelection)
+            {
+                foreach (var token in selectedTokens)
+                {
+                    if (!SelectedTokens.Contains(token))
+                    {
+                        SelectedTokens.Add(token);
+                    }
+                }
+            }
+            else
+            {
+                SelectedTokens = selectedTokens;
+            }
+            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
+        }
+
         #region Event Handlers
 
         public void TokenClicked(TokenEventArgs e)
@@ -207,7 +229,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            SelectedTokens = e.SelectedTokens;
+            UpdateSelection(e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel.SurfaceText}' token ({e.TokenDisplayViewModel.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
