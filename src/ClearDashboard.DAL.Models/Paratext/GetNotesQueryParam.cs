@@ -1,7 +1,7 @@
 ﻿
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class GetNotesData 
+    public class GetNotesQueryParam 
     {
         public int BookId { get; set; }
 

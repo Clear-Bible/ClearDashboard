@@ -203,6 +203,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
      
 
         private bool _loadingApplication;
+     
+
         public bool LoadingApplication
         {
             get => _loadingApplication;
@@ -222,6 +224,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             {
                 LoadingApplication = false;
             }
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            DeterminePopupHorizontalOffset((ShellView)view);
+            base.OnViewReady(view);
+        }
+
+        private double _popupHorizontalOffset;
+        public double PopupHorizontalOffset
+        {
+            get => _popupHorizontalOffset;
+            set => Set(ref _popupHorizontalOffset, value);
+        }
+
+        private void DeterminePopupHorizontalOffset(Visual view)
+        {
+            var source = PresentationSource.FromVisual(view);
+
+            var horizontalFactor = source.CompositionTarget.TransformToDevice.M22;
+            PopupHorizontalOffset = horizontalFactor switch
+            {
+                < 1.25 => 5,
+                >= 1.25 => 270,
+                _ => 5
+            };
+
+            Logger!.LogInformation($"Set PopupHorizontalOffset to {PopupHorizontalOffset}");
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)

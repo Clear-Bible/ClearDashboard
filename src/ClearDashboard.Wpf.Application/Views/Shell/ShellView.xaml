@@ -242,17 +242,16 @@
             </Grid>
         </Border>
 
-        <userControls:AnchoredPopup
-            Grid.Row="1"
-            AllowsTransparency="True"
-            HorizontalOffset="{Binding PopupHorizontalOffset}"
-            IsOpen="{Binding BackgroundTasksViewModel.ShowPopup}"
-            IsTopmost="False"
-            Placement="Top"
-            PlacementTarget="{Binding ElementName=BackgroundTasks}"
-            StaysOpen="True"
-            VerticalOffset="12">
-            <shell1:BackgroundTasksView x:Name="BackgroundTasksView" DataContext="{Binding BackgroundTasksViewModel}" />
+        <userControls:AnchoredPopup Grid.Row="1"  IsOpen="{Binding BackgroundTasksViewModel.ShowPopup}" 
+                                    PlacementTarget="{Binding ElementName=BackgroundTasks}"
+                                    Placement="Top"
+                                    StaysOpen="True"
+                                    AllowsTransparency="True"
+                                    VerticalOffset="12"
+                                    HorizontalOffset="{Binding PopupHorizontalOffset}"
+                                    IsTopmost="False">
+            <shell1:BackgroundTasksView x:Name="BackgroundTasksView"  
+                                               DataContext="{Binding BackgroundTasksViewModel}"/>
 
         </userControls:AnchoredPopup>
 

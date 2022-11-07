@@ -183,7 +183,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 WebAppProxy = WebApp.Start(baseAddress,
                     (appBuilder) =>
                     {
-                        WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host, this);
+                        WebHostStartup = new WebHostStartup(_project, _verseRef, this, _host, _parent, this);
                         WebHostStartup.Configuration(appBuilder);
                     });
 
