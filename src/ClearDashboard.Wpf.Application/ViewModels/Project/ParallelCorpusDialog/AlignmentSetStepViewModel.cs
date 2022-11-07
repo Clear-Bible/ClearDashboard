@@ -8,8 +8,10 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Threading;
 using FluentValidation;
 using FluentValidation.Results;
+
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -100,7 +102,6 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
     public async void Add()
     {
         CanAdd = false;
-        ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {
             try
@@ -109,7 +110,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
 
                 switch (processStatus)
                 {
-                    case ProcessStatus.Completed:
+                    case LongRunningTaskStatus.Completed:
                         if (ParentViewModel.Steps.Count > 3)
                         {
                             await MoveForwards();
@@ -120,12 +121,13 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
                         }
 
                         break;
-                    case ProcessStatus.Failed:
+                    case LongRunningTaskStatus.Failed:
+                    case LongRunningTaskStatus.Cancelled:
                         ParentViewModel.Cancel();
                         break;
-                    case ProcessStatus.NotStarted:
+                    case LongRunningTaskStatus.NotStarted:
                         break;
-                    case ProcessStatus.Running:
+                    case LongRunningTaskStatus.Running:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -136,7 +138,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
             {
                 ParentViewModel!.Cancel();
             }
-        }, ParentViewModel!.CancellationTokenSource!.Token);
+        }, CancellationToken.None);
     }
 
     protected override ValidationResult? Validate()

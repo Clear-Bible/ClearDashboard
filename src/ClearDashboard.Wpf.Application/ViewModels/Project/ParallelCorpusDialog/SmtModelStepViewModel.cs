@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -62,7 +63,6 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
     public async void Train()
     {
         CanTrain = false;
-        ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {
             try
@@ -71,15 +71,16 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 
                 switch (processStatus)
                 {
-                    case ProcessStatus.Completed:
+                    case LongRunningTaskStatus.Completed:
                         await MoveForwards();
                         break;
-                    case ProcessStatus.Failed:
+                    case LongRunningTaskStatus.Failed:
+                    case LongRunningTaskStatus.Cancelled:
                         ParentViewModel.Cancel();
                         break;
-                    case ProcessStatus.NotStarted:
+                    case LongRunningTaskStatus.NotStarted:
                         break;
-                    case ProcessStatus.Running:
+                    case LongRunningTaskStatus.Running:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -89,6 +90,6 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
             {
                 ParentViewModel!.Cancel();
             }
-        }, ParentViewModel!.CancellationTokenSource!.Token);
+        }, CancellationToken.None);
     }
 }

@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="ClearDashboard.Wpf.Application.Views.Shell.BackgroundTasksView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:cm="http://caliburnmicro.com"
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+             xmlns:threading="clr-namespace:ClearDashboard.DataAccessLayer.Threading;assembly=ClearDashboard.DAL"
+             xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
+             xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+             xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
+             mc:Ignorable="d" 
+             helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+             d:DesignHeight="200" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=shell:BackgroundTasksViewModel,
+                                     IsDesignTimeCreatable=True}"
+          
+             Width="300"
+             Height="200"
+             Margin="5"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <converters:InvertedEnumMatchToBooleanConverter x:Key="InvertedEnumMatchToBooleanConverter" />
+    </UserControl.Resources>
+
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="180" ></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0"
+            x:Name="TaskView"
+            Width="300"
+            Height="180"
+            Background="{StaticResource MaterialDesignPaper}"
+            BorderBrush="{StaticResource PrimaryHueMidBrush}"
+            BorderThickness="2"
+            CornerRadius="1">
+
+            <Grid Name="GridLayout">
+                <!--  BackGround Tasks  -->
+                <ListView
+                    x:Name="TasksListView"
+                    Margin="5"
+                    VerticalContentAlignment="Top"
+                    materialDesign:RippleAssist.IsDisabled="True"
+                    ItemsSource="{Binding BackgroundTaskStatuses}"
+                    ScrollViewer.CanContentScroll="False"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    Style="{StaticResource MaterialDesignListBox}">
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Tag="{Binding DataContext, ElementName=GridLayout}">
+                                <Grid.ContextMenu>
+                                    <ContextMenu Name="cm" cm:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem cm:Message.Attach="CopyText($dataContext)" Header="{helpers:Localization Copy}" />
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                                <Border BorderBrush="{StaticResource PrimaryHueDarkBrush}" BorderThickness="1">
+                                    <StackPanel materialDesign:RippleAssist.Feedback="Transparent" Orientation="Horizontal">
+                                        <!--  ISCOMPLETED ICON  -->
+                                        <materialDesign:PackIcon
+                                            Width="18"
+                                            Height="18"
+                                            VerticalAlignment="Center">
+                                            <materialDesign:PackIcon.Style>
+                                                <Style TargetType="materialDesign:PackIcon">
+                                                    <Setter Property="Kind" Value="AirplaneSettings" />
+                                                    <Setter Property="Padding" Value="0" />
+
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Running}">
+                                                            <Setter Property="Foreground" Value="Orange" />
+                                                            <Setter Property="Kind" Value="Autorenew" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Completed}">
+                                                            <Setter Property="Foreground" Value="{StaticResource GreenMidBrush}" />
+                                                            <Setter Property="Kind" Value="CheckboxMarkedCircle" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Failed}">
+                                                            <Setter Property="Foreground" Value="{StaticResource RedMidBrush}" />
+                                                            <Setter Property="Kind" Value="AlertCircle" />
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.CancellationRequested}">
+                                                            <Setter Property="Foreground" Value="{StaticResource YellowMidBrush}" />
+                                                            <Setter Property="Kind" Value="CloseCircleOutline" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:PackIcon.Style>
+                                        </materialDesign:PackIcon>
+
+                                        <!--  Cancel Task Button  -->
+                                        <Button
+                                            Width="20"
+                                            Height="20"
+                                            Margin="4"
+                                            Padding="0"
+                                            cm:Action.TargetWithoutContext="{Binding ElementName=TasksListView, Path=DataContext}"
+                                            cm:Message.Attach="[Event Click] = [Action CancelTask($this)]"
+                                            materialDesign:RippleAssist.Feedback="Transparent"
+                                            IsEnabled="{Binding TaskLongRunningProcessStatus, Converter={StaticResource InvertedEnumMatchToBooleanConverter}, ConverterParameter=Completed}"
+                                            ToolTip="{helpers:Localization ShellView_CancelTaskTooltip}">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </Style>
+                                            </Button.Style>
+                                            <materialDesign:PackIcon
+                                                Width="18"
+                                                Height="18"
+                                                VerticalAlignment="Center"
+                                                Foreground="{StaticResource RedLightBrush}"
+                                                Kind="Cancel" />
+                                        </Button>
+
+                                        <StackPanel Margin="5,0,0,0" Orientation="Vertical">
+                                            <!--  TASK NAME  -->
+                                            <TextBlock
+                                                Width="370"
+                                                HorizontalAlignment="Left"
+                                                FontSize="12"
+                                                FontWeight="Bold"
+                                                Foreground="{StaticResource BlueMidBrush}"
+                                                Text="{Binding Name}" />
+                                            <!--<Run Text="TASK: " />-->
+                                            <!--  TASK DESCRIPTION  -->
+                                            <TextBlock
+                                                Width="200"
+                                                HorizontalAlignment="Left"
+                                                FontSize="12"
+                                                FontWeight="Bold"
+                                                Text="{Binding Description}"
+                                                TextWrapping="Wrap">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding TaskLongRunningProcessStatus}" Value="{x:Static threading:LongRunningTaskStatus.Failed}">
+                                                                <Setter Property="Foreground" Value="{StaticResource RedLightBrush}" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!--<TextBlock Text="{Binding TaskStatus}" />-->
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <TextBlock
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Text="{helpers:Localization ShellView_NoBackGroundTasks}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding BackgroundTaskStatuses.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Button
+                    x:Name="CloseTaskBox"
+                    cm:Message.Attach="CloseTaskBox"
+                    Width="16"
+                    Height="16"
+                    Padding="0"
+                    Margin="4"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top">
+                    X
+                </Button>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1" Margin="4,-1,0,0">
+            <Path Fill="{StaticResource PrimaryHueMidBrush}" Stroke="{StaticResource PrimaryHueMidBrush}" StrokeThickness="2" Data="M 0 0 L 10 10 L 20 0 Z"  />
+        </Grid>
+    </Grid>
+</UserControl>

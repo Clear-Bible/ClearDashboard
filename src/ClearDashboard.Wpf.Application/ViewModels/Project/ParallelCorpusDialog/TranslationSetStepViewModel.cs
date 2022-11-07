@@ -3,15 +3,14 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
-using System.Threading;
-using SIL.Machine.Utils;
-using System;
-using ClearDashboard.Wpf.Application.Validators;
 using FluentValidation;
 using FluentValidation.Results;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -66,7 +65,6 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
     public async void Add()
     {
         CanAdd = false;
-        ParentViewModel!.CreateCancellationTokenSource();
         _ = await Task.Factory.StartNew(async () =>
         {
             try
@@ -75,7 +73,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
 
                 switch (processStatus)
                 {
-                    case ProcessStatus.Completed:
+                    case LongRunningTaskStatus.Completed:
                         
                         //if (ParentViewModel.Steps.Count > 3)
                         //{
@@ -89,12 +87,13 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
                         ParentViewModel.Ok();
 
                         break;
-                    case ProcessStatus.Failed:
+                    case LongRunningTaskStatus.Failed:
+                    case LongRunningTaskStatus.Cancelled:
                         ParentViewModel.Cancel();
                         break;
-                    case ProcessStatus.NotStarted:
+                    case LongRunningTaskStatus.NotStarted:
                         break;
-                    case ProcessStatus.Running:
+                    case LongRunningTaskStatus.Running:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -104,7 +103,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
             {
                 ParentViewModel!.Cancel();
             }
-        }, ParentViewModel!.CancellationTokenSource!.Token);
+        }, CancellationToken.None);
 
     }
 
