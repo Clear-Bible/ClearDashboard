@@ -22,14 +22,29 @@ namespace ClearDashboard.Wpf.Application.Collections
 
         }
 
+        public void AddDistinct(NoteId id)
+        {
+            var existing = Items.FirstOrDefault(i => i.IdEquals(id));
+            if (existing == null)
+            {
+                Items.Add(id);
+            }
+        }
+
         public void AddDistinct(IEnumerable<NoteId> ids)
         {
             foreach (var id in ids)
             {
-                if (!Items.Contains(id))
-                {
-                    Add(id);
-                }
+                AddDistinct(id);
+            }
+        }
+
+        public void RemoveIfExists(NoteId id)
+        {
+            var existing = Items.FirstOrDefault(i => i.IdEquals(id));
+            if (existing != null)
+            {
+                Items.Remove(existing);
             }
         }
     }
