@@ -242,7 +242,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public async Task TokenRightButtonDownAsync(TokenEventArgs e)
         {
-            SelectedTokens = e.SelectedTokens;
+            UpdateSelection(e.SelectedTokens, false);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
