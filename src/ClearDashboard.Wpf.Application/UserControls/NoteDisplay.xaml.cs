@@ -173,7 +173,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(14d));
 
         /// <summary>
-        /// Identifies the NoteAssoicationFontStyle dependency property.
+        /// Identifies the NoteAssociationFontStyle dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteAssociationFontStyleProperty = DependencyProperty.Register(nameof(NoteAssociationFontStyle), typeof(FontStyle), typeof(NoteDisplay),
             new PropertyMetadata(FontStyles.Normal));
