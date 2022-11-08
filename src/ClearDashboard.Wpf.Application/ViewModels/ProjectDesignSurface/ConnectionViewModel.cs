@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
-        public bool IsRTL { get; set; }
+        public bool IsRtl { get; set; }
 
         public Guid Id { get; set; } = Guid.NewGuid();
         

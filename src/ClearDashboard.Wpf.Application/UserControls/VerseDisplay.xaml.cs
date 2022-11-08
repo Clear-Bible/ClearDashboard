@@ -283,21 +283,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TargetTokensProperty = DependencyProperty.Register(nameof(TargetTokens), typeof(IEnumerable), typeof(VerseDisplay),
             new PropertyMetadata(null, OnTargetTokensChanged));
 
-        private static int num = 0;
-
         public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var verseDisplay = (VerseDisplay)d;
-            num++;
-            if (num%2 == 1)// &&
-               // verseDisplay.TargetTokens.ToEnumerable().ToList().Count == 0)
-            {//Top
-                //verseDisplay.IsRtl = FlowDirection.RightToLeft; //verseDisplay.FlowDirection;
-            }
-            else
-            {//Bottom
-                verseDisplay.IsTargetRtl = FlowDirection.RightToLeft; //verseDisplay.FlowDirection;
-            }
 
             if (verseDisplay.TargetTokens != null)
             {

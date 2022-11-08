@@ -1290,7 +1290,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ConnectionId = connection.Id,
                 ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
-                IsRTL = connection.IsRTL,
+                IsRtl = connection.IsRtl,
             });
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
@@ -1319,8 +1319,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
                             ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
                             IsEnabled = true,
-                            IsRTL = alignmentSetInfo.IsRtl,
-                            IsTargetRTL = alignmentSetInfo.IsTargetRtl
+                            IsRtl = alignmentSetInfo.IsRtl,
+                            IsTargetRtl = alignmentSetInfo.IsTargetRtl
                         },
                     }
                 });
@@ -1365,7 +1365,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 DisplayName = info.DisplayName,
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                                IsRTL = info.IsRTL,
+                                IsRtl = info.IsRTL,
                             }
                         }
                 });
@@ -1428,9 +1428,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
                                 connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRTL,
+                                connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsTargetRTL,
+                                connectionMenuItem.IsTargetRtl,
                                 IsNewWindow: false));
                     }
                     break;
@@ -1445,7 +1445,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
                                 connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRTL,
+                                connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization null,
                                 null,
                                 IsNewWindow: false));
