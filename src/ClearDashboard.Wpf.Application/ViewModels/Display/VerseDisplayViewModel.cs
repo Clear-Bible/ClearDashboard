@@ -264,7 +264,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             EngineStringDetokenizer sourceDetokenizer, 
             bool isRtl)
         {
-            SourceTokens = textRow.Tokens;
+            SourceTokens = textRow.Tokens.GetPositionalSortedBaseTokens().ToList();
             SourceDetokenizer = sourceDetokenizer;
             IsSourceRtl = isRtl;
             IsTargetRtl = false;
@@ -282,7 +282,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             EngineStringDetokenizer sourceDetokenizer,
             bool isSourceRtl)
         {
-            SourceTokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
             IsSourceRtl = isSourceRtl;
             IsTargetRtl = false;
@@ -303,11 +303,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             EngineStringDetokenizer targetDetokenizer,
             bool isTargetRtl)
         {
-            SourceTokens = engineParallelTextRow.SourceTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
             IsSourceRtl = isSourceRtl;
 
-            TargetTokens = engineParallelTextRow.TargetTokens ?? throw new InvalidOperationException("Text row has no source tokens");
+            TargetTokens = engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             TargetDetokenizer = targetDetokenizer;
             IsTargetRtl = isTargetRtl;
 
