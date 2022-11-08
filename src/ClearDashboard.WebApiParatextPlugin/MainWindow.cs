@@ -575,12 +575,25 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                     if (fontFamily != "")
                     {
-                        metaData.FontFamily = new FontFamily(fontFamily);
+                        try
+                        {
+                            var font = new FontFamily(fontFamily);
+                            metaData.FontFamily = font;
+                        }
+                        catch (Exception e)
+                        {
+                            AppendText(Color.Red, $"Font Family Error: {project.ShortName} {e.Message}");
+                        }
                     }
                     return metaData;
                 }).ToList();
 
             var projectNames = metadata.Select(project => project.Name).ToList();
+
+            //foreach (var project in metadata)
+            //{
+            //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
+            //}
 
             var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
             var directories = directoryInfo.GetDirectories();
