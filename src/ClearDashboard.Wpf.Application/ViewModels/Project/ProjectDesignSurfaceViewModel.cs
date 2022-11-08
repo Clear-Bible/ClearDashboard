@@ -725,6 +725,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 _busyState.Add(taskName, true);
                 CorpusNodeViewModel node = new();
+                node.TranslationFontFamily = "Times New Roman";
+
                 try
                 {
 
@@ -962,10 +964,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
-        public async Task AddParatextCorpus()
-        {
-            await AddParatextCorpus("");
-        }
 
         // ReSharper restore UnusedMember.Global
         // ReSharper disable once UnusedMember.Global
@@ -987,6 +985,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 _ = await Task.Factory.StartNew(async () =>
                 {
                     CorpusNodeViewModel node = new();
+                    node.TranslationFontFamily = metadata.FontFamily;
+                    
                     try
                     {
                         DAL.Alignment.Corpora.Corpus? corpus = null;

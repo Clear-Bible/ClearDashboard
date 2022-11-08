@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Controls.Utils;
+using Size = System.Windows.Size;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 {
@@ -20,6 +21,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
     {
 
         #region events
+
+        /// <summary>
+        /// Event raised when the size of the node is changed.
+        /// The size will change when the UI has determined its size based on the contents
+        /// of the nodes data-template.  It then pushes the size through to the view-model
+        /// and this 'SizeChanged' event occurs.
+        /// </summary>
+        public event EventHandler<EventArgs>? SizeChanged;
 
         #endregion
 
@@ -77,74 +86,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         #endregion Private Data Members
 
-        public CorpusNodeViewModel()
-        {
-        }
-
-        public CorpusNodeViewModel(string name, IEventAggregator? eventAggregator, DashboardProjectManager? projectManager)
-        {
-            _name = name;
-            _eventAggregator = eventAggregator;
-            _projectManager = projectManager;
-        }
-
-
-        private List<SerializedTokenization> _nodeTokenizations = new();
-        public List<SerializedTokenization> NodeTokenizations
-        {
-            get => _nodeTokenizations;
-            set
-            {
-                _nodeTokenizations = value;
-                NotifyOfPropertyChange(() => NodeTokenizations);
-            }
-        }
-
-        private bool _isRtl;
-
-        public bool IsRTL
-        {
-            get => _isRtl;
-            set
-            {
-                _isRtl = value;
-                NotifyOfPropertyChange(() => IsRTL);
-            }
-        }
-
-
-        private Guid _id = Guid.NewGuid();
-        public Guid Id
-        {
-            get => _id;
-            set
-            {
-                _id = value;
-                NotifyOfPropertyChange(() => Id);
-            }
-        }
-
-        private Guid _corpusId;
-        public Guid CorpusId
-        {
-            get => _corpusId;
-            set
-            {
-                Set(ref _corpusId, value);
-                
-            }
-        }
-
-        private ObservableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
-        public ObservableCollection<CorpusNodeMenuItemViewModel> MenuItems
-        {
-            get => _menuItems;
-            set
-            {
-                _menuItems = value;
-                NotifyOfPropertyChange(() => MenuItems);
-            }
-        }
+        #region Public Properties
 
         /// <summary>
         /// The name of the node.
@@ -155,28 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             set => Set(ref _name, value);
         }
 
-
-        private string _paratextProjectId = string.Empty;
-        /// <summary>
-        /// The paratext guid
-        /// </summary>
-        public string ParatextProjectId
-        {
-            get => _paratextProjectId;
-            set => Set(ref _paratextProjectId, value);
-        }
-
-
-        private CorpusType _corpusType = CorpusType.Standard;
-        /// <summary>
-        /// The paratext project type
-        /// </summary>
-        public CorpusType CorpusType
-        {
-            get => _corpusType;
-            set => Set(ref _corpusType, value);
-        }
-
+        public FontFamily TranslationFontFamily { get; set; } = new FontFamily("Segoe UI");
 
         /// <summary>
         /// The X coordinate for the position of the node.
@@ -228,13 +149,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
-        /// <summary>
-        /// Event raised when the size of the node is changed.
-        /// The size will change when the UI has determined its size based on the contents
-        /// of the nodes data-template.  It then pushes the size through to the view-model
-        /// and this 'SizeChanged' event occurs.
-        /// </summary>
-        public event EventHandler<EventArgs>? SizeChanged;
+        #endregion Public Properties
+
+        
+        #region Observable Properties
 
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
@@ -315,6 +233,108 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
                 }
             }
         }
+
+        private List<SerializedTokenization> _nodeTokenizations = new();
+        public List<SerializedTokenization> NodeTokenizations
+        {
+            get => _nodeTokenizations;
+            set
+            {
+                _nodeTokenizations = value;
+                NotifyOfPropertyChange(() => NodeTokenizations);
+            }
+        }
+
+        private bool _isRtl;
+
+        public bool IsRTL
+        {
+            get => _isRtl;
+            set
+            {
+                _isRtl = value;
+                NotifyOfPropertyChange(() => IsRTL);
+            }
+        }
+
+
+        private Guid _id = Guid.NewGuid();
+        public Guid Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                NotifyOfPropertyChange(() => Id);
+            }
+        }
+
+        private Guid _corpusId;
+        public Guid CorpusId
+        {
+            get => _corpusId;
+            set
+            {
+                Set(ref _corpusId, value);
+                
+            }
+        }
+
+        private ObservableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
+        public ObservableCollection<CorpusNodeMenuItemViewModel> MenuItems
+        {
+            get => _menuItems;
+            set
+            {
+                _menuItems = value;
+                NotifyOfPropertyChange(() => MenuItems);
+            }
+        }
+
+        private string _paratextProjectId = string.Empty;
+        /// <summary>
+        /// The paratext guid
+        /// </summary>
+        public string ParatextProjectId
+        {
+            get => _paratextProjectId;
+            set => Set(ref _paratextProjectId, value);
+        }
+
+        private CorpusType _corpusType = CorpusType.Standard;
+        /// <summary>
+        /// The paratext project type
+        /// </summary>
+        public CorpusType CorpusType
+        {
+            get => _corpusType;
+            set => Set(ref _corpusType, value);
+        }
+
+        #endregion //Observable Properties
+
+
+
+        #region Constructor
+
+        public CorpusNodeViewModel()
+        {
+        }
+
+        public CorpusNodeViewModel(string name, IEventAggregator? eventAggregator, DashboardProjectManager? projectManager)
+        {
+            _name = name;
+            _eventAggregator = eventAggregator;
+            _projectManager = projectManager;
+        }
+
+        #endregion //Constructor
+
+
+        #region Public Methods
+
+
+        #endregion Public Methods
 
         #region Private Methods
 

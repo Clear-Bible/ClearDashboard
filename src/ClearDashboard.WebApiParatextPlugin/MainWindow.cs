@@ -1,12 +1,17 @@
-﻿using ClearDashboard.DataAccessLayer.Models.Paratext;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
+using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using Serilog;
+using SIL.Linq;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,14 +23,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using Microsoft.Win32;
-using SIL.Linq;
-using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.WebApiParatextPlugin.Models;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -590,10 +588,10 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             var projectNames = metadata.Select(project => project.Name).ToList();
 
-            //foreach (var project in metadata)
-            //{
-            //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
-            //}
+            foreach (var project in metadata)
+            {
+                AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
+            }
 
             var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
             var directories = directoryInfo.GetDirectories();
