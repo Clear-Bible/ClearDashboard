@@ -17,23 +17,36 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// 
         /// </summary>
         /// <param name="addNoteCommandParam"></param>
+        /// <param name="paratextProjectId"></param>
         /// <param name="verseTokens">All tokens must be from the same book, chapter, and verse. Applies note to the first token's book, chapter, verse. </param>
-        /// <param name="verseContiguousSelectedTokens">If empty, apply note to entire verse. When non-empty, all tokens must be also included in the prior parameter.</param>
-        /// <param name="engineStringDetokenizer"></param>
+        /// <param name="verseContiguousSelectedTokens">If empty, apply note to entire verse. When non-empty, all tokens must be also included in the prior parameter.</param>        /// <param name="engineStringDetokenizer"></param>
         /// <param name="noteText"></param>
         /// <param name="assignedUser"></param>
+        /// <param name="book">if book, chapter, or verse not set the current paratext setting for the current project will be used.</param>
+        /// <param name="chapter">if book, chapter, or verse not set the current paratext setting for the current project will be used.</param>
+        /// <param name="verse">if book, chapter, or verse not set the current paratext setting for the current project will be used.</param>
+        /// <exception cref="Exception"></exception>
         public static void SetProperties(
             this AddNoteCommandParam addNoteCommandParam,
+            string paratextProjectId,
             IEnumerable<Token> verseTokens,
             IEnumerable<Token> verseContiguousSelectedTokens,
             EngineStringDetokenizer engineStringDetokenizer,
             string noteText,
-            User? assignedUser)
+            int book = -1,
+            int chapter = -1,
+            int verse = -1,
+            User? assignedUser = null)
         {
             if (verseTokens.Count() == 0)
             {
                 throw new Exception("Must supply a non-zero amount of verse tokens");
             }
+
+            addNoteCommandParam.ParatextProjectId = paratextProjectId;
+            addNoteCommandParam.Book = book;
+            addNoteCommandParam.Chapter = chapter;
+            addNoteCommandParam.Verse = verse;
 
             var token = verseTokens.First();
             addNoteCommandParam.Book = token.TokenId.BookNumber;
