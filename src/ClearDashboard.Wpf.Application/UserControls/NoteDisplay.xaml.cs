@@ -173,13 +173,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(14d));
 
         /// <summary>
-        /// Identifies the NoteFontStyle dependency property.
+        /// Identifies the NoteAssoicationFontStyle dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteAssociationFontStyleProperty = DependencyProperty.Register(nameof(NoteAssociationFontStyle), typeof(FontStyle), typeof(NoteDisplay),
             new PropertyMetadata(FontStyles.Normal));
 
         /// <summary>
-        /// Identifies the NoteFontWeight dependency property.
+        /// Identifies the NoteAssociationFontWeight dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteAssociationFontWeightProperty = DependencyProperty.Register(nameof(NoteAssociationFontWeight), typeof(FontWeight), typeof(NoteDisplay),
             new PropertyMetadata(FontWeights.Normal));
@@ -197,40 +197,64 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
-        /// Identifies the NoteFontSize dependency property.
+        /// Identifies the NoteTextFontSize dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteFontSizeProperty = DependencyProperty.Register(nameof(NoteFontSize), typeof(double), typeof(NoteDisplay),
+        public static readonly DependencyProperty NoteTextFontSizeProperty = DependencyProperty.Register(nameof(NoteTextFontSize), typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(15d));
 
         /// <summary>
-        /// Identifies the NoteFontFamily dependency property.
+        /// Identifies the NoteTextFontFamily dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteFontFamilyProperty = DependencyProperty.Register(nameof(NoteFontFamily), typeof(FontFamily), typeof(NoteDisplay),
+        public static readonly DependencyProperty NoteTextFontFamilyProperty = DependencyProperty.Register(nameof(NoteTextFontFamily), typeof(FontFamily), typeof(NoteDisplay),
             new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
 
         /// <summary>
-        /// Identifies the NoteFontStyle dependency property.
+        /// Identifies the NoteTextFontStyle dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteFontStyleProperty = DependencyProperty.Register(nameof(NoteFontStyle), typeof(FontStyle), typeof(NoteDisplay),
+        public static readonly DependencyProperty NoteTextFontStyleProperty = DependencyProperty.Register(nameof(NoteTextFontStyle), typeof(FontStyle), typeof(NoteDisplay),
             new PropertyMetadata(FontStyles.Normal));
 
         /// <summary>
-        /// Identifies the NoteFontWeight dependency property.
+        /// Identifies the NoteTextFontWeight dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteFontWeightProperty = DependencyProperty.Register(nameof(NoteFontWeight), typeof(FontWeight), typeof(NoteDisplay),
+        public static readonly DependencyProperty NoteTextFontWeightProperty = DependencyProperty.Register(nameof(NoteTextFontWeight), typeof(FontWeight), typeof(NoteDisplay),
             new PropertyMetadata(FontWeights.Normal));
 
         /// <summary>
-        /// Identifies the NoteMargin dependency property.
+        /// Identifies the NoteTextMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteMarginProperty = DependencyProperty.Register(nameof(NoteMargin), typeof(Thickness), typeof(NoteDisplay),
+        public static readonly DependencyProperty NoteTextMarginProperty = DependencyProperty.Register(nameof(NoteTextMargin), typeof(Thickness), typeof(NoteDisplay),
             new PropertyMetadata(new Thickness(2, 2, 2, 2)));
+
+        /// <summary>
+        /// Identifies the NoteTextMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteTextPaddingProperty = DependencyProperty.Register(nameof(NoteTextPadding), typeof(Thickness), typeof(NoteDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TimestampFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TimestampFontFamilyProperty = DependencyProperty.Register(nameof(TimestampFontFamily), typeof(FontFamily), typeof(NoteDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
 
         /// <summary>
         /// Identifies the TimestampFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TimestampFontSizeProperty = DependencyProperty.Register(nameof(TimestampFontSize), typeof(double), typeof(NoteDisplay),
             new PropertyMetadata(11d));
+
+        /// <summary>
+        /// Identifies the TimestampFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TimestampFontStyleProperty = DependencyProperty.Register(nameof(TimestampFontStyle), typeof(FontStyle), typeof(NoteDisplay),
+            new PropertyMetadata(FontStyles.Italic));
+
+        /// <summary>
+        /// Identifies the TimestampFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TimestampFontWeightProperty = DependencyProperty.Register(nameof(TimestampFontWeight), typeof(FontWeight), typeof(NoteDisplay),
+            new PropertyMetadata(FontWeights.Normal));
 
         /// <summary>
         /// Identifies the TimestampMargin dependency property.
@@ -321,7 +345,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             UpdateControlLayout();
         }
 
-        private void NoteLabelClick(object sender, MouseButtonEventArgs e)
+        private void OnNoteLabelClick(object sender, MouseButtonEventArgs e)
         {
             IsEditing = true;
 
@@ -331,7 +355,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             OriginalNoteText = Note.Text;
         }
 
-        private void NoteTextBoxOnTextChanged(object sender, TextChangedEventArgs e)
+        private void OnNoteTextBoxChanged(object sender, TextChangedEventArgs e)
         {
             if (NoteTextBoxVisibility == Visibility.Visible)
             {
@@ -624,48 +648,57 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font size for the note family box.
+        /// Gets or sets the font size for the note text box.
         /// </summary>
-        public FontFamily NoteFontFamily
+        public FontFamily NoteTextFontFamily
         {
-            get => (FontFamily)GetValue(NoteFontFamilyProperty);
-            set => SetValue(NoteFontFamilyProperty, value);
+            get => (FontFamily)GetValue(NoteTextFontFamilyProperty);
+            set => SetValue(NoteTextFontFamilyProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the font size for the note text box.
         /// </summary>
-        public double NoteFontSize
+        public double NoteTextFontSize
         {
-            get => (double)GetValue(NoteFontSizeProperty);
-            set => SetValue(NoteFontSizeProperty, value);
+            get => (double)GetValue(NoteTextFontSizeProperty);
+            set => SetValue(NoteTextFontSizeProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the font weight for the note text box.
         /// </summary>
-        public FontWeight NoteFontWeight
+        public FontWeight NoteTextFontWeight
         {
-            get => (FontWeight)GetValue(NoteFontWeightProperty);
-            set => SetValue(NoteFontWeightProperty, value);
+            get => (FontWeight)GetValue(NoteTextFontWeightProperty);
+            set => SetValue(NoteTextFontWeightProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the font style for the note text box.
         /// </summary>
-        public FontStyle NoteFontStyle
+        public FontStyle NoteTextFontStyle
         {
-            get => (FontStyle)GetValue(NoteFontStyleProperty);
-            set => SetValue(NoteFontStyleProperty, value);
+            get => (FontStyle)GetValue(NoteTextFontStyleProperty);
+            set => SetValue(NoteTextFontStyleProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the margin for the note text box.
         /// </summary>
-        public Thickness NoteMargin
+        public Thickness NoteTextMargin
         {
-            get => (Thickness)GetValue(NoteMarginProperty);
-            set => SetValue(NoteMarginProperty, value);
+            get => (Thickness)GetValue(NoteTextMarginProperty);
+            set => SetValue(NoteTextMarginProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding for the note text box.
+        /// </summary>
+        public Thickness NoteTextPadding
+        {
+            get => (Thickness)GetValue(NoteTextPaddingProperty);
+            set => SetValue(NoteTextPaddingProperty, value);
         }
 
         /// <summary>
@@ -678,12 +711,38 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font size for the timestamp and user.
+        /// Gets or sets the font family for displaying the timestamp.
+        /// </summary>
+        public FontFamily TimestampFontFamily
+        {
+            get => (FontFamily)GetValue(TimestampFontFamilyProperty);
+            set => SetValue(TimestampFontFamilyProperty, value);
+        }
+        /// <summary>
+        /// Gets or sets the font size for displaying the timestamp.
         /// </summary>
         public double TimestampFontSize
         {
             get => (double)GetValue(TimestampFontSizeProperty);
             set => SetValue(TimestampFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for displaying the timestamp.
+        /// </summary>
+        public FontStyle TimestampFontStyle
+        {
+            get => (FontStyle)GetValue(TimestampFontStyleProperty);
+            set => SetValue(TimestampFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for displaying the timestamp.
+        /// </summary>
+        public FontWeight TimestampFontWeight
+        {
+            get => (FontWeight)GetValue(TimestampFontWeightProperty);
+            set => SetValue(TimestampFontStyleProperty, value);
         }
 
         /// <summary>
