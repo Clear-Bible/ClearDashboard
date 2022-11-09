@@ -842,7 +842,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void AddManuscriptGreekCorpus()
         {
-            Logger!.LogInformation("AddParatextGreekCorpus called.");
+            Logger!.LogInformation("AddGreekCorpus called.");
 
 
             AddManuscriptGreekEnabled = false;
@@ -1461,7 +1461,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
                                 connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRTL,
+                                connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
                                 connectionMenuItem.IsTargetRTL,
                                 IsNewWindow: false,
@@ -1480,7 +1480,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
                                 connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRTL,
+                                connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization null,
                                 null,
                                 IsNewWindow: false,

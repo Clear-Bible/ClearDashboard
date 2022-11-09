@@ -614,10 +614,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
                     TokenizationType = message.TokenizationType;
-                    CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
-
+                    var bookFound = false;
+                    foreach (var book in metadata.AvailableBooks)
+                    {
+                        if (book.Code == CurrentBcv.BookName)
+                        {
+                            CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
+                            bookFound = true;
+                        }
+                    }
+                    
                     var project = _tokenProjects.FirstOrDefault(p => p.CorpusId == message.CorpusId);
+
                     if (project is null)
                     {
                         // get the entirety of text for this corpus
@@ -725,12 +734,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //    // Label suggestions are the same for each VerseDisplayViewModel
                     //    LabelSuggestions = verses.First().LabelSuggestions;
                     //}
-
-                    OnUIThread(() =>
+                    if (bookFound)
                     {
-                        UpdateVersesDisplay(message, verses, title, false);
-                        NotifyOfPropertyChange(() => VersesDisplay);
-                    });
+                        OnUIThread(() =>
+                        {
+                            UpdateVersesDisplay(message, verses, title, false);
+                            NotifyOfPropertyChange(() => VersesDisplay);
+                        });
+                    }
+                    else
+                    {
+                        OnUIThread(() => { UpdateVerseDisplayWhenBookOutOfRange(message); });
+                    }
+                   
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -756,13 +772,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }), cancellationToken);
                     }
 
-                    OnUIThread(() =>
-                    {
-                        UpdateVersesDisplay(message, new ObservableCollection<VerseDisplayViewModel>(),
-                            message.ProjectName + " - " + message.TokenizationType +
-                            "    No verse data in this verse range", false);
-                        ProgressBarVisibility = Visibility.Collapsed;
-                    });
+                    OnUIThread(() => { UpdateVerseDisplayWhenBookOutOfRange(message); });
                 }
                 finally
                 {
@@ -784,6 +794,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                 }
             }, cancellationToken);
+        }
+
+        private void UpdateVerseDisplayWhenBookOutOfRange(ShowTokenizationWindowMessage message)
+        {
+            UpdateVersesDisplay(message, new ObservableCollection<VerseDisplayViewModel>(),
+                message.ProjectName + " - " + message.TokenizationType +
+                "    No verse data in this verse range", false);
+            ProgressBarVisibility = Visibility.Collapsed;
         }
 
         public async Task<DAL.Alignment.Translation.TranslationSet> GetTranslationSet(string translationSetId)
@@ -1197,7 +1215,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                     IsRtl = message.IsRTL,
-                    IsTargetRtl = (bool)message.IsTargetRTL
+                    IsTargetRtl = message.IsTargetRTL ?? false
                 });
 
                 // add to the grouping for saving
