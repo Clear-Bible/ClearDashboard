@@ -886,7 +886,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             try
             {
-                string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazor.exe");
+                string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
 
                 FileInfo fi = new FileInfo(tailBlazorPath);
                 if (fi.Exists == false)
@@ -896,8 +896,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 Process p = new Process();
                 p.StartInfo.WorkingDirectory = fi.Directory.FullName;
-                p.StartInfo.FileName = tailBlazorPath;
-                p.StartInfo.Arguments = fi.Name;
+                p.StartInfo.FileName = fi.FullName;
+                p.StartInfo.Arguments = dashboardLogPath.Path;
                 p.Start();
             }
             catch (Exception e)
