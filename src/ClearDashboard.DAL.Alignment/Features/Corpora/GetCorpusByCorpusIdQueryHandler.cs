@@ -47,17 +47,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             return new RequestResult<Corpus>
             (
                 new Corpus(
-                    request.CorpusId,
-                    _mediator,
-                    corpus.IsRtl,
-                    corpus.Name,
-                    corpus.DisplayName,
-                    corpus.Language,
-                    corpus.ParatextGuid,
-                    corpus.CorpusType.ToString(),
-                    corpus.Metadata,
-                    corpus.Created,
-                    ModelHelper.BuildUserId(corpus.User!))
+                    corpusId: request.CorpusId,
+                    mediator: _mediator,
+                    isRtl: corpus.IsRtl,
+                    name: corpus.Name,
+                    displayName: corpus.DisplayName,
+                    language: corpus.Language,
+                    paratextGuid: corpus.ParatextGuid,
+                    corpusType: corpus.CorpusType.ToString(),
+                    metadata: corpus.Metadata,
+                    created: corpus.Created,
+                    userId: ModelHelper.BuildUserId(corpus.User!),
+                    translationFontFamily: "Segoe UI")
             );
         }
     }

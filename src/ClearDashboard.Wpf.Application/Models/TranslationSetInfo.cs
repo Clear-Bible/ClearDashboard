@@ -1,4 +1,6 @@
 ﻿
+using System.Drawing;
+
 namespace ClearDashboard.Wpf.Application.Models
 {
     public class TranslationSetInfo
@@ -11,7 +13,10 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public string AlignmentSetId { get; set; } = string.Empty;
         public string? AlignmentSetDisplayName { get; set; } = string.Empty;
-
+        
         public bool IsRTL { get; set; }
+
+        public string SourceFontFamily { get; set; } = "Segoe UI";
+        public string TargetFontFamily { get; set; } = "Segoe UI";
     }
 }

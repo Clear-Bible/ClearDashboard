@@ -12,9 +12,9 @@
     xmlns:model="clr-namespace:ClearDashboard.Wpf.Application.Models"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:shell="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Shell"
+    xmlns:shell1="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:shell1="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -242,16 +242,17 @@
             </Grid>
         </Border>
 
-        <userControls:AnchoredPopup Grid.Row="1"  IsOpen="{Binding BackgroundTasksViewModel.ShowPopup}" 
-                                    PlacementTarget="{Binding ElementName=BackgroundTasks}"
-                                    Placement="Top"
-                                    StaysOpen="True"
-                                    AllowsTransparency="True"
-                                    VerticalOffset="12"
-                                    HorizontalOffset="{Binding PopupHorizontalOffset}"
-                                    IsTopmost="False">
-            <shell1:BackgroundTasksView x:Name="BackgroundTasksView"  
-                                               DataContext="{Binding BackgroundTasksViewModel}"/>
+        <userControls:AnchoredPopup
+            Grid.Row="1"
+            AllowsTransparency="True"
+            HorizontalOffset="{Binding PopupHorizontalOffset}"
+            IsOpen="{Binding BackgroundTasksViewModel.ShowPopup}"
+            IsTopmost="False"
+            Placement="Top"
+            PlacementTarget="{Binding ElementName=BackgroundTasks}"
+            StaysOpen="True"
+            VerticalOffset="12">
+            <shell1:BackgroundTasksView x:Name="BackgroundTasksView" DataContext="{Binding BackgroundTasksViewModel}" />
 
         </userControls:AnchoredPopup>
 

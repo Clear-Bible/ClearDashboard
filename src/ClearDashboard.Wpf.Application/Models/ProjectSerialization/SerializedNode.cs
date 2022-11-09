@@ -1,6 +1,7 @@
-﻿using System;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using System;
 using System.Collections.Generic;
-using ClearDashboard.DataAccessLayer.Models;
+using System.Drawing;
 
 namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
@@ -14,4 +15,5 @@ public class SerializedNode
     public List<SerializedTokenization> NodeTokenizations = new();
     public Guid CorpusId { get; set; } = Guid.Empty;
     public bool IsRTL { get; set; }
+    public string TranslationFontFamily { get; set; } = "Segoe UI";
 }

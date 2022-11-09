@@ -9,11 +9,19 @@
     <SolidColorBrush x:Key="nodeBorderBrush" Color="Black" />
 
     <!--  The fill brushes for nodes.  -->
-    <LinearGradientBrush x:Key="nodeFillBrushStandardProject" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="nodeFillBrushStandard" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="#7FC9FF" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushBacktranslationProject" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="nodeFillBrushStudyBible" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="DarkSlateGray" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="nodeFillBrushStudyBibleAdditions" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="DarkSlateGray" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="nodeFillBrushBacktranslation" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="Orange" />
     </LinearGradientBrush>
@@ -21,9 +29,21 @@
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="PaleGoldenrod" />
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="nodeFillBrushReferenceResource" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="DarkOliveGreen" />
+    </LinearGradientBrush>
     <LinearGradientBrush x:Key="nodeFillBrushReferenceDaughter" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="RosyBrown" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="nodeFillBrushReferenceDictionary" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="CornflowerBlue" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="nodeFillBrushReferenceAuxilary" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="Beige" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="nodeFillBrushReferenceUnknown" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
@@ -32,6 +52,10 @@
     <LinearGradientBrush x:Key="nodeFillBrushReferenceManuscript" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="MediumOrchid" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="nodeFillBrushReferenceConsultantNotes" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Offset="0" Color="White" />
+        <GradientStop Offset="0.6" Color="BurlyWood" />
     </LinearGradientBrush>
     <!--  The brush for connections.  -->
     <SolidColorBrush x:Key="connectionBrush" Color="Black" />

@@ -14,4 +14,5 @@ public class SerializedCorpus
     public DateTimeOffset? Created { get; set; }
     public string? UserId { get; set; }
     public string? UserDisplayName { get; set; }
+    public string TranslationFontFamily { get; set; } = "Segoe UI";
 }

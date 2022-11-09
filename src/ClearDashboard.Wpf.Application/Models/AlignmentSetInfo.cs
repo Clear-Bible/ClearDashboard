@@ -1,4 +1,6 @@
-﻿namespace ClearDashboard.Wpf.Application.Models;
+﻿using System.Drawing;
+
+namespace ClearDashboard.Wpf.Application.Models;
 
 public class AlignmentSetInfo
 {
@@ -11,4 +13,7 @@ public class AlignmentSetInfo
     public bool IsRtl { get; set; } = false;
 
     public bool IsTargetRtl { get; set; } = false;
+
+    public string SourceFontFamily { get; set; } = "Segoe UI";
+    public string TargetFontFamily { get; set; } = "Segoe UI";
 }

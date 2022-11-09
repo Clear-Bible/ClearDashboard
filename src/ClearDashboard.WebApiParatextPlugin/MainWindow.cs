@@ -1,12 +1,17 @@
-﻿using ClearDashboard.DataAccessLayer.Models.Paratext;
+﻿using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.WebApiParatextPlugin.Extensions;
 using ClearDashboard.WebApiParatextPlugin.Helpers;
 using ClearDashboard.WebApiParatextPlugin.Hubs;
 using MediatR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
+using Microsoft.Win32;
 using Paratext.PluginInterfaces;
 using Serilog;
+using SIL.Linq;
+using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,14 +23,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using Microsoft.Win32;
-using SIL.Linq;
-using SIL.Scripture;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.WebApiParatextPlugin.Models;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -558,19 +556,43 @@ namespace ClearDashboard.WebApiParatextPlugin
             var projects = _host.GetAllProjects(true);
 
 
-            var metadata=  projects.Select(project => new ParatextProjectMetadata
+            var metadata=  projects.Select(project =>
                 {
-                    Id = project.ID,
-                    LanguageName = project.LanguageName,
-                    Name = project.ShortName,
-                    LongName = project.LongName,
-                    CorpusType = DetermineCorpusType(project.Type),
-                    IsRtl = project.Language.IsRtoL,
-                    AvailableBooks = project.GetAvailableBooks(),
-            })
-                .ToList();
+                    var metaData = new ParatextProjectMetadata
+                    {
+                        Id = project.ID,
+                        LanguageName = project.LanguageName,
+                        Name = project.ShortName,
+                        LongName = project.LongName,
+                        CorpusType = DetermineCorpusType(project.Type),
+                        IsRtl = project.Language.IsRtoL,
+                        AvailableBooks = project.GetAvailableBooks(),
+                    };
+
+                    metaData.FontFamily = project.Language.Font.FontFamily;
+
+                    try
+                    {
+                        // check to see if this font is installed locally
+                        FontFamily family =new FontFamily(project.Language.Font.FontFamily);
+                    }
+                    catch (Exception e)
+                    {
+                        AppendText(Color.Red, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
+
+                        // use the default font
+                        metaData.FontFamily = "Segoe UI";
+                    }
+
+                    return metaData;
+                }).ToList();
 
             var projectNames = metadata.Select(project => project.Name).ToList();
+
+            //foreach (var project in metadata)
+            //{
+            //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
+            //}
 
             var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
             var directories = directoryInfo.GetDirectories();

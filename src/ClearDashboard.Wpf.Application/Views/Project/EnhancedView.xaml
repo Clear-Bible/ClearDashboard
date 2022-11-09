@@ -489,6 +489,8 @@
 
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
+                                                <!--  SourceFontFamily, TranslationFontFamily, and TargetFontFamily  -->
+
                                                 <userControls:VerseDisplay
                                                     x:Name="VerseDisplay"
                                                     Title=""
