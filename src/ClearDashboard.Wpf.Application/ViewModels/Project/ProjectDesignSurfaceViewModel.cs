@@ -1317,7 +1317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ConnectionId = connection.Id,
                 ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
-                IsRTL = connection.IsRTL,
+                IsRtl = connection.IsRtl,
                 SourceParatextId = connection.SourceConnector.ParatextID,
                 TargetParatextId = connection.DestinationConnector.ParatextID,
             }) ;
@@ -1348,7 +1348,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ParallelCorpusId = alignmentSetInfo.ParallelCorpusId,
                             ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
                             IsEnabled = true,
-                            IsRTL = alignmentSetInfo.IsRtl,
+                            IsRtl = alignmentSetInfo.IsRtl,
                             IsTargetRTL = alignmentSetInfo.IsTargetRtl,
                             SourceParatextId = connection.SourceConnector.ParatextID,
                             TargetParatextId = connection.DestinationConnector.ParatextID,
@@ -1396,7 +1396,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 DisplayName = info.DisplayName,
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
-                                IsRTL = info.IsRTL,
+                                IsRtl = info.IsRTL,
                                 SourceParatextId = connection.SourceConnector.ParatextID,
                                 TargetParatextId = connection.DestinationConnector.ParatextID,
                             }

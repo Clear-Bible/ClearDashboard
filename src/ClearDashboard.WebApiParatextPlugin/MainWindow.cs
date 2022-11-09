@@ -569,28 +569,30 @@ namespace ClearDashboard.WebApiParatextPlugin
                         AvailableBooks = project.GetAvailableBooks(),
                     };
 
-                    var fontFamily = project.Language.Font.FontFamily;
+                    metaData.FontFamily = project.Language.Font.FontFamily;
 
-                    if (fontFamily != "")
+                    try
                     {
-                        try
-                        {
-                            metaData.FontFamily = fontFamily;
-                        }
-                        catch (Exception e)
-                        {
-                            AppendText(Color.Red, $"Font Family Error: {project.ShortName} {e.Message}");
-                        }
+                        // check to see if this font is installed locally
+                        FontFamily family =new FontFamily(project.Language.Font.FontFamily);
                     }
+                    catch (Exception e)
+                    {
+                        AppendText(Color.Red, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
+
+                        // use the default font
+                        metaData.FontFamily = "Segoe UI";
+                    }
+
                     return metaData;
                 }).ToList();
 
             var projectNames = metadata.Select(project => project.Name).ToList();
 
-            foreach (var project in metadata)
-            {
-                AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
-            }
+            //foreach (var project in metadata)
+            //{
+            //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
+            //}
 
             var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
             var directories = directoryInfo.GetDirectories();
