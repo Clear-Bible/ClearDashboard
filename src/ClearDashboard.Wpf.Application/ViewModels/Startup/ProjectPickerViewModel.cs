@@ -227,7 +227,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
 
-           
+
             var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
             if (results.Success && results.HasData)
             {
@@ -375,6 +375,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             Settings.Default.language_code = language;
             Settings.Default.Save();
+        }
+
+        public void Create()
+        {
+            MoveForwards();
+            EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
         }
 
         #endregion  Methods

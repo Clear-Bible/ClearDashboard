@@ -279,6 +279,27 @@
                     Content="{helpers:Localization ProjectPicker_NoMatches}"
                     FontSize="21" />
             </materialDesign:Card>
+            <Button
+                x:Name="CreateProjectFromSearchText"
+                Width="475"
+                Height="81"
+                Margin="15"
+                HorizontalContentAlignment="Left"
+                VerticalContentAlignment="Top"
+                cal:Message.Attach="Create"
+                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                Background="#EEEBEB"
+                BorderThickness="0"
+                FontSize="21"
+                IsEnabled="{Binding Connected}"
+                Style="{StaticResource TransparentStyle}"
+                Visibility="{Binding SearchBlankVisibility}">
+                <TextBlock HorizontalAlignment="Left" TextAlignment="Left">
+                    <Run Text="Create Project: '" />
+                    <Run Text="{Binding SearchText}" />
+                    <Run Text="'" />
+                </TextBlock>
+            </Button>
 
             <ListView
                 x:Name="ProjectListView"

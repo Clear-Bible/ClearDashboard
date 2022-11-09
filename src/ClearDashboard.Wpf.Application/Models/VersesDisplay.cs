@@ -121,6 +121,12 @@ namespace ClearDashboard.Wpf.Application.Models
             set => Set(ref _isRtl, value);
         }
 
+        private bool _isTargetRtl;
 
+        public bool IsTargetRtl
+        {
+            get => _isTargetRtl;
+            set => Set(ref _isTargetRtl, value);
+        }
     }
 }

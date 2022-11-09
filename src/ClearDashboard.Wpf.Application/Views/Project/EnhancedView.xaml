@@ -23,12 +23,11 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
-            <converters:TokensTextRowMultiValueConvertor x:Key="TokensTextRowMultiValueConvertor" />
             <converters:WidthSubtraction x:Key="WidthSubtraction" />
-            <userControls:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-            <userControls:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
-            <userControls:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
-            <userControls:ThicknessConverter x:Key="ThicknessConverter" />
+            <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+            <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+            <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+            <converters:ThicknessConverter x:Key="ThicknessConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -498,6 +497,8 @@
                                                     FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     IsEnabled="True"
+                                                    IsRtl="{Binding ElementName=InnerListView, Path=DataContext.IsRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
+                                                    IsTargetRtl="{Binding ElementName=InnerListView, Path=DataContext.IsTargetRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -506,8 +507,9 @@
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Tokens="{Binding TokenDisplayViewModels}"
+                                                    Tokens="{Binding SourceTokenDisplayViewModels}"
                                                     TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                                    TranslationFlowDirection="{Binding ElementName=InnerListView, Path=DataContext.IsTargetRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
@@ -602,7 +604,7 @@
                         <userControls:TranslationSelector
                             Margin="2,5"
                             SelectedItem="{Binding CurrentTranslationOption}"
-                            TokenDisplayViewModel="{Binding CurrentToken}"
+                            TokenDisplayViewModel="{Binding TokenForTranslation}"
                             TranslationOptions="{Binding TranslationOptions}"
                             Visibility="{Binding TranslationControlVisibility}">
                             <i:Interaction.Triggers>
@@ -618,15 +620,16 @@
                         <userControls:NoteCollectionDisplay
                             Title="{Binding Path=SelectedTokens.CombinedSurfaceText}"
                             Margin="0,5"
-                            EntityId="{Binding Path=CurrentToken.Token.TokenId}"
                             EntityIds="{Binding Path=SelectedTokens.EntityIds}"
-                            InnerMargin="0,0,0,30"
+                            InnerMargin="0,0,0,25"
                             LabelBackground="BlanchedAlmond"
                             LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            LabelSuggestions="{Binding LabelSuggestions}"
+                            LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
+                            NoteAssociationFontSize="13"
+                            NoteAssociationMargin="5,5,0,0"
                             NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            Notes="{Binding SelectedTokens.CombinedNotes}"
+                            Notes="{Binding NoteManager.CurrentNotes}"
                             TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             Visibility="{Binding NoteControlVisibility}">
 
