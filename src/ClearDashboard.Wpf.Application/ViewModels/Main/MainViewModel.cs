@@ -195,6 +195,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     AddNewEnhancedView();
                 }
+                else if (value == "ShowLogID")
+                {
+                    ShowLogs();
+                }
                 else if (value == "GatherLogsID")
                 {
                     GatherLogs();
@@ -871,6 +875,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Methods
 
+        private async void ShowLogs()
+        {
+            var dashboardLogPath = IoC.Get<CaptureFilePathHook>();
+
+            if (File.Exists(dashboardLogPath.Path) == false)
+            {
+                return;
+            }
+
+            try
+            {
+                string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazor.exe");
+
+                FileInfo fi = new FileInfo(tailBlazorPath);
+                if (fi.Exists == false)
+                {
+                    return;
+                }
+
+                Process p = new Process();
+                p.StartInfo.WorkingDirectory = fi.Directory.FullName;
+                p.StartInfo.FileName = tailBlazorPath;
+                p.StartInfo.Arguments = fi.Name;
+                p.Start();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+            }
+        }
+        
         private async void GatherLogs()
         {
             // get the application window size from shellviewmodel
@@ -1207,6 +1242,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = LocalizationStrings.Get("MainView_Help", Logger), Id =  "HelpID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
+                        // Gather Logs
+                        new() { Header = LocalizationStrings.Get("MainView_ShowLog", Logger), Id = "ShowLogID", ViewModel = this, },
+
                         // Gather Logs
                         new() { Header = LocalizationStrings.Get("MainView_GatherLogs", Logger), Id = "GatherLogsID", ViewModel = this, },
                         // About
