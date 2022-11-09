@@ -8,14 +8,19 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +32,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,16 +40,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
-using ClearDashboard.Wpf.Application.Services;
 using EngineToken = ClearBible.Engine.Corpora.Token;
-using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
-using System.Net.Http;
-using ClearDashboard.Wpf.Application.Extensions;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -827,6 +826,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
         {
+            // get the fontfamily for this project
+            var mainViewModel = IoC.Get<MainViewModel>();
+            var fontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.ParatextProjectId);
+
+
             var brush = GetCorpusBrushColor(message);
 
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == message.CorpusId);
@@ -1161,8 +1165,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
 
-
-
+            // get the fontfamily for this project
+            var mainViewModel = IoC.Get<MainViewModel>();
+            var sourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
+            var targetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
 
             VersesDisplay? row;
             if (message.AlignmentSetId is null)

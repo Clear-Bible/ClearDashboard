@@ -214,7 +214,14 @@
             Orientation="Horizontal">
 
             <Button
+                x:Name="UseDefaults"
+                Content="{helpers:Localization UseDefaults}"
+                IsDefault="True"
+                Style="{StaticResource TransparentStyle}" />
+
+            <Button
                 x:Name="Create"
+                Margin="10,0,0,0"
                 Content="{helpers:Localization Create}"
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}" />

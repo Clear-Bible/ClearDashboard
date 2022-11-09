@@ -293,6 +293,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         //    SetLanguage();
         //}
 
+
+
+
         #endregion
 
         #region Caliburn.Micro overrides

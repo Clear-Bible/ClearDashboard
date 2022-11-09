@@ -24,6 +24,9 @@ using ClearDashboard.DataAccessLayer.Models.Paratext;
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
 
+
+public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
+
 public record GetApplicationWindowSettings();
 public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
@@ -47,7 +50,9 @@ public record ShowParallelTranslationWindowMessage(
     bool IsRTL,
     //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
     bool? IsTargetRTL, 
-    bool IsNewWindow);
+    bool IsNewWindow,
+    string SourceParatextId,
+    string TargetParatextId);
 
 public record CloseDockingPane(Guid guid);
 public record UiLanguageChangedMessage(string LanguageCode);
@@ -280,6 +285,7 @@ public class DashboardProjectManager : ProjectManager
     }
     
     public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+    public List<ParatextProjectMetadata> ProjectsMetadata { get; set; } = new();
 
     public void CheckLicense<TViewModel>(TViewModel viewModel)
     {

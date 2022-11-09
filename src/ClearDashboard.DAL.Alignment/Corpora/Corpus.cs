@@ -17,11 +17,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public Dictionary<string, object> Metadata { get; set; }
         public DateTimeOffset? Created { get; }
         public UserId? UserId { get; set; }
+        public string TranslationFontFamily { get; set; } = "Segoe UI";
 
         // FIXME:  Should this be a string?  A different (higher level) enum?
         public Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? displayName,
             string? language, string? paratextGuid, string corpusType, Dictionary<string, object> metadata,
-            DateTimeOffset? created, UserId userId)
+            DateTimeOffset? created, UserId userId, string translationFontFamily)
         {
             CorpusId = corpusId;
             IsRtl = isRtl;
@@ -33,6 +34,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             Metadata = metadata;
             Created = created;
             UserId = userId;
+            TranslationFontFamily = translationFontFamily;
         }
 
         public async void Update()

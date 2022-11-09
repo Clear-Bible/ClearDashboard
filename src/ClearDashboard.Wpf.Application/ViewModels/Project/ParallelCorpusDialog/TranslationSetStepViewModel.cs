@@ -61,8 +61,12 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
         }
     }
 
-
     public async void Add()
+    {
+        await Add(true);
+    }
+
+    public async Task Add(object nothing)
     {
         CanAdd = false;
         _ = await Task.Factory.StartNew(async () =>
@@ -113,7 +117,7 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
         return base.OnInitializeAsync(cancellationToken);
     }
 
-    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel.CurrentStepTitle =
             LocalizationStrings.Get("ParallelCorpusDialog_AddTranslationSet", Logger);
@@ -121,9 +125,14 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
         var gloss = LocalizationStrings.Get("AddParatextCorpusDialog_Interlinear", Logger);
 
         TranslationSetDisplayName =
-            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} -> {ParentViewModel.TargetCorpusNodeViewModel.Name} {gloss}";
+            $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {gloss}";
 
-        return base.OnActivateAsync(cancellationToken);
+        if (ParentViewModel.UseDefaults)
+        {
+            await Add(true);
+        }
+        
+        base.OnActivateAsync(cancellationToken);
     }
 
     protected override ValidationResult? Validate()

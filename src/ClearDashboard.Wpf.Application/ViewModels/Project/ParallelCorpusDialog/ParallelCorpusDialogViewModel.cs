@@ -184,7 +184,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public LongRunningTask? CurrentTask { get; set; }
 
-   
+
+        public bool UseDefaults { get; set; } = false;
 
         public async Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName)
         {
@@ -301,8 +302,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
-            PlaySound.PlaySoundFromResource(null, null);
-
+            if (UseDefaults == false)
+            {
+                PlaySound.PlaySoundFromResource(null, null);
+            }
+            
             return CurrentTask.Status;
         }
 
@@ -398,7 +402,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
-            PlaySound.PlaySoundFromResource(null, null);
+            if (UseDefaults == false)
+            {
+                PlaySound.PlaySoundFromResource(null, null);
+            }
+
 
             return CurrentTask.Status;
         }
@@ -569,7 +577,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
-            PlaySound.PlaySoundFromResource(null, null);
+            if (UseDefaults == false)
+            {
+                PlaySound.PlaySoundFromResource(null, null);
+            }
 
             return CurrentTask.Status;
         }
