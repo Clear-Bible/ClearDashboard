@@ -575,8 +575,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     {
                         try
                         {
-                            var font = new FontFamily(fontFamily);
-                            metaData.FontFamily = font;
+                            metaData.FontFamily = fontFamily;
                         }
                         catch (Exception e)
                         {

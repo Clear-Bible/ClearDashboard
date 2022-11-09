@@ -97,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             set => Set(ref _name, value);
         }
 
-        public FontFamily TranslationFontFamily { get; set; } = new FontFamily("Segoe UI");
+        public string TranslationFontFamily { get; set; } = "Segoe UI";
 
         /// <summary>
         /// The X coordinate for the position of the node.

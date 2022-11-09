@@ -24,6 +24,9 @@ using ClearDashboard.DataAccessLayer.Models.Paratext;
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
 
+
+public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
+
 public record GetApplicationWindowSettings();
 public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
@@ -280,6 +283,7 @@ public class DashboardProjectManager : ProjectManager
     }
     
     public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+    public List<ParatextProjectMetadata> ProjectsMetadata { get; set; } = new();
 
     public void CheckLicense<TViewModel>(TViewModel viewModel)
     {

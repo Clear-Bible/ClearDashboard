@@ -15,5 +15,5 @@ public class SerializedNode
     public List<SerializedTokenization> NodeTokenizations = new();
     public Guid CorpusId { get; set; } = Guid.Empty;
     public bool IsRTL { get; set; }
-    public FontFamily TranslationFontFamily { get; set; } = new FontFamily("Segoe UI");
+    public string TranslationFontFamily { get; set; } = "Segoe UI";
 }

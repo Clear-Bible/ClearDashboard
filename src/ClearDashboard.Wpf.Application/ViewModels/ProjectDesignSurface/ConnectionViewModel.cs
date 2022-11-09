@@ -189,6 +189,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public ParallelCorpusId? ParallelCorpusId { get; set; }
         public string? ParallelCorpusDisplayName { get; set; }
 
+        public string SourceFontFamily { get; set; } = "Segoe UI";
+        public string TargetFontFamily { get; set; } = "Segoe UI";
+
+
         /// <summary>
         /// Event fired when the connection has changed.
         /// </summary>

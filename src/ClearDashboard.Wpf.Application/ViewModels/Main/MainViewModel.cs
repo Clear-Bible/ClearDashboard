@@ -44,6 +44,7 @@ using System.Windows.Shell;
 using System.IO.Compression;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -80,6 +81,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private WindowSettings _windowSettings;
 
+        
+
 
         #endregion //Member Variables
 
@@ -108,6 +111,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once MemberCanBePrivate.Global
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
+
+        public List<ParatextProjectMetadata> ProjectMetadata = new();
+
         #endregion //Public Properties
 
         #region Commands
@@ -517,6 +523,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             
+
+            
+
+
             base.OnViewLoaded(view);
         }
 
@@ -656,6 +666,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (ProjectManager.CurrentProject.WindowTabLayout is null)
             {
                 return;
+            }
+
+            // regular Paratext corpus
+            CancellationToken cancellationTokenProject = new();
+            var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationTokenProject);
+            
+            if (result.Success && result.HasData)
+            {
+                ProjectMetadata = result.Data;
+
+                ProjectManager.ProjectsMetadata = ProjectMetadata;
+            }
+            else
+            {
+                throw new InvalidOperationException(result.Message);
             }
 
             Stopwatch sw = new();
