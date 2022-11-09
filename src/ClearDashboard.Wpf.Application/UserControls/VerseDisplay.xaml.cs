@@ -301,6 +301,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register(nameof(TargetVisibility), typeof(Visibility), typeof(VerseDisplay),
             new PropertyMetadata(Visibility.Collapsed));
 
+        public static readonly DependencyProperty IsRtlProperty = DependencyProperty.Register(nameof(IsRtl), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        public static readonly DependencyProperty IsTargetRtlProperty = DependencyProperty.Register(nameof(IsTargetRtl), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
@@ -1110,6 +1116,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Visibility)GetValue(TargetVisibilityProperty);
             set => SetValue(TargetVisibilityProperty, value);
+        }
+
+        public FlowDirection IsRtl
+        {
+            get => (FlowDirection)GetValue(IsRtlProperty);
+            set => SetValue(IsRtlProperty, value);
+        }
+        public FlowDirection IsTargetRtl
+        {
+            get => (FlowDirection)GetValue(IsTargetRtlProperty);
+            set => SetValue(IsTargetRtlProperty, value);
         }
 
         /// <summary>
