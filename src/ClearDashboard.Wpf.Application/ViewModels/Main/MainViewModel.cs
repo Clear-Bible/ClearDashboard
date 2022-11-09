@@ -45,6 +45,7 @@ using System.IO.Compression;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -2016,6 +2017,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             UnHideWindow("PINS");
             return Task.CompletedTask;
+        }
+
+        public string GetFontFamilyFromParatextProjectId(string paratextProjectId)
+        {
+            var sourceProject = ProjectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
+            if (sourceProject is not null)
+            {
+                return sourceProject.FontFamily;
+            }
+            else
+            {
+                if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
+                {
+                    return ManuscriptIds.HebrewFont;
+                }
+                else if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
+                {
+                    return ManuscriptIds.GreekFont;
+                }
+            }
+            return "Segoe UI";
         }
     }
 

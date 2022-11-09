@@ -1259,16 +1259,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             CorpusNodeViewModel = corpusNode,
                             Tokenizer = nodeTokenization.TokenizationName,
                         },
-                        new CorpusNodeMenuItemViewModel
-                        {
-                            // Properties
-                            Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger),
-                            Id = "TokenizerPropertiesId",
-                            ProjectDesignSurfaceViewModel = this,
-                            IconKind = "Settings",
-                            CorpusNodeViewModel = corpusNode,
-                            Tokenizer = nodeTokenization.TokenizationName,
-                        }
+                        //new CorpusNodeMenuItemViewModel
+                        //{
+                        //    // Properties
+                        //    Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger),
+                        //    Id = "TokenizerPropertiesId",
+                        //    ProjectDesignSurfaceViewModel = this,
+                        //    IconKind = "Settings",
+                        //    CorpusNodeViewModel = corpusNode,
+                        //    Tokenizer = nodeTokenization.TokenizationName,
+                        //}
                     }
                 });
             }
@@ -1318,7 +1318,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
                 IsRTL = connection.IsRTL,
-            });
+                SourceParatextId = connection.SourceConnector.ParatextID,
+                TargetParatextId = connection.DestinationConnector.ParatextID,
+            }) ;
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
@@ -1347,7 +1349,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusDisplayName,
                             IsEnabled = true,
                             IsRTL = alignmentSetInfo.IsRtl,
-                            IsTargetRTL = alignmentSetInfo.IsTargetRtl
+                            IsTargetRTL = alignmentSetInfo.IsTargetRtl,
+                            SourceParatextId = connection.SourceConnector.ParatextID,
+                            TargetParatextId = connection.DestinationConnector.ParatextID,
                         },
                     }
                 });
@@ -1393,6 +1397,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
                                 IsRTL = info.IsRTL,
+                                SourceParatextId = connection.SourceConnector.ParatextID,
+                                TargetParatextId = connection.DestinationConnector.ParatextID,
                             }
                         }
                 });
@@ -1402,15 +1408,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
 
-            connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-            {
-                // Properties
-                Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger),
-                Id = "PropertiesId",
-                IconKind = "Settings",
-                ConnectionViewModel = connection,
-                ProjectDesignSurfaceViewModel = this
-            });
+            //connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
+            //{
+            //    // Properties
+            //    Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger),
+            //    Id = "PropertiesId",
+            //    IconKind = "Settings",
+            //    ConnectionViewModel = connection,
+            //    ProjectDesignSurfaceViewModel = this
+            //});
 
             connection.MenuItems = connectionMenuItems;
         }
@@ -1458,7 +1464,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.IsRTL,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
                                 connectionMenuItem.IsTargetRTL,
-                                IsNewWindow: false));
+                                IsNewWindow: false,
+                                connectionMenuItem.SourceParatextId,
+                                connectionMenuItem.TargetParatextId));
                     }
                     break;
                 case "AddTranslationToEnhancedViewId":
@@ -1475,17 +1483,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.IsRTL,
                                 //FIXME:surface serialization null,
                                 null,
-                                IsNewWindow: false));
+                                IsNewWindow: false,
+                                connectionMenuItem.SourceParatextId,
+                                connectionMenuItem.TargetParatextId)); 
                     }
-                    else
-                    {
-
-                    }
-                    break;
-
-
-
-
                     break;
                 default:
 
@@ -1777,41 +1778,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     SourceParatextId: newConnection.SourceConnector.ParentNode.ParatextProjectId,
                     TargetParatextId: newConnection.DestinationConnector.ParentNode.ParatextProjectId,
                     ConnectorGuid: newConnection.Id));
-
+                
                 var mainViewModel = IoC.Get<MainViewModel>();
-                var sourceProject = mainViewModel.ProjectMetadata.FirstOrDefault(p => p.Id == newConnection.SourceConnector.ParentNode.ParatextProjectId);
-                if (sourceProject is not null)
-                {
-                    newConnection.SourceFontFamily = sourceProject.FontFamily;
-                }
-                else
-                {
-                    if (newConnection.SourceConnector.ParatextID == ManuscriptIds.HebrewManuscriptId)
-                    {
-                        newConnection.TargetFontFamily = ManuscriptIds.HebrewFont;
-                    }
-                    else if (newConnection.SourceConnector.ParatextID == ManuscriptIds.GreekManuscriptId)
-                    {
-                        newConnection.TargetFontFamily = ManuscriptIds.GreekFont;
-                    }
-                }
+                newConnection.SourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(newConnection.SourceConnector.ParentNode
+                    .ParatextProjectId);
 
-                var targetProject = mainViewModel.ProjectMetadata.FirstOrDefault(p => p.Id == newConnection.DestinationConnector.ParentNode.ParatextProjectId);
-                if (targetProject is not null)
-                {
-                    newConnection.TargetFontFamily = targetProject.FontFamily;
-                }
-                else
-                {
-                    if (newConnection.DestinationConnector.ParatextID == ManuscriptIds.HebrewManuscriptId)
-                    {
-                        newConnection.TargetFontFamily = ManuscriptIds.HebrewFont;
-                    }
-                    else if (newConnection.DestinationConnector.ParatextID == ManuscriptIds.GreekManuscriptId)
-                    {
-                        newConnection.TargetFontFamily = ManuscriptIds.GreekFont;
-                    }
-                }
+                newConnection.TargetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(newConnection.DestinationConnector.ParentNode
+                    .ParatextProjectId);
 
                 await AddParallelCorpus(newConnection);
             }

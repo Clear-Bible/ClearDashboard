@@ -20,6 +20,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -807,6 +808,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
         {
+            // get the fontfamily for this project
+            var mainViewModel = IoC.Get<MainViewModel>();
+            var fontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.ParatextProjectId);
+
+
             var brush = GetCorpusBrushColor(message);
 
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == message.CorpusId);
@@ -1141,8 +1147,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
 
-
-
+            // get the fontfamily for this project
+            var mainViewModel = IoC.Get<MainViewModel>();
+            var sourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
+            var targetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
 
             VersesDisplay? row;
             if (message.AlignmentSetId is null)
