@@ -28,7 +28,8 @@ public interface IParallelCorpusDialogViewModel
     AlignmentSet AlignmentSet { get; set; }
     string? CurrentStepTitle { get; set; }
     string? CurrentProject { get; set; }
-    Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
+    bool UseDefaults { get; set; }
+Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
     Task<LongRunningTaskStatus> TrainSmtModel();
     Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName);
     Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName);

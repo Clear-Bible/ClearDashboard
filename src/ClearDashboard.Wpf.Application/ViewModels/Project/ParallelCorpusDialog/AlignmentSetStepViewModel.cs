@@ -72,7 +72,7 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
         return base.OnInitializeAsync(cancellationToken);
     }
 
-    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    protected async override Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel.CurrentStepTitle =
             LocalizationStrings.Get("ParallelCorpusDialog_AddAlignmentSet", Logger);
@@ -82,7 +82,12 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
         AlignmentSetDisplayName =
             $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {alignment}";
 
-        return base.OnActivateAsync(cancellationToken);
+        if (ParentViewModel.UseDefaults)
+        {
+            await Add(true);
+        }
+
+        base.OnActivateAsync(cancellationToken);
     }
 
     private bool _canOk;
@@ -100,6 +105,11 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
     }
 
     public async void Add()
+    {
+        await Add(true);
+    }
+
+    public async Task Add(object nothing)
     {
         CanAdd = false;
         _ = await Task.Factory.StartNew(async () =>

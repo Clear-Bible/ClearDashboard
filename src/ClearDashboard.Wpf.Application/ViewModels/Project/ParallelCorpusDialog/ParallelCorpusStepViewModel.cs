@@ -93,7 +93,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             set => Set(ref _canCreate, value);
         }
 
+        public async void UseDefaults()
+        {
+            if (ParentViewModel is not null)
+            {
+                ParentViewModel.UseDefaults = true;
+            }
+            
+            await Create(true);
+        }
+
+
         public async void Create()
+        {
+            await Create(true);
+        }
+        
+
+        public async Task Create(object nothing)
         {
             CanCreate = false;
             _ = await Task.Factory.StartNew(async () =>
