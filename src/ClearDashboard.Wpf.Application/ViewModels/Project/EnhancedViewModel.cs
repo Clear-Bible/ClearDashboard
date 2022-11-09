@@ -1209,7 +1209,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                     IsRtl = message.IsRTL,
-                    IsTargetRtl = (bool)message.IsTargetRTL
+                    IsTargetRtl = message.IsTargetRTL ?? false
                 });
 
                 // add to the grouping for saving

@@ -836,7 +836,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void AddManuscriptGreekCorpus()
         {
-            Logger!.LogInformation("AddParatextGreekCorpus called.");
+            Logger!.LogInformation("AddGreekCorpus called.");
 
 
             AddManuscriptGreekEnabled = false;
