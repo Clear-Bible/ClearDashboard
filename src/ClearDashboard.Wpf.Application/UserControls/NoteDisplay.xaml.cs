@@ -197,16 +197,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
-        /// Identifies the NoteTextFontSize dependency property.
-        /// </summary>
-        public static readonly DependencyProperty NoteTextFontSizeProperty = DependencyProperty.Register(nameof(NoteTextFontSize), typeof(double), typeof(NoteDisplay),
-            new PropertyMetadata(15d));
-
-        /// <summary>
         /// Identifies the NoteTextFontFamily dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteTextFontFamilyProperty = DependencyProperty.Register(nameof(NoteTextFontFamily), typeof(FontFamily), typeof(NoteDisplay),
             new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the NoteTextFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteTextFontSizeProperty = DependencyProperty.Register(nameof(NoteTextFontSize), typeof(double), typeof(NoteDisplay),
+            new PropertyMetadata(15d));
 
         /// <summary>
         /// Identifies the NoteTextFontStyle dependency property.
