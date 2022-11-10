@@ -224,7 +224,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the NoteTextMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteTextMarginProperty = DependencyProperty.Register(nameof(NoteTextMargin), typeof(Thickness), typeof(NoteDisplay),
-            new PropertyMetadata(new Thickness(2, 2, 2, 2)));
+            new PropertyMetadata(new Thickness(2, 2, 2, 0)));
 
         /// <summary>
         /// Identifies the NoteTextMargin dependency property.
