@@ -10,16 +10,16 @@
     FontSize="16"
     mc:Ignorable="d">
     <Border
-        BorderBrush="{DynamicResource MaterialDesignToolForeground}"
-        BorderThickness="0.5"
-        CornerRadius="6"
-        Padding="5">
+        BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
+        BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
+        CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderCornerRadius}"
+        Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}">
         <Border.Style>
             <Style TargetType="{x:Type Border}">
                 <Setter Property="Background" Value="Transparent" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="true">
-                        <Setter Property="Background" Value="AliceBlue" />
+                        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteHoverBrush}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>

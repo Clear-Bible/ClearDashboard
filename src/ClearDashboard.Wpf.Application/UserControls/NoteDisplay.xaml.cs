@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,6 +12,9 @@ using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
+using Brushes = System.Windows.Media.Brushes;
+using FontFamily = System.Windows.Media.FontFamily;
+using FontStyle = System.Windows.FontStyle;
 using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -195,6 +199,36 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty NoteAssociationPaddingProperty = DependencyProperty.Register(nameof(NoteAssociationPadding), typeof(Thickness), typeof(NoteDisplay),
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the NoteBorderBrush dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderBrushProperty = DependencyProperty.Register(nameof(NoteBorderBrush), typeof(SolidColorBrush), typeof(NoteDisplay),
+            new PropertyMetadata(new SolidColorBrush(Colors.LightGray)));
+
+        /// <summary>
+        /// Identifies the NoteBorderCornerRadius dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderCornerRadiusProperty = DependencyProperty.Register(nameof(NoteBorderCornerRadius), typeof(CornerRadius), typeof(NoteDisplay),
+            new PropertyMetadata(new CornerRadius(6)));
+
+        /// <summary>
+        /// Identifies the NoteBorderPadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderPaddingProperty = DependencyProperty.Register(nameof(NoteBorderPadding), typeof(Thickness), typeof(NoteDisplay),
+            new PropertyMetadata(new Thickness(10)));
+
+        /// <summary>
+        /// Identifies the NoteBorderThickness dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderThicknessProperty = DependencyProperty.Register(nameof(NoteBorderThickness), typeof(Thickness), typeof(NoteDisplay),
+            new PropertyMetadata(new Thickness(0.5)));
+
+        /// <summary>
+        /// Identifies the NoteHoverBrush dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteHoverBrushProperty = DependencyProperty.Register(nameof(NoteHoverBrush), typeof(SolidColorBrush), typeof(NoteDisplay),
+            new PropertyMetadata(new SolidColorBrush(Colors.AliceBlue)));
 
         /// <summary>
         /// Identifies the NoteTextFontFamily dependency property.
@@ -645,6 +679,51 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Thickness)GetValue(NoteAssociationPaddingProperty);
             set => SetValue(NoteAssociationPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="SolidColorBrush"/> for the border around the note editor.
+        /// </summary>
+        public SolidColorBrush NoteBorderBrush
+        {
+            get => (SolidColorBrush)GetValue(NoteBorderBrushProperty);
+            set => SetValue(NoteBorderBrushProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the corner radius for the border around the note editor.
+        /// </summary>
+        public CornerRadius NoteBorderCornerRadius
+        {
+            get => (CornerRadius)GetValue(NoteBorderCornerRadiusProperty);
+            set => SetValue(NoteBorderCornerRadiusProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding of the border around the note editor.
+        /// </summary>
+        public Thickness NoteBorderPadding
+        {
+            get => (Thickness)GetValue(NoteBorderPaddingProperty);
+            set => SetValue(NoteBorderPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the thickness of the border around the note editor.
+        /// </summary>
+        public Thickness NoteBorderThickness
+        {
+            get => (Thickness)GetValue(NoteBorderThicknessProperty);
+            set => SetValue(NoteBorderThicknessProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background <see cref="SolidColorBrush"/> to use when the note is hovered.
+        /// </summary>
+        public SolidColorBrush NoteHoverBrush
+        {
+            get => (SolidColorBrush)GetValue(NoteHoverBrushProperty);
+            set => SetValue(NoteHoverBrushProperty, value);
         }
 
         /// <summary>

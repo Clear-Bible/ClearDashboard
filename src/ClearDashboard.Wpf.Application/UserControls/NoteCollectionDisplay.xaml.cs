@@ -189,6 +189,37 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
+        /// Identifies the NoteBorderBrush dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderBrushProperty = DependencyProperty.Register(nameof(NoteBorderBrush), typeof(SolidColorBrush), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new SolidColorBrush(Colors.LightGray)));
+
+        /// <summary>
+        /// Identifies the NoteBorderCornerRadius dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderCornerRadiusProperty = DependencyProperty.Register(nameof(NoteBorderCornerRadius), typeof(CornerRadius), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new CornerRadius(6)));
+
+        /// <summary>
+        /// Identifies the NoteBorderPadding dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderPaddingProperty = DependencyProperty.Register(nameof(NoteBorderPadding), typeof(Thickness), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new Thickness(10)));
+
+        /// <summary>
+        /// Identifies the NoteBorderThickness dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteBorderThicknessProperty = DependencyProperty.Register(nameof(NoteBorderThickness), typeof(Thickness), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new Thickness(0.5)));
+
+        /// <summary>
+        /// Identifies the NoteHoverBrush dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteHoverBrushProperty = DependencyProperty.Register(nameof(NoteHoverBrush), typeof(SolidColorBrush), typeof(NoteCollectionDisplay),
+            new PropertyMetadata(new SolidColorBrush(Colors.AliceBlue)));
+
+
+        /// <summary>
         /// Identifies the NoteMargin dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteMarginProperty = DependencyProperty.Register(nameof(NoteMargin), typeof(Thickness), typeof(NoteCollectionDisplay),
@@ -632,6 +663,51 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Thickness)GetValue(NoteAssociationPaddingProperty);
             set => SetValue(NoteAssociationPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="SolidColorBrush"/> for the border around each note editor.
+        /// </summary>
+        public SolidColorBrush NoteBorderBrush
+        {
+            get => (SolidColorBrush)GetValue(NoteBorderBrushProperty);
+            set => SetValue(NoteBorderBrushProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the corner radius for the border around each note editor.
+        /// </summary>
+        public CornerRadius NoteBorderCornerRadius
+        {
+            get => (CornerRadius)GetValue(NoteBorderCornerRadiusProperty);
+            set => SetValue(NoteBorderCornerRadiusProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the padding of the border around each note editor.
+        /// </summary>
+        public Thickness NoteBorderPadding
+        {
+            get => (Thickness)GetValue(NoteBorderPaddingProperty);
+            set => SetValue(NoteBorderPaddingProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the thickness of the border around each note editor.
+        /// </summary>
+        public Thickness NoteBorderThickness
+        {
+            get => (Thickness)GetValue(NoteBorderThicknessProperty);
+            set => SetValue(NoteBorderThicknessProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the background <see cref="SolidColorBrush"/> to use when each note is hovered.
+        /// </summary>
+        public SolidColorBrush NoteHoverBrush
+        {
+            get => (SolidColorBrush)GetValue(NoteHoverBrushProperty);
+            set => SetValue(NoteHoverBrushProperty, value);
         }
 
         /// <summary>
