@@ -8,14 +8,19 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +32,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,16 +40,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
-using ClearDashboard.Wpf.Application.Services;
 using EngineToken = ClearBible.Engine.Corpora.Token;
-using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
-using System.Net.Http;
-using ClearDashboard.Wpf.Application.Extensions;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -615,10 +614,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
                     TokenizationType = message.TokenizationType;
-                    CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
 
-
+                    var bookFound = false;
+                    foreach (var book in metadata.AvailableBooks)
+                    {
+                        if (book.Code == CurrentBcv.BookName)
+                        {
+                            CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
+                            bookFound = true;
+                        }
+                    }
+                    
                     var project = _tokenProjects.FirstOrDefault(p => p.CorpusId == message.CorpusId);
+
                     if (project is null)
                     {
                         // get the entirety of text for this corpus
@@ -726,12 +734,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //    // Label suggestions are the same for each VerseDisplayViewModel
                     //    LabelSuggestions = verses.First().LabelSuggestions;
                     //}
-
-                    OnUIThread(() =>
+                    if (bookFound)
                     {
-                        UpdateVersesDisplay(message, verses, title, false);
-                        NotifyOfPropertyChange(() => VersesDisplay);
-                    });
+                        OnUIThread(() =>
+                        {
+                            UpdateVersesDisplay(message, verses, title, false);
+                            NotifyOfPropertyChange(() => VersesDisplay);
+                        });
+                    }
+                    else
+                    {
+                        OnUIThread(() => { UpdateVerseDisplayWhenBookOutOfRange(message); });
+                    }
+                   
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -757,13 +772,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }), cancellationToken);
                     }
 
-                    OnUIThread(() =>
-                    {
-                        UpdateVersesDisplay(message, new ObservableCollection<VerseDisplayViewModel>(),
-                            message.ProjectName + " - " + message.TokenizationType +
-                            "    No verse data in this verse range", false);
-                        ProgressBarVisibility = Visibility.Collapsed;
-                    });
+                    OnUIThread(() => { UpdateVerseDisplayWhenBookOutOfRange(message); });
                 }
                 finally
                 {
@@ -785,6 +794,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                 }
             }, cancellationToken);
+        }
+
+        private void UpdateVerseDisplayWhenBookOutOfRange(ShowTokenizationWindowMessage message)
+        {
+            UpdateVersesDisplay(message, new ObservableCollection<VerseDisplayViewModel>(),
+                message.ProjectName + " - " + message.TokenizationType +
+                "    No verse data in this verse range", false);
+            ProgressBarVisibility = Visibility.Collapsed;
         }
 
         public async Task<DAL.Alignment.Translation.TranslationSet> GetTranslationSet(string translationSetId)
@@ -809,6 +826,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
         {
+            // get the fontfamily for this project
+            var mainViewModel = IoC.Get<MainViewModel>();
+            var fontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.ParatextProjectId);
+
+
             var brush = GetCorpusBrushColor(message);
 
             var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == message.CorpusId);
@@ -1143,8 +1165,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
 
-
-
+            // get the fontfamily for this project
+            var mainViewModel = IoC.Get<MainViewModel>();
+            var sourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
+            var targetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
 
             VersesDisplay? row;
             if (message.AlignmentSetId is null)
@@ -1190,6 +1214,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
+                    IsRtl = message.IsRTL,
+                    IsTargetRtl = message.IsTargetRTL ?? false
                 });
 
                 // add to the grouping for saving

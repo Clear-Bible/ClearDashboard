@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
-        public bool IsRTL { get; set; }
+        public bool IsRtl { get; set; }
 
         public Guid Id { get; set; } = Guid.NewGuid();
         
@@ -188,6 +188,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         public ParallelCorpusId? ParallelCorpusId { get; set; }
         public string? ParallelCorpusDisplayName { get; set; }
+
+        public string SourceFontFamily { get; set; } = "Segoe UI";
+        public string TargetFontFamily { get; set; } = "Segoe UI";
+
 
         /// <summary>
         /// Event fired when the connection has changed.

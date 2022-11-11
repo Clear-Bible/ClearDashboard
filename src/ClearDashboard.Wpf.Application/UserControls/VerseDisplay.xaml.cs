@@ -346,6 +346,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TokenFontWeightProperty = DependencyProperty.Register(nameof(TokenFontWeight), typeof(FontWeight), typeof(VerseDisplay),
             new PropertyMetadata(FontWeights.SemiBold));
 
+        public static readonly DependencyProperty IsRtlProperty = DependencyProperty.Register(nameof(IsRtl), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        public static readonly DependencyProperty IsTargetRtlProperty = DependencyProperty.Register(nameof(IsTargetRtl), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
 
         /// <summary>
         /// Identifies the Tokens dependency property.
@@ -1299,6 +1305,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (FontFamily)GetValue(TokenFontFamilyProperty);
             set => SetValue(TokenFontFamilyProperty, value);
+        }
+
+        public FlowDirection IsRtl
+        {
+            get => (FlowDirection)GetValue(IsRtlProperty);
+            set => SetValue(IsRtlProperty, value);
+        }
+        public FlowDirection IsTargetRtl
+        {
+            get => (FlowDirection)GetValue(IsTargetRtlProperty);
+            set => SetValue(IsTargetRtlProperty, value);
         }
 
         /// <summary>

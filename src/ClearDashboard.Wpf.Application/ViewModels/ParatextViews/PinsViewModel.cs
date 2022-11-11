@@ -235,7 +235,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 {
                     _paratextInstallPath = paratextUtils.ParatextInstallPath;
 
-                    // run getting and deserializing all of these resources in parallel
+                    //run getting and deserializing all of these resources in parallel
                     await Task.WhenAll(
                         GetTermRenderings(),
                         GetBiblicalTerms(_paratextInstallPath),
@@ -280,26 +280,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
-                for (var i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
+                if (_biblicalTermsList.Term != null)
                 {
-                    if (_biblicalTermsList.Term[i].Id != "")
+                    for (var i = _biblicalTermsList.Term.Count - 1; i >= 0; i--)
                     {
-                        _biblicalTermsList.Term[i].Id =
-                            CorrectUnicode(_biblicalTermsList.Term[i].Id);
-                    }
+                        if (_biblicalTermsList.Term[i].Id != "")
+                        {
+                            _biblicalTermsList.Term[i].Id =
+                                CorrectUnicode(_biblicalTermsList.Term[i].Id);
+                        }
 
-                    cancellationToken.ThrowIfCancellationRequested();
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
                 }
 
-                for (var i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
+                if (_allBiblicalTermsList.Term != null)
                 {
-                    if (_allBiblicalTermsList.Term[i].Id != "")
+                    for (var i = _allBiblicalTermsList.Term.Count - 1; i >= 0; i--)
                     {
-                        _allBiblicalTermsList.Term[i].Id =
-                            CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
-                    }
+                        if (_allBiblicalTermsList.Term[i].Id != "")
+                        {
+                            _allBiblicalTermsList.Term[i].Id =
+                                CorrectUnicode(_allBiblicalTermsList.Term[i].Id);
+                        }
 
-                    cancellationToken.ThrowIfCancellationRequested();
+                        cancellationToken.ThrowIfCancellationRequested();
+                    }
                 }
 
 
@@ -522,104 +528,107 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 }
 
 
-                BibleBookDict = BibleBooks.ToDictionary(item => item[2..5], item => item[..2]);
-                var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
-                ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
-                var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
-                    .ToList();
-                string tref, lx, lt, li;
-                var bcnt = 0;
-                var lexlang = ProjectManager.CurrentParatextProject.Name;
-                var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
-
-                foreach (var f in bookfilesfiltered) // loop through books f
+                if (GridData.Count > 0)
                 {
-                    projectBookFileData = File.ReadAllLines(f); // read file and check
-                    for (var k = 0; k < projectBookFileData.Count(); k++)
+                    BibleBookDict = BibleBooks.ToDictionary(item => item[2..5], item => item[..2]);
+                    var reg = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Wow6432Node\\Paratext\\8");
+                    ProjectDir = (reg.GetValue("Settings_Directory") ?? "").ToString();
+                    var bookfiles = Directory.GetFiles(ProjectDir, "Interlinear_*.xml", SearchOption.AllDirectories)
+                        .ToList();
+                    string tref, lx, lt, li;
+                    var bcnt = 0;
+                    var lexlang = ProjectManager.CurrentParatextProject.Name;
+                    var bookfilesfiltered = bookfiles.Where(s => s.ToString().Contains("\\" + lexlang)).ToList();
+
+                    foreach (var f in bookfilesfiltered) // loop through books f
                     {
-                        if (projectBookFileData[k].Contains("<item>"))
+                        projectBookFileData = File.ReadAllLines(f); // read file and check
+                        for (var k = 0; k < projectBookFileData.Count(); k++)
                         {
-                            if (projectBookFileData[++k].Contains("<string>"))
+                            if (projectBookFileData[k].Contains("<item>"))
                             {
-                                tref = GetTagValue(projectBookFileData[k]);
-                                do
+                                if (projectBookFileData[++k].Contains("<string>"))
                                 {
-                                    if (projectBookFileData[++k]
-                                        .Contains(
-                                            "<Lexeme")) // build a dictionary where key = lexeme+gloss, and where value = references
+                                    tref = GetTagValue(projectBookFileData[k]);
+                                    do
                                     {
-                                        lx = lt = li = "";
-                                        Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
-                                        if (LexMatRef.ContainsKey(li +
-                                                                  lx)) // key already exists so add references to previous value
-                                            LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
-                                        else // this is a new key so create a new key, value pair
-                                            LexMatRef.Add(li + lx, tref);
-                                    }
-                                } while (!projectBookFileData[k].Contains("</item>"));
-                            }
-                        }
-                    }
-                }
-
-                List<string> rs;
-                string ky, vl;
-                int ndx2;
-                var pndx = 0;
-                var simrefs = "";
-                var results = new List<PinsDataTable>();
-                PinsDataTable datrow;
-                foreach (var LMR in LexMatRef)
-                {
-                    try
-                    {
-                        rs = LMR.Value.Split(',')
-                            .ToList(); // change dictionary values from comma delimited string to List for sorting
-                        ky = LMR.Key;
-                        SortRefs(ref rs); // sort the List  
-                        vl = string.Join(", ", rs); // change List back to comma delimited string
-
-                        if (!vl.Contains("missing"))
-                        {
-                            var objectToFind = GridData.Where(s => s.Match == ky).FirstOrDefault();
-                            ndx2 = GridData.IndexOf(objectToFind); //.FindIndex(s => s.Match == ky);
-                            if (ndx2 >= 0)
-                            {
-                                datrow = GridData[ndx2];
-                                datrow.Refs = vl;
-
-                                if (datrow.Refs != "")
-                                {
-                                    //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
-                                    var longrefs = datrow.Refs.Split(',').ToList();
-                                    var simprefs = new List<string>();
-                                    foreach (var longref in longrefs)
-                                    {
-                                        var booksplit = longref.Trim().Split(' ').ToList();
-                                        var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
-                                        var chapterVerseSplit = booksplit[1].Split(':').ToList();
-                                        var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
-                                        var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
-                                        simprefs.Add(bookNum + chapterNum + verseNum);
-                                    }
-
-                                    var verseList = datrow.VerseList;
-                                    verseList.AddRange(simprefs);
-                                    datrow.VerseList = verseList;
-                                    datrow.SimpRefs = datrow.VerseList.Count.ToString();
-                                }
-                                else
-                                {
-                                    datrow.SimpRefs = "0";
-                                    datrow.VerseList = null;
-
+                                        if (projectBookFileData[++k]
+                                            .Contains(
+                                                "<Lexeme")) // build a dictionary where key = lexeme+gloss, and where value = references
+                                        {
+                                            lx = lt = li = "";
+                                            Lexparse(projectBookFileData[k], ref lx, ref lt, ref li);
+                                            if (LexMatRef.ContainsKey(li +
+                                                                      lx)) // key already exists so add references to previous value
+                                                LexMatRef[li + lx] = LexMatRef[li + lx] + ", " + tref;
+                                            else // this is a new key so create a new key, value pair
+                                                LexMatRef.Add(li + lx, tref);
+                                        }
+                                    } while (!projectBookFileData[k].Contains("</item>"));
                                 }
                             }
                         }
                     }
-                    catch (Exception ex)
+
+                    List<string> rs;
+                    string ky, vl;
+                    int ndx2;
+                    var pndx = 0;
+                    var simrefs = "";
+                    var results = new List<PinsDataTable>();
+                    PinsDataTable datrow;
+                    foreach (var LMR in LexMatRef)
                     {
-                        Logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
+                        try
+                        {
+                            rs = LMR.Value.Split(',')
+                                .ToList(); // change dictionary values from comma delimited string to List for sorting
+                            ky = LMR.Key;
+                            SortRefs(ref rs); // sort the List  
+                            vl = string.Join(", ", rs); // change List back to comma delimited string
+
+                            if (!vl.Contains("missing"))
+                            {
+                                var objectToFind = GridData.Where(s => s.Match == ky).FirstOrDefault();
+                                ndx2 = GridData.IndexOf(objectToFind); //.FindIndex(s => s.Match == ky);
+                                if (ndx2 >= 0)
+                                {
+                                    datrow = GridData[ndx2];
+                                    datrow.Refs = vl;
+
+                                    if (datrow.Refs != "")
+                                    {
+                                        //SimplifyRefs(datrow.Refs.Split(',').ToList(), ref simrefs);
+                                        var longrefs = datrow.Refs.Split(',').ToList();
+                                        var simprefs = new List<string>();
+                                        foreach (var longref in longrefs)
+                                        {
+                                            var booksplit = longref.Trim().Split(' ').ToList();
+                                            var bookNum = BibleBookDict[booksplit[0]].PadLeft(3, '0');
+                                            var chapterVerseSplit = booksplit[1].Split(':').ToList();
+                                            var chapterNum = chapterVerseSplit[0].PadLeft(3, '0');
+                                            var verseNum = chapterVerseSplit[1].PadLeft(3, '0');
+                                            simprefs.Add(bookNum + chapterNum + verseNum);
+                                        }
+
+                                        var verseList = datrow.VerseList;
+                                        verseList.AddRange(simprefs);
+                                        datrow.VerseList = verseList;
+                                        datrow.SimpRefs = datrow.VerseList.Count.ToString();
+                                    }
+                                    else
+                                    {
+                                        datrow.SimpRefs = "0";
+                                        datrow.VerseList = null;
+
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
+                        }
                     }
                 }
 

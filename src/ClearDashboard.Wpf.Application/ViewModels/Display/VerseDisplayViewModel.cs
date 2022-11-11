@@ -40,7 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private IReadOnlyList<Token> SourceTokens { get; set; }
         private EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        private bool IsSourceRtl { get; set; }
+        private bool IsRtl { get; set; }
         private IReadOnlyList<Token>? TargetTokens { get; set; }
         private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
         private bool IsTargetRtl { get; set; }
@@ -268,7 +268,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 {
                     Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
 
-                    SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsSourceRtl, true);
+                    SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsRtl, true);
                 }
             }
             catch (Exception e)
@@ -285,14 +285,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             SourceTokens = textRow.Tokens.GetPositionalSortedBaseTokens().ToList();
             SourceDetokenizer = sourceDetokenizer;
-            IsSourceRtl = isRtl;
+            IsRtl = isRtl;
             IsTargetRtl = false;
 
             TranslationSet = null;
             
             AlignmentSet = null;
 
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsSourceRtl, true);
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsRtl, true);
         }
 
         public async Task ShowTranslationAsync(
@@ -303,7 +303,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
-            IsSourceRtl = isSourceRtl;
+            IsRtl = isSourceRtl;
             IsTargetRtl = false;
 
             TranslationSet = translationSet;
@@ -311,7 +311,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             
             AlignmentSet = null;
             
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsSourceRtl, true);
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsRtl, true);
         }
 
         public async Task ShowAlignmentsAsync(
@@ -324,7 +324,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
-            IsSourceRtl = isSourceRtl;
+            IsRtl = isSourceRtl;
 
             TargetTokens = engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             TargetDetokenizer = targetDetokenizer;

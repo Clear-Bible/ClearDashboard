@@ -44,6 +44,8 @@ using System.Windows.Shell;
 using System.IO.Compression;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -80,6 +82,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private WindowSettings _windowSettings;
 
+        
+
 
         #endregion //Member Variables
 
@@ -108,6 +112,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once MemberCanBePrivate.Global
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
+
+        public List<ParatextProjectMetadata> ProjectMetadata = new();
+
         #endregion //Public Properties
 
         #region Commands
@@ -187,6 +194,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 else if (value == "NewEnhancedCorpusID")
                 {
                     AddNewEnhancedView();
+                }
+                else if (value == "ShowLogID")
+                {
+                    ShowLogs();
                 }
                 else if (value == "GatherLogsID")
                 {
@@ -517,6 +528,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             
+
+            
+
+
             base.OnViewLoaded(view);
         }
 
@@ -656,6 +671,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (ProjectManager.CurrentProject.WindowTabLayout is null)
             {
                 return;
+            }
+
+            // regular Paratext corpus
+            CancellationToken cancellationTokenProject = new();
+            var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationTokenProject);
+            
+            if (result.Success && result.HasData)
+            {
+                ProjectMetadata = result.Data;
+
+                ProjectManager.ProjectsMetadata = ProjectMetadata;
+            }
+            else
+            {
+                throw new InvalidOperationException(result.Message);
             }
 
             Stopwatch sw = new();
@@ -845,6 +875,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Methods
 
+        private async void ShowLogs()
+        {
+            var dashboardLogPath = IoC.Get<CaptureFilePathHook>();
+
+            if (File.Exists(dashboardLogPath.Path) == false)
+            {
+                return;
+            }
+
+            try
+            {
+                string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
+
+                FileInfo fi = new FileInfo(tailBlazorPath);
+                if (fi.Exists == false)
+                {
+                    return;
+                }
+
+                Process p = new Process();
+                p.StartInfo.WorkingDirectory = fi.Directory.FullName;
+                p.StartInfo.FileName = fi.FullName;
+                p.StartInfo.Arguments = dashboardLogPath.Path;
+                p.Start();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+            }
+        }
+        
         private async void GatherLogs()
         {
             // get the application window size from shellviewmodel
@@ -1181,6 +1242,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Header = LocalizationStrings.Get("MainView_Help", Logger), Id =  "HelpID", ViewModel = this,
                     MenuItems = new ObservableCollection<MenuItemViewModel>
                     {
+                        // Gather Logs
+                        new() { Header = LocalizationStrings.Get("MainView_ShowLog", Logger), Id = "ShowLogID", ViewModel = this, },
+
                         // Gather Logs
                         new() { Header = LocalizationStrings.Get("MainView_GatherLogs", Logger), Id = "GatherLogsID", ViewModel = this, },
                         // About
@@ -1991,6 +2055,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             UnHideWindow("PINS");
             return Task.CompletedTask;
+        }
+
+        public string GetFontFamilyFromParatextProjectId(string paratextProjectId)
+        {
+            var sourceProject = ProjectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
+            if (sourceProject is not null)
+            {
+                return sourceProject.FontFamily;
+            }
+            else
+            {
+                if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
+                {
+                    return ManuscriptIds.HebrewFont;
+                }
+                else if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
+                {
+                    return ManuscriptIds.GreekFont;
+                }
+            }
+            return "Segoe UI";
         }
     }
 

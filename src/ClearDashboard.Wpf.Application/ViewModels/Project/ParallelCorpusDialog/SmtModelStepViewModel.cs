@@ -53,14 +53,26 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         return base.OnInitializeAsync(cancellationToken);
     }
 
-    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel.CurrentStepTitle =
             LocalizationStrings.Get("ParallelCorpusDialog_TrainSmtModel", Logger);
-        return base.OnActivateAsync(cancellationToken);
+
+        if (ParentViewModel.UseDefaults)
+        {
+            await Train(true);
+        }
+
+        base.OnActivateAsync(cancellationToken);
     }
 
     public async void Train()
+    {
+        await Train(true);
+    }
+
+
+    public async Task Train(object nothing)
     {
         CanTrain = false;
         _ = await Task.Factory.StartNew(async () =>
