@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using SIL.EventsAndDelegates;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
@@ -215,7 +216,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         Id = verseRowId,
                         TokenizationId = tokenizationId,
                         BookChapterVerse = $"{b:000}{c:000}{v:000}",
-                        OriginalText = ttr.Text,
+                        OriginalText = ttr.OriginalText,
                         IsSentenceStart = ttr.IsSentenceStart,
                         IsInRange = ttr.IsInRange,
                         IsRangeStart = ttr.IsRangeStart,
@@ -286,7 +287,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private static DbCommand CreateVerseRowInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "BookChapterVerse", "OriginalText", "TokenizationId", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty" };
+            var columns = new string[] { "Id", "BookChapterVerse", "OriginalText", "TokenizationId", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.VerseRow), columns);
 
@@ -295,16 +296,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             return command;
         }
 
-        private static async Task InsertVerseRowAsync(Models.VerseRow verseRow, DbCommand verseRowCmd, CancellationToken cancellationToken)
+        private async Task InsertVerseRowAsync(Models.VerseRow verseRow, DbCommand verseRowCmd, CancellationToken cancellationToken)
         {
+            var converter = new DateTimeOffsetToBinaryConverter();
+
             verseRowCmd.Parameters["@Id"].Value = verseRow.Id;
             verseRowCmd.Parameters["@BookChapterVerse"].Value = verseRow.BookChapterVerse;
-            verseRowCmd.Parameters["@OriginalText"].Value = verseRow.OriginalText;
+            verseRowCmd.Parameters["@OriginalText"].Value = (verseRow.OriginalText != null) ? verseRow.OriginalText : DBNull.Value;
             verseRowCmd.Parameters["@IsSentenceStart"].Value = verseRow.IsSentenceStart;
             verseRowCmd.Parameters["@IsInRange"].Value = verseRow.IsInRange;
             verseRowCmd.Parameters["@IsRangeStart"].Value = verseRow.IsRangeStart;
             verseRowCmd.Parameters["@IsEmpty"].Value = verseRow.IsEmpty;
             verseRowCmd.Parameters["@TokenizationId"].Value = verseRow.TokenizationId;
+            verseRowCmd.Parameters["@UserId"].Value = Guid.Empty != verseRow.UserId ? verseRow.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
+            verseRowCmd.Parameters["@Created"].Value = converter.ConvertToProvider(verseRow.Created);
 
             _ = await verseRowCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -320,7 +325,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             return command;
         }
-        private static async Task InsertVerseRowsAsync(IEnumerable<Models.VerseRow> verseRows, DbCommand verseRowCmd, DbCommand componentCmd, CancellationToken cancellationToken)
+        private async Task InsertVerseRowsAsync(IEnumerable<Models.VerseRow> verseRows, DbCommand verseRowCmd, DbCommand componentCmd, CancellationToken cancellationToken)
         {
             foreach (var verseRow in verseRows)
             {

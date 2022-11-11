@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 using System.Diagnostics;
 using ClearDashboard.DAL.Alignment.Features.Events;
+using System;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -255,7 +256,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         private DbCommand CreateAlignmentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId" };
+            var columns = new string[] { "Id", "SourceTokenComponentId", "TargetTokenComponentId", "AlignmentVerification", "AlignmentOriginatedFrom", "Score", "AlignmentSetId", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.Alignment), columns);
 
@@ -266,6 +267,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         private async Task InsertAlignmentAsync(Models.Alignment alignment, Guid alignmentSetId, DbCommand alignmentCommand, CancellationToken cancellationToken)
         {
+            var converter = new DateTimeOffsetToBinaryConverter();
+
             alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
             alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
             alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
@@ -273,6 +276,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom.ToString();
             alignmentCommand.Parameters["@Score"].Value = alignment.Score;
             alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
+            alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
+            alignmentCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignment.Created);
             _ = await alignmentCommand.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
 

@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.DataAccessLayer.Models;
 
-public class Translation : IdentifiableEntity
+public class Translation : SynchronizableTimestampedEntity
 {
     public Guid SourceTokenComponentId { get; set; }
     public string? TargetText { get; set; }
