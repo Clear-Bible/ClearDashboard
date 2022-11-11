@@ -11,29 +11,40 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-
-        <DataTemplate x:Key="TokenBubble">
+        <DataTemplate x:Key="TokenDisplay">
             <local:TokenDisplay
-                HorizontalAlignment="Left"
                 DataContext="{Binding}"
-                FilterPins="OnFilterPins"
-                FlowDirection="LeftToRight"
-                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=FontSize}"
+                HorizontalAlignment="Left"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
-                NoteCreate="OnNoteCreate"
                 NoteIndicatorColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorColor}"
                 NoteIndicatorHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
-                NoteLeftButtonDown="OnNoteLeftButtonDown"
-                NoteLeftButtonUp="OnNoteLeftButtonUp"
-                NoteMouseEnter="OnNoteMouseEnter"
-                NoteMouseLeave="OnNoteMouseLeave"
-                NoteMouseWheel="OnNoteMouseWheel"
-                NoteRightButtonDown="OnNoteRightButtonDown"
-                NoteRightButtonUp="OnNoteRightButtonUp"
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"
                 SelectedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedTokenBackground}"
                 ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
+                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}"
+                TokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontFamily}"
+                TokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
+                TokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"
+                TokenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontWeight}"
+                TokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenVerticalSpacing}"
+                TranslationAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+                TranslationFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
+                TranslationFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
+                TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                TranslationFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
+                TranslationFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
+                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}" 
+                FilterPins="OnFilterPins"
+                NoteCreate="OnNoteCreate"
+                NoteIndicatorLeftButtonDown="OnNoteLeftButtonDown"
+                NoteIndicatorLeftButtonUp="OnNoteLeftButtonUp"
+                NoteIndicatorMouseEnter="OnNoteMouseEnter"
+                NoteIndicatorMouseLeave="OnNoteMouseLeave"
+                NoteIndicatorMouseWheel="OnNoteMouseWheel"
+                NoteIndicatorRightButtonDown="OnNoteRightButtonDown"
+                NoteIndicatorRightButtonUp="OnNoteRightButtonUp"
+                TranslateQuick="OnTranslateQuick"
                 TokenClicked="OnTokenClicked"
                 TokenDoubleClicked="OnTokenDoubleClicked"
                 TokenLeftButtonDown="OnTokenLeftButtonDown"
@@ -43,14 +54,8 @@
                 TokenMouseWheel="OnTokenMouseWheel"
                 TokenRightButtonDown="OnTokenRightButtonDown"
                 TokenRightButtonUp="OnTokenRightButtonUp"
-                TokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenVerticalSpacing}"
-                TranslateQuick="OnTranslateQuick"
-                TranslationAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
                 TranslationClicked="OnTranslationClicked"
                 TranslationDoubleClicked="OnTranslationDoubleClicked"
-                TranslationFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
-                TranslationFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
-                TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 TranslationLeftButtonDown="OnTranslationLeftButtonDown"
                 TranslationLeftButtonUp="OnTranslationLeftButtonUp"
                 TranslationMouseEnter="OnTranslationMouseEnter"
@@ -58,7 +63,61 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
-                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}" />
+                />
+        </DataTemplate>
+        <DataTemplate x:Key="TargetDisplay">
+            <local:TokenDisplay
+                DataContext="{Binding}"
+                HorizontalAlignment="Left"
+                HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
+                NoteIndicatorColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorColor}"
+                NoteIndicatorHeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorHeight}"
+                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}"
+                SelectedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedTokenBackground}"
+                ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
+                ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
+                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}"
+                TokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFontFamily}"
+                TokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFontSize}"
+                TokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFontStyle}"
+                TokenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFontWeight}"
+                TokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenVerticalSpacing}"
+                TranslationAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+                TranslationFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
+                TranslationFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
+                TranslationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                TranslationFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
+                TranslationFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
+                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}" 
+                FilterPins="OnFilterPins"
+                NoteCreate="OnNoteCreate"
+                NoteIndicatorLeftButtonDown="OnNoteLeftButtonDown"
+                NoteIndicatorLeftButtonUp="OnNoteLeftButtonUp"
+                NoteIndicatorMouseEnter="OnNoteMouseEnter"
+                NoteIndicatorMouseLeave="OnNoteMouseLeave"
+                NoteIndicatorMouseWheel="OnNoteMouseWheel"
+                NoteIndicatorRightButtonDown="OnNoteRightButtonDown"
+                NoteIndicatorRightButtonUp="OnNoteRightButtonUp"
+                TranslateQuick="OnTranslateQuick"
+                TokenClicked="OnTokenClicked"
+                TokenDoubleClicked="OnTokenDoubleClicked"
+                TokenLeftButtonDown="OnTokenLeftButtonDown"
+                TokenLeftButtonUp="OnTokenLeftButtonUp"
+                TokenMouseEnter="OnTokenMouseEnter"
+                TokenMouseLeave="OnTokenMouseLeave"
+                TokenMouseWheel="OnTokenMouseWheel"
+                TokenRightButtonDown="OnTokenRightButtonDown"
+                TokenRightButtonUp="OnTokenRightButtonUp"
+                TranslationClicked="OnTranslationClicked"
+                TranslationDoubleClicked="OnTranslationDoubleClicked"
+                TranslationLeftButtonDown="OnTranslationLeftButtonDown"
+                TranslationLeftButtonUp="OnTranslationLeftButtonUp"
+                TranslationMouseEnter="OnTranslationMouseEnter"
+                TranslationMouseLeave="OnTranslationMouseLeave"
+                TranslationMouseWheel="OnTranslationMouseWheel"
+                TranslationRightButtonDown="OnTranslationRightButtonDown"
+                TranslationRightButtonUp="OnTranslationRightButtonUp"
+                />
         </DataTemplate>
         <ItemsPanelTemplate x:Key="WrapPanelTemplate">
             <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
@@ -67,6 +126,7 @@
             <StackPanel HorizontalAlignment="Left" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
     </UserControl.Resources>
+
     <StackPanel Orientation="Vertical">
         <TextBlock
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleMargin}"
@@ -77,26 +137,25 @@
             Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
         <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensPadding}"
-            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensBackground}"
-            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensBorderBrush}"
-            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensBorderThickness}">
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
+            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
+            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
+            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}">
             <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsRtl}"
-                ItemTemplate="{StaticResource TokenBubble}"
+                ItemTemplate="{StaticResource TokenDisplay}"
                 ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Tokens}" />
         </Border>
         <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensPadding}"
-            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensBorderBrush}"
-            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokensBorderThickness}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
+            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
+            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
+            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
             <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=IsTargetRtl}"
-                ItemTemplate="{StaticResource TokenBubble}"
+                ItemTemplate="{StaticResource TargetDisplay}"
                 ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />

@@ -19,28 +19,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Static DependencyProperties
 
         /// <summary>
-        /// Identifies the Orientation dependency property.
+        /// Identifies the ExtendedProperties dependency property.
         /// </summary>
-        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(TokenDisplay),
-            new PropertyMetadata(Orientation.Horizontal, OnLayoutChanged));
-        
-        /// <summary>
-        /// Identifies the TokenMargin dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register(nameof(TokenMargin), typeof(Thickness), typeof(TokenDisplay),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
-
-        /// <summary>
-        /// Identifies the TokenBackground dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenBackgroundProperty = DependencyProperty.Register(nameof(TokenBackground), typeof(Brush), typeof(TokenDisplay),
-            new PropertyMetadata(Brushes.Transparent));
-
-        /// <summary>
-        /// Identifies the SelectedTokenBackground dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register(nameof(SelectedTokenBackground), typeof(Brush), typeof(TokenDisplay),
-            new PropertyMetadata(Brushes.LightSteelBlue));
+        public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register(nameof(ExtendedProperties), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
@@ -49,10 +30,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(5d, OnLayoutChanged));
 
         /// <summary>
-        /// Identifies the TokenVerticalSpacing dependency property.
+        /// Identifies the NoteIndicatorColor dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register(nameof(TokenVerticalSpacing), typeof(double), typeof(TokenDisplay),
-            new PropertyMetadata(4d, OnLayoutChanged));
+        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register(nameof(NoteIndicatorColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorComputedColorProperty = DependencyProperty.Register(nameof(NoteIndicatorComputedColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
+        /// Identifies the NoteIndicatorHeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register(nameof(NoteIndicatorHeight), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(3d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the NoteIndicatorMargin dependency property.
@@ -61,64 +54,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(new Thickness(0, 0, 0, 0)));
 
         /// <summary>
-        /// Identifies the NoteIndicatorHeight dependency property.
+        /// Identifies the NoteIndicatorVisibility dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register(nameof(NoteIndicatorHeight), typeof(double), typeof(TokenDisplay),
-            new PropertyMetadata(3d, OnLayoutChanged));
-        
-        /// <summary>
-        /// Identifies the NoteIndicatorColor dependency property.
-        /// </summary>
-        public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register(nameof(NoteIndicatorColor), typeof(Brush), typeof(TokenDisplay),
-            new PropertyMetadata(Brushes.LightGray));
-
-        /// <summary>
-        /// Identifies the TranslationMargin dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register(nameof(TranslationMargin), typeof(Thickness), typeof(TokenDisplay),
-            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
-
-        /// <summary>
-        /// Identifies the TranslationVerticalSpacing dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register(nameof(TranslationVerticalSpacing), typeof(double), typeof(TokenDisplay),
-            new PropertyMetadata(10d, OnLayoutChanged));
-
-        /// <summary>
-        /// Identifies the TranslationAlignment dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register(nameof(TranslationAlignment), typeof(HorizontalAlignment), typeof(TokenDisplay),
-            new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
-
-        /// <summary>
-        /// Identifies the TranslationFontFamily dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register(nameof(TranslationFontFamily), typeof(FontFamily), typeof(TokenDisplay),
-            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
-
-        /// <summary>
-        /// Identifies the TranslationFlowDirection dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationFlowDirectionProperty = DependencyProperty.Register(nameof(TranslationFlowDirection), typeof(FlowDirection), typeof(TokenDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
-
-        /// <summary>
-        /// Identifies the TranslationFontSize dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register(nameof(TranslationFontSize), typeof(double), typeof(TokenDisplay),
-            new PropertyMetadata(16d));
-
-        /// <summary>
-        /// Identifies the ShowTranslation dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register(nameof(ShowTranslation), typeof(bool), typeof(TokenDisplay),
-            new PropertyMetadata(true, OnLayoutChanged));
-
-        /// <summary>
-        /// Identifies the TranslationVisibility dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register(nameof(TranslationVisibility), typeof(Visibility), typeof(TokenDisplay),
+        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register(nameof(NoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
             new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
+        /// Identifies the Orientation dependency property.
+        /// </summary>
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(TokenDisplay),
+            new PropertyMetadata(Orientation.Horizontal, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the SelectedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SelectedTokenBackgroundProperty = DependencyProperty.Register(nameof(SelectedTokenBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightSteelBlue));
 
         /// <summary>
         /// Identifies the ShowNoteIndicator dependency property.
@@ -127,10 +78,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
-        /// Identifies the NoteIndicatorVisibility dependency property.
+        /// Identifies the ShowTranslation dependency property.
         /// </summary>
-        public static readonly DependencyProperty NoteIndicatorVisibilityProperty = DependencyProperty.Register(nameof(NoteIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
-            new PropertyMetadata(Visibility.Visible));
+        public static readonly DependencyProperty ShowTranslationProperty = DependencyProperty.Register(nameof(ShowTranslation), typeof(bool), typeof(TokenDisplay),
+            new PropertyMetadata(true, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the SurfaceText dependency property.
@@ -138,19 +89,116 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty SurfaceTextProperty = DependencyProperty.Register(nameof(SurfaceText), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the ExtendedProperties dependency property.
+        /// Identifies the TokenBackground dependency property.
         /// </summary>
-        public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register(nameof(ExtendedProperties), typeof(string), typeof(TokenDisplay));
+        public static readonly DependencyProperty TokenBackgroundProperty = DependencyProperty.Register(nameof(TokenBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Transparent));
 
         /// <summary>
-        /// Identifies the TargetTranslationText dependency property.
+        /// Identifies the TokenFlowDirection dependency property.
         /// </summary>
-        public static readonly DependencyProperty TargetTranslationTextProperty = DependencyProperty.Register(nameof(TargetTranslationText), typeof(string), typeof(TokenDisplay));
+        public static readonly DependencyProperty TokenFlowDirectionProperty = DependencyProperty.Register(nameof(TokenFlowDirection), typeof(FlowDirection), typeof(TokenDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        /// <summary>
+        /// Identifies the TokenFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenFontFamilyProperty = DependencyProperty.Register(nameof(TokenFontFamily), typeof(FontFamily), typeof(TokenDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the TokenFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenFontSizeProperty = DependencyProperty.Register(nameof(TokenFontSize), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(18d));
+
+        /// <summary>
+        /// Identifies the TokenFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenFontStyleProperty = DependencyProperty.Register(nameof(TokenFontStyle), typeof(FontStyle), typeof(TokenDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the TokenFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenFontWeightProperty = DependencyProperty.Register(nameof(TokenFontWeight), typeof(FontWeight), typeof(TokenDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the TokenMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenMarginProperty = DependencyProperty.Register(nameof(TokenMargin), typeof(Thickness), typeof(TokenDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TokenVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenVerticalSpacingProperty = DependencyProperty.Register(nameof(TokenVerticalSpacing), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(4d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TranslationAlignment dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register(nameof(TranslationAlignment), typeof(HorizontalAlignment), typeof(TokenDisplay),
+            new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the TranslationColor dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationColorProperty = DependencyProperty.Register(nameof(TranslationColor), typeof(Brush), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationFlowDirection dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFlowDirectionProperty = DependencyProperty.Register(nameof(TranslationFlowDirection), typeof(FlowDirection), typeof(TokenDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        /// <summary>
+        /// Identifies the TranslationFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register(nameof(TranslationFontFamily), typeof(FontFamily), typeof(TokenDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the TranslationFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register(nameof(TranslationFontSize), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(16d));
+
+        /// <summary>
+        /// Identifies the TranslationFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFontStyleProperty = DependencyProperty.Register(nameof(TranslationFontStyle), typeof(FontStyle), typeof(TokenDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the TranslationFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationFontWeightProperty = DependencyProperty.Register(nameof(TranslationFontWeight), typeof(FontWeight), typeof(TokenDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the TranslationMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register(nameof(TranslationMargin), typeof(Thickness), typeof(TokenDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the TranslationText dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationTextProperty = DependencyProperty.Register(nameof(TranslationText), typeof(string), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the TranslationVerticalSpacing dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationVerticalSpacingProperty = DependencyProperty.Register(nameof(TranslationVerticalSpacing), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(10d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TranslationVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationVisibilityProperty = DependencyProperty.Register(nameof(TranslationVisibility), typeof(Visibility), typeof(TokenDisplay),
+            new PropertyMetadata(Visibility.Visible));
 
         #endregion Static DependencyProperties
         #region Static RoutedEvents
@@ -263,46 +311,46 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteLeftButtonDownEvent routed event.
+        /// Identifies the NoteIndicatorLeftButtonDownEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorLeftButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteLeftButtonUpEvent routed event.
+        /// Identifies the NoteIndicatorLeftButtonUpEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorLeftButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteRightButtonDownEvent routed event.
+        /// Identifies the NoteIndicatorRightButtonDownEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorRightButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteRightButtonUpEvent routed event.
+        /// Identifies the NoteIndicatorRightButtonUpEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorRightButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseEnterEvent routed event.
+        /// Identifies the NoteIndicatorMouseEnterEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseLeaveEvent routed event.
+        /// Identifies the NoteIndicatorMouseLeaveEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseWheelEvent routed event.
+        /// Identifies the NoteIndicatorMouseWheelEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorMouseWheelEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteCreateEvent routed event.
@@ -489,64 +537,64 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteLeftButtonDown
+        public event RoutedEventHandler NoteIndicatorLeftButtonDown
         {
-            add => AddHandler(NoteLeftButtonDownEvent, value);
-            remove => RemoveHandler(NoteLeftButtonDownEvent, value);
+            add => AddHandler(NoteIndicatorLeftButtonDownEvent, value);
+            remove => RemoveHandler(NoteIndicatorLeftButtonDownEvent, value);
         }
 
         /// <summary>
         /// Occurs when the left mouse button is released while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteLeftButtonUp
+        public event RoutedEventHandler NoteIndicatorLeftButtonUp
         {
-            add => AddHandler(NoteLeftButtonUpEvent, value);
-            remove => RemoveHandler(NoteLeftButtonUpEvent, value);
+            add => AddHandler(NoteIndicatorLeftButtonUpEvent, value);
+            remove => RemoveHandler(NoteIndicatorLeftButtonUpEvent, value);
         }
 
         /// <summary>
         /// Occurs when the right mouse button is pressed while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteRightButtonDown
+        public event RoutedEventHandler NoteIndicatorRightButtonDown
         {
-            add => AddHandler(NoteRightButtonDownEvent, value);
-            remove => RemoveHandler(NoteRightButtonDownEvent, value);
+            add => AddHandler(NoteIndicatorRightButtonDownEvent, value);
+            remove => RemoveHandler(NoteIndicatorRightButtonDownEvent, value);
         }
 
         /// <summary>
         /// Occurs when the right mouse button is released while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteRightButtonUp
+        public event RoutedEventHandler NoteIndicatorRightButtonUp
         {
-            add => AddHandler(NoteRightButtonUpEvent, value);
-            remove => RemoveHandler(NoteRightButtonUpEvent, value);
+            add => AddHandler(NoteIndicatorRightButtonUpEvent, value);
+            remove => RemoveHandler(NoteIndicatorRightButtonUpEvent, value);
         }
 
         /// <summary>
         /// Occurs when the mouse pointer enters the bounds of a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteMouseEnter
+        public event RoutedEventHandler NoteIndicatorMouseEnter
         {
-            add => AddHandler(NoteMouseEnterEvent, value);
-            remove => RemoveHandler(NoteMouseEnterEvent, value);
+            add => AddHandler(NoteIndicatorMouseEnterEvent, value);
+            remove => RemoveHandler(NoteIndicatorMouseEnterEvent, value);
         }
 
         /// <summary>
         /// Occurs when the mouse pointer leaves the bounds of a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteMouseLeave
+        public event RoutedEventHandler NoteIndicatorMouseLeave
         {
-            add => AddHandler(NoteMouseLeaveEvent, value);
-            remove => RemoveHandler(NoteMouseLeaveEvent, value);
+            add => AddHandler(NoteIndicatorMouseLeaveEvent, value);
+            remove => RemoveHandler(NoteIndicatorMouseLeaveEvent, value);
         }
 
         /// <summary>
         /// Occurs when the user rotates the mouse wheel while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteMouseWheel
+        public event RoutedEventHandler NoteIndicatorMouseWheel
         {
-            add => AddHandler(NoteMouseWheelEvent, value);
-            remove => RemoveHandler(NoteMouseWheelEvent, value);
+            add => AddHandler(NoteIndicatorMouseWheelEvent, value);
+            remove => RemoveHandler(NoteIndicatorMouseWheelEvent, value);
         }
 
         /// <summary>
@@ -730,37 +778,37 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteLeftButtonDownEvent, e);
+            RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
         }
 
         private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+            RaiseNoteEvent(NoteIndicatorRightButtonUpEvent, e);
         }
 
         private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonDownEvent, e);
+            RaiseNoteEvent(NoteIndicatorRightButtonDownEvent, e);
         }
 
         private void OnNoteRightButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+            RaiseNoteEvent(NoteIndicatorRightButtonUpEvent, e);
         }
 
         private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseEnterEvent, e);
+            RaiseNoteEvent(NoteIndicatorMouseEnterEvent, e);
         }
 
         private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseLeaveEvent, e);
+            RaiseNoteEvent(NoteIndicatorMouseLeaveEvent, e);
         }
 
         private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseWheelEvent, e);
+            RaiseNoteEvent(NoteIndicatorMouseWheelEvent, e);
         }
 
         private void OnCreateNote(object sender, RoutedEventArgs e)
@@ -781,51 +829,47 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion
-
+        #region Public Properties
         /// <summary>
-        /// Gets or sets the orientation for displaying the token.
+        /// Gets or sets the extendedProperties to be displayed.
         /// </summary>
-        /// <remarks>
-        /// Regardless of the value of this property, the token and its translation are still displayed in a vertical orientation.
-        /// This is only relevant for determining whether leading whitespace should be trimmed prior to display.
-        /// </remarks>
-        public Orientation Orientation
+        public string? ExtendedProperties
         {
-            get => (Orientation)GetValue(OrientationProperty);
-            set => SetValue(OrientationProperty, value);
+            get => (string)GetValue(ExtendedPropertiesProperty);
+            set => SetValue(ExtendedPropertiesProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the margin around each token for display.
+        /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
-        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// This is a relative factor that will ultimately depend on the token's PaddingBefore and PaddingAfter values.
         /// </remarks>
-        public Thickness TokenMargin
+        public double HorizontalSpacing
         {
-            get => (Thickness) GetValue(TokenMarginProperty);
-            set => SetValue(TokenMarginProperty, value);
+            get => (double)GetValue(HorizontalSpacingProperty);
+            set => SetValue(HorizontalSpacingProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the token background when it is selected.
+        /// Gets or sets the default <see cref="Brush"/> used to draw the note indicator.
         /// </summary>
-        public Brush SelectedTokenBackground
+        public Brush NoteIndicatorColor
         {
-            get => (Brush)GetValue(SelectedTokenBackgroundProperty);
-            set => SetValue(SelectedTokenBackgroundProperty, value);
+            get => (Brush)GetValue(NoteIndicatorColorProperty);
+            set => SetValue(NoteIndicatorColorProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the token background.
+        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator, depending on the note's hover status.
         /// </summary>
         /// <remarks>
-        /// This property should normally not be set explicitly; it is computed from the token's selection status.
+        /// This should normally not be set explicitly; it is computed from the note's hover status.
         /// </remarks>
-        public Brush TokenBackground
+        public Brush NoteIndicatorComputedColor
         {
-            get => (Brush)GetValue(TokenBackgroundProperty);
-            set => SetValue(TokenBackgroundProperty, value);
+            get => (Brush)GetValue(NoteIndicatorComputedColorProperty);
+            private set => SetValue(NoteIndicatorComputedColorProperty, value);
         }
 
         /// <summary>
@@ -845,20 +889,145 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </remarks>
         public Thickness NoteIndicatorMargin
         {
-            get => (Thickness) GetValue(NoteIndicatorMarginProperty);
+            get => (Thickness)GetValue(NoteIndicatorMarginProperty);
             set => SetValue(NoteIndicatorMarginProperty, value);
         }
 
+
         /// <summary>
-        /// Gets or sets the horizontal spacing between translations.
+        /// Gets or sets the <see cref="Visibility"/> of the note indicator.
+        /// </summary>
+        /// <remarks>This should normally not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
+        public Visibility NoteIndicatorVisibility
+        {
+            get => (Visibility)GetValue(NoteIndicatorVisibilityProperty);
+            set => SetValue(NoteIndicatorVisibilityProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the orientation for displaying the token.
         /// </summary>
         /// <remarks>
-        /// This is a relative factor that will ultimately depend on the token's PaddingBefore and PaddingAfter values.
+        /// Regardless of the value of this property, the token and its translation are still displayed in a vertical orientation.
+        /// This is only relevant for determining whether leading whitespace should be trimmed prior to display.
         /// </remarks>
-        public double HorizontalSpacing
+        public Orientation Orientation
         {
-            get => (double)GetValue(HorizontalSpacingProperty);
-            set => SetValue(HorizontalSpacingProperty, value);
+            get => (Orientation)GetValue(OrientationProperty);
+            set => SetValue(OrientationProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token background when it is selected.
+        /// </summary>
+        public Brush SelectedTokenBackground
+        {
+            get => (Brush)GetValue(SelectedTokenBackgroundProperty);
+            set => SetValue(SelectedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the whether to show the note indicator.
+        /// </summary>
+        public bool ShowNoteIndicator
+        {
+            get => (bool)GetValue(ShowNoteIndicatorProperty);
+            set => SetValue(ShowNoteIndicatorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the whether to showTranslation the translation.
+        /// </summary>
+        public bool ShowTranslation
+        {
+            get => (bool)GetValue(ShowTranslationProperty);
+            set => SetValue(ShowTranslationProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the surface text to be displayed.
+        /// </summary>
+        /// <remarks>
+        /// This should normally not be called directly; it is computed based on the orientation of the display.
+        /// </remarks>
+        public string SurfaceText
+        {
+            get => (string)GetValue(SurfaceTextProperty);
+            set => SetValue(SurfaceTextProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token background.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token's selection status.
+        /// </remarks>
+        public Brush TokenBackground
+        {
+            get => (Brush)GetValue(TokenBackgroundProperty);
+            set => SetValue(TokenBackgroundProperty, value);
+        }
+
+        /// <summary>
+        /// Gets the <see cref="TokenDisplayViewModel"/> data source for this control.
+        /// </summary>
+        public TokenDisplayViewModel TokenDisplayViewModel => (TokenDisplayViewModel)DataContext;
+
+        /// <summary>
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the tokens.
+        /// </summary>
+        public FlowDirection TokenFlowDirection
+        {
+            get => (FlowDirection)GetValue(TokenFlowDirectionProperty);
+            set => SetValue(TokenFlowDirectionProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
+        /// </summary>
+        public FontFamily TokenFontFamily
+        {
+            get => (FontFamily)GetValue(TokenFontFamilyProperty);
+            set => SetValue(TokenFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the token.
+        /// </summary>
+        public double TokenFontSize
+        {
+            get => (double)GetValue(TokenFontSizeProperty);
+            set => SetValue(TokenFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the token.
+        /// </summary>
+        public FontStyle TokenFontStyle
+        {
+            get => (FontStyle)GetValue(TokenFontStyleProperty);
+            set => SetValue(TokenFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the token.
+        /// </summary>
+        public FontWeight TokenFontWeight
+        {
+            get => (FontWeight)GetValue(TokenFontWeightProperty);
+            set => SetValue(TokenFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin around each token for display.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness TokenMargin
+        {
+            get => (Thickness) GetValue(TokenMarginProperty);
+            set => SetValue(TokenMarginProperty, value);
         }
 
         /// <summary>
@@ -869,7 +1038,49 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (double)GetValue(TokenVerticalSpacingProperty);
             set => SetValue(TokenVerticalSpacingProperty, value);
         }
-        
+
+        /// <summary>
+        /// Gets or sets the <see cref="HorizontalAlignment"/> for the token and translation.
+        /// </summary>
+        public HorizontalAlignment TranslationAlignment
+        {
+            get => (HorizontalAlignment)GetValue(TranslationAlignmentProperty);
+            set => SetValue(TranslationAlignmentProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its TranslationState.
+        /// </summary>
+        /// <remarks>
+        /// This should normally not be set directly; the value is based on the TranslationState:
+        ///   * Words in red come from a translation model generated from SMT, e.g. IBM4.
+        ///   * Words in blue were set by the same word being set elsewhere, with "Change all unset occurrences" selected.
+        ///   * Words in black were set by the user.
+        /// </remarks>
+        public Brush TranslationColor
+        {
+            get => (Brush)GetValue(TranslationColorProperty);
+            set => SetValue(TranslationColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the translations.
+        /// </summary>
+        public FlowDirection TranslationFlowDirection
+        {
+            get => (FlowDirection)GetValue(TranslationFlowDirectionProperty);
+            set => SetValue(TranslationFlowDirectionProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the translations.
+        /// </summary>
+        public FontFamily TranslationFontFamily
+        {
+            get => (FontFamily)GetValue(TranslationFontFamilyProperty);
+            set => SetValue(TranslationFontFamilyProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the font size for the translation.
         /// </summary>
@@ -880,12 +1091,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="HorizontalAlignment"/> for the token and translation.
+        /// Gets or sets the font style for the translation.
         /// </summary>
-        public HorizontalAlignment TranslationAlignment
+        public FontStyle TranslationFontStyle
         {
-            get => (HorizontalAlignment) GetValue(TranslationAlignmentProperty);
-            set => SetValue(TranslationAlignmentProperty, value);
+            get => (FontStyle)GetValue(TranslationFontStyleProperty);
+            set => SetValue(TranslationFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the translation.
+        /// </summary>
+        public FontWeight TranslationFontWeight
+        {
+            get => (FontWeight)GetValue(TranslationFontWeightProperty);
+            set => SetValue(TranslationFontWeightProperty, value);
         }
 
         /// <summary>
@@ -910,33 +1130,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the translations.
-        /// </summary>
-        public FontFamily TranslationFontFamily
-        {
-            get => (FontFamily)GetValue(TranslationFontFamilyProperty);
-            set => SetValue(TranslationFontFamilyProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the translations.
-        /// </summary>
-        public FlowDirection TranslationFlowDirection
-        {
-            get => (FlowDirection)GetValue(TranslationFlowDirectionProperty);
-            set => SetValue(TranslationFlowDirectionProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the whether to showTranslation the translation.
-        /// </summary>
-        public bool ShowTranslation
-        {
-            get => (bool) GetValue(ShowTranslationProperty);
-            set => SetValue(ShowTranslationProperty, value);
-        }
-
-        /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the translation.
         /// </summary>
         /// <remarks>This should normally not be set explicitly; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
@@ -947,89 +1140,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the whether to show the note indicator.
-        /// </summary>
-        public bool ShowNoteIndicator
-        {
-            get => (bool) GetValue(ShowNoteIndicatorProperty);
-            set => SetValue(ShowNoteIndicatorProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="Visibility"/> of the note indicator.
-        /// </summary>
-        /// <remarks>This should normally not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
-        public Visibility NoteIndicatorVisibility
-        {
-            get => (Visibility) GetValue(NoteIndicatorVisibilityProperty);
-            set => SetValue(NoteIndicatorVisibilityProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator.
-        /// </summary>
-        public Brush NoteIndicatorColor
-        {
-            get => (Brush) GetValue(NoteIndicatorColorProperty);
-            set => SetValue(NoteIndicatorColorProperty, value);
-        }
-
-        /// <summary>
-        /// Gets the <see cref="TokenDisplayViewModel"/> data source for this control.
-        /// </summary>
-        public TokenDisplayViewModel TokenDisplayViewModel => (TokenDisplayViewModel) DataContext;
-
-        /// <summary>
-        /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its TranslationState.
-        /// </summary>
-        /// <remarks>
-        /// This should normally not be set directly; the value is based on the TranslationState:
-        ///   * Words in red come from a translation model generated from SMT, e.g. IBM4.
-        ///   * Words in blue were set by the same word being set elsewhere, with "Change all unset occurrences" selected.
-        ///   * Words in black were set by the user.
-        /// </remarks>
-        public Brush TranslationColor
-        {
-            get => (Brush)GetValue(TranslationColorProperty);
-            set => SetValue(TranslationColorProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the surface text to be displayed.
-        /// </summary>
-        /// <remarks>
-        /// This should normally not be called directly; it is computed based on the orientation of the display.
-        /// </remarks>
-        public string SurfaceText
-        {
-            get => (string) GetValue(SurfaceTextProperty);
-            set => SetValue(SurfaceTextProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the extendedProperties to be displayed.
-        /// </summary>
-        /// <remarks>
-        /// This should normally not be called directly; it is computed based on the orientation of the display.
-        /// </remarks>
-        public string? ExtendedProperties
-        {
-            get => (string)GetValue(ExtendedPropertiesProperty);
-            set => SetValue(ExtendedPropertiesProperty, value);
-        }
-
-
-        /// <summary>
         /// Gets or sets the translation target text to be displayed.
         /// </summary>
         /// <remarks>
         /// This should normally not be called directly; it is computed based on the display properties.
         /// </remarks>
-        public string TargetTranslationText
+        public string TranslationText
         {
-            get => (string) GetValue(TargetTranslationTextProperty);
-            set => SetValue(TargetTranslationTextProperty, value);
+            get => (string) GetValue(TranslationTextProperty);
+            set => SetValue(TranslationTextProperty, value);
         }
+        #endregion Public Properties
 
         private void CalculateLayout()
         {
@@ -1043,11 +1164,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
             TokenBackground = TokenDisplayViewModel.IsSelected ? SelectedTokenBackground : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
-            TargetTranslationText = TokenDisplayViewModel.TargetTranslationText;
+            TranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
                 "FromTranslationModel" => Brushes.Red,

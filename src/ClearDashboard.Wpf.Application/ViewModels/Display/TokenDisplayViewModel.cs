@@ -79,14 +79,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             set => Set(ref _isSelected, value);
         }
 
-        private bool _isNoteSelected;
+        private bool _isNoteHovered;
         /// <summary>
-        /// Gets or sets whether a note to which the token is associated is displayed.
+        /// Gets or sets whether a note to which the token is associated is hovered by the mouse.
         /// </summary>
-        public bool IsNoteSelected
+        public bool IsNoteHovered
         {
-            get => _isNoteSelected;
-            set => Set(ref _isNoteSelected, value);
+            get => _isNoteHovered;
+            set => Set(ref _isNoteHovered, value);
         }
 
         public bool HasNote => NoteIds.Any();
