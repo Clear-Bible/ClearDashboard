@@ -757,7 +757,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
                         token: cancellationToken);
 
-                    corpus.TranslationFontFamily = "SBL Hebrew";
+                    corpus.TranslationFontFamily = ManuscriptIds.HebrewFontFamily;
 
                     OnUIThread(() => Corpora.Add(corpus));
 
@@ -896,7 +896,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.GreekManuscriptId,
                         token: cancellationToken);
 
-                    corpus.TranslationFontFamily = "SBL Greek";
+                    corpus.TranslationFontFamily = ManuscriptIds.GreekFontFamily;
 
                     OnUIThread(() => Corpora.Add(corpus));
 
