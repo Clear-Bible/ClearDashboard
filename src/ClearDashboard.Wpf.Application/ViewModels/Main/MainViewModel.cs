@@ -884,16 +884,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return;
             }
 
+            string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
+
+            FileInfo fi = new FileInfo(tailBlazorPath);
+            if (fi.Exists == false)
+            {
+                return;
+            }
+
             try
             {
-                string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
-
-                FileInfo fi = new FileInfo(tailBlazorPath);
-                if (fi.Exists == false)
-                {
-                    return;
-                }
-
                 Process p = new Process();
                 p.StartInfo.WorkingDirectory = fi.Directory.FullName;
                 p.StartInfo.FileName = fi.FullName;
@@ -2068,11 +2068,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
                 {
-                    return ManuscriptIds.HebrewFont;
+                    return ManuscriptIds.HebrewFontFamily;
                 }
                 else if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
                 {
-                    return ManuscriptIds.GreekFont;
+                    return ManuscriptIds.GreekFontFamily;
                 }
             }
             return "Segoe UI";
