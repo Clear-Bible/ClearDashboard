@@ -622,7 +622,7 @@
                         <userControls:NoteCollectionDisplay
                             Margin="0,0"
                             EntityIds="{Binding Path=SelectedTokens.EntityIds}"
-                            NoteMargin="0,0,0,25"
+                            NoteMargin="0,0,0,10"
                             LabelBackground="BlanchedAlmond"
                             LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

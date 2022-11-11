@@ -478,6 +478,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             }
         }
 
+        private void OnAssociationsButtonClick(object sender, RoutedEventArgs e)
+        {
+            IsAssociationButtonClicked = true;
+            OnPropertyChanged(nameof(AssociationsVisibility));
+            OnPropertyChanged(nameof(AssociationsButtonVisibility));
+        }
+
         private void OnNoteAssociationClicked(object sender, RoutedEventArgs e)
         {
             RaiseNoteAssociationEvent(NoteAssociationClickedEvent, e);
@@ -577,11 +584,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
-        public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Hidden : Visibility.Visible;
+        public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
         public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Hidden;
-        public Visibility LabelSelectorVisibility => AddMode ? Visibility.Hidden : Visibility.Visible;
-        public Visibility AssociationsVisibility => AddMode ? Visibility.Hidden : Visibility.Visible;
-
+        public Visibility LabelSelectorVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
+        private bool IsAssociationButtonClicked { get; set; }
         /// <summary>
         /// Gets or sets the collection of <see cref="EntityId{T}"/> associated with the note.
         /// </summary>
