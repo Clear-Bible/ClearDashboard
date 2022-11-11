@@ -17,8 +17,10 @@
             Margin="0,-5,0,0"
             VerticalAlignment="Center"
             VerticalContentAlignment="Center"
-            MouseLeftButtonDown="AddButtonClicked">
-            +
+            MouseLeftButtonDown="AddButtonClicked" 
+            ToolTip="Add a label"
+            Content="+">
+            
         </Label>
         <StackPanel
             x:Name="LabelStackPanel"

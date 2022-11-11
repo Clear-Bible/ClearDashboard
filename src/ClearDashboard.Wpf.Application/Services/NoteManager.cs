@@ -337,6 +337,28 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         /// <summary>
+        /// Publishes a message indicating that a note was hovered (that is, the mouse was moved into its editor).
+        /// </summary>
+        /// <param name="note">The <see cref="Note"/> that was hovered.</param>
+        /// <param name="entityIds">The entity IDs associated with the hovered note.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task NoteMouseEnterAsync(NoteViewModel note, EntityIdCollection entityIds)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseEnterMessage(note, entityIds));
+        }
+
+        /// <summary>
+        /// Publishes a message indicating that the mouse was moved our of a note's editor.
+        /// </summary>
+        /// <param name="note">The <see cref="Note"/> that was left.</param>
+        /// <param name="entityIds">The entity IDs associated with the note that was left.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task NoteMouseLeaveAsync(NoteViewModel note, EntityIdCollection entityIds)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new NoteMouseLeaveMessage(note, entityIds));
+        }
+
+        /// <summary>
         /// Creates a new <see cref="Label"/> and associates it with a <see cref="Note"/>.
         /// </summary>
         /// <param name="note">The <see cref="NoteViewModel"/> to which to associate the label.</param>
