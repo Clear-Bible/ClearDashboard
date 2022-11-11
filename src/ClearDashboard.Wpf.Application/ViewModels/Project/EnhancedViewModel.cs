@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -40,7 +41,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
+using FontFamily = System.Windows.Media.FontFamily;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
@@ -830,6 +834,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var mainViewModel = IoC.Get<MainViewModel>();
             var fontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.ParatextProjectId);
 
+            FontFamily family;
+            try
+            {
+                family = new(fontFamily);
+            }
+            catch (Exception e)
+            {
+                family = new("Segoe UI");
+            }
+
 
             var brush = GetCorpusBrushColor(message);
 
@@ -844,6 +858,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                     IsRtl = message.IsRTL,
+                    SourceFontFamily = family,
                 });
 
                 // add to the grouping for saving
@@ -1170,6 +1185,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var sourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
             var targetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
 
+            FontFamily familySource;
+            try
+            {
+                familySource = new(sourceFontFamily);
+            }
+            catch (Exception e)
+            {
+                familySource = new("Segoe UI");
+            }
+
+            FontFamily familyTarget;
+            try
+            {
+                familyTarget = new(targetFontFamily);
+            }
+            catch (Exception e)
+            {
+                familyTarget = new("Segoe UI");
+            }
+
+
+
             VersesDisplay? row;
             if (message.AlignmentSetId is null)
             {
@@ -1215,7 +1252,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                     IsRtl = message.IsRTL,
-                    IsTargetRtl = message.IsTargetRTL ?? false
+                    IsTargetRtl = message.IsTargetRTL ?? false,
+                    SourceFontFamily = familySource,
+                    TargetFontFamily = familyTarget,
+                    TranslationFontFamily = familyTarget,
                 });
 
                 // add to the grouping for saving
