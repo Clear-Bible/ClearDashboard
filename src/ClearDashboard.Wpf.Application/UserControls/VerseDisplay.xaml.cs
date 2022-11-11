@@ -133,46 +133,46 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteLeftButtonDownEvent routed event.
+        /// Identifies the NoteIndicatorLeftButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteIndicatorLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteLeftButtonUpEvent routed event.
+        /// Identifies the NoteIndicatorLeftButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteIndicatorLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteRightButtonDownEvent routed event.
+        /// Identifies the NoteIndicatorRightButtonDownEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteIndicatorRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteRightButtonUpEvent routed event.
+        /// Identifies the NoteIndicatorRightButtonUpEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteIndicatorRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseEnterEvent routed event.
+        /// Identifies the NoteIndicatorMouseEnterEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteIndicatorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseLeaveEvent routed event.
+        /// Identifies the NoteIndicatorMouseLeaveEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteIndicatorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseWheelEvent routed event.
+        /// Identifies the NoteIndicatorMouseWheelEvent routed event.
         /// </summary>
         public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+            ("NoteIndicatorMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteCreateEvent routed event.

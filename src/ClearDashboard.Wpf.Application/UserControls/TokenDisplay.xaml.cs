@@ -36,6 +36,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.LightGray));
 
         /// <summary>
+        /// Identifies the NoteIndicatorColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty NoteIndicatorComputedColorProperty = DependencyProperty.Register(nameof(NoteIndicatorComputedColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
         /// Identifies the NoteIndicatorHeight dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register(nameof(NoteIndicatorHeight), typeof(double), typeof(TokenDisplay),
@@ -305,46 +311,46 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TranslationMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteLeftButtonDownEvent routed event.
+        /// Identifies the NoteIndicatorLeftButtonDownEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteLeftButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorLeftButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorLeftButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteLeftButtonUpEvent routed event.
+        /// Identifies the NoteIndicatorLeftButtonUpEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteLeftButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorLeftButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorLeftButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteRightButtonDownEvent routed event.
+        /// Identifies the NoteIndicatorRightButtonDownEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteRightButtonDownEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorRightButtonDownEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorRightButtonDown", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteRightButtonUpEvent routed event.
+        /// Identifies the NoteIndicatorRightButtonUpEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteRightButtonUpEvent = EventManager.RegisterRoutedEvent
-            ("NoteRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorRightButtonUpEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorRightButtonUp", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseEnterEvent routed event.
+        /// Identifies the NoteIndicatorMouseEnterEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteMouseEnterEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseLeaveEvent routed event.
+        /// Identifies the NoteIndicatorMouseLeaveEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteMouseLeaveEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
-        /// Identifies the NoteMouseWheelEvent routed event.
+        /// Identifies the NoteIndicatorMouseWheelEvent routed event.
         /// </summary>
-        public static readonly RoutedEvent NoteMouseWheelEvent = EventManager.RegisterRoutedEvent
-            ("NoteMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+        public static readonly RoutedEvent NoteIndicatorMouseWheelEvent = EventManager.RegisterRoutedEvent
+            ("NoteIndicatorMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
         /// Identifies the NoteCreateEvent routed event.
@@ -531,64 +537,64 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Occurs when the left mouse button is pressed while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteLeftButtonDown
+        public event RoutedEventHandler NoteIndicatorLeftButtonDown
         {
-            add => AddHandler(NoteLeftButtonDownEvent, value);
-            remove => RemoveHandler(NoteLeftButtonDownEvent, value);
+            add => AddHandler(NoteIndicatorLeftButtonDownEvent, value);
+            remove => RemoveHandler(NoteIndicatorLeftButtonDownEvent, value);
         }
 
         /// <summary>
         /// Occurs when the left mouse button is released while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteLeftButtonUp
+        public event RoutedEventHandler NoteIndicatorLeftButtonUp
         {
-            add => AddHandler(NoteLeftButtonUpEvent, value);
-            remove => RemoveHandler(NoteLeftButtonUpEvent, value);
+            add => AddHandler(NoteIndicatorLeftButtonUpEvent, value);
+            remove => RemoveHandler(NoteIndicatorLeftButtonUpEvent, value);
         }
 
         /// <summary>
         /// Occurs when the right mouse button is pressed while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteRightButtonDown
+        public event RoutedEventHandler NoteIndicatorRightButtonDown
         {
-            add => AddHandler(NoteRightButtonDownEvent, value);
-            remove => RemoveHandler(NoteRightButtonDownEvent, value);
+            add => AddHandler(NoteIndicatorRightButtonDownEvent, value);
+            remove => RemoveHandler(NoteIndicatorRightButtonDownEvent, value);
         }
 
         /// <summary>
         /// Occurs when the right mouse button is released while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteRightButtonUp
+        public event RoutedEventHandler NoteIndicatorRightButtonUp
         {
-            add => AddHandler(NoteRightButtonUpEvent, value);
-            remove => RemoveHandler(NoteRightButtonUpEvent, value);
+            add => AddHandler(NoteIndicatorRightButtonUpEvent, value);
+            remove => RemoveHandler(NoteIndicatorRightButtonUpEvent, value);
         }
 
         /// <summary>
         /// Occurs when the mouse pointer enters the bounds of a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteMouseEnter
+        public event RoutedEventHandler NoteIndicatorMouseEnter
         {
-            add => AddHandler(NoteMouseEnterEvent, value);
-            remove => RemoveHandler(NoteMouseEnterEvent, value);
+            add => AddHandler(NoteIndicatorMouseEnterEvent, value);
+            remove => RemoveHandler(NoteIndicatorMouseEnterEvent, value);
         }
 
         /// <summary>
         /// Occurs when the mouse pointer leaves the bounds of a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteMouseLeave
+        public event RoutedEventHandler NoteIndicatorMouseLeave
         {
-            add => AddHandler(NoteMouseLeaveEvent, value);
-            remove => RemoveHandler(NoteMouseLeaveEvent, value);
+            add => AddHandler(NoteIndicatorMouseLeaveEvent, value);
+            remove => RemoveHandler(NoteIndicatorMouseLeaveEvent, value);
         }
 
         /// <summary>
         /// Occurs when the user rotates the mouse wheel while the mouse pointer is over a note indicator.
         /// </summary>
-        public event RoutedEventHandler NoteMouseWheel
+        public event RoutedEventHandler NoteIndicatorMouseWheel
         {
-            add => AddHandler(NoteMouseWheelEvent, value);
-            remove => RemoveHandler(NoteMouseWheelEvent, value);
+            add => AddHandler(NoteIndicatorMouseWheelEvent, value);
+            remove => RemoveHandler(NoteIndicatorMouseWheelEvent, value);
         }
 
         /// <summary>
@@ -772,37 +778,37 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteLeftButtonDownEvent, e);
+            RaiseNoteEvent(NoteIndicatorLeftButtonDownEvent, e);
         }
 
         private void OnNoteLeftButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+            RaiseNoteEvent(NoteIndicatorRightButtonUpEvent, e);
         }
 
         private void OnNoteRightButtonDown(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonDownEvent, e);
+            RaiseNoteEvent(NoteIndicatorRightButtonDownEvent, e);
         }
 
         private void OnNoteRightButtonUp(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteRightButtonUpEvent, e);
+            RaiseNoteEvent(NoteIndicatorRightButtonUpEvent, e);
         }
 
         private void OnNoteMouseEnter(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseEnterEvent, e);
+            RaiseNoteEvent(NoteIndicatorMouseEnterEvent, e);
         }
 
         private void OnNoteMouseLeave(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseLeaveEvent, e);
+            RaiseNoteEvent(NoteIndicatorMouseLeaveEvent, e);
         }
 
         private void OnNoteMouseWheel(object sender, RoutedEventArgs e)
         {
-            RaiseNoteEvent(NoteMouseWheelEvent, e);
+            RaiseNoteEvent(NoteIndicatorMouseWheelEvent, e);
         }
 
         private void OnCreateNote(object sender, RoutedEventArgs e)
@@ -846,12 +852,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator.
+        /// Gets or sets the default <see cref="Brush"/> used to draw the note indicator.
         /// </summary>
         public Brush NoteIndicatorColor
         {
             get => (Brush)GetValue(NoteIndicatorColorProperty);
             set => SetValue(NoteIndicatorColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the note indicator, depending on the note's hover status.
+        /// </summary>
+        /// <remarks>
+        /// This should normally not be set explicitly; it is computed from the note's hover status.
+        /// </remarks>
+        public Brush NoteIndicatorComputedColor
+        {
+            get => (Brush)GetValue(NoteIndicatorComputedColorProperty);
+            private set => SetValue(NoteIndicatorComputedColorProperty, value);
         }
 
         /// <summary>
@@ -1121,7 +1139,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TranslationVisibilityProperty, value);
         }
 
-
         /// <summary>
         /// Gets or sets the translation target text to be displayed.
         /// </summary>
@@ -1147,6 +1164,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
             TokenBackground = TokenDisplayViewModel.IsSelected ? SelectedTokenBackground : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();

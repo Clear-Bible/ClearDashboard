@@ -1582,6 +1582,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
         }
 
+        public void NoteEditorMouseEnter(object sender, NoteEventArgs e)
+        {
+            Task.Run(() => NoteEditorMouseEnterAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteEditorMouseEnterAsync(NoteEventArgs e)
+        {
+            await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds);
+        }
+
+        public void NoteEditorMouseLeave(object sender, NoteEventArgs e)
+        {
+            Task.Run(() => NoteEditorMouseLeaveAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteEditorMouseLeaveAsync(NoteEventArgs e)
+        {
+            await NoteManager.NoteMouseLeaveAsync(e.Note, e.EntityIds);
+        }
+
         public void LabelAdded(object sender, LabelEventArgs e)
         {
             //WORKS

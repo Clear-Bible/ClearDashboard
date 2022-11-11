@@ -533,8 +533,8 @@
                                                         <i:EventTrigger EventName="TranslationMouseLeave">
                                                             <i:CallMethodAction MethodName="TranslationMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
-                                                        <i:EventTrigger EventName="NoteMouseEnter">
-                                                            <i:CallMethodAction MethodName="NoteMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                                        <i:EventTrigger EventName="NoteIndicatorMouseEnter">
+                                                            <i:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="NoteCreate">
                                                             <i:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
@@ -615,8 +615,7 @@
                         </userControls:TranslationSelector>
 
                         <userControls:NoteCollectionDisplay
-                            Title="{Binding Path=SelectedTokens.CombinedSurfaceText}"
-                            Margin="0,5"
+                            Margin="0,0"
                             EntityIds="{Binding Path=SelectedTokens.EntityIds}"
                             NoteMargin="0,0,0,25"
                             LabelBackground="BlanchedAlmond"
@@ -631,8 +630,8 @@
                             Visibility="{Binding NoteControlVisibility}">
 
                             <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="NoteMouseEnter">
-                                    <i:CallMethodAction MethodName="NoteMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                <i:EventTrigger EventName="NoteIndicatorMouseEnter">
+                                    <i:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="NoteAdded">
                                     <i:CallMethodAction MethodName="NoteAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
@@ -642,6 +641,12 @@
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="NoteDeleted">
                                     <i:CallMethodAction MethodName="NoteDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="NoteEditorMouseEnter">
+                                    <i:CallMethodAction MethodName="NoteEditorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="NoteEditorMouseLeave">
+                                    <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="LabelSelected">
                                     <i:CallMethodAction MethodName="LabelSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />

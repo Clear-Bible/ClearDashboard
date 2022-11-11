@@ -29,7 +29,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     public class VerseDisplayViewModel : PropertyChangedBase, 
         IHandle<SelectionUpdatedMessage>,
         IHandle<NoteAddedMessage>,
-        IHandle<NoteDeletedMessage>
+        IHandle<NoteDeletedMessage>,
+        IHandle<NoteMouseEnterMessage>,
+        IHandle<NoteMouseLeaveMessage>
     {
         private NoteManager NoteManager { get; }
         private IEventAggregator EventAggregator { get; }
@@ -169,7 +171,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 token.NoteDeleted(message.Note);
             }
+            await Task.CompletedTask;
+        }
 
+        public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.Equals(t.Token.TokenId))))
+            {
+                token.IsNoteHovered = true;
+            }
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.Equals(t.Token.TokenId))))
+            {
+                token.IsNoteHovered = false;
+            }
             await Task.CompletedTask;
         }
 

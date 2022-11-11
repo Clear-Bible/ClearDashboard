@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -103,6 +102,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent NoteDeletedEvent = EventManager.RegisterRoutedEvent
             ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteEditorMouseEnter routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteEditorMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("NoteEditorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteEditorMouseLeave routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("NoteEditorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteUpdated routed event.
@@ -433,14 +444,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ConfirmDeletePopup.IsOpen = true;
         }
 
-        private void DeleteNoteConfirmed(object sender, RoutedEventArgs e)
+        private void RaiseNoteEvent(RoutedEvent routedEvent)
         {
             RaiseEvent(new NoteEventArgs
             {
-                RoutedEvent = NoteDeletedEvent,
+                RoutedEvent = routedEvent,
                 EntityIds = EntityIds,
                 Note = Note
             });
+        }
+
+        private void DeleteNoteConfirmed(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteDeletedEvent);
             ConfirmDeletePopup.IsOpen = false;
         }
 
@@ -499,6 +515,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnNoteAssociationMouseLeave(object sender, RoutedEventArgs e)
         {
             RaiseNoteAssociationEvent(NoteAssociationMouseLeaveEvent, e);
+        }
+
+        private void OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            RaiseNoteEvent(NoteEditorMouseEnterEvent);
+        }
+
+        private void OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            RaiseNoteEvent(NoteEditorMouseLeaveEvent);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -882,30 +908,39 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Public Events
 
         /// <summary>
+        /// Occurs when an existing label suggestion is selected.
+        /// </summary>
+        public event RoutedEventHandler LabelSelected
+        {
+            add => AddHandler(LabelSelectedEvent, value);
+            remove => RemoveHandler(LabelSelectedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an new label is added.
+        /// </summary>
+        public event RoutedEventHandler LabelAdded
+        {
+            add => AddHandler(LabelAddedEvent, value);
+            remove => RemoveHandler(LabelAddedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a label is removed.
+        /// </summary>
+        public event RoutedEventHandler LabelRemoved
+        {
+            add => AddHandler(LabelRemovedEvent, value);
+            remove => RemoveHandler(LabelRemovedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a note is applied.
         /// </summary>
         public event RoutedEventHandler NoteAdded
         {
             add => AddHandler(NoteAddedEvent, value);
             remove => RemoveHandler(NoteAddedEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when a note is updated.
-        /// </summary>
-        public event RoutedEventHandler NoteUpdated
-        {
-            add => AddHandler(NoteUpdatedEvent, value);
-            remove => RemoveHandler(NoteUpdatedEvent, value);
-        }
-
-        /// <summary>
-        /// Occurs when a note is deleted.
-        /// </summary>
-        public event RoutedEventHandler NoteDeleted
-        {
-            add => AddHandler(NoteDeletedEvent, value);
-            remove => RemoveHandler(NoteDeletedEvent, value);
         }
 
         /// <summary>
@@ -981,30 +1016,39 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Occurs when an existing label suggestion is selected.
+        /// Occurs when a note is deleted.
         /// </summary>
-        public event RoutedEventHandler LabelSelected
+        public event RoutedEventHandler NoteDeleted
         {
-            add => AddHandler(LabelSelectedEvent, value);
-            remove => RemoveHandler(LabelSelectedEvent, value);
+            add => AddHandler(NoteDeletedEvent, value);
+            remove => RemoveHandler(NoteDeletedEvent, value);
         }
 
         /// <summary>
-        /// Occurs when an new label is added.
+        /// Occurs when the mouse enters the note editor.
         /// </summary>
-        public event RoutedEventHandler LabelAdded
+        public event RoutedEventHandler NoteEditorMouseEnter
         {
-            add => AddHandler(LabelAddedEvent, value);
-            remove => RemoveHandler(LabelAddedEvent, value);
+            add => AddHandler(NoteEditorMouseEnterEvent, value);
+            remove => RemoveHandler(NoteEditorMouseEnterEvent, value);
         }
 
         /// <summary>
-        /// Occurs when a label is removed.
+        /// Occurs when the mouse leaves the note editor.
         /// </summary>
-        public event RoutedEventHandler LabelRemoved
+        public event RoutedEventHandler NoteEditorMouseLeave
         {
-            add => AddHandler(LabelRemovedEvent, value);
-            remove => RemoveHandler(LabelRemovedEvent, value);
+            add => AddHandler(NoteEditorMouseLeaveEvent, value);
+            remove => RemoveHandler(NoteEditorMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a note is updated.
+        /// </summary>
+        public event RoutedEventHandler NoteUpdated
+        {
+            add => AddHandler(NoteUpdatedEvent, value);
+            remove => RemoveHandler(NoteUpdatedEvent, value);
         }
 
         /// <summary>
@@ -1020,5 +1064,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             Loaded += OnLoaded;
         }
+
     }
 }

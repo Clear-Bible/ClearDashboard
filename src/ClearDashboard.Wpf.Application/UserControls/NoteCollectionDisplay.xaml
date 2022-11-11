@@ -63,6 +63,8 @@
                 NoteAssociationMouseEnter="OnNoteAssociationMouseEnter" 
                 NoteAssociationMouseLeave="OnNoteAssociationMouseLeave" 
                 NoteDeleted="OnNoteDeleted"
+                NoteEditorMouseEnter="OnNoteEditorMouseEnter"
+                NoteEditorMouseLeave="OnNoteEditorMouseLeave"
                 NoteUpdated="OnNoteUpdated"
                 />
         </DataTemplate>
@@ -151,6 +153,8 @@
                     LabelSelected="OnLabelSelected"
                     NoteAdded="OnNoteAdded"
                     NoteDeleted="OnNoteDeleted"
+                    NoteEditorMouseEnter="OnNoteEditorMouseEnter"
+                    NoteEditorMouseLeave="OnNoteEditorMouseLeave"
                     NoteUpdated="OnNoteUpdated"
                     />
             </StackPanel>

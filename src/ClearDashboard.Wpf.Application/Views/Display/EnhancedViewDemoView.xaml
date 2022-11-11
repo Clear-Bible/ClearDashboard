@@ -76,7 +76,7 @@
             [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];                                                                                         
             [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];                                                                                         
             [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];                                                                                         
-            [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];                                                                                         
+            [Event NoteIndicatorMouseEnter] = [Action NoteIndicatorMouseEnter($eventArgs)];                                                                                         
             [Event NoteCreate] = [Action NoteCreate($eventArgs)];                                 
             [Event FilterPins] = [Action FilterPins($eventArgs)];
             [Event TranslateQuick] = [Action TranslateQuick($eventArgs)]"
@@ -728,6 +728,8 @@
                                     [Event NoteAssociationRightButtonDown] = [Action NoteAssociationRightButtonDown($eventArgs)];
                                     [Event NoteAssociationMouseEnter] = [Action NoteAssociationMouseEnter($eventArgs)];
                                     [Event NoteAssociationMouseLeave] = [Action NoteAssociationMouseLeave($eventArgs)];
+                                    [Event NoteEditorMouseEnter] = [Action NoteEditorMouseEnter($eventArgs)];
+                                    [Event NoteEditorMouseLeave] = [Action NoteEditorMouseLeave($eventArgs)];
                                     "
                 EntityIds="{Binding SelectedTokens.EntityIds}"
                 NoteMargin="0,0,0,25"

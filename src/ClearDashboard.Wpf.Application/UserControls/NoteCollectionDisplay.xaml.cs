@@ -104,6 +104,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteDeleted", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         /// <summary>
+        /// Identifies the NoteEditorMouseEnter routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteEditorMouseEnterEvent = EventManager.RegisterRoutedEvent
+            ("NoteEditorMouseEnter", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
+        /// Identifies the NoteEditorMouseLeave routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
+            ("NoteEditorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
         /// Identifies the NoteUpdated routed event.
         /// </summary>
         public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
@@ -460,6 +472,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 Notes.Remove(args.Note);
 
                 RaiseNoteEvent(NoteDeletedEvent, args);
+            }
+        }
+
+        private void OnNoteEditorMouseEnter(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteEditorMouseEnterEvent, args);
+            }
+        }
+        private void OnNoteEditorMouseLeave(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteEditorMouseLeaveEvent, args);
             }
         }
 
@@ -1102,6 +1129,33 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when a note is deleted.
+        /// </summary>
+        public event RoutedEventHandler NoteDeleted
+        {
+            add => AddHandler(NoteDeletedEvent, value);
+            remove => RemoveHandler(NoteDeletedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse enters one of the note editors.
+        /// </summary>
+        public event RoutedEventHandler NoteEditorMouseEnter
+        {
+            add => AddHandler(NoteEditorMouseEnterEvent, value);
+            remove => RemoveHandler(NoteEditorMouseEnterEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the mouse leaves one of the note editors.
+        /// </summary>
+        public event RoutedEventHandler NoteEditorMouseLeave
+        {
+            add => AddHandler(NoteEditorMouseLeaveEvent, value);
+            remove => RemoveHandler(NoteEditorMouseLeaveEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a note is updated.
         /// </summary>
         public event RoutedEventHandler NoteUpdated
@@ -1110,14 +1164,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             remove => RemoveHandler(NoteUpdatedEvent, value);
         }
 
-        /// <summary>
-        /// Occurs when a note is deleted.
-        /// </summary>
-        public event RoutedEventHandler NoteDeleted
-        {
-            add => AddHandler(NoteDeletedEvent, value);
-            remove => RemoveHandler(NoteDeletedEvent, value);
-        }
 
         /// <summary>
         /// Occurs when the user requests to close the notes control.
