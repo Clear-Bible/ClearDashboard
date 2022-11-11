@@ -6,7 +6,6 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Display"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
@@ -77,12 +76,13 @@
             [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];                                                                                         
             [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];                                                                                         
             [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];                                                                                         
-            [Event NoteMouseEnter] = [Action NoteMouseEnter($eventArgs)];                                                                                         
+            [Event NoteIndicatorMouseEnter] = [Action NoteIndicatorMouseEnter($eventArgs)];                                                                                         
             [Event NoteCreate] = [Action NoteCreate($eventArgs)];                                 
             [Event FilterPins] = [Action FilterPins($eventArgs)];
             [Event TranslateQuick] = [Action TranslateQuick($eventArgs)]"
             FlowDirection="{Binding ElementName=RtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
-            FontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+            TokenFontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+            TokenFontWeight="SemiBold"
             HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
@@ -94,17 +94,19 @@
             TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
             TranslationFlowDirection="{Binding ElementName=TranslationRtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
             TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+            TranslationFontWeight="SemiBold"
             TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
 
         <Label
+            Grid.Column="0"
             Grid.Row="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Content="{Binding Message}"
             FontSize="15" />
-        <CheckBox x:Name="ShowVisualControlsCheckbox" Grid.Row="3">Show Visual Controls</CheckBox>
-        <Grid Grid.Row="4" Visibility="{Binding ElementName=ShowVisualControlsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">
+        <CheckBox x:Name="ShowVisualControlsCheckbox" Grid.Column="0" Grid.Row="3">Show Visual Controls</CheckBox>
+        <Grid Grid.Column="0" Grid.Row="4" Visibility="{Binding ElementName=ShowVisualControlsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150" />
                 <ColumnDefinition Width="275" />
@@ -714,7 +716,6 @@
                 Visibility="{Binding TranslationPaneVisibility}" />
 
             <userControls:NoteCollectionDisplay
-                Title="{Binding SelectedTokens.CombinedSurfaceText}"
                 cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)]; 
                                     [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            
                                     [Event NoteUpdated] = [Action NoteUpdated($eventArgs)];                                                            
@@ -727,27 +728,29 @@
                                     [Event NoteAssociationRightButtonDown] = [Action NoteAssociationRightButtonDown($eventArgs)];
                                     [Event NoteAssociationMouseEnter] = [Action NoteAssociationMouseEnter($eventArgs)];
                                     [Event NoteAssociationMouseLeave] = [Action NoteAssociationMouseLeave($eventArgs)];
+                                    [Event NoteEditorMouseEnter] = [Action NoteEditorMouseEnter($eventArgs)];
+                                    [Event NoteEditorMouseLeave] = [Action NoteEditorMouseLeave($eventArgs)];
                                     "
                 EntityIds="{Binding SelectedTokens.EntityIds}"
-                InnerMargin="0,0,0,25"
+                NoteMargin="0,0,0,10"
                 LabelBackground="BlanchedAlmond"
                 LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                NoteFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 Notes="{Binding NoteManager.CurrentNotes}"
                 NoteAssociationFontSize="13"
                 NoteAssociationMargin="5,5,0,0"
                 TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="{Binding NotePaneVisibility}">
-                <userControls:NoteCollectionDisplay.NoteMargin>
+                <userControls:NoteCollectionDisplay.NoteTextMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="NoteLeftMarginSlider" Path="Value" />
                         <Binding ElementName="NoteTopMarginSlider" Path="Value" />
                         <Binding ElementName="NoteRightMarginSlider" Path="Value" />
                         <Binding ElementName="NoteBottomMarginSlider" Path="Value" />
                     </MultiBinding>
-                </userControls:NoteCollectionDisplay.NoteMargin>
+                </userControls:NoteCollectionDisplay.NoteTextMargin>
                 <userControls:NoteCollectionDisplay.TimestampMargin>
                     <MultiBinding Converter="{StaticResource ThicknessConverter}">
                         <Binding ElementName="TimestampLeftMarginSlider" Path="Value" />

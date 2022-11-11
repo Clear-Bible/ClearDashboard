@@ -325,16 +325,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ",e.EntityIds.Select(id => id.ToString()))}";
         }
 
-        public async Task NoteUpdated(NoteEventArgs e)
-        {
-            await NoteManager.UpdateNoteAsync(e.Note);
-            Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
-        }
-
         public async Task NoteDeleted(NoteEventArgs e)
         {
             await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
             Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";
+        }
+
+        public async Task NoteEditorMouseEnter(NoteEventArgs e)
+        {
+            await NoteManager.NoteMouseEnterAsync(e.Note, e.EntityIds);
+        }
+
+        public async Task NoteEditorMouseLeave(NoteEventArgs e)
+        {
+            await NoteManager.NoteMouseLeaveAsync(e.Note, e.EntityIds);
+        }
+
+        public async Task NoteUpdated(NoteEventArgs e)
+        {
+            await NoteManager.UpdateNoteAsync(e.Note);
+            Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
         public async Task LabelAdded(LabelEventArgs e)
