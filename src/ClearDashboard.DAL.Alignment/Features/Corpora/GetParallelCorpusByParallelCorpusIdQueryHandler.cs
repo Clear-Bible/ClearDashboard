@@ -112,20 +112,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                             var currentBCV = VerseBCV(v);
 
-                            var sourceTokens = v.TokenVerseAssociations
+                            var sourceTokenIds = v.TokenVerseAssociations
                                 .Where(tva => tva.TokenComponent != null)
                                 .OrderBy(tva => tva.Position)
-                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
-                            .Union(parallelCorpus.TokenComposites
-                                    .Where(tc => tc.TokenizationId == parallelCorpus.SourceTokenizedCorpusId)
-                                    .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
-                                    .Select(tc => ModelHelper.BuildTokenId(tc)));
+                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
+                            
+                            // FIXME:  We don't have anywhere to put these yet to return them
+                            //var sourceCompositeIds = parallelCorpus.TokenComposites
+                            //        .Where(tc => tc.TokenizationId == parallelCorpus.SourceTokenizedCorpusId)
+                            //        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
+                            //        .Select(tc => ModelHelper.BuildTokenId(tc));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
-                                sourceTokens);
+                                sourceTokenIds);
                         });
 
                     var targetVerses = vm.Verses
@@ -138,20 +140,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                             var currentBCV = VerseBCV(v);
 
-                            var targetTokens = v.TokenVerseAssociations
+                            var targetTokenIds = v.TokenVerseAssociations
                                 .Where(tva => tva.TokenComponent != null)
                                 .OrderBy(tva => tva.Position)
-                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
-                            .Union(parallelCorpus.TokenComposites
-                                    .Where(tc => tc.TokenizationId == parallelCorpus.TargetTokenizedCorpusId)
-                                    .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
-                                    .Select(tc => ModelHelper.BuildTokenId(tc)));
+                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
+
+                            // FIXME:  We don't have anywhere to put these yet to return them
+                            //var targetCompositeIds = parallelCorpus.TokenComposites
+                            //        .Where(tc => tc.TokenizationId == parallelCorpus.TargetTokenizedCorpusId)
+                            //        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
+                            //        .Select(tc => ModelHelper.BuildTokenId(tc));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
-                                targetTokens);
+                                targetTokenIds);
                         });
 
                     return new VerseMapping(sourceVerses, targetVerses);
