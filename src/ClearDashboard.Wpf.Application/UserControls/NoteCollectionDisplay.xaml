@@ -13,8 +13,6 @@
         <DataTemplate x:Key="NoteTemplate" DataType="userControls:NoteDisplay">
             <userControls:NoteDisplay
                 x:Name="NoteDisplay"
-                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=InnerMargin}"
-                Padding="5"
                 EntityIds="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=EntityIds}"
                 LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
                 LabelCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}"
@@ -28,11 +26,7 @@
                 NoteAssociationFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontSize}"
                 NoteAssociationFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontStyle}"
                 NoteAssociationFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationFontWeight}"
-                NoteAssociationLeftButtonDown="OnNoteAssociationLeftButtonDown"
-                NoteAssociationLeftButtonUp="OnNoteAssociationLeftButtonUp"
                 NoteAssociationMargin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationMargin}"
-                NoteAssociationMouseEnter="OnNoteAssociationMouseEnter"
-                NoteAssociationMouseLeave="OnNoteAssociationMouseLeave"
                 NoteAssociationPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteAssociationPadding}"
                 NoteBorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
                 NoteBorderCornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderCornerRadius}"
