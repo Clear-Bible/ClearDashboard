@@ -138,7 +138,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .Include(tm => tm.TargetTextScores)
                     .Join(
                         ProjectDbContext!.TokenComponents
-                            .Where(tc => tc.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                            .Where(tc => tc.TokenizedCorpusId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                             .Where(tc => tokenGuidsNotFound.Contains(tc.Id)),
                         tm => tm.SourceText,
                         tc => tc.TrainingText ?? "",
@@ -163,7 +163,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     cancellationToken.ThrowIfCancellationRequested();
 
                     var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
-                        .Where(tc => tc.TokenizationId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
+                        .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                         .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
                         .Where(tc => tc.TrainingText != null)
                         .ToList()

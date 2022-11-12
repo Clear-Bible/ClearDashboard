@@ -91,13 +91,13 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
             var sourceTokensForComposite = ProjectDbContext.Tokens
-                .Where(t => t.TokenizationId == sourceTokenizedCorpus.Id)
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedCorpus.Id)
                 .Take(10)
                 .ToList()
                 .GroupBy(t => t.VerseRowId)
                 .First();
             var targetTokensForComposite = ProjectDbContext.Tokens
-                .Where(t => t.TokenizationId == targetTokenizedCorpus.Id)
+                .Where(t => t.TokenizedCorpusId == targetTokenizedCorpus.Id)
                 .Take(10)
                 .ToList()
                 .GroupBy(t => t.VerseRowId)
@@ -108,7 +108,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                 Id = Guid.NewGuid(),
                 EngineTokenId = "0101010101-999",
                 VerseRowId = sourceTokensForComposite.Key,
-                TokenizationId = sourceTokenizedCorpus.Id,
+                TokenizedCorpusId = sourceTokenizedCorpus.Id,
                 ParallelCorpusId = parallelTokenizedCorpus.ParallelCorpusId.Id
             };
             var targetTokenComposite = new Models.TokenComposite()
@@ -116,7 +116,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
                 Id = Guid.NewGuid(),
                 EngineTokenId = "0101010101-9999",
                 VerseRowId = targetTokensForComposite.Key,
-                TokenizationId = targetTokenizedCorpus.Id,
+                TokenizedCorpusId = targetTokenizedCorpus.Id,
                 ParallelCorpusId = parallelTokenizedCorpus.ParallelCorpusId.Id
             };
             ProjectDbContext.TokenComponents.Add(targetTokenComposite);

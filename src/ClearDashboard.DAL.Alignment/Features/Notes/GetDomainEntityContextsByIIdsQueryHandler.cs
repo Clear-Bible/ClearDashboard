@@ -92,7 +92,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                         if (tokenIds.Any())
                         {
                             ProjectDbContext!.Tokens
-                                .Include(t => t.Tokenization)
+                                .Include(t => t.TokenizedCorpus)
                                     .ThenInclude(tc => tc!.Corpus)
                                 .Where(e => kvp.Value.Select(ids => ids.Id).Contains(e.Id))
                                 .ForEach(e =>
@@ -110,7 +110,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                         {
                             ProjectDbContext!.TokenComposites
                                 .Include(t => t.Tokens)
-                                .Include(t => t.Tokenization)
+                                .Include(t => t.TokenizedCorpus)
                                     .ThenInclude(tc => tc!.Corpus)
                                 .Where(e => kvp.Value.Select(ids => ids.Id).Contains(e.Id))
                                 .ForEach(e =>
@@ -289,8 +289,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         {
             var domainEntityContext = new Dictionary<string, string>();
 
-            domainEntityContext.Add("Corpus.DisplayName", tokenComponent.Tokenization!.Corpus!.DisplayName ?? tokenComponent.Tokenization!.Corpus!.Name ?? string.Empty);
-            domainEntityContext.Add("TokenizedCorpus.DisplayName", tokenComponent.Tokenization!.DisplayName ?? tokenComponent.Tokenization!.Corpus!.Name ?? string.Empty);
+            domainEntityContext.Add("Corpus.DisplayName", tokenComponent.TokenizedCorpus!.Corpus!.DisplayName ?? tokenComponent.TokenizedCorpus!.Corpus!.Name ?? string.Empty);
+            domainEntityContext.Add("TokenizedCorpus.DisplayName", tokenComponent.TokenizedCorpus!.DisplayName ?? tokenComponent.TokenizedCorpus!.Corpus!.Name ?? string.Empty);
             AddTokenComponentContext(tokenComponent, bookNumbersToAbbreviations, domainEntityContext);
 
             if (tokenComponent.GetType() == typeof(Models.Token))

@@ -353,7 +353,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     IsInRange = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsRangeStart = table.Column<bool>(type: "INTEGER", nullable: false),
                     IsEmpty = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Created = table.Column<long>(type: "INTEGER", nullable: false)
                 },
@@ -361,8 +361,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 {
                     table.PrimaryKey("PK_VerseRow", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_VerseRow_TokenizedCorpus_TokenizationId",
-                        column: x => x.TokenizationId,
+                        name: "FK_VerseRow_TokenizedCorpus_TokenizedCorpusId",
+                        column: x => x.TokenizedCorpusId,
                         principalTable: "TokenizedCorpus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -450,7 +450,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     TrainingText = table.Column<string>(type: "TEXT", nullable: true),
                     ExtendedProperties = table.Column<string>(type: "TEXT", nullable: true),
                     VerseRowId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    TokenizationId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    TokenizedCorpusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     Discriminator = table.Column<string>(type: "TEXT", nullable: false),
                     BookNumber = table.Column<int>(type: "INTEGER", nullable: true),
                     ChapterNumber = table.Column<int>(type: "INTEGER", nullable: true),
@@ -475,8 +475,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         principalTable: "TokenComponent",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_TokenComponent_TokenizedCorpus_TokenizationId",
-                        column: x => x.TokenizationId,
+                        name: "FK_TokenComponent_TokenizedCorpus_TokenizedCorpusId",
+                        column: x => x.TokenizedCorpusId,
                         principalTable: "TokenizedCorpus",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -980,9 +980,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "TokenCompositeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TokenComponent_TokenizationId",
+                name: "IX_TokenComponent_TokenizedCorpusId",
                 table: "TokenComponent",
-                column: "TokenizationId");
+                column: "TokenizedCorpusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TokenComponent_TrainingText",
@@ -1132,9 +1132,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_VerseRow_TokenizationId",
+                name: "IX_VerseRow_TokenizedCorpusId",
                 table: "VerseRow",
-                column: "TokenizationId");
+                column: "TokenizedCorpusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_VerseRow_UserId",

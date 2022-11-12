@@ -22,9 +22,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Guid VerseRowId { get; set; }
         public virtual VerseRow? VerseRow { get; set; }
 
-        [ForeignKey("TokenizationId")]
-        public Guid TokenizationId { get; set; }
-        public virtual TokenizedCorpus? Tokenization { get; set; }
+        [ForeignKey("TokenizedCorpusId")]
+        public Guid TokenizedCorpusId { get; set; }
+        public virtual TokenizedCorpus? TokenizedCorpus { get; set; }
 
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
         public virtual ICollection<Alignment> SourceAlignments { get; set; }

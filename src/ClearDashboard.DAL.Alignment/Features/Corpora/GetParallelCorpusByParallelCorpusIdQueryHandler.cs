@@ -119,7 +119,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             
                             // FIXME:  We don't have anywhere to put these yet to return them
                             //var sourceCompositeIds = parallelCorpus.TokenComposites
-                            //        .Where(tc => tc.TokenizationId == parallelCorpus.SourceTokenizedCorpusId)
+                            //        .Where(tc => tc.TokenizedCorpusId == parallelCorpus.SourceTokenizedCorpusId)
                             //        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
                             //        .Select(tc => ModelHelper.BuildTokenId(tc));
 
@@ -147,7 +147,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                             // FIXME:  We don't have anywhere to put these yet to return them
                             //var targetCompositeIds = parallelCorpus.TokenComposites
-                            //        .Where(tc => tc.TokenizationId == parallelCorpus.TargetTokenizedCorpusId)
+                            //        .Where(tc => tc.TokenizedCorpusId == parallelCorpus.TargetTokenizedCorpusId)
                             //        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
                             //        .Select(tc => ModelHelper.BuildTokenId(tc));
 

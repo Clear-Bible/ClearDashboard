@@ -67,7 +67,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             if (!ProjectDbContext!.TokenComponents
-                .Where(tc => tc.TokenizationId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
+                .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id))
             {
                 return new RequestResult<object>
@@ -78,7 +78,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             if (!ProjectDbContext!.TokenComponents
-                .Where(tc => tc.TokenizationId == alignmentSet!.ParallelCorpus!.TargetTokenizedCorpusId)
+                .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.TargetTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id))
             {
                 return new RequestResult<object>

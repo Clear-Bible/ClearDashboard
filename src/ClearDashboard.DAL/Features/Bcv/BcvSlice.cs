@@ -48,7 +48,7 @@ namespace ClearDashboard.DataAccessLayer.Features.Bcv
                 .FirstOrDefault();
 
             var verses = ProjectDbContext.Tokens
-                .Where(tc => tc.TokenizationId == tokenizedCorpusId)
+                .Where(tc => tc.TokenizedCorpusId == tokenizedCorpusId)
                 .Select(tc => new { tc.BookNumber, tc.ChapterNumber, tc.VerseNumber })
                 .Distinct()
                 .Select(bcv => new

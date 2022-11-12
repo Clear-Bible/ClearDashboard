@@ -20,9 +20,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool IsRangeStart { get; set; }
         public bool IsEmpty { get; set; }
 
-        [ForeignKey("TokenizationId")]
-        public Guid TokenizationId { get; set; }
-        public virtual TokenizedCorpus? Tokenization { get; set; }
+        [ForeignKey("TokenizedCorpusId")]
+        public Guid TokenizedCorpusId { get; set; }
+        public virtual TokenizedCorpus? TokenizedCorpus { get; set; }
         public virtual ICollection<TokenComponent> TokenComponents { get; set; }
     }
 }

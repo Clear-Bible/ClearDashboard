@@ -37,7 +37,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var bookNumberAsPaddedString = $"{bookNumberForAbbreviation:000}";
             var verseRows = ProjectDbContext.VerseRows
                 .Include(vr => vr.TokenComponents)
-                .Where(vr => vr.TokenizationId == request.TokenizedCorpusId.Id)
+                .Where(vr => vr.TokenizedCorpusId == request.TokenizedCorpusId.Id)
                 .Where(vr => vr.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
                 .OrderBy(vr => vr.BookChapterVerse)
                 .ToList();

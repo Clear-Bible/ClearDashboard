@@ -36,7 +36,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
     {
         //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
         // pull out its parent CorpusId
-        //Then iterate tokenization.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
+        //Then iterate tokenizedCorpus.Corpus(parent).Verses(child) and find unique bookAbbreviations and return as IEnumerable<string>
         var tokenizedCorpus =
             ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext)
             .Include(tc => tc.Corpus)
@@ -54,7 +54,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         }
 
         var bookNumbers = ProjectDbContext.Tokens
-             .Where(tc => tc.TokenizationId == request.TokenizedTextCorpusId.Id)
+             .Where(tc => tc.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
              .Select(tc => tc.BookNumber).Distinct();
 
         var bookNumbersToAbbreviations =

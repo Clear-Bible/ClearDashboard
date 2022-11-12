@@ -68,7 +68,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(tr => tr.TranslationSetId == translationSet.Id)
                 .Where(tr => tr.SourceTokenComponent!.TrainingText == requestTranslation.SourceToken.TrainingText);
             var tokenComponents = ProjectDbContext!.TokenComponents
-                .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                .Where(t => t.TokenizedCorpusId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                 .Where(t => t.TrainingText == requestTranslation.SourceToken.TrainingText);
 
             var exactMatchFound = false;
@@ -136,9 +136,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             else
             {
                 var tokenComponent = ProjectDbContext!.TokenComponents
-                    .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                    .Where(t => t.TokenizedCorpusId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                     .Where(t => t.Id == rTokenId.Id)
-                    //.Where(t => t.Tokenization!.SourceParallelCorpora
+                    //.Where(t => t.TokenizedCorpus!.SourceParallelCorpora
                     //    .Any(spc => spc.TranslationSets
                     //        .Any(ts => ts.Id == request.TranslationSetId.Id)))
                     .FirstOrDefault();

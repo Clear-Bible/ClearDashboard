@@ -229,7 +229,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
-            modelBuilder.Entity<Token>().HasIndex(e => e.TokenizationId);
+            modelBuilder.Entity<Token>().HasIndex(e => e.TokenizedCorpusId);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.ChapterNumber);
             modelBuilder.Entity<Token>().HasIndex(e => e.VerseNumber);

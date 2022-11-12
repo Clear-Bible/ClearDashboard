@@ -131,7 +131,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 using var tokenComponentInsertCommand = CreateTokenComponentInsertCommand(connection);
 
                 await InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, cancellationToken);
-                var tokenizationId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
+                var tokenizedCorpusId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
 
                 foreach (var bookId in bookIds)
                 {
@@ -163,7 +163,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         throw new Exception($"TokensTextRow for book '{bookId}' contains CompositeToken(s) having child tokens from more than one book-chapter-verse");
                     }
 
-                    var (verseRows, btTokenCount) = GetVerseRows(ttrs, tokenizationId);
+                    var (verseRows, btTokenCount) = GetVerseRows(ttrs, tokenizedCorpusId);
 
                     await InsertVerseRowsAsync(
                             verseRows,
@@ -178,7 +178,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 await transaction.CommitAsync(cancellationToken);
 
                 var tokenizedCorpusDb = ModelHelper.AddIdIncludesTokenizedCorpaQuery(ProjectDbContext!)
-                    .First(tc => tc.Id == tokenizationId);
+                    .First(tc => tc.Id == tokenizedCorpusId);
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
                     ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
                     new CorpusId(corpus.Id),
@@ -186,7 +186,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     bookIds,
                     versification);
 
-//               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizationId));
+//               var tokenizedTextCorpus = await TokenizedTextCorpus.Get(_mediator, new TokenizedTextCorpusId(tokenizedCorpusId));
                 return (tokenizedTextCorpus, tokenCount);
             }
             finally
@@ -198,7 +198,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
         }
 
-        private static (IEnumerable<Models.VerseRow>, int) GetVerseRows(IEnumerable<TokensTextRow> ttrs, Guid tokenizationId)
+        private static (IEnumerable<Models.VerseRow>, int) GetVerseRows(IEnumerable<TokensTextRow> ttrs, Guid tokenizedCorpusId)
         {
             var tokenCount = 0;
             var verseRows = ttrs
@@ -214,7 +214,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     return new Models.VerseRow
                     {
                         Id = verseRowId,
-                        TokenizationId = tokenizationId,
+                        TokenizedCorpusId = tokenizedCorpusId,
                         BookChapterVerse = $"{b:000}{c:000}{v:000}",
                         OriginalText = ttr.OriginalText,
                         IsSentenceStart = ttr.IsSentenceStart,
@@ -231,7 +231,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     {
                                         Id = compositeToken.TokenId.Id,
                                         VerseRowId = verseRowId,
-                                        TokenizationId = tokenizationId,
+                                        TokenizedCorpusId = tokenizedCorpusId,
                                         TrainingText = compositeToken.TrainingText,
                                         ExtendedProperties = compositeToken.ExtendedProperties,
                                         EngineTokenId = compositeToken.TokenId.ToString(),
@@ -243,7 +243,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                                 {
                                                     Id = childToken.TokenId.Id,
                                                     VerseRowId = verseRowId,
-                                                    TokenizationId = tokenizationId,
+                                                    TokenizedCorpusId = tokenizedCorpusId,
                                                     TrainingText = childToken.TrainingText,
                                                     EngineTokenId = childToken.TokenId.ToString(),
                                                     BookNumber = childToken.TokenId.BookNumber,
@@ -264,7 +264,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     {
                                         Id = token.TokenId.Id,
                                         VerseRowId = verseRowId,
-                                        TokenizationId = tokenizationId,
+                                        TokenizedCorpusId = tokenizedCorpusId,
                                         TrainingText = token.TrainingText,
                                         EngineTokenId = token.TokenId.ToString(),
                                         BookNumber = token.TokenId.BookNumber,
@@ -287,7 +287,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private static DbCommand CreateVerseRowInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "BookChapterVerse", "OriginalText", "TokenizationId", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "UserId", "Created" };
+            var columns = new string[] { "Id", "BookChapterVerse", "OriginalText", "TokenizedCorpusId", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.VerseRow), columns);
 
@@ -307,7 +307,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             verseRowCmd.Parameters["@IsInRange"].Value = verseRow.IsInRange;
             verseRowCmd.Parameters["@IsRangeStart"].Value = verseRow.IsRangeStart;
             verseRowCmd.Parameters["@IsEmpty"].Value = verseRow.IsEmpty;
-            verseRowCmd.Parameters["@TokenizationId"].Value = verseRow.TokenizationId;
+            verseRowCmd.Parameters["@TokenizedCorpusId"].Value = verseRow.TokenizedCorpusId;
             verseRowCmd.Parameters["@UserId"].Value = Guid.Empty != verseRow.UserId ? verseRow.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
             verseRowCmd.Parameters["@Created"].Value = converter.ConvertToProvider(verseRow.Created);
 
@@ -317,7 +317,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         private static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizationId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "TokenCompositeId" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "TokenCompositeId" };
 
             ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
 
@@ -366,7 +366,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@EngineTokenId"].Value = token.EngineTokenId;
             componentCmd.Parameters["@TrainingText"].Value = token.TrainingText;
             componentCmd.Parameters["@VerseRowId"].Value = token.VerseRowId;
-            componentCmd.Parameters["@TokenizationId"].Value = token.TokenizationId;
+            componentCmd.Parameters["@TokenizedCorpusId"].Value = token.TokenizedCorpusId;
             componentCmd.Parameters["@Discriminator"].Value = token.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = token.BookNumber;
             componentCmd.Parameters["@ChapterNumber"].Value = token.ChapterNumber;
@@ -385,7 +385,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             componentCmd.Parameters["@TrainingText"].Value = tokenComposite.TrainingText;
             componentCmd.Parameters["@VerseRowId"].Value = tokenComposite.VerseRowId;
             componentCmd.Parameters["@ExtendedProperties"].Value = (tokenComposite.ExtendedProperties != null) ? tokenComposite.ExtendedProperties : DBNull.Value;
-            componentCmd.Parameters["@TokenizationId"].Value = tokenComposite.TokenizationId;
+            componentCmd.Parameters["@TokenizedCorpusId"].Value = tokenComposite.TokenizedCorpusId;
             componentCmd.Parameters["@Discriminator"].Value = tokenComposite.GetType().Name;
             componentCmd.Parameters["@BookNumber"].Value = DBNull.Value;
             componentCmd.Parameters["@ChapterNumber"].Value = DBNull.Value;
