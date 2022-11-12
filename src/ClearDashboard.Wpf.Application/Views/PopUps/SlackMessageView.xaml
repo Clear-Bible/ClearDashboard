@@ -64,9 +64,17 @@
             TextWrapping="Wrap" />
 
         <!--  Row 3  -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal">
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
 
             <iconPacks:PackIconUnicons
+                Grid.Column="0"
                 Width="36"
                 Height="36"
                 Margin="20,0,50,0"
@@ -86,6 +94,7 @@
             </iconPacks:PackIconUnicons>
 
             <iconPacks:PackIconUnicons
+                Grid.Column="0"
                 Width="36"
                 Height="36"
                 Margin="20,0,50,0"
@@ -107,6 +116,7 @@
 
             <Button
                 x:Name="SendMessage"
+                Grid.Column="1"
                 Width="Auto"
                 Margin="10"
                 HorizontalAlignment="Center"
@@ -132,11 +142,21 @@
                     </Style>
                 </Button.Style>
             </Button>
-        </StackPanel>
+
+            <Button
+                x:Name="Close"
+                Grid.Column="2"
+                Margin="0,0,10,0"
+                HorizontalAlignment="Right"
+                Content="{helpers:Localization Close}"
+                Style="{StaticResource MaterialDesignRaisedDarkButton}" />
+        </Grid>
 
         <Border
             Grid.Row="0"
             Grid.RowSpan="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
             Margin="2"
             BorderBrush="{StaticResource IndigoDarkBrush}"
             BorderThickness="2"

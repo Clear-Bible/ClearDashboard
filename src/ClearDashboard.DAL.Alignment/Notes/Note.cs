@@ -19,8 +19,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
             get;
 #if DEBUG
             set;
-#else
-            private set;
+#else 
+            // RELEASE MODIFIED
+            //private set;
+            set;
 #endif
         }
         public string? Text { get; set; }
@@ -51,13 +53,19 @@ namespace ClearDashboard.DAL.Alignment.Notes
 #if DEBUG
         private ObservableCollection<Label> labels_;
 #else
-        private readonly ObservableCollection<Label> labels_;
+        // RELEASE MODIFIED
+        //private readonly ObservableCollection<Label> labels_;
+        private ObservableCollection<Label> labels_;
 #endif
 
         public ObservableCollection<Label> Labels
         {
             get { return labels_; }
 #if DEBUG
+            set { labels_ = value; }
+#else
+            // RELEASE MODIFIED
+            //set { labels_ = value; }
             set { labels_ = value; }
 #endif
         }

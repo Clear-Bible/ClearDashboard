@@ -105,12 +105,21 @@ namespace ClearDashboard.Wpf.Application.Models
             set => Set(ref _verses, value);
         }
 
-        
-        private FontFamily _fontFamily;
-        public FontFamily FontFamily
+
+        #region FontFamily
+
+        private FontFamily _targetFontFamily;
+        public FontFamily TargetFontFamily
         {
-            get => _fontFamily;
-            set => Set(ref _fontFamily, value);
+            get => _targetFontFamily;
+            set => Set(ref _targetFontFamily, value);
+        }
+
+        private FontFamily _sourceFontFamily;
+        public FontFamily SourceFontFamily
+        {
+            get => _sourceFontFamily;
+            set => Set(ref _sourceFontFamily, value);
         }
 
         private FontFamily _translationFontFamily;
@@ -119,6 +128,8 @@ namespace ClearDashboard.Wpf.Application.Models
             get => _translationFontFamily;
             set => Set(ref _translationFontFamily, value);
         }
+
+        #endregion
 
 
         private bool _showTranslation;
