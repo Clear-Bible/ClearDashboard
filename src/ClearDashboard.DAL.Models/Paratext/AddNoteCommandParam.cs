@@ -1,6 +1,4 @@
 ﻿
-using SIL.Scripture;
-
 namespace ClearDashboard.DataAccessLayer.Models
 {
     public class AddNoteCommandParam 
