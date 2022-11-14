@@ -46,7 +46,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             Assert.NotNull(queryResult);
             Assert.True(queryResult.Success);
 
-            Output.WriteLine(queryResult.Data.corpusId.ToString());
+            Output.WriteLine(queryResult.Data.tokenizedTextCorpusId.CorpusId.ToString());
             foreach (var bookId in queryResult.Data.bookIds)
             {
                 Output.WriteLine($"\t{bookId}");

@@ -74,7 +74,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                         break;
 
                     case true when kvp.Key == typeof(CorpusId).Name:
-                        fullIds.AddRange(ProjectDbContext!.Corpa
+                        fullIds.AddRange(ModelHelper.AddIdIncludesCorpaQuery(ProjectDbContext!)
                             .Where(e => kvp.Value.Contains(e.Id))
                             .Select(e => ModelHelper.BuildCorpusId(e)));
                         break;

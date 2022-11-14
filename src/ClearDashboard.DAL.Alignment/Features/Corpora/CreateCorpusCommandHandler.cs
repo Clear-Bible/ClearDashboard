@@ -40,9 +40,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var modelCorpus = new ModelCorpus
             {
                 IsRtl = request.IsRtl,
+                TranslationFontFamily = request.TranslationFontFamily,
                 Name = request.Name,
                 Language = request.Language,
-                ParatextGuid = request.ParatextId,
+                ParatextGuid = request.ParatextId
             };
 
             if (Enum.TryParse<ModelCorpusType>(request.CorpusType, out ModelCorpusType corpusType))
@@ -64,7 +65,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
 #endif
 
-            return new RequestResult<CorpusId>(ModelHelper.BuildCorpusId(modelCorpus));
+            return new RequestResult<CorpusId>(new CorpusId(modelCorpus.Id));
         }
     }
 }

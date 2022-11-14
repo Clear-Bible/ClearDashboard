@@ -1,6 +1,7 @@
 ﻿using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
 using SIL.Machine.Tokenization;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
@@ -17,9 +18,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             Metadata = new Dictionary<string, object>();
         }
 
-        public TokenizedTextCorpusId(Guid id, string? displayName, string? tokenizationFunction, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
+        public TokenizedTextCorpusId(Guid id, CorpusId corpusId, string? displayName, string? tokenizationFunction, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
         {
             Id = id;
+            CorpusId = corpusId;
             DisplayName = displayName;
             TokenizationFunction = tokenizationFunction;
             Metadata = metadata;
@@ -27,6 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             UserId = userId;
         }
 
+        public CorpusId? CorpusId { get; }
         public string? DisplayName { get; set; }
         public string? TokenizationFunction { get; }
         public EngineStringDetokenizer Detokenizer
@@ -50,10 +53,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public bool Equals(TokenizedTextCorpusId? other)
         {
             if (other is null) return false;
-
             if (!IdEquals(other)) return false;
 
-            if (DisplayName != other.DisplayName || 
+            if (CorpusId != other.CorpusId || 
+                DisplayName != other.DisplayName || 
                 TokenizationFunction != other.TokenizationFunction ||
                 Created != other.Created ||
                 UserId != other.UserId)
@@ -71,7 +74,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 mhc ^= (item.Key, item.Value).GetHashCode();
             }
 
-            return HashCode.Combine(Id, DisplayName, TokenizationFunction, Created, UserId, mhc);
+            return HashCode.Combine(Id, CorpusId, DisplayName, TokenizationFunction, Created, UserId, mhc);
         }
         public static bool operator ==(TokenizedTextCorpusId? e1, TokenizedTextCorpusId? e2) => object.Equals(e1, e2);
         public static bool operator !=(TokenizedTextCorpusId? e1, TokenizedTextCorpusId? e2) => !(e1 == e2);

@@ -41,6 +41,7 @@ using System.Windows;
 using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 
 
 // ReSharper disable once CheckNamespace
@@ -535,15 +536,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 surface.Corpora.Add(new SerializedCorpus
                 {
                     CorpusId = corpus.CorpusId.Id.ToString(),
-                    CorpusType = corpus.CorpusType,
-                    Created = corpus.Created,
-                    DisplayName = corpus.DisplayName,
-                    IsRtl = corpus.IsRtl,
-                    Language = corpus.Language,
-                    Name = corpus.Name,
-                    ParatextGuid = corpus.ParatextGuid,
-                    UserId = corpus.UserId?.Id.ToString(),
-                    TranslationFontFamily = corpus.TranslationFontFamily
+                    CorpusType = corpus.CorpusId.CorpusType,
+                    Created = corpus.CorpusId.Created,
+                    DisplayName = corpus.CorpusId.DisplayName,
+                    IsRtl = corpus.CorpusId.IsRtl,
+                    TranslationFontFamily = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
+                    Language = corpus.CorpusId.Language,
+                    Name = corpus.CorpusId.Name,
+                    ParatextGuid = corpus.CorpusId.ParatextGuid,
+                    UserId = corpus.CorpusId.UserId?.Id.ToString()
                 });
             }
 
@@ -607,18 +608,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 foreach (var corpusNode in deserialized.CorpusNodes)
                 {
                     var corpus = new DAL.Alignment.Corpora.Corpus(
-                        corpusId: new CorpusId(corpusNode.CorpusId),
-                        mediator: Mediator,
-                        isRtl: corpusNode.IsRTL,
-                        name: corpusNode.Name,
-                        displayName: "",
-                        language: "",
-                        paratextGuid: corpusNode.ParatextProjectId,
-                        corpusType: corpusNode.CorpusType.ToString(),
-                        metadata: new Dictionary<string, object>(),
-                        created: new DateTimeOffset(),
-                        translationFontFamily: corpusNode.TranslationFontFamily,
-                        userId: new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName ?? string.Empty));
+                        corpusId: new CorpusId(
+                            corpusNode.CorpusId,
+                            isRtl: corpusNode.IsRTL,
+                            translationFontFamily: corpusNode.TranslationFontFamily,
+                            name: corpusNode.Name,
+                            displayName: "",
+                            language: "",
+                            paratextGuid: corpusNode.ParatextProjectId,
+                            corpusType: corpusNode.CorpusType.ToString(),
+                            metadata: new Dictionary<string, object>(),
+                            created: new DateTimeOffset(),
+                            userId: new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName ?? string.Empty)));
 
                     var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
                     var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
@@ -671,19 +672,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 foreach (var corpus in corpora)
                 {
                     this.Corpora.Add(new DAL.Alignment.Corpora.Corpus(
-                        corpusId: new CorpusId(corpus.CorpusId ?? Guid.NewGuid().ToString()),
-                        mediator: Mediator,
-                        isRtl: corpus.IsRtl,
-                        name: corpus.Name,
-                        displayName: corpus.DisplayName,
-                        language: corpus.Language,
-                        paratextGuid: corpus.ParatextGuid,
-                        corpusType: corpus.CorpusType,
-                        metadata: new Dictionary<string, object>(),
-                        created: corpus.Created,
-                        translationFontFamily: corpus.TranslationFontFamily,
-                        userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString(), corpus.UserDisplayName ?? string.Empty)
-                    ));
+                        corpusId: new CorpusId(
+                            id: string.IsNullOrEmpty(corpus.CorpusId) ? Guid.NewGuid() : Guid.Parse(corpus.CorpusId),
+                            isRtl: corpus.IsRtl,
+                            translationFontFamily: corpus.TranslationFontFamily,
+                            name: corpus.Name,
+                            displayName: corpus.DisplayName,
+                            language: corpus.Language,
+                            paratextGuid: corpus.ParatextGuid,
+                            corpusType: corpus.CorpusType,
+                            metadata: new Dictionary<string, object>(),
+                            created: corpus.Created ?? DateTimeOffset.Now,
+                            userId: new UserId(corpus.UserId ?? Guid.NewGuid().ToString(), corpus.UserDisplayName ?? string.Empty))
+                        ));
                 }
             }
 
@@ -757,7 +758,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
                         token: cancellationToken);
 
-                    corpus.TranslationFontFamily = ManuscriptIds.HebrewFontFamily;
+                    corpus.CorpusId.TranslationFontFamily = ManuscriptIds.HebrewFontFamily;
 
                     OnUIThread(() => Corpora.Add(corpus));
 
@@ -896,7 +897,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.GreekManuscriptId,
                         token: cancellationToken);
 
-                    corpus.TranslationFontFamily = ManuscriptIds.GreekFontFamily;
+                    corpus.CorpusId.TranslationFontFamily = ManuscriptIds.GreekFontFamily;
 
                     OnUIThread(() => Corpora.Add(corpus));
 
@@ -1006,7 +1007,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // is this corpus already made for a different tokenization
                         foreach (var corpusNode in Corpora)
                         {
-                            if (corpusNode.ParatextGuid == metadata.Id)
+                            if (corpusNode.CorpusId.ParatextGuid == metadata.Id)
                             {
                                 corpus = corpusNode;
 
@@ -1040,7 +1041,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                  ParatextId: metadata.Id,
                                  token: cancellationToken);
 
-                            corpus.TranslationFontFamily = metadata.FontFamily;
+                            corpus.CorpusId.TranslationFontFamily = metadata.FontFamily;
 #pragma warning restore CS8604
                         }
                         OnUIThread(() =>
@@ -2015,15 +2016,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private CorpusNodeViewModel CreateNode(DAL.Alignment.Corpora.Corpus corpus, Point nodeLocation,
             Tokenizer tokenizer)
         {
-            var node = new CorpusNodeViewModel(corpus.Name ?? string.Empty, EventAggregator, ProjectManager)
+            var node = new CorpusNodeViewModel(corpus.CorpusId.Name ?? string.Empty, EventAggregator, ProjectManager)
             {
                 X = (double.IsNegativeInfinity(nodeLocation.X) || double.IsPositiveInfinity(nodeLocation.X) || double.IsNaN(nodeLocation.X)) ? 150 : nodeLocation.X,
                 Y = (double.IsNegativeInfinity(nodeLocation.Y) || double.IsPositiveInfinity(nodeLocation.Y) || double.IsNaN(nodeLocation.Y)) ? 150 : nodeLocation.Y,
-                CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusType),
-                ParatextProjectId = corpus.ParatextGuid ?? string.Empty,
+                CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusId.CorpusType),
+                ParatextProjectId = corpus.CorpusId.ParatextGuid ?? string.Empty,
                 CorpusId = corpus.CorpusId.Id,
-                IsRTL = corpus.IsRtl,
-                TranslationFontFamily = corpus.TranslationFontFamily,
+                IsRTL = corpus.CorpusId.IsRtl,
+                TranslationFontFamily = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
             };
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", EventAggregator, ProjectManager, node.ParatextProjectId)
@@ -2043,7 +2044,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 TokenizationFriendlyName = EnumHelper.GetDescription(tokenizer),
                 IsSelected = false,
                 TokenizationName = tokenizer.ToString(),
-                TokenizedTextCorpusId = corpus.TranslationFontFamily,
+                TokenizedTextCorpusId = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
             });
 
             //

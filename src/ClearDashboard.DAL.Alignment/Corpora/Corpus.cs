@@ -7,34 +7,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class Corpus
     {
-        public CorpusId CorpusId { get; set; }
-        public bool IsRtl { get; set; }
-        public string? Name { get; set; }
-        public string? DisplayName { get; set; }
-        public string? Language { get; set; }
-        public string? ParatextGuid { get; set; }
-        public string CorpusType { get; set; }
-        public Dictionary<string, object> Metadata { get; set; }
-        public DateTimeOffset? Created { get; }
-        public UserId? UserId { get; set; }
-        public string TranslationFontFamily { get; set; } = "Segoe UI";
+        public const string DefaultTranslationFontFamily = "Segoe UI";
 
-        // FIXME:  Should this be a string?  A different (higher level) enum?
-        public Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? displayName,
-            string? language, string? paratextGuid, string corpusType, Dictionary<string, object> metadata,
-            DateTimeOffset? created, UserId userId, string translationFontFamily)
+        public CorpusId CorpusId { get; set; }
+
+        public Corpus(CorpusId corpusId)
         {
             CorpusId = corpusId;
-            IsRtl = isRtl;
-            Name = name;
-            DisplayName = displayName;
-            Language = language;
-            ParatextGuid = paratextGuid;
-            CorpusType = corpusType;
-            Metadata = metadata;
-            Created = created;
-            UserId = userId;
-            TranslationFontFamily = translationFontFamily;
         }
 
         public async void Update()
@@ -58,9 +37,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string Language,
             string CorpusType,
             string ParatextId,
+            string TranslationFontFamily = DefaultTranslationFontFamily,
             CancellationToken token = default)
         {
-            var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType, ParatextId);
+            var command = new CreateCorpusCommand(IsRtl, TranslationFontFamily, Name, Language, CorpusType, ParatextId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
