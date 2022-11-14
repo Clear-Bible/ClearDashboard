@@ -15,9 +15,9 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
 {
     public class GetBookIdsByTokenizedCorpusIdQueryHandler : IRequestHandler<
         GetBookIdsByTokenizedCorpusIdQuery,
-        RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>>
+        RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>>
     {
-        public Task<RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>>
+        public Task<RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>>
             Handle(GetBookIdsByTokenizedCorpusIdQuery command, CancellationToken cancellationToken)
         {
 
@@ -28,8 +28,8 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
             var corpus = new UsfmFileTextCorpus("usfm.sty", Encoding.UTF8, TestDataHelpers.UsfmTestProjectPath);
             
             return Task.FromResult(
-                new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
-                (result: (corpus.Texts.Select(t => t.Id), new TokenizedTextCorpusId(new Guid()), new CorpusId(new Guid()), ScrVers.RussianOrthodox),
+                new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
+                (result: (corpus.Texts.Select(t => t.Id), new TokenizedTextCorpusId(new Guid()), ScrVers.RussianOrthodox),
                 success: true,
                 message: "successful result from test"));
         }

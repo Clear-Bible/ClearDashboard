@@ -10,13 +10,11 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     public class TokenizedTextCorpus : ScriptureTextCorpus
     {
         public TokenizedTextCorpusId TokenizedTextCorpusId { get; set; }
-        public CorpusId CorpusId { get; set; }
         public override ScrVers Versification { get; }
 
-        internal TokenizedTextCorpus(TokenizedTextCorpusId tokenizedCorpusId, CorpusId corpusId, IMediator mediator, IEnumerable<string> bookAbbreviations, ScrVers versification)
+        internal TokenizedTextCorpus(TokenizedTextCorpusId tokenizedCorpusId, IMediator mediator, IEnumerable<string> bookAbbreviations, ScrVers versification)
         {
             TokenizedTextCorpusId = tokenizedCorpusId;
-            CorpusId = corpusId;
             Versification = versification;
 
             foreach (var bookAbbreviation in bookAbbreviations)
@@ -47,7 +45,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var result = await mediator.Send(command);
             result.ThrowIfCanceledOrFailed(true);
 
-            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, result.Data.corpusId, mediator, result.Data.bookIds, result.Data.versification);
+            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification);
         }
     }
 }

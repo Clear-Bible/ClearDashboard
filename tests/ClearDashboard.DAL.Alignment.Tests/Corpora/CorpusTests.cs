@@ -211,7 +211,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
                 var tokenizedCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(Mediator!, corpusIds.First());
                 Assert.Single(tokenizedCorpusIds);
-                Assert.Equal(tokenizedTextCorpus.CorpusId, corpusIds.First());
+                Assert.Equal(tokenizedTextCorpus.TokenizedTextCorpusId.CorpusId, corpusIds.First());
                 Assert.Equal(tokenizedTextCorpus.TokenizedTextCorpusId, tokenizedCorpusIds.First());
             }
             finally
@@ -362,18 +362,18 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
             Assert.Equal(2, allCorpora.Count());
 
-            var firstCorpus = allCorpora.FirstOrDefault(c => c.Name == "First Corpus");
-            var secondCorpus = allCorpora.FirstOrDefault(c => c.Name == "Second Corpus");
+            var firstCorpus = allCorpora.FirstOrDefault(c => c.CorpusId.Name == "First Corpus");
+            var secondCorpus = allCorpora.FirstOrDefault(c => c.CorpusId.Name == "Second Corpus");
 
-            Assert.Equal("First Corpus", firstCorpus.Name);
-            Assert.Equal("english", firstCorpus.Language);
-            Assert.Equal(Models.CorpusType.Standard.ToString(), firstCorpus.CorpusType);
-            Assert.NotNull(firstCorpus.Metadata);
+            Assert.Equal("First Corpus", firstCorpus.CorpusId.Name);
+            Assert.Equal("english", firstCorpus.CorpusId.Language);
+            Assert.Equal(Models.CorpusType.Standard.ToString(), firstCorpus.CorpusId.CorpusType);
+            Assert.NotNull(firstCorpus.CorpusId.Metadata);
 
-            Assert.Equal("Second Corpus", secondCorpus.Name);
-            Assert.Equal("english", secondCorpus.Language);
-            Assert.Equal(Models.CorpusType.BackTranslation.ToString(), secondCorpus.CorpusType);
-            Assert.NotNull(secondCorpus.Metadata);
+            Assert.Equal("Second Corpus", secondCorpus.CorpusId.Name);
+            Assert.Equal("english", secondCorpus.CorpusId.Language);
+            Assert.Equal(Models.CorpusType.BackTranslation.ToString(), secondCorpus.CorpusId.CorpusType);
+            Assert.NotNull(secondCorpus.CorpusId.Metadata);
         }
     }
 }

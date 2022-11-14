@@ -181,7 +181,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .First(tc => tc.Id == tokenizedCorpusId);
                 var tokenizedTextCorpus = new TokenizedTextCorpus(
                     ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpusDb),
-                    new CorpusId(corpus.Id),
                     _mediator,
                     bookIds,
                     versification);

@@ -18,8 +18,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
 public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHandler<
     GetBookIdsByTokenizedCorpusIdQuery,
-    RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>,
-    (IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
+    RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>,
+    (IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
 {
     private readonly IMediator _mediator;
 
@@ -31,7 +31,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         _mediator = mediator;
     }
 
-    protected override async Task<RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>> GetDataAsync(
+    protected override async Task<RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>> GetDataAsync(
         GetBookIdsByTokenizedCorpusIdQuery request, CancellationToken cancellationToken)
     {
         //DB Impl notes: look at command.TokenizedCorpusId and find in TokenizedCorpus table.
@@ -44,7 +44,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
 
         if (tokenizedCorpus == null)
         {
-            return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
+            return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
             (
                 // NB:  better to return default(T) which is the default on the constructor.
                 //result: (new List<string>(), new CorpusId(new Guid())),
@@ -66,7 +66,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         {
             if (cancellationToken.IsCancellationRequested)
             {
-                return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
+                return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
                 (
                     success: false,
                     message: "Operation canceled",
@@ -76,7 +76,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
 
             if (!bookNumbersToAbbreviations.TryGetValue(bookNumber, out string? bookAbbreviation))
             {
-                return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
+                return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
                 (
                     success: false,
                     message: $"Book number '{bookNumber}' not found in FileGetBooks.BookIds"
@@ -92,11 +92,10 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
             // FIXME - what do I do here to pull the CustomVersData into versification?
         }
 
-        return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
+        return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>
             ((
                 bookAbbreviations, 
                 ModelHelper.BuildTokenizedTextCorpusId(tokenizedCorpus),
-                ModelHelper.BuildCorpusId(tokenizedCorpus),
                 versification
             ));
     }

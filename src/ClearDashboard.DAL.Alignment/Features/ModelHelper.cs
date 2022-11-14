@@ -83,9 +83,36 @@ namespace ClearDashboard.DAL.Alignment.Features
             return $"{token.BookNumber:000}{token.ChapterNumber:000}{token.VerseNumber:000}{token.WordNumber:000}{token.SubwordNumber:000}";
         }
 
+        public static IQueryable<Models.Corpus> AddIdIncludesCorpaQuery(ProjectDbContext projectDbContext)
+        {
+            return projectDbContext.Corpa
+                .Include(e => e.User);
+        }
+
         public static CorpusId BuildCorpusId(Models.Corpus corpus)
         {
-            return new CorpusId(corpus.Id);
+            if (corpus.User == null)
+            {
+                throw new MediatorErrorEngineException("DB Corpus passed to BuildCorpusId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
+
+            return BuildCorpusId(corpus, corpus.User);
+        }
+
+        public static CorpusId BuildCorpusId(Models.Corpus corpus, Models.User user)
+        {
+            return new CorpusId(
+                corpus.Id,
+                corpus.IsRtl,
+                corpus.TranslationFontFamily,
+                corpus.Name,
+                corpus.DisplayName,
+                corpus.Language,
+                corpus.ParatextGuid,
+                corpus.CorpusType.ToString(),
+                corpus.Metadata,
+                corpus.Created,
+                BuildUserId(user));
         }
         public static CorpusId BuildCorpusId(Models.TokenizedCorpus tokenizedCorpus)
         {
@@ -103,23 +130,36 @@ namespace ClearDashboard.DAL.Alignment.Features
 
         public static IQueryable<Models.TokenizedCorpus> AddIdIncludesTokenizedCorpaQuery(ProjectDbContext projectDbContext)
         {
-            return projectDbContext.TokenizedCorpora.Include(e => e.User);
+            return projectDbContext.TokenizedCorpora
+                .Include(e => e.User)
+                .Include(e => e.Corpus)
+                    .ThenInclude(c => c!.User);
         }
 
         public static TokenizedTextCorpusId BuildTokenizedTextCorpusId(Models.TokenizedCorpus tokenizedCorpus)
         {
+            if (tokenizedCorpus.Corpus == null)
+            {
+                throw new MediatorErrorEngineException("DB TokenizedCorpus passed to BuildTokenizedTextCorpusId does not contain a Corpus.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
+
             if (tokenizedCorpus.User == null)
             {
                 throw new MediatorErrorEngineException("DB TokenizedCorpus passed to BuildTokenizedTextCorpusId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
             }
+            return BuildTokenizedTextCorpusId(tokenizedCorpus, tokenizedCorpus.Corpus, tokenizedCorpus.User);
+        }
 
+        public static TokenizedTextCorpusId BuildTokenizedTextCorpusId(Models.TokenizedCorpus tokenizedCorpus, Models.Corpus corpus, Models.User user)
+        {
             return new TokenizedTextCorpusId(
                 tokenizedCorpus.Id,
+                BuildCorpusId(corpus),
                 tokenizedCorpus.DisplayName,
                 tokenizedCorpus.TokenizationFunction,
                 tokenizedCorpus.Metadata,
                 tokenizedCorpus.Created,
-                BuildUserId(tokenizedCorpus.User));
+                BuildUserId(user));
         }
 
         public static IQueryable<Models.ParallelCorpus> AddIdIncludesParallelCorpaQuery(ProjectDbContext projectDbContext)
@@ -128,8 +168,14 @@ namespace ClearDashboard.DAL.Alignment.Features
                 .Include(e => e.User)
                 .Include(e => e.SourceTokenizedCorpus)
                     .ThenInclude(tc => tc!.User)
+                .Include(e => e.SourceTokenizedCorpus)
+                    .ThenInclude(tc => tc!.Corpus)
+                        .ThenInclude(c => c!.User)
                 .Include(e => e.TargetTokenizedCorpus)
-                    .ThenInclude(tc => tc!.User);
+                    .ThenInclude(tc => tc!.User)
+                .Include(e => e.TargetTokenizedCorpus)
+                    .ThenInclude(tc => tc!.Corpus)
+                        .ThenInclude(c => c!.User);
         }
 
         public static ParallelCorpusId BuildParallelCorpusId(Models.ParallelCorpus parallelCorpus)
@@ -144,7 +190,7 @@ namespace ClearDashboard.DAL.Alignment.Features
             }
             if (parallelCorpus.User == null)
             {
-                throw new MediatorErrorEngineException("DB ParallelCorpus passed to BuildTokenizedTextCorpusId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
+                throw new MediatorErrorEngineException("DB ParallelCorpus passed to BuildParallelCorpusId does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
             }
 
             return BuildParallelCorpusId(parallelCorpus, parallelCorpus.SourceTokenizedCorpus, parallelCorpus.TargetTokenizedCorpus, parallelCorpus.User);
@@ -169,8 +215,16 @@ namespace ClearDashboard.DAL.Alignment.Features
                     .ThenInclude(pc => pc!.SourceTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
                 .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
+                        .ThenInclude(tc => tc!.Corpus)
+                            .ThenInclude(c => c!.User)
+                .Include(ast => ast.ParallelCorpus)
                     .ThenInclude(pc => pc!.TargetTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.TargetTokenizedCorpus)
+                        .ThenInclude(tc => tc!.Corpus)
+                            .ThenInclude(c => c!.User)
                 .Include(ast => ast.ParallelCorpus)
                     .ThenInclude(pc => pc!.User)
                 .Include(ast => ast.User);
@@ -257,8 +311,16 @@ namespace ClearDashboard.DAL.Alignment.Features
                     .ThenInclude(pc => pc!.SourceTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
                 .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.SourceTokenizedCorpus)
+                        .ThenInclude(tc => tc!.Corpus)
+                            .ThenInclude(c => c!.User)
+                .Include(ast => ast.ParallelCorpus)
                     .ThenInclude(pc => pc!.TargetTokenizedCorpus)
                         .ThenInclude(tc => tc!.User)
+                .Include(ast => ast.ParallelCorpus)
+                    .ThenInclude(pc => pc!.TargetTokenizedCorpus)
+                        .ThenInclude(tc => tc!.Corpus)
+                            .ThenInclude(c => c!.User)
                 .Include(ast => ast.ParallelCorpus)
                     .ThenInclude(pc => pc!.User)
                 .Include(ast => ast.User);
