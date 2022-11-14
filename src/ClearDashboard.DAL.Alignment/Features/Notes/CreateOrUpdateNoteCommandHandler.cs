@@ -86,7 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
                 ProjectDbContext.Notes.Add(note);
             }
-            
+
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
             note = ProjectDbContext.Notes.Include(n => n.User).First(n => n.Id == note.Id);
 

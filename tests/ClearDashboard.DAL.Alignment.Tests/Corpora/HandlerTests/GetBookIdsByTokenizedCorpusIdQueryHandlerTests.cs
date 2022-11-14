@@ -91,17 +91,29 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandlerTests : TestBase
             var tokenizedCorpus = ProjectDbContext!.TokenizedCorpora.FirstOrDefault(tc => tc.Id == tokenizedTextCorpus.TokenizedTextCorpusId.Id);
             Assert.NotNull(tokenizedCorpus);
 
+            var verseRow = new Models.VerseRow()
+            {
+                BookChapterVerse = "999001001",
+                OriginalText = "booboo",
+                IsSentenceStart = true,
+                IsInRange = true,
+                IsRangeStart = true,
+                IsEmpty = false
+            };
+
             // Add token with bogus book number:
-            tokenizedCorpus!.TokenComponents.Add(
-                new Models.Token
-                {
-                    BookNumber = 9999,
-                    ChapterNumber = 1,
-                    VerseNumber = 1,
-                    WordNumber = 1,
-                    SubwordNumber = 1
-                }
-            );
+            var token = new Models.Token
+            {
+                BookNumber = 999,
+                ChapterNumber = 1,
+                VerseNumber = 1,
+                WordNumber = 1,
+                SubwordNumber = 1
+            };
+
+            verseRow.TokenComponents.Add(token);
+            tokenizedCorpus!.VerseRows.Add(verseRow);
+            tokenizedCorpus!.TokenComponents.Add(token);
 
             // Commit to database:
             await ProjectDbContext.SaveChangesAsync();

@@ -56,7 +56,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //[Description("Latin Word Detokenizer")]
         //LatinWordDetokenizer,
 
-        [Description("Latin Word Tokenization")]
+        [Description("Latin Word TokenizedCorpus")]
         LatinWordTokenizer,
 
         //[Description("Line Segment Tokenizer")]
@@ -77,7 +77,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //[Description("Whitespace Detokenizer")]
         //WhitespaceDetokenizer,
 
-        [Description("Whitespace Tokenization")]
+        [Description("Whitespace TokenizedCorpus")]
         // ReSharper disable once UnusedMember.Global
         WhitespaceTokenizer,
 
@@ -85,7 +85,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //ZwspWordDetokenizer,
 
         // ReSharper disable once UnusedMember.Global
-        [Description("Zwsp Word Tokenization")]
+        [Description("Zwsp Word TokenizedCorpus")]
         ZwspWordTokenizer
     }
 
@@ -1521,14 +1521,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     bool showInNewWindow = corpusNodeMenuItem.Id == "ShowVerseId";
 
                     var corpusId = Guid.Parse(tokenization.CorpusId);
-                    var tokenizationId = Guid.Parse(tokenization.TokenizedTextCorpusId);
+                    var tokenizedTextCorpusId = Guid.Parse(tokenization.TokenizedTextCorpusId);
                     await EventAggregator.PublishOnUIThreadAsync(
                         new ShowTokenizationWindowMessage(
                             corpusNodeViewModel.ParatextProjectId,
                             ProjectName: corpusNodeViewModel.Name,
                             TokenizationType: corpusNodeMenuItem.Tokenizer,
                             CorpusId: corpusId,
-                            TokenizedTextCorpusId: tokenizationId,
+                            TokenizedTextCorpusId: tokenizedTextCorpusId,
                             corpusNodeViewModel.CorpusType,
                             //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             corpusNodeViewModel.IsRTL,

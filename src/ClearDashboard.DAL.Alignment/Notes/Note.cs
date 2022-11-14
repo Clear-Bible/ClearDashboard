@@ -3,6 +3,7 @@ using System.Linq;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Notes;
 using MediatR;
 
@@ -173,15 +174,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new CreateOrUpdateNoteCommand(NoteId, Text ?? string.Empty, AbbreviatedText, noteStatus_, ThreadId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                NoteId = result.Data!;
-                return this;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            NoteId = result.Data!;
+            return this;
         }
 
         public async Task<Label> CreateAssociateLabel(IMediator mediator, string labelText, CancellationToken token = default)
@@ -229,14 +225,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new CreateLabelNoteAssociationCommand(label.LabelId, NoteId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                labels_.Add(label);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
+
+            labels_.Add(label);
         }
 
         /// <summary>
@@ -272,14 +263,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new DeleteLabelNoteAssociationCommand(label.LabelId, NoteId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                labels_.Remove(labelMatch);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
+                
+            labels_.Remove(labelMatch);
         }
 
         public async Task AssociateDomainEntity(IMediator mediator, IId domainEntityId, CancellationToken token = default)
@@ -297,14 +283,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new CreateNoteDomainEntityAssociationCommand(NoteId, domainEntityId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                domainEntityIds_.Add(domainEntityId);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
+
+            domainEntityIds_.Add(domainEntityId);
         }
 
         public async Task DetachDomainEntity(IMediator mediator, IId domainEntityId, CancellationToken token = default)
@@ -322,14 +303,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new DeleteNoteDomainEntityAssociationCommand(NoteId, domainEntityId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                domainEntityIds_.Remove(domainEntityId);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
+
+            domainEntityIds_.Remove(domainEntityId);
         }
 
         public async Task Delete(IMediator mediator, CancellationToken token = default)
@@ -342,10 +318,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new DeleteNoteAndAssociationsByNoteIdCommand(NoteId);
 
             var result = await mediator.Send(command, token);
-            if (!result.Success)
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
         }
 
         public static async Task<Note> Get(
@@ -356,14 +329,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetNoteByNoteIdQuery(noteId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public static async Task<IEnumerable<Note>> GetAllNotes(
@@ -373,14 +341,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetNotesByDomainEntityIIdsQuery(null);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public static async Task<IOrderedEnumerable<Note>> GetNotesInThread(
@@ -391,14 +354,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetNotesInThreadQuery(threadId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public static async Task<IEnumerable<IId>> GetFullDomainEntityIds(
@@ -409,14 +367,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetFullDomainEntityIdsByIIdsQuery(domainEntityIIds);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         /// <summary>
@@ -435,14 +388,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetDomainEntityContextsByIIdsQuery(domainEntityIIds);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         /// <summary>
@@ -464,31 +412,26 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetNotesByDomainEntityIIdsQuery(domainEntityIIds);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
+            result.ThrowIfCanceledOrFailed(true);
+
+            var iidNoteGroups = result.Data!
+                .Where(note => note.DomainEntityIds.Any())
+                .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
+                .GroupBy(pair => pair.iid, new IIdEqualityComparer());
+
+            if (domainEntityIIds is not null && domainEntityIIds.Any())
             {
-                var iidNoteGroups = result.Data!
-                    .Where(note => note.DomainEntityIds.Any())
-                    .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
-                    .GroupBy(pair => pair.iid, new IIdEqualityComparer());
-
-                if (domainEntityIIds is not null && domainEntityIIds.Any())
-                {
-                    iidNoteGroups = iidNoteGroups.Where(g => domainEntityIIds.Select(d => d.Id).Contains(g.Key.Id));
-                }
-
-                var domainEntityNoteIds = iidNoteGroups
-                    .ToDictionary(
-                        g => g.Key,
-                        g => g.Select(iidNote => iidNote.note.NoteId!),
-                        new IIdEqualityComparer()
-                    );
-
-                return domainEntityNoteIds;
+                iidNoteGroups = iidNoteGroups.Where(g => domainEntityIIds.Select(d => d.Id).Contains(g.Key.Id));
             }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+
+            var domainEntityNoteIds = iidNoteGroups
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(iidNote => iidNote.note.NoteId!),
+                    new IIdEqualityComparer()
+                );
+
+            return domainEntityNoteIds;
         }
 
         /// <summary>
@@ -541,43 +484,38 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetNotesByDomainEntityIIdsQuery(null);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                var domainEntityIdNotesThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
+            result.ThrowIfCanceledOrFailed(true);
 
-                var idNotes = domainEntityIdNotesThreads
-                    .ToDictionary(
-                        iidNotes => iidNotes.Key,
-                        iidNotes => iidNotes.Value
-                            .SelectMany(kvp => kvp.Value
-                                .Append(kvp.Key)
-                                .OrderBy(note => note.NoteId!.Created)),
-                    new IIdEqualityComparer());
-                // result.Data is in the form:  IEnumerable<Note>
-                // This linq uses SelectMany to extract out note / domain entity id pairs,
-                // groups them by domain entity id (using an IIdEquatable comparer) and writes
-                // the resulting IIdEquatable, INumerable<Note> groups to a dictionary:
-                //var idNotes = result.Data!
-                //    .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
-                //    .GroupBy(pair => pair.iid, new IIdEqualityComparer())
-                //    .ToDictionary(
-                //        g => g.Key!,
-                //        g => g.Select(g => g.note),
-                //        new IIdEqualityComparer());
+            var domainEntityIdNotesThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
 
-                // result.Data is in the form:  Dictionary<Note, IdEquatableCollection>
-                // This linq reverses that, grouping the appropriate Note references
-                // under their associated IIdEquatable(s):
-                //var idNotes = result.Data!
-                //    .SelectMany(nd => nd.Value, (nd, iid) => new { iid, note = nd.Key })
-                //    .GroupBy(pair => pair.iid)
-                //    .ToDictionary(g => g.Key, g => g.Select(g => g.note) /*.ToList() as ICollection<Note>*/);
-                return idNotes;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            var idNotes = domainEntityIdNotesThreads
+                .ToDictionary(
+                    iidNotes => iidNotes.Key,
+                    iidNotes => iidNotes.Value
+                        .SelectMany(kvp => kvp.Value
+                            .Append(kvp.Key)
+                            .OrderBy(note => note.NoteId!.Created)),
+                new IIdEqualityComparer());
+            // result.Data is in the form:  IEnumerable<Note>
+            // This linq uses SelectMany to extract out note / domain entity id pairs,
+            // groups them by domain entity id (using an IIdEquatable comparer) and writes
+            // the resulting IIdEquatable, INumerable<Note> groups to a dictionary:
+            //var idNotes = result.Data!
+            //    .SelectMany(note => note.DomainEntityIds, (note, iid) => new { iid, note })
+            //    .GroupBy(pair => pair.iid, new IIdEqualityComparer())
+            //    .ToDictionary(
+            //        g => g.Key!,
+            //        g => g.Select(g => g.note),
+            //        new IIdEqualityComparer());
+
+            // result.Data is in the form:  Dictionary<Note, IdEquatableCollection>
+            // This linq reverses that, grouping the appropriate Note references
+            // under their associated IIdEquatable(s):
+            //var idNotes = result.Data!
+            //    .SelectMany(nd => nd.Value, (nd, iid) => new { iid, note = nd.Key })
+            //    .GroupBy(pair => pair.iid)
+            //    .ToDictionary(g => g.Key, g => g.Select(g => g.note) /*.ToList() as ICollection<Note>*/);
+            return idNotes;
         }
 
         /// <summary>
@@ -603,16 +541,10 @@ namespace ClearDashboard.DAL.Alignment.Notes
             var command = new GetNotesByDomainEntityIIdsQuery(null);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {    
-                var domainEntityIdNotesAndThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
-                return domainEntityIdNotesAndThreads;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
 
+            var domainEntityIdNotesAndThreads = ToDomainEntityIdNotesThreads(result.Data!, domainEntityIIds);
+            return domainEntityIdNotesAndThreads;
         }
 
         private static Dictionary<IId, Dictionary<Note, IEnumerable<Note>>> ToDomainEntityIdNotesThreads(

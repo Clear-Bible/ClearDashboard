@@ -37,12 +37,12 @@ public class GetCorpusByCorpusIdQueryHandlerTests : TestBase
             Assert.True(createResult.Success);
             Assert.NotNull(createResult.Data);
 
-            var corpus = createResult.Data!;
+            var corpusId = createResult.Data!;
 
             // Clear ProjectDbContext:
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var query = new GetCorpusByCorpusIdQuery(corpus.CorpusId);
+            var query = new GetCorpusByCorpusIdQuery(corpusId);
             var queryResult = await Mediator!.Send(query);
 
             Assert.True(queryResult.Success);

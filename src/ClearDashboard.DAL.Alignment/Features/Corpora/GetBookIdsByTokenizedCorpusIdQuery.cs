@@ -1,9 +1,10 @@
 ﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS.Features;
+using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetBookIdsByTokenizedCorpusIdQuery : ProjectRequestQuery<(IEnumerable<string> bookIds, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId)>
+    public record GetBookIdsByTokenizedCorpusIdQuery : ProjectRequestQuery<(IEnumerable<string> bookIds, TokenizedTextCorpusId tokenizedTextCorpusId, CorpusId corpusId, ScrVers versification)>
     {
         public GetBookIdsByTokenizedCorpusIdQuery(TokenizedTextCorpusId tokenizedTextCorpusId)
         {

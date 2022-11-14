@@ -2,7 +2,9 @@
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DAL.CQRS;
 using MediatR;
 using System.Collections;
 
@@ -31,14 +33,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             if (UsingTranslationModel)
             {
                 var result = await mediator_.Send(new GetTranslationSetModelEntryQuery(TranslationSetId, token.TrainingText));
-                if (result.Success)
-                {
-                    return result.Data;
-                }
-                else
-                {
-                    throw new MediatorErrorEngineException(result.Message);
-                }
+                result.ThrowIfCanceledOrFailed();
+
+                return result.Data;
             }
             else
             {
@@ -75,14 +72,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public async Task<IEnumerable<Translation>> GetTranslations(IEnumerable<TokenId> sourceTokenIds, CancellationToken token = default)
         {
             var result = await mediator_.Send(new GetTranslationsByTranslationSetIdAndTokenIdsQuery(TranslationSetId, sourceTokenIds), token);
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         /// <summary>
@@ -94,14 +86,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public async Task PutTranslation(Translation translation, string translationActionType, CancellationToken token = default)
         {
             var result = await mediator_.Send(new PutTranslationSetTranslationCommand(TranslationSetId, translation, translationActionType), token);
-            if (result.Success)
-            {
-                return;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
         }
 
         public async void Update(CancellationToken token = default)
@@ -113,14 +98,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
             GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
             var result = await mediator.Send(new GetAllTranslationSetIdsQuery(parallelCorpusId, userId));
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public static async Task<TranslationSet> Get(
@@ -130,20 +110,15 @@ namespace ClearDashboard.DAL.Alignment.Translation
             var command = new GetTranslationSetByTranslationSetIdQuery(translationSetId);
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                var data = result.Data;
-                return new TranslationSet(
-                    data.translationSetId,
-                    data.parallelCorpusId,
-                    data.alignmentSetId,
-                    data.usingTranslationModel,
-                    mediator);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            var data = result.Data;
+            return new TranslationSet(
+                data.translationSetId,
+                data.parallelCorpusId,
+                data.alignmentSetId,
+                data.usingTranslationModel,
+                mediator);
         }
 
         /// <summary>
@@ -170,16 +145,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 displayName,
                 //smtModel,
                 metadata,
-                parallelCorpusId), token);
+            parallelCorpusId), token);
 
-            if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
-            {
-                return createTranslationSetCommandResult.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(createTranslationSetCommandResult.Message);
-            }
+            createTranslationSetCommandResult.ThrowIfCanceledOrFailed(true);
+
+            return createTranslationSetCommandResult.Data!;
         }
 
         internal TranslationSet(

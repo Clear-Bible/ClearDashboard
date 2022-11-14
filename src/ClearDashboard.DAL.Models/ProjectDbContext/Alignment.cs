@@ -2,7 +2,7 @@
 
 namespace ClearDashboard.DataAccessLayer.Models;
 
-public class Alignment : IdentifiableEntity
+public class Alignment : SynchronizableTimestampedEntity
 {
     public Guid SourceTokenComponentId { get; set; }
     public Guid TargetTokenComponentId { get; set; }

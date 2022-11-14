@@ -14,7 +14,7 @@ using System.Diagnostics;
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
     public class CreateCorpusCommandHandler : ProjectDbContextCommandHandler<CreateCorpusCommand,
-        RequestResult<Corpus>, Corpus>
+        RequestResult<CorpusId>, CorpusId>
     {
         private readonly IMediator _mediator;
 
@@ -26,7 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<Corpus>> SaveDataAsync(
+        protected override async Task<RequestResult<CorpusId>> SaveDataAsync(
             CreateCorpusCommand request, CancellationToken cancellationToken)
         {
 #if DEBUG
@@ -61,18 +61,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
 #if DEBUG
             sw.Stop();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Save corpus (end)");
-            sw.Restart();
-#endif
-
-            var corpus = await Corpus.Get(_mediator, ModelHelper.BuildCorpusId(modelCorpus));
-
-#if DEBUG
-            sw.Stop();
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end)");
 #endif
 
-            return new RequestResult<Corpus>(corpus);
+            return new RequestResult<CorpusId>(ModelHelper.BuildCorpusId(modelCorpus));
         }
     }
 }

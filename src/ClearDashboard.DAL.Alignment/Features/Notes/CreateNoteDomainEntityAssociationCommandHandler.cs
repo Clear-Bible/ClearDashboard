@@ -29,44 +29,33 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         protected override async Task<RequestResult<NoteDomainEntityAssociationId>> SaveDataAsync(CreateNoteDomainEntityAssociationCommand request,
             CancellationToken cancellationToken)
         {
-            try
-            {
-                var (name, guid) = request.DomainEntityId.GetNameAndId();
+            var (name, guid) = request.DomainEntityId.GetNameAndId();
 
-                var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
-                    .FirstOrDefault(
-                        nd => nd.NoteId == request.NoteId.Id && 
-                        nd.DomainEntityIdGuid == guid
-                    );
-
-                if (noteDomainEntityAssociation == null)
-                {
-                    noteDomainEntityAssociation = new Models.NoteDomainEntityAssociation
-                    {
-                        NoteId = request.NoteId.Id,
-                        DomainEntityIdName = name,
-                        DomainEntityIdGuid = guid
-                    };
-
-                    ProjectDbContext.NoteDomainEntityAssociations.Add(noteDomainEntityAssociation);
-                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-                }
-                else if (name != noteDomainEntityAssociation.DomainEntityIdName)
-                {
-                    noteDomainEntityAssociation.DomainEntityIdName = name;
-                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-                }
-
-                return new RequestResult<NoteDomainEntityAssociationId>(new NoteDomainEntityAssociationId(noteDomainEntityAssociation.Id));
-            }
-            catch (EngineException ex)
-            {
-                return new RequestResult<NoteDomainEntityAssociationId>
-                (
-                    success: false,
-                    message: $"Exception type: {ex.GetType().Name}, having message: {ex.Message}"
+            var noteDomainEntityAssociation = ProjectDbContext!.NoteDomainEntityAssociations
+                .FirstOrDefault(
+                    nd => nd.NoteId == request.NoteId.Id && 
+                    nd.DomainEntityIdGuid == guid
                 );
+
+            if (noteDomainEntityAssociation == null)
+            {
+                noteDomainEntityAssociation = new Models.NoteDomainEntityAssociation
+                {
+                    NoteId = request.NoteId.Id,
+                    DomainEntityIdName = name,
+                    DomainEntityIdGuid = guid
+                };
+
+                ProjectDbContext.NoteDomainEntityAssociations.Add(noteDomainEntityAssociation);
+                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
             }
+            else if (name != noteDomainEntityAssociation.DomainEntityIdName)
+            {
+                noteDomainEntityAssociation.DomainEntityIdName = name;
+                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            }
+
+            return new RequestResult<NoteDomainEntityAssociationId>(new NoteDomainEntityAssociationId(noteDomainEntityAssociation.Id));
         }
     }
 }

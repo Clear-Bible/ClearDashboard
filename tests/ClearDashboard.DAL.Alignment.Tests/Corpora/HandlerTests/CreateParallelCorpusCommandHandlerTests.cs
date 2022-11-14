@@ -72,15 +72,18 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             var command =
                 new CreateParallelCorpusCommand(new TokenizedTextCorpusId(sourceTokenizedCorpusId),
                     new TokenizedTextCorpusId(targetTokenizedCorpusId), verseMappings, "awesome parallel corpus");
-            var result = await Mediator.Send(command);
+            var createResult = await Mediator.Send(command);
 
             ProjectDbContext.ChangeTracker.Clear();
 
             // General assertions
-            Assert.NotNull(result);
-            Assert.True(result.Success);
-            Assert.Equal("Success", result.Message);
-            Assert.NotNull(result.Data);
+            Assert.NotNull(createResult);
+            Assert.True(createResult.Success);
+            Assert.Equal("Success", createResult.Message);
+            Assert.NotNull(createResult.Data);
+
+            var returnedParallelCorpus = await ParallelCorpus.Get(Mediator, createResult.Data);
+            Assert.NotNull(returnedParallelCorpus);
 
             // Validate persisted ParallelCorpus data
 
@@ -101,7 +104,6 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.Equal("New Testament 2", theParallelCorporaEntry.TargetTokenizedCorpus?.Corpus?.Name);
 
             // Validate returned ParallelCorpus Data
-            var returnedParallelCorpus = result.Data;
             Assert.NotNull(returnedParallelCorpus);
             Assert.NotNull(returnedParallelCorpus!.SourceCorpus);
             Assert.Equal("Βίβλος γενέσεως Ἰησοῦ Χριστοῦ υἱοῦ Δαυεὶδ υἱοῦ Ἀβραάμ .",
@@ -155,12 +157,12 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Output.WriteLine("Created engine parallel text corpus");
 
             var someSourceTokens = ProjectDbContext!.Tokens
-                .Where(tc => tc.TokenizationId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Where(tc => tc.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
                 .Take(50)
                 .ToList();
 
             var someTargetTokens = ProjectDbContext!.Tokens
-                .Where(tc => tc.TokenizationId == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Where(tc => tc.TokenizedCorpusId == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id)
                 .Skip(50)
                 .Take(50)
                 .ToList();
@@ -327,11 +329,11 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             var sourceTokenGuidsFromDB = parallelCorpusFromDB.VerseMappings
                 .SelectMany(vm => vm.Verses!
-                .SelectMany(v => v.TokenVerseAssociations.Where(tva => tva.TokenComponent!.TokenizationId == sourceTokenizedCorpus.Id)
+                .SelectMany(v => v.TokenVerseAssociations.Where(tva => tva.TokenComponent!.TokenizedCorpusId == sourceTokenizedCorpus.Id)
                 .Select(tva => tva.TokenComponentId)));
             var targetTokenGuidsFromDB = parallelCorpusFromDB.VerseMappings
                 .SelectMany(vm => vm.Verses!
-                .SelectMany(v => v.TokenVerseAssociations.Where(tva => tva.TokenComponent!.TokenizationId == targetTokenizedCorpus.Id)
+                .SelectMany(v => v.TokenVerseAssociations.Where(tva => tva.TokenComponent!.TokenizedCorpusId == targetTokenizedCorpus.Id)
                 .Select(tva => tva.TokenComponentId)));
 
             Assert.True(sourceTokenGuidsFromDB.Count() > 0);

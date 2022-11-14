@@ -16,5 +16,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         string Name, 
         string Language, 
         string CorpusType,
-        string ParatextId) : ProjectRequestCommand<Corpus>;
+        string ParatextId) : ProjectRequestCommand<CorpusId>;
 }

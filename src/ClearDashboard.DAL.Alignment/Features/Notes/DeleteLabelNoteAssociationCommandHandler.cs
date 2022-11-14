@@ -42,7 +42,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             ProjectDbContext.Remove(labelNoteAssociation);
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-            return new RequestResult<object>(new ());
+            return new RequestResult<object>(new());
         }
     }
 }

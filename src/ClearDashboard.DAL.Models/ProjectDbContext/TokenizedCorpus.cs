@@ -14,6 +14,7 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
 
         SourceParallelCorpora = new HashSet<ParallelCorpus>();
         TargetParallelCorpora = new HashSet<ParallelCorpus>();
+        VerseRows = new HashSet<VerseRow>();
         Metadata = new Dictionary<string, object>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
@@ -30,6 +31,7 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
 
     public virtual ICollection<ParallelCorpus> SourceParallelCorpora { get; set; }
     public virtual ICollection<ParallelCorpus> TargetParallelCorpora { get; set; }
+    public virtual ICollection<VerseRow> VerseRows { get; set; }
 
     public virtual Guid CorpusId { get; set; }
     public virtual Corpus? Corpus { get; set; }

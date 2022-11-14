@@ -9,7 +9,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             // ReSharper disable VirtualMemberCallInConstructor
             TokenizedCorpora = new HashSet<TokenizedCorpus>();
-            Verses = new HashSet<Verse>();
             Metadata = new Dictionary<string, object>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
@@ -20,7 +19,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? Language { get; set; }
         public string? ParatextGuid { get; set; }
         public virtual CorpusType CorpusType { get; set; }
-        public virtual ICollection<Verse> Verses { get; set; }
         public virtual ICollection<TokenizedCorpus> TokenizedCorpora { get; set; }
 
 

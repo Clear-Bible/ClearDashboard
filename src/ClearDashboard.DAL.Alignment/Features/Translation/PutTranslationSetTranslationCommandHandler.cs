@@ -12,6 +12,7 @@ using SIL.Extensions;
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 using ClearBible.Engine.Corpora;
+using Microsoft.AspNet.SignalR.Client.Http;
 
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
@@ -47,106 +48,115 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             if (request.TranslationActionType == "PutPropagate")
             {
-                var translations = ProjectDbContext!.Translations
-                    .Include(tr => tr.SourceTokenComponent)
-                    .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
-                    .Where(tr => tr.SourceTokenComponent!.TrainingText == request.Translation.SourceToken.TrainingText);
-                var tokenComponents = ProjectDbContext!.TokenComponents
-                    .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
-                    .Where(t => t.TrainingText == request.Translation.SourceToken.TrainingText);
-
-                var exactMatchFound = false;
-                var tokenGuidsUpdated = new List<Guid>();
-                foreach (var tr in translations)
-                {
-                    var exactMatch = rTokenId.Id == tr.SourceTokenComponent!.Id;
-
-                    // Don't propagate to a non-exact match that has already been assigned:
-                    if (exactMatch || tr.TranslationState != Models.TranslationOriginatedFrom.Assigned)
-                    {
-                        tr.TargetText = request.Translation.TargetTranslationText;
-                        tr.TranslationState = exactMatch
-                            ? Models.TranslationOriginatedFrom.Assigned
-                            : Models.TranslationOriginatedFrom.FromOther;
-                    }
-
-                    tokenGuidsUpdated.Add(tr.SourceTokenComponent!.Id);
-
-                    if (exactMatch) exactMatchFound = true;
-                }
-
-                foreach (var t in tokenComponents)
-                {
-                    if (!tokenGuidsUpdated.Contains(t.Id))
-                    {
-                        var exactMatch = rTokenId.Id == t.Id;
-                        translationSet.Translations.Add(new Models.Translation
-                        {
-                            SourceTokenComponent = t,
-                            TargetText = request.Translation.TargetTranslationText,
-                            TranslationState = exactMatch
-                                ? Models.TranslationOriginatedFrom.Assigned
-                                : Models.TranslationOriginatedFrom.FromOther
-                        });
-
-                        if (exactMatch) exactMatchFound = true;
-                    }
-                }
-
-                if (!exactMatchFound)
-                {
-                    return new RequestResult<object>
-                    (
-                        success: false,
-                        message: $"Unable to find TokenId {rTokenId.Id} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId} (PutPropagate)"
-                    );
-                }
-
+                PutPropagate(translationSet, request.Translation, cancellationToken);
             }
             else
             {
-                var translation = ProjectDbContext!.Translations
-                    .Where(tr => tr.TranslationSetId == translationSet.Id)
-                    .Where(tr => tr.SourceTokenComponentId == rTokenId.Id)
-                    .FirstOrDefault();
-
-                if (translation != null)
-                {
-                    translation.TargetText = request.Translation.TargetTranslationText;
-                    translation.TranslationState = Models.TranslationOriginatedFrom.Assigned;
-                }
-                else
-                {
-                    var tokenComponent = ProjectDbContext!.TokenComponents
-                        .Where(t => t.TokenizationId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
-                        .Where(t => t.Id == rTokenId.Id)
-                        //.Where(t => t.Tokenization!.SourceParallelCorpora
-                        //    .Any(spc => spc.TranslationSets
-                        //        .Any(ts => ts.Id == request.TranslationSetId.Id)))
-                        .FirstOrDefault();
-
-                    if (tokenComponent != null)
-                    {
-                        translationSet.Translations.Add(new Models.Translation
-                        {
-                            SourceTokenComponent = tokenComponent,
-                            TargetText = request.Translation.TargetTranslationText,
-                            TranslationState = Models.TranslationOriginatedFrom.Assigned
-                        });
-                    }
-                    else
-                    {
-                        return new RequestResult<object>
-                        (
-                            success: false,
-                            message: $"Unable to find TokenId {rTokenId.Id} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId} (PutNoPropagate)"
-                        );
-                    }
-                }
+                PutNoPropagate(translationSet, request.Translation, cancellationToken);
             }
 
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
             return new RequestResult<object>(null);
+        }
+
+        private void PutPropagate(Models.TranslationSet translationSet, Alignment.Translation.Translation requestTranslation, CancellationToken cancellationToken)
+        {
+            var rTokenId = requestTranslation.SourceToken.TokenId;
+
+            var translations = ProjectDbContext!.Translations
+                .Include(tr => tr.SourceTokenComponent)
+                .Where(tr => tr.TranslationSetId == translationSet.Id)
+                .Where(tr => tr.SourceTokenComponent!.TrainingText == requestTranslation.SourceToken.TrainingText);
+            var tokenComponents = ProjectDbContext!.TokenComponents
+                .Where(t => t.TokenizedCorpusId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                .Where(t => t.TrainingText == requestTranslation.SourceToken.TrainingText);
+
+            var exactMatchFound = false;
+            var tokenGuidsUpdated = new List<Guid>();
+            foreach (var tr in translations)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var exactMatch = rTokenId.Id == tr.SourceTokenComponent!.Id;
+
+                // Don't propagate to a non-exact match that has already been assigned:
+                if (exactMatch || tr.TranslationState != Models.TranslationOriginatedFrom.Assigned)
+                {
+                    tr.TargetText = requestTranslation.TargetTranslationText;
+                    tr.TranslationState = exactMatch
+                        ? Models.TranslationOriginatedFrom.Assigned
+                        : Models.TranslationOriginatedFrom.FromOther;
+                }
+
+                tokenGuidsUpdated.Add(tr.SourceTokenComponent!.Id);
+
+                if (exactMatch) exactMatchFound = true;
+            }
+
+            foreach (var t in tokenComponents)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                if (!tokenGuidsUpdated.Contains(t.Id))
+                {
+                    var exactMatch = rTokenId.Id == t.Id;
+                    translationSet.Translations.Add(new Models.Translation
+                    {
+                        SourceTokenComponent = t,
+                        TargetText = requestTranslation.TargetTranslationText,
+                        TranslationState = exactMatch
+                            ? Models.TranslationOriginatedFrom.Assigned
+                            : Models.TranslationOriginatedFrom.FromOther
+                    });
+
+                    if (exactMatch) exactMatchFound = true;
+                }
+            }
+
+            if (!exactMatchFound)
+            {
+                throw new ArgumentException($"Unable to find TokenId {rTokenId.Id} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId} (PutPropagate)");
+            }
+        }
+
+        private void PutNoPropagate(Models.TranslationSet translationSet, Alignment.Translation.Translation requestTranslation, CancellationToken cancellationToken)
+        {
+            var rTokenId = requestTranslation.SourceToken.TokenId;
+
+            var translation = ProjectDbContext!.Translations
+                .Where(tr => tr.TranslationSetId == translationSet.Id)
+                .Where(tr => tr.SourceTokenComponentId == rTokenId.Id)
+                .FirstOrDefault();
+
+            if (translation != null)
+            {
+                translation.TargetText = requestTranslation.TargetTranslationText;
+                translation.TranslationState = Models.TranslationOriginatedFrom.Assigned;
+            }
+            else
+            {
+                var tokenComponent = ProjectDbContext!.TokenComponents
+                    .Where(t => t.TokenizedCorpusId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                    .Where(t => t.Id == rTokenId.Id)
+                    //.Where(t => t.TokenizedCorpus!.SourceParallelCorpora
+                    //    .Any(spc => spc.TranslationSets
+                    //        .Any(ts => ts.Id == request.TranslationSetId.Id)))
+                    .FirstOrDefault();
+
+                if (tokenComponent != null)
+                {
+                    translationSet.Translations.Add(new Models.Translation
+                    {
+                        SourceTokenComponent = tokenComponent,
+                        TargetText = requestTranslation.TargetTranslationText,
+                        TranslationState = Models.TranslationOriginatedFrom.Assigned
+                    });
+                }
+                else
+                {
+                    throw new ArgumentException($"Unable to find TokenId {rTokenId.Id} in source tokenized corpus id {translationSet.ParallelCorpus!.SourceTokenizedCorpusId} (PutNoPropagate)");
+                }
+            }
         }
     }
 }
