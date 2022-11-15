@@ -24,6 +24,11 @@ namespace ClearDashboard.Wpf.Application.Models
         public string DownloadLink { get; set; } = String.Empty;
     }
 
+    public class GithubDownloadUri
+    {
+        public string download_url { get; set; } = String.Empty;
+    }
+
     public class ReleaseNote
     {
 

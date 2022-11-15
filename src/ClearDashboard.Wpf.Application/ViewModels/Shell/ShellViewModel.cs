@@ -19,6 +19,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
@@ -31,6 +32,8 @@ using System.Windows.Navigation;
 using System.Windows.Threading;
 using ClearDashboard.Wpf.Application.Views.Shell;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using System.Security.Policy;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -353,26 +356,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 return;
             }
 
-
-            Stream stream;
+            var updateDataList = new List<UpdateFormat>();
             try
             {
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/Clear-Bible/CLEAR_External_Releases/contents/VersionHistory");
+                req.UserAgent = "[any words that is more than 5 characters]";
+                req.Accept = "application/json";
+                WebResponse response = req.GetResponse(); //Error Here
+                Stream dataStream = response.GetResponseStream();
+                var downloadUris = await JsonSerializer.DeserializeAsync<List<GithubDownloadUri>>(dataStream);
+
+                Stream stream;
                 var webClient = new WebClient();
-                stream = await webClient.OpenReadTaskAsync(new Uri("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/main/ClearDashboard.json", UriKind.Absolute));
+                
+                foreach (var uri in downloadUris)
+                {
+                    stream = await webClient.OpenReadTaskAsync(new Uri(uri.download_url, UriKind.Absolute));
+                    updateDataList.Add(await JsonSerializer.DeserializeAsync<UpdateFormat>(stream));
+                }
             }
             catch (Exception)
             {
                 return;
             }
-
-            _updateData = await JsonSerializer.DeserializeAsync<UpdateFormat>(stream);
-            var isNewer = CheckWebVersion(_updateData.Version);
+            
+            var isNewer = CheckWebVersion(updateDataList.LastOrDefault().Version);
 
             if (isNewer)
             {
                 ShowUpdateLink = Visibility.Visible;
-                UpdateUrl = new Uri(_updateData.DownloadLink);
-                UpdateNotes = _updateData.ReleaseNotes;
+                UpdateUrl = new Uri(updateDataList.LastOrDefault().DownloadLink);
+
+                var combinedReleaseNotes = new List<ReleaseNote>();
+                foreach (var update in updateDataList)
+                {
+                    if (CheckWebVersion(update.Version))
+                    {
+                        combinedReleaseNotes.AddRange(update.ReleaseNotes);
+                    }
+                }
+                UpdateNotes = combinedReleaseNotes;
             }
         }
 
