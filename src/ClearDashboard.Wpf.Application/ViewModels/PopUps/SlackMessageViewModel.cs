@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Windows;
 using System;
+using System.Reflection;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {
@@ -175,7 +176,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
                 return;
             }
 
-            string msg = $"*User:* {ParatextUser} \n*Message:* \n{UserMessage}";
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            var versionNumber = $"{thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+
+            string msg = $"*User:* {ParatextUser} \n*Version*: {versionNumber} \n*Message:* \n{UserMessage}";
 
             var logger = LifetimeScope.Resolve<ILogger<SlackMessage>>();
             SlackMessage slackMessage = new SlackMessage(msg, this._zipPathAttachment, logger);
