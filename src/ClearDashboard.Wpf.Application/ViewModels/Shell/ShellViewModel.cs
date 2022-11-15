@@ -251,7 +251,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 _ => 5
             };
 
-            Logger!.LogInformation($"Set PopupHorizontalOffset to {PopupHorizontalOffset}");
+            Logger.LogInformation($"HorizontalFactor is {horizontalFactor}");
+            Logger!.LogInformation($"Setting PopupHorizontalOffset to {PopupHorizontalOffset}");
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
