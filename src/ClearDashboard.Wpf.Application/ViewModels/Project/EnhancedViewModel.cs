@@ -1032,6 +1032,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
                     if (message.AlignmentSetId != null)
+
+                        // ALIGNMENTS
                         await verseDisplayViewModel!.ShowAlignmentsAsync(
                             row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
                             await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
@@ -1041,7 +1043,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //FIXME:surface serialization message.TargetDetokenizer ?? throw new InvalidParameterEngineException(name: "message.TargetDetokenizer", value: "null", message: "message.TargetDetokenizer must not be null when message.AlignmentSetId is not null."),
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             message.IsTargetRTL ?? throw new InvalidDataEngineException(name: "IsTargetRTL", value: "null"));
-                    else 
+                    else
+
+                        // INTERLINEARS
                         await verseDisplayViewModel!.ShowTranslationAsync(
                             row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
                             await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null")),
@@ -1057,8 +1061,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 //    LabelSuggestions = versesOut.First().LabelSuggestions;
                 //}
 
-                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
+                
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
+                if (message.AlignmentSetId != null)
+                {
+                    // ALIGNMENTS
+                    title += " " + LocalizationStrings.Get("EnhancedView_Alignment", _logger);
+                }
+                else
+                {
+                    // INTERLINEARS
+                    title += " " + LocalizationStrings.Get("EnhancedView_Interlinear", _logger);
+                }
+
+                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
                 if (rows.Count <= 1)
                 {
                     // only one verse

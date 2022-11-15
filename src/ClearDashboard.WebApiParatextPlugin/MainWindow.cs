@@ -296,11 +296,18 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
 
             var fullPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\Plugin.log");
-            //create if does not exist
-            DirectoryInfo di = new DirectoryInfo(fullPath);
-            if (di.Exists == false)
+            try
             {
-                di.Create();
+                //create if does not exist
+                DirectoryInfo di = new DirectoryInfo(fullPath);
+                if (di.Exists == false)
+                {
+                    di.Create();
+                }
+            }
+            catch (Exception)
+            {
+
             }
 
             // configure Serilog
