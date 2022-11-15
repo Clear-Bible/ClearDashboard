@@ -12,7 +12,8 @@ namespace ClearDashboard.Wpf.Application.Models
         BugFix,
         Changed,
         Updated,
-        Deferred
+        Deferred,
+        BreakingChange
     }
     
     public class UpdateFormat

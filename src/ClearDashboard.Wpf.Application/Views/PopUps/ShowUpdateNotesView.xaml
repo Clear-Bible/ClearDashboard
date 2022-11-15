@@ -36,6 +36,10 @@
             <iconPacks:PackIconModern Foreground="{StaticResource IndigoMidBrush}" Kind="TimerStop" />
         </DataTemplate>
 
+        <DataTemplate x:Key="breaking">
+            <iconPacks:PackIconOcticons Foreground="{StaticResource RedVeryDarkBrush}" Kind="Alert" />
+        </DataTemplate>
+
         <converters:WidthSubtraction x:Key="WidthSubtraction" />
     </Window.Resources>
 
@@ -93,6 +97,9 @@
                                                 <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Deferred}">
                                                     <Setter Property="ContentTemplate" Value="{StaticResource deferred}" />
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BreakingChange}">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource breaking}" />
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </ContentControl.Style>
@@ -125,6 +132,9 @@
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Deferred}">
                                                     <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BreakingChange}">
+                                                    <Setter Property="Foreground" Value="{StaticResource RedVeryDarkBrush}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
