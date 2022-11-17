@@ -76,8 +76,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="575" MinWidth="550" />
@@ -488,11 +488,56 @@
 
         </StackPanel>
 
-
-        <StackPanel
+        <StatusBar
+            x:Name="StatusBar"
             Grid.Row="3"
             Grid.Column="0"
-            Margin="10,0,0,0"
-            Orientation="Vertical" />
+            Grid.ColumnSpan="2"
+            Height="40"
+            Foreground="{DynamicResource MaterialDesignDarkForeground}">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="4">
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">
+
+                    <Button
+                        x:Name="ClickUpdateLink"
+                        Margin="10,0,10,0"
+                        Padding="0"
+                        BorderThickness="0"
+                        Style="{StaticResource TransparentButton}">
+                        <TextBlock
+                            Cursor="Hand"
+                            Foreground="DodgerBlue"
+                            Text="{helpers:Localization ShellView_UpdateFound}"
+                            TextDecorations="Underline" />
+                    </Button>
+                    <Button
+                        x:Name="ShowNotes"
+                        Margin="0,0,10,0"
+                        Padding="0"
+                        BorderThickness="0"
+                        Style="{StaticResource TransparentButton}"
+                        ToolTip="{helpers:Localization ShellView_ShowNotes}">
+                        <iconPacks:PackIconPixelartIcons
+                            Width="20"
+                            Height="20"
+                            Foreground="{StaticResource BlueMidBrush}"
+                            Kind="Notes" />
+                    </Button>
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </UserControl>

@@ -121,7 +121,7 @@ namespace ClearDashboard.Wpf.Application.Models
             return UpdateNotes;
         }
 
-        private static bool CheckWebVersion(string webVersion)
+        public static bool CheckWebVersion(string webVersion)
         {
             var webVer = ParseVersionString(webVersion);
 
