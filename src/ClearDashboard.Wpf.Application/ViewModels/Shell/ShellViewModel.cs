@@ -243,7 +243,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var source = PresentationSource.FromVisual(view);
 
-            var horizontalFactor = source.CompositionTarget.TransformToDevice.M22;
+
+            var verticalFactor = source.CompositionTarget.TransformToDevice.M22;
+            var horizontalFactor = source.CompositionTarget.TransformToDevice.M11;
             PopupHorizontalOffset = horizontalFactor switch
             {
                 < 1.25 => 5,
@@ -251,7 +253,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 _ => 5
             };
 
-            Logger.LogInformation($"HorizontalFactor is {horizontalFactor}");
+            Logger!.LogInformation($"VerticalFactor is {verticalFactor}");
+            Logger!.LogInformation($"HorizontalFactor is {horizontalFactor}");
             Logger!.LogInformation($"Setting PopupHorizontalOffset to {PopupHorizontalOffset}");
         }
 
