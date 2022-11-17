@@ -326,59 +326,59 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private async void CheckForProgramUpdates()
         {
-            //var updateJson = new UpdateFormat
+            ////var updateJson = new UpdateFormat
+            ////{
+            ////    Version = "0.4.0.0",
+            ////    ReleaseDate = DateTime.Now.ToString(),
+            ////    DownloadLink = "",
+            ////};
+
+            ////var releaseNote = new ReleaseNote
+            ////{
+            ////    NoteType = ReleaseNote.ReleaseNoteType.Added,
+            ////    Note = "Alignments can now be added to the EnhancedView.  Pressing shift while hovering over tokens in either source or target will highlight the corresponding aligned token in the other related corpus. Alt hover will clear selection."
+            ////};
+            ////updateJson.ReleaseNotes.Add(releaseNote);
+            ////releaseNote = new ReleaseNote
+            ////{
+            ////    NoteType = ReleaseNote.ReleaseNoteType.Added,
+            ////    Note = "On adding in a new Paratext Corpus, you can now search for the corpus name in the dropdown box."
+            ////};
+            ////updateJson.ReleaseNotes.Add(releaseNote);
+
+            ////var options = new JsonSerializerOptions { WriteIndented = true };
+            ////string jsonString = JsonSerializer.Serialize(updateJson, options);
+            ////File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
+
+            //var connectedToInternet = await NetworkHelper.IsConnectedToInternet();           // check internet connection
+            //if (!connectedToInternet)
             //{
-            //    Version = "0.4.0.0",
-            //    ReleaseDate = DateTime.Now.ToString(),
-            //    DownloadLink = "",
-            //};
+            //    return;
+            //}
 
-            //var releaseNote = new ReleaseNote
+            var updateDataList = await ReleaseNotesManager.GetUpdateData();//new List<UpdateFormat>();
+            //try
             //{
-            //    NoteType = ReleaseNote.ReleaseNoteType.Added,
-            //    Note = "Alignments can now be added to the EnhancedView.  Pressing shift while hovering over tokens in either source or target will highlight the corresponding aligned token in the other related corpus. Alt hover will clear selection."
-            //};
-            //updateJson.ReleaseNotes.Add(releaseNote);
-            //releaseNote = new ReleaseNote
-            //{
-            //    NoteType = ReleaseNote.ReleaseNoteType.Added,
-            //    Note = "On adding in a new Paratext Corpus, you can now search for the corpus name in the dropdown box."
-            //};
-            //updateJson.ReleaseNotes.Add(releaseNote);
+            //    //HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/Clear-Bible/CLEAR_External_Releases/contents/VersionHistory");
+            //    //req.UserAgent = "[any words that is more than 5 characters]";
+            //    //req.Accept = "application/json";
+            //    //WebResponse response = req.GetResponse(); //Error Here
+            //    //Stream dataStream = response.GetResponseStream();
+            //    //var downloadUris = await JsonSerializer.DeserializeAsync<List<GithubDownloadUri>>(dataStream);
 
-            //var options = new JsonSerializerOptions { WriteIndented = true };
-            //string jsonString = JsonSerializer.Serialize(updateJson, options);
-            //File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
-
-            var connectedToInternet = await NetworkHelper.IsConnectedToInternet();           // check internet connection
-            if (!connectedToInternet)
-            {
-                return;
-            }
-
-            var updateDataList = new List<UpdateFormat>();
-            try
-            {
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/Clear-Bible/CLEAR_External_Releases/contents/VersionHistory");
-                req.UserAgent = "[any words that is more than 5 characters]";
-                req.Accept = "application/json";
-                WebResponse response = req.GetResponse(); //Error Here
-                Stream dataStream = response.GetResponseStream();
-                var downloadUris = await JsonSerializer.DeserializeAsync<List<GithubDownloadUri>>(dataStream);
-
-                Stream stream;
-                var webClient = new WebClient();
+            //    //Stream stream;
+            //    //var webClient = new WebClient();
                 
-                foreach (var uri in downloadUris)
-                {
-                    stream = await webClient.OpenReadTaskAsync(new Uri(uri.download_url, UriKind.Absolute));
-                    updateDataList.Add(await JsonSerializer.DeserializeAsync<UpdateFormat>(stream));
-                }
-            }
-            catch (Exception)
-            {
-                return;
-            }
+            //    //foreach (var uri in downloadUris)
+            //    //{
+            //    //    stream = await webClient.OpenReadTaskAsync(new Uri(uri.download_url, UriKind.Absolute));
+            //    //    updateDataList.Add(await JsonSerializer.DeserializeAsync<UpdateFormat>(stream));
+            //    //}
+            //}
+            //catch (Exception)
+            //{
+            //    return;
+            //}
             
             var isNewer = CheckWebVersion(updateDataList.LastOrDefault().Version);
 
@@ -387,15 +387,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 ShowUpdateLink = Visibility.Visible;
                 UpdateUrl = new Uri(updateDataList.LastOrDefault().DownloadLink);
 
-                var combinedReleaseNotes = new List<ReleaseNote>();
-                foreach (var update in updateDataList)
-                {
-                    if (CheckWebVersion(update.Version))
-                    {
-                        combinedReleaseNotes.AddRange(update.ReleaseNotes);
-                    }
-                }
-                UpdateNotes = combinedReleaseNotes;
+                //var combinedReleaseNotes = new List<ReleaseNote>();
+                //foreach (var update in updateDataList)
+                //{
+                //    if (CheckWebVersion(update.Version))
+                //    {
+                //        combinedReleaseNotes.AddRange(update.ReleaseNotes);
+                //    }
+                //}
+                UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(updateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
             }
         }
 
