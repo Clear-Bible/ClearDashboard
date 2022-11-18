@@ -95,6 +95,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? null;
         }
 
+        private async Task BuildTokenDisplayViewModelsAsync()
+        {
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsRtl, true);
+            NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+            
+            if (TargetTokens != null)
+            {
+                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer, IsRtl, true);
+                NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
+            }
+        }
+
         private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
         {
             var result = new TokenDisplayViewModelCollection();
@@ -199,9 +211,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// <summary>
         /// Gets a collection of <see cref="TranslationOption"/>s for a given translation.
         /// </summary>
-        /// <param name="translation">The <see cref="Translation"/> for which to provide options.</param>
+        /// <param name="token">The <see cref="Token"/> for which to provide options.</param>
         /// <returns>An awaitable <see cref="Task{T}"/> containing a <see cref="IEnumerable{T}"/> of <see cref="TranslationOption"/>s.</returns>
-        public async Task<IEnumerable<TranslationOption>> GetTranslationOptionsAsync(Translation translation)
+        public async Task<IEnumerable<TranslationOption>> GetTranslationOptionsAsync(Token token)
         {
             try
             {
@@ -214,10 +226,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     throw new InvalidOperationException("Cannot retrieve translation options because the translation set is null.  Ensure that you have called ShowTranslationAsync() with the current translation set.");
                 }
 
-                var translationModelEntry = await TranslationSet.GetTranslationModelEntryForToken(translation.SourceToken);
+                var translationModelEntry = await TranslationSet.GetTranslationModelEntryForToken(token);
                 if (translationModelEntry == null)
                 {
-                    Logger?.LogCritical($"Cannot find translation options for {translation.SourceToken.SurfaceText}");
+                    Logger?.LogCritical($"Cannot find translation options for {token.SurfaceText}");
                     return new List<TranslationOption>();
                 }
 
@@ -227,7 +239,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     .ToList();
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved translation options for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Retrieved translation options for {token.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 return translationOptions;
 
@@ -267,8 +279,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 if (translationActionType == TranslationActionTypes.PutPropagate)
                 {
                     Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
-
-                    SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsRtl, true);
+                    await BuildTokenDisplayViewModelsAsync();
                 }
             }
             catch (Exception e)
@@ -292,7 +303,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             
             AlignmentSet = null;
 
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsRtl, true);
+            await BuildTokenDisplayViewModelsAsync();
         }
 
         public async Task ShowTranslationAsync(
@@ -310,8 +321,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
             
             AlignmentSet = null;
-            
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, IsRtl, true);
+
+            await BuildTokenDisplayViewModelsAsync();
         }
 
         public async Task ShowAlignmentsAsync(
@@ -326,7 +337,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             SourceDetokenizer = sourceDetokenizer;
             IsRtl = isSourceRtl;
 
-            TargetTokens = engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
+            TargetTokens = engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no target tokens");
             TargetDetokenizer = targetDetokenizer;
             IsTargetRtl = isTargetRtl;
 
@@ -334,9 +345,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
             AlignmentSet = alignmentSet;
             Alignments = await alignmentSet.GetAlignments(new List<EngineParallelTextRow>() { engineParallelTextRow });
-            
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, sourceDetokenizer, isSourceRtl, true);
-            TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, targetDetokenizer, isTargetRtl, false);
+
+            await BuildTokenDisplayViewModelsAsync();
         }
 
         #endregion
@@ -360,6 +370,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
             EventAggregator.SubscribeOnUIThread(this);
         }
-
     }
 }
