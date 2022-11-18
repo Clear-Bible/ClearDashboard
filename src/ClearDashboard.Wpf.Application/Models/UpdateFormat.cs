@@ -252,7 +252,7 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static bool IsNewerVersion(Version olderVersion, Version newerVersion)
         {
-            if (newerVersion.CompareTo(olderVersion) == 1)
+            if (olderVersion != null && newerVersion.CompareTo(olderVersion) == 1)
             {
                 return true;
             }
@@ -262,7 +262,12 @@ namespace ClearDashboard.Wpf.Application.Models
         public static async Task<bool> CheckVersionCompatibility(string projectVersion)
         {
             var updateData = await GetUpdateDataFromFile();
-            return !IsBreakingChangePresent(updateData, ParseVersionString(projectVersion));
+            var parsedProjectVersion = ParseVersionString(projectVersion);
+            if (parsedProjectVersion == null)
+            {
+                return false;
+            }
+            return !IsBreakingChangePresent(updateData, parsedProjectVersion);
         }
 
         public static bool IsBreakingChangePresent(List<UpdateFormat> updateDataList, Version projectVersion)

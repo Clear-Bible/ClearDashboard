@@ -269,10 +269,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             {
                 DashboardProjects = results.Data;
 
-                //foreach (var project in DashboardProjects)
-                //{
-                //    project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
-                //}
+                foreach (var project in DashboardProjects)
+                {
+                    project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+                }
 
                 _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
                 _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
