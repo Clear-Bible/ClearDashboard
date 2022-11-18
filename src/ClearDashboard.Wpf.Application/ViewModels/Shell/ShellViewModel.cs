@@ -371,158 +371,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private async void CheckForProgramUpdates()
         {
-            ////var updateJson = new UpdateFormat
-            ////{
-            ////    Version = "0.4.0.0",
-            ////    ReleaseDate = DateTime.Now.ToString(),
-            ////    DownloadLink = "",
-            ////};
 
-            ////var releaseNote = new ReleaseNote
-            ////{
-            ////    NoteType = ReleaseNote.ReleaseNoteType.Added,
-            ////    Note = "Alignments can now be added to the EnhancedView.  Pressing shift while hovering over tokens in either source or target will highlight the corresponding aligned token in the other related corpus. Alt hover will clear selection."
-            ////};
-            ////updateJson.ReleaseNotes.Add(releaseNote);
-            ////releaseNote = new ReleaseNote
-            ////{
-            ////    NoteType = ReleaseNote.ReleaseNoteType.Added,
-            ////    Note = "On adding in a new Paratext Corpus, you can now search for the corpus name in the dropdown box."
-            ////};
-            ////updateJson.ReleaseNotes.Add(releaseNote);
+            var fullUpdateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();
 
-            ////var options = new JsonSerializerOptions { WriteIndented = true };
-            ////string jsonString = JsonSerializer.Serialize(updateJson, options);
-            ////File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
-
-            //var connectedToInternet = await NetworkHelper.IsConnectedToInternet();           // check internet connection
-            //if (!connectedToInternet)
-            //{
-            //    return;
-            //}
-
-            var updateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();//new List<UpdateFormat>();
-            //try
-            //{
-            //    //HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/Clear-Bible/CLEAR_External_Releases/contents/VersionHistory");
-            //    //req.UserAgent = "[any words that is more than 5 characters]";
-            //    //req.Accept = "application/json";
-            //    //WebResponse response = req.GetResponse(); //Error Here
-            //    //Stream dataStream = response.GetResponseStream();
-            //    //var downloadUris = await JsonSerializer.DeserializeAsync<List<GithubDownloadUri>>(dataStream);
-
-            //    //Stream stream;
-            //    //var webClient = new WebClient();
-                
-            //    //foreach (var uri in downloadUris)
-            //    //{
-            //    //    stream = await webClient.OpenReadTaskAsync(new Uri(uri.download_url, UriKind.Absolute));
-            //    //    updateDataList.Add(await JsonSerializer.DeserializeAsync<UpdateFormat>(stream));
-            //    //}
-            //}
-            //catch (Exception)
-            //{
-            //    return;
-            //}
-            
-            var isNewer = ReleaseNotesManager.CheckWebVersion(updateDataList.LastOrDefault().Version);
+            var isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);
 
             if (isNewer)
             {
                 ShowUpdateLink = Visibility.Visible;
-                UpdateUrl = new Uri(updateDataList.LastOrDefault().DownloadLink);
+                UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
 
-                //var combinedReleaseNotes = new List<ReleaseNote>();
-                //foreach (var update in updateDataList)
-                //{
-                //    if (CheckWebVersion(update.Version))
-                //    {
-                //        combinedReleaseNotes.AddRange(update.ReleaseNotes);
-                //    }
-                //}
-                Updates=updateDataList;//could replace with ReleaseManager.UpdateNotes to speed up
+                Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
+                //UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(fullUpdateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
             }
         }
-
-
-
-        //private bool CheckWebVersion(string webVersion)
-        //{
-        //    //convert string to version
-        //    var ver = webVersion.Split('.');
-        //    Version webVer;
-
-        //    switch (ver.Length)
-        //    {
-        //        case 4:
-        //            try
-        //            {
-        //                webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), Convert.ToInt32(ver[3]));
-        //            }
-        //            catch (Exception)
-        //            {
-        //                return false;
-        //            }
-
-        //            break;
-        //        case 3:
-        //            try
-        //            {
-        //                webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), 0);
-        //            }
-        //            catch (Exception)
-        //            {
-        //                return false;
-        //            }
-
-        //            break;
-        //        case 2:
-        //            try
-        //            {
-        //                webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), 0, 0);
-        //            }
-        //            catch (Exception)
-        //            {
-        //                return false;
-        //            }
-
-        //            break;
-        //        default:
-        //        {
-        //            if (ver.Length == 2)
-        //            {
-        //                try
-        //                {
-        //                    webVer = new Version(Convert.ToInt32(ver[0]), 0, 0, 0);
-        //                }
-        //                catch (Exception)
-        //                {
-        //                    return false;
-        //                }
-        //            }
-        //            else
-        //            {
-        //                return false;
-        //            }
-
-        //            break;
-        //        }
-        //    }
-
-
-        //    //get the assembly version
-        //    var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-
-        //    // compare
-        //    var result = webVer.CompareTo(thisVersion);
-
-        //    if (result == 1)
-        //    {
-        //        //newer release present on the web
-        //        return true;
-        //    }
-        //    return false;
-        //}
 
         public void ClickUpdateLink()
         {
