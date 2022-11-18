@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
-using SIL.Extensions;
-using SIL.Machine.DataStructures;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {
