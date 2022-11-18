@@ -22,12 +22,9 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <converters:VerseTokensToChapterVerseValueConvertor x:Key="VerseTokensToChapterVerseValueConvertor" />
-            <converters:WidthSubtraction x:Key="WidthSubtraction" />
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
             <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
             <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
-            <converters:ThicknessConverter x:Key="ThicknessConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -293,6 +290,7 @@
                 </Grid.RowDefinitions>
 
                 <Button
+                    Grid.Row="0"
                     Grid.Column="0"
                     Margin="4,4,4,4"
                     Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
@@ -301,6 +299,7 @@
                     ToolTip="Show the Enhanced View Controls" />
 
                 <userControls:BcvUserControl
+                    Grid.Row="0"
                     Grid.Column="1"
                     Margin="50,0,0,0"
                     BcvDictionary="{Binding Path=BcvDictionary}"
@@ -514,8 +513,9 @@
                                                     TranslationFlowDirection="{Binding ElementName=InnerListView, Path=DataContext.IsTargetRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-
+                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    TranslationClicked="TranslationClicked"
+                                                    >
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenClicked">
                                                             <i:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
@@ -528,9 +528,6 @@
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TokenMouseLeave">
                                                             <i:CallMethodAction MethodName="TokenMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslationClicked">
-                                                            <i:CallMethodAction MethodName="TranslationClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
                                                         <i:EventTrigger EventName="TranslationMouseEnter">
                                                             <i:CallMethodAction MethodName="TranslationMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
@@ -576,7 +573,6 @@
                 Visibility="{Binding ProgressBarVisibility}"
                 Value="0" />
 
-
             <controls:SidebarExpander
                 Grid.Row="0"
                 Grid.Column="2"
@@ -601,80 +597,53 @@
                     </TextBlock>
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Orientation="Vertical">
-
-                        <userControls:TranslationSelector
-                            Margin="2,5"
-                            SelectedItem="{Binding CurrentTranslationOption}"
-                            TokenDisplayViewModel="{Binding TokenForTranslation}"
-                            TranslationOptions="{Binding TranslationOptions}"
-                            Visibility="{Binding TranslationControlVisibility}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="TranslationApplied">
-                                    <i:CallMethodAction MethodName="TranslationApplied" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="TranslationCancelled">
-                                    <i:CallMethodAction MethodName="TranslationCancelled" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </userControls:TranslationSelector>
-
-                        <userControls:NoteCollectionDisplay
-                            Margin="0,0"
-                            EntityIds="{Binding Path=SelectedTokens.EntityIds}"
-                            NoteMargin="0,0,0,10"
-                            LabelBackground="BlanchedAlmond"
-                            LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
-                            NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            Notes="{Binding NoteManager.CurrentNotes}"
-                            TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            Visibility="{Binding NoteControlVisibility}">
-
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="NoteIndicatorMouseEnter">
-                                    <i:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="NoteAdded">
-                                    <i:CallMethodAction MethodName="NoteAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="NoteUpdated">
-                                    <i:CallMethodAction MethodName="NoteUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="NoteDeleted">
-                                    <i:CallMethodAction MethodName="NoteDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="NoteEditorMouseEnter">
-                                    <i:CallMethodAction MethodName="NoteEditorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="NoteEditorMouseLeave">
-                                    <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="LabelSelected">
-                                    <i:CallMethodAction MethodName="LabelSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="LabelAdded">
-                                    <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="LabelRemoved">
-                                    <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="CloseRequested">
-                                    <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </userControls:NoteCollectionDisplay>
-
-                    </StackPanel>
+                    <userControls:NoteCollectionDisplay
+                        Margin="0,0"
+                        EntityIds="{Binding Path=SelectedTokens.EntityIds}"
+                        NoteMargin="0,0,0,10"
+                        LabelBackground="BlanchedAlmond"
+                        LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
+                        NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        Notes="{Binding NoteManager.CurrentNotes}"
+                        TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                        Visibility="{Binding NoteControlVisibility}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="NoteIndicatorMouseEnter">
+                                <i:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteAdded">
+                                <i:CallMethodAction MethodName="NoteAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteUpdated">
+                                <i:CallMethodAction MethodName="NoteUpdated" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteDeleted">
+                                <i:CallMethodAction MethodName="NoteDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteEditorMouseEnter">
+                                <i:CallMethodAction MethodName="NoteEditorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteEditorMouseLeave">
+                                <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelSelected">
+                                <i:CallMethodAction MethodName="LabelSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelAdded">
+                                <i:CallMethodAction MethodName="LabelAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="LabelRemoved">
+                                <i:CallMethodAction MethodName="LabelRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="CloseRequested">
+                                <i:CallMethodAction MethodName="CloseNotePaneRequested" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </userControls:NoteCollectionDisplay>
                 </ScrollViewer>
             </controls:SidebarExpander>
-
-
         </Grid>
-
-
-
     </Grid>
-
 </UserControl>
