@@ -660,7 +660,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay!,
+                TokenDisplay = tokenDisplay!,
                 ModifierKeys = Keyboard.Modifiers
             });
         }
@@ -716,7 +716,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay!,
+                TokenDisplay = tokenDisplay!,
                 Translation = tokenDisplay?.Translation
             });
         }
