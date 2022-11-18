@@ -486,7 +486,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay,
+                TokenDisplay = tokenDisplay,
                 SelectedTokens = SelectedTokens,
                 ModifierKeys = Keyboard.Modifiers,
             });
@@ -721,7 +721,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = control?.TokenDisplayViewModel,
+                TokenDisplay = control?.TokenDisplayViewModel,
+                VerseDisplay = VerseDisplayViewModel,
                 Translation = control?.TokenDisplayViewModel?.Translation,
             }) ;
         }
@@ -1452,6 +1453,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (Thickness)GetValue(VerseBorderThicknessProperty);
             set => SetValue(VerseBorderThicknessProperty, value);
         }
+
+        public VerseDisplayViewModel? VerseDisplayViewModel => DataContext as VerseDisplayViewModel;
 
         /// <summary>
         /// Gets or sets the margin for the tokens list.
