@@ -187,5 +187,11 @@
                 </ItemContainerTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button
+            x:Name="Close"
+            Margin="10"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Content="Close" />
     </Grid>
 </Window>

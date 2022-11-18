@@ -54,5 +54,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _logger = logger;
             //ReleaseNotes = releaseNotes;
         }
+
+        public void Close()
+        {
+            TryCloseAsync();
+        }
     }
 }
