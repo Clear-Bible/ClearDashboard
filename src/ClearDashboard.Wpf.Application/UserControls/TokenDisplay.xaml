@@ -19,8 +19,8 @@
         <StackPanel.ContextMenu>
             <ContextMenu>
                 <MenuItem Click="OnCreateNote" Header="Create Note" />
-                <MenuItem Click="OnFilterPins" Header="Filter Pins" />
-                <MenuItem Click="OnTranslateQuick" Header="TranslateQuick" />
+                <!--<MenuItem Click="OnFilterPins" Header="Filter Pins" />
+                <MenuItem Click="OnTranslateQuick" Header="TranslateQuick" />-->
             </ContextMenu>
         </StackPanel.ContextMenu>
         <Button
