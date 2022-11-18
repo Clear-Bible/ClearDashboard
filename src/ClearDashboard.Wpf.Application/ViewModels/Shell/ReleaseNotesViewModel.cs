@@ -33,6 +33,7 @@ using System.Windows.Threading;
 using ClearDashboard.Wpf.Application.Views.Shell;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 using System.Security.Policy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -157,6 +158,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         public List<ReleaseNote> UpdateNotes { get; set; }
+
+        public List<UpdateFormat> Updates { get; set; }
 
         #endregion
 
@@ -357,7 +360,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             //    return;
             //}
 
-            var updateDataList = await ReleaseNotesManager.GetUpdateData();//new List<UpdateFormat>();
+            var updateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();//new List<UpdateFormat>();
             //try
             //{
             //    //HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/Clear-Bible/CLEAR_External_Releases/contents/VersionHistory");
@@ -396,7 +399,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 //        combinedReleaseNotes.AddRange(update.ReleaseNotes);
                 //    }
                 //}
-                UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(updateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
+                Updates = updateDataList;//could replace with ReleaseManager.UpdateNotes to speed up
             }
         }
 
@@ -514,7 +517,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             settings.Title = $"{localizedString} - {_updateData?.Version}";
 
             var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
-            viewModel.ReleaseNotes = new ObservableCollection<ReleaseNote>(UpdateNotes);
+            viewModel.Updates = new ObservableCollection<UpdateFormat>(Updates);
 
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(viewModel, null, settings);

@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Collections.Generic;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -229,6 +230,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         public List<ReleaseNote> UpdateNotes { get; set; }
 
+        public List<UpdateFormat> Updates{ get; set; }
+
         #endregion
 
         #region Constructor
@@ -425,17 +428,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private async void CheckForProgramUpdates()
         {
 
-            var updateDataList = await ReleaseNotesManager.GetUpdateData();
+            var fullUpdateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();
 
-            var isNewer = ReleaseNotesManager.CheckWebVersion(updateDataList.LastOrDefault().Version);
+            var isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);
 
             if (isNewer)
             {
                 ShowUpdateLink = Visibility.Visible;
-                UpdateUrl = new Uri(updateDataList.LastOrDefault().DownloadLink);
+                UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
 
-              
-                UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(updateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
+                Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
+                //UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(fullUpdateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
             }
         }
 
@@ -473,7 +476,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             settings.Title = $"{localizedString} - {_updateData?.Version}";
 
             var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
-            viewModel.ReleaseNotes = new ObservableCollection<ReleaseNote>(UpdateNotes);
+            viewModel.Updates = new ObservableCollection<UpdateFormat>(Updates);
 
             IWindowManager manager = new WindowManager();
             manager.ShowWindowAsync(viewModel, null, settings);

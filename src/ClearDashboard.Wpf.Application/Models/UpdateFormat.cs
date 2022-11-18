@@ -6,10 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -42,6 +44,7 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public ReleaseNoteType NoteType { get; set; } = ReleaseNoteType.Added;
         public string Note { get; set; } = String.Empty;
+        public string Version { get; set; }
     }
 
     public static class ReleaseNotesManager
@@ -50,7 +53,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public static List<UpdateFormat> UpdateData { get; set; }
         public static bool UpdateDataUpdated { get; set; }
 
-        public static async Task<List<UpdateFormat>> GetUpdateData()
+        public static async Task<List<UpdateFormat>> GetUpdateDataFromFolder()
         {
             if (!UpdateDataUpdated)
             {
@@ -90,6 +93,34 @@ namespace ClearDashboard.Wpf.Application.Models
             return UpdateData;
         }
 
+        public static async Task<List<UpdateFormat>> GetUpdateDataFromFile()
+        {
+            if (!UpdateDataUpdated)
+            {
+                var connectedToInternet = await NetworkHelper.IsConnectedToInternet();
+                if (!connectedToInternet)
+                {
+                    return UpdateData;
+                }
+
+                try
+                {
+                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/new-json-format/ClearDashboard.json");
+                    req.UserAgent = "[any words that is more than 5 characters]";
+                    req.Accept = "application/json";
+                    WebResponse response = req.GetResponse(); //Error Here
+                    Stream dataStream = response.GetResponseStream();
+                    UpdateData = await JsonSerializer.DeserializeAsync<List<UpdateFormat>>(dataStream);
+                    UpdateDataUpdated = true;
+                }
+                catch (Exception)
+                {
+                    return UpdateData;
+                }
+            }
+            return UpdateData;
+        }
+
         public static async Task<List<ReleaseNote>> GetUpdateNotes(List<UpdateFormat> updateDataList)
         {
             var isNewer = CheckWebVersion(updateDataList.LastOrDefault().Version);
@@ -114,11 +145,26 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static async Task<List<ReleaseNote>> GetUpdateNotes()
         {
-            var updateDataList = await ReleaseNotesManager.GetUpdateData();//new List<UpdateFormat>();
+            var updateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();//new List<UpdateFormat>();
             
             UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(updateDataList);
 
             return UpdateNotes;
+        }
+
+        public static async Task<List<UpdateFormat>> GetRelevantUpdates(List<UpdateFormat> updateDataList)
+        {
+            var selectUpdates = new List<UpdateFormat>();
+            foreach (var update in updateDataList)
+            {
+                if (CheckWebVersion(update.Version))
+                {
+                    selectUpdates.Add(update);
+                }
+            }
+
+            UpdateData = selectUpdates;
+            return UpdateData;
         }
 
         public static bool CheckWebVersion(string webVersion)
@@ -215,7 +261,7 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static async Task<bool> CheckVersionCompatibility(string projectVersion)
         {
-            var updateData = await GetUpdateData();
+            var updateData = await GetUpdateDataFromFile();
             return !IsBreakingChangePresent(updateData, ParseVersionString(projectVersion));
         }
 

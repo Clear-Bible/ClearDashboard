@@ -49,13 +49,15 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+
+
         <ListView
-            x:Name="ListView"
+            x:Name="UpdateList"
             Margin="18,0,5,5"
             VerticalAlignment="Top"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch"
-            ItemsSource="{Binding ReleaseNotes}">
+            ItemsSource="{Binding Updates}">
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
                     <Setter Property="Visibility" Value="Visible" />
@@ -67,95 +69,123 @@
                     <Setter Property="BorderThickness" Value="0,0,0,1" />
                 </Style>
             </ListView.ItemContainerStyle>
-            <ListView.View>
-                <GridView>
-                    <GridView.ColumnHeaderContainerStyle>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </Style>
-                    </GridView.ColumnHeaderContainerStyle>
+            <ListView.ItemTemplate>
+                <ItemContainerTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{Binding Version}" />
 
-                    <GridViewColumn Width="30">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ContentControl>
-                                    <ContentControl.Style>
-                                        <Style TargetType="ContentControl">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Added}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource added}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BugFix}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource bugfix}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Changed}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource changed}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Updated}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource updated}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Deferred}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource deferred}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BreakingChange}">
-                                                    <Setter Property="ContentTemplate" Value="{StaticResource breaking}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
+                        <ListView
+                            x:Name="NotesList"
+                            Margin="18,0,5,5"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch"
+                            ItemsSource="{Binding ReleaseNotes}">
+                            <ListView.Style>
+                                <Style TargetType="{x:Type ListView}">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </Style>
+                            </ListView.Style>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="BorderBrush" Value="LightGray" />
+                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.View>
+                                <GridView>
+                                    <GridView.ColumnHeaderContainerStyle>
+                                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
                                         </Style>
-                                    </ContentControl.Style>
-                                </ContentControl>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                                    </GridView.ColumnHeaderContainerStyle>
 
-                    <GridViewColumn Width="100">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Text="{Binding NoteType}"
-                                    TextWrapping="Wrap">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Added}">
-                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BugFix}">
-                                                    <Setter Property="Foreground" Value="{StaticResource RedDarkBrush}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Changed}">
-                                                    <Setter Property="Foreground" Value="{StaticResource BlueMidBrush}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Updated}">
-                                                    <Setter Property="Foreground" Value="{StaticResource YellowVeryDarkBrush}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Deferred}">
-                                                    <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BreakingChange}">
-                                                    <Setter Property="Foreground" Value="{StaticResource RedVeryDarkBrush}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                                    <GridViewColumn Width="30">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ContentControl>
+                                                    <ContentControl.Style>
+                                                        <Style TargetType="ContentControl">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Added}">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource added}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BugFix}">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource bugfix}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Changed}">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource changed}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Updated}">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource updated}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Deferred}">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource deferred}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BreakingChange}">
+                                                                    <Setter Property="ContentTemplate" Value="{StaticResource breaking}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ContentControl.Style>
+                                                </ContentControl>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
 
-                    <GridViewColumn Width="{Binding ElementName=ListView, Path=ActualWidth, Converter={converters:WidthSubtraction}, ConverterParameter='140'}">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Note}"
-                                    TextWrapping="Wrap" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
+                                    <GridViewColumn Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Text="{Binding NoteType}"
+                                                    TextWrapping="Wrap">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Added}">
+                                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BugFix}">
+                                                                    <Setter Property="Foreground" Value="{StaticResource RedDarkBrush}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Changed}">
+                                                                    <Setter Property="Foreground" Value="{StaticResource BlueMidBrush}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Updated}">
+                                                                    <Setter Property="Foreground" Value="{StaticResource YellowVeryDarkBrush}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.Deferred}">
+                                                                    <Setter Property="Foreground" Value="{StaticResource IndigoMidBrush}" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding NoteType}" Value="{x:Static my:ReleaseNoteType.BreakingChange}">
+                                                                    <Setter Property="Foreground" Value="{StaticResource RedVeryDarkBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                    <GridViewColumn Width="{Binding ElementName=ListView, Path=ActualWidth, Converter={converters:WidthSubtraction}, ConverterParameter='140'}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    Text="{Binding Note}"
+                                                    TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+                    </StackPanel>
+                </ItemContainerTemplate>
+            </ListView.ItemTemplate>
         </ListView>
     </Grid>
 </Window>
