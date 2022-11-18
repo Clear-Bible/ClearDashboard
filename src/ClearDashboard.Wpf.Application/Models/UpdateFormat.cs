@@ -33,11 +33,6 @@ namespace ClearDashboard.Wpf.Application.Models
         public string DownloadLink { get; set; } = String.Empty;
     }
 
-    public class GithubDownloadUri
-    {
-        public string download_url { get; set; } = String.Empty;
-    }
-
     public class ReleaseNote
     {
 
@@ -52,46 +47,6 @@ namespace ClearDashboard.Wpf.Application.Models
         public static List<ReleaseNote> UpdateNotes { get; set; }
         public static List<UpdateFormat> UpdateData { get; set; }
         public static bool UpdateDataUpdated { get; set; }
-
-        public static async Task<List<UpdateFormat>> GetUpdateDataFromFolder()
-        {
-            if (!UpdateDataUpdated)
-            {
-                var connectedToInternet = await NetworkHelper.IsConnectedToInternet();
-                if (!connectedToInternet)
-                {
-                    return UpdateData;
-                }
-
-                var updateDataList = new List<UpdateFormat>();
-                try
-                {
-                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://api.github.com/repos/Clear-Bible/CLEAR_External_Releases/contents/VersionHistory");
-                    req.UserAgent = "[any words that is more than 5 characters]";
-                    req.Accept = "application/json";
-                    WebResponse response = req.GetResponse(); //Error Here
-                    Stream dataStream = response.GetResponseStream();
-                    var downloadUris = await JsonSerializer.DeserializeAsync<List<GithubDownloadUri>>(dataStream);
-
-                    Stream stream;
-                    var webClient = new WebClient();
-
-                    foreach (var uri in downloadUris)
-                    {
-                        stream = await webClient.OpenReadTaskAsync(new Uri(uri.download_url, UriKind.Absolute));
-                        updateDataList.Add(await JsonSerializer.DeserializeAsync<UpdateFormat>(stream));
-                    }
-
-                    UpdateData=updateDataList;
-                    UpdateDataUpdated = true;
-                }
-                catch (Exception)
-                {
-                    return UpdateData;
-                }
-            }
-            return UpdateData;
-        }
 
         public static async Task<List<UpdateFormat>> GetUpdateDataFromFile()
         {
@@ -145,9 +100,9 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static async Task<List<ReleaseNote>> GetUpdateNotes()
         {
-            var updateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();//new List<UpdateFormat>();
+            var updateDataList = await GetUpdateDataFromFile();
             
-            UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(updateDataList);
+            UpdateNotes = await GetUpdateNotes(updateDataList);
 
             return UpdateNotes;
         }
@@ -174,15 +129,7 @@ namespace ClearDashboard.Wpf.Application.Models
             //get the assembly version
             var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
 
-            // compare
-            var result = webVer.CompareTo(thisVersion);
-
-            if (result == 1)
-            {
-                //newer release present on the web
-                return true;
-            }
-            return false;
+            return IsNewerVersion(thisVersion, webVer);
         }
 
         private static Version ParseVersionString(string webVersion)
@@ -252,7 +199,7 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static bool IsNewerVersion(Version olderVersion, Version newerVersion)
         {
-            if (olderVersion != null && newerVersion.CompareTo(olderVersion) == 1)
+            if (newerVersion.CompareTo(olderVersion) == 1)
             {
                 return true;
             }

@@ -20,11 +20,10 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
     public class GetDashboardProjectsQueryHandler : ResourceRequestHandler<GetDashboardProjectQuery,
         RequestResult<ObservableCollection<DashboardProject>>, ObservableCollection<DashboardProject>>
     {
-        public GetDashboardProjectsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider? projectProvider, ILogger<GetDashboardProjectsQueryHandler> logger) : base(logger)//projectNameDbContextFactory, projectProvider, 
+        public GetDashboardProjectsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider? projectProvider, ILogger<GetDashboardProjectsQueryHandler> logger) : base(logger)
         {
             ProjectNameDbContextFactory = projectNameDbContextFactory ?? throw new ArgumentNullException(nameof(projectNameDbContextFactory));
         }
-        //
 
         protected ProjectDbContextFactory? ProjectNameDbContextFactory { get; init; }
         protected Task<ProjectDbContext> ProjectDbContext { get; set; }
