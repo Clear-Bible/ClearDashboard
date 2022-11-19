@@ -540,7 +540,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Created = corpus.CorpusId.Created,
                     DisplayName = corpus.CorpusId.DisplayName,
                     IsRtl = corpus.CorpusId.IsRtl,
-                    TranslationFontFamily = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
+                    TranslationFontFamily = corpus.CorpusId.FontFamily ?? Corpus.DefaultFontFamily,
                     Language = corpus.CorpusId.Language,
                     Name = corpus.CorpusId.Name,
                     ParatextGuid = corpus.CorpusId.ParatextGuid,
@@ -611,7 +611,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         corpusId: new CorpusId(
                             corpusNode.CorpusId,
                             isRtl: corpusNode.IsRTL,
-                            translationFontFamily: corpusNode.TranslationFontFamily,
+                            fontFamily: corpusNode.TranslationFontFamily,
                             name: corpusNode.Name,
                             displayName: "",
                             language: "",
@@ -675,7 +675,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         corpusId: new CorpusId(
                             id: string.IsNullOrEmpty(corpus.CorpusId) ? Guid.NewGuid() : Guid.Parse(corpus.CorpusId),
                             isRtl: corpus.IsRtl,
-                            translationFontFamily: corpus.TranslationFontFamily,
+                            fontFamily: corpus.TranslationFontFamily,
                             name: corpus.Name,
                             displayName: corpus.DisplayName,
                             language: corpus.Language,
@@ -758,7 +758,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
                         token: cancellationToken);
 
-                    corpus.CorpusId.TranslationFontFamily = ManuscriptIds.HebrewFontFamily;
+                    corpus.CorpusId.FontFamily = ManuscriptIds.HebrewFontFamily;
 
                     OnUIThread(() => Corpora.Add(corpus));
 
@@ -897,7 +897,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.GreekManuscriptId,
                         token: cancellationToken);
 
-                    corpus.CorpusId.TranslationFontFamily = ManuscriptIds.GreekFontFamily;
+                    corpus.CorpusId.FontFamily = ManuscriptIds.GreekFontFamily;
 
                     OnUIThread(() => Corpora.Add(corpus));
 
@@ -1041,7 +1041,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                  ParatextId: metadata.Id,
                                  token: cancellationToken);
 
-                            corpus.CorpusId.TranslationFontFamily = metadata.FontFamily;
+                            corpus.CorpusId.FontFamily = metadata.FontFamily;
 #pragma warning restore CS8604
                         }
                         OnUIThread(() =>
@@ -2024,7 +2024,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ParatextProjectId = corpus.CorpusId.ParatextGuid ?? string.Empty,
                 CorpusId = corpus.CorpusId.Id,
                 IsRTL = corpus.CorpusId.IsRtl,
-                TranslationFontFamily = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
+                TranslationFontFamily = corpus.CorpusId.FontFamily ?? Corpus.DefaultFontFamily,
             };
 
             node.InputConnectors.Add(new ConnectorViewModel("Target", EventAggregator, ProjectManager, node.ParatextProjectId)
@@ -2044,7 +2044,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 TokenizationFriendlyName = EnumHelper.GetDescription(tokenizer),
                 IsSelected = false,
                 TokenizationName = tokenizer.ToString(),
-                TokenizedTextCorpusId = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
+                TokenizedTextCorpusId = corpus.CorpusId.FontFamily ?? Corpus.DefaultFontFamily,
             });
 
             //

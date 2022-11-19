@@ -3,5 +3,5 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora
 {
-    public record GetAllTokenizedCorpusIdsByCorpusIdQuery(CorpusId CorpusId) : ProjectRequestQuery<IEnumerable<TokenizedTextCorpusId>>;
+    public record GetAllTokenizedCorpusIdsByCorpusIdQuery(CorpusId? CorpusId) : ProjectRequestQuery<IEnumerable<TokenizedTextCorpusId>>;
 }

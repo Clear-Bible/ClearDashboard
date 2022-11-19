@@ -7,7 +7,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class Corpus
     {
-        public const string DefaultTranslationFontFamily = "Segoe UI";
+        public const string DefaultFontFamily = "Segoe UI";
 
         public CorpusId CorpusId { get; set; }
 
@@ -37,10 +37,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string Language,
             string CorpusType,
             string ParatextId,
-            string TranslationFontFamily = DefaultTranslationFontFamily,
+            string FontFamily = DefaultFontFamily,
             CancellationToken token = default)
         {
-            var command = new CreateCorpusCommand(IsRtl, TranslationFontFamily, Name, Language, CorpusType, ParatextId);
+            var command = new CreateCorpusCommand(IsRtl, FontFamily, Name, Language, CorpusType, ParatextId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);

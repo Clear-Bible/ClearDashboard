@@ -104,7 +104,7 @@ namespace ClearDashboard.DAL.Alignment.Features
             return new CorpusId(
                 corpus.Id,
                 corpus.IsRtl,
-                corpus.TranslationFontFamily,
+                corpus.FontFamily,
                 corpus.Name,
                 corpus.DisplayName,
                 corpus.Language,
