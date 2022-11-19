@@ -101,13 +101,6 @@
             Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
             TranslationClicked="TranslationClicked"
             >
-
-            <!--<i:Interaction.Triggers>
-                <i:EventTrigger EventName="TranslationClicked">
-                    <i:CallMethodAction MethodName="TranslationClicked" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>-->
-
         </userControls:VerseDisplay>
 
         <Label
@@ -720,13 +713,6 @@
             Grid.RowSpan="4"
             Grid.Column="1"
             Orientation="Vertical">
-            <!--<userControls:TranslationSelector
-                cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];"
-                SelectedItem="{Binding CurrentTranslationOption}"
-                TokenDisplayViewModel="{Binding TokenForTranslation}"
-                TranslationOptions="{Binding TranslationOptions}"
-                Visibility="{Binding TranslationPaneVisibility}" />-->
-
             <userControls:NoteCollectionDisplay
                 cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)]; 
                                     [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            
