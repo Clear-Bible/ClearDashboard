@@ -73,10 +73,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            var tuple = await AlignmentSet.GetAllAlignmentSetIds(Mediator!, ParallelCorpusId,
-                new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!));
+            AlignmentSets = (await AlignmentSet.GetAllAlignmentSetIds(
+                Mediator!, 
+                ParallelCorpusId,
+                new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName!)))
+                .ToList();
 
-            AlignmentSets = tuple.Select(t => t.alignmentSetId).ToList();
             SelectedAlignmentSet = AlignmentSets.FirstOrDefault();
             CanCreate = false;
             CanCancel = true;

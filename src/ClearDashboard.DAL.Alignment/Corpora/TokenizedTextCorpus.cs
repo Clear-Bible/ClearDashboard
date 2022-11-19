@@ -29,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
         }
 
-        public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId corpusId)
+        public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId? corpusId)
         {
             var result = await mediator.Send(new GetAllTokenizedCorpusIdsByCorpusIdQuery(corpusId));
             result.ThrowIfCanceledOrFailed(true);

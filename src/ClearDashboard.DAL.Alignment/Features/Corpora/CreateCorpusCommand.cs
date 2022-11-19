@@ -13,7 +13,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     /// <param name="CorpusType"></param>
     public record CreateCorpusCommand(
         bool IsRtl,
-        string TranslationFontFamily,
+        string FontFamily,
         string Name, 
         string Language, 
         string CorpusType,
