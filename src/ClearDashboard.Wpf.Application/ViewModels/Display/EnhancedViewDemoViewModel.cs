@@ -146,20 +146,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             set => Set(ref _selectedTokens, value);
         }
 
-        private IEnumerable<TranslationOption> _translationOptions;
-        public IEnumerable<TranslationOption> TranslationOptions
-        {
-            get => _translationOptions;
-            set => Set(ref _translationOptions, value);
-        }
-
-        private TranslationOption? _currentTranslationOption;
-        public TranslationOption? CurrentTranslationOption
-        {
-            get => _currentTranslationOption;
-            set => Set(ref _currentTranslationOption, value);
-        }
-
         private Visibility _notePaneVisibility = Visibility.Collapsed;
         public Visibility NotePaneVisibility
         {
@@ -287,21 +273,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotePaneVisibility = Visibility.Visible;
         }
 
-        public async Task TranslationApplied(TranslationEventArgs e)
-        {
-            await VerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
-            NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
-
-            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplay.SurfaceText}' ({e.TokenDisplay.Token.TokenId})";
-            TranslationPaneVisibility = Visibility.Collapsed;
-        }
-
-        public void TranslationCancelled(RoutedEventArgs e)
-        {
-            Message = "Translation cancelled.";
-            TranslationPaneVisibility = Visibility.Collapsed;
-        }        
-        
         public async Task NoteAdded(NoteEventArgs e)
         {
             await NoteManager.AddNoteAsync(e.Note, e.EntityIds);

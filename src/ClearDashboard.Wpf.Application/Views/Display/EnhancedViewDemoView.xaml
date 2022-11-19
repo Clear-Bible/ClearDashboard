@@ -73,14 +73,11 @@
             [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];                                                                                         
             [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];                                                                                         
             [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];                                                                                         
-                                                                                                   
             [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];                                                                                         
             [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];                                                                                         
             [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];                                                                                         
             [Event NoteIndicatorMouseEnter] = [Action NoteIndicatorMouseEnter($eventArgs)];                                                                                         
-            [Event NoteCreate] = [Action NoteCreate($eventArgs)];                                 
-            [Event FilterPins] = [Action FilterPins($eventArgs)];
-            [Event TranslateQuick] = [Action TranslateQuick($eventArgs)]"
+            [Event NoteCreate] = [Action NoteCreate($eventArgs)]"
             DataContext="{Binding VerseDisplayViewModel}"
             FlowDirection="{Binding ElementName=RtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
             TokenFontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
