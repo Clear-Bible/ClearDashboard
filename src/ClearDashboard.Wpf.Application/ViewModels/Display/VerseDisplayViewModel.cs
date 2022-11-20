@@ -116,12 +116,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             {
                 result.Add(new TokenDisplayViewModel(paddedToken.token)
                 {
-                    // For right-to-left languages, the padding before and padding after should be swapped.
-                    PaddingBefore = !isRtl ? paddedToken.paddingBefore : paddedToken.paddingAfter,
-                    PaddingAfter = !isRtl ? paddedToken.paddingAfter : paddedToken.paddingBefore,
-
+                    PaddingBefore = paddedToken.paddingBefore,
+                    PaddingAfter = paddedToken.paddingAfter,
                     Translation = GetTranslationForToken(paddedToken.token),
-                    //Notes = await GetNotesForEntityAsync(paddedToken.token.TokenId),
                     NoteIds = await NoteManager.GetNoteIdsAsync(paddedToken.token.TokenId),
                     IsSource = isSource
                 });
