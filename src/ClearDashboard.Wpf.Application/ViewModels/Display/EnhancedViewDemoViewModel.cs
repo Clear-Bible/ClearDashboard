@@ -231,12 +231,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             Message = string.Empty;
         }
 
-        public async Task TranslationClicked(TranslationEventArgs e)
-        {
-            await DisplayTranslationPane(e);
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} clicked";
-        }
-
         public void TranslationMouseEnter(TranslationEventArgs e)
         {
             Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} hovered";

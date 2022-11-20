@@ -95,31 +95,31 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.Transparent));
 
         /// <summary>
-        /// Identifies the TokenFlowDirection dependency property.
+        /// Identifies the SourceFlowDirection dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFlowDirectionProperty = DependencyProperty.Register(nameof(TokenFlowDirection), typeof(FlowDirection), typeof(TokenDisplay),
             new PropertyMetadata(FlowDirection.LeftToRight));
 
         /// <summary>
-        /// Identifies the TokenFontFamily dependency property.
+        /// Identifies the SourceFontFamily dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontFamilyProperty = DependencyProperty.Register(nameof(TokenFontFamily), typeof(FontFamily), typeof(TokenDisplay),
             new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
 
         /// <summary>
-        /// Identifies the TokenFontSize dependency property.
+        /// Identifies the SourceFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontSizeProperty = DependencyProperty.Register(nameof(TokenFontSize), typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(18d));
 
         /// <summary>
-        /// Identifies the TokenFontStyle dependency property.
+        /// Identifies the SourceFontStyle dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontStyleProperty = DependencyProperty.Register(nameof(TokenFontStyle), typeof(FontStyle), typeof(TokenDisplay),
             new PropertyMetadata(FontStyles.Normal));
 
         /// <summary>
-        /// Identifies the TokenFontWeight dependency property.
+        /// Identifies the SourceFontWeight dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontWeightProperty = DependencyProperty.Register(nameof(TokenFontWeight), typeof(FontWeight), typeof(TokenDisplay),
             new PropertyMetadata(FontWeights.SemiBold));
