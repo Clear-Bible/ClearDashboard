@@ -1,7 +1,9 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Translation;
+using ClearDashboard.DAL.CQRS;
 using MediatR;
 using System.Collections;
 
@@ -17,27 +19,15 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public async Task<IEnumerable<Alignment>> GetAlignments(IEnumerable<EngineParallelTextRow> engineParallelTextRows, CancellationToken token = default)
         {
             var result = await mediator_.Send(new GetAlignmentsByAlignmentSetIdAndTokenIdsQuery(AlignmentSetId, engineParallelTextRows), token);
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+            
+            return result.Data!;
         }
 
         public async void PutAlignment(Alignment alignment, CancellationToken token = default)
         {
             var result = await mediator_.Send(new PutAlignmentSetAlignmentCommand(AlignmentSetId, alignment), token);
-            if (result.Success)
-            {
-                return;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed();
         }
 
         /// <summary>
@@ -50,27 +40,17 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public async Task<IEnumerable<(string trainingTargetText, string surfaceTargetText, IEnumerable<(IEnumerable<Token>, IEnumerable<int>)>)>> GetAlignedTokensAndContext(string sourceTrainingText)
         {
             var result = await mediator_.Send(new GetAlignedTokensAndContextQuery(sourceTrainingText));
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public async Task<IEnumerable<Token>> GetTargetTokensBySourceTrainingText(string sourceTrainingText)
         {
             var result = await mediator_.Send(new GetAlignmentSetTargetTokensBySourceTrainingTextQuery(AlignmentSetId, sourceTrainingText));
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+ 
+            return result.Data!;
         }
 
         public async Task Update(CancellationToken token = default)
@@ -79,18 +59,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             throw new NotImplementedException();
         }
 
-        public static async Task<IEnumerable<(AlignmentSetId alignmentSetId, ParallelCorpusId parallelCorpusId, UserId userId)>> 
+        public static async Task<IEnumerable<AlignmentSetId>> 
             GetAllAlignmentSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
             var result = await mediator.Send(new GetAllAlignmentSetIdsQuery(parallelCorpusId, userId));
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!.Select(e => e.alignmentSetId);
         }
 
         public static async Task<AlignmentSet> Get(
@@ -100,18 +75,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             var command = new GetAlignmentSetByAlignmentSetIdQuery(alignmentSetId);
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                var data = result.Data;
-                return new AlignmentSet(
-                    data.alignmentSetId,
-                    data.parallelCorpusId,
-                    mediator);
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            var data = result.Data;
+            return new AlignmentSet(
+                data.alignmentSetId,
+                data.parallelCorpusId,
+                mediator);
         }
 
         public static async Task<AlignmentSet> Create(
@@ -130,16 +100,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 smtModel,
                 isSyntaxTreeAlignerRefined,
                 metadata,
-                parallelCorpusId), token);
+            parallelCorpusId), token);
 
-            if (createTranslationSetCommandResult.Success && createTranslationSetCommandResult.Data != null)
-            {
-                return createTranslationSetCommandResult.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(createTranslationSetCommandResult.Message);
-            }
+            createTranslationSetCommandResult.ThrowIfCanceledOrFailed(true);
+
+            return createTranslationSetCommandResult.Data!;
         }
 
         internal AlignmentSet(

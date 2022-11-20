@@ -11,6 +11,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.FiniteState;
+using System.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -46,9 +47,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 );
             }
 
+            var fullIds = BuildFullDomainEntityIds(grouped, cancellationToken);
+            return new RequestResult<IEnumerable<IId>>(fullIds);
+        }
+
+        private IEnumerable<IId> BuildFullDomainEntityIds(Dictionary<string, IEnumerable<Guid>> grouped, CancellationToken cancellationToken)
+        {
             var fullIds = new List<IId>();
             foreach (var kvp in grouped)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 switch (true)
                 {
                     case true when kvp.Key == typeof(TokenId).Name:
@@ -65,7 +74,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                         break;
 
                     case true when kvp.Key == typeof(CorpusId).Name:
-                        fullIds.AddRange(ProjectDbContext!.Corpa
+                        fullIds.AddRange(ModelHelper.AddIdIncludesCorpaQuery(ProjectDbContext!)
                             .Where(e => kvp.Value.Contains(e.Id))
                             .Select(e => ModelHelper.BuildCorpusId(e)));
                         break;
@@ -126,15 +135,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                                 .Select(e => ModelHelper.BuildUserId(e)));
                         break;
                     default:
-                        return new RequestResult<IEnumerable<IId>>
-                        (
-                            success: false,
-                            message: $"Unsupported domain entity id type found:  {kvp.Key}"
-                        );
+                        throw new ArgumentException($"Unsupported domain entity id type found:  {kvp.Key}");
                 }
             }
 
-            return new RequestResult<IEnumerable<IId>>(fullIds);
+            return fullIds;
         }
     }
 }

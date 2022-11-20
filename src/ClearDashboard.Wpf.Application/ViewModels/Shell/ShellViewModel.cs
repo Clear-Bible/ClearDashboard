@@ -30,6 +30,8 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using ClearDashboard.Wpf.Application.Views.Shell;
+using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -38,6 +40,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<UserMessage>,
         IHandle<GetApplicationWindowSettings>
     {
+
+        //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
+        //public static extern int GetDeviceCaps(IntPtr hDC, int nIndex);
+
+        //public enum DeviceCap
+        //{
+        //    VERTRES = 10,
+        //    DESKTOPVERTRES = 117
+        //}
+
 
         #region Properties
 
@@ -243,16 +255,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var source = PresentationSource.FromVisual(view);
 
-            var horizontalFactor = source.CompositionTarget.TransformToDevice.M22;
-            PopupHorizontalOffset = horizontalFactor switch
-            {
-                < 1.25 => 5,
-                >= 1.25 => 270,
-                _ => 5
-            };
+            PopupHorizontalOffset = 5;
 
-            Logger!.LogInformation($"Set PopupHorizontalOffset to {PopupHorizontalOffset}");
+            //var scalingFactor = GetWindowsScreenScalingFactor(false);
+            //PopupHorizontalOffset = scalingFactor * 5;
+
+            //var verticalFactor = source.CompositionTarget.TransformToDevice.M11;
+            //var horizontalFactor = source.CompositionTarget.TransformToDevice.M22;
+            //PopupHorizontalOffset = horizontalFactor switch
+            //{
+            //    < 1.25 => 5,
+            //    >= 1.25 => 270,
+            //    _ => 5
+            //};
+
+            //Logger!.LogInformation($"VerticalFactor is {verticalFactor}");
+            //Logger!.LogInformation($"HorizontalFactor is {horizontalFactor}");
+            Logger!.LogInformation($"Setting PopupHorizontalOffset to {PopupHorizontalOffset}");
         }
+
+        //private static double GetWindowsScreenScalingFactor(bool percentage = true)
+        //{
+        //    //Create Graphics object from the current windows handle
+        //    Graphics GraphicsObject = Graphics.FromHwnd(IntPtr.Zero);
+        //    //Get Handle to the device context associated with this Graphics object
+        //    IntPtr DeviceContextHandle = GraphicsObject.GetHdc();
+        //    //Call GetDeviceCaps with the Handle to retrieve the Screen Height
+        //    int LogicalScreenHeight = GetDeviceCaps(DeviceContextHandle, (int)DeviceCap.VERTRES);
+        //    int PhysicalScreenHeight = GetDeviceCaps(DeviceContextHandle, (int)DeviceCap.DESKTOPVERTRES);
+        //    //Divide the Screen Heights to get the scaling factor and round it to two decimals
+        //    double ScreenScalingFactor = Math.Round((double)PhysicalScreenHeight / (double)LogicalScreenHeight, 2);
+        //    //If requested as percentage - convert it
+        //    if (percentage)
+        //    {
+        //        ScreenScalingFactor *= 100.0;
+        //    }
+        //    //Release the Handle and Dispose of the GraphicsObject object
+        //    GraphicsObject.ReleaseHdc(DeviceContextHandle);
+        //    GraphicsObject.Dispose();
+        //    //Return the Scaling Factor
+        //    return ScreenScalingFactor;
+        //}
+
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {

@@ -16,10 +16,15 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? EngineTokenId { get; set; }
         public string? TrainingText { get; set; }
+        public string? ExtendedProperties { get; set; }
 
-        [ForeignKey("TokenizationId")]
-        public Guid TokenizationId { get; set; }
-        public virtual TokenizedCorpus? Tokenization { get; set; }
+        [ForeignKey("VerseRowId")]
+        public Guid VerseRowId { get; set; }
+        public virtual VerseRow? VerseRow { get; set; }
+
+        [ForeignKey("TokenizedCorpusId")]
+        public Guid TokenizedCorpusId { get; set; }
+        public virtual TokenizedCorpus? TokenizedCorpus { get; set; }
 
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }
         public virtual ICollection<Alignment> SourceAlignments { get; set; }

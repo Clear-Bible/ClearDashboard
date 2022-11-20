@@ -11,10 +11,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         public int SubwordNumber { get; set; }
 
         public string? SurfaceText { get; set; }
-        public string? PropertiesJson { get; set; }
 
         public virtual Adornment? Adornment { get; set; }
 
+        [ForeignKey("TokenCompositeId")]
         public Guid? TokenCompositeId { get; set; }
         public virtual TokenComposite? TokenComposite { get; set; }
     }

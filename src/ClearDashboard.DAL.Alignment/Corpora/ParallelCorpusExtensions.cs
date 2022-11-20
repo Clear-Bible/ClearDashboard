@@ -1,7 +1,10 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.CQRS;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
@@ -51,14 +54,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 engineParallelTextCorpus.VerseMappingList ?? throw new InvalidParameterEngineException(name: "engineParallelTextCorpus.VerseMappingList", value: "null"),
                 displayName), token);
 
-            if (createParallelCorpusCommandResult.Success && createParallelCorpusCommandResult.Data != null)
-            {
-                return createParallelCorpusCommandResult.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(createParallelCorpusCommandResult.Message);
-            }
+            createParallelCorpusCommandResult.ThrowIfCanceledOrFailed(true);
+
+            return await ParallelCorpus.Get(mediator, createParallelCorpusCommandResult.Data!, token);
         }
     }
 }

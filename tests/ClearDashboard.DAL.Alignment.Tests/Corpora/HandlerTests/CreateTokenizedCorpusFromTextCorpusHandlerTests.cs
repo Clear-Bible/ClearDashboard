@@ -49,7 +49,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var corpusDB = ProjectDbContext!.Corpa.Include(c => c.TokenizedCorpora).FirstOrDefault(c => c.Id == tokenizedTextCorpus!.CorpusId.Id);
+            var corpusDB = ProjectDbContext!.Corpa.Include(c => c.TokenizedCorpora).FirstOrDefault(c => c.Id == tokenizedTextCorpus!.TokenizedTextCorpusId.CorpusId.Id);
 
             Assert.NotNull(corpusDB);
             Assert.True(corpusDB.IsRtl);
@@ -113,7 +113,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var corpusDB = ProjectDbContext!.Corpa.Include(c => c.TokenizedCorpora).FirstOrDefault(c => c.Id == tokenizedTextCorpus!.CorpusId.Id);
+            var corpusDB = ProjectDbContext!.Corpa.Include(c => c.TokenizedCorpora).FirstOrDefault(c => c.Id == tokenizedTextCorpus!.TokenizedTextCorpusId.CorpusId.Id);
 
             Assert.NotNull(corpusDB);
             Assert.True(corpusDB.IsRtl);

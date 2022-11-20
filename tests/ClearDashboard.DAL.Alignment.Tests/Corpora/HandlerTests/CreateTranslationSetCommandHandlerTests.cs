@@ -83,8 +83,8 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var someTranslationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!, parallelCorpus2.ParallelCorpusId);
             Assert.Single(someTranslationSetIds);
 
-            Assert.Equal(translationSet2.TranslationSetId, someTranslationSetIds.First().translationSetId);
-            Assert.Equal(parallelCorpus2.ParallelCorpusId, someTranslationSetIds.First().parallelCorpusId);
+            Assert.Equal(translationSet2.TranslationSetId, someTranslationSetIds.First());
+            Assert.Equal(parallelCorpus2.ParallelCorpusId, someTranslationSetIds.First().ParallelCorpusId);
 
             var allTranslationSetIdsForUser = await TranslationSet.GetAllTranslationSetIds(Mediator!, null, new UserId(user.Id, user.FullName ?? string.Empty));
             Assert.Equal(2, allTranslationSetIdsForUser.Count());

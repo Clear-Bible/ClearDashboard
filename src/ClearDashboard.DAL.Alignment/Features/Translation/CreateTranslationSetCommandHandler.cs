@@ -101,8 +101,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 using var translationModelTargetTextScoreInsertCommand = CreateTranslationModelTargetTextScoreInsertCommand(connection);
 
                 var translationSetId = await InsertTranslationSetAsync(
-                    translationSet, 
-                    translationSetInsertCommand, 
+                    translationSet,
+                    translationSetInsertCommand,
                     cancellationToken);
 
                 foreach (var translationModelEntry in translationSet.TranslationModel)
@@ -141,15 +141,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     ModelHelper.BuildAlignmentSetId(translationSetFromDb.AlignmentSet!, parallelCorpusId, translationSetFromDb.AlignmentSet!.User!),
                     request.TranslationModel != null ? true : false,
                     _mediator));
-
-            }
-            catch (Exception e)
-            {
-                return new RequestResult<Alignment.Translation.TranslationSet>
-                (
-                    success: false,
-                    message: e.Message
-                );
             }
             finally
             {

@@ -159,6 +159,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         #region Methods
 
+        public async void Close()
+        {
+            await this.TryCloseAsync();
+        }
+
+
         public async Task SendMessage()
         {
             var bRet = await NetworkHelper.IsConnectedToInternet();

@@ -66,7 +66,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                 using var writeLock = project.RequestWriteLock(_mainWindow, WriteLockReleaseRequested, WriteLockScope.ProjectNotes);
                 if (writeLock == null)
                 {
-                    throw new Exception("Couldn't obtain write lock required to add note. Abandoning operation");
+                    throw new Exception("Couldn't obtain write lock required to add note. Abandoning operation.");
                 }
                 else
                 {
@@ -88,6 +88,10 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                                 throw new Exception($"Couldn't find match for occurance index {request.Data.OccuranceIndexOfSelectedTextInVerseText} of selected text {request.Data.SelectedText}");
                         }
                     }
+                    if (anchor == null)
+                    {
+                        throw new Exception("Cannot find matching text in verse. Note not added to Paratext.");
+                    }
                     List<CommentParagraph> commentParagraphs = new List<CommentParagraph>();
                     foreach (var paragraph in request.Data.NoteParagraphs)
                     {
@@ -95,7 +99,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
                     }
 
                     var noteAdded = project.AddNote(writeLock, anchor, commentParagraphs, assignedUser: new UserInfo(request.Data.ParatextUser));
-                    return Task.FromResult(new RequestResult<IProjectNote>(noteAdded));
+                    //cannot return IProjectNote return value from AddNote because it has a circular reference and the json serializer used with signalr cannot serialize the object.
+                    return Task.FromResult(new RequestResult<IProjectNote>(null));
                 }
             }
             catch (Exception ex)

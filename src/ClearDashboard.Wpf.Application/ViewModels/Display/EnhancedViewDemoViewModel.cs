@@ -89,7 +89,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 var translationSetIds = await TranslationSet.GetAllTranslationSetIds(Mediator!);
-                var translationSet = await TranslationSet.Get(translationSetIds.First().translationSetId, Mediator!);
+                var translationSet = await TranslationSet.Get(translationSetIds.First(), Mediator!);
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved first translation set {translationSet.TranslationSetId.Id} in {stopwatch.ElapsedMilliseconds} ms ({stopwatch.Elapsed.Seconds} seconds)");
                 return translationSet;

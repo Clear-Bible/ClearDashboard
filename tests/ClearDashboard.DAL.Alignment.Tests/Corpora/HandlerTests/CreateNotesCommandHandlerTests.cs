@@ -22,6 +22,7 @@ using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
 using ClearDashboard.DAL.Alignment.BackgroundServices;
 using Autofac;
 using System.Threading;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -102,7 +103,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             #endregion
 
             var sourceTokens = ProjectDbContext!.Tokens
-                .Where(t => t.TokenizationId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
                 .Take(10)
                 .Select(t => ModelHelper.BuildToken(t)).ToList();
 
@@ -309,7 +310,7 @@ public class CreateNotesCommandHandlerTests : TestBase
                 .Create(Mediator!, sourceCorpus.CorpusId, "test", "tokenization");
 
             var sourceTokens = ProjectDbContext!.Tokens
-                .Where(t => t.TokenizationId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
                 .Take(3)
                 .Select(t => ModelHelper.BuildToken(t)).ToList();
 

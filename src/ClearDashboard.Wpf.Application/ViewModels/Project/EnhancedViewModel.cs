@@ -31,6 +31,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -41,7 +42,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Dialogs;
+using Brush = System.Windows.Media.Brush;
+using Brushes = System.Windows.Media.Brushes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
+using FontFamily = System.Windows.Media.FontFamily;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
@@ -831,6 +835,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var mainViewModel = IoC.Get<MainViewModel>();
             var fontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.ParatextProjectId);
 
+            FontFamily family;
+            try
+            {
+                family = new(fontFamily);
+            }
+            catch (Exception e)
+            {
+                family = new("Segoe UI");
+            }
+
 
             var brush = GetCorpusBrushColor(message);
 
@@ -845,6 +859,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                     IsRtl = message.IsRTL,
+                    SourceFontFamily = family,
                 });
 
                 // add to the grouping for saving
@@ -1018,6 +1033,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
                     if (message.AlignmentSetId != null)
+
+                        // ALIGNMENTS
                         await verseDisplayViewModel!.ShowAlignmentsAsync(
                             row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
                             await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
@@ -1027,7 +1044,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             //FIXME:surface serialization message.TargetDetokenizer ?? throw new InvalidParameterEngineException(name: "message.TargetDetokenizer", value: "null", message: "message.TargetDetokenizer must not be null when message.AlignmentSetId is not null."),
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             message.IsTargetRTL ?? throw new InvalidDataEngineException(name: "IsTargetRTL", value: "null"));
-                    else 
+                    else
+
+                        // INTERLINEARS
                         await verseDisplayViewModel!.ShowTranslationAsync(
                             row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
                             await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null")),
@@ -1043,8 +1062,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 //    LabelSuggestions = versesOut.First().LabelSuggestions;
                 //}
 
-                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
+                
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
+                if (message.AlignmentSetId != null)
+                {
+                    // ALIGNMENTS
+                    title += " " + LocalizationStrings.Get("EnhancedView_Alignment", _logger);
+                }
+                else
+                {
+                    // INTERLINEARS
+                    title += " " + LocalizationStrings.Get("EnhancedView_Interlinear", _logger);
+                }
+
+                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
                 if (rows.Count <= 1)
                 {
                     // only one verse
@@ -1171,6 +1202,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var sourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
             var targetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
 
+            FontFamily familySource;
+            try
+            {
+                familySource = new(sourceFontFamily);
+            }
+            catch (Exception e)
+            {
+                familySource = new("Segoe UI");
+            }
+
+            FontFamily familyTarget;
+            try
+            {
+                familyTarget = new(targetFontFamily);
+            }
+            catch (Exception e)
+            {
+                familyTarget = new("Segoe UI");
+            }
+
+
+
             VersesDisplay? row;
             if (message.AlignmentSetId is null)
             {
@@ -1216,7 +1269,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     RowTitle = title,
                     Verses = verses,
                     IsRtl = message.IsRTL,
-                    IsTargetRtl = message.IsTargetRTL ?? false
+                    IsTargetRtl = message.IsTargetRTL ?? false,
+                    SourceFontFamily = familySource,
+                    TargetFontFamily = familyTarget,
+                    TranslationFontFamily = familyTarget,
                 });
 
                 // add to the grouping for saving

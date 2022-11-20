@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
@@ -23,21 +24,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedCorpusId_, Id); //Note that in ScriptureText Id is the book abbreviation bookId.
 
             var result = Task.Run(() => mediator_.Send(command)).GetAwaiter().GetResult();
-            if (result.Success)
-            {
-                var verses = result.Data;
+            result.ThrowIfCanceledOrFailed();
 
-                if (verses == null)
-                    throw new MediatorErrorEngineException("GetTokensByTokenizedCorpusIdAndBookIdQuery returned null data");
+            var verses = result.Data;
 
-                return verses
-                    .SelectMany(verse => CreateRows(verse.Chapter, verse.Verse, "", verse.IsSentenceStart) // text parameter is set by TokensTextRow from the tokens
-                        .Select(tr => new TokensTextRow(tr, verse.Tokens.ToList()))); //MUST return TokensTextRow. 
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            if (verses == null)
+                throw new MediatorErrorEngineException("GetTokensByTokenizedCorpusIdAndBookIdQuery returned null data");
+
+            return verses
+                .SelectMany(verse => CreateRows(verse.Chapter, verse.Verse, "", verse.IsSentenceStart) // text parameter is set by TokensTextRow from the tokens
+                    .Select(tr => new TokensTextRow(tr, verse.Tokens.ToList()))); //MUST return TokensTextRow. 
         }
     }
 }

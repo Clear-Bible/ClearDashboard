@@ -488,7 +488,12 @@
 
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <!--  SourceFontFamily, TranslationFontFamily, and TargetFontFamily  -->
+                                                <!--
+                                                    TargetFontFamily="Karenni Unicode"
+                                                    TranslationFontFamily="Karenni Unicode"
+                                                    TokenFontFamily="Karenni Unicode"
+                                                -->
+
 
                                                 <userControls:VerseDisplay
                                                     x:Name="VerseDisplay"
@@ -504,11 +509,15 @@
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
                                                     ShowTranslations="{Binding DataContext.ShowTranslation, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                    TargetFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TargetFontFamily}"
+                                                    TargetTokens="{Binding TargetTokenDisplayViewModels}"
                                                     TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TitleVisibility="Collapsed"
+                                                    TokenFontFamily="{Binding ElementName=InnerListView, Path=DataContext.SourceFontFamily}"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
                                                     TranslationFlowDirection="{Binding ElementName=InnerListView, Path=DataContext.IsTargetRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
+                                                    TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"

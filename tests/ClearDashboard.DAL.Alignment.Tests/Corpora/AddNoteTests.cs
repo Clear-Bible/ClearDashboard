@@ -23,6 +23,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
         }
 
         [Fact]
+        [Trait("Requires", "Paratext ZZ_SUR on test machine, paratextprojectid 2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f")]
         public async void AddNoteToSingleToken()
         {
             try
@@ -56,21 +57,85 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
                 Output.WriteLine($"tokensTextDetokenized: {tokensTextDetokenized}");
 
                 AddNoteCommandParam addNoteCommandParam = new AddNoteCommandParam();
+
+                //verify in paratext that a note shows up for the entire verse Gen1:2.
                 addNoteCommandParam.SetProperties(
                     "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
                     tokensTextRow.Tokens, 
-                    tokensTextRow.Tokens.Where((t,i) => i == 7), 
+                    tokensTextRow.Tokens.Where((t,i) => false), 
                     new EngineStringDetokenizer(new WhitespaceDetokenizer()), 
-                    "howdy!",
+                    "Whole verse note",
                     tokensTextRow.Tokens.First().TokenId.BookNumber,
                     tokensTextRow.Tokens.First().TokenId.ChapterNumber,
                     tokensTextRow.Tokens.First().TokenId.VerseNumber
                     );
 
                 var result = await Mediator!.Send(new AddNoteCommand(addNoteCommandParam));
-                if (result.Success && result.Data != null)
+                if (result.Success)
                 {
                     var data = result.Data;
+                    Assert.Null(data);
+                }
+                else
+                {
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+
+                //verify in paratext that a note shows up for the third occurance of the word 'ni' in Gen1:2.
+                addNoteCommandParam.SetProperties(
+                    "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    tokensTextRow.Tokens,
+                    tokensTextRow.Tokens.Where((t, i) => i == 15),
+                    new EngineStringDetokenizer(new WhitespaceDetokenizer()),
+                    "third occurance of the word 'ni'",
+                    tokensTextRow.Tokens.First().TokenId.BookNumber,
+                    tokensTextRow.Tokens.First().TokenId.ChapterNumber,
+                    tokensTextRow.Tokens.First().TokenId.VerseNumber
+                    );
+
+                result = await Mediator!.Send(new AddNoteCommand(addNoteCommandParam));
+                if (result.Success)
+                {
+                    var data = result.Data;
+                    Assert.Null(data);
+                }
+                else
+                {
+                    throw new MediatorErrorEngineException(result.Message);
+                }
+
+                //verify in paratext that no note shows up in Gen 1:2 since the selected text is non-contiguous.
+                addNoteCommandParam.SetProperties(
+                    "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    tokensTextRow.Tokens,
+                    tokensTextRow.Tokens.Where((t, i) => i == 15 || i == 16 || i == 18),
+                    new EngineStringDetokenizer(new WhitespaceDetokenizer()),
+                    "shouldn't show up as note",
+                    tokensTextRow.Tokens.First().TokenId.BookNumber,
+                    tokensTextRow.Tokens.First().TokenId.ChapterNumber,
+                    tokensTextRow.Tokens.First().TokenId.VerseNumber
+                    );
+
+                result = await Mediator!.Send(new AddNoteCommand(addNoteCommandParam));
+                Assert.False(result.Success);
+
+                //verify in paratext that a note shows up for the 15th, 16th, and 17th words 'ni a nkoo' of Gen1:2.
+                addNoteCommandParam.SetProperties(
+                    "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f",
+                    tokensTextRow.Tokens,
+                    tokensTextRow.Tokens.Where((t, i) => i == 15 || i == 16 || i == 17),
+                    new EngineStringDetokenizer(new WhitespaceDetokenizer()),
+                    "ni a nkoo",
+                    tokensTextRow.Tokens.First().TokenId.BookNumber,
+                    tokensTextRow.Tokens.First().TokenId.ChapterNumber,
+                    tokensTextRow.Tokens.First().TokenId.VerseNumber
+                    );
+
+                result = await Mediator!.Send(new AddNoteCommand(addNoteCommandParam));
+                if (result.Success)
+                {
+                    var data = result.Data;
+                    Assert.Null(data);
                 }
                 else
                 {

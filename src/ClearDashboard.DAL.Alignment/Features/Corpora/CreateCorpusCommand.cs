@@ -12,9 +12,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     /// <param name="Language"></param>
     /// <param name="CorpusType"></param>
     public record CreateCorpusCommand(
-        bool IsRtl, 
+        bool IsRtl,
+        string FontFamily,
         string Name, 
         string Language, 
         string CorpusType,
-        string ParatextId) : ProjectRequestCommand<Corpus>;
+        string ParatextId) : ProjectRequestCommand<CorpusId>;
 }

@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 
@@ -6,34 +7,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class Corpus
     {
-        public CorpusId CorpusId { get; set; }
-        public bool IsRtl { get; set; }
-        public string? Name { get; set; }
-        public string? DisplayName { get; set; }
-        public string? Language { get; set; }
-        public string? ParatextGuid { get; set; }
-        public string CorpusType { get; set; }
-        public Dictionary<string, object> Metadata { get; set; }
-        public DateTimeOffset? Created { get; }
-        public UserId? UserId { get; set; }
-        public string TranslationFontFamily { get; set; } = "Segoe UI";
+        public const string DefaultFontFamily = "Segoe UI";
 
-        // FIXME:  Should this be a string?  A different (higher level) enum?
-        public Corpus(CorpusId corpusId, IMediator mediator, bool isRtl, string? name, string? displayName,
-            string? language, string? paratextGuid, string corpusType, Dictionary<string, object> metadata,
-            DateTimeOffset? created, UserId userId, string translationFontFamily)
+        public CorpusId CorpusId { get; set; }
+
+        public Corpus(CorpusId corpusId)
         {
             CorpusId = corpusId;
-            IsRtl = isRtl;
-            Name = name;
-            DisplayName = displayName;
-            Language = language;
-            ParatextGuid = paratextGuid;
-            CorpusType = corpusType;
-            Metadata = metadata;
-            Created = created;
-            UserId = userId;
-            TranslationFontFamily = translationFontFamily;
         }
 
         public async void Update()
@@ -45,14 +25,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<IEnumerable<CorpusId>> GetAllCorpusIds(IMediator mediator)
         {
             var result = await mediator.Send(new GetAllCorpusIdsQuery());
-            if (result.Success && result.Data != null)
-            {
-                return result.Data;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
 
         public static async Task<Corpus> Create(
@@ -62,19 +37,15 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string Language,
             string CorpusType,
             string ParatextId,
+            string FontFamily = DefaultFontFamily,
             CancellationToken token = default)
         {
-            var command = new CreateCorpusCommand(IsRtl, Name, Language, CorpusType, ParatextId);
+            var command = new CreateCorpusCommand(IsRtl, FontFamily, Name, Language, CorpusType, ParatextId);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return await Corpus.Get(mediator, result.Data!);
         }
 
         public static async Task<IEnumerable<Corpus>> GetAll(IMediator mediator)
@@ -82,15 +53,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetAllCorporaQuery();
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
 
+            return result.Data!;
         }
         public static async Task<Corpus> Get(
             IMediator mediator,
@@ -99,14 +64,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new GetCorpusByCorpusIdQuery(corpusId);
 
             var result = await mediator.Send(command);
-            if (result.Success)
-            {
-                return result.Data!;
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
     }
 }

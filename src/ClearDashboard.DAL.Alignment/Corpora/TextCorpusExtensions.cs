@@ -1,6 +1,7 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
@@ -41,14 +42,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var command = new CreateTokenizedCorpusFromTextCorpusCommand(textCorpus, corpusId, displayName, tokenizationFunction, ScrVers.Original);
 
             var result = await mediator.Send(command, token);
-            if (result.Success)
-            {
-                return result.Data ?? throw new MediatorErrorEngineException(message: "result data is null");
-            }
-            else
-            {
-                throw new MediatorErrorEngineException(result.Message);
-            }
+            result.ThrowIfCanceledOrFailed(true);
+
+            return result.Data!;
         }
     }
 }

@@ -67,7 +67,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             if (!ProjectDbContext!.TokenComponents
-                .Where(tc => tc.TokenizationId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
+                .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id))
             {
                 return new RequestResult<object>
@@ -78,7 +78,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             if (!ProjectDbContext!.TokenComponents
-                .Where(tc => tc.TokenizationId == alignmentSet!.ParallelCorpus!.TargetTokenizedCorpusId)
+                .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.TargetTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id))
             {
                 return new RequestResult<object>
@@ -108,24 +108,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             using (var transaction = ProjectDbContext.Database.BeginTransaction())
             {
-                try
-                {
-                    alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignment, ProjectDbContext));
-                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+                alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignment, ProjectDbContext));
+                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                    transaction.Commit();
-                } 
-                catch (Exception ex)
-                {
-                    return new RequestResult<object>
-                    (
-                        success: false,
-                        message: $"Error saving alignment changes: '{ex.Message}'"
-                    );
-                }
+                transaction.Commit();
             }
 
-            await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment));
+            await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment), cancellationToken);
             return new RequestResult<object>(null);
         }
     }

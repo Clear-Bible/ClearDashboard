@@ -11,5 +11,8 @@ namespace ClearDashboard.DataAccessLayer.Models
             // ReSharper restore VirtualMemberCallInConstructor
         }
         public virtual ICollection<Token> Tokens { get; set; }
+
+        public virtual Guid? ParallelCorpusId { get; set; }
+        public virtual ParallelCorpus? ParallelCorpus { get; set; }
     }
 }

@@ -32,30 +32,30 @@ public class GetCorpusByCorpusIdQueryHandlerTests : TestBase
     {
         try
         {
-            var command = new CreateCorpusCommand(true, "a name", "a language", "StudyBible", Guid.NewGuid().ToString());
+            var command = new CreateCorpusCommand(true, "ff", "a name", "a language", "StudyBible", Guid.NewGuid().ToString());
             var createResult = await Mediator!.Send(command);
             Assert.True(createResult.Success);
             Assert.NotNull(createResult.Data);
 
-            var corpus = createResult.Data!;
+            var corpusId = createResult.Data!;
 
             // Clear ProjectDbContext:
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var query = new GetCorpusByCorpusIdQuery(corpus.CorpusId);
+            var query = new GetCorpusByCorpusIdQuery(corpusId);
             var queryResult = await Mediator!.Send(query);
 
             Assert.True(queryResult.Success);
             Assert.NotNull(queryResult.Data);
 
-            var corpusDB = queryResult.Data!;
+            var corpus = queryResult.Data!;
 
-            Assert.True(corpusDB.IsRtl);
-            Assert.Equal("a name", corpusDB.Name);
-            Assert.Equal("a language", corpusDB.Language);
-            Assert.NotNull(corpusDB.ParatextGuid);
-            Assert.Equal(Models.CorpusType.StudyBible.ToString(), corpusDB.CorpusType);
-            Assert.Empty(corpusDB.Metadata);
+            Assert.True(corpus.CorpusId.IsRtl);
+            Assert.Equal("a name", corpus.CorpusId.Name);
+            Assert.Equal("a language", corpus.CorpusId.Language);
+            Assert.NotNull(corpus.CorpusId.ParatextGuid);
+            Assert.Equal(Models.CorpusType.StudyBible.ToString(), corpus.CorpusId.CorpusType);
+            Assert.Empty(corpus.CorpusId.Metadata);
         }
         finally
         {
