@@ -1,10 +1,10 @@
-﻿using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
-using ClearDashboard.Wpf.Controls;
+﻿using ClearDashboard.Wpf.Controls;
 using System;
 using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
 namespace ClearDashboard.Wpf.Application.Views.Project
 {

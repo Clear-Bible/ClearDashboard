@@ -4,7 +4,7 @@ using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
 public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBase
 {

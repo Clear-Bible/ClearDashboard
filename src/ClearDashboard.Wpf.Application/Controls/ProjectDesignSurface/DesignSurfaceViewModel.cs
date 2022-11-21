@@ -3,7 +3,7 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Controls.Utils;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a network of nodes and connections between the nodes.
@@ -16,42 +16,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The collection of nodes in the network.
         /// </summary>
-        private ImpObservableCollection<CorpusNodeViewModel> _nodes;
+        private ImpObservableCollection<CorpusNodeViewModel>? _nodes;
 
         /// <summary>
         /// The collection of connections in the network.
         /// </summary>
-        private ImpObservableCollection<ConnectionViewModel> _connections;
+        private ImpObservableCollection<ConnectionViewModel>? _connections;
 
         #endregion Internal Data Members
 
         private readonly INavigationService? _navigationService;
         private readonly ILogger<DesignSurfaceViewModel>? _logger;
         private readonly DashboardProjectManager? _projectManager;
-        private IEventAggregator? _eventAggregator;
-        public IEventAggregator? EventAggregator
-        {
-            get => _eventAggregator;
-            set => _eventAggregator = value;
-        }
 
+        public IEventAggregator? EventAggregator { get; set; }
 
 
         /// <summary>
         /// The collection of nodes in the network.
         /// </summary>
-        public ImpObservableCollection<CorpusNodeViewModel> CorpusNodes
-        {
-            get
-            {
-                if (_nodes == null)
-                {
-                    _nodes = new ImpObservableCollection<CorpusNodeViewModel>();
-                }
-
-                return _nodes;
-            }
-        }
+        public ImpObservableCollection<CorpusNodeViewModel> CorpusNodes => _nodes ??= new ImpObservableCollection<CorpusNodeViewModel>();
 
         /// <summary>
         /// The collection of connections in the network.
@@ -76,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised then Connections have been removed.
         /// </summary>
-        private void OnConnectionsItemsRemoved(object sender, CollectionItemsChangedEventArgs e)
+        private void OnConnectionsItemsRemoved(object? sender, CollectionItemsChangedEventArgs e)
         {
             foreach (ConnectionViewModel connection in e.Items)
             {
@@ -88,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised then Connections has been selected.
         /// </summary>
-        private void OnConnectionsItemsSelected(object sender, CollectionItemsChangedEventArgs e)
+        private void OnConnectionsItemsSelected(object? sender, CollectionItemsChangedEventArgs e)
         {
             foreach (ConnectionViewModel connection in e.Items)
             {
@@ -108,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             _navigationService = navigationService;
             _logger = logger;
             _projectManager = projectManager;
-            _eventAggregator = eventAggregator;
+            EventAggregator = eventAggregator;
         }
         #endregion
     }

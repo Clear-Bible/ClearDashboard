@@ -5,9 +5,9 @@ namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization
 {
     public class ProjectDesignSurfaceSerializationModel
     {
-        public ImpObservableCollection<SerializedConnection> Connections { get; set; } = new();
-        public ImpObservableCollection<SerializedNode> CorpusNodes { get; set; } = new();
+        public ImpObservableCollection<SerializedParallelCorpuse> ParallelCorpora { get; set; } = new();
+        public ImpObservableCollection<SerializedTokenizedCorpus> TokenizedCorpora { get; set; } = new();
 
-        public ObservableCollection<SerializedCorpus> Corpora = new();
+        public ObservableCollection<SerializedCorpus> Corpora { get; set; }  = new();
     }
 }

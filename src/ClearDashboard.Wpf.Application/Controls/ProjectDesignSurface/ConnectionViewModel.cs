@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
+using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Controls.Utils;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a connection between two connectors (aka connection points) of two nodes.
@@ -21,12 +20,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The source connector the connection is attached to.
         /// </summary>
-        private ConnectorViewModel _sourceConnector;
+        private ConnectorViewModel? _sourceConnector;
 
         /// <summary>
         /// The destination connector the connection is attached to.
         /// </summary>
-        private ConnectorViewModel _destinationConnector;
+        private ConnectorViewModel? _destinationConnector;
 
         /// <summary>
         /// The source and dest hotspots used for generating connection points.
@@ -37,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Points that make up the connection.
         /// </summary>
-        private PointCollection _points;
+        private PointCollection? _points;
 
         /// <summary>
         /// Set to 'true' when the node is selected.
@@ -52,18 +51,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public bool IsSelected
         {
             get => _isSelected;
-            set
-            {
-                Set(ref _isSelected, value);
-            }
+            set => Set(ref _isSelected, value);
         }
 
         public bool IsRtl { get; set; }
 
         public Guid Id { get; set; } = Guid.NewGuid();
         
-        private ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> _menuItems = new();
-        public ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> MenuItems
+        private BindableCollection<ParallelCorpusConnectionMenuItemViewModel> _menuItems = new();
+        public BindableCollection<ParallelCorpusConnectionMenuItemViewModel> MenuItems
         {
             get => _menuItems;
             set
@@ -76,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The source connector the connection is attached to.
         /// </summary>
-        public ConnectorViewModel SourceConnector
+        public ConnectorViewModel? SourceConnector
         {
             get => _sourceConnector;
             set
@@ -109,7 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The destination connector the connection is attached to.
         /// </summary>
-        public ConnectorViewModel DestinationConnector
+        public ConnectorViewModel? DestinationConnector
         {
             get => _destinationConnector;
             set
@@ -171,7 +167,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Points that make up the connection.
         /// </summary>
-        public PointCollection Points
+        public PointCollection? Points
         {
             get => _points;
             set
@@ -196,7 +192,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event fired when the connection has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ConnectionChanged;
+        public event EventHandler<EventArgs>? ConnectionChanged;
 
         #region Private Methods
 
@@ -214,7 +210,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when the hotspot of the source connector has been updated.
         /// </summary>
-        private void OnSourceConnectorHotspotUpdated(object sender, EventArgs e)
+        private void OnSourceConnectorHotspotUpdated(object? sender, EventArgs e)
         {
             SourceConnectorHotspot = SourceConnector.Hotspot;
         }
@@ -222,7 +218,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when the hotspot of the dest connector has been updated.
         /// </summary>
-        private void OnDestinationConnectorHotspotUpdated(object sender, EventArgs e)
+        private void OnDestinationConnectorHotspotUpdated(object? sender, EventArgs e)
         {
             DestConnectorHotspot = DestinationConnector.Hotspot;
         }

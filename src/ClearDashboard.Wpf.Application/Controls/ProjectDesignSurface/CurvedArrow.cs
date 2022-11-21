@@ -7,7 +7,7 @@ using System.Windows.Shapes;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines an arrow that has multiple points.

@@ -12,9 +12,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
-    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -30,7 +30,7 @@
                     Merge in the resource dictionary that is shared between the main window and the overview window.
                 -->
 
-                <ResourceDictionary Source="/Views/ProjectDesignSurface/SharedVisualTemplates.xaml" />
+                <ResourceDictionary Source="/Styles/ProjectDesignSurface/SharedVisualTemplates.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -663,7 +663,7 @@
                                 Height="30"
                                 Margin="0,-5,6,0"
                                 HorizontalAlignment="Right"
-                                Content="{Binding Path=NodeTokenizations.Count, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding Path=Tokenizations.Count, UpdateSourceTrigger=PropertyChanged}"
                                 IsHitTestVisible="False"
                                 ToolTip="Number of different tokenizations">
                                 <materialDesign:Chip.Style>
@@ -1143,7 +1143,7 @@
             IsMiscCategoryLabelHidden="False"
             IsReadOnly="False"
             IsVirtualizing="False"
-            SelectedObject="{Binding SelectedConnection}"
+            SelectedObject="{Binding SelectedDesignSurfaceComponent}"
             ShowAdvancedOptions="False"
             ShowHorizontalScrollBar="True"
             ShowSummary="False"

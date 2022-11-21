@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+﻿namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines the type of a connector (aka connection point).

@@ -12,7 +12,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -24,6 +23,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
@@ -189,13 +189,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public async Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName)
         {
-            var sourceNodeTokenization = SourceCorpusNodeViewModel.NodeTokenizations.FirstOrDefault();
+            var sourceNodeTokenization = SourceCorpusNodeViewModel.Tokenizations.FirstOrDefault();
             if (sourceNodeTokenization == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
                     $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{ConnectionViewModel.SourceConnector.ParentNode.CorpusId}'.");
             }
-            var targetNodeTokenization = TargetCorpusNodeViewModel.NodeTokenizations.FirstOrDefault();
+            var targetNodeTokenization = TargetCorpusNodeViewModel.Tokenizations.FirstOrDefault();
             if (sourceNodeTokenization == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
@@ -11,7 +9,7 @@ using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Controls.Utils;
 using Size = System.Windows.Size;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a node in the view-model.
@@ -223,38 +221,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             {
                 Set(ref _isSelected, value);
 
-                if (_isSelected)
-                {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(this));
-                }
-                else
-                {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(null));
-                }
+                _eventAggregator.PublishOnUIThreadAsync(_isSelected
+                    ? new NodeSelectedChangedMessage(this)
+                    : new NodeSelectedChangedMessage(null));
             }
         }
 
-        private List<SerializedTokenization> _nodeTokenizations = new();
-        public List<SerializedTokenization> NodeTokenizations
+        private List<SerializedTokenization> _tokenizations = new();
+        public List<SerializedTokenization> Tokenizations
         {
-            get => _nodeTokenizations;
-            set
-            {
-                _nodeTokenizations = value;
-                NotifyOfPropertyChange(() => NodeTokenizations);
-            }
+            get => _tokenizations;
+            set =>Set(ref _tokenizations, value);
         }
 
         private bool _isRtl;
 
-        public bool IsRTL
+        public bool IsRtl
         {
             get => _isRtl;
-            set
-            {
-                _isRtl = value;
-                NotifyOfPropertyChange(() => IsRTL);
-            }
+            set => Set(ref _isRtl, value);
         }
 
 
@@ -262,33 +247,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public Guid Id
         {
             get => _id;
-            set
-            {
-                _id = value;
-                NotifyOfPropertyChange(() => Id);
-            }
+            set => Set(ref _id, value);
         }
 
         private Guid _corpusId;
         public Guid CorpusId
         {
             get => _corpusId;
-            set
-            {
-                Set(ref _corpusId, value);
-                
-            }
+            set => Set(ref _corpusId, value);
         }
 
-        private ObservableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
-        public ObservableCollection<CorpusNodeMenuItemViewModel> MenuItems
+        private BindableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
+        public BindableCollection<CorpusNodeMenuItemViewModel> MenuItems
         {
             get => _menuItems;
-            set
-            {
-                _menuItems = value;
-                NotifyOfPropertyChange(() => MenuItems);
-            }
+            set => Set(ref _menuItems, value);
         }
 
         private string _paratextProjectId = string.Empty;
@@ -341,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when connectors are added to the node.
         /// </summary>
-        private void OnInputConnectorsItemsAdded(object sender, CollectionItemsChangedEventArgs e)
+        private void OnInputConnectorsItemsAdded(object? sender, CollectionItemsChangedEventArgs e)
         {
             foreach (ConnectorViewModel connector in e.Items)
             {
@@ -353,7 +326,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when connectors are removed from the node.
         /// </summary>
-        private void OnInputConnectorsItemsRemoved(object sender, CollectionItemsChangedEventArgs e)
+        private void OnInputConnectorsItemsRemoved(object? sender, CollectionItemsChangedEventArgs e)
         {
             foreach (ConnectorViewModel connector in e.Items)
             {

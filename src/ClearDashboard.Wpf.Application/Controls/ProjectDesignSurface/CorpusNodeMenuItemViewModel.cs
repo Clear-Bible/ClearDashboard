@@ -1,8 +1,6 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using System;
+﻿using System;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<ParallelCorpusConnectionMenuItemViewModel>
     {

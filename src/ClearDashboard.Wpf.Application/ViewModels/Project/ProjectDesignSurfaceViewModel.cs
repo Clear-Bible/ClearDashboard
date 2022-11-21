@@ -19,7 +19,6 @@ using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Views.Project;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -30,7 +29,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
@@ -38,7 +36,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
@@ -47,50 +45,6 @@ using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 // ReSharper disable once CheckNamespace
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
-    #region Enums
-
-    public enum Tokenizer
-    {
-        //[Description("Latin Sentence Tokenizer")]
-        //LatinSentenceTokenizer = 0,
-
-        //[Description("Latin Word Detokenizer")]
-        //LatinWordDetokenizer,
-
-        [Description("Latin Word TokenizedCorpus")]
-        LatinWordTokenizer,
-
-        //[Description("Line Segment Tokenizer")]
-        //LineSegmentTokenizer,
-
-        //[Description("Null Tokenizer")]
-        //NullTokenizer,
-
-        //[Description("Regex Tokenizer")]
-        //RegexTokenizer,
-
-        //[Description("String Detokenizer")]
-        //StringDetokenizer,
-
-        //[Description("String Tokenizer")]
-        //StringTokenizer,
-
-        //[Description("Whitespace Detokenizer")]
-        //WhitespaceDetokenizer,
-
-        [Description("Whitespace TokenizedCorpus")]
-        // ReSharper disable once UnusedMember.Global
-        WhitespaceTokenizer,
-
-        //[Description("Zwsp Word Detokenizer")]
-        //ZwspWordDetokenizer,
-
-        // ReSharper disable once UnusedMember.Global
-        [Description("Zwsp Word TokenizedCorpus")]
-        ZwspWordTokenizer
-    }
-
-    #endregion //Enums
 
     public class ProjectDesignSurfaceViewModel : ToolViewModel
     {
@@ -99,8 +53,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
         public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
-        private readonly IWindowManager _windowManager;
-        private readonly LongRunningTaskManager _longRunningTaskManager;
+        private readonly IWindowManager? _windowManager;
+        private readonly LongRunningTaskManager? _longRunningTaskManager;
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -147,9 +101,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// 
         private double _contentViewportHeight;
 
-        private ProjectDesignSurfaceView View { get; set; }
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
-        private Canvas DesignSurfaceCanvas { get; set; }
         private Wpf.Controls.ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
 
@@ -162,10 +113,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Observable Properties
 
 
-        private List<ParatextProjectMetadata> _projectMetadata = new();
-
-
-        private BindableCollection<DAL.Alignment.Corpora.Corpus> Corpora { get; set; }
+         private BindableCollection<Corpus> Corpora { get; set; }
 
         /// <summary>
         /// This is the network that is displayed in the window.
@@ -245,12 +193,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        private object _selectedConnection;
-        public object SelectedConnection
+        private object _selectedDesignSurfaceComponent;
+        public object SelectedDesignSurfaceComponent
         {
             get
             {
-                if (_selectedConnection is CorpusNodeViewModel node)
+                if (_selectedDesignSurfaceComponent is CorpusNodeViewModel node)
                 {
                     foreach (var corpusNode in DesignSurface.CorpusNodes)
                     {
@@ -260,7 +208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                     }
                 }
-                else if (_selectedConnection is ConnectionViewModel conn)
+                else if (_selectedDesignSurfaceComponent is ConnectionViewModel conn)
                 {
                     foreach (var connection in DesignSurface.Connections)
                     {
@@ -272,59 +220,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else
                 {
-                    return _selectedConnection;
+                    return _selectedDesignSurfaceComponent;
                 }
 
 #pragma warning disable CS8603
                 return null;
 #pragma warning restore CS8603
             }
-            set => Set(ref _selectedConnection, value);
+            set => Set(ref _selectedDesignSurfaceComponent, value);
         }
 
         private bool _addManuscriptHebrewEnabled = true;
         public bool AddManuscriptHebrewEnabled
         {
             get => _addManuscriptHebrewEnabled;
-            set
-            {
-                _addManuscriptHebrewEnabled = value;
-                NotifyOfPropertyChange(() => AddManuscriptHebrewEnabled);
-            }
+            set => Set(ref _addManuscriptHebrewEnabled, value);
         }
 
         private bool _addManuscriptGreekEnabled = true;
         public bool AddManuscriptGreekEnabled
         {
             get => _addManuscriptGreekEnabled;
-            set
-            {
-                _addManuscriptGreekEnabled = value;
-                NotifyOfPropertyChange(() => AddManuscriptGreekEnabled);
-            }
+            set => Set(ref _addManuscriptGreekEnabled, value);
         }
 
         private string _projectName;
         public string ProjectName
         {
             get => _projectName;
-            set
-            {
-                _projectName = value;
-                NotifyOfPropertyChange(() => ProjectName);
-            }
+            set => Set(ref _projectName, value);
         }
 
         #endregion //Observable Properties
 
         #region Constructor
-        // ReSharper disable once UnusedMember.Global
+    
+
 #pragma warning disable CS8618
         public ProjectDesignSurfaceViewModel()
 #pragma warning restore CS8618
+
         {
-            // Add some test data to the view-model.
-            PopulateWithTestData();
+
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -342,14 +279,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Title = "🖧 PROJECT DESIGN SURFACE";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
-            Corpora = new BindableCollection<DAL.Alignment.Corpora.Corpus>();
+            Corpora = new BindableCollection<Corpus>();
         }
-
-        //protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-        //{
-        //    //IsBusy = true;
-        //    return base.OnInitializeAsync(cancellationToken);
-        //}
 
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
@@ -375,14 +306,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (View == null)
+            if (ProjectDesignSurface == null)
             {
                 if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
                 {
-                    View = projectDesignSurfaceView;
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    DesignSurfaceCanvas = (Canvas)projectDesignSurfaceView.FindName("DesignSurfaceCanvas");
-
                     // ReSharper disable once AssignNullToNotNullAttribute
                     ProjectDesignSurface = (Wpf.Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
@@ -473,16 +400,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // save all the nodes
             foreach (var corpusNode in DesignSurface.CorpusNodes)
             {
-                surface.CorpusNodes.Add(new SerializedNode
+                surface.TokenizedCorpora.Add(new SerializedTokenizedCorpus
                 {
                     ParatextProjectId = corpusNode.ParatextProjectId,
                     CorpusType = corpusNode.CorpusType,
                     Name = corpusNode.Name,
                     X = corpusNode.X,
                     Y = corpusNode.Y,
-                    NodeTokenizations = corpusNode.NodeTokenizations,
+                    Tokenizations = corpusNode.Tokenizations,
                     CorpusId = corpusNode.CorpusId,
-                    IsRTL = corpusNode.IsRTL,
+                    IsRTL = corpusNode.IsRtl,
                     TranslationFontFamily = corpusNode.TranslationFontFamily,
                 });
             }
@@ -517,10 +444,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 })
                     .ToList();
 
-                surface.Connections.Add(new SerializedConnection
+                surface.ParallelCorpora.Add(new SerializedParallelCorpuse
                 {
-                    SourceConnectorId = connection.SourceConnector.ParatextID,
-                    TargetConnectorId = connection.DestinationConnector.ParatextID,
+                    SourceConnectorId = connection.SourceConnector.ParatextId,
+                    TargetConnectorId = connection.DestinationConnector.ParatextId,
                     TranslationSetInfo = serializedTranslationSet,
                     AlignmentSetInfo = serializedAlignmentSet,
                     ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
@@ -567,13 +494,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             ProjectName = ProjectManager.CurrentProject.ProjectName!;
-
-            // we have already loaded once
-            //if (DesignSurface.CorpusNodes.Count > 0)
-            //{
-            //    return;
-            //}
-
+            
             if (ProjectManager?.CurrentProject.DesignSurfaceLayout == "")
             {
                 return;
@@ -605,9 +526,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // restore the nodes
             if (deserialized != null)
             {
-                foreach (var corpusNode in deserialized.CorpusNodes)
+                foreach (var corpusNode in deserialized.TokenizedCorpora)
                 {
-                    var corpus = new DAL.Alignment.Corpora.Corpus(
+                    var corpus = new Corpus(
                         corpusId: new CorpusId(
                             corpusNode.CorpusId,
                             isRtl: corpusNode.IsRTL,
@@ -621,11 +542,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             created: new DateTimeOffset(),
                             userId: new UserId(ProjectManager!.CurrentUser.Id, ProjectManager.CurrentUser.FullName ?? string.Empty)));
 
-                    var tokenization = corpusNode.NodeTokenizations[0].TokenizationName;
-                    var tokenizer = (Tokenizer)Enum.Parse(typeof(Tokenizer), tokenization);
+                    var tokenization = corpusNode.Tokenizations[0].TokenizationName;
+                    var tokenizer = (Tokenizers)Enum.Parse(typeof(Tokenizers), tokenization);
 
-                    var node = CreateNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
-                    node.NodeTokenizations = corpusNode.NodeTokenizations;
+                    var node = CreateCorpusNode(corpus, new Point(corpusNode.X, corpusNode.Y), tokenizer);
+                    node.Tokenizations = corpusNode.Tokenizations;
 
                     if (corpusNode.CorpusType == CorpusType.ManuscriptHebrew)
                     {
@@ -641,7 +562,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
 
                 // restore the connections
-                foreach (var deserializedConnection in deserialized.Connections)
+                foreach (var deserializedConnection in deserialized.ParallelCorpora)
                 {
                     var sourceNode = DesignSurface.CorpusNodes.FirstOrDefault(p =>
                         p.ParatextProjectId == deserializedConnection.SourceConnectorId);
@@ -671,7 +592,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var corpora = deserialized.Corpora;
                 foreach (var corpus in corpora)
                 {
-                    this.Corpora.Add(new DAL.Alignment.Corpora.Corpus(
+                    this.Corpora.Add(new Corpus(
                         corpusId: new CorpusId(
                             id: string.IsNullOrEmpty(corpus.CorpusId) ? Guid.NewGuid() : Guid.Parse(corpus.CorpusId),
                             isRtl: corpus.IsRtl,
@@ -694,7 +615,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        private readonly ObservableDictionary<string, bool> _busyState = new ObservableDictionary<string, bool>();
+        private readonly ObservableDictionary<string, bool> _busyState = new();
 
         private bool _isBusy;
         public override bool IsBusy
@@ -741,7 +662,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _ = await Task.Factory.StartNew(async () =>
             {
                 _busyState.Add(taskName, true);
-                CorpusNodeViewModel node = new();
+                CorpusNodeViewModel corpusNode = new();
 
                 try
                 {
@@ -749,7 +670,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                         description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
-                    var corpus = await DAL.Alignment.Corpora.Corpus.Create(
+                    var corpus = await Corpus.Create(
                         mediator: Mediator,
                         IsRtl: true,
                         Name: "Macula Hebrew",
@@ -767,7 +688,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // figure out some offset based on the number of nodes already in the network
                         // so we don't overlap
                         var point = GetFreeSpot();
-                        node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
+                        corpusNode = CreateCorpusNode(corpus, point, Tokenizers.WhitespaceTokenizer);
                     });
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -776,7 +697,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
                         "Macula Hebrew",
-                        Tokenizer.WhitespaceTokenizer.ToString(),
+                        Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken);
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
@@ -788,14 +709,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(async () =>
                     {
-                        await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus,
-                            Tokenizer.WhitespaceTokenizer);
+                        await UpdateNodeTokenization(corpusNode, corpus, tokenizedTextCorpus,
+                            Tokenizers.WhitespaceTokenizer);
                     });
 
                 }
                 catch (OperationCanceledException ex)
                 {
-                   Logger!.LogInformation($"AddManuscriptHebrewCorpus - operation canceled.");
+                    Logger!.LogInformation($"AddManuscriptHebrewCorpus - operation canceled.");
                 }
                 catch (MediatorErrorEngineException ex)
                 {
@@ -825,7 +746,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteNode(node);
+                        DeleteCorpusNode(corpusNode);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         AddManuscriptHebrewEnabled = true;
                     }
@@ -906,7 +827,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // figure out some offset based on the number of nodes already in the network
                         // so we don't overlap
                         var point = GetFreeSpot();
-                        node = CreateNode(corpus, point, Tokenizer.WhitespaceTokenizer);
+                        node = CreateCorpusNode(corpus, point, Tokenizers.WhitespaceTokenizer);
                     });
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -914,7 +835,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator, corpus.CorpusId,
                         "Macula Greek",
-                        Tokenizer.WhitespaceTokenizer.ToString(),
+                        Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken);
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
@@ -924,7 +845,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(async () =>
                     {
-                        await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizer.WhitespaceTokenizer);
+                        await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, Tokenizers.WhitespaceTokenizer);
                     });
 
                 }
@@ -959,7 +880,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DeleteNode(node);
+                        DeleteCorpusNode(node);
                         AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -1048,26 +969,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                                  Corpora.Add(corpus);
                                  var point = GetFreeSpot();
-                                 node = CreateNode(corpus, point, dialogViewModel.SelectedTokenizer);
+                                 node = CreateCorpusNode(corpus, point, dialogViewModel.SelectedTokenizers);
                              });
 
 
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                            description: $"Tokenizing and transforming '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
-                        var textCorpus = dialogViewModel.SelectedTokenizer switch
+                        var textCorpus = dialogViewModel.SelectedTokenizers switch
                         {
-                            Tokenizer.LatinWordTokenizer =>
+                            Tokenizers.LatinWordTokenizer =>
                                (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, cancellationToken))
                                .Tokenize<LatinWordTokenizer>()
                                .Transform<IntoTokensTextRowProcessor>()
                                .Transform<SetTrainingBySurfaceLowercase>(),
-                            Tokenizer.WhitespaceTokenizer =>
+                            Tokenizers.WhitespaceTokenizer =>
                                (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, cancellationToken))
                                .Tokenize<WhitespaceTokenizer>()
                                .Transform<IntoTokensTextRowProcessor>()
                                .Transform<SetTrainingBySurfaceLowercase>(),
-                            Tokenizer.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, cancellationToken))
+                            Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, metadata.Id!, cancellationToken))
                                .Tokenize<ZwspWordTokenizer>()
                                .Transform<IntoTokensTextRowProcessor>()
                                .Transform<SetTrainingBySurfaceLowercase>(),
@@ -1082,7 +1003,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 #pragma warning disable CS8604
                         var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                           metadata.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
+                           metadata.Name, dialogViewModel.SelectedTokenizers.ToString(), cancellationToken);
 #pragma warning restore CS8604
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
@@ -1091,7 +1012,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         OnUIThread(async () =>
                         {
-                             await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, dialogViewModel.SelectedTokenizer);
+                             await UpdateNodeTokenization(node, corpus, tokenizedTextCorpus, dialogViewModel.SelectedTokenizers);
                         });
 
                         _longRunningTaskManager.TaskComplete(taskName);
@@ -1129,7 +1050,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         _busyState.Remove(taskName);
                         if (cancellationToken.IsCancellationRequested)
                         {
-                            DeleteNode(node);
+                            DeleteCorpusNode(node);
                         }
                         else
                         {
@@ -1161,15 +1082,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// <param name="node"></param>
         /// <param name="corpus"></param>
         /// <param name="tokenizedTextCorpus"></param>
-        /// <param name="viewModelSelectedTokenizer"></param>
+        /// <param name="viewModelSelectedTokenizers"></param>
         private async Task UpdateNodeTokenization(CorpusNodeViewModel node, DAL.Alignment.Corpora.Corpus corpus,
-            TokenizedTextCorpus tokenizedTextCorpus, Tokenizer viewModelSelectedTokenizer)
+            TokenizedTextCorpus tokenizedTextCorpus, Tokenizers viewModelSelectedTokenizers)
         {
             var corpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == node.Id);
             if (corpusNode is not null)
             {
-                var nodeTokenization = corpusNode.NodeTokenizations.FirstOrDefault(b =>
-                    b.TokenizationName == viewModelSelectedTokenizer.ToString());
+                var nodeTokenization = corpusNode.Tokenizations.FirstOrDefault(b =>
+                    b.TokenizationName == viewModelSelectedTokenizers.ToString());
 
                 if (nodeTokenization is not null)
                 {
@@ -1180,13 +1101,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else
                 {
-                    corpusNode.NodeTokenizations.Add(new SerializedTokenization
+                    corpusNode.Tokenizations.Add(new SerializedTokenization
                     {
                         CorpusId = corpus.CorpusId.Id.ToString(),
-                        TokenizationFriendlyName = EnumHelper.GetDescription(viewModelSelectedTokenizer),
+                        TokenizationFriendlyName = EnumHelper.GetDescription(viewModelSelectedTokenizers),
                         IsSelected = false,
                         IsPopulated = true,
-                        TokenizationName = viewModelSelectedTokenizer.ToString(),
+                        TokenizationName = viewModelSelectedTokenizers.ToString(),
                     });
 
                     // TODO the UI chip is not being updated with the new count...why?
@@ -1214,7 +1135,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // initiate the menu system
             corpusNode.MenuItems.Clear();
 
-            ObservableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
+            BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
 
             // restrict the ability of Manuscript to add new tokenizers
             if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew || corpusNode.CorpusType != CorpusType.ManuscriptGreek)
@@ -1232,7 +1153,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
             }
 
-            foreach (var nodeTokenization in corpusNode.NodeTokenizations)
+            foreach (var nodeTokenization in corpusNode.Tokenizations)
             {
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
                 {
@@ -1306,7 +1227,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // initiate the menu system
             connection.MenuItems.Clear();
 
-            ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems = new();
+            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems = new();
 
             // Add new alignment set
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
@@ -1319,8 +1240,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 ParallelCorpusId = connection.ParallelCorpusId.Id.ToString(),
                 ParallelCorpusDisplayName = connection.ParallelCorpusDisplayName,
                 IsRtl = connection.IsRtl,
-                SourceParatextId = connection.SourceConnector.ParatextID,
-                TargetParatextId = connection.DestinationConnector.ParatextID,
+                SourceParatextId = connection.SourceConnector.ParatextId,
+                TargetParatextId = connection.DestinationConnector.ParatextId,
             }) ;
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = this, IsSeparator = true });
@@ -1351,8 +1272,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             IsEnabled = true,
                             IsRtl = alignmentSetInfo.IsRtl,
                             IsTargetRTL = alignmentSetInfo.IsTargetRtl,
-                            SourceParatextId = connection.SourceConnector.ParatextID,
-                            TargetParatextId = connection.DestinationConnector.ParatextID,
+                            SourceParatextId = connection.SourceConnector.ParatextId,
+                            TargetParatextId = connection.DestinationConnector.ParatextId,
                         },
                     }
                 });
@@ -1398,8 +1319,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 ParallelCorpusId = info.ParallelCorpusId,
                                 ParallelCorpusDisplayName = info.ParallelCorpusDisplayName,
                                 IsRtl = info.IsRTL,
-                                SourceParatextId = connection.SourceConnector.ParatextID,
-                                TargetParatextId = connection.DestinationConnector.ParatextID,
+                                SourceParatextId = connection.SourceConnector.ParatextId,
+                                TargetParatextId = connection.DestinationConnector.ParatextId,
                             }
                         }
                 });
@@ -1446,7 +1367,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
                 case "PropertiesId":
                     // node properties
-                    SelectedConnection = connectionViewModel;
+                    SelectedDesignSurfaceComponent = connectionViewModel;
                     break;
                 case "CreateNewInterlinearId":
                     await AddNewInterlinear(connectionMenuItem);
@@ -1513,7 +1434,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case "AddToEnhancedViewId":
                 case "ShowVerseId":
                     // ShowTokenizationWindowMessage(string ParatextProjectId, string projectName, string TokenizationType, Guid corpusId, Guid tokenizedTextCorpusId);
-                    var tokenization = corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b => b.TokenizationName == corpusNodeMenuItem.Tokenizer);
+                    var tokenization = corpusNodeViewModel.Tokenizations.FirstOrDefault(b => b.TokenizationName == corpusNodeMenuItem.Tokenizer);
                     if (tokenization == null)
                     {
                         return;
@@ -1532,20 +1453,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             TokenizedTextCorpusId: tokenizedTextCorpusId,
                             corpusNodeViewModel.CorpusType,
                             //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            corpusNodeViewModel.IsRTL,
+                            corpusNodeViewModel.IsRtl,
                             IsNewWindow: showInNewWindow));
                     break;
                 case "PropertiesId":
                     // node properties
-                    SelectedConnection = corpusNodeViewModel;
+                    SelectedDesignSurfaceComponent = corpusNodeViewModel;
                     break;
                 case "TokenizerPropertiesId":
                     // get the selected tokenizer
                     var nodeTokenization =
-                        corpusNodeViewModel.NodeTokenizations.FirstOrDefault(b =>
+                        corpusNodeViewModel.Tokenizations.FirstOrDefault(b =>
                             b.TokenizationName == corpusNodeMenuItem.Tokenizer);
 #pragma warning disable CS8601
-                    SelectedConnection = nodeTokenization;
+                    SelectedDesignSurfaceComponent = nodeTokenization;
 #pragma warning restore CS8601
                     break;
             }
@@ -1852,13 +1773,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     $"Cannot find the target Corpus node for the Corpus with Id '{newConnection.DestinationConnector.ParentNode.CorpusId}'.");
             }
 
-            var sourceNodeTokenization = sourceCorpusNode.NodeTokenizations.FirstOrDefault();
+            var sourceNodeTokenization = sourceCorpusNode.Tokenizations.FirstOrDefault();
             if (sourceNodeTokenization == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
                     $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{newConnection.SourceConnector.ParentNode.CorpusId}'.");
             }
-            var targetNodeTokenization = targetCorpusNode.NodeTokenizations.FirstOrDefault();
+            var targetNodeTokenization = targetCorpusNode.Tokenizations.FirstOrDefault();
             if (targetNodeTokenization == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
@@ -1910,8 +1831,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
                             ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
                             ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString(),
-                            IsRtl = newConnection.SourceConnector.ParentNode.IsRTL,
-                            IsTargetRtl = newConnection.DestinationConnector.ParentNode.IsRTL
+                            IsRtl = newConnection.SourceConnector.ParentNode.IsRtl,
+                            IsTargetRtl = newConnection.DestinationConnector.ParentNode.IsRtl
                         });
                     }
 
@@ -1982,7 +1903,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 if (node.IsSelected)
                 {
-                    DeleteNode(node);
+                    DeleteCorpusNode(node);
                 }
             }
         }
@@ -1991,7 +1912,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// Delete the node from the view-model.
         /// Also deletes any connections to or from the node.
         /// </summary>
-        public void DeleteNode(CorpusNodeViewModel node)
+        public void DeleteCorpusNode(CorpusNodeViewModel node)
         {
             OnUIThread(() =>
             {
@@ -2013,8 +1934,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// <summary>
         /// Create a node and add it to the view-model.
         /// </summary>
-        private CorpusNodeViewModel CreateNode(DAL.Alignment.Corpora.Corpus corpus, Point nodeLocation,
-            Tokenizer tokenizer)
+        private CorpusNodeViewModel CreateCorpusNode(Corpus corpus, Point nodeLocation,
+            Tokenizers tokenizers)
         {
             var node = new CorpusNodeViewModel(corpus.CorpusId.Name ?? string.Empty, EventAggregator, ProjectManager)
             {
@@ -2023,27 +1944,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 CorpusType = (CorpusType)Enum.Parse(typeof(CorpusType), corpus.CorpusId.CorpusType),
                 ParatextProjectId = corpus.CorpusId.ParatextGuid ?? string.Empty,
                 CorpusId = corpus.CorpusId.Id,
-                IsRTL = corpus.CorpusId.IsRtl,
+                IsRtl = corpus.CorpusId.IsRtl,
                 TranslationFontFamily = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
             };
 
-            node.InputConnectors.Add(new ConnectorViewModel("Target", EventAggregator, ProjectManager, node.ParatextProjectId)
+            node.InputConnectors.Add(new ConnectorViewModel("Target", EventAggregator, node.ParatextProjectId)
             {
                 Type = ConnectorType.Input
             });
 
-            node.OutputConnectors.Add(new ConnectorViewModel("Source", EventAggregator, ProjectManager, node.ParatextProjectId)
+            node.OutputConnectors.Add(new ConnectorViewModel("Source", EventAggregator, node.ParatextProjectId)
             {
                 Type = ConnectorType.Output
             });
 
 
-            node.NodeTokenizations.Add(new SerializedTokenization
+            node.Tokenizations.Add(new SerializedTokenization
             {
                 CorpusId = corpus.CorpusId.Id.ToString(),
-                TokenizationFriendlyName = EnumHelper.GetDescription(tokenizer),
+                TokenizationFriendlyName = EnumHelper.GetDescription(tokenizers),
                 IsSelected = false,
-                TokenizationName = tokenizer.ToString(),
+                TokenizationName = tokenizers.ToString(),
                 TokenizedTextCorpusId = corpus.CorpusId.TranslationFontFamily ?? Corpus.DefaultTranslationFontFamily,
             });
 
@@ -2074,61 +1995,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-        /// <summary>
-        /// A function to conveniently populate the view-model with test data.
-        /// </summary>
-        private void PopulateWithTestData()
-        {
-            /*
-            
-            //
-            // Create a network, the root of the view-model.
-            //
-            DesignSurface = new DesignSurfaceViewModel(_navigationService, _logger as ILogger<DesignSurfaceViewModel>,
-                _projectManager, _eventAggregator);
-
-            //
-            // Create some nodes and add them to the view-model.
-            //
-            var node1 = CreateNode("zz_SUR", new Point(100, 60), false, CorpusType.Standard, Guid.NewGuid().ToString());
-            var node2 = CreateNode("zz_SURBT", new Point(350, 40), false, CorpusType.BackTranslation, Guid.NewGuid().ToString());
-            var node3 = CreateNode("NIV", new Point(350, 120), false, CorpusType.Resource, Guid.NewGuid().ToString());
-
-
-
-            //
-            // Create a connection between the standard / back translation.
-            //
-            var connection = new ConnectionViewModel
-            {
-                SourceConnector = node1.OutputConnectors[0],
-                DestinationConnector = node2.InputConnectors[0]
-            };
-
-            //
-            // Add the connection to the view-model.
-            //
-            DesignSurface.Connections.Add(connection);
-
-
-            connection = new ConnectionViewModel
-            {
-                SourceConnector = node1.OutputConnectors[0],
-                DestinationConnector = node3.InputConnectors[0]
-            };
-            DesignSurface.Connections.Add(connection);
-
-            */
-        }
+   
 
         public void ShowCorpusProperties(object corpus)
         {
-            SelectedConnection = corpus;
+            SelectedDesignSurfaceComponent = corpus;
         }
 
         public void ShowConnectionProperties(ConnectionViewModel connection)
         {
-            SelectedConnection = connection;
+            SelectedDesignSurfaceComponent = connection;
         }
 
         public void UiLanguageChangedMessage(UiLanguageChangedMessage message)

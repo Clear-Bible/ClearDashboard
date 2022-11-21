@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
-public class SerializedConnection
+public class SerializedParallelCorpuse
 {
     public string SourceConnectorId { get; set; } = string.Empty;
     public string SourceFontFamily { get; set; } = "Segoe UI";

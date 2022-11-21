@@ -16,7 +16,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public CorpusId(
             Guid id, bool isRtl, string? translationFontFamily, string? name, string? displayName, 
-            string? language, string? paratextGuid, string corpusType, Dictionary<string, object> metadata,
+            string? language, string? paratextGuid, string? corpusType, Dictionary<string, object> metadata,
             DateTimeOffset created, UserId userId)
         {
             Id = id;
