@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -38,8 +39,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Controls;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
+//using TopeLevelIds = ClearDashboard.DAL.Alignment.TopLevelIds;
 
 
 // ReSharper disable once CheckNamespace
@@ -276,7 +279,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _windowManager = windowManager;
             _longRunningTaskManager = longRunningTaskManager;
 
-            Title = "🖧 PROJECT DESIGN SURFACE";
+            Title = "🖧 PROJECT DESIGN SURFACE ****";
             ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new BindableCollection<Corpus>();
@@ -303,15 +306,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
-            // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
-
+         
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (ProjectDesignSurface == null)
             {
                 if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
                 {
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    ProjectDesignSurface = (Wpf.Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+                    ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
                 }
             }
 
@@ -328,28 +330,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             base.OnViewAttached(view, context);
         }
 
-        //protected override void OnViewLoaded(object view)
-        //{
-        //    // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
-        //    if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
-        //    {
-        //        LoadCanvas();
-        //    }
+      
 
-        //    base.OnViewLoaded(view);
-        //}
-
-        //protected override void OnViewReady(object view)
-        //{
-        //    // NEVER IS CALLED NOW THAT WE ARE USING THIS AS A COMPONENT
-        //    if (_projectManager.CurrentProject.DesignSurfaceLayout != "" && _projectManager.CurrentProject.DesignSurfaceLayout is not null)
-        //    {
-        //        LoadCanvas();
-        //    }
-
-        //    base.OnViewReady(view);
-        //}
-
+     
         #endregion //Constructor
 
         #region Caliburn.Micro overrides
@@ -522,6 +505,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             AddManuscriptGreekEnabled = true;
             AddManuscriptHebrewEnabled = true;
             var deserialized = JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
+
+
+            //var toplevel = TopLevelProjectIds.Get
 
             // restore the nodes
             if (deserialized != null)
@@ -1355,11 +1341,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (connection is not null)
                     {
                         // kick off the add new tokenization dialog
-                        AddParallelCorpus(connection);
+                        await AddParallelCorpus(connection);
                     }
                     else
                     {
-                        Logger.LogError("Could not find connection with id {0}", connectionMenuItem.ConnectionId);
+                        Logger!.LogError("Could not find connection with id {0}", connectionMenuItem.ConnectionId);
                     }
                     break;
                 case "SeparatorId":
@@ -1710,20 +1696,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 await AddParallelCorpus(newConnection);
             }
+
+            await SaveCanvas();
         }
 
-        //public async void TrainSmtModel()
-        //{
-        //    var dialogViewModel = IoC.Get<SmtModelDialogViewModel>();
-
-        //    if (dialogViewModel is IDialog dialog)
-        //    {
-        //        dialog.DialogMode = DialogMode.Add;
-        //    }
-
-        //    var success = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
-        //}
-
+      
         private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
             var parameters = new List<Autofac.Core.Parameter>
@@ -2020,6 +1997,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #endregion // Methods
 
-
+      
     }
 }

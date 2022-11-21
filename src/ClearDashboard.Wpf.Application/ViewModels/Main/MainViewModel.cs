@@ -518,6 +518,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
 
                 await NoteManager.InitializeAsync();
+
+                //SetupProjectDesignSurface();
             }
 
             await base.OnInitializeAsync(cancellationToken);
@@ -527,11 +529,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-            
-
-            
-
-
             base.OnViewLoaded(view);
         }
 
@@ -633,12 +630,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EventAggregator?.Unsubscribe(this);
 
             // save the design surface
-            //await _projectDesignSurfaceViewModel.DeactivateAsync(false);
 
+            // NB:  Call the following results "System.ObjectDisposedException: Instances cannot be resolved and nested lifetimes cannot be created from this LifetimeScope as it (or one of its parent scopes) has already been disposed."
+            //await _projectDesignSurfaceViewModel.SaveCanvas();
+
+            Logger!.LogInformation("Saving ProjectDesignSurface layout.");
             ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
 
-            //await _projectDesignSurfaceViewModel.SaveCanvas();
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -866,6 +865,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
             _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
+
+           // _projectDesignSurfaceViewModel.ActivateWith(this);
 
             // force a load to happen as it is getting swallowed up elsewhere
             _projectDesignSurfaceViewModel.LoadCanvas();
