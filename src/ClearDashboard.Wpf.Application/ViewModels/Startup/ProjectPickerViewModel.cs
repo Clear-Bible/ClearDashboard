@@ -36,7 +36,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
         private readonly TranslationSource? _translationSource;
-        private UpdateFormat? _updateData;
         #endregion
 
         #region Observable Objects
@@ -205,32 +204,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 NotifyOfPropertyChange(() => ParatextUserName);
             }
         }
-        
-        private string? _version;
-        public string? Version
-        {
-            get => _version;
-            set => Set(ref _version, value);
-        }
-
-        private Visibility _showUpdateLink = Visibility.Collapsed;
-        public Visibility ShowUpdateLink
-        {
-            get => _showUpdateLink;
-            set => Set(ref _showUpdateLink, value);
-        }
-
-
-        private Uri _updateUrl = new Uri("https://www.clear.bible");
-        public Uri UpdateUrl
-        {
-            get => _updateUrl;
-            set => Set(ref _updateUrl, value);
-        }
-
-        public List<ReleaseNote> UpdateNotes { get; set; }
-
-        public List<UpdateFormat> Updates{ get; set; }
 
         #endregion
 
@@ -248,9 +221,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             NoProjectVisibility = Visibility.Visible;
             SearchBlankVisibility = Visibility.Collapsed;
             IsParatextRunning = _paratextProxy.IsParatextRunning();
-
-            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-            Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
         }
 
         public async Task StartParatext()
@@ -263,7 +233,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            CheckForProgramUpdates();
             var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
             if (results.Success && results.HasData)
             {
@@ -423,63 +392,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         {
             MoveForwards();
             EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
-        }
-
-        private async void CheckForProgramUpdates()
-        {
-
-            var fullUpdateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();
-
-            var isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);
-
-            if (isNewer)
-            {
-                ShowUpdateLink = Visibility.Visible;
-                UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
-
-                Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
-                //UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(fullUpdateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
-            }
-        }
-
-        public void ClickUpdateLink()
-        {
-            if (UpdateUrl.AbsoluteUri == "")
-            {
-                return;
-            }
-
-            try
-            {
-                var psi = new ProcessStartInfo
-                {
-                    FileName = UpdateUrl.AbsoluteUri,
-                    UseShellExecute = true
-                };
-                Process.Start(psi);
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception);
-            }
-        }
-
-        public void ShowNotes()
-        {
-            var localizedString = LocalizationStrings.Get("ShellView_ShowNotes", Logger);
-
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.CanResize;
-            settings.MinWidth = 600;
-            settings.MinHeight = 600;
-            settings.Title = $"{localizedString} - {_updateData?.Version}";
-
-            var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
-            viewModel.Updates = new ObservableCollection<UpdateFormat>(Updates);
-
-            IWindowManager manager = new WindowManager();
-            manager.ShowWindowAsync(viewModel, null, settings);
         }
 
         #endregion  Methods

@@ -509,34 +509,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="4">
-                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">
-
-                    <Button
-                        x:Name="ClickUpdateLink"
-                        Margin="10,0,10,0"
-                        Padding="0"
-                        BorderThickness="0"
-                        Style="{StaticResource TransparentButton}">
-                        <TextBlock
-                            Cursor="Hand"
-                            Foreground="DodgerBlue"
-                            Text="{helpers:Localization ShellView_UpdateFound}"
-                            TextDecorations="Underline" />
-                    </Button>
-                    <Button
-                        x:Name="ShowNotes"
-                        Margin="0,0,10,0"
-                        Padding="0"
-                        BorderThickness="0"
-                        Style="{StaticResource TransparentButton}"
-                        ToolTip="{helpers:Localization ShellView_ShowNotes}">
-                        <iconPacks:PackIconPixelartIcons
-                            Width="20"
-                            Height="20"
-                            Foreground="{StaticResource BlueMidBrush}"
-                            Kind="Notes" />
-                    </Button>
-                </StackPanel>
+                <userControls:ReleaseNotesUserControl></userControls:ReleaseNotesUserControl>
             </StatusBarItem>
         </StatusBar>
     </Grid>
