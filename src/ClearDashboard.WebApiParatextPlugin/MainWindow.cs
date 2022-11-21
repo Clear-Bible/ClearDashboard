@@ -51,6 +51,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private delegate void AppendMsgTextDelegate(Color color, string text);
 
         private List<TextCollection> _textCollections = new();
+        private List<ParatextProjectMetadata> _projectMetadata;
         #endregion
 
         #region startup
@@ -560,10 +561,12 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public List<ParatextProjectMetadata> GetProjectMetadata()
         {
-            var projects = _host.GetAllProjects(true);
+            if (_projectMetadata == null)
+            {
+                var projects = _host.GetAllProjects(true);
 
 
-            var metadata=  projects.Select(project =>
+                var metadata = projects.Select(project =>
                 {
                     var metaData = new ParatextProjectMetadata
                     {
@@ -585,7 +588,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                     catch (Exception e)
                     {
-                        AppendText(Color.Red, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
+                        AppendText(Color.Orange, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
 
                         // use the default font
                         metaData.FontFamily = "Segoe UI";
@@ -594,34 +597,36 @@ namespace ClearDashboard.WebApiParatextPlugin
                     return metaData;
                 }).ToList();
 
-            var projectNames = metadata.Select(project => project.Name).ToList();
+                var projectNames = metadata.Select(project => project.Name).ToList();
 
-            //foreach (var project in metadata)
-            //{
-            //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
-            //}
+                //foreach (var project in metadata)
+                //{
+                //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
+                //}
 
-            var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
-            var directories = directoryInfo.GetDirectories();
-            foreach (var directory in directories.Where(directory=> projectNames.Contains(directory.Name)))
-            {
-                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
-                if (projectMetadatum != null)
+                var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
+                var directories = directoryInfo.GetDirectories();
+                foreach (var directory in directories.Where(directory => projectNames.Contains(directory.Name)))
                 {
-                    projectMetadatum.ProjectPath = directory.FullName;
+                    var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                    if (projectMetadatum != null)
+                    {
+                        projectMetadatum.ProjectPath = directory.FullName;
+                    }
                 }
-            }
 
-            foreach (var directory in directories.Where(directory => !projectNames.Contains(directory.Name)))
-            {
-                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
-                if (projectMetadatum != null)
+                foreach (var directory in directories.Where(directory => !projectNames.Contains(directory.Name)))
                 {
-                    projectMetadatum.CorpusType = CorpusType.Resource;
+                    var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                    if (projectMetadatum != null)
+                    {
+                        projectMetadatum.CorpusType = CorpusType.Resource;
+                    }
                 }
-            }
 
-            return metadata;
+                _projectMetadata = metadata;
+            }
+            return _projectMetadata;
         }
 
         /// <summary>
