@@ -10,6 +10,7 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
+    xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.Views.MARBLE"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
@@ -140,6 +141,12 @@
                                 <paratextViews:WordMeaningsView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
+
+                        <panes:PanesTemplateSelector.MarbleViewTemplate>
+                            <DataTemplate>
+                                <marble:MarbleView />
+                            </DataTemplate>
+                        </panes:PanesTemplateSelector.MarbleViewTemplate>
 
                         <panes:PanesTemplateSelector.PinsViewTemplate>
                             <DataTemplate>

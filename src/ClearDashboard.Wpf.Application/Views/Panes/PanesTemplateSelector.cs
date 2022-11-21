@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.MARBLE;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using System.Windows;
@@ -38,7 +39,12 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             get;
             set;
         }
-
+        
+        public DataTemplate MarbleViewTemplate
+        {
+            get;
+            set;
+        }
 
         public DataTemplate PinsViewTemplate
         {
@@ -72,6 +78,11 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             if (item is WordMeaningsViewModel)
             {
                 return WordMeaningsViewTemplate;
+            }
+
+            if (item is MarbleViewModel)
+            {
+                return MarbleViewTemplate;
             }
 
 

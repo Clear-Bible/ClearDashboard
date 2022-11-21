@@ -44,7 +44,6 @@
     <None Remove="Resources\GentiumPlus-Italic.ttf" />
     <None Remove="Resources\GentiumPlus-Regular.ttf" />
     <None Remove="Resources\KadmosU.ttf" />
-    <None Remove="Resources\Layouts\Dashboard.Layout.config2" />
     <None Remove="Resources\logos_icon.png" />
     <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
@@ -83,9 +82,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\newproject.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Layouts\Dashboard.Layout.config2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -276,6 +272,9 @@
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -46,6 +46,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.Wpf.Application.ViewModels.MARBLE;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -225,6 +226,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             break;
                         case "WordMeaningsID":
                             _windowIdToLoad = "WORDMEANINGS";
+                            break;
+                        case "MarbleID":
+                            _windowIdToLoad = "MARBLE";
                             break;
                         case "TextCollectionID":
                             _windowIdToLoad = "TEXTCOLLECTION";
@@ -817,6 +821,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<PinsViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
             await ActivateItemAsync<WordMeaningsViewModel>();
+            await ActivateItemAsync<MarbleViewModel>();
 
             // remove all existing windows
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
@@ -1233,6 +1238,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         
                         // Word Meanings
                         new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
+                        
+                        // MARBLE
+                        new() { Header = "◕ MARBLE", Id = "MarbleID", ViewModel = this, },
                     }
                 },
                 
@@ -1379,6 +1387,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.WordMeanings:
                             e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
                             break;
+                        case WorkspaceLayoutNames.Marble:
+                            e.Content = GetToolViewModelFromItems("MarbleViewModel");
+                            break;
                         case WorkspaceLayoutNames.Pins:
                             e.Content = GetToolViewModelFromItems("PinsViewModel");
                             break;
@@ -1424,6 +1435,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             case PinsViewModel:
                             case TextCollectionsViewModel:
                             case WordMeaningsViewModel:
+                            case MarbleViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
                         }
@@ -1508,6 +1520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case PinsViewModel:
                         case TextCollectionsViewModel:
                         case WordMeaningsViewModel:
+                        case MarbleViewModel:
                             return (ToolViewModel)t;
                     }
                 }
@@ -1539,6 +1552,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case WorkspaceLayoutNames.WordMeanings:
                     var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
                     return (vm3, vm3.Title, vm3.DockSide);
+                case WorkspaceLayoutNames.Marble:
+                    var vm4 = GetToolViewModelFromItems("MarbleViewModel");
+                    return (vm4, vm4.Title, vm4.DockSide);
 
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
@@ -1623,6 +1639,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
                         case WorkspaceLayoutNames.WordMeanings:
+                        case WorkspaceLayoutNames.Marble:
                         case WorkspaceLayoutNames.Pins:
                         case WorkspaceLayoutNames.TextCollection:
 
@@ -2087,5 +2104,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public const string Pins = "PINS";
         public const string TextCollection = "TEXTCOLLECTION";
         public const string WordMeanings = "WORDMEANINGS";
+        public const string Marble = "MARBLE";
     }
 }

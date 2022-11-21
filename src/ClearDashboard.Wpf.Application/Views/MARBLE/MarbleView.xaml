@@ -1,0 +1,1134 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.MARBLE.MarbleView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.MARBLE"
+    xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.MARBLE"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;assembly=ClearDashboard.DAL.Models"
+    xmlns:pieChart="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:cm="http://caliburnmicro.com"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    x:Name="MarbleViewControl"
+    d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
+                                     IsDesignTimeCreatable=True}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <x:ArrayExtension x:Key="brushes" Type="{x:Type Brush}">
+            <SolidColorBrush Color="#9F15C3" />
+            <SolidColorBrush Color="#FF8E01" />
+            <SolidColorBrush Color="#339933" />
+            <SolidColorBrush Color="#00AAFF" />
+            <SolidColorBrush Color="#818183" />
+            <SolidColorBrush Color="#000033" />
+        </x:ArrayExtension>
+
+        <Style x:Key="ExpanderStyle" TargetType="{x:Type Expander}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource PrimaryHueMidForegroundBrush}" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid ShowGridLines="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Orientation="Horizontal">
+            <Button
+                Width="20"
+                Height="20"
+                Margin="5,5,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
+                ToolTip="{helpers:Localization ExpandView}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignFlatLightButton}" TargetType="Button">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="RenderTransformOrigin" Value="0.5, 0.5" />
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="2" ScaleY="2" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+                <materialDesign:PackIcon
+                    Background="Transparent"
+                    Foreground="{StaticResource SecondaryHueDarkBrush}"
+                    Kind="ArrowExpandAll" />
+            </Button>
+
+            <userControls:BcvUserControl
+                Margin="50,0,0,0"
+                BcvDictionary="{Binding Path=BcvDictionary}"
+                CurrentBcv="{Binding Path=CurrentBcv}"
+                IsControlEnabled="False"
+                IsControlMinimal="True"
+                ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                ShowHeader="False"
+                ShowOffsetControl="False"
+                VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        
+        <Border
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            BorderBrush="{StaticResource SecondaryHueMidBrush}"
+            BorderThickness="2"
+            CornerRadius="5"
+            Margin="10,0,10,0">
+            <StackPanel Orientation="Vertical">
+                <controls:AutoCompleteComboBox
+                    Width="200"
+                    Height="Auto"
+                    Margin="30,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    ItemsSource="{Binding Projects}"
+                    SelectedItem="{Binding SelectedProject}"
+                    Style="{StaticResource MaterialDesignComboBox}"
+                    TextSearch.TextPath="LongName">
+
+                    <!--<controls:AutoCompleteComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                <TextBlock FontSize="24" Text="{Binding Name}" />
+                                <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:AutoCompleteComboBox.ItemTemplate>-->
+
+                </controls:AutoCompleteComboBox>
+
+                <ListBox
+                    FontFamily="SBL Hebrew"
+                    FontSize="20"
+                    ItemsSource="{Binding LexicalLinks}"
+                    SelectedValue="{Binding SelectedLexicalLink, Mode=TwoWay}">
+                    <ListBox.Style>
+                        <Style BasedOn="{StaticResource MaterialDesignChoiceChipAccentOutlineListBox}" TargetType="ListBox">
+                            <Setter Property="FlowDirection" Value="LeftToRight" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding LexicalLinks[0].IsRtl}" Value="True">
+                                    <Setter Property="FlowDirection" Value="RightToLeft" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.Style>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,2">
+                                <TextBlock Text="{Binding Word}">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock" />
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+
+        <pieChart:PieChartLayout
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="10"
+            DataContext="{Binding Senses}"
+            HorizontalAlignment="Stretch"
+            ManuscriptTextProperty="ManuscriptWord"
+            PlottedProperty="VerseTotal">
+            <pieChart:PieChartLayout.ColorSelector>
+                <pieChart:IndexedColourSelector Brushes="{StaticResource brushes}" />
+            </pieChart:PieChartLayout.ColorSelector>
+        </pieChart:PieChartLayout>
+
+        <GroupBox
+            Grid.Row="3"
+            Grid.Column="0"
+            Width="Auto"
+            Margin="10,5,10,10"
+            Header="General Information">
+            <ScrollViewer>
+                <StackPanel Orientation="Horizontal">
+                    <Expander Header="Parts of Speech   ">
+                        <Expander.Style>
+                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="IsExpanded" Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PartsOfSpeech.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Expander.Style>
+                        <StackPanel
+                            Margin="3"
+                            Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                            Orientation="Vertical"
+                            TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                            <ListBox MaxHeight="300" ItemsSource="{Binding PartsOfSpeech}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Margin" Value="0" />
+                                        <Setter Property="Height" Value="30" />
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="FontWeight" Value="Bold" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Foreground" Value="Black" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="3" HorizontalAlignment="Stretch">
+                                            <Grid.Background>
+                                                <SolidColorBrush Color="#EBEBEB" />
+                                            </Grid.Background>
+
+
+                                            <!--  the name of this item  -->
+                                            <TextBlock
+                                                Margin="3"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                FontWeight="Medium"
+                                                Text="{Binding}"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Expander>
+
+                    <Expander Header="Strong Codes   ">
+                        <Expander.Style>
+                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="IsExpanded" Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding StrongCodes.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Expander.Style>
+                        <StackPanel
+                            Margin="3"
+                            Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                            Orientation="Vertical"
+                            TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                            <ListBox MaxHeight="300" ItemsSource="{Binding StrongCodes}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Margin" Value="0" />
+                                        <Setter Property="Height" Value="30" />
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="FontWeight" Value="Bold" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Foreground" Value="Black" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="3" HorizontalAlignment="Stretch">
+                                            <Grid.Background>
+                                                <SolidColorBrush Color="#EBEBEB" />
+                                            </Grid.Background>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button
+                                                Grid.Column="0"
+                                                Height="20"
+                                                VerticalAlignment="Center">
+                                                <Button.Style>
+                                                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                                                        <Setter Property="Padding" Value="0" />
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsAvailable}" Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Button.Content>
+                                                    <Image
+                                                        Width="16"
+                                                        Height="16"
+                                                        Source="/Resources/logos_icon.png" />
+                                                </Button.Content>
+                                            </Button>
+
+                                            <!--  the name of this item  -->
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="3"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                FontWeight="Medium"
+                                                Text="{Binding}"
+                                                TextWrapping="Wrap" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Expander>
+
+
+                    <Expander Header="Related Lemmas   ">
+                        <Expander.Style>
+                            <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="IsExpanded" Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding RelatedLemmas.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Expander.Style>
+                        <StackPanel
+                            Margin="3"
+                            Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                            Orientation="Vertical"
+                            TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                            <ListBox MaxHeight="300" ItemsSource="{Binding RelatedLemmaList}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="Margin" Value="0" />
+                                        <Setter Property="Height" Value="30" />
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="FontWeight" Value="Bold" />
+                                                <Setter Property="Background" Value="Transparent" />
+                                                <Setter Property="Foreground" Value="Black" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="3" HorizontalAlignment="Stretch">
+                                            <Grid.Background>
+                                                <SolidColorBrush Color="#EBEBEB" />
+                                            </Grid.Background>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button
+                                                Grid.Column="0"
+                                                Height="20"
+                                                VerticalAlignment="Center">
+                                                <Button.Style>
+                                                    <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
+                                                        <Setter Property="Padding" Value="0" />
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsAvailable}" Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <materialDesign:PackIcon Kind="Magnify" />
+                                            </Button>
+
+                                            <!--  the name of this item  -->
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                Margin="3"
+                                                VerticalAlignment="Center"
+                                                FontFamily="SBL Hebrew"
+                                                FontSize="20"
+                                                FontWeight="Medium"
+                                                Text="{Binding Lemma}"
+                                                TextWrapping="Wrap" />
+
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Expander>
+
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+
+        <GroupBox
+            Grid.Row="4"
+            Grid.Column="0"
+            Width="Auto"
+            Margin="5,5,10,10"
+            Header="Senses">
+
+            <ListView
+                x:Name="SensesListView"
+                Margin="0"
+                IsSynchronizedWithCurrentItem="True"
+                ItemsSource="{Binding}"
+                SelectedIndex="0">
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="2,0,0,0" />
+
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+                <ListView.View>
+                    <GridView>
+
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Height" Value="25" />
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
+
+                        <GridViewColumn Width="300">
+                            <GridViewColumn.Header>
+                                <TextBlock HorizontalAlignment="Left" Text="Sense" />
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Sense}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="130">
+                            <GridViewColumn.Header>
+                                <TextBlock HorizontalAlignment="Left" Text="Verse Total" />
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=VerseTotalPercent}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+
+        <ScrollViewer
+            Grid.Row="3"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Margin="5">
+            <StackPanel Orientation="Vertical">
+
+                <Expander
+                    Header="Definition"
+                    IsExpanded="True"
+                    Style="{StaticResource ExpanderStyle}">
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                        <TextBlock
+                            Padding="3"
+                            FontWeight="Bold"
+                            Text="Definition Short:"
+                            TextDecorations="Underline" />
+                        <TextBox
+                            Width="550"
+                            Padding="3"
+                            IsReadOnly="True"
+                            Text="{Binding Path=DescriptionShort}"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            Padding="3"
+                            FontWeight="Bold"
+                            Text="Definition Long:"
+                            TextDecorations="Underline">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DescriptionLong}" Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBox
+                            Width="550"
+                            Padding="3"
+                            IsReadOnly="True"
+                            Text="{Binding Path=DescriptionLong}"
+                            TextWrapping="Wrap">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DescriptionLong}" Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            Padding="3"
+                            FontWeight="Bold"
+                            Text="Glosses:"
+                            TextDecorations="Underline" />
+                        <ListBox ItemsSource="{Binding Glosses}" />
+                    </StackPanel>
+                </Expander>
+
+
+
+
+
+                <Expander Header="Verses" Style="{StaticResource ExpanderStyle}">
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding Verses}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Height" Value="30" />
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3" HorizontalAlignment="Stretch">
+                                        <Grid.Background>
+                                            <SolidColorBrush Color="#EBEBEB" />
+                                        </Grid.Background>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="25" />
+                                            <ColumnDefinition Width="200" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <Button VerticalAlignment="Center">
+                                            <Button.Style>
+                                                <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
+                                                    <Setter Property="Padding" Value="0" />
+                                                    <Setter Property="Background" Value="Transparent" />
+                                                </Style>
+                                            </Button.Style>
+                                            <materialDesign:PackIcon VerticalAlignment="Center" Kind="Eye" />
+                                        </Button>
+
+                                        <!--  the name of this item  -->
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Margin="3"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Expander>
+
+
+                <Expander Header="Synonyms">
+                    <Expander.Style>
+                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Synonyms.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Expander.Style>
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                        <ListBox MaxHeight="300" ItemsSource="{Binding Synonyms}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Height" Value="30" />
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3" HorizontalAlignment="Stretch">
+                                        <Grid.Background>
+                                            <SolidColorBrush Color="#EBEBEB" />
+                                        </Grid.Background>
+
+
+                                        <!--  the name of this item  -->
+                                        <TextBlock
+                                            Margin="3"
+                                            VerticalAlignment="Center"
+                                            FontFamily="SBL Hebrew"
+                                            FontSize="20"
+                                            FontWeight="Medium"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Expander>
+
+                <Expander Header="Antonyms">
+                    <Expander.Style>
+                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Antonyms.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Expander.Style>
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding Antonyms}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Height" Value="30" />
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3" HorizontalAlignment="Stretch">
+                                        <Grid.Background>
+                                            <SolidColorBrush Color="#EBEBEB" />
+                                        </Grid.Background>
+
+                                        <!--  the name of this item  -->
+                                        <TextBlock
+                                            Margin="3"
+                                            VerticalAlignment="Center"
+                                            FontFamily="SBL Hebrew"
+                                            FontSize="20"
+                                            FontWeight="Medium"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Expander>
+
+                <Expander Header="Domains">
+                    <Expander.Style>
+                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Domains.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Expander.Style>
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                        <TextBlock
+                            FontWeight="Bold"
+                            Text="Domains:"
+                            TextDecorations="Underline" />
+
+                        <ListBox MaxHeight="300" ItemsSource="{Binding Domains}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Height" Value="30" />
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3" HorizontalAlignment="Stretch">
+                                        <Grid.Background>
+                                            <SolidColorBrush Color="#EBEBEB" />
+                                        </Grid.Background>
+
+                                        <!--  the name of this item  -->
+                                        <TextBlock
+                                            Margin="3"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <TextBlock
+                            FontWeight="Bold"
+                            Text="Sub Domains:"
+                            TextDecorations="Underline" />
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SubDomains}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Height" Value="30" />
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3" HorizontalAlignment="Stretch">
+                                        <Grid.Background>
+                                            <SolidColorBrush Color="#EBEBEB" />
+                                        </Grid.Background>
+
+                                        <!--  the name of this item  -->
+                                        <TextBlock
+                                            Margin="3"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                    </StackPanel>
+                </Expander>
+
+                <Expander Header="CoreDomains">
+                    <Expander.Style>
+                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CoreDomains.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Expander.Style>
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding CoreDomains}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Height" Value="30" />
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3" HorizontalAlignment="Stretch">
+                                        <Grid.Background>
+                                            <SolidColorBrush Color="#EBEBEB" />
+                                        </Grid.Background>
+
+                                        <!--  the name of this item  -->
+                                        <TextBlock
+                                            Margin="3"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Expander>
+
+                <Expander Header="Valency">
+                    <Expander.Style>
+                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Valencies.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Expander.Style>
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding Valencies}">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Height" Value="30" />
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="FontWeight" Value="Bold" />
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="Foreground" Value="Black" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="3" HorizontalAlignment="Stretch">
+                                        <Grid.Background>
+                                            <SolidColorBrush Color="#EBEBEB" />
+                                        </Grid.Background>
+
+                                        <!--  the name of this item  -->
+                                        <TextBlock
+                                            Margin="3"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding}"
+                                            TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </Expander>
+
+                <Expander Header="Collocational Meanings">
+                    <Expander.Style>
+                        <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AlphabetTreeNodes.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Expander.Style>
+                    <StackPanel
+                        Margin="3"
+                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+                        <TreeView Name="treeview" ItemsSource="{Binding Path=AlphabetTreeNodes}">
+                            <!--<b:Interaction.Triggers>
+                        <b:EventTrigger EventName="SelectedItemChanged">
+                            <b:InvokeCommandAction Command="{Binding Path=SelectedItemChangedCommand}" CommandParameter="{Binding ElementName=treeview, Path=SelectedItem}" />
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>-->
+
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="TreeViewItem">
+                                    <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="TreeViewItem">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" MinWidth="19" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto" />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <ToggleButton
+                                                        Name="Expander"
+                                                        ClickMode="Press"
+                                                        IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
+                                                        <ToggleButton.Style>
+                                                            <Style TargetType="ToggleButton">
+                                                                <Style.Resources>
+                                                                    <ResourceDictionary />
+                                                                </Style.Resources>
+                                                                <Setter Property="UIElement.Focusable" Value="False" />
+                                                                <Setter Property="FrameworkElement.Width" Value="16" />
+                                                                <Setter Property="FrameworkElement.Height" Value="16" />
+                                                                <Setter Property="Control.Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="ToggleButton">
+                                                                            <Border
+                                                                                Width="16"
+                                                                                Height="16"
+                                                                                Padding="5,5,5,5"
+                                                                                Background="#00FFFFFF">
+                                                                                <Path
+                                                                                    Name="ExpandPath"
+                                                                                    Fill="#FFFFFFFF"
+                                                                                    Stroke="#FF818181">
+                                                                                    <Path.Data>
+                                                                                        <PathGeometry Figures="M0,0L0,6L6,0z" />
+                                                                                    </Path.Data>
+                                                                                    <Path.RenderTransform>
+                                                                                        <RotateTransform Angle="135" CenterX="3" CenterY="3" />
+                                                                                    </Path.RenderTransform>
+                                                                                </Path>
+                                                                            </Border>
+                                                                            <ControlTemplate.Triggers>
+                                                                                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                                                                                    <Setter TargetName="ExpandPath" Property="UIElement.RenderTransform">
+                                                                                        <Setter.Value>
+                                                                                            <RotateTransform Angle="180" CenterX="3" CenterY="3" />
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                    <Setter TargetName="ExpandPath" Property="Shape.Fill">
+                                                                                        <Setter.Value>
+                                                                                            <SolidColorBrush>#FF595959</SolidColorBrush>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                    <Setter TargetName="ExpandPath" Property="Shape.Stroke">
+                                                                                        <Setter.Value>
+                                                                                            <SolidColorBrush>#FF262626</SolidColorBrush>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </Trigger>
+                                                                                <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                                                                    <Setter TargetName="ExpandPath" Property="Shape.Stroke">
+                                                                                        <Setter.Value>
+                                                                                            <SolidColorBrush>#FF27C7F7</SolidColorBrush>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                    <Setter TargetName="ExpandPath" Property="Shape.Fill">
+                                                                                        <Setter.Value>
+                                                                                            <SolidColorBrush>#FFCCEEFB</SolidColorBrush>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </Trigger>
+                                                                                <MultiTrigger>
+                                                                                    <MultiTrigger.Conditions>
+                                                                                        <Condition Property="UIElement.IsMouseOver" Value="True" />
+                                                                                        <Condition Property="ToggleButton.IsChecked" Value="True" />
+                                                                                    </MultiTrigger.Conditions>
+                                                                                    <Setter TargetName="ExpandPath" Property="Shape.Stroke">
+                                                                                        <Setter.Value>
+                                                                                            <SolidColorBrush>#FF1CC4F7</SolidColorBrush>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                    <Setter TargetName="ExpandPath" Property="Shape.Fill">
+                                                                                        <Setter.Value>
+                                                                                            <SolidColorBrush>#FF82DFFB</SolidColorBrush>
+                                                                                        </Setter.Value>
+                                                                                    </Setter>
+                                                                                </MultiTrigger>
+                                                                            </ControlTemplate.Triggers>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </ToggleButton.Style>
+                                                    </ToggleButton>
+                                                    <Border
+                                                        Name="Bd"
+                                                        Grid.Column="1"
+                                                        Padding="{TemplateBinding Control.Padding}"
+                                                        Background="{TemplateBinding Panel.Background}"
+                                                        BorderBrush="{TemplateBinding Border.BorderBrush}"
+                                                        BorderThickness="{TemplateBinding Border.BorderThickness}"
+                                                        SnapsToDevicePixels="True">
+                                                        <ContentPresenter
+                                                            Name="PART_Header"
+                                                            HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                                            Content="{TemplateBinding HeaderedContentControl.Header}"
+                                                            ContentSource="Header"
+                                                            ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}"
+                                                            ContentTemplate="{TemplateBinding HeaderedContentControl.HeaderTemplate}"
+                                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                                                    </Border>
+                                                    <ItemsPresenter
+                                                        Name="ItemsHost"
+                                                        Grid.Row="1"
+                                                        Grid.Column="1"
+                                                        Grid.ColumnSpan="2" />
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="TreeViewItem.IsExpanded" Value="False">
+                                                        <Setter TargetName="ItemsHost" Property="UIElement.Visibility" Value="Collapsed" />
+                                                    </Trigger>
+                                                    <Trigger Property="ItemsControl.HasItems" Value="False">
+                                                        <Setter TargetName="Expander" Property="UIElement.Visibility" Value="Hidden" />
+                                                    </Trigger>
+                                                    <Trigger Property="TreeViewItem.IsSelected" Value="True">
+                                                        <Setter TargetName="Bd" Property="Panel.Background">
+                                                            <Setter.Value>
+                                                                <DynamicResource ResourceKey="{x:Static SystemColors.HighlightBrushKey}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="TextElement.Foreground">
+                                                            <Setter.Value>
+                                                                <DynamicResource ResourceKey="{x:Static SystemColors.HighlightTextBrushKey}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                    <Trigger Property="UIElement.IsEnabled" Value="False">
+                                                        <Setter Property="TextElement.Foreground">
+                                                            <Setter.Value>
+                                                                <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="{x:Type models:TreeNode}" ItemsSource="{Binding Path=ChildNodes}">
+                                    <Label Content="{Binding Path=NodeName}" />
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+
+                    </StackPanel>
+                </Expander>
+
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>
