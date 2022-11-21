@@ -94,13 +94,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId and also this.AlignmentSetId
         }
 
-        public static async Task<IEnumerable<(TranslationSetId translationSetId, ParallelCorpusId parallelCorpusId, UserId userId)>> 
+        public static async Task<IEnumerable<TranslationSetId>> 
             GetAllTranslationSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
             var result = await mediator.Send(new GetAllTranslationSetIdsQuery(parallelCorpusId, userId));
             result.ThrowIfCanceledOrFailed(true);
 
-            return result.Data!;
+            return result.Data!.Select(e => e.translationSetId);
         }
 
         public static async Task<TranslationSet> Get(

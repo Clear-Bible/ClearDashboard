@@ -59,13 +59,13 @@ namespace ClearDashboard.DAL.Alignment.Translation
             throw new NotImplementedException();
         }
 
-        public static async Task<IEnumerable<(AlignmentSetId alignmentSetId, ParallelCorpusId parallelCorpusId, UserId userId)>> 
+        public static async Task<IEnumerable<AlignmentSetId>> 
             GetAllAlignmentSetIds(IMediator mediator, ParallelCorpusId? parallelCorpusId = null, UserId? userId = null)
         {
             var result = await mediator.Send(new GetAllAlignmentSetIdsQuery(parallelCorpusId, userId));
             result.ThrowIfCanceledOrFailed(true);
 
-            return result.Data!;
+            return result.Data!.Select(e => e.alignmentSetId);
         }
 
         public static async Task<AlignmentSet> Get(

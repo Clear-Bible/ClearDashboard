@@ -50,7 +50,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     new CorpusId(
                         id: corpus.Id,
                         isRtl: corpus.IsRtl,
-                        translationFontFamily: corpus.TranslationFontFamily,
+                        fontFamily: corpus.FontFamily,
                         name: corpus.Name,
                         displayName: corpus.DisplayName,
                         language: corpus.Language,
