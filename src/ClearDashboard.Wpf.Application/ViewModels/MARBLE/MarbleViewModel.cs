@@ -31,8 +31,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
         private readonly DashboardProjectManager? _projectManager;
         private readonly IEventAggregator? _eventAggregator;
         private readonly TranslationSource _translationSource;
-        
+
         #region Member Variables   
+
+        private List<SemanticDomainLookup> _lookup;
 
 
         #region BCV
@@ -203,6 +205,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         protected override async void OnViewReady(object view)
         {
+            _lookup = LoadSearchCSV().Result;
+
+
             if (ProjectManager.CurrentVerse != String.Empty)
             {
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
