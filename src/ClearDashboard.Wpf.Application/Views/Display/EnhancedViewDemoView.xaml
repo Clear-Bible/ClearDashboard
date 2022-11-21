@@ -9,6 +9,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     Title="AlignmentSample"
     d:DataContext="{d:DesignInstance Type=display:EnhancedViewDemoViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -72,17 +73,15 @@
             [Event TokenRightButtonDown] = [Action TokenRightButtonDown($eventArgs)];                                                                                         
             [Event TokenMouseEnter] = [Action TokenMouseEnter($eventArgs)];                                                                                         
             [Event TokenMouseLeave] = [Action TokenMouseLeave($eventArgs)];                                                                                         
-            [Event TranslationClicked] = [Action TranslationClicked($eventArgs)];                                                                                         
             [Event TranslationMouseEnter] = [Action TranslationMouseEnter($eventArgs)];                                                                                         
             [Event TranslationMouseLeave] = [Action TranslationMouseLeave($eventArgs)];                                                                                         
             [Event TranslationMouseWheel] = [Action TranslationMouseWheel($eventArgs)];                                                                                         
             [Event NoteIndicatorMouseEnter] = [Action NoteIndicatorMouseEnter($eventArgs)];                                                                                         
-            [Event NoteCreate] = [Action NoteCreate($eventArgs)];                                 
-            [Event FilterPins] = [Action FilterPins($eventArgs)];
-            [Event TranslateQuick] = [Action TranslateQuick($eventArgs)]"
+            [Event NoteCreate] = [Action NoteCreate($eventArgs)]"
+            DataContext="{Binding VerseDisplayViewModel}"
             FlowDirection="{Binding ElementName=RtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
-            TokenFontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-            TokenFontWeight="SemiBold"
+            SourceFontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+            SourceFontWeight="SemiBold"
             HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
@@ -90,13 +89,15 @@
             ShowTranslations="{Binding ElementName=ShowTranslationsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
             TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-            Tokens="{Binding VerseDisplayViewModel.SourceTokenDisplayViewModels}"
             TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
             TranslationFlowDirection="{Binding ElementName=TranslationRtlCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolFlowDirectionConverter}}"
             TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
             TranslationFontWeight="SemiBold"
             TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-            Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}" />
+            Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+            TranslationClicked="TranslationClicked"
+            >
+        </userControls:VerseDisplay>
 
         <Label
             Grid.Column="0"
@@ -157,7 +158,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 FontWeight="Bold">
-                Tokens:
+                SourceTokens:
             </Label>
             <StackPanel
                 Grid.Row="1"
@@ -708,13 +709,6 @@
             Grid.RowSpan="4"
             Grid.Column="1"
             Orientation="Vertical">
-            <userControls:TranslationSelector
-                cal:Message.Attach="[Event TranslationApplied] = [Action TranslationApplied($eventArgs)];                                                              [Event TranslationCancelled] = [Action TranslationCancelled($eventArgs)];"
-                SelectedItem="{Binding CurrentTranslationOption}"
-                TokenDisplayViewModel="{Binding TokenForTranslation}"
-                TranslationOptions="{Binding TranslationOptions}"
-                Visibility="{Binding TranslationPaneVisibility}" />
-
             <userControls:NoteCollectionDisplay
                 cal:Message.Attach="[Event CloseRequested] = [Action CloseNotePaneRequested($eventArgs)]; 
                                     [Event NoteAdded] = [Action NoteAdded($eventArgs)];                                                            

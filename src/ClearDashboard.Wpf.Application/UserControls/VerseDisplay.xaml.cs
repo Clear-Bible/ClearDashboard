@@ -201,11 +201,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(10d));
 
         /// <summary>
-        /// Identifies the ItemsPanelTemplate dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register(nameof(ItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
-
-        /// <summary>
         /// Identifies the NoteIndicatorColor dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteIndicatorColorProperty = DependencyProperty.Register(nameof(NoteIndicatorColor), typeof(Brush), typeof(VerseDisplay),
@@ -241,6 +236,41 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(true));
 
         /// <summary>
+        /// Identifies the SourceFlowDirection dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFlowDirectionProperty = DependencyProperty.Register(nameof(SourceFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
+            new PropertyMetadata(FlowDirection.LeftToRight));
+
+        /// <summary>
+        /// Identifies the SourceFontFamily dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFontFamilyProperty = DependencyProperty.Register(nameof(SourceFontFamily), typeof(FontFamily), typeof(VerseDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the SourceFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFontSizeProperty = DependencyProperty.Register(nameof(SourceFontSize), typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(18d));
+
+        /// <summary>
+        /// Identifies the SourceFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFontStyleProperty = DependencyProperty.Register(nameof(SourceFontStyle), typeof(FontStyle), typeof(VerseDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the SourceFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFontWeightProperty = DependencyProperty.Register(nameof(SourceFontWeight), typeof(FontWeight), typeof(VerseDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the SourceItemsPanelTemplate dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceItemsPanelTemplateProperty = DependencyProperty.Register(nameof(SourceItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TargetFlowDirection dependency property.
         /// </summary>
         public static readonly DependencyProperty TargetFlowDirectionProperty = DependencyProperty.Register(nameof(TargetFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
@@ -271,10 +301,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(FontWeights.Normal));
 
         /// <summary>
-        /// Identifies the TargetTokens dependency property.
+        /// Identifies the TargetItemsPanelTemplate dependency property.
         /// </summary>
-        public static readonly DependencyProperty TargetTokensProperty = DependencyProperty.Register(nameof(TargetTokens), typeof(IEnumerable), typeof(VerseDisplay),
-            new PropertyMetadata(null, OnTargetTokensChanged));
+        public static readonly DependencyProperty TargetItemsPanelTemplateProperty = DependencyProperty.Register(nameof(TargetItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TargetVisibility dependency property.
@@ -316,47 +345,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register(nameof(TitleVisibility), typeof(Visibility), typeof(VerseDisplay), new PropertyMetadata(Visibility.Visible));
 
-        /// <summary>
-        /// Identifies the TokenFlowDirection dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFlowDirectionProperty = DependencyProperty.Register(nameof(TokenFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
-
-        /// <summary>
-        /// Identifies the TokenFontFamily dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontFamilyProperty = DependencyProperty.Register(nameof(TokenFontFamily), typeof(FontFamily), typeof(VerseDisplay),
-            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
-
-        /// <summary>
-        /// Identifies the TokenFontSize dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontSizeProperty = DependencyProperty.Register(nameof(TokenFontSize), typeof(double), typeof(VerseDisplay),
-            new PropertyMetadata(18d));
-
-        /// <summary>
-        /// Identifies the TokenFontStyle dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontStyleProperty = DependencyProperty.Register(nameof(TokenFontStyle), typeof(FontStyle), typeof(VerseDisplay),
-            new PropertyMetadata(FontStyles.Normal));
-
-        /// <summary>
-        /// Identifies the TokenFontWeight dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontWeightProperty = DependencyProperty.Register(nameof(TokenFontWeight), typeof(FontWeight), typeof(VerseDisplay),
-            new PropertyMetadata(FontWeights.SemiBold));
-
         public static readonly DependencyProperty IsRtlProperty = DependencyProperty.Register(nameof(IsRtl), typeof(FlowDirection), typeof(VerseDisplay),
             new PropertyMetadata(FlowDirection.LeftToRight));
 
         public static readonly DependencyProperty IsTargetRtlProperty = DependencyProperty.Register(nameof(IsTargetRtl), typeof(FlowDirection), typeof(VerseDisplay),
             new PropertyMetadata(FlowDirection.LeftToRight));
-
-
-        /// <summary>
-        /// Identifies the Tokens dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokensProperty = DependencyProperty.Register(nameof(Tokens), typeof(IEnumerable), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenVerticalSpacing dependency property.
@@ -446,7 +439,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Private event handlers
 
         /// <summary>
-        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="ItemsPanelTemplate"/>.
+        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="SourceItemsPanelTemplate"/>.
         /// </summary>
         /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
         /// <param name="args">Event args containing the new value.</param>
@@ -458,7 +451,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateItemsPanelTemplate(bool wrap)
         {
-            ItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
+            SourceItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "SourceWrapPanelTemplate" : "SourceStackPanelTemplate");
+            TargetItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "TargetWrapPanelTemplate" : "TargetStackPanelTemplate");
         }
 
         public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -486,7 +480,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay,
+                TokenDisplay = tokenDisplay,
                 SelectedTokens = SelectedTokens,
                 ModifierKeys = Keyboard.Modifiers,
             });
@@ -721,7 +715,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = control?.TokenDisplayViewModel,
+                TokenDisplay = control?.TokenDisplayViewModel,
+                VerseDisplay = VerseDisplayViewModel,
                 Translation = control?.TokenDisplayViewModel?.Translation,
             }) ;
         }
@@ -1088,6 +1083,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public properties
 
+        private IEventAggregator EventAggregator { get; set; }
+
         /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
@@ -1098,16 +1095,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (double)GetValue(HorizontalSpacingProperty);
             set => SetValue(HorizontalSpacingProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets whether the <see cref="ItemsPanelTemplate"/> to use when rendering the control.
-        /// </summary>
-        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
-        private ItemsPanelTemplate ItemsPanelTemplate
-        {
-            get => (ItemsPanelTemplate)GetValue(ItemsPanelTemplateProperty);
-            set => SetValue(ItemsPanelTemplateProperty, value);
         }
 
         /// <summary>
@@ -1173,7 +1160,67 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the translations.
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the tokens.
+        /// </summary>
+        public FlowDirection SourceFlowDirection
+        {
+            get => (FlowDirection)GetValue(SourceFlowDirectionProperty);
+            set => SetValue(SourceFlowDirectionProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
+        /// </summary>
+        public FontFamily SourceFontFamily
+        {
+            get => (FontFamily)GetValue(SourceFontFamilyProperty);
+            set => SetValue(SourceFontFamilyProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font size for the token.
+        /// </summary>
+        public double SourceFontSize
+        {
+            get => (double)GetValue(SourceFontSizeProperty);
+            set => SetValue(SourceFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the token.
+        /// </summary>
+        public FontStyle SourceFontStyle
+        {
+            get => (FontStyle)GetValue(SourceFontStyleProperty);
+            set => SetValue(SourceFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the token.
+        /// </summary>
+        public FontWeight SourceFontWeight
+        {
+            get => (FontWeight)GetValue(SourceFontWeightProperty);
+            set => SetValue(SourceFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="SourceItemsPanelTemplate"/> to use when rendering the control.
+        /// </summary>
+        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
+        private ItemsPanelTemplate SourceItemsPanelTemplate
+        {
+            get => (ItemsPanelTemplate)GetValue(SourceItemsPanelTemplateProperty);
+            set => SetValue(SourceItemsPanelTemplateProperty, value);
+        }
+
+        /// <summary>
+        /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
+        /// </summary>
+        public IEnumerable SourceTokens => VerseDisplayViewModel.SourceTokenDisplayViewModels;
+
+        /// <summary>
+        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the target tokens.
         /// </summary>
         public FlowDirection TargetFlowDirection
         {
@@ -1182,7 +1229,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the translations.
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.
         /// </summary>
         public FontFamily TargetFontFamily
         {
@@ -1191,7 +1238,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font size for the translation.
+        /// Gets or sets the font size for the target tokens.
         /// </summary>
         public double TargetFontSize
         {
@@ -1200,7 +1247,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font style for the translation.
+        /// Gets or sets the font style for the target tokens.
         /// </summary>
         public FontStyle TargetFontStyle
         {
@@ -1209,7 +1256,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font weight for the translation.
+        /// Gets or sets the font weight for the target.
         /// </summary>
         public FontWeight TargetFontWeight
         {
@@ -1218,13 +1265,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the collection of target (alignment) tokens to be displayed for the verse.
+        /// Gets or sets the <see cref="TargetItemsPanelTemplate"/> to use when rendering the target tokens.
         /// </summary>
-        public IEnumerable? TargetTokens
+        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
+        private ItemsPanelTemplate TargetItemsPanelTemplate
         {
-            get => (IEnumerable)GetValue(TargetTokensProperty);
-            set => SetValue(TargetTokensProperty, value);
+            get => (ItemsPanelTemplate)GetValue(TargetItemsPanelTemplateProperty);
+            set => SetValue(TargetItemsPanelTemplateProperty, value);
         }
+
+        /// <summary>
+        /// Gets the collection of <see cref="TokenDisplayViewModel"/> target objects to display in the control.
+        /// </summary>
+        public IEnumerable TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
 
         /// <summary>
         /// Gets or sets the visibility of the target (alignment) verse.
@@ -1289,24 +1342,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(TitleVisibilityProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the tokens.
-        /// </summary>
-        public FlowDirection TokenFlowDirection
-        {
-            get => (FlowDirection)GetValue(TokenFlowDirectionProperty);
-            set => SetValue(TokenFlowDirectionProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
-        /// </summary>
-        public FontFamily TokenFontFamily
-        {
-            get => (FontFamily)GetValue(TokenFontFamilyProperty);
-            set => SetValue(TokenFontFamilyProperty, value);
-        }
-
         public FlowDirection IsRtl
         {
             get => (FlowDirection)GetValue(IsRtlProperty);
@@ -1316,42 +1351,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (FlowDirection)GetValue(IsTargetRtlProperty);
             set => SetValue(IsTargetRtlProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font size for the token.
-        /// </summary>
-        public double TokenFontSize
-        {
-            get => (double)GetValue(TokenFontSizeProperty);
-            set => SetValue(TokenFontSizeProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font style for the token.
-        /// </summary>
-        public FontStyle TokenFontStyle
-        {
-            get => (FontStyle)GetValue(TokenFontStyleProperty);
-            set => SetValue(TokenFontStyleProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font weight for the token.
-        /// </summary>
-        public FontWeight TokenFontWeight
-        {
-            get => (FontWeight)GetValue(TokenFontWeightProperty);
-            set => SetValue(TokenFontWeightProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects to display in the control.
-        /// </summary>
-        public IEnumerable Tokens
-        {
-            get => (IEnumerable)GetValue(TokensProperty);
-            set => SetValue(TokensProperty, value);
         }
 
         /// <summary>
@@ -1454,6 +1453,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets the strongly-typed VerseDisplayViewModel bound to this control.
+        /// </summary>
+        public VerseDisplayViewModel VerseDisplayViewModel => DataContext as VerseDisplayViewModel ?? throw new InvalidOperationException();
+
+        /// <summary>
         /// Gets or sets the margin for the tokens list.
         /// </summary>
         public Thickness VerseMargin
@@ -1488,9 +1492,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             Loaded += OnLoaded;
         }
 
-        public IEventAggregator EventAggregator { get; set; }
-
-        public VerseDisplay(IEventAggregator eventAggregator)
+        public VerseDisplay(IEventAggregator eventAggregator) : this()
         {
             EventAggregator = eventAggregator;
         }

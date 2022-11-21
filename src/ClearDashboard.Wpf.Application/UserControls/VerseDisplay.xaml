@@ -11,7 +11,7 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <DataTemplate x:Key="TokenDisplay">
+        <DataTemplate x:Key="SourceTokenDisplay">
             <local:TokenDisplay
                 DataContext="{Binding}"
                 HorizontalAlignment="Left"
@@ -22,11 +22,11 @@
                 SelectedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedTokenBackground}"
                 ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
-                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}"
-                TokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontFamily}"
-                TokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
-                TokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"
-                TokenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontWeight}"
+                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}"
+                TokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontFamily}"
+                TokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontSize}"
+                TokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontStyle}"
+                TokenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontWeight}"
                 TokenVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenVerticalSpacing}"
                 TranslationAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
                 TranslationFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
@@ -65,7 +65,7 @@
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
                 />
         </DataTemplate>
-        <DataTemplate x:Key="TargetDisplay">
+        <DataTemplate x:Key="TargetTokenDisplay">
             <local:TokenDisplay
                 DataContext="{Binding}"
                 HorizontalAlignment="Left"
@@ -119,11 +119,28 @@
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
                 />
         </DataTemplate>
-        <ItemsPanelTemplate x:Key="WrapPanelTemplate">
-            <WrapPanel Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
+        <ItemsPanelTemplate x:Key="SourceWrapPanelTemplate">
+            <WrapPanel 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}" 
+                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" 
+                />
         </ItemsPanelTemplate>
-        <ItemsPanelTemplate x:Key="StackPanelTemplate">
-            <StackPanel HorizontalAlignment="Left" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
+        <ItemsPanelTemplate x:Key="TargetWrapPanelTemplate">
+            <WrapPanel 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}" 
+                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
+        </ItemsPanelTemplate>
+        <ItemsPanelTemplate x:Key="SourceStackPanelTemplate">
+            <StackPanel 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}" 
+                HorizontalAlignment="Left" 
+                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
+        </ItemsPanelTemplate>
+        <ItemsPanelTemplate x:Key="TargetStackPanelTemplate">
+            <StackPanel 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}" 
+                HorizontalAlignment="Left" 
+                Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
     </UserControl.Resources>
 
@@ -137,26 +154,29 @@
             Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Title}"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TitleVisibility}" />
         <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
-            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
-            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
-            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}">
-            <ItemsControl
-                ItemTemplate="{StaticResource TokenDisplay}"
-                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}"
-                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Tokens}" />
-        </Border>
-        <Border
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
             BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
             BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
+            >
+            <ItemsControl
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}"
+                ItemTemplate="{StaticResource SourceTokenDisplay}"
+                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceItemsPanelTemplate}"
+                ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}" />
+        </Border>
+        <Border
+            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBackground}"
+            BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
+            BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
             <ItemsControl
-                ItemTemplate="{StaticResource TargetDisplay}"
-                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ItemsPanelTemplate}"
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}"
+                ItemTemplate="{StaticResource TargetTokenDisplay}"
+                ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetItemsPanelTemplate}"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}" />
         </Border>

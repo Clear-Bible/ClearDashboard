@@ -1,21 +1,9 @@
-﻿using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.Events;
 
 namespace ClearDashboard.Wpf.Application.Views.Project
 {
@@ -24,10 +12,27 @@ namespace ClearDashboard.Wpf.Application.Views.Project
     /// </summary>
     public partial class EnhancedView : UserControl
     {
+        public void TranslationClicked(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Task.Run(() => TranslationClickedAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());
+        }
+
+        public async Task TranslationClickedAsync(TranslationEventArgs args)
+        {
+            void ShowTranslationSelectionDialog()
+            {
+                var dialog = new TranslationSelectionDialog(args.TokenDisplay!, args.VerseDisplay!)
+                {
+                    Owner = Window.GetWindow(this),
+                };
+                dialog.ShowDialog();
+            }
+            await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowTranslationSelectionDialog);
+        }
+
         public EnhancedView()
         {
             InitializeComponent();
         }
-
     }
 }
