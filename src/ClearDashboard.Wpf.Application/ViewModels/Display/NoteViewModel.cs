@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Notes;
@@ -16,6 +17,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public Note Entity { get; }
         public NoteId? NoteId => Entity.NoteId;
         public EntityId<NoteId>? ThreadId => Entity.ThreadId;
+
+        public Guid? ParatextId { get; set; }
+        public bool EnableParatextSend => ParatextId.HasValue;
+
 
         public string? Text
         {

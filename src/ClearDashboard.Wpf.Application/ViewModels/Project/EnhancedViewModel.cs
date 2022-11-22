@@ -41,6 +41,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.Wpf.Application.Dialogs;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
@@ -1508,6 +1509,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             NoteControlVisibility = Visibility.Visible;
         }
+
+//        public void ParatextSend(object sender, ParatextEventArgs e)
+//        {
+//            NoteManager.ParatextSend(e);
+//;        }
 
         public void FilterPins(object sender, NoteEventArgs e)
         {
