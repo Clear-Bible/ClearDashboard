@@ -114,7 +114,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
   </ItemGroup>
@@ -275,6 +275,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\TailBlazor\Dragablz.dll">

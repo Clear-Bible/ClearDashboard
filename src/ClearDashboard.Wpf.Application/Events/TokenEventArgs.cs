@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.Events
         /// <summary>
         /// The <see cref="TokenDisplayViewModel"/> that triggered this event.
         /// </summary>
-        public TokenDisplayViewModel TokenDisplayViewModel { get; set; }
+        public TokenDisplayViewModel TokenDisplay { get; set; }
 
         /// <summary>
         /// The collection of selected <see cref="TokenDisplayViewModel"/>s.

@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
     public class EnhancedViewDemoViewModel : DashboardApplicationScreen, IMainWindowViewModel
     {
         #region Demo data - for demo page only
-        public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
+        public EngineStringDetokenizer Detokenizer { get; set; } = new(new LatinWordDetokenizer());
 
         public async Task<ParallelCorpus> GetParallelCorpus(ParallelCorpusId? corpusId = null)
         {
@@ -105,16 +105,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             try
             {
-                VerseDisplayViewModel = ServiceProvider!.GetService<VerseDisplayViewModel>();
+                VerseDisplayViewModel = ServiceProvider.GetService<VerseDisplayViewModel>()!;
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                //await ProjectManager!.LoadProject("EnhancedViewDemo");
                 await ProjectManager!.LoadProject("EnhancedViewDemo2");
                 //var row = await GetVerseTextRow(40001001);
                 var row = await GetVerseTextRow(001001001);
                 var translationSet = await GetFirstTranslationSet();
-                //await VerseDisplayViewModel!.BindAsync(row, translationSet, Detokenizer);
 
                 await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
@@ -141,32 +139,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             set => Set(ref _message, value);
         }
 
-        private TokenDisplayViewModel _tokenForTranslation;
-        public TokenDisplayViewModel TokenForTranslation
-        {
-            get => _tokenForTranslation;
-            set => Set(ref _tokenForTranslation, value);
-        }
-
         private TokenDisplayViewModelCollection _selectedTokens = new();
         public TokenDisplayViewModelCollection SelectedTokens
         {
             get => _selectedTokens;
             set => Set(ref _selectedTokens, value);
-        }
-
-        private IEnumerable<TranslationOption> _translationOptions;
-        public IEnumerable<TranslationOption> TranslationOptions
-        {
-            get => _translationOptions;
-            set => Set(ref _translationOptions, value);
-        }
-
-        private TranslationOption? _currentTranslationOption;
-        public TranslationOption? CurrentTranslationOption
-        {
-            get => _currentTranslationOption;
-            set => Set(ref _currentTranslationOption, value);
         }
 
         private Visibility _notePaneVisibility = Visibility.Collapsed;
@@ -181,14 +158,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             get => _translationPaneVisibility;
             set => Set(ref _translationPaneVisibility, value);
-        }
-
-        private async Task DisplayTranslationPane(TranslationEventArgs e)
-        {
-            TokenForTranslation = e.TokenDisplayViewModel;
-            TranslationOptions = await VerseDisplayViewModel.GetTranslationOptionsAsync(e.Translation);
-            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == e.Translation.TargetTranslationText) ?? null;
-            TranslationPaneVisibility = Visibility.Visible;
         }
 
         private static string GetModifierKeysText(ModifierKeys modifierKeys)
@@ -233,10 +202,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
+            UpdateSelection(e.TokenDisplay, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
-            Message = $"'{e.TokenDisplayViewModel.SurfaceText}' token ({e.TokenDisplayViewModel.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
+            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
@@ -246,26 +215,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public async Task TokenRightButtonDownAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplayViewModel, e.SelectedTokens, false);
+            UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
             await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) right-clicked";
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
         }
 
         public void TokenMouseEnter(TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplayViewModel?.SurfaceText}' token ({e.TokenDisplayViewModel?.Token.TokenId}) hovered";
+            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
         }
 
         public void TokenMouseLeave(TokenEventArgs e)
         {
             Message = string.Empty;
-        }
-
-        public async Task TranslationClicked(TranslationEventArgs e)
-        {
-            await DisplayTranslationPane(e);
-            Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} clicked";
         }
 
         public void TranslationMouseEnter(TranslationEventArgs e)
@@ -304,21 +267,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             NotePaneVisibility = Visibility.Visible;
         }
 
-        public async Task TranslationApplied(TranslationEventArgs e)
-        {
-            await VerseDisplayViewModel.PutTranslationAsync(e.Translation, e.TranslationActionType);
-            NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
-
-            Message = $"Translation '{e.Translation.TargetTranslationText}' ({e.TranslationActionType}) applied to token '{e.TokenDisplayViewModel.SurfaceText}' ({e.TokenDisplayViewModel.Token.TokenId})";
-            TranslationPaneVisibility = Visibility.Collapsed;
-        }
-
-        public void TranslationCancelled(RoutedEventArgs e)
-        {
-            Message = "Translation cancelled.";
-            TranslationPaneVisibility = Visibility.Collapsed;
-        }        
-        
         public async Task NoteAdded(NoteEventArgs e)
         {
             await NoteManager.AddNoteAsync(e.Note, e.EntityIds);

@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
+﻿using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.Events;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ClearDashboard.Wpf.Application.Views.Display
 {
-    public partial class EnhancedViewDemoView : Page
+    public partial class EnhancedViewDemoView
     {
+        public void TranslationClicked(object sender, RoutedEventArgs routedEventArgs)
+        {
+            Task.Run(() => TranslationClickedAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());
+        }
+
+        public async Task TranslationClickedAsync(TranslationEventArgs args)
+        {
+            void ShowTranslationSelectionDialog()
+            {
+                var dialog = new TranslationSelectionDialog(args.TokenDisplay!, args.VerseDisplay!)
+                {
+                    Owner = Window.GetWindow(this),
+                };
+                dialog.ShowDialog();
+            }
+            await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowTranslationSelectionDialog);
+        }
 
         public EnhancedViewDemoView()
         {

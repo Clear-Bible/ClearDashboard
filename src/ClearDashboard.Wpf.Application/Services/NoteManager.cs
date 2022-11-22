@@ -157,6 +157,10 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
                 var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
+                
+                //var corpusId = ParatextNoteManager.GetIfAllTokenIdsAndForSameTokenizedCorpus(noteId);
+                //noteViewModel.ParatextId = corpusId?.ParatextId;
+
                 foreach (var associatedEntityId in associatedEntityIds)
                 {
                     var association = new NoteAssociationViewModel

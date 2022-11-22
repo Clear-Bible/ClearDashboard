@@ -1,0 +1,33 @@
+﻿<Window x:Class="ClearDashboard.Wpf.Application.Dialogs.TranslationSelectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+        mc:Ignorable="d"
+        Title="{Binding DialogTitle}" 
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        Height="500" Width="800">
+    <Grid>
+        <userControls:TranslationSelector
+            SelectedItem="{Binding CurrentTranslationOption}"
+            TokenDisplayViewModel="{Binding TokenDisplay}"
+            TranslationOptions="{Binding TranslationOptions}"
+            TranslationApplied="OnTranslationApplied"
+            TranslationCancelled="OnTranslationCancelled"
+            >
+        </userControls:TranslationSelector>
+        <ProgressBar
+            Width="76"
+            Height="75"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
+    </Grid>
+</Window>
