@@ -50,7 +50,7 @@ using System.Windows.Input;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : ToolViewModel
+    public class ProjectDesignSurfaceViewModel : DashboardApplicationScreen
     {
         #region Member Variables
 
@@ -59,146 +59,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private readonly IWindowManager? _windowManager;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
-
-        /// <summary>
-        /// This is the network that is displayed in the window.
-        /// It is the main part of the view-model.
-        /// </summary>
-        private DesignSurfaceViewModel _designSurface;
-
-        ///
-        /// The current scale at which the content is being viewed.
-        /// 
-        private double _contentScale = 1;
-
-        ///
-        /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
-        /// 
-        private double _contentOffsetX;
-
-        ///
-        /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
-        /// 
-        private double _contentOffsetY;
-
-        ///
-        /// The width of the content (in content coordinates).
-        /// 
-        private double _contentWidth = 1000;
-
-        ///
-        /// The height of the content (in content coordinates).
-        /// 
-        private double _contentHeight = 1000;
-
-        ///
-        /// The width of the viewport onto the content (in content coordinates).
-        /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
-        /// view-model so that the value can be shared with the overview window.
-        /// 
-        private double _contentViewportWidth;
-
-        ///
-        /// The height of the viewport onto the content (in content coordinates).
-        /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
-        /// view-model so that the value can be shared with the overview window.
-        /// 
-        private double _contentViewportHeight;
-
-        private Wpf.Controls.ProjectDesignSurface? ProjectDesignSurface { get; set; }
-
-
         #endregion //Member Variables
 
-        #region Public Variables
-
-        #endregion //Public Variables
 
         #region Observable Properties
 
 
-         private BindableCollection<Corpus> Corpora { get; set; }
+         private BindableCollection<Corpus>? Corpora { get; set; }
+
+        ///// <summary>
+        ///// This is the design surface that is displayed in the window.
+        ///// It is the main part of the view-model.
+        ///// </summary>
+        /////
+        //private ProjectDesignSurface? ProjectDesignSurface { get; set; }
 
         /// <summary>
-        /// This is the network that is displayed in the window.
+        /// This is the design surface that is displayed in the window.
         /// It is the main part of the view-model.
         /// </summary>
-        public DesignSurfaceViewModel DesignSurface
+        private DesignSurfaceViewModel? _designSurface;
+
+        public DesignSurfaceViewModel? DesignSurface
         {
             get => _designSurface;
             private set => Set(ref _designSurface, value);
         }
 
-        ///
-        /// The current scale at which the content is being viewed.
-        /// 
-        public double ContentScale
-        {
-            get => _contentScale;
-            set => Set(ref _contentScale, value);
-        }
-
-        ///
-        /// The X coordinate of the offset of the viewport onto the content (in content coordinates).
-        /// 
-        public double ContentOffsetX
-        {
-            get => _contentOffsetX;
-            set => Set(ref _contentOffsetX, value);
-        }
-
-        ///
-        /// The Y coordinate of the offset of the viewport onto the content (in content coordinates).
-        /// 
-        public double ContentOffsetY
-        {
-            get => _contentOffsetY;
-            set => Set(ref _contentOffsetY, value);
-        }
-
-        ///
-        /// The width of the content (in content coordinates).
-        /// 
-        public double ContentWidth
-        {
-            get => _contentWidth;
-            set => Set(ref _contentWidth, value);
-        }
-
-        ///
-        /// The height of the content (in content coordinates).
-        /// 
-        public double ContentHeight
-        {
-            get => _contentHeight;
-            set => Set(ref _contentHeight, value);
-        }
-
-        ///
-        /// The width of the viewport onto the content (in content coordinates).
-        /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
-        /// view-model so that the value can be shared with the overview window.
-        /// 
-        public double ContentViewportWidth
-        {
-            get => _contentViewportWidth;
-            set => Set(ref _contentViewportWidth, value);
-        }
-
-        ///
-        /// The height of the viewport onto the content (in content coordinates).
-        /// The value for this is actually computed by the main window's ZoomAndPanControl and update in the
-        /// view-model so that the value can be shared with the overview window.
-        /// 
-        public double ContentViewportHeight
-        {
-            get => _contentViewportHeight;
-            set => Set(ref _contentViewportHeight, value);
-        }
+ 
 
 
-        private object _selectedDesignSurfaceComponent;
-        public object SelectedDesignSurfaceComponent
+        private object? _selectedDesignSurfaceComponent;
+        public object? SelectedDesignSurfaceComponent
         {
             get
             {
@@ -214,7 +106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else if (_selectedDesignSurfaceComponent is ParallelCorpusConnectionViewModel conn)
                 {
-                    foreach (var connection in DesignSurface.Connections)
+                    foreach (var connection in DesignSurface.ParallelCorpusConnections)
                     {
                         if (connection.Id == conn.Id)
                         {
@@ -248,8 +140,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _addManuscriptGreekEnabled, value);
         }
 
-        private string _projectName;
-        public string ProjectName
+        private string? _projectName;
+        public string? ProjectName
         {
             get => _projectName;
             set => Set(ref _projectName, value);
@@ -259,29 +151,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Constructor
     
-
-#pragma warning disable CS8618
+        // Required for design-time binding
         public ProjectDesignSurfaceViewModel()
-#pragma warning restore CS8618
-
         {
-
+            //no-op
         }
 
-        // ReSharper disable once UnusedMember.Global
-#pragma warning disable CS8618
         public ProjectDesignSurfaceViewModel(INavigationService navigationService, IWindowManager windowManager,
-#pragma warning restore CS8618
             ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager,
             IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
-
             _windowManager = windowManager;
             _longRunningTaskManager = longRunningTaskManager;
-
-            Title = "🖧 PROJECT DESIGN SURFACE ****";
-            ContentId = "PROJECTDESIGNSURFACETOOL";
 
             Corpora = new BindableCollection<Corpus>();
         }
@@ -307,26 +189,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
-         
+            //
+            // Create a design surface, the root of the view-model.
+            //
+            DesignSurface = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (ProjectDesignSurface == null)
+            if (DesignSurface.ProjectDesignSurface == null)
             {
                 if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
                 {
                     // ReSharper disable once AssignNullToNotNullAttribute
-                    ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+                    DesignSurface.ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+
                 }
             }
 
-            //
-            // Create a network, the root of the view-model.
-            //
-#pragma warning disable CS8604
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            DesignSurface = LifetimeScope.Resolve<DesignSurfaceViewModel>();
-            // DesignSurface = new DesignSurfaceViewModel(NavigationService, Logger as ILogger<DesignSurfaceViewModel>,
-            //    ProjectManager, EventAggregator);
-#pragma warning restore CS8604
+            
+
 
             base.OnViewAttached(view, context);
         }
@@ -399,7 +279,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             // save all the connections
-            foreach (var connection in DesignSurface.Connections)
+            foreach (var connection in DesignSurface.ParallelCorpusConnections)
             {
                 var serializedTranslationSet = connection.TranslationSetInfo.Select(translationSet => new TranslationSetInfo
                 {
@@ -558,7 +438,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             SourceFontFamily = deserializedConnection.SourceFontFamily,
                             TargetFontFamily = deserializedConnection.TargetFontFamily,
                         };
-                        DesignSurface.Connections.Add(connection);
+                        DesignSurface.ParallelCorpusConnections.Add(connection);
                         // add in the context menu
                         CreateConnectionMenu(connection);
                     }
@@ -1074,7 +954,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     NotifyOfPropertyChange(() => DesignSurface.CorpusNodes);
 
                     // force a redraw
-                    ProjectDesignSurface?.InvalidateVisual();
+                    DesignSurface.ProjectDesignSurface?.InvalidateVisual();
                 }
 
                 CreateCorpusNodeMenu(corpusNode);
@@ -1311,7 +1191,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 case "AddTranslationSetId":
                     // find the right connection to send
-                    var connection = DesignSurface.Connections.First(c => c.Id == connectionMenuItem.ConnectionId);
+                    var connection = DesignSurface.ParallelCorpusConnections.First(c => c.Id == connectionMenuItem.ConnectionId);
 
                     if (connection is not null)
                     {
@@ -1443,7 +1323,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             double y = 25;
             double yOffset = 0;
 
-            foreach (var corpusNode in DesignSurface.CorpusNodes)
+            foreach (var corpusNode in DesignSurface!.CorpusNodes)
             {
                 var positionX = corpusNode.X;
                 var positionY = corpusNode.Y + corpusNode.Size.Height;
@@ -1502,7 +1382,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //
             // Add the new connection to the view-model.
             //
-            DesignSurface.Connections.Add(connection);
+            DesignSurface.ParallelCorpusConnections.Add(connection);
 
             return connection;
         }
@@ -1541,7 +1421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
-            var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
+            var curDragPoint = Mouse.GetPosition(DesignSurface.ProjectDesignSurface);
 
             //
             // Delegate the real work to the view model.
@@ -1560,7 +1440,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         public void OnParallelCorpusConnectionDragging(object sender, ConnectionDraggingEventArgs e)
         {
-            var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
+            var curDragPoint = Mouse.GetPosition(DesignSurface.ProjectDesignSurface);
             var connection = (ParallelCorpusConnectionViewModel)e.Connection;
             ConnectionDragging(curDragPoint, connection);
         }
@@ -1669,7 +1549,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // The connection was unsuccessful.
                 // Maybe the user dragged it out and dropped it in empty space.
                 //
-                this.DesignSurface.Connections.Remove(newParallelCorpusConnection);
+                this.DesignSurface.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                 return;
             }
 
@@ -1688,7 +1568,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // eg input -> input or output -> output, are not allowed,
                 // Remove the connection.
                 //
-                DesignSurface.Connections.Remove(newParallelCorpusConnection);
+                DesignSurface.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                 return;
             }
 
@@ -1703,7 +1583,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (existingConnection != null)
             {
-                DesignSurface.Connections.Remove(existingConnection);
+                DesignSurface.ParallelCorpusConnections.Remove(existingConnection);
             }
 
             //
@@ -1728,13 +1608,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // check to see if we somehow didn't get a source/target id properly.  If so remove the line
                 if (newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId == "" || newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId is null)
                 {
-                    DesignSurface.Connections.Remove(newParallelCorpusConnection);
+                    DesignSurface.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                     return;
                 }
 
                 if (newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId == "" || newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId is null)
                 {
-                    DesignSurface.Connections.Remove(newParallelCorpusConnection);
+                    DesignSurface.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                     return;
                 }
 
@@ -1952,10 +1832,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 //
                 // Remove all connections attached to the node.
                 //
-                DesignSurface.Connections.RemoveRange(node.AttachedConnections);
+                DesignSurface!.ParallelCorpusConnections.RemoveRange(node.AttachedConnections);
 
                 //
-                // Remove the node from the network.
+                // Remove the node from the design surface.
                 //
                 DesignSurface.CorpusNodes.Remove(node);
 
@@ -1971,7 +1851,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             if (nodeLocation.X == 0 && nodeLocation.Y == 0)
             {
-                // figure out some offset based on the number of nodes already in the network
+                // figure out some offset based on the number of nodes already on the design surface
                 // so we don't overlap
                 nodeLocation = GetFreeSpot();
             }
@@ -2030,7 +1910,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 TargetParatextId: parallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId,
                 ConnectorGuid: parallelCorpusConnection.Id));
 
-            DesignSurface.Connections.Remove(parallelCorpusConnection);
+            DesignSurface.ParallelCorpusConnections.Remove(parallelCorpusConnection);
         }
 
 

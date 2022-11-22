@@ -142,12 +142,12 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// <summary>
         /// Event raised on mouse move in the ProjectDesignSurfaceView.
         /// </summary>
-        private void networkControl_MouseMove(object sender, MouseEventArgs e)
+        private void OnMouseMove(object sender, MouseEventArgs e)
         {
             if (_mouseHandlingMode == MouseHandlingMode.Panning)
             {
-                var curZoomAndPanControlMousePoint = e.GetPosition(zoomAndPanControl);
-                var dragOffset = curZoomAndPanControlMousePoint - _origZoomAndPanControlMouseDownPoint;
+                var currentPoint = e.GetPosition(zoomAndPanControl);
+                var dragOffset = currentPoint - _origZoomAndPanControlMouseDownPoint;
                 var dragThreshold = 10;
                 if (Math.Abs(dragOffset.X) > dragThreshold ||
                     Math.Abs(dragOffset.Y) > dragThreshold)
@@ -214,26 +214,26 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// <summary>
         /// Event raised by rotating the mouse wheel.
         /// </summary>
-        private void networkControl_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
 
             if (e.Delta > 0)
             {
-                var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
-                ZoomIn(curContentMousePoint);
+                var currentPoint = e.GetPosition(ProjectDesignSurface);
+                ZoomIn(currentPoint);
             }
             else if (e.Delta < 0)
             {
-                var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
-                ZoomOut(curContentMousePoint);
+                var currentPoint = e.GetPosition(ProjectDesignSurface);
+                ZoomOut(currentPoint);
             }
         }
 
         /// <summary>
         /// Event raised when the user has double clicked in the zoom and pan control.
         /// </summary>
-        private void networkControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if ((Keyboard.Modifiers & ModifierKeys.Shift) == 0)
             {
@@ -247,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void ZoomIn_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var o = ProjectDesignSurface.SelectedNode;
+           // var o = ProjectDesignSurface.SelectedNode;
 
             ZoomIn(new Point(zoomAndPanControl.ContentZoomFocusX, zoomAndPanControl.ContentZoomFocusY));
         }
@@ -289,7 +289,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             }
             else
             {
-                nodes = this.ViewModel.DesignSurface.CorpusNodes;
+                nodes = ViewModel.DesignSurface.CorpusNodes;
                 if (nodes.Count == 0)
                 {
                     return;
