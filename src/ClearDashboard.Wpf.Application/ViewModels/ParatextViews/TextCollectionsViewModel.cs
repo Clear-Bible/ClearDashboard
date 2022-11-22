@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -159,7 +160,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         protected override async void OnViewAttached(object view, object context)
         {
-            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            // grab the dictionary of all the verse lookups
+            if (ProjectManager?.CurrentParatextProject is not null)
+            {
+                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+
+                var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                    .Select(g => g.First())
+                    .ToList();
+
+                foreach (var book in books)
+                {
+                    var bookId = book.Substring(0, 3);
+
+                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                    CurrentBcv.BibleBookList?.Add(bookName);
+                }
+            }
+            else
+            {
+                BcvDictionary = new Dictionary<string, string>();
+            }
+            
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;

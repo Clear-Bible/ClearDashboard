@@ -181,6 +181,12 @@ namespace ClearDashboard.DAL.ViewModels
         /// <returns>A string with the Clear.Bible format of verse location ID.</returns>
         public string GetVerseId()
         {
+            if (BookAbbr != "")
+            {
+                var bbb = GetBookNumFromBookName(BookAbbr);
+                SetVerseFromId(bbb + ChapterIdText + VerseIdText);
+            }
+
             return BBBCCCVVV;
         }
 
@@ -204,6 +210,7 @@ namespace ClearDashboard.DAL.ViewModels
                 // The book number for use in the array used in the pull down list.
                 BookNum = bookNum;
                 BookName = GetShortBookNameFromBookNum(bookNumStr);
+                BookAbbr = BookName;
             }
             else
             {
