@@ -10,11 +10,4 @@
         Output,
     }
 
-    public enum ParatextProjectType
-    {
-        Standard,
-        BackTranslation,
-        Reference,
-        Other
-    }
 }

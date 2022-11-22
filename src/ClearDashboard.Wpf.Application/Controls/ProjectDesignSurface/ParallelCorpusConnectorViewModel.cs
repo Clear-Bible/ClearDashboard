@@ -10,7 +10,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// <summary>
     /// Defines a connector (aka connection point) that can be attached to a node and is used to connect the node to another node.
     /// </summary>
-    public sealed class ConnectorViewModel : AbstractModelBase
+    public sealed class ParallelCorpusConnectorViewModel : AbstractModelBase
     {
         private readonly IEventAggregator? _eventAggregator;
     
@@ -20,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The connections that are attached to this connector, or null if no connections are attached.
         /// </summary>
-        private ImpObservableCollection<ConnectionViewModel>? _attachedConnections;
+        private ImpObservableCollection<ParallelCorpusConnectionViewModel>? _attachedConnections;
 
         /// <summary>
         /// The hotspot (or center) of the connector.
@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         #endregion Internal Data Members
 
-        public ConnectorViewModel(string name, IEventAggregator? eventAggregator, string paratextProjectId)
+        public ParallelCorpusConnectorViewModel(string name, IEventAggregator? eventAggregator, string paratextProjectId)
         {
             _eventAggregator = eventAggregator;
             Name = name;
@@ -71,13 +71,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The connections that are attached to this connector, or null if no connections are attached.
         /// </summary>
-        public ImpObservableCollection<ConnectionViewModel> AttachedConnections
+        public ImpObservableCollection<ParallelCorpusConnectionViewModel> AttachedConnections
         {
             get
             {
                 if (_attachedConnections == null)
                 {
-                    _attachedConnections = new ImpObservableCollection<ConnectionViewModel>();
+                    _attachedConnections = new ImpObservableCollection<ParallelCorpusConnectionViewModel>();
                     _attachedConnections.ItemsAdded += OnAttachedConnectionsItemsAdded;
                     _attachedConnections.ItemsRemoved += OnAttachedConnectionsItemsRemoved;
                 }
@@ -142,7 +142,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnAttachedConnectionsItemsAdded(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectionViewModel connection in e.Items)
+            foreach (ParallelCorpusConnectionViewModel connection in e.Items)
             {
                 connection.ConnectionChanged += OnConnectionChanged;
             }
@@ -163,7 +163,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnAttachedConnectionsItemsRemoved(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectionViewModel connection in e.Items)
+            foreach (ParallelCorpusConnectionViewModel connection in e.Items)
             {
                 connection.ConnectionChanged -= OnConnectionChanged;
             }

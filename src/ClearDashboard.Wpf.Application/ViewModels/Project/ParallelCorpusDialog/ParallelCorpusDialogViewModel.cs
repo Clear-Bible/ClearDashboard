@@ -51,7 +51,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         
         public ParallelCorpusDialogViewModel(DialogMode dialogMode, 
-                                ConnectionViewModel connectionViewModel, 
+                                ParallelCorpusConnectionViewModel parallelCorpusConnectionViewModel, 
                                 CorpusNodeViewModel sourceCorpusNodeViewModel, 
                                 CorpusNodeViewModel targetCorpusNodeViewModel, 
                                 DashboardProjectManager? projectManager, 
@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger!);
 
             DialogMode = dialogMode;
-            ConnectionViewModel = connectionViewModel;
+            ParallelCorpusConnectionViewModel = parallelCorpusConnectionViewModel;
             SourceCorpusNodeViewModel = sourceCorpusNodeViewModel;
             TargetCorpusNodeViewModel = targetCorpusNodeViewModel;
             SelectedSmtAlgorithm = SmtModelType.FastAlign;
@@ -89,10 +89,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             set => Set(ref _targetCorpusNodeViewModel, value);
         }
 
-        public ConnectionViewModel ConnectionViewModel
+        public ParallelCorpusConnectionViewModel ParallelCorpusConnectionViewModel
         {
-            get => _connectionViewModel;
-            set => Set(ref _connectionViewModel, value);
+            get => _parallelCorpusConnectionViewModel;
+            set => Set(ref _parallelCorpusConnectionViewModel, value);
         }
 
         private SmtModelType _selectedSmtAlgorithm;
@@ -180,7 +180,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public EngineParallelTextCorpus ParallelTextCorpus { get; set; }
 
-        private ConnectionViewModel _connectionViewModel;
+        private ParallelCorpusConnectionViewModel _parallelCorpusConnectionViewModel;
 
         public LongRunningTask? CurrentTask { get; set; }
 
@@ -193,13 +193,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             if (sourceNodeTokenization == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
-                    $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{ConnectionViewModel.SourceConnector.ParentNode.CorpusId}'.");
+                    $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{ParallelCorpusConnectionViewModel.SourceConnector.ParentNode.CorpusId}'.");
             }
             var targetNodeTokenization = TargetCorpusNodeViewModel.Tokenizations.FirstOrDefault();
             if (sourceNodeTokenization == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
-                    $"Cannot find the target TokenizedTextCorpusId associated to Corpus with Id '{ConnectionViewModel.DestinationConnector.ParentNode.CorpusId}'.");
+                    $"Cannot find the target TokenizedTextCorpusId associated to Corpus with Id '{ParallelCorpusConnectionViewModel.DestinationConnector.ParentNode.CorpusId}'.");
             }
 
 

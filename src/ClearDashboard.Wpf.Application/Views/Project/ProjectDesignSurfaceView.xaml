@@ -15,6 +15,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -149,7 +150,6 @@
                 <Setter Property="MinWidth" Value="80" />
                 <Setter Property="Width" Value="Auto" />
                 <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                <!--<Setter Property="FontWeight" Value="Bold" />-->
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
@@ -279,7 +279,7 @@
                 
                 In this sample a curved arrow represents connections between nodes.
             -->
-            <DataTemplate DataType="{x:Type projectDesignSurface:ConnectionViewModel}">
+            <DataTemplate DataType="{x:Type projectDesignSurface:ParallelCorpusConnectionViewModel}">
 
                 <!--
                     An adorned control is used, to represent the connection.
@@ -1061,7 +1061,7 @@
 
             <!--
                 The ScrollViewer displays scrollbars when the content is too big to fit in the viewport.
-                Focusable is set to False because it is only that NetworkView that I want to be focusable.
+                Focusable is set to False because it is only that ProjectDesignSurfaceView that I want to be focusable.
             -->
             <ScrollViewer
                 Grid.Row="1"
@@ -1073,8 +1073,8 @@
                 VerticalScrollBarVisibility="Visible">
 
                 <!--
-                    The ZoomAndPanControl displays the NetworkView as its content.
-                    We can use the mouse to zoom and pan about the NetworkView.
+                    The ZoomAndPanControl displays the ProjectDesignSurfaceView as its content.
+                    We can use the mouse to zoom and pan about the ProjectDesignSurfaceView.
                 -->
                 <controls:ZoomAndPanControl
                     x:Name="zoomAndPanControl"
@@ -1089,29 +1089,47 @@
 
 
                     <!--
-                        We need to nest our NetworkView in an AdornerDecorator so that adorners work correct when
+                        We need to nest our ProjectDesignSurfaceView in an AdornerDecorator so that adorners work correct when
                         we zoom in and out using the ZoomAndPanControl
                     -->
                     <AdornerDecorator>
                         <!--
                             This grid specifies the size of the ZoomAndPanControl's content.
-                            It wraps up both the NetworkView and drag-zooming Canvas.
+                            It wraps up both the ProjectDesignSurfaceView and drag-zooming Canvas.
                         -->
                         <Grid Width="{Binding ContentWidth}" Height="{Binding ContentHeight}">
 
-                            <!--  In this sample the NetworkView is the content displayed by the ZoomAndPanControl.  -->
-                            <controls:ProjectDesignSurface
-                                x:Name="ProjectDesignSurface"
-                                ConnectionDragCompleted="OnProjectDesignSurfaceConnectionDragCompleted"
+                            <!--  In this sample the ProjectDesignSurfaceView is the content displayed by the ZoomAndPanControl.  -->
+
+                                <!--
+                                ConnectionDragCompleted="OnParallelCorpusConnectionDragCompleted"
                                 ConnectionDragStarted="OnProjectDesignSurfaceConnectionDragStarted"
                                 ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
-                                ConnectionsSource="{Binding Path=DesignSurface.Connections}"
+                                QueryConnectionFeedback="OnProjectDesignSurfaceQueryConnectionFeedback"  
+                            
+                            
+                               [Event ConnectionDragging] = [Action OnParallelCorpusConnectionDragging($this, $eventArgs)];
+                                -->
+
+
+                            <controls:ProjectDesignSurface
+                                x:Name="ProjectDesignSurface"
+                               ConnectionsSource="{Binding Path=DesignSurface.Connections}"
+                                ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
                                 MouseDown="OnDesignSurfaceMouseDown"
                                 MouseMove="networkControl_MouseMove"
                                 MouseUp="OnDesignSurfaceMouseUp"
                                 MouseWheel="networkControl_MouseWheel"
                                 NodesSource="{Binding DesignSurface.CorpusNodes}"
-                                QueryConnectionFeedback="OnProjectDesignSurfaceQueryConnectionFeedback" />
+                               
+                                cm:Message.Attach="[Event NodeDragCompleted] = [Action OnCorpusNodeDragCompleted($this,$eventArgs)];
+                                                   [Event ConnectionDragCompleted] = [Action OnParallelCorpusConnectionDragCompleted($this, $eventArgs)];
+                                                   [Event ConnectionDragStarted] = [Action OnParallelCorpusConnectionDragStarted($this, $eventArgs)];
+                                                   [Event QueryConnectionFeedback] = [Action OnProjectDesignSurfaceQueryConnectionFeedback($this, $eventArgs)];
+                                                   " />
+
+
+
 
                             <!--
                                 This Canvas and Border are used as a very simple way to render a drag rectangle that the user

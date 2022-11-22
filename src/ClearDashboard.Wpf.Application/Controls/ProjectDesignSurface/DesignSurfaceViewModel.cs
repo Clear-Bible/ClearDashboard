@@ -21,7 +21,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The collection of connections in the network.
         /// </summary>
-        private ImpObservableCollection<ConnectionViewModel>? _connections;
+        private ImpObservableCollection<ParallelCorpusConnectionViewModel>? _connections;
 
         #endregion Internal Data Members
 
@@ -40,13 +40,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The collection of connections in the network.
         /// </summary>
-        public ImpObservableCollection<ConnectionViewModel> Connections
+        public ImpObservableCollection<ParallelCorpusConnectionViewModel> Connections
         {
             get
             {
                 if (_connections == null)
                 {
-                    _connections = new ImpObservableCollection<ConnectionViewModel>();
+                    _connections = new ImpObservableCollection<ParallelCorpusConnectionViewModel>();
                     _connections.ItemsRemoved += OnConnectionsItemsRemoved;
                     _connections.ItemsSelected += OnConnectionsItemsSelected;
                 }
@@ -62,7 +62,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnConnectionsItemsRemoved(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectionViewModel connection in e.Items)
+            foreach (ParallelCorpusConnectionViewModel connection in e.Items)
             {
                 connection.SourceConnector = null;
                 connection.DestinationConnector = null;
@@ -74,7 +74,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnConnectionsItemsSelected(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectionViewModel connection in e.Items)
+            foreach (ParallelCorpusConnectionViewModel connection in e.Items)
             {
                 connection.SourceConnector = null;
                 connection.DestinationConnector = null;

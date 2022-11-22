@@ -42,74 +42,78 @@ namespace ClearDashboard.Wpf.Application.Views.Project
 
 
 
-        /// <summary>
-        /// Event raised when the user has started to drag out a connection.
-        /// </summary>
-        private void OnProjectDesignSurfaceConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
-        {
-            if (ViewModel.IsBusy)
-            {
-                return;
-            }
 
-            var draggedOutConnector = (ConnectorViewModel)e.ConnectorDraggedOut;
-            var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
 
-            //
-            // Delegate the real work to the view model.
-            //
-            var connection = this.ViewModel.ConnectionDragStarted(draggedOutConnector, curDragPoint);
+        ///// <summary>
+        ///// Event raised, to query for feedback, while the user is dragging a connection.
+        ///// </summary>
+        //private void OnProjectDesignSurfaceQueryConnectionFeedback(object sender, QueryConnectionFeedbackEventArgs e)
+        //{
+        //    var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
+        //    var draggedOverConnector = (ParallelCorpusConnectorViewModel)e.DraggedOverConnector;
 
-            //
-            // Must return the view-model object that represents the connection via the event args.
-            // This is so that NetworkView can keep track of the object while it is being dragged.
-            //
-            e.Connection = connection;
-        }
+        //    ViewModel.QueryConnectionFeedback(draggedOutConnector, draggedOverConnector, out var feedbackIndicator, out var connectionOk);
 
-        /// <summary>
-        /// Event raised, to query for feedback, while the user is dragging a connection.
-        /// </summary>
-        private void OnProjectDesignSurfaceQueryConnectionFeedback(object sender, QueryConnectionFeedbackEventArgs e)
-        {
-            var draggedOutConnector = (ConnectorViewModel)e.ConnectorDraggedOut;
-            var draggedOverConnector = (ConnectorViewModel)e.DraggedOverConnector;
+        //    //
+        //    // Return the feedback object to ProjectDesignSurfaceView.
+        //    // The object combined with the data-template for it will be used to create a 'feedback icon' to
+        //    // display (in an adorner) to the user.
+        //    //
+        //    e.FeedbackIndicator = feedbackIndicator;
 
-            ViewModel.QueryConnectionFeedback(draggedOutConnector, draggedOverConnector, out var feedbackIndicator, out var connectionOk);
+        //    //
+        //    // Let ProjectDesignSurfaceView know if the connection is ok or not ok.
+        //    //
+        //    e.ConnectionOk = connectionOk;
+        //}
 
-            //
-            // Return the feedback object to NetworkView.
-            // The object combined with the data-template for it will be used to create a 'feedback icon' to
-            // display (in an adorner) to the user.
-            //
-            e.FeedbackIndicator = feedbackIndicator;
 
-            //
-            // Let NetworkView know if the connection is ok or not ok.
-            //
-            e.ConnectionOk = connectionOk;
-        }
+        ///// <summary>
+        ///// Event raised when the user has started to drag out a connection.
+        ///// </summary>
+        //private void OnProjectDesignSurfaceConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
+        //{
+        //    if (ViewModel.IsBusy)
+        //    {
+        //        return;
+        //    }
+
+        //    var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
+        //    var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
+
+        //    //
+        //    // Delegate the real work to the view model.
+        //    //
+        //    var connection = this.ViewModel.ConnectionDragStarted(draggedOutConnector, curDragPoint);
+
+        //    //
+        //    // Must return the view-model object that represents the connection via the event args.
+        //    // This is so that ProjectDesignSurfaceView can keep track of the object while it is being dragged.
+        //    //
+        //    e.Connection = connection;
+        //}
 
         /// <summary>
         /// Event raised while the user is dragging a connection.
+        /// NB:  This method cannot be moved to the view model as Mouse.GetPosition always returns a Point - (0,0)
         /// </summary>
         private void OnProjectDesignSurfaceConnectionDragging(object sender, ConnectionDraggingEventArgs e)
         {
-            Point curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
-            var connection = (ConnectionViewModel)e.Connection;
+            var curDragPoint = Mouse.GetPosition(ProjectDesignSurface);
+            var connection = (ParallelCorpusConnectionViewModel)e.Connection;
             this.ViewModel.ConnectionDragging(curDragPoint, connection);
         }
 
-        /// <summary>
-        /// Event raised when the user has finished dragging out a connection.
-        /// </summary>
-        private void OnProjectDesignSurfaceConnectionDragCompleted(object sender, ConnectionDragCompletedEventArgs e)
-        {
-            var connectorDraggedOut = (ConnectorViewModel)e.ConnectorDraggedOut;
-            var connectorDraggedOver = (ConnectorViewModel)e.ConnectorDraggedOver;
-            var newConnection = (ConnectionViewModel)e.Connection;
-            this.ViewModel.ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
-        }
+        ///// <summary>
+        ///// Event raised when the user has finished dragging out a connection.
+        ///// </summary>
+        //private void OnProjectDesignSurfaceConnectionDragCompleted(object sender, ConnectionDragCompletedEventArgs e)
+        //{
+        //    var connectorDraggedOut = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
+        //    var connectorDraggedOver = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOver;
+        //    var newConnection = (ParallelCorpusConnectionViewModel)e.Connection;
+        //    this.ViewModel.ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
+        //}
 
         /// <summary>
         /// Event raised to delete the selected node.
@@ -141,7 +145,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void OnDeleteConnectionExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            var connection = (ConnectionViewModel)e.Parameter;
+            var connection = (ParallelCorpusConnectionViewModel)e.Parameter;
             //this.ViewModel.DeleteConnection(connection);
         }
 
@@ -172,6 +176,19 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             var node = e.Source as CorpusNodeViewModel;
+        }
+
+        private void OnCorpusNodeProperties(object sender, ExecutedRoutedEventArgs e)
+        {
+            var corpus = (CorpusNodeViewModel)e.Parameter;
+            this.ViewModel.ShowCorpusProperties(corpus);
+
+        }
+
+        private void OnConnectionProperties(object sender, ExecutedRoutedEventArgs e)
+        {
+            var connection = (ParallelCorpusConnectionViewModel)e.Parameter;
+            this.ViewModel.ShowConnectionProperties(connection);
         }
     }
 }

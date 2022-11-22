@@ -9,7 +9,7 @@ using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 namespace ClearDashboard.Wpf.Application.Views.Project
 {
     /// <summary>
-    /// This is a partial implementation of MainWindow that just contains most of the zooming and panning functionality.
+    /// This is a partial implementation of ProjectDesignSurfaceView that just contains most of the zooming and panning functionality.
     /// </summary>
     public partial class ProjectDesignSurfaceView
     {
@@ -49,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private bool _prevZoomRectSet;
 
         /// <summary>
-        /// Event raised on mouse down in the NetworkView.
+        /// Event raised on mouse down in the ProjectDesignSurfaceView.
         /// </summary> 
         private void OnDesignSurfaceMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -87,7 +87,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         }
 
         /// <summary>
-        /// Event raised on mouse up in the NetworkView.
+        /// Event raised on mouse up in the ProjectDesignSurfaceView.
         /// </summary>
         private void OnDesignSurfaceMouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -140,7 +140,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         }
 
         /// <summary>
-        /// Event raised on mouse move in the NetworkView.
+        /// Event raised on mouse move in the ProjectDesignSurfaceView.
         /// </summary>
         private void networkControl_MouseMove(object sender, MouseEventArgs e)
         {
@@ -455,6 +455,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         //
         private void FadeOutDragZoomRect()
         {
+            //AnimationHelper.StartAnimation(DragZoomBorder, UIElement.OpacityProperty, 0.0, 0.1,
+            //    (sender, e) => DragZoomCanvas.Visibility = Visibility.Collapsed);
+
             AnimationHelper.StartAnimation(DragZoomBorder, UIElement.OpacityProperty, 0.0, 0.1,
                 delegate (object sender, EventArgs e)
                 {
@@ -480,17 +483,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             _prevZoomRectSet = false;
         }
 
-        private void OnCorpusNodeProperties(object sender, ExecutedRoutedEventArgs e)
-        {
-            var corpus = (CorpusNodeViewModel)e.Parameter;
-            this.ViewModel.ShowCorpusProperties(corpus);
+      
 
-        }
-
-        private void OnConnectionProperties(object sender, ExecutedRoutedEventArgs e)
-        {
-            var connection = (ConnectionViewModel)e.Parameter;
-            this.ViewModel.ShowConnectionProperties(connection);
-        }
     }
 }

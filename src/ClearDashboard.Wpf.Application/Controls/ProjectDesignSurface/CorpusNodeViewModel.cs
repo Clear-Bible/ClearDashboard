@@ -70,12 +70,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
         /// </summary>
-        private ImpObservableCollection<ConnectorViewModel> _inputConnectors = null;
+        private ImpObservableCollection<ParallelCorpusConnectorViewModel> _inputConnectors = null;
 
         /// <summary>
         /// List of output connectors (connections points) attached to the node.
         /// </summary>
-        private ImpObservableCollection<ConnectorViewModel> _outputConnectors = null;
+        private ImpObservableCollection<ParallelCorpusConnectorViewModel> _outputConnectors = null;
 
         /// <summary>
         /// Set to 'true' when the node is selected.
@@ -155,13 +155,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
         /// </summary>
-        public ImpObservableCollection<ConnectorViewModel> InputConnectors
+        public ImpObservableCollection<ParallelCorpusConnectorViewModel> InputConnectors
         {
             get
             {
                 if (_inputConnectors == null)
                 {
-                    _inputConnectors = new ImpObservableCollection<ConnectorViewModel>();
+                    _inputConnectors = new ImpObservableCollection<ParallelCorpusConnectorViewModel>();
                     _inputConnectors.ItemsAdded += OnInputConnectorsItemsAdded;
                     _inputConnectors.ItemsRemoved += OnInputConnectorsItemsRemoved;
                 }
@@ -173,13 +173,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// List of output connectors (connections points) attached to the node.
         /// </summary>
-        public ImpObservableCollection<ConnectorViewModel> OutputConnectors
+        public ImpObservableCollection<ParallelCorpusConnectorViewModel> OutputConnectors
         {
             get
             {
                 if (_outputConnectors == null)
                 {
-                    _outputConnectors = new ImpObservableCollection<ConnectorViewModel>();
+                    _outputConnectors = new ImpObservableCollection<ParallelCorpusConnectorViewModel>();
                     _outputConnectors.ItemsAdded += OnOutputConnectorsItemsAdded;
                     _outputConnectors.ItemsRemoved += OnOutputConnectorsItemsRemoved;
                 }
@@ -191,11 +191,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// A helper property that retrieves a list (a new list each time) of all connections attached to the node. 
         /// </summary>
-        public ICollection<ConnectionViewModel> AttachedConnections
+        public ICollection<ParallelCorpusConnectionViewModel> AttachedConnections
         {
             get
             {
-                var attachedConnections = new List<ConnectionViewModel>();
+                var attachedConnections = new List<ParallelCorpusConnectionViewModel>();
 
                 foreach (var connector in InputConnectors)
                 {
@@ -304,11 +304,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         #endregion //Constructor
 
 
-        #region Public Methods
-
-
-        #endregion Public Methods
-
         #region Private Methods
 
         /// <summary>
@@ -316,7 +311,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnInputConnectorsItemsAdded(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = this;
                 connector.Type = ConnectorType.Input;
@@ -328,7 +323,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnInputConnectorsItemsRemoved(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = null;
                 connector.Type = ConnectorType.Undefined;
@@ -340,7 +335,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnOutputConnectorsItemsAdded(object sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = this;
                 connector.Type = ConnectorType.Output;
@@ -352,7 +347,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnOutputConnectorsItemsRemoved(object sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = null;
                 connector.Type = ConnectorType.Undefined;

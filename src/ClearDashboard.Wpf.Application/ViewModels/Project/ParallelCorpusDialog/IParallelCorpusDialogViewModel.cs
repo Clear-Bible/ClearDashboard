@@ -18,7 +18,7 @@ public interface IParallelCorpusDialogViewModel
 {
     CorpusNodeViewModel SourceCorpusNodeViewModel { get; set; }
     CorpusNodeViewModel TargetCorpusNodeViewModel { get; set; }
-    ConnectionViewModel ConnectionViewModel { get; set; }
+    ParallelCorpusConnectionViewModel ParallelCorpusConnectionViewModel { get; set; }
     SmtModelType SelectedSmtAlgorithm { get; set; }
     IWordAlignmentModel WordAlignmentModel { get; set; }
     DAL.Alignment.Corpora.ParallelCorpus ParallelTokenizedCorpus { get; set; }

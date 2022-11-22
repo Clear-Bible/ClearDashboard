@@ -13,19 +13,19 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// <summary>
     /// Defines a connection between two connectors (aka connection points) of two nodes.
     /// </summary>
-    public sealed class ConnectionViewModel : AbstractModelBase
+    public sealed class ParallelCorpusConnectionViewModel : AbstractModelBase
     {
         #region Internal Data Members
 
         /// <summary>
         /// The source connector the connection is attached to.
         /// </summary>
-        private ConnectorViewModel? _sourceConnector;
+        private ParallelCorpusConnectorViewModel? _sourceConnector;
 
         /// <summary>
         /// The destination connector the connection is attached to.
         /// </summary>
-        private ConnectorViewModel? _destinationConnector;
+        private ParallelCorpusConnectorViewModel? _destinationConnector;
 
         /// <summary>
         /// The source and dest hotspots used for generating connection points.
@@ -72,7 +72,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The source connector the connection is attached to.
         /// </summary>
-        public ConnectorViewModel? SourceConnector
+        public ParallelCorpusConnectorViewModel? SourceConnector
         {
             get => _sourceConnector;
             set
@@ -105,7 +105,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The destination connector the connection is attached to.
         /// </summary>
-        public ConnectorViewModel? DestinationConnector
+        public ParallelCorpusConnectorViewModel? DestinationConnector
         {
             get => _destinationConnector;
             set
