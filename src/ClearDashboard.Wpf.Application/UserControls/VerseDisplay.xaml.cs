@@ -236,12 +236,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(true));
 
         /// <summary>
-        /// Identifies the SourceFlowDirection dependency property.
-        /// </summary>
-        public static readonly DependencyProperty SourceFlowDirectionProperty = DependencyProperty.Register(nameof(SourceFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
-
-        /// <summary>
         /// Identifies the SourceFontFamily dependency property.
         /// </summary>
         public static readonly DependencyProperty SourceFontFamilyProperty = DependencyProperty.Register(nameof(SourceFontFamily), typeof(FontFamily), typeof(VerseDisplay),
@@ -269,12 +263,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the SourceItemsPanelTemplate dependency property.
         /// </summary>
         public static readonly DependencyProperty SourceItemsPanelTemplateProperty = DependencyProperty.Register(nameof(SourceItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
-
-        /// <summary>
-        /// Identifies the TargetFlowDirection dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TargetFlowDirectionProperty = DependencyProperty.Register(nameof(TargetFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
 
         /// <summary>
         /// Identifies the TargetFontFamily dependency property.
@@ -344,12 +332,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the Title Visibility dependency property.
         /// </summary>
         public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register(nameof(TitleVisibility), typeof(Visibility), typeof(VerseDisplay), new PropertyMetadata(Visibility.Visible));
-
-        public static readonly DependencyProperty IsRtlProperty = DependencyProperty.Register(nameof(IsRtl), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
-
-        public static readonly DependencyProperty IsTargetRtlProperty = DependencyProperty.Register(nameof(IsTargetRtl), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
 
         /// <summary>
         /// Identifies the TokenVerticalSpacing dependency property.
@@ -1160,15 +1142,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the tokens.
-        /// </summary>
-        public FlowDirection SourceFlowDirection
-        {
-            get => (FlowDirection)GetValue(SourceFlowDirectionProperty);
-            set => SetValue(SourceFlowDirectionProperty, value);
-        }
-
-        /// <summary>
         /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
         /// </summary>
         public FontFamily SourceFontFamily
@@ -1218,15 +1191,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
         /// </summary>
         public IEnumerable SourceTokens => VerseDisplayViewModel.SourceTokenDisplayViewModels;
-
-        /// <summary>
-        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the target tokens.
-        /// </summary>
-        public FlowDirection TargetFlowDirection
-        {
-            get => (FlowDirection)GetValue(TargetFlowDirectionProperty);
-            set => SetValue(TargetFlowDirectionProperty, value);
-        }
 
         /// <summary>
         /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.
@@ -1340,17 +1304,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Visibility)GetValue(TitleVisibilityProperty);
             set => SetValue(TitleVisibilityProperty, value);
-        }
-
-        public FlowDirection IsRtl
-        {
-            get => (FlowDirection)GetValue(IsRtlProperty);
-            set => SetValue(IsRtlProperty, value);
-        }
-        public FlowDirection IsTargetRtl
-        {
-            get => (FlowDirection)GetValue(IsTargetRtlProperty);
-            set => SetValue(IsTargetRtlProperty, value);
         }
 
         /// <summary>
