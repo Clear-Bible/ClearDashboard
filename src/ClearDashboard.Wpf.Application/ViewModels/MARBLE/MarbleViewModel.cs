@@ -205,7 +205,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         protected override async void OnViewReady(object view)
         {
-            _lookup = LoadSearchCSV().Result;
+           // _lookup = LoadSearchCSV().Result;
 
 
             if (ProjectManager.CurrentVerse != String.Empty)
@@ -295,7 +295,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            return Task.CompletedTask;
         }
 
         #endregion // Methods
