@@ -30,6 +30,19 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
+        public string BookAbbr
+        {
+            get => Entity?.BookAbbr;
+            set
+            {
+                if (Entity != null)
+                {
+                    Entity.BookAbbr = value;
+                }
+                NotifyOfPropertyChange();
+            }
+        }
+
         public List<int> ChapterNumbers
         {
             get => Entity?.ChapterNumbers;
