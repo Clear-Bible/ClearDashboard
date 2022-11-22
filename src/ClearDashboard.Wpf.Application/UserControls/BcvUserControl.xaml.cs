@@ -96,13 +96,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (BookChapterVerseViewModel)GetValue(CurrentBcvProperty);
             set
             {
+                if (value.BBBCCCVVV == CurrentBcv.BBBCCCVVV)
+                {
+                    return;
+                }
+
                 SetValue(CurrentBcvProperty, value);
 
-                    CalculateBooks();
-                    CalculateChapters();
-                    CalculateVerses();
+                CalculateBooks();
+                CalculateChapters();
+                CalculateVerses();
 
-                    VerseChange = CurrentBcv.GetVerseId();
+                VerseChange = CurrentBcv.GetVerseId();
             }
         }
 

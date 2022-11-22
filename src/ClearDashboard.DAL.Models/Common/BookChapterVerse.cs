@@ -8,6 +8,7 @@ namespace ClearDashboard.DataAccessLayer.Models
     {
         public List<string>? BibleBookList { get; set; } = new List<string>();
 
+        public string BookAbbr { get; set; } = string.Empty;
 
         public List<int>? ChapterNumbers { get; set; } = new List<int>();
 

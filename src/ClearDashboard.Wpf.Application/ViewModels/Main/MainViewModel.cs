@@ -66,6 +66,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
+        public INavigationService NavigationService { get; set; }
         private NoteManager NoteManager { get; }
 #nullable disable
         #region Member Variables
@@ -465,8 +466,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //            }
         }
 
-        public INavigationService NavigationService { get; set; }
-
 
         /// <summary>
         /// Binds the viewmodel to it's view prior to activating so that the OnViewAttached method of the
@@ -532,10 +531,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
             
-
-            
-
-
             base.OnViewLoaded(view);
         }
 
@@ -844,6 +839,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (ProjectManager?.CurrentParatextProject is not null)
             {
                 BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+
+                var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                    .Select(g => g.First())
+                    .ToList();
+
+                foreach (var book in books)
+                {
+                    var bookId = book.Substring(0, 3);
+
+                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                    CurrentBcv.BibleBookList?.Add(bookName);
+                }
             }
             else
             {
