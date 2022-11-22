@@ -374,8 +374,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
-            if (_projectManager.CurrentParatextProject.BcvDictionary != null)
-                BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            // grab the dictionary of all the verse lookups
+            if (ProjectManager?.CurrentParatextProject is not null)
+            {
+                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+
+                var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                    .Select(g => g.First())
+                    .ToList();
+
+                foreach (var book in books)
+                {
+                    var bookId = book.Substring(0, 3);
+
+                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                    CurrentBcv.BibleBookList?.Add(bookName);
+                }
+            }
+            else
+            {
+                BcvDictionary = new Dictionary<string, string>();
+            }
+            
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
