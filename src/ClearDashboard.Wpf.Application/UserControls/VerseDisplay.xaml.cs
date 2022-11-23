@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
@@ -21,8 +23,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
-    public partial class VerseDisplay : IHandle<SelectionUpdatedMessage>
+    public partial class VerseDisplay : INotifyPropertyChanged,
+        IHandle<SelectionUpdatedMessage>,
+        IHandle<TokensUpdatedMessage>
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -417,6 +435,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty WrapProperty = DependencyProperty.Register(nameof(Wrap), typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true, OnWrapChanged));
 
+        private static IEventAggregator _eventAggregator;
+
         #endregion Static DependencyProperties
         #region Private event handlers
 
@@ -511,6 +531,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
             SelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(TokensUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            OnPropertyChanged(nameof(SourceTokens));
             await Task.CompletedTask;
         }
 
@@ -1065,7 +1091,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public properties
 
-        private IEventAggregator EventAggregator { get; set; }
+        public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
         /// Gets or sets the horizontal spacing between translations.
@@ -1443,11 +1469,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             InitializeComponent();
             Loaded += OnLoaded;
+
+            if (EventAggregator != null)
+            {
+                EventAggregator.SubscribeOnUIThread(this);
+            }
         }
 
-        public VerseDisplay(IEventAggregator eventAggregator) : this()
-        {
-            EventAggregator = eventAggregator;
-        }
+        //public VerseDisplay(IEventAggregator eventAggregator) : this()
+        //{
+        //    EventAggregator = eventAggregator;
+        //    EventAggregator.SubscribeOnUIThread(this);
+        //}
+
     }
 }

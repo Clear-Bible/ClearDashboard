@@ -43,6 +43,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.UserControls;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
@@ -363,6 +364,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             MoveCorpusDownRowCommand = new RelayCommand(MoveCorpusDown);
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
+
+            VerseDisplay.EventAggregator = eventAggregator;
         }
 
 
