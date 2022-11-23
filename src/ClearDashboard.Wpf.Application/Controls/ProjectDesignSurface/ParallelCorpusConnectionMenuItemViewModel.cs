@@ -12,14 +12,14 @@ public class ParallelCorpusConnectionMenuItemViewModel : MenuItemViewModel<Paral
 
     }
 
-    public string SourceParatextId { get; set; } = "";
-    public string TargetParatextId { get; set; } = "";
+    public string? SourceParatextId { get; set; } = "";
+    public string? TargetParatextId { get; set; } = "";
 
     public bool IsRtl { get; set; }
     public bool IsTargetRTL { get; set; }
-    public string AlignmentSetId { get; set; } = string.Empty;
-    public string TranslationSetId { get; set; } = string.Empty;
-    public string DisplayName { get; set; } = string.Empty;
+    public string? AlignmentSetId { get; set; } = string.Empty;
+    public string? TranslationSetId { get; set; } = string.Empty;
+    public string? DisplayName { get; set; } = string.Empty;
     public string? ParallelCorpusId { get; set; } = string.Empty;
     public string? ParallelCorpusDisplayName { get; set; } = string.Empty;
     public Guid ConnectionId { get; set; }

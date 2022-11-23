@@ -869,7 +869,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
            // _projectDesignSurfaceViewModel.ActivateWith(this);
 
             // force a load to happen as it is getting swallowed up elsewhere
-            _projectDesignSurfaceViewModel.LoadCanvas().Wait();
+            _projectDesignSurfaceViewModel.LoadDesignSurface().Wait();
         }
 
         #endregion //Constructor
