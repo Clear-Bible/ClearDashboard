@@ -1434,7 +1434,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the strongly-typed VerseDisplayViewModel bound to this control.
         /// </summary>
-        public VerseDisplayViewModel VerseDisplayViewModel => DataContext as VerseDisplayViewModel ?? throw new InvalidOperationException();
+        public VerseDisplayViewModel VerseDisplayViewModel => DataContext.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null;
 
         /// <summary>
         /// Gets or sets the margin for the tokens list.
