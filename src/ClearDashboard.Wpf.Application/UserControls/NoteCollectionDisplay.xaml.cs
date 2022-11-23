@@ -116,6 +116,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteEditorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
 
         /// <summary>
+        /// Identifies the NoteSendToParatext routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
+            ("NoteSendToParatext", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteCollectionDisplay));
+
+        /// <summary>
         /// Identifies the NoteUpdated routed event.
         /// </summary>
         public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
@@ -453,6 +459,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 OnPropertyChanged(nameof(Notes));
                 OnPropertyChanged(nameof(NewNote));
                 RaiseNoteEvent(NoteAddedEvent, args);
+            }
+        }
+
+        private void OnNoteSendToParatext(object sender, RoutedEventArgs e)
+        {
+            if (e is NoteEventArgs args)
+            {
+                RaiseNoteEvent(NoteSendToParatextEvent, args);
             }
         }
 
@@ -1156,6 +1170,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests a note be sent to Paratext.
+        /// </summary>
+        public event RoutedEventHandler NoteSendToParatext
+        {
+            add => AddHandler(NoteSendToParatextEvent, value);
+            remove => RemoveHandler(NoteSendToParatextEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a note is updated.
         /// </summary>
         public event RoutedEventHandler NoteUpdated
@@ -1185,6 +1208,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             InitializeComponent();
         }
-
     }
 }

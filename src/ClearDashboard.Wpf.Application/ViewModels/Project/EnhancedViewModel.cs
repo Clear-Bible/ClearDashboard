@@ -1602,6 +1602,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
         }
 
+        public void NoteSendToParatext(object sender, NoteEventArgs e)
+        {
+            Task.Run<TaskAwaiter>(() => NoteSendToParatextAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteSendToParatextAsync(NoteEventArgs e)
+        {
+            await NoteManager.SendToParatextAsync(e.Note);
+            Message = $"Note '{e.Note.Text}' sent to Paratext.";
+        }
+
         public void NoteDeleted(object sender, NoteEventArgs e)
         {
             Task.Run(() => NoteDeletedAsync(e).GetAwaiter());

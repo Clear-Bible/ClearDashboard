@@ -724,6 +724,7 @@
                                     [Event NoteAssociationMouseLeave] = [Action NoteAssociationMouseLeave($eventArgs)];
                                     [Event NoteEditorMouseEnter] = [Action NoteEditorMouseEnter($eventArgs)];
                                     [Event NoteEditorMouseLeave] = [Action NoteEditorMouseLeave($eventArgs)];
+                                    [Event NoteSendToParatext] = [Action NoteSendToParatext($eventArgs)];
                                     "
                 EntityIds="{Binding SelectedTokens.EntityIds}"
                 NoteMargin="0,0,0,10"

@@ -311,12 +311,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TargetItemsPanelTemplateProperty = DependencyProperty.Register(nameof(TargetItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
-        ///// <summary>
-        ///// Identifies the TargetVisibility dependency property.
-        ///// </summary>
-        //public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register(nameof(TargetVisibility), typeof(Visibility), typeof(VerseDisplay),
-        //    new PropertyMetadata(Visibility.Collapsed));
-
         /// <summary>
         /// Identifies the TitleFontSize dependency property.
         /// </summary>
@@ -456,21 +450,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             SourceItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "SourceWrapPanelTemplate" : "SourceStackPanelTemplate");
             TargetItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "TargetWrapPanelTemplate" : "TargetStackPanelTemplate");
         }
-
-        //public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    var verseDisplay = (VerseDisplay)d;
-
-        //    if (verseDisplay.TargetTokens != null)
-        //    {
-        //        var tokenDisplayViewModelCollection = (TokenDisplayViewModelCollection)verseDisplay.TargetTokens!;
-        //        verseDisplay.TargetVisibility = tokenDisplayViewModelCollection.Any() ? Visibility.Visible : Visibility.Collapsed;
-        //    }
-        //    else
-        //    {
-        //        verseDisplay.TargetVisibility = Visibility.Collapsed;
-        //    }
-        //}
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -1268,15 +1247,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets the collection of <see cref="TokenDisplayViewModel"/> target objects to display in the control.
         /// </summary>
         public TokenDisplayViewModelCollection TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
-
-        ///// <summary>
-        ///// Gets or sets the visibility of the target (alignment) verse
-        ///// </summary>
-        //public Visibility TargetVisibility
-        //{
-        //    get => (Visibility)GetValue(TargetVisibilityProperty);
-        //    set => SetValue(TargetVisibilityProperty, value);
-        //}
 
         /// <summary>
         /// Gets or sets the visibility of the target (alignment) verse.

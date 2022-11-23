@@ -21,7 +21,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         public Guid? ParatextId { get; set; }
         public bool EnableParatextSend => ParatextId.HasValue;
 
-
         public string? Text
         {
             get => Entity.Text;
