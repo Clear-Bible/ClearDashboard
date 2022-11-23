@@ -311,11 +311,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TargetItemsPanelTemplateProperty = DependencyProperty.Register(nameof(TargetItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
-        /// <summary>
-        /// Identifies the TargetVisibility dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register(nameof(TargetVisibility), typeof(Visibility), typeof(VerseDisplay),
-            new PropertyMetadata(Visibility.Collapsed));
+        ///// <summary>
+        ///// Identifies the TargetVisibility dependency property.
+        ///// </summary>
+        //public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register(nameof(TargetVisibility), typeof(Visibility), typeof(VerseDisplay),
+        //    new PropertyMetadata(Visibility.Collapsed));
 
         /// <summary>
         /// Identifies the TitleFontSize dependency property.
@@ -457,20 +457,20 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TargetItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "TargetWrapPanelTemplate" : "TargetStackPanelTemplate");
         }
 
-        public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var verseDisplay = (VerseDisplay)d;
+        //public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        //{
+        //    var verseDisplay = (VerseDisplay)d;
 
-            if (verseDisplay.TargetTokens != null)
-            {
-                var tokenDisplayViewModelCollection = (TokenDisplayViewModelCollection)verseDisplay.TargetTokens!;
-                verseDisplay.TargetVisibility = tokenDisplayViewModelCollection.Any() ? Visibility.Visible : Visibility.Collapsed;
-            }
-            else
-            {
-                verseDisplay.TargetVisibility = Visibility.Collapsed;
-            }
-        }
+        //    if (verseDisplay.TargetTokens != null)
+        //    {
+        //        var tokenDisplayViewModelCollection = (TokenDisplayViewModelCollection)verseDisplay.TargetTokens!;
+        //        verseDisplay.TargetVisibility = tokenDisplayViewModelCollection.Any() ? Visibility.Visible : Visibility.Collapsed;
+        //    }
+        //    else
+        //    {
+        //        verseDisplay.TargetVisibility = Visibility.Collapsed;
+        //    }
+        //}
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -1267,16 +1267,21 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the collection of <see cref="TokenDisplayViewModel"/> target objects to display in the control.
         /// </summary>
-        public IEnumerable TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
+        public TokenDisplayViewModelCollection TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
+
+        ///// <summary>
+        ///// Gets or sets the visibility of the target (alignment) verse
+        ///// </summary>
+        //public Visibility TargetVisibility
+        //{
+        //    get => (Visibility)GetValue(TargetVisibilityProperty);
+        //    set => SetValue(TargetVisibilityProperty, value);
+        //}
 
         /// <summary>
         /// Gets or sets the visibility of the target (alignment) verse.
         /// </summary>
-        public Visibility TargetVisibility
-        {
-            get => (Visibility)GetValue(TargetVisibilityProperty);
-            set => SetValue(TargetVisibilityProperty, value);
-        }
+        public Visibility TargetVisibility => TargetTokens.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         /// <summary>
         /// Gets or sets the title to be displayed for the verse.
