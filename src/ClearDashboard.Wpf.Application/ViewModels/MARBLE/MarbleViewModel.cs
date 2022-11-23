@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -22,6 +23,7 @@ using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
 using ClearDashboard.Wpf.Application.Views.MARBLE;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using System.Xml.Linq;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 {
@@ -34,7 +36,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         #region Member Variables   
 
-        private List<SemanticDomainLookup> _lookup;
+        private List<SemanticDomainLookup>? _lookup;
+        private string _currentVerse = "";
 
 
         #region BCV
@@ -166,7 +169,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
             set
             {
                 _selectedLexicalLink = value;
+
+                if (_selectedLexicalLink is not null)
+                {
+                    SelectedHebrew = _selectedLexicalLink.Word;
+                    GetWord();
+                }
+
                 NotifyOfPropertyChange(() => SelectedLexicalLink);
+            }
+        }
+
+        private bool _isOT;
+        public bool IsOT
+        {
+            get => _isOT;
+            set
+            {
+                _isOT = value;
+                NotifyOfPropertyChange(() => IsOT);
             }
         }
 
@@ -204,17 +225,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
         }
 
         protected override async void OnViewReady(object view)
-        {
-           // _lookup = LoadSearchCSV().Result;
-
-
+        { 
+            // load in all the word search lookups
+            await LoadSearchCSV();
+            
             if (ProjectManager.CurrentVerse != String.Empty)
             {
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-                await ReloadWordMeanings().ConfigureAwait(false);
+                _currentVerse = CurrentBcv.BBBCCCVVV;
+
+                await LoadUpVerse().ConfigureAwait(false);
             }
 
             base.OnViewReady(view);
+        }
+
+        private async Task LoadSearchCSV()
+        {
+            var queryResult = await ExecuteRequest(new LoadSemanticDictionaryLookupSlice.LoadSemanticDictionaryLookupQuery(), CancellationToken.None).ConfigureAwait(false);
+            if (queryResult.Success == false)
+            {
+                Logger!.LogError(queryResult.Message);
+                return;
+            }
+
+
+            if (queryResult.Data == null)
+            {
+               
+                return;
+            }
+
+            _lookup = queryResult.Data;
         }
 
         #endregion //Constructor
@@ -222,11 +264,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         #region Methods
 
+        private async Task LoadUpVerse()
+        {
+            var queryResult = await ExecuteRequest(new GetVerseDataFromSemanticDatabaseQuery(CurrentBcv), CancellationToken.None).ConfigureAwait(false);
+            if (queryResult.Success == false)
+            {
+                Logger!.LogError(queryResult.Message);
+                return;
+            }
+
+
+            if (queryResult.Data == null)
+            {
+                LexicalLinks.Clear();
+                return;
+            }
+
+            _lexicalLinks = queryResult.Data;
+
+            if (_lexicalLinks.Count > 0)
+            {
+                SelectedHebrew = _lexicalLinks[0].Word;
+                await GetWord().ConfigureAwait(false);
+            }
+            NotifyOfPropertyChange(() => LexicalLinks);
+        }
+
+
+
         /// <summary>
         /// Get the Biblical Words from 
         /// </summary>
         /// <returns></returns>
-        private async Task ReloadWordMeanings()
+        private async Task GetWord()
         {
             // SDBH & SDBG support the following language codes:
             // en, fr, sp, pt, sw, zht, zhs
@@ -253,38 +323,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
                     break;
             }
 
-            //var queryResult = await ExecuteRequest(new GetWhatIsThisWordByBcvQuery(CurrentBcv, languageCode), CancellationToken.None).ConfigureAwait(false);
-            //if (queryResult.Success == false)
-            //{
-            //    Logger!.LogError(queryResult.Message);
-            //    return;
-            //}
+            var queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
+            if (queryResult.Success == false)
+            {
+                Logger!.LogError(queryResult.Message);
+                return;
+            }
 
 
-            //if (queryResult.Data == null)
-            //{
-            //    WordData.Clear();
-            //    return;
-            //}
-
-            //_whatIsThisWord = queryResult.Data;
+            if (queryResult.Data == null)
+            {
+                Logger!.LogError($"MABLE DB Query returned null for {CurrentBcv.BBBCCCVVV} Word: {_selectedHebrew}");
+                return;
+            }
 
 
-            //// invoke to get it to run in STA mode
+            Senses = queryResult.Data;
 
-            //OnUIThread(() =>
-            //{
-            //    WordData.Clear();
-            //    foreach (var marbleResource in _whatIsThisWord)
-            //    {
-            //        if (marbleResource.IsSense)
-            //        {
-            //            _wordData.Add(marbleResource);
-            //        }
-            //    }
-            //});
-
-            //NotifyOfPropertyChange(() => WordData);
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
@@ -295,7 +350,63 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         public Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            //throw new NotImplementedException();
+            var incomingVerse = message.Verse.PadLeft(9, '0');
+
+            if (_currentVerse == incomingVerse)
+            {
+                return Task.CompletedTask;
+            }
+
+
+            _currentVerse = incomingVerse;
+            CurrentBcv.SetVerseFromId(_currentVerse);
+            if (_currentVerse.EndsWith("000"))
+            {
+
+                // TODO
+                
+                // a zero based verse
+                //TargetInlinesText.Clear();
+                //NotifyOfPropertyChange(() => TargetInlinesText);
+                //TargetHTML = "";
+                //WordData.Clear();
+                //NotifyOfPropertyChange(() => WordData);
+            }
+            else
+            {
+                // a normal verse
+                var verse = new Verse
+                {
+                    VerseBBBCCCVVV = _currentVerse
+                };
+
+                int BookNum;
+                try
+                {
+                    _currentBcv.SetVerseFromId(message.Verse);
+                    BookNum = _currentBcv.BookNum;
+                }
+                catch (Exception)
+                {
+                    Logger.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
+                    BookNum = 01;
+                }
+
+
+                if (BookNum < 40)
+                {
+                    _isOT = true;
+                }
+                else
+                {
+                    _isOT = false;
+                }
+
+                _ = LoadUpVerse();
+                
+                //_ = GetWord();
+                
+            }
 
             return Task.CompletedTask;
         }
