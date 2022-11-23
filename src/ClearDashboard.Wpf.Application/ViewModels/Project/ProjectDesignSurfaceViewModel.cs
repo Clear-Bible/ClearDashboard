@@ -454,6 +454,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             var json = ProjectManager?.CurrentProject.DesignSurfaceLayout;
 
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+
             JsonSerializerOptions options = new()
             {
                 ReferenceHandler = ReferenceHandler.IgnoreCycles,
@@ -533,11 +538,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     corpus.CorpusId.FontFamily = ManuscriptIds.HebrewFontFamily;
 
-                    OnUIThread(() => Corpora.Add(corpus));
+                    OnUIThread(() =>
+                    {
+                        Corpora.Add(corpus);
+                        corpusNode = CreateCorpusNode(corpus, new Point());
+                    });
 
-                 
 
-                    await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
                         cancellationToken: cancellationToken);
 
@@ -549,7 +557,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     OnUIThread(() =>
                     {
 
-                        corpusNode = CreateCorpusNode(corpus, new Point());
+                        //corpusNode = CreateCorpusNode(corpus, new Point());
                         //TODO:  revisit
                         corpusNode.Tokenizations.Add(new SerializedTokenization
                         {
@@ -681,7 +689,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     corpus.CorpusId.FontFamily = ManuscriptIds.GreekFontFamily;
 
-                    OnUIThread(() => Corpora.Add(corpus));
+                    OnUIThread(() =>
+                    {
+                        
+                        Corpora.Add(corpus);
+                        node = CreateCorpusNode(corpus, new Point());
+                    });
 
                    
 
@@ -695,7 +708,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        node = CreateCorpusNode(corpus, new Point());
+                       
 
                         //TODO:  revisit
                         node.Tokenizations.Add(new SerializedTokenization
@@ -838,7 +851,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         OnUIThread(() =>
                         {
                             Corpora.Add(corpus);
-                          
+                            node = CreateCorpusNode(corpus, new Point());
+
                         });
 
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -877,17 +891,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                            metadata.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
 
-                        node = CreateCorpusNode(corpus, new Point());
-                        //TODO:  revisit
-                        node.Tokenizations.Add(new SerializedTokenization
-                        {
-                            CorpusId = corpus.CorpusId.Id.ToString(),
-                            TokenizationFriendlyName = EnumHelper.GetDescription(dialogViewModel.SelectedTokenizer),
-                            IsSelected = false,
-                            TokenizationName = dialogViewModel.SelectedTokenizer.ToString(),
-                            TokenizedTextCorpusId = tokenizedTextCorpus.TokenizedTextCorpusId.Id.ToString()
-                        });
+                        
 
+                        OnUIThread(() =>
+                        {
+                            
+                            //TODO:  revisit
+                            node.Tokenizations.Add(new SerializedTokenization
+                            {
+                                CorpusId = corpus.CorpusId.Id.ToString(),
+                                TokenizationFriendlyName = EnumHelper.GetDescription(dialogViewModel.SelectedTokenizer),
+                                IsSelected = false,
+                                TokenizationName = dialogViewModel.SelectedTokenizer.ToString(),
+                                TokenizedTextCorpusId = tokenizedTextCorpus.TokenizedTextCorpusId.Id.ToString()
+                            });
+
+                        });
+                       
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                            description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
