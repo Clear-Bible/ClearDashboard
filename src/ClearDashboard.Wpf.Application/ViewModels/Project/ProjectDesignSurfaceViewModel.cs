@@ -44,6 +44,7 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 
 // ReSharper disable once CheckNamespace
@@ -789,7 +790,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             Logger!.LogInformation("AddParatextCorpus called.");
 
             var dialogViewModel = LifetimeScope!.Resolve<AddParatextCorpusDialogViewModel>();
-            var result = await _windowManager.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+            var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
 
             if (result)
             {
@@ -797,7 +798,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var taskName = $"{metadata.Name}";
                 _busyState.Add(taskName, true);
 
-                var task = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
+                var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
                 var cancellationToken = task.CancellationTokenSource!.Token;
                 _ = await Task.Factory.StartNew(async () =>
                 {
@@ -852,6 +853,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             Corpora.Add(corpus);
                             node = CreateCorpusNode(corpus, new Point());
+
+                        
 
                         });
 
@@ -1952,6 +1955,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             OnUIThread(() =>
             {
                 DesignSurface!.CorpusNodes.Add(node);
+                // NB: Allow the newly added node to be drawn on the design surface - even if there are other long running background processes running
+                //     This is the equivalent of calling Application.DoEvents() in a WinForms app and should only be used as a last resort.
+                _ = App.Current.Dispatcher.Invoke(
+                    DispatcherPriority.Background,
+                    new ThreadStart(delegate { }));
             });
 
             EventAggregator.PublishOnUIThreadAsync(new CorpusAddedMessage(node.ParatextProjectId));
