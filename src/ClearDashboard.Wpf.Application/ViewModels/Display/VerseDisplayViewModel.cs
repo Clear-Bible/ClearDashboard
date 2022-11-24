@@ -105,6 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer, IsSourceRtl, true);
                 NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
             }
+
         }
 
         private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
@@ -277,6 +278,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 {
                     Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
                     await BuildTokenDisplayViewModelsAsync();
+                    await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
                 }
             }
             catch (Exception e)

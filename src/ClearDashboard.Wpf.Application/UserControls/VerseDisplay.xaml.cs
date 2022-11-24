@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
@@ -21,8 +23,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
     /// <summary>
     /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
-    public partial class VerseDisplay : IHandle<SelectionUpdatedMessage>
+    public partial class VerseDisplay : INotifyPropertyChanged,
+        IHandle<SelectionUpdatedMessage>,
+        IHandle<TokensUpdatedMessage>
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -294,12 +312,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty TargetItemsPanelTemplateProperty = DependencyProperty.Register(nameof(TargetItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
         /// <summary>
-        /// Identifies the TargetVisibility dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register(nameof(TargetVisibility), typeof(Visibility), typeof(VerseDisplay),
-            new PropertyMetadata(Visibility.Collapsed));
-
-        /// <summary>
         /// Identifies the TitleFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TitleFontSizeProperty = DependencyProperty.Register(nameof(TitleFontSize), typeof(double), typeof(VerseDisplay),
@@ -417,6 +429,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty WrapProperty = DependencyProperty.Register(nameof(Wrap), typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true, OnWrapChanged));
 
+        private static IEventAggregator _eventAggregator;
+
         #endregion Static DependencyProperties
         #region Private event handlers
 
@@ -435,21 +449,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             SourceItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "SourceWrapPanelTemplate" : "SourceStackPanelTemplate");
             TargetItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "TargetWrapPanelTemplate" : "TargetStackPanelTemplate");
-        }
-
-        public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var verseDisplay = (VerseDisplay)d;
-
-            if (verseDisplay.TargetTokens != null)
-            {
-                var tokenDisplayViewModelCollection = (TokenDisplayViewModelCollection)verseDisplay.TargetTokens!;
-                verseDisplay.TargetVisibility = tokenDisplayViewModelCollection.Any() ? Visibility.Visible : Visibility.Collapsed;
-            }
-            else
-            {
-                verseDisplay.TargetVisibility = Visibility.Collapsed;
-            }
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -511,6 +510,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
             SelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(TokensUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            OnPropertyChanged(nameof(SourceTokens));
             await Task.CompletedTask;
         }
 
@@ -1065,7 +1070,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public properties
 
-        private IEventAggregator EventAggregator { get; set; }
+        public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
         /// Gets or sets the horizontal spacing between translations.
@@ -1241,16 +1246,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the collection of <see cref="TokenDisplayViewModel"/> target objects to display in the control.
         /// </summary>
-        public IEnumerable TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
+        public TokenDisplayViewModelCollection TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
 
         /// <summary>
         /// Gets or sets the visibility of the target (alignment) verse.
         /// </summary>
-        public Visibility TargetVisibility
-        {
-            get => (Visibility)GetValue(TargetVisibilityProperty);
-            set => SetValue(TargetVisibilityProperty, value);
-        }
+        public Visibility TargetVisibility => TargetTokens.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         /// <summary>
         /// Gets or sets the title to be displayed for the verse.
@@ -1408,7 +1409,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the strongly-typed VerseDisplayViewModel bound to this control.
         /// </summary>
-        public VerseDisplayViewModel VerseDisplayViewModel => DataContext as VerseDisplayViewModel ?? throw new InvalidOperationException();
+        public VerseDisplayViewModel VerseDisplayViewModel => DataContext.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null;
 
         /// <summary>
         /// Gets or sets the margin for the tokens list.
@@ -1443,11 +1444,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             InitializeComponent();
             Loaded += OnLoaded;
+
+            if (EventAggregator != null)
+            {
+                EventAggregator.SubscribeOnUIThread(this);
+            }
         }
 
-        public VerseDisplay(IEventAggregator eventAggregator) : this()
-        {
-            EventAggregator = eventAggregator;
-        }
+        //public VerseDisplay(IEventAggregator eventAggregator) : this()
+        //{
+        //    EventAggregator = eventAggregator;
+        //    EventAggregator.SubscribeOnUIThread(this);
+        //}
+
     }
 }

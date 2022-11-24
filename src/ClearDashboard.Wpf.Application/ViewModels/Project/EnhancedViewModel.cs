@@ -43,6 +43,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.UserControls;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
@@ -363,6 +364,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             MoveCorpusDownRowCommand = new RelayCommand(MoveCorpusDown);
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
+
+            VerseDisplay.EventAggregator = eventAggregator;
         }
 
 
@@ -1597,6 +1600,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             await NoteManager.UpdateNoteAsync(e.Note);
             Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+        }
+
+        public void NoteSendToParatext(object sender, NoteEventArgs e)
+        {
+            Task.Run<TaskAwaiter>(() => NoteSendToParatextAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteSendToParatextAsync(NoteEventArgs e)
+        {
+            await NoteManager.SendToParatextAsync(e.Note);
+            Message = $"Note '{e.Note.Text}' sent to Paratext.";
         }
 
         public void NoteDeleted(object sender, NoteEventArgs e)

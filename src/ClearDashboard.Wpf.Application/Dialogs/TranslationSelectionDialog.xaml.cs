@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Events;
+using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Application.Dialogs
 {
@@ -67,7 +68,12 @@ namespace ClearDashboard.Wpf.Application.Dialogs
         {
             TranslationOptions = await VerseDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
             CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == TokenDisplay.TargetTranslationText);
-            ProgressBarVisibility = Visibility.Collapsed;
+
+            OnUIThread(() =>
+            {
+                TranslationSelectorControl.TranslationControlsVisibility = Visibility.Visible;
+                ProgressBarVisibility = Visibility.Collapsed;
+            });
         }
 
         private void OnUnloaded(object sender, RoutedEventArgs e)
@@ -75,6 +81,8 @@ namespace ClearDashboard.Wpf.Application.Dialogs
             Loaded -= OnLoaded;
             Unloaded -= OnUnloaded;
         }
+
+        private static void OnUIThread(System.Action action) => action.OnUIThread();
 
         private void OnTranslationApplied(object sender, RoutedEventArgs e)
         {
@@ -87,10 +95,10 @@ namespace ClearDashboard.Wpf.Application.Dialogs
             {
                 if (!TokenDisplay.TargetTranslationText.Equals(e.Translation.TargetTranslationText))
                 {
+                    OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+
                     async Task ApplyTranslation()
                     {
-                        ProgressBarVisibility = Visibility.Visible;
-
                         await VerseDisplay.PutTranslationAsync(e.Translation, e.TranslationActionType);
                     }
 
