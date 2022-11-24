@@ -663,7 +663,7 @@
                                 Height="30"
                                 Margin="0,-5,6,0"
                                 HorizontalAlignment="Right"
-                                Content="{Binding Path=Tokenizations.Count, UpdateSourceTrigger=PropertyChanged}"
+                                Content="{Binding Path=TokenizationCount, UpdateSourceTrigger=PropertyChanged}"
                                 IsHitTestVisible="False"
                                 ToolTip="Number of different tokenizations">
                                 <materialDesign:Chip.Style>

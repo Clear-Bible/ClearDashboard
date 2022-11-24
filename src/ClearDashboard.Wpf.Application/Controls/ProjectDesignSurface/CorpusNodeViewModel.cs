@@ -227,12 +227,23 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
-        private List<SerializedTokenization> _tokenizations = new();
-        public List<SerializedTokenization> Tokenizations
+        //private BindableCollection<SerializedTokenization> _tokenizations = new();
+        //public BindableCollection<SerializedTokenization> Tokenizations
+        //{
+        //    get => _tokenizations;
+        //    set =>Set(ref _tokenizations, value);
+        //}
+
+        public int TokenizationCount
         {
-            get => _tokenizations;
-            set =>Set(ref _tokenizations, value);
+            get => _tokenizationCount;
+            set => Set(ref _tokenizationCount, value);
         }
+
+        //public void NotifyOfTokenizationCount()
+        //{
+        //    NotifyOfPropertyChange(()=>TokenizationCount);
+        //}
 
         private bool _isRtl;
 
@@ -275,6 +286,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
         private CorpusType _corpusType = CorpusType.Standard;
+        private int _tokenizationCount;
+
         /// <summary>
         /// The paratext project type
         /// </summary>
