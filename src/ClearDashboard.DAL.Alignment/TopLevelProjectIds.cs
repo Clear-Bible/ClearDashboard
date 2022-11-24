@@ -59,8 +59,8 @@ namespace ClearDashboard.DAL.Alignment
                     .Select(e => e.TargetTokenizedCorpusId!.Id))
                 .Distinct();
 
-            var tokenizedTextCorpusIds = allTokenizedTextCorpusIds
-                .Where(e => containedTokenizedTextCorpusIds.Contains(e.Id));
+            var tokenizedTextCorpusIds = allTokenizedTextCorpusIds.Distinct();
+               // .Where(e => containedTokenizedTextCorpusIds.Contains(e.Id));
 
             var allCorpusIds = await Corpus.GetAllCorpusIds(mediator);
             var containedCorpusIds =
