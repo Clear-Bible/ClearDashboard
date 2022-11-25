@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
+using MediatR;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -16,12 +17,12 @@ namespace ClearDashboard.Wpf.Application.Services
         /// 2) All of the tokens must originate from the same Paratext corpus;
         /// 3) All of the tokens must be contiguous in the corpus.
         /// </remarks>
+        /// <param name="mediator"></param>
         /// <param name="noteId">The note for which to get the Paratext project ID.</param>
         /// <returns>The Paratext project ID if all three conditions are met; null otherwise.</returns>
-        public static Guid? GetParatextId(NoteId noteId)
+        public static async Task<Guid?> GetParatextId(IMediator mediator, NoteId noteId)
         {
-            // TODO: implement
-            return Guid.Empty;
+            return await Note.GetParatextIdIfAssociatedContiguousTokensOnly(mediator, noteId);
         }
 
         /// <summary>
