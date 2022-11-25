@@ -172,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
-                noteViewModel.ParatextId = ParatextNoteManager.GetParatextId(noteId);
+                noteViewModel.ParatextId = await ParatextNoteManager.GetParatextId(Mediator, noteId);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note {noteId} in {stopwatch.ElapsedMilliseconds}ms");
