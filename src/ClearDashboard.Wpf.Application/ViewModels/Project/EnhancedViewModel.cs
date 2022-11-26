@@ -661,7 +661,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         // get the entirety of text for this corpus
                         currentTokenizedTextCorpus =
-                            await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId));
+                            await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId.Value));
 
                         // add this corpus to our master list
                         _tokenProjects.Add(new TokenProject
@@ -669,8 +669,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ParatextProjectId = message.ParatextProjectId,
                             ProjectName = message.ProjectName,
                             TokenizationType = message.TokenizationType,
-                            CorpusId = message.CorpusId,
-                            TokenizedTextCorpusId = message.TokenizedTextCorpusId,
+                            CorpusId = message.CorpusId.Value,
+                            TokenizedTextCorpusId = message.TokenizedTextCorpusId.Value,
                             Metadata = metadata,
                             TokenizedTextCorpus = currentTokenizedTextCorpus,
                         });
@@ -754,7 +754,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             textRow,
                             //FIXME:surface serialization message.detokenizer,
                             new EngineStringDetokenizer(new LatinWordDetokenizer()), 
-                            message.IsRTL);
+                            message.IsRTL.Value);
 
                         verses.Add(verseDisplayViewModel);
                     }
@@ -878,12 +878,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 VersesDisplay.Add(new VersesDisplay
                 {
-                    CorpusId = message.CorpusId,
+                    CorpusId = message.CorpusId.Value,
                     BorderColor = brush,
                     ShowTranslation = showTranslations,
                     RowTitle = title,
                     Verses = verses,
-                    IsRtl = message.IsRTL,
+                    IsRtl = message.IsRTL.Value,
                     SourceFontFamily = family,
                 });
 
@@ -896,12 +896,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             else
             {
-                row.CorpusId = message.CorpusId;
+                row.CorpusId = message.CorpusId.Value;
                 row.BorderColor = brush;
                 row.ShowTranslation = showTranslations;
                 row.RowTitle = title;
                 row.Verses = verses;
-                row.IsRtl = message.IsRTL;
+                row.IsRtl = message.IsRTL.Value;
             }
 
             //do a dump of VerseDisplayViewModel Ids
