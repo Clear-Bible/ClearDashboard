@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
@@ -29,7 +30,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         public event EventHandler<EventArgs>? SizeChanged;
 
         #endregion
-
 
         #region Private Data Members
 
@@ -95,6 +95,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             set => Set(ref _name, value);
         }
 
+        [JsonIgnore]
         public string TranslationFontFamily { get; set; } = "Segoe UI";
 
         /// <summary>
@@ -118,6 +119,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The Z index of the node.
         /// </summary>
+        [JsonIgnore]
         public int ZIndex
         {
             get => _zIndex;
@@ -133,6 +135,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         ///     When the size is computed via the UI it is then pushed into the view-model
         ///     so that our application code has access to the size of a node.
         /// </summary>
+        [JsonIgnore]
         public Size Size
         {
             get => _size;
@@ -149,12 +152,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         #endregion Public Properties
 
-        
+
         #region Observable Properties
 
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
         /// </summary>
+        [JsonIgnore]
         public ImpObservableCollection<ParallelCorpusConnectorViewModel> InputConnectors
         {
             get
@@ -173,6 +177,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// List of output connectors (connections points) attached to the node.
         /// </summary>
+        [JsonIgnore]
         public ImpObservableCollection<ParallelCorpusConnectorViewModel> OutputConnectors
         {
             get
@@ -191,6 +196,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// A helper property that retrieves a list (a new list each time) of all connections attached to the node. 
         /// </summary>
+        [JsonIgnore]
         public ICollection<ParallelCorpusConnectionViewModel> AttachedConnections
         {
             get
@@ -214,6 +220,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// Set to 'true' when the node is selected.
         /// </summary>
+        [JsonIgnore]
         public bool IsSelected
         {
             get => _isSelected;
@@ -234,6 +241,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         //    set =>Set(ref _tokenizations, value);
         //}
 
+        [JsonIgnore]
         public int TokenizationCount
         {
             get => _tokenizationCount;
@@ -246,14 +254,14 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         //}
 
         private bool _isRtl;
-
+        [JsonIgnore]
         public bool IsRtl
         {
             get => _isRtl;
             set => Set(ref _isRtl, value);
         }
 
-
+        [JsonIgnore]
         private Guid _id = Guid.NewGuid();
         public Guid Id
         {
@@ -268,6 +276,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             set => Set(ref _corpusId, value);
         }
 
+        [JsonIgnore]
         private BindableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
         public BindableCollection<CorpusNodeMenuItemViewModel> MenuItems
         {
@@ -279,18 +288,21 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// The paratext guid
         /// </summary>
+        [JsonIgnore]
         public string ParatextProjectId
         {
             get => _paratextProjectId;
             set => Set(ref _paratextProjectId, value);
         }
 
+        
         private CorpusType _corpusType = CorpusType.Standard;
         private int _tokenizationCount;
 
         /// <summary>
         /// The paratext project type
         /// </summary>
+        [JsonIgnore]
         public CorpusType CorpusType
         {
             get => _corpusType;
@@ -367,6 +379,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
+
+        #endregion Private Methods
+
         public Task HandleAsync(ConnectionSelectedChangedMessage message, CancellationToken cancellationToken)
         {
             var connection = message.ConnectorId;
@@ -375,7 +390,5 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
 
-
-        #endregion Private Methods
     }
 }

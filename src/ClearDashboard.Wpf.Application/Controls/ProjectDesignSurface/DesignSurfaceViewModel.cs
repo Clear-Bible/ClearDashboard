@@ -24,7 +24,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// <summary>
     /// Defines a design surface with nodes and connections between the nodes.
     /// </summary>
-    public sealed class DesignSurfaceViewModel: Screen
+    public sealed class DesignSurfaceViewModel : Screen
     {
 
         #region Internal Data Members
@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private readonly ILifetimeScope _lifecycleScope;
         private readonly IEventAggregator? _eventAggregator;
         private readonly IMediator _mediator;
-       
+
 
         ///
         /// The current scale at which the content is being viewed.
@@ -362,7 +362,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             parallelCorpusConnection.MenuItems.Clear();
 
             var connectionMenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>();
-                
+
             AddAlignmentSetMenu(parallelCorpusConnection, topLevelProjectIds, projectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(projectDesignSurfaceViewModel, connectionMenuItems);
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, projectDesignSurfaceViewModel, connectionMenuItems);
@@ -377,7 +377,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         {
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
-                Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                Header = "",
+                Id = "SeparatorId",
+                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                 IsSeparator = true
             });
         }
@@ -460,28 +462,28 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             // Add new alignment set
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
-                {
-                    Header = LocalizationStrings.Get("Pds_CreateNewAlignmentSetMenu", _logger!),
-                    Id = "CreateAlignmentSetId",
-                    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
-                    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                    ConnectionId = parallelCorpusConnection.Id,
-                    ParallelCorpusId = parallelCorpusConnection.ParallelCorpusId?.Id.ToString(),
-                    ParallelCorpusDisplayName = parallelCorpusConnection.ParallelCorpusDisplayName,
-                    IsRtl = parallelCorpusConnection.IsRtl,
-                    SourceParatextId = parallelCorpusConnection.SourceConnector?.ParatextId,
-                    TargetParatextId = parallelCorpusConnection.DestinationConnector?.ParatextId,
-                });
+            {
+                Header = LocalizationStrings.Get("Pds_CreateNewAlignmentSetMenu", _logger!),
+                Id = "CreateAlignmentSetId",
+                IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
+                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                ConnectionId = parallelCorpusConnection.Id,
+                ParallelCorpusId = parallelCorpusConnection.ParallelCorpusId?.Id.ToString(),
+                ParallelCorpusDisplayName = parallelCorpusConnection.ParallelCorpusDisplayName,
+                IsRtl = parallelCorpusConnection.IsRtl,
+                SourceParatextId = parallelCorpusConnection.SourceConnector?.ParatextId,
+                TargetParatextId = parallelCorpusConnection.DestinationConnector?.ParatextId,
+            });
 
-                AddMenuSeparator(projectDesignSurfaceViewModel, connectionMenuItems);
-                //new ParallelCorpusConnectionMenuItemViewModel
-                //{
-                //    Header = "",
-                //    Id = "SeparatorId",
-                //    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-                //    IsSeparator = true
-                //}
-  
+            AddMenuSeparator(projectDesignSurfaceViewModel, connectionMenuItems);
+            //new ParallelCorpusConnectionMenuItemViewModel
+            //{
+            //    Header = "",
+            //    Id = "SeparatorId",
+            //    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+            //    IsSeparator = true
+            //}
+
 
 
             var alignmentSets = topLevelProjectIds.AlignmentSetIds.Where(alignmentSet =>
@@ -658,6 +660,22 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         }
 
+        /// <summary>
+        /// Utility method to delete a connection from the view-model.
+        /// </summary>
+        public void DeleteConnection(ParallelCorpusConnectionViewModel parallelCorpusConnection)
+        {
+            _eventAggregator.PublishOnUIThreadAsync(new ParallelCorpusDeletedMessage(
+                 SourceParatextId: parallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId,
+                 TargetParatextId: parallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId,
+                 ConnectorGuid: parallelCorpusConnection.Id));
+
+            if (ParallelCorpusConnections.Contains(parallelCorpusConnection))
+            {
+                ParallelCorpusConnections.Remove(parallelCorpusConnection);
+            }
+
+        }
 
         #region Private Methods
 

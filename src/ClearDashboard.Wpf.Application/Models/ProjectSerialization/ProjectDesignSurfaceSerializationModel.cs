@@ -1,13 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using ClearDashboard.Wpf.Controls.Utils;
+﻿using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization
 {
     public class ProjectDesignSurfaceSerializationModel
     {
-        public ImpObservableCollection<SerializedParallelCorpus> ParallelCorpora { get; set; } = new();
-        public ImpObservableCollection<SerializedTokenizedCorpus> TokenizedCorpora { get; set; } = new();
-
-        //public ObservableCollection<SerializedCorpus> Corpora { get; set; }  = new();
+        public List<CorpusNodeLocation> CorpusNodeLocations { get; set; } = new();
     }
 }
