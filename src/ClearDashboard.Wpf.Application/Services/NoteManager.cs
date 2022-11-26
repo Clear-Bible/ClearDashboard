@@ -157,6 +157,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
                 var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
+                
                 foreach (var associatedEntityId in associatedEntityIds)
                 {
                     var association = new NoteAssociationViewModel
@@ -171,6 +172,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
+                noteViewModel.ParatextId = await ParatextNoteManager.GetParatextId(Mediator, noteId);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note {noteId} in {stopwatch.ElapsedMilliseconds}ms");
@@ -334,6 +336,16 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Sends a note to Paratext.
+        /// </summary>
+        /// <param name="note">The note to send to Paratext.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public static async Task SendToParatextAsync(NoteViewModel note)
+        {
+            await ParatextNoteManager.SendToParatextAsync(note);
         }
 
         /// <summary>

@@ -50,6 +50,7 @@
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
+    <None Remove="Resources\Paratext_Send32.png" />
     <None Remove="Resources\Paratext_white_Icon48.png" />
     <None Remove="Resources\SBL_grk.ttf" />
     <None Remove="Resources\SBL_Hbrw.ttf" />
@@ -161,6 +162,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Paratext_Disconnected32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Paratext_white_Icon48.png" />
@@ -275,9 +279,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\TailBlazor\Dragablz.dll">

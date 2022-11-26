@@ -41,7 +41,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Events;
 using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.UserControls;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
@@ -362,6 +364,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             MoveCorpusDownRowCommand = new RelayCommand(MoveCorpusDown);
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
+
+            VerseDisplay.EventAggregator = eventAggregator;
         }
 
 
@@ -374,8 +378,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override void OnViewAttached(object view, object context)
         {
-            if (_projectManager.CurrentParatextProject.BcvDictionary != null)
-                BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            // grab the dictionary of all the verse lookups
+            if (ProjectManager?.CurrentParatextProject is not null)
+            {
+                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+
+                var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                    .Select(g => g.First())
+                    .ToList();
+
+                foreach (var book in books)
+                {
+                    var bookId = book.Substring(0, 3);
+
+                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                    CurrentBcv.BibleBookList?.Add(bookName);
+                }
+            }
+            else
+            {
+                BcvDictionary = new Dictionary<string, string>();
+            }
+            
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
@@ -1509,6 +1534,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NoteControlVisibility = Visibility.Visible;
         }
 
+//        public void ParatextSend(object sender, ParatextEventArgs e)
+//        {
+//            NoteManager.ParatextSend(e);
+//;        }
+
         public void FilterPins(object sender, NoteEventArgs e)
         {
             //WORKS
@@ -1570,6 +1600,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             await NoteManager.UpdateNoteAsync(e.Note);
             Message = $"Note '{e.Note.Text}' updated on tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
+        }
+
+        public void NoteSendToParatext(object sender, NoteEventArgs e)
+        {
+            Task.Run<TaskAwaiter>(() => NoteSendToParatextAsync(e).GetAwaiter());
+        }
+
+        public async Task NoteSendToParatextAsync(NoteEventArgs e)
+        {
+            await NoteManager.SendToParatextAsync(e.Note);
+            Message = $"Note '{e.Note.Text}' sent to Paratext.";
         }
 
         public void NoteDeleted(object sender, NoteEventArgs e)

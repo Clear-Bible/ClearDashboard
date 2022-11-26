@@ -116,6 +116,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("NoteEditorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
+        /// Identifies the NoteSendToParatext routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
+            ("NoteSendToParatext", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
         /// Identifies the NoteUpdated routed event.
         /// </summary>
         public static readonly RoutedEvent NoteUpdatedEvent = EventManager.RegisterRoutedEvent
@@ -439,11 +445,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseLabelEvent(LabelRemovedEvent, labelEventArgs!);
         }
 
-        private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
-        {
-            ConfirmDeletePopup.IsOpen = true;
-        }
-
         private void RaiseNoteEvent(RoutedEvent routedEvent)
         {
             RaiseEvent(new NoteEventArgs
@@ -452,6 +453,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 EntityIds = EntityIds,
                 Note = Note
             });
+        }
+
+        private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = true;
         }
 
         private void DeleteNoteConfirmed(object sender, RoutedEventArgs e)
@@ -463,6 +469,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void DeleteNoteCancelled(object sender, RoutedEventArgs e)
         {
             ConfirmDeletePopup.IsOpen = false;
+        }
+
+        private void ConfirmParatextSend(object sender, RoutedEventArgs e)
+        {
+            ConfirmParatextSendPopup.IsOpen = true;
+        }
+
+        private void ParatextSendConfirmed(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteSendToParatextEvent);
+            ConfirmParatextSendPopup.IsOpen = false;
+        }
+
+        private void ParatextSendCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmParatextSendPopup.IsOpen = false;
         }
 
         private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
@@ -589,6 +611,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public Visibility LabelSelectorVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
         public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
         public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
+        public Visibility ParatextSendVisibility => !AddMode && Note.EnableParatextSend ? Visibility.Visible : Visibility.Hidden;
         private bool IsAssociationButtonClicked { get; set; }
         /// <summary>
         /// Gets or sets the collection of <see cref="EntityId{T}"/> associated with the note.
@@ -1048,6 +1071,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(NoteEditorMouseLeaveEvent, value);
             remove => RemoveHandler(NoteEditorMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests a note be sent to Paratext.
+        /// </summary>
+        public event RoutedEventHandler NoteSendToParatext
+        {
+            add => AddHandler(NoteSendToParatextEvent, value);
+            remove => RemoveHandler(NoteSendToParatextEvent, value);
         }
 
         /// <summary>

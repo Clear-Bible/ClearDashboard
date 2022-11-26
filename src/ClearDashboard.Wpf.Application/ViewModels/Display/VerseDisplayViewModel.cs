@@ -40,10 +40,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private IReadOnlyList<Token> SourceTokens { get; set; }
         private EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        private bool IsRtl { get; set; }
+        public bool IsSourceRtl { get; set; }
         private IReadOnlyList<Token>? TargetTokens { get; set; }
         private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        private bool IsTargetRtl { get; set; }
+        public bool IsTargetRtl { get; set; }
 
         private TranslationSet? TranslationSet { get; set; }
         private IEnumerable<Translation>? Translations { get; set; }
@@ -97,14 +97,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task BuildTokenDisplayViewModelsAsync()
         {
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsRtl, true);
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsSourceRtl, true);
             NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             
             if (TargetTokens != null)
             {
-                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer, IsRtl, true);
+                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer, IsSourceRtl, true);
                 NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
             }
+
         }
 
         private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
@@ -277,6 +278,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 {
                     Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
                     await BuildTokenDisplayViewModelsAsync();
+                    await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
                 }
             }
             catch (Exception e)
@@ -293,7 +295,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             SourceTokens = textRow.Tokens.GetPositionalSortedBaseTokens().ToList();
             SourceDetokenizer = sourceDetokenizer;
-            IsRtl = isRtl;
+            IsSourceRtl = isRtl;
             IsTargetRtl = false;
 
             TranslationSet = null;
@@ -311,7 +313,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
-            IsRtl = isSourceRtl;
+            IsSourceRtl = isSourceRtl;
             IsTargetRtl = false;
 
             TranslationSet = translationSet;
@@ -332,7 +334,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         {
             SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
-            IsRtl = isSourceRtl;
+            IsSourceRtl = isSourceRtl;
 
             TargetTokens = engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no target tokens");
             TargetDetokenizer = targetDetokenizer;
