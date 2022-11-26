@@ -309,7 +309,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource(null, null);
+                PlaySound.PlaySoundFromResource();
             }
 
             return CurrentTask.Status;
@@ -406,7 +406,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource(null, null);
+                PlaySound.PlaySoundFromResource();
             }
 
 
@@ -414,7 +414,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
 
-        public TranslationSet TranslationSet { get; set; }
+        public TranslationSet? TranslationSet { get; set; }
         public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
         {
             IsBusy = true;
@@ -492,7 +492,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
-            PlaySound.PlaySoundFromResource(null, null);
+            PlaySound.PlaySoundFromResource();
 
             return CurrentTask.Status;
 
@@ -501,7 +501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
 
-        public AlignmentSet AlignmentSet { get; set; }
+        public AlignmentSet? AlignmentSet { get; set; }
         public async Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName)
         {
             IsBusy = true;
@@ -581,7 +581,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource(null, null);
+                PlaySound.PlaySoundFromResource();
             }
 
             return CurrentTask.Status;
