@@ -47,7 +47,7 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardApplicationScreen, IHandle<UiLanguageChangedMessage>
+    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IHandle<UiLanguageChangedMessage>, IDisposable
     {
         #region Member Variables
 
@@ -67,11 +67,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// This is the design surface that is displayed in the window.
         /// It is the main part of the view-model.
         /// </summary>
-        private DesignSurfaceViewModel? _designSurface;
-        public DesignSurfaceViewModel? DesignSurface
+        private DesignSurfaceViewModel? _designSurfaceViewModel;
+        public DesignSurfaceViewModel? DesignSurfaceViewModel
         {
-            get => _designSurface;
-            private set => Set(ref _designSurface, value);
+            get => _designSurfaceViewModel;
+            private set => Set(ref _designSurfaceViewModel, value);
         }
 
         private object? _selectedDesignSurfaceComponent;
@@ -81,7 +81,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 if (_selectedDesignSurfaceComponent is CorpusNodeViewModel node)
                 {
-                    foreach (var corpusNode in DesignSurface!.CorpusNodes)
+                    foreach (var corpusNode in DesignSurfaceViewModel!.CorpusNodes)
                     {
                         if (corpusNode.ParatextProjectId == node.ParatextProjectId)
                         {
@@ -91,7 +91,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else if (_selectedDesignSurfaceComponent is ParallelCorpusConnectionViewModel conn)
                 {
-                    foreach (var connection in DesignSurface!.ParallelCorpusConnections)
+                    foreach (var connection in DesignSurfaceViewModel!.ParallelCorpusConnections)
                     {
                         if (connection.Id == conn.Id)
                         {
@@ -163,19 +163,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return base.OnInitializeAsync(cancellationToken);
         }
 
-        protected override void Dispose(bool disposing)
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected void Dispose(bool disposing)
         {
             EventAggregator!.Unsubscribe(this);
             _busyState.CollectionChanged -= BusyStateOnCollectionChanged;
-            base.Dispose(disposing);
         }
 
-        //protected override Task OnActivateAsync(CancellationToken cancellationToken)
-        //{
-        //    EventAggregator.SubscribeOnUIThread(this);
-        //    _busyState.CollectionChanged += BusyStateOnCollectionChanged;
-        //    return base.OnActivateAsync(cancellationToken);
-        //}
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
+
+            EventAggregator.SubscribeOnUIThread(this);
+            _busyState.CollectionChanged += BusyStateOnCollectionChanged;
+            await base.OnActivateAsync(cancellationToken);
+        }
 
         private void BusyStateOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
@@ -190,23 +196,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        protected override void OnViewAttached(object view, object context)
+        private async Task<TViewModel?> ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
+            where TViewModel : Screen
+        {
+
+            // NOTE:  This is the hack to get OnViewAttached and OnViewReady methods to be called on conducted ViewModels.  Also note
+            //   OnViewLoaded is not called.
+
+            var viewModel = LifetimeScope!.Resolve<TViewModel>();
+          
+            viewModel.Parent = this;
+            viewModel.ConductWith(this);
+            var view = ViewLocator.LocateForModel(this, null, null);
+            ViewModelBinder.Bind(viewModel, view, null);
+            await ActivateItemAsync(viewModel, cancellationToken);
+
+            return viewModel;
+        }
+
+        protected override async  void OnViewAttached(object view, object context)
         {
             //
             // Create a design surface, the root of the view-model.
             //
-            DesignSurface = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
+           //DesignSurfaceViewModel = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
+          
 
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (DesignSurface.ProjectDesignSurface == null)
-            {
-                if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
-                {
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    DesignSurface.ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+            //// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            //if (DesignSurfaceViewModel.ProjectDesignSurface == null)
+            //{
+            //    if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
+            //    {
+            //        // ReSharper disable once AssignNullToNotNullAttribute
+            //        DesignSurfaceViewModel.ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
 
-                }
-            }
+            //    }
+            //}
             base.OnViewAttached(view, context);
         }
 
@@ -245,7 +270,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var surface = new ProjectDesignSurfaceSerializationModel();
 
             // save all the nodes
-            foreach (var corpusNode in DesignSurface!.CorpusNodes)
+            foreach (var corpusNode in DesignSurfaceViewModel!.CorpusNodes)
             {
                 surface.CorpusNodeLocations.Add(new CorpusNodeLocation
                 {
@@ -298,17 +323,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var corpus = new Corpus(corpusId);
                         var corpusNodeLocation = designSurfaceData.CorpusNodeLocations.FirstOrDefault(cn => cn.CorpusId == corpusId.Id);
                         var point = corpusNodeLocation != null ? new Point(corpusNodeLocation.X, corpusNodeLocation.Y) : new Point();
-                        var node = DesignSurface!.CreateCorpusNode(corpus, point);
+                        var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
                         var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
-                        DesignSurface!.CreateCorpusNodeMenu(node, tokenizedCorpora, this);
+                        DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
                     foreach (var parallelCorpusId in topLevelProjectIds.ParallelCorpusIds)
                     {
 
-                        var sourceNode = DesignSurface!.CorpusNodes.FirstOrDefault(p =>
+                        var sourceNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(p =>
                             p.ParatextProjectId == parallelCorpusId.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
-                        var targetNode = DesignSurface!.CorpusNodes.FirstOrDefault(p =>
+                        var targetNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(p =>
                             p.ParatextProjectId == parallelCorpusId.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
 
 
@@ -323,9 +348,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 SourceFontFamily = parallelCorpusId.SourceTokenizedCorpusId?.CorpusId?.FontFamily,
                                 TargetFontFamily = parallelCorpusId.TargetTokenizedCorpusId?.CorpusId?.FontFamily,
                             };
-                            DesignSurface.ParallelCorpusConnections.Add(connection);
+                            DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
                             // add in the context menu
-                            DesignSurface!.CreateConnectionMenu(connection, topLevelProjectIds, this);
+                            DesignSurfaceViewModel!.CreateConnectionMenu(connection, topLevelProjectIds);
                         }
                     }
                 }
@@ -378,10 +403,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private readonly ObservableDictionary<string, bool> _busyState = new();
 
-        public override bool IsBusy
-        {
-            get => _busyState.Count > 0;
-        }
+        public new bool IsBusy => _busyState.Count > 0;
 
 
         // ReSharper disable once UnusedMember.Global
@@ -443,7 +465,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        corpusNode = DesignSurface!.CreateCorpusNode(corpus, new Point());
+                        corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
                     });
 
 
@@ -467,7 +489,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // ReSharper disable once AsyncVoidLambda
                     OnUIThread(async () =>
                     {
-                        await DesignSurface!.UpdateNodeTokenization(corpusNode, this);
+                        await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
                     });
 
                 }
@@ -503,7 +525,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurface!.DeleteCorpusNode(corpusNode);
+                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         AddManuscriptHebrewEnabled = true;
                     }
@@ -577,7 +599,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     OnUIThread(() =>
                     {
-                        corpusNode = DesignSurface!.CreateCorpusNode(corpus, new Point());
+                        corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
                     });
 
 
@@ -599,7 +621,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // ReSharper disable once AsyncVoidLambda
                     OnUIThread(async () =>
                     {
-                        await DesignSurface!.UpdateNodeTokenization(corpusNode, this);
+                        await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
                     });
 
                 }
@@ -634,7 +656,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurface!.DeleteCorpusNode(corpusNode);
+                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
                         AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -676,9 +698,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         TranslationFontFamily = selectedProject.FontFamily
                     };
 
-                    if (DesignSurface!.CorpusNodes.Any(cn => cn.ParatextProjectId == selectedProject.Id))
+                    if (DesignSurfaceViewModel!.CorpusNodes.Any(cn => cn.ParatextProjectId == selectedProject.Id))
                     {
-                        node = DesignSurface!.CorpusNodes.Single(cn => cn.ParatextProjectId == selectedProject.Id);
+                        node = DesignSurfaceViewModel!.CorpusNodes.Single(cn => cn.ParatextProjectId == selectedProject.Id);
                     }
 
                     try
@@ -709,7 +731,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                         OnUIThread(() =>
                         {
-                            node = DesignSurface!.CreateCorpusNode(corpus, new Point());
+                            node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
                         });
 
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -754,7 +776,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         // ReSharper disable once AsyncVoidLambda
                         OnUIThread(async () =>
                         {
-                            await DesignSurface!.UpdateNodeTokenization(node, this);
+                            await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
                         });
 
                         _longRunningTaskManager.TaskComplete(taskName);
@@ -792,7 +814,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         _busyState.Remove(taskName);
                         if (cancellationToken.IsCancellationRequested)
                         {
-                            DesignSurface!.DeleteCorpusNode(node);
+                            DesignSurfaceViewModel!.DeleteCorpusNode(node);
                         }
                         else
                         {
@@ -824,7 +846,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 case "AddTranslationSetId":
                     // find the right connection to send
-                    var connection = DesignSurface!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
+                    var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
 
                     if (connection != null)
                     {
@@ -990,7 +1012,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //
             // Add the new connection to the view-model.
             //
-            DesignSurface!.ParallelCorpusConnections.Add(connection);
+            DesignSurfaceViewModel!.ParallelCorpusConnections.Add(connection);
 
             return connection;
         }
@@ -1029,7 +1051,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
 
             var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
-            var curDragPoint = Mouse.GetPosition(DesignSurface!.ProjectDesignSurface);
+            var curDragPoint = Mouse.GetPosition(DesignSurfaceViewModel!.ProjectDesignSurface);
 
             //
             // Delegate the real work to the view model.
@@ -1048,7 +1070,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         /// </summary>
         public void OnParallelCorpusConnectionDragging(object sender, ConnectionDraggingEventArgs e)
         {
-            var curDragPoint = Mouse.GetPosition(DesignSurface!.ProjectDesignSurface);
+            var curDragPoint = Mouse.GetPosition(DesignSurfaceViewModel!.ProjectDesignSurface);
             var connection = (ParallelCorpusConnectionViewModel)e.Connection;
             ConnectionDragging(curDragPoint, connection);
         }
@@ -1153,7 +1175,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // The connection was unsuccessful.
                 // Maybe the user dragged it out and dropped it in empty space.
                 //
-                DesignSurface!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                 return;
             }
 
@@ -1172,7 +1194,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // eg input -> input or output -> output, are not allowed,
                 // Remove the connection.
                 //
-                DesignSurface!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                 return;
             }
 
@@ -1183,11 +1205,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //
             // Remove any existing connection between the same two connectors.
             //
-            var existingConnection = DesignSurface!.FindConnection(parallelCorpusConnectorDraggedOut, parallelCorpusConnectorDraggedOver);
+            var existingConnection = DesignSurfaceViewModel!.FindConnection(parallelCorpusConnectorDraggedOut, parallelCorpusConnectorDraggedOver);
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             if (existingConnection != null)
             {
-                DesignSurface!.ParallelCorpusConnections.Remove(existingConnection);
+                DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(existingConnection);
             }
 
             //
@@ -1213,14 +1235,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var sourceParatextProjectId = newParallelCorpusConnection.SourceConnector!.ParentNode!.ParatextProjectId;
                 if (string.IsNullOrEmpty(sourceParatextProjectId))
                 {
-                    DesignSurface!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                    DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                     return;
                 }
 
                 var destinationParatextProjectId = newParallelCorpusConnection.DestinationConnector.ParentNode!.ParatextProjectId;
                 if (string.IsNullOrEmpty(destinationParatextProjectId))
                 {
-                    DesignSurface!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
+                    DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
                     return;
                 }
 
@@ -1273,8 +1295,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     });
 
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                    DesignSurface!.CreateConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds,
-                        this);
+                    DesignSurfaceViewModel!.CreateConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
                     await SaveDesignSurfaceData();
 
                 }
@@ -1288,13 +1309,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection)
         {
-            var sourceCorpusNode = DesignSurface!.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.SourceConnector!.ParentNode!.Id);
+            var sourceCorpusNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.SourceConnector!.ParentNode!.Id);
             if (sourceCorpusNode == null)
             {
                 throw new MissingCorpusNodeException(
                     $"Cannot find the source Corpus node for the Corpus with Id '{newParallelCorpusConnection.SourceConnector!.ParentNode!.CorpusId}'.");
             }
-            var targetCorpusNode = DesignSurface.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.DestinationConnector!.ParentNode!.Id);
+            var targetCorpusNode = DesignSurfaceViewModel.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.DestinationConnector!.ParentNode!.Id);
             if (targetCorpusNode == null)
             {
                 throw new MissingCorpusNodeException(
@@ -1359,12 +1380,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
 
                     topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                    DesignSurface!.CreateConnectionMenu(newParallelCorpusConnection, topLevelProjectIds, this);
+                    DesignSurfaceViewModel!.CreateConnectionMenu(newParallelCorpusConnection, topLevelProjectIds);
 
                 }
                 else
                 {
-                    DesignSurface!.DeleteConnection(newParallelCorpusConnection);
+                    DesignSurfaceViewModel!.DeleteConnection(newParallelCorpusConnection);
                 }
             }
             finally
@@ -1396,15 +1417,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //var language = message.LanguageCode;
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
             // re-render the context menus
-            foreach (var corpusNode in DesignSurface!.CorpusNodes)
+            foreach (var corpusNode in DesignSurfaceViewModel!.CorpusNodes)
             {
                 var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusNode.CorpusId);
-                DesignSurface!.CreateCorpusNodeMenu(corpusNode, tokenizedCorpora, this);
+                DesignSurfaceViewModel!.CreateCorpusNodeMenu(corpusNode, tokenizedCorpora);
             }
         }
 
         #endregion // Methods
 
 
+     
     }
 }

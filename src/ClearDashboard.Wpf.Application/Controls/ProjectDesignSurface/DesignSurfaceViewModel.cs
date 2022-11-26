@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Controls.Utils;
 using MahApps.Metro.IconPacks;
@@ -13,14 +15,220 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Views.Project;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
+using ClearDashboard.DAL.Alignment;
 
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
+
+    public interface IDesignSurfaceDataProvider<out TViewModel, TData>
+    {
+        TViewModel? DesignSurfaceViewModel { get; }
+        Task<TData> GetAsync();
+        Task SaveAsync(TData data, CancellationToken cancellationToken);
+    }
+
+    public class ProjectDesignSurfaceDataProvider : IDesignSurfaceDataProvider<DesignSurfaceViewModel,ProjectDesignSurfaceSerializationModel>
+    {
+        protected ILogger<ProjectDesignSurfaceDataProvider>? Logger { get; }
+
+        protected DashboardProjectManager? ProjectManager { get; }
+
+        //private readonly ILifetimeScope _lifecycleScope;
+        //private readonly IEventAggregator? _eventAggregator;
+        protected IMediator Mediator { get; }
+
+        public ProjectDesignSurfaceDataProvider(ILogger<ProjectDesignSurfaceDataProvider>? logger, DashboardProjectManager? projectManager, IMediator mediator)
+        {
+            Logger = logger;
+            ProjectManager = projectManager;
+            Mediator = mediator;
+        }
+
+        public DesignSurfaceViewModel? DesignSurfaceViewModel { get; set; }
+
+        public Task<ProjectDesignSurfaceSerializationModel> GetAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SaveAsync(ProjectDesignSurfaceSerializationModel data, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public async Task SaveDesignSurfaceData()
+        {
+            _ = await Task.Factory.StartNew(async () =>
+            {
+                var json = SerializeDesignSurface();
+
+                ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
+
+                Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
+
+                try
+                {
+                    await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+                    await Task.Delay(250);
+                }
+                catch (Exception ex)
+                {
+                    Logger?.LogError(ex,
+                        $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
+                }
+            });
+
+        }
+
+        public string SerializeDesignSurface()
+        {
+            var surface = new ProjectDesignSurfaceSerializationModel();
+
+            // save all the nodes
+            foreach (var corpusNode in DesignSurfaceViewModel!.CorpusNodes)
+            {
+                surface.CorpusNodeLocations.Add(new CorpusNodeLocation
+                {
+                    X = corpusNode.X,
+                    Y = corpusNode.Y,
+                    CorpusId = corpusNode.CorpusId,
+                });
+            }
+
+            JsonSerializerOptions options = new()
+            {
+                IncludeFields = true,
+                WriteIndented = false,
+                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+            };
+
+            return JsonSerializer.Serialize(surface, options);
+
+        }
+
+        public async Task LoadDesignSurface()
+        {
+           
+            Stopwatch sw = new();
+            sw.Start();
+
+            try
+            {
+                var designSurfaceData = LoadDesignSurfaceData();
+                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+                // restore the nodes
+                if (designSurfaceData != null)
+                {
+                    foreach (var corpusId in topLevelProjectIds.CorpusIds)
+                    {
+                        if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
+                        {
+                            // UNDO
+                            //AddManuscriptHebrewEnabled = false;
+                        }
+                        else if (corpusId.CorpusType == CorpusType.ManuscriptGreek.ToString())
+                        {
+                            // UNDO
+                            //AddManuscriptGreekEnabled = false;
+                        }
+
+                        var corpus = new Corpus(corpusId);
+                        var corpusNodeLocation = designSurfaceData.CorpusNodeLocations.FirstOrDefault(cn => cn.CorpusId == corpusId.Id);
+                        var point = corpusNodeLocation != null ? new Point(corpusNodeLocation.X, corpusNodeLocation.Y) : new Point();
+                        var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
+                        var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
+
+                        // UNDO
+                       DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
+                    }
+
+                    foreach (var parallelCorpusId in topLevelProjectIds.ParallelCorpusIds)
+                    {
+
+                        var sourceNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(p =>
+                            p.ParatextProjectId == parallelCorpusId.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
+                        var targetNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(p =>
+                            p.ParatextProjectId == parallelCorpusId.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
+
+
+                        if (sourceNode is not null && targetNode is not null)
+                        {
+                            var connection = new ParallelCorpusConnectionViewModel
+                            {
+                                SourceConnector = sourceNode.OutputConnectors[0],
+                                DestinationConnector = targetNode.InputConnectors[0],
+                                ParallelCorpusDisplayName = parallelCorpusId.DisplayName,
+                                ParallelCorpusId = parallelCorpusId,
+                                SourceFontFamily = parallelCorpusId.SourceTokenizedCorpusId?.CorpusId?.FontFamily,
+                                TargetFontFamily = parallelCorpusId.TargetTokenizedCorpusId?.CorpusId?.FontFamily,
+                            };
+                            DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
+                            // add in the context menu
+
+                            // UnDO
+                            //DesignSurfaceViewModel!.CreateConnectionMenu(connection, topLevelProjectIds, this);
+                        }
+                    }
+                }
+
+
+            }
+            finally
+            {
+                // UNDO
+                // LoadingDesignSurface = false;
+                //  DesignSurfaceLoaded = true;
+                sw.Stop();
+
+                Debug.WriteLine($"LoadCanvas took {sw.ElapsedMilliseconds} ms ({sw.Elapsed.Seconds} seconds)");
+            }
+
+        }
+
+        private ProjectDesignSurfaceSerializationModel? LoadDesignSurfaceData()
+        {
+            if (ProjectManager!.CurrentProject is null)
+            {
+                return null;
+            }
+
+            //ProjectName = ProjectManager.CurrentProject.ProjectName!;
+
+            if (ProjectManager?.CurrentProject.DesignSurfaceLayout == "")
+            {
+                return null;
+            }
+
+            var json = ProjectManager?.CurrentProject.DesignSurfaceLayout;
+
+            if (string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+
+            JsonSerializerOptions options = new()
+            {
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                IncludeFields = true,
+                WriteIndented = true,
+                NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals
+            };
+
+            return JsonSerializer.Deserialize<ProjectDesignSurfaceSerializationModel>(json, options);
+        }
+
+    }
     /// <summary>
     /// Defines a design surface with nodes and connections between the nodes.
     /// </summary>
@@ -48,7 +256,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private readonly IEventAggregator? _eventAggregator;
         private readonly IMediator _mediator;
 
-
+        private readonly IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? _designSurfaceDataProvider;
         ///
         /// The current scale at which the content is being viewed.
         /// 
@@ -88,6 +296,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// 
         private double _contentViewportHeight;
 
+
+        private ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel => (ProjectDesignSurfaceViewModel)Parent;
         ///
         /// The current scale at which the content is being viewed.
         /// 
@@ -183,6 +393,36 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
                 return _connections;
             }
+        }
+
+        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        {
+            return base.OnInitializeAsync(cancellationToken);
+        }
+
+        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            return base.OnActivateAsync(cancellationToken);
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            base.OnViewReady(view);
+        }
+
+        protected override void OnViewAttached(object view, object context)
+        {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            if (ProjectDesignSurface == null)
+            {
+                if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
+                {
+                    // ReSharper disable once AssignNullToNotNullAttribute
+                    ProjectDesignSurface = (Wpf.Controls.ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
+
+                }
+            }
+            base.OnViewAttached(view, context);
         }
 
 
@@ -338,14 +578,14 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
 
-        public async Task UpdateNodeTokenization(CorpusNodeViewModel node, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel)
+        public async Task UpdateNodeTokenization(CorpusNodeViewModel node)
         {
             var corpusNode = CorpusNodes.FirstOrDefault(b => b.Id == node.Id);
             if (corpusNode is not null)
             {
                 var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(_mediator);
                 var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusNode.CorpusId);
-                CreateCorpusNodeMenu(corpusNode, tokenizedCorpora, projectDesignSurfaceViewModel);
+                CreateCorpusNodeMenu(corpusNode, tokenizedCorpora);
             }
         }
 
@@ -356,30 +596,29 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <param name="topLevelProjectIds"></param>
         /// <param name="projectDesignSurfaceViewModel"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void CreateConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel)
+        public void CreateConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
         {
             // initiate the menu system
             parallelCorpusConnection.MenuItems.Clear();
 
             var connectionMenuItems = new BindableCollection<ParallelCorpusConnectionMenuItemViewModel>();
 
-            AddAlignmentSetMenu(parallelCorpusConnection, topLevelProjectIds, projectDesignSurfaceViewModel, connectionMenuItems);
-            AddMenuSeparator(projectDesignSurfaceViewModel, connectionMenuItems);
-            AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, projectDesignSurfaceViewModel, connectionMenuItems);
-            AddMenuSeparator(projectDesignSurfaceViewModel, connectionMenuItems);
-            AddPropertiesMenu(parallelCorpusConnection, projectDesignSurfaceViewModel, connectionMenuItems);
+            AddAlignmentSetMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
+            AddMenuSeparator(connectionMenuItems);
+            AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
+            AddMenuSeparator(connectionMenuItems);
+            AddPropertiesMenu(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems);
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
         }
 
-        private static void AddMenuSeparator(ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
-            BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
+        private static void AddMenuSeparator(BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
                 Header = "",
                 Id = "SeparatorId",
-                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                //ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                 IsSeparator = true
             });
         }
@@ -414,7 +653,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             });
 
 
-            AddMenuSeparator(projectDesignSurfaceViewModel, connectionMenuItems);
+            AddMenuSeparator(connectionMenuItems);
             //connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             //{
             //    Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
@@ -475,17 +714,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 TargetParatextId = parallelCorpusConnection.DestinationConnector?.ParatextId,
             });
 
-            AddMenuSeparator(projectDesignSurfaceViewModel, connectionMenuItems);
-            //new ParallelCorpusConnectionMenuItemViewModel
-            //{
-            //    Header = "",
-            //    Id = "SeparatorId",
-            //    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
-            //    IsSeparator = true
-            //}
-
-
-
+            AddMenuSeparator( connectionMenuItems);
             var alignmentSets = topLevelProjectIds.AlignmentSetIds.Where(alignmentSet =>
                 alignmentSet.ParallelCorpusId == parallelCorpusConnection.ParallelCorpusId);
             // ALIGNMENT SETS
@@ -528,11 +757,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <param name="tokenizedCorpora"></param>
         /// <param name="projectDesignSurfaceViewModel"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel)
+        public void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
         {
             // initiate the menu system
             corpusNode.MenuItems.Clear();
             corpusNode.TokenizationCount = 0;
+
+            //var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusNode.CorpusId);
 
             BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
 
@@ -545,10 +776,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", _logger!),
                     Id = "AddTokenizationId",
                     IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
-                    ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                     CorpusNodeViewModel = corpusNode,
                 });
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel, IsSeparator = true });
+                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
             }
 
             foreach (var tokenizedCorpus in tokenizedCorpora)
@@ -569,7 +800,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 // Add Verses to focused enhanced view
                                 Header = LocalizationStrings.Get("Pds_AddToEnhancedViewMenu", _logger!),
                                 Id = "AddToEnhancedViewId",
-                                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                                ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
                                 CorpusNodeViewModel = corpusNode,
                                 Tokenizer = tokenizer.ToString(),
@@ -578,7 +809,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             {
                                 // Show Verses in New Windows
                                 Header = LocalizationStrings.Get("Pds_ShowVersesMenu", _logger!),
-                                Id = "ShowVerseId", ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                                Id = "ShowVerseId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentText.ToString(),
                                 CorpusNodeViewModel = corpusNode,
                                 Tokenizer = tokenizer.ToString(),
@@ -603,7 +834,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             {
                 Header = "",
                 Id = "SeparatorId",
-                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
+                ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                 IsSeparator = true
             });
 
@@ -614,7 +845,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 Id = "PropertiesId",
                 IconKind = PackIconPicolIconsKind.Settings.ToString(),
                 CorpusNodeViewModel = corpusNode,
-                ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel
+                ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel
             });
 
             corpusNode.MenuItems = nodeMenuItems;
@@ -709,7 +940,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public DesignSurfaceViewModel(INavigationService? navigationService,
             ILogger<DesignSurfaceViewModel>? logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, ILifetimeScope lifecycleScope, IMediator mediator)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, ILifetimeScope lifecycleScope, IMediator mediator, IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider)
         {
             //_navigationService = navigationService;
             //_projectManager = projectManager;
@@ -717,6 +948,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             _eventAggregator = eventAggregator;
             _lifecycleScope = lifecycleScope;
             _mediator = mediator;
+            _designSurfaceDataProvider = designSurfaceDataProvider;
         }
         #endregion
     }
