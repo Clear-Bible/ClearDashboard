@@ -16,6 +16,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -104,7 +105,10 @@ namespace ClearDashboard.Wpf.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<CorpusNodeViewModel>().AsSelf().InstancePerLifetimeScope();
+            //builder.RegisterType<CorpusNodeViewModel>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectDesignSurfaceDataProvider>()
+                .As<IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>>()
+                .InstancePerLifetimeScope();
             base.Load(builder);
         }
     }
