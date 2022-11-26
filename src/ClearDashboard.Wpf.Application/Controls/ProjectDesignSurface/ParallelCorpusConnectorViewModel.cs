@@ -30,11 +30,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         #endregion Internal Data Members
 
-        public ParallelCorpusConnectorViewModel(string name, IEventAggregator? eventAggregator, string paratextProjectId)
+        public ParallelCorpusConnectorViewModel(string name, string paratextProjectId, ConnectorType connectorType, IEventAggregator? eventAggregator)
         {
             _eventAggregator = eventAggregator;
             Name = name;
-            Type = ConnectorType.Undefined;
+            ConnectorType = connectorType;
             ParatextId = paratextProjectId;
         }
 
@@ -48,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// Defines the type of the connector.
         /// </summary>
-        public ConnectorType Type { get; internal set; }
+        public ConnectorType ConnectorType { get; internal set; }
 
         /// <summary>
         /// Returns 'true' if the connector connected to another node.

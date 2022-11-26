@@ -55,8 +55,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                                 CorpusNodeViewModel sourceCorpusNodeViewModel,
                                 CorpusNodeViewModel targetCorpusNodeViewModel,
                                 IEnumerable<TokenizedTextCorpusId> tokenizedCorpora,
-                                //TokenizedTextCorpusId sourceTokenizedTextCorpusId,
-                                //TokenizedTextCorpusId targetTokenizedTextCorpusId,
                                 DashboardProjectManager? projectManager,
                                 INavigationService navigationService,
                                 ILogger<ParallelCorpusDialogViewModel> logger,
@@ -228,11 +226,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
 
-                //var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
-                //    new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
-                //var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
-                //    new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
-
                 var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, sourceTokenizedTextCorpusId);
                 var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, targetTokenizedTextCorpusId);
 
@@ -355,9 +348,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                                 message);
                             Logger!.LogInformation(message);
 
-
-                            // CODE REVIEW:  Is this a good idea? NO!
-                            //cancellationToken.ThrowIfCancellationRequested();
                         }
                     ), SymmetrizationHeuristic.GrowDiagFinalAnd);
 

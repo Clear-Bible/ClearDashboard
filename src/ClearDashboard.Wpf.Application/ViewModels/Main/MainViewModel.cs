@@ -100,7 +100,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        private bool InComingChangesStarted { get; set; }
+        private bool IncomingChangesStarted { get; set; }
 
         private bool _isBusy;
         public bool IsBusy
@@ -804,7 +804,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             RebuildMenu();
 
-            SetupProjectDesignSurface();
+            await SetupProjectDesignSurface();
 
             Items.Clear();
 
@@ -845,7 +845,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
 
-            InComingChangesStarted = true;
+            IncomingChangesStarted = true;
 
             // set the CurrentBcv prior to listening to the event
             CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
@@ -853,23 +853,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //CalculateBooks();
             //CalculateChapters();
             //CalculateVerses();
-            InComingChangesStarted = false;
+            IncomingChangesStarted = false;
 
             // Subscribe to changes of the Book Chapter Verse data object.
             CurrentBcv.PropertyChanged += BcvChanged;
         }
 
-        private void SetupProjectDesignSurface()
+        private async Task SetupProjectDesignSurface()
         {
             _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
             var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
             ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
             _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
-
-           // _projectDesignSurfaceViewModel.ActivateWith(this);
-
             // force a load to happen as it is getting swallowed up elsewhere
-            _projectDesignSurfaceViewModel.LoadDesignSurface().Wait();
+           await  _projectDesignSurfaceViewModel.LoadDesignSurface();
         }
 
         #endregion //Constructor
@@ -1735,12 +1732,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
-                InComingChangesStarted = true;
+                IncomingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
                 //CalculateChapters();
                 //CalculateVerses();
-                InComingChangesStarted = false;
+                IncomingChangesStarted = false;
             }
         }
 
@@ -1749,24 +1746,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (ProjectManager?.CurrentParatextProject is not null)
             {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+                try
+                {
+                    // send to log
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
 
-                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-                InComingChangesStarted = true;
+                    BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+                    IncomingChangesStarted = true;
 
-                // add in the books to the dropdown list
-                //CalculateBooks();
+                    // add in the books to the dropdown list
+                    //CalculateBooks();
 
-                // set the CurrentBcv prior to listening to the event
-                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                    // set the CurrentBcv prior to listening to the event
+                    CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
-                //CalculateChapters();
-                //CalculateVerses();
+                    //CalculateChapters();
+                    //CalculateVerses();
 
-                NotifyOfPropertyChange(() => CurrentBcv);
-                InComingChangesStarted = false;
+                    NotifyOfPropertyChange(() => CurrentBcv);
+                }
+                finally
+                {
+                    IncomingChangesStarted = false;
+                }
+
             }
             else
             {
@@ -1876,18 +1880,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
 
-        public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
             // pass up to the Project Design Surface the message
-            if (_projectDesignSurfaceViewModel is not null)
-            {
-                _projectDesignSurfaceViewModel.UiLanguageChangedMessage(message);
-            }
+            //if (_projectDesignSurfaceViewModel is not null)
+            //{
+            //    _projectDesignSurfaceViewModel.UiLanguageChangedMessage(message);
+            //}
 
             // rebuild the menu system with the new language
             RebuildMenu();
-
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)

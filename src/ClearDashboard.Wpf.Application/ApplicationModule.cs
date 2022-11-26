@@ -15,6 +15,7 @@ using System.Threading;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -99,6 +100,14 @@ namespace ClearDashboard.Wpf.Application
         }
     }
 
+    internal class ProjectDesignSurfaceModule : Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<CorpusNodeViewModel>().AsSelf().InstancePerLifetimeScope();
+            base.Load(builder);
+        }
+    }
 
     internal class ApplicationModule : Module
     {

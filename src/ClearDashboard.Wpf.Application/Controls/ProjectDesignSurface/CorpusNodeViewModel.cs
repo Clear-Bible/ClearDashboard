@@ -15,7 +15,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// Defines a node in the view-model.
     /// CorpusNodes are connected to other nodes through attached connectors (aka anchor/connection points).
     /// </summary>
-    public class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChangedMessage>
+    public class CorpusNodeViewModel : Screen, IHandle<ConnectionSelectedChangedMessage>
     {
 
         #region events
@@ -327,7 +327,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = this;
-                connector.Type = ConnectorType.Input;
+                connector.ConnectorType = ConnectorType.Input;
             }
         }
 
@@ -339,7 +339,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = null;
-                connector.Type = ConnectorType.Undefined;
+                connector.ConnectorType = ConnectorType.Undefined;
             }
         }
 
@@ -351,7 +351,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = this;
-                connector.Type = ConnectorType.Output;
+                connector.ConnectorType = ConnectorType.Output;
             }
         }
 
@@ -363,7 +363,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = null;
-                connector.Type = ConnectorType.Undefined;
+                connector.ConnectorType = ConnectorType.Undefined;
             }
         }
 
