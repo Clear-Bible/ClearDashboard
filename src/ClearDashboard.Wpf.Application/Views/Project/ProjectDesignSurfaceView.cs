@@ -289,7 +289,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             }
             else
             {
-                nodes = ViewModel.DesignSurface.CorpusNodes;
+                nodes = ViewModel.DesignSurfaceViewModel.CorpusNodes;
                 if (nodes.Count == 0)
                 {
                     return;

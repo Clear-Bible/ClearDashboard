@@ -1079,11 +1079,11 @@
                 <controls:ZoomAndPanControl
                     x:Name="zoomAndPanControl"
                     Background="LightGray"
-                    ContentOffsetX="{Binding DesignSurface.ContentOffsetX, Mode=TwoWay}"
-                    ContentOffsetY="{Binding DesignSurface.ContentOffsetY, Mode=TwoWay}"
-                    ContentScale="{Binding DesignSurface.ContentScale, Mode=TwoWay}"
-                    ContentViewportHeight="{Binding DesignSurface.ContentViewportHeight, Mode=OneWayToSource}"
-                    ContentViewportWidth="{Binding DesignSurface.ContentViewportWidth, Mode=OneWayToSource}"
+                    ContentOffsetX="{Binding DesignSurfaceViewModel.ContentOffsetX, Mode=TwoWay}"
+                    ContentOffsetY="{Binding DesignSurfaceViewModel.ContentOffsetY, Mode=TwoWay}"
+                    ContentScale="{Binding DesignSurfaceViewModel.ContentScale, Mode=TwoWay}"
+                    ContentViewportHeight="{Binding DesignSurfaceViewModel.ContentViewportHeight, Mode=OneWayToSource}"
+                    ContentViewportWidth="{Binding DesignSurfaceViewModel.ContentViewportWidth, Mode=OneWayToSource}"
                     Focusable="False">
 
 
@@ -1097,7 +1097,7 @@
                             This grid specifies the size of the ZoomAndPanControl's content.
                             It wraps up both the ProjectDesignSurfaceView and drag-zooming Canvas.
                         -->
-                        <Grid Width="{Binding DesignSurface.ContentWidth}" Height="{Binding DesignSurface.ContentHeight}">
+                        <Grid Width="{Binding DesignSurfaceViewModel.ContentWidth}" Height="{Binding DesignSurfaceViewModel.ContentHeight}">
 
                             <!--  In this sample the ProjectDesignSurfaceView is the content displayed by the ZoomAndPanControl.  -->
 
@@ -1116,13 +1116,13 @@
 
                             <controls:ProjectDesignSurface
                                 x:Name="ProjectDesignSurface"
-                                ConnectionsSource="{Binding Path=DesignSurface.ParallelCorpusConnections}"
+                                ConnectionsSource="{Binding Path=DesignSurfaceViewModel.ParallelCorpusConnections}"
                                 ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
                                 MouseDown="OnDesignSurfaceMouseDown"
                                 MouseMove="OnMouseMove"
                                 MouseUp="OnDesignSurfaceMouseUp"
                                 MouseWheel="OnMouseWheel"
-                                NodesSource="{Binding DesignSurface.CorpusNodes}"
+                                NodesSource="{Binding DesignSurfaceViewModel.CorpusNodes}"
                                 cm:Message.Attach="[Event NodeDragCompleted] = [Action OnCorpusNodeDragCompleted($this,$eventArgs)];
                                                    [Event ConnectionDragCompleted] = [Action OnParallelCorpusConnectionDragCompleted($this, $eventArgs)];
                                                    [Event ConnectionDragStarted] = [Action OnParallelCorpusConnectionDragStarted($this, $eventArgs)];
