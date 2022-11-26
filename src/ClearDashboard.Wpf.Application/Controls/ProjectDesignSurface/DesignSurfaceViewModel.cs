@@ -227,7 +227,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// gets the position below the last node on the surface
         /// </summary>
         /// <returns></returns>
-        public Point GetFreeSpot()
+        private Point GetFreeSpot()
         {
             double x = 25;
             double y = 25;
