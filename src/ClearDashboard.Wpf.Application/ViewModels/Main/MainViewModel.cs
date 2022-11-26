@@ -477,7 +477,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         //    await ActivateItemAsync(viewModel, cancellationToken);
         //}
 
-        private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
+        private async Task<TViewModel> ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
             where TViewModel : Screen
         {
 
@@ -490,6 +490,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
+            return viewModel;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -803,9 +804,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             RebuildMenu();
 
-            await SetupProjectDesignSurface();
+            //await SetupProjectDesignSurface();
 
             Items.Clear();
+
+          
 
             // documents
             await ActivateItemAsync<EnhancedViewModel>();
@@ -815,6 +818,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<PinsViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
             await ActivateItemAsync<WordMeaningsViewModel>();
+
+
+            _projectDesignSurfaceViewModel = await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
+            _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
+            await _projectDesignSurfaceViewModel.LoadDesignSurface();
 
             // remove all existing windows
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
@@ -871,15 +879,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             CurrentBcv.PropertyChanged += BcvChanged;
         }
 
-        private async Task SetupProjectDesignSurface()
-        {
-            _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
-            var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
-            ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
-            _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
-            // force a load to happen as it is getting swallowed up elsewhere
-           await  _projectDesignSurfaceViewModel.LoadDesignSurface();
-        }
+        //private async Task SetupProjectDesignSurface()
+        //{
+        //    _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
+        //    var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
+        //    ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
+        //    _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
+        //    // force a load to happen as it is getting swallowed up elsewhere
+        //   await  _projectDesignSurfaceViewModel.LoadDesignSurface();
+        //}
 
         #endregion //Constructor
 
@@ -1435,6 +1443,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             case TextCollectionsViewModel:
                             case WordMeaningsViewModel:
                                 _tools.Add((ToolViewModel)t);
+                                break;
+
+                            case ProjectDesignSurfaceViewModel:
+                                break;
+                            default:
                                 break;
                         }
                     }
