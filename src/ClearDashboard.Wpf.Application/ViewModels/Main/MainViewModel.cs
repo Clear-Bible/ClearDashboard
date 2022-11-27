@@ -520,7 +520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (Parameter != null)
             {
 
-                Logger.LogInformation($"Received {Parameter.ProjectName}.");
+                Logger.LogInformation($"Loading project '{Parameter.ProjectName}'.");
                 if (Parameter.IsNew)
                 {
                     await ProjectManager.CreateNewProject(Parameter.ProjectName);
@@ -551,8 +551,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
 
             await PinsViewModel.DeactivateAsync(close);
-
-
+            await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
 
             if (_lastLayout == "")
             {
