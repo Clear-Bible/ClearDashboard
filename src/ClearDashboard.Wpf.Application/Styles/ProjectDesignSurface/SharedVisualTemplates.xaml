@@ -3,65 +3,65 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls">
 
-    <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     <!--  The border brush for nodes.  -->
-    <SolidColorBrush x:Key="nodeBorderBrush" Color="Black" />
+    <SolidColorBrush x:Key="NodeBorderBrush" Color="Black" />
 
     <!--  The fill brushes for nodes.  -->
-    <LinearGradientBrush x:Key="nodeFillBrushStandard" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushStandard" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="#7FC9FF" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushStudyBible" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushStudyBible" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="DarkSlateGray" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushStudyBibleAdditions" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushStudyBibleAdditions" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="DarkSlateGray" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushBacktranslation" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushBacktranslation" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="Orange" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceProject" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceProject" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="PaleGoldenrod" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceResource" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceResource" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="DarkOliveGreen" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceDaughter" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceDaughter" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="RosyBrown" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceDictionary" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceDictionary" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="CornflowerBlue" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceAuxilary" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceAuxilary" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="Beige" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceUnknown" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceUnknown" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="Silver" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceManuscript" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceManuscript" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="MediumOrchid" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="nodeFillBrushReferenceConsultantNotes" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceConsultantNotes" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="BurlyWood" />
     </LinearGradientBrush>
     <!--  The brush for connections.  -->
-    <SolidColorBrush x:Key="connectionBrush" Color="Black" />
+    <SolidColorBrush x:Key="ConnectionBrush" Color="Black" />
 
     <!--  The brush for connectors.  -->
-    <SolidColorBrush x:Key="connectorBackgroundBrush" Color="White" />
+    <SolidColorBrush x:Key="ConnectorBackgroundBrush" Color="White" />
 
     <!--
         Define a style for 'NodeItem'.
@@ -82,7 +82,7 @@
     <!--
         A data-template that defines the UI for input connectors.
     -->
-    <DataTemplate x:Key="inputConnectorTemplate">
+    <DataTemplate x:Key="InputConnectorTemplate">
         <Grid Margin="0,2,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -109,7 +109,7 @@
     <!--
         A data-template that defines the UI for output connectors.
     -->
-    <DataTemplate x:Key="outputConnectorTemplate">
+    <DataTemplate x:Key="OutputConnectorTemplate">
         <Grid Margin="0,2,0,0" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -136,9 +136,9 @@
                 <!--  Show a black dot at the start of the arrow when connected.  -->
                 <Ellipse
                     Margin="3"
-                    Fill="{StaticResource connectionBrush}"
+                    Fill="{StaticResource ConnectionBrush}"
                     IsHitTestVisible="False"
-                    Visibility="{Binding IsConnectionAttached, Converter={StaticResource booleanToVisibilityConverter}}" />
+                    Visibility="{Binding IsConnectionAttached, Converter={StaticResource BooleanToVisibilityConverter}}" />
             </Grid>
         </Grid>
     </DataTemplate>
