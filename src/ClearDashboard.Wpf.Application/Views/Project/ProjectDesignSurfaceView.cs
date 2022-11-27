@@ -142,7 +142,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// <summary>
         /// Event raised on mouse move in the ProjectDesignSurfaceView.
         /// </summary>
-        private void OnMouseMove(object sender, MouseEventArgs e)
+        private void OnDesignSurfaceMouseMove(object sender, MouseEventArgs e)
         {
             if (_mouseHandlingMode == MouseHandlingMode.Panning)
             {
@@ -289,7 +289,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             }
             else
             {
-                nodes = ViewModel.DesignSurfaceViewModel.CorpusNodes;
+                nodes = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CorpusNodes;
                 if (nodes.Count == 0)
                 {
                     return;
@@ -344,10 +344,6 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             zoomAndPanControl.AnimatedZoomTo(1.0);
         }
 
-        //private void ToggleCorpusVisibility_Executed(object sender, ExecutedRoutedEventArgs e)
-        //{
-        //    ViewModel.ToggleCorpusVisible("");
-        //}
 
         /// <summary>
         /// Jump back to the previous zoom level.
