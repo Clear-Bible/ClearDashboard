@@ -176,6 +176,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            Items.Clear();
+
             DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
 
             EventAggregator.SubscribeOnUIThread(this);
@@ -213,28 +215,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             return viewModel;
         }
-
-        protected override async  void OnViewAttached(object view, object context)
-        {
-            //
-            // Create a design surface, the root of the view-model.
-            //
-           //DesignSurfaceViewModel = LifetimeScope!.Resolve<DesignSurfaceViewModel>();
-          
-
-            //// ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            //if (DesignSurfaceViewModel.ProjectDesignSurface == null)
-            //{
-            //    if (view is ProjectDesignSurfaceView projectDesignSurfaceView)
-            //    {
-            //        // ReSharper disable once AssignNullToNotNullAttribute
-            //        DesignSurfaceViewModel.ProjectDesignSurface = (ProjectDesignSurface)projectDesignSurfaceView.FindName("ProjectDesignSurface");
-
-            //    }
-            //}
-            base.OnViewAttached(view, context);
-        }
-
 
         #endregion //Constructor
 
@@ -674,8 +654,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await AddParatextCorpus("");
         }
 
-        // ReSharper restore UnusedMember.Global
-        // ReSharper disable once UnusedMember.Global
         public async Task AddParatextCorpus(string selectedParatextProjectId)
         {
             Logger!.LogInformation("AddParatextCorpus called.");
