@@ -3,17 +3,24 @@ using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
+using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using ClearDashboard.Wpf.Application.Views.Main;
@@ -25,6 +32,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -32,20 +42,8 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using DockingManager = AvalonDock.DockingManager;
-using System.Dynamic;
-using ClearApplicationFoundation.LogHelpers;
-using System.Drawing.Imaging;
-using System.Drawing;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using Point = System.Drawing.Point;
-using System.Windows.Shell;
-using System.IO.Compression;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -75,7 +73,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
-        private ProjectDesignSurfaceView _projectDesignSurfaceControl;
+        private ProjectDesignSurfaceView _projectDesignSurfaceView;
         private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
 #pragma warning restore CA1416 // Validate platform compatibility
 
@@ -651,14 +649,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
-                _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
+                _projectDesignSurfaceView = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
 
                 // subscribe to the event aggregator
                 //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
             await Task.Delay(250);
-            Init();
+            Initialize();
 
 
             // load the document window contents
@@ -800,15 +798,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Logger.LogInformation($"LoadDocuments - Total Load Time {deserialized.Count} documents in {sw.ElapsedMilliseconds} ms");
         }
 
-        private async void Init()
+        private async void Initialize()
         {
             RebuildMenu();
 
             //await SetupProjectDesignSurface();
 
             Items.Clear();
-
-          
 
             // documents
             await ActivateItemAsync<EnhancedViewModel>();
@@ -821,7 +817,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 
             _projectDesignSurfaceViewModel = await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
-            _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
+            _projectDesignSurfaceView.DataContext = _projectDesignSurfaceViewModel;
             await _projectDesignSurfaceViewModel.LoadDesignSurface();
 
             // remove all existing windows
@@ -837,7 +833,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 //var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
                 //Settings.Default.LastLayout = filePath;
                 // check to see if the layout exists
-                string layoutPath = Settings.Default.LastLayout;
+                var layoutPath = Settings.Default.LastLayout;
                 LoadLayout(layoutSerializer, File.Exists(layoutPath) ? layoutPath : FileLayouts[0].LayoutPath);
             }
 
@@ -879,15 +875,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             CurrentBcv.PropertyChanged += BcvChanged;
         }
 
-        //private async Task SetupProjectDesignSurface()
-        //{
-        //    _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
-        //    var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
-        //    ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
-        //    _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
-        //    // force a load to happen as it is getting swallowed up elsewhere
-        //   await  _projectDesignSurfaceViewModel.LoadDesignSurface();
-        //}
 
         #endregion //Constructor
 
@@ -902,21 +889,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return;
             }
 
-            string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
+            var tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
 
-            FileInfo fi = new FileInfo(tailBlazorPath);
-            if (fi.Exists == false)
+            var fileInfo = new FileInfo(tailBlazorPath);
+            if (fileInfo.Exists == false)
             {
                 return;
             }
 
             try
             {
-                Process p = new Process();
-                p.StartInfo.WorkingDirectory = fi.Directory.FullName;
-                p.StartInfo.FileName = fi.FullName;
-                p.StartInfo.Arguments = dashboardLogPath.Path;
-                p.Start();
+                var process = new Process();
+                process.StartInfo.WorkingDirectory = fileInfo.Directory.FullName;
+                process.StartInfo.FileName = fileInfo.FullName;
+                process.StartInfo.Arguments = dashboardLogPath.Path;
+                process.Start();
             }
             catch (Exception e)
             {
@@ -987,8 +974,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             graphics.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
                         }
-
-
                         bitmap.Save(destinationScreenShotPath, ImageFormat.Jpeg);
                     }
                 }
@@ -999,7 +984,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            
             List<string> files = new();
             if (destinationParatextLogPath != "")
             {
@@ -1058,7 +1042,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void AddNewEnhancedView()
         {
-            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
+            var viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
@@ -1097,7 +1081,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private ObservableCollection<LayoutFile> GetFileLayouts()
         {
-            int id = 0;
+            var id = 0;
             ObservableCollection<LayoutFile> fileLayouts = new();
             // add in the default layouts
             var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
@@ -1107,8 +1091,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 foreach (var file in files.Where(f => !f.StartsWith("Project")))
                 {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+                    var fileInfo = new FileInfo(file);
+                    var name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
 
                     fileLayouts.Add(new LayoutFile
                     {
