@@ -187,8 +187,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }), cancellationToken);
 
             // ReSharper disable once MethodSupportsCancellation
-            _ = await Task.Factory.StartNew(async () =>
-           //_ = Task.Run(() =>
+            _ = Task.Run(async () =>
             {
                 await GenerateData().ConfigureAwait(false);
             }).ConfigureAwait(true);
