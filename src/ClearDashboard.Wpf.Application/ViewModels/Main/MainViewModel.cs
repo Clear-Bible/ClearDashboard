@@ -75,6 +75,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private DockingManager _dockingManager = new();
         private ProjectDesignSurfaceView _projectDesignSurfaceView;
         private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
+
+        public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel
+        {
+            get => _projectDesignSurfaceViewModel;
+            set => Set(ref _projectDesignSurfaceViewModel, value);
+        }
+
+        public PinsViewModel PinsViewModel
+        {
+            get => _pinsViewModel;
+            set => Set(ref _pinsViewModel, value);
+        }
 #pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
@@ -381,6 +393,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
         private string _projectName;
+        private PinsViewModel _pinsViewModel;
+
+
         public string ProjectName
         {
             get => _projectName;
@@ -517,7 +532,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 await NoteManager.InitializeAsync();
 
-                //SetupProjectDesignSurface();
             }
 
             await base.OnInitializeAsync(cancellationToken);
@@ -532,7 +546,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+
+
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
+
+            await PinsViewModel.DeactivateAsync(close);
+
+
 
             if (_lastLayout == "")
             {
@@ -636,6 +656,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
 
+            Items.Clear();
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -811,15 +832,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
-            await ActivateItemAsync<PinsViewModel>();
+            PinsViewModel = await ActivateItemAsync<PinsViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
             await ActivateItemAsync<WordMeaningsViewModel>();
 
-
-            _projectDesignSurfaceViewModel = await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
-            _projectDesignSurfaceView.DataContext = _projectDesignSurfaceViewModel;
-            await _projectDesignSurfaceViewModel.LoadDesignSurface();
-
+            // Activate the ProjectDesignSurfaceViewModel - this will call the appropriate
+            // Caliburn.Micro Screen lifecycle methods.  Also note that this will add ProjectDesignSurfaceViewModel 
+            // as the last Screen managed by this conductor implementation.
+            ProjectDesignSurfaceViewModel = await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
             // remove all existing windows
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
 
@@ -1423,13 +1443,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 break;
 
                             case BiblicalTermsViewModel:
-                            case PinsViewModel:
+                            case ParatextViews.PinsViewModel:
                             case TextCollectionsViewModel:
                             case WordMeaningsViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
 
-                            case ProjectDesignSurfaceViewModel:
+                            case Project.ProjectDesignSurfaceViewModel:
                                 break;
                             default:
                                 break;
@@ -1512,7 +1532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (type)
                     {
                         case BiblicalTermsViewModel:
-                        case PinsViewModel:
+                        case ParatextViews.PinsViewModel:
                         case TextCollectionsViewModel:
                         case WordMeaningsViewModel:
                             return (ToolViewModel)t;
