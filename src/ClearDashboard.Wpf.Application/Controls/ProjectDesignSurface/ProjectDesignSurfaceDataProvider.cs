@@ -19,7 +19,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 public interface IDesignSurfaceDataProvider<out TViewModel, TData>
 {
     TViewModel? DesignSurfaceViewModel { get; }
-    Task<TData> GetAsync();
+    Task<TData?> GetAsync();
     Task SaveAsync(TData data, CancellationToken cancellationToken);
 }
 
@@ -42,14 +42,17 @@ public class ProjectDesignSurfaceDataProvider : IDesignSurfaceDataProvider<Desig
 
     public DesignSurfaceViewModel? DesignSurfaceViewModel { get; set; }
 
-    public Task<ProjectDesignSurfaceSerializationModel> GetAsync()
+    public async Task<ProjectDesignSurfaceSerializationModel?> GetAsync()
     {
-        throw new NotImplementedException();
+        var projectDesignSurfaceSerializationModel = LoadDesignSurfaceData();
+        await Task.CompletedTask;
+        return projectDesignSurfaceSerializationModel;
     }
 
-    public Task SaveAsync(ProjectDesignSurfaceSerializationModel data, CancellationToken cancellationToken)
+    public async Task SaveAsync(ProjectDesignSurfaceSerializationModel data, CancellationToken cancellationToken)
+    //public async Task SaveAsync()
     {
-        throw new NotImplementedException();
+        await SaveDesignSurfaceData();
     }
 
 
@@ -103,17 +106,20 @@ public class ProjectDesignSurfaceDataProvider : IDesignSurfaceDataProvider<Desig
 
     }
 
-    public async Task LoadDesignSurface()
+    public async Task<ProjectDesignSurfaceSerializationModel?> LoadDesignSurface()
     {
+
         DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
         DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
-
+        DesignSurfaceViewModel.ProjectDesignSurfaceViewModel.LoadingDesignSurface = true;
+        DesignSurfaceViewModel.ProjectDesignSurfaceViewModel.DesignSurfaceLoaded = false;
         Stopwatch sw = new();
         sw.Start();
 
+        ProjectDesignSurfaceSerializationModel? designSurfaceData = null;
         try
         {
-            var designSurfaceData = LoadDesignSurfaceData();
+            designSurfaceData = LoadDesignSurfaceData();
             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
             // restore the nodes
@@ -166,20 +172,21 @@ public class ProjectDesignSurfaceDataProvider : IDesignSurfaceDataProvider<Desig
                         //DesignSurfaceViewModel!.CreateConnectionMenu(connection, topLevelProjectIds, this);
                     }
                 }
+
+                
             }
 
 
         }
         finally
         {
-            // UNDO
-            // LoadingDesignSurface = false;
-            //  DesignSurfaceLoaded = true;
+            DesignSurfaceViewModel.ProjectDesignSurfaceViewModel.LoadingDesignSurface = false;
+            DesignSurfaceViewModel.ProjectDesignSurfaceViewModel.DesignSurfaceLoaded = true;
             sw.Stop();
 
             Debug.WriteLine($"LoadCanvas took {sw.ElapsedMilliseconds} ms ({sw.Elapsed.Seconds} seconds)");
         }
-
+        return designSurfaceData;
     }
 
     public ProjectDesignSurfaceSerializationModel? LoadDesignSurfaceData()

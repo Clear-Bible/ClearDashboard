@@ -97,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private double _contentViewportHeight;
 
 
-        private ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel => (ProjectDesignSurfaceViewModel)Parent;
+        public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel => (ProjectDesignSurfaceViewModel)Parent;
         ///
         /// The current scale at which the content is being viewed.
         /// 
@@ -234,7 +234,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public DesignSurfaceViewModel(INavigationService? navigationService,
             ILogger<DesignSurfaceViewModel>? logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator, IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider)
+            DashboardProjectManager? projectManager, IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator, 
+            IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider)
         {
             //_navigationService = navigationService;
             //_projectManager = projectManager;
