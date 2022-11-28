@@ -111,21 +111,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _selectedDesignSurfaceComponent, value);
         }
 
-        private bool _addManuscriptHebrewEnabled = true;
-        public bool AddManuscriptHebrewEnabled
-        {
-            get => _addManuscriptHebrewEnabled;
-            set => Set(ref _addManuscriptHebrewEnabled, value);
-        }
-
-        private bool _addManuscriptGreekEnabled = true;
-        public bool AddManuscriptGreekEnabled
-        {
-            get => _addManuscriptGreekEnabled;
-            set => Set(ref _addManuscriptGreekEnabled, value);
-        }
-
-        private string? _projectName;
+       private string? _projectName;
         public string? ProjectName
         {
             get => _projectName;
@@ -181,6 +167,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
 
             EventAggregator.SubscribeOnUIThread(this);
+
+            await DrawDesignSurface();
+
             _busyState.CollectionChanged += BusyStateOnCollectionChanged;
             await base.OnActivateAsync(cancellationToken);
         }
@@ -223,7 +212,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task SaveDesignSurfaceData()
         {
-            _ = await Task.Factory.StartNew(async () =>
+            _ = Task.Run(async () =>
+         // _ = await Task.Factory.StartNew(async () =>
             {
                 var json = SerializeDesignSurface();
 
@@ -271,10 +261,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         }
 
-        public async Task LoadDesignSurface()
+        public async Task DrawDesignSurface()
         {
-            AddManuscriptGreekEnabled = true;
-            AddManuscriptHebrewEnabled = true;
+            Logger!.LogInformation($"Drawing design surface for project '{ProjectName}.");
+            DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
+            DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
             LoadingDesignSurface = true;
             DesignSurfaceLoaded = false;
 
@@ -293,11 +284,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
                         {
-                            AddManuscriptHebrewEnabled = false;
+                            DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = false;
                         }
                         else if (corpusId.CorpusType == CorpusType.ManuscriptGreek.ToString())
                         {
-                            AddManuscriptGreekEnabled = false;
+                            DesignSurfaceViewModel!.AddManuscriptGreekEnabled = false;
                         }
 
                         var corpus = new Corpus(corpusId);
@@ -307,6 +298,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
                         DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
+
+                    DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
+                    //DesignSurfaceViewModel.ProjectDesignSurface!.UpdateLayout();
+
 
                     foreach (var parallelCorpusId in topLevelProjectIds.ParallelCorpusIds)
                     {
@@ -393,7 +388,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             var taskName = "HebrewCorpus";
 
-            AddManuscriptHebrewEnabled = false;
+            DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = false;
 
             var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = task.CancellationTokenSource!.Token;
@@ -421,7 +416,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 AvailableBooks = books,
             };
 
-            _ = await Task.Factory.StartNew(async () =>
+            _ = Task.Run(async () =>
+         // _ = await Task.Factory.StartNew(async () =>
             {
                 _busyState.Add(taskName, true);
                 CorpusNodeViewModel corpusNode = new();
@@ -442,11 +438,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         token: cancellationToken);
 
                     corpus.CorpusId.FontFamily = ManuscriptIds.HebrewFontFamily;
+                    corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
 
-                    OnUIThread(() =>
-                    {
-                        corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
-                    });
 
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
@@ -463,14 +456,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
                         cancellationToken: cancellationToken);
 
+                    await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
 
-                    Logger!.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-
-                    // ReSharper disable once AsyncVoidLambda
-                    OnUIThread(async () =>
-                    {
-                        await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
-                    });
 
                 }
                 catch (OperationCanceledException)
@@ -507,7 +494,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
                         // What other work needs to be done?  how do we know which steps have been executed?
-                        AddManuscriptHebrewEnabled = true;
+                        DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
                     }
                     else
                     {
@@ -524,7 +511,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             Logger!.LogInformation("AddGreekCorpus called.");
 
-            AddManuscriptGreekEnabled = false;
+            DesignSurfaceViewModel!.AddManuscriptGreekEnabled = false;
 
             var taskName = "GreekCorpus";
             var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
@@ -555,7 +542,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 AvailableBooks = books,
             };
 
-            _ = await Task.Factory.StartNew(async () =>
+            _ = Task.Run(async () =>
+          //_ = await Task.Factory.StartNew(async () =>
             {
                 _busyState.Add(taskName, true);
 
@@ -576,14 +564,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         token: cancellationToken);
 
                     corpus.CorpusId.FontFamily = ManuscriptIds.GreekFontFamily;
-
-                    OnUIThread(() =>
-                    {
-                        corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
-                    });
-
-
-
+                    corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
 
@@ -592,17 +573,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         "Macula Greek",
                         Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken);
-
+                   
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
-
-                    Logger!.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-
-                    // ReSharper disable once AsyncVoidLambda
-                    OnUIThread(async () =>
-                    {
-                        await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
-                    });
+                     await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
 
                 }
                 catch (OperationCanceledException)
@@ -637,7 +611,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (cancellationToken.IsCancellationRequested)
                     {
                         DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
-                        AddManuscriptGreekEnabled = true;
+                        DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
                     }
                     else
                     {
@@ -645,11 +619,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                 }
             }, cancellationToken);
-
-
         }
 
-        public async void AddParatextCorpus()
+        public async Task AddUsfmCorpus()
+        {
+            // TODO:  need to complete implementation
+            await Task.CompletedTask;
+        }
+
+        public async Task AddParatextCorpus()
         {
             await AddParatextCorpus("");
         }
@@ -669,7 +647,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
                 var cancellationToken = task.CancellationTokenSource!.Token;
-                _ = await Task.Factory.StartNew(async () =>
+
+                _ = Task.Run(async () =>
+              //_ = await Task.Factory.StartNew(async () =>
                 {
                     CorpusNodeViewModel node = new()
                     {
@@ -707,10 +687,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             corpus.CorpusId.FontFamily = selectedProject.FontFamily;
 #pragma warning restore CS8604
                         }
-                        OnUIThread(() =>
-                        {
-                            node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
-                        });
+                        node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
+
 
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                            description: $"Tokenizing and transforming '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
@@ -746,16 +724,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                            selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
 
+                       
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                            description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
-                        Logger!.LogInformation("Sending TokenizedTextCorpusLoadedMessage via EventAggregator.");
-
-                        // ReSharper disable once AsyncVoidLambda
-                        OnUIThread(async () =>
-                        {
-                            await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
-                        });
+                        await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
 
                         _longRunningTaskManager.TaskComplete(taskName);
                     }
@@ -780,7 +753,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
                         if (!cancellationToken.IsCancellationRequested)
                         {
-
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                exception: ex, cancellationToken: cancellationToken);
                         }
@@ -959,288 +931,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
             }
         }
+        
 
-        /// <summary>
-        /// Called when the user has started to drag out a connector, thus creating a new connection.
-        /// </summary>
-        public ParallelCorpusConnectionViewModel ConnectionDragStarted(ParallelCorpusConnectorViewModel draggedOutParallelCorpusConnector, Point curDragPoint)
-        {
-            //
-            // Create a new connection to add to the view-model.
-            //
-            var connection = new ParallelCorpusConnectionViewModel();
 
-            if (draggedOutParallelCorpusConnector.ConnectorType == ConnectorType.Output)
-            {
-                //
-                // The user is dragging out a source connector (an output) and will connect it to a destination connector (an input).
-                //
-                connection.SourceConnector = draggedOutParallelCorpusConnector;
-                connection.DestConnectorHotspot = curDragPoint;
-            }
-            else
-            {
-                //
-                // The user is dragging out a destination connector (an input) and will connect it to a source connector (an output).
-                //
-                connection.DestinationConnector = draggedOutParallelCorpusConnector;
-                connection.SourceConnectorHotspot = curDragPoint;
-            }
 
-            //
-            // Add the new connection to the view-model.
-            //
-            DesignSurfaceViewModel!.ParallelCorpusConnections.Add(connection);
-
-            return connection;
-        }
-
-        /// <summary>
-        /// Event raised, to query for feedback, while the user is dragging a connection.
-        /// </summary>
-        public void OnProjectDesignSurfaceQueryConnectionFeedback(object sender, QueryConnectionFeedbackEventArgs e)
-        {
-            var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
-            var draggedOverConnector = (ParallelCorpusConnectorViewModel)e.DraggedOverConnector;
-
-            QueryConnectionFeedback(draggedOutConnector, draggedOverConnector, out var feedbackIndicator, out var connectionOk);
-
-            //
-            // Return the feedback object to ProjectDesignSurfaceView.
-            // The object combined with the data-template for it will be used to create a 'feedback icon' to
-            // display (in an adorner) to the user.
-            //
-            e.FeedbackIndicator = feedbackIndicator;
-
-            //
-            // Let ProjectDesignSurfaceView know if the connection is ok or not ok.
-            //
-            e.ConnectionOk = connectionOk;
-        }
-
-        /// <summary>
-        /// Event raised when the user has started to drag out a connection.
-        /// </summary>
-        public void OnParallelCorpusConnectionDragStarted(object sender, ConnectionDragStartedEventArgs e)
-        {
-            if (IsBusy)
-            {
-                return;
-            }
-
-            var draggedOutConnector = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
-            var curDragPoint = Mouse.GetPosition(DesignSurfaceViewModel!.ProjectDesignSurface);
-
-            //
-            // Delegate the real work to the view model.
-            //
-            var connection = ConnectionDragStarted(draggedOutConnector, curDragPoint);
-
-            //
-            // Must return the view-model object that represents the connection via the event args.
-            // This is so that ProjectDesignSurfaceView can keep track of the object while it is being dragged.
-            //
-            e.Connection = connection;
-        }
-
-        /// <summary>
-        /// Event raised while the user is dragging a connection.
-        /// </summary>
-        public void OnParallelCorpusConnectionDragging(object sender, ConnectionDraggingEventArgs e)
-        {
-            var curDragPoint = Mouse.GetPosition(DesignSurfaceViewModel!.ProjectDesignSurface);
-            var connection = (ParallelCorpusConnectionViewModel)e.Connection;
-            ConnectionDragging(curDragPoint, connection);
-        }
-
-        /// <summary>
-        /// Event raised when the user has finished dragging out a connection.
-        /// </summary>
-        public void OnParallelCorpusConnectionDragCompleted(object? sender, ConnectionDragCompletedEventArgs e)
-        {
-            var connectorDraggedOut = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOut;
-            var connectorDraggedOver = (ParallelCorpusConnectorViewModel)e.ConnectorDraggedOver;
-            var newConnection = (ParallelCorpusConnectionViewModel)e.Connection;
-            ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
-        }
-
-        public async void OnCorpusNodeDragCompleted(object? sender, NodeDragCompletedEventArgs? e)
-        {
-            Logger!.LogInformation("NodeDragCompleted");
-            await SaveDesignSurfaceData();
-
-        }
-
-        /// <summary>
-        /// Called to query the application for feedback while the user is dragging the connection.
-        /// </summary>
-        public void QueryConnectionFeedback(ParallelCorpusConnectorViewModel draggedOutParallelCorpusConnector, ParallelCorpusConnectorViewModel draggedOverParallelCorpusConnector, out object feedbackIndicator, out bool connectionOk)
-        {
-            if (draggedOutParallelCorpusConnector == draggedOverParallelCorpusConnector)
-            {
-                //
-                // Can't connect to self!
-                // Provide feedback to indicate that this connection is not valid!
-                //
-                feedbackIndicator = new ConnectionBadIndicator();
-                connectionOk = false;
-            }
-            else
-            {
-                var sourceConnector = draggedOutParallelCorpusConnector;
-                var destConnector = draggedOverParallelCorpusConnector;
-
-                //
-                // Only allow connections from output connector to input connector (ie each
-                // connector must have a different type).
-                // Also only allocation from one node to another, never one node back to the same node.
-                //
-                connectionOk = sourceConnector.ParentNode != destConnector.ParentNode &&
-                               sourceConnector.ConnectorType != destConnector.ConnectorType;
-
-                if (connectionOk)
-                {
-                    // 
-                    // Yay, this is a valid connection!
-                    // Provide feedback to indicate that this connection is ok!
-                    //
-                    feedbackIndicator = new ConnectionOkIndicator();
-                }
-                else
-                {
-                    //
-                    // Connectors with the same connector type (eg input & input, or output & output)
-                    // can't be connected.
-                    // Only connectors with separate connector type (eg input & output).
-                    // Provide feedback to indicate that this connection is not valid!
-                    //
-                    feedbackIndicator = new ConnectionBadIndicator();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called as the user continues to drag the connection.
-        /// </summary>
-        public void ConnectionDragging(Point curDragPoint, ParallelCorpusConnectionViewModel parallelCorpusConnection)
-        {
-
-            Logger!.LogDebug($"Current drag point: {curDragPoint.X}, {curDragPoint.Y}");
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (parallelCorpusConnection is not null)
-            {
-                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-                if (parallelCorpusConnection.DestinationConnector == null)
-                {
-                    parallelCorpusConnection.DestConnectorHotspot = curDragPoint;
-                }
-                else
-                {
-                    parallelCorpusConnection.SourceConnectorHotspot = curDragPoint;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the user has finished dragging out the new connection.
-        /// </summary>
-        public async void ConnectionDragCompleted(ParallelCorpusConnectionViewModel newParallelCorpusConnection, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOut, ParallelCorpusConnectorViewModel parallelCorpusConnectorDraggedOver)
-        {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (parallelCorpusConnectorDraggedOver == null)
-            {
-                //
-                // The connection was unsuccessful.
-                // Maybe the user dragged it out and dropped it in empty space.
-                //
-                DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
-                return;
-            }
-
-            //
-            // Only allow connections from output connector to input connector (ie each
-            // connector must have a different type).
-            // Also only allocation from one node to another, never one node back to the same node.
-            //
-            var connectionOk = parallelCorpusConnectorDraggedOut.ParentNode != parallelCorpusConnectorDraggedOver.ParentNode &&
-                               parallelCorpusConnectorDraggedOut.ConnectorType != parallelCorpusConnectorDraggedOver.ConnectorType;
-
-            if (!connectionOk)
-            {
-                //
-                // Connections between connectors that have the same type,
-                // eg input -> input or output -> output, are not allowed,
-                // Remove the connection.
-                //
-                DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
-                return;
-            }
-
-            //
-            // The user has dragged the connection on top of another valid connector.
-            //
-
-            //
-            // Remove any existing connection between the same two connectors.
-            //
-            var existingConnection = DesignSurfaceViewModel!.FindConnection(parallelCorpusConnectorDraggedOut, parallelCorpusConnectorDraggedOver);
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (existingConnection != null)
-            {
-                DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(existingConnection);
-            }
-
-            //
-            // Finalize the connection by attaching it to the connector
-            // that the user dragged the mouse over.
-            //
-            bool added;
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            if (newParallelCorpusConnection.DestinationConnector is null)
-            {
-                newParallelCorpusConnection.DestinationConnector = parallelCorpusConnectorDraggedOver;
-                added = true;
-            }
-            else
-            {
-                newParallelCorpusConnection.SourceConnector = parallelCorpusConnectorDraggedOver;
-                added = true;
-            }
-
-            if (added)
-            {
-                // check to see if we somehow didn't get a source/target id properly.  If so remove the line
-                var sourceParatextProjectId = newParallelCorpusConnection.SourceConnector!.ParentNode!.ParatextProjectId;
-                if (string.IsNullOrEmpty(sourceParatextProjectId))
-                {
-                    DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
-                    return;
-                }
-
-                var destinationParatextProjectId = newParallelCorpusConnection.DestinationConnector.ParentNode!.ParatextProjectId;
-                if (string.IsNullOrEmpty(destinationParatextProjectId))
-                {
-                    DesignSurfaceViewModel!.ParallelCorpusConnections.Remove(newParallelCorpusConnection);
-                    return;
-                }
-
-                await EventAggregator.PublishOnUIThreadAsync(new ParallelCorpusAddedMessage(
-                    SourceParatextId: newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId,
-                    TargetParatextId: newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId,
-                    ConnectorGuid: newParallelCorpusConnection.Id));
-
-                var mainViewModel = IoC.Get<MainViewModel>();
-                newParallelCorpusConnection.SourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(newParallelCorpusConnection.SourceConnector.ParentNode
-                    .ParatextProjectId);
-
-                newParallelCorpusConnection.TargetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(newParallelCorpusConnection.DestinationConnector.ParentNode
-                    .ParatextProjectId);
-
-                await AddParallelCorpus(newParallelCorpusConnection);
-            }
-
-            await SaveDesignSurfaceData();
-        }
+       
 
 
         private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
@@ -1260,17 +955,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet!,
                         dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
                         dialogViewModel.SelectedAlignmentSet!.ParallelCorpusId!, Mediator!);
-
-
-                    connectionMenuItem.ConnectionViewModel!.TranslationSetInfo.Add(new TranslationSetInfo
-                    {
-                        DisplayName = translationSet.TranslationSetId.DisplayName,
-                        TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
-                        ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
-                        ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
-                        AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
-                        AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName
-                    });
 
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
                     DesignSurfaceViewModel!.CreateConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
@@ -1323,35 +1007,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     // get TranslationSet , etc from the dialogViewModel
                     var translationSet = dialogViewModel!.TranslationSet;
-
-                    if (translationSet != null)
-                    {
-                        newParallelCorpusConnection.TranslationSetInfo.Add(new TranslationSetInfo
-                        {
-                            DisplayName = translationSet.TranslationSetId.DisplayName,
-                            TranslationSetId = translationSet.TranslationSetId.Id.ToString(),
-                            ParallelCorpusDisplayName = translationSet.ParallelCorpusId.DisplayName,
-                            ParallelCorpusId = translationSet.ParallelCorpusId.Id.ToString(),
-                            AlignmentSetId = translationSet.AlignmentSetId.Id.ToString(),
-                            AlignmentSetDisplayName = translationSet.AlignmentSetId.DisplayName,
-                            SourceFontFamily = newParallelCorpusConnection.SourceFontFamily!,
-                            TargetFontFamily = newParallelCorpusConnection.TargetFontFamily!,
-                        });
-                    }
-
-                    var alignmentSet = dialogViewModel.AlignmentSet;
-                    if (alignmentSet != null)
-                    {
-                        newParallelCorpusConnection.AlignmentSetInfo.Add(new AlignmentSetInfo
-                        {
-                            DisplayName = alignmentSet.AlignmentSetId.DisplayName,
-                            AlignmentSetId = alignmentSet.AlignmentSetId.Id.ToString(),
-                            ParallelCorpusDisplayName = alignmentSet.ParallelCorpusId.DisplayName,
-                            ParallelCorpusId = alignmentSet.ParallelCorpusId.Id.ToString(),
-                            IsRtl = newParallelCorpusConnection.SourceConnector!.ParentNode!.IsRtl,
-                            IsTargetRtl = newParallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl
-                        });
-                    }
+                    
 
                     newParallelCorpusConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
                     newParallelCorpusConnection.ParallelCorpusDisplayName =
@@ -1363,7 +1019,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else
                 {
-                    DesignSurfaceViewModel!.DeleteConnection(newParallelCorpusConnection);
+                    DesignSurfaceViewModel!.DeleteParallelCorpusConnection(newParallelCorpusConnection);
                 }
             }
             finally
@@ -1405,6 +1061,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion // Methods
 
 
-     
+        public void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
+        {
+            // *****************************************************************
+            // CHRIS: need to implement code to delete a parallel corpus here.
+
+            // *****************************************************************
+
+            // Un-remark the following code to remove the connector between
+            // corpus nodes here.
+            //DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
+        }
+
+        public void DeleteCorpusNode(CorpusNodeViewModel node)
+        {
+            // ****************************************************************************
+            // CHRIS: need to implement code to delete Corpus and TokenizedCorpus here...
+
+            // ****************************************************************************
+
+            // Un-remark the following code to delete the ParallelCorpora and remove the connector between nodes. 
+            foreach (var connection in node.AttachedConnections)
+            {
+                DeleteParallelCorpusConnection(connection);
+            }
+
+            // Un-remark to remove the CorpusNode form the project design surface.
+            //DesignSurfaceViewModel!.DeleteCorpusNode(node);
+        }
     }
 }
