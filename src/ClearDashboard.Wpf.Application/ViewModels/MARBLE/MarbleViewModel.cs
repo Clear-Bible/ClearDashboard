@@ -138,7 +138,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         #endregion //Observable Properties
 
-        public ObservableCollection<Senses> Senses;
+        private ObservableCollection<Senses> _senses;
+        public ObservableCollection<Senses> Senses
+        {
+            get => _senses;
+            set
+            {
+                _senses = value;
+                NotifyOfPropertyChange(() => Senses);
+            }
+        }
+
+
 
         private string _selectedHebrew = "";
         public string SelectedHebrew
