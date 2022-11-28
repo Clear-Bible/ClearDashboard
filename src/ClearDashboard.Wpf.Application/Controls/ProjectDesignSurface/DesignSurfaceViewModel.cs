@@ -293,35 +293,16 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         {
             double x = 25;
             double y = 25;
-            double yOffset = 0;
 
+            var index = 0;
             foreach (var corpusNode in CorpusNodes)
             {
-                var positionX = corpusNode.X;
-                var positionY = corpusNode.Y + corpusNode.Size.Height;
-                yOffset = corpusNode.Size.Height;
-
-                if (positionX > x && !double.IsNegativeInfinity(positionX) && !double.IsPositiveInfinity(positionX) && !double.IsNaN(positionX))
-                {
-                    x = positionX;
-                }
-                if (positionY > y && !double.IsNegativeInfinity(positionY) && !double.IsPositiveInfinity(positionY) && !double.IsNaN(positionY))
-                {
-                    y = positionY;
-                }
+                var nodeHeight = !double.IsNegativeInfinity(corpusNode.Size.Height) ? corpusNode.Size.Height : 75;
+                index++;
+                y = ((corpusNode.Y * index)/ CorpusNodes.Count) + nodeHeight;
             }
 
-            if (double.IsNegativeInfinity(y) || double.IsPositiveInfinity(y) || double.IsNaN(y))
-            {
-                y = 150;
-            }
-
-            if (double.IsNegativeInfinity(x) || double.IsPositiveInfinity(x) || double.IsNaN(x))
-            {
-                x = 150;
-            }
-
-            return new Point(x, y + (yOffset * 0.5));
+            return new Point(x, y);
         }
 
 
