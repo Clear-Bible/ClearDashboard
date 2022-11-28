@@ -19,20 +19,16 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             InitializeComponent();
         }
 
-
         protected override void OnInitialized(EventArgs e)
         {
             base.OnInitialized(e);
 
         }
 
-   
         /// <summary>
         /// Convenient accessor for the view-model.
         /// </summary>
         public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel => (ProjectDesignSurfaceViewModel)DataContext;
-
-
 
         /// <summary>
         /// Event raised while the user is dragging a connection.
@@ -44,7 +40,6 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             var connection = (ParallelCorpusConnectionViewModel)e.Connection;
             this.ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.ConnectionDragging(curDragPoint, connection);
         }
-
 
         ///// <summary>
         ///// Event raised to delete the selected node.
