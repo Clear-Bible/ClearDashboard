@@ -492,8 +492,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             ParallelCorpusId = translationSet.ParallelCorpusId!.Id.ToString(),
                             ParallelCorpusDisplayName = translationSet.ParallelCorpusId!.DisplayName,
 
-                            // CODE REVIEW - TODO:  Where does IsRtl come from? (parallelCorpusConnection.IsRtl,)
-                            //IsRtl = info.ParallelCorpusId.SourceTokenizedCorpusId.,
+                            IsRtl =  parallelCorpusConnection.ParallelCorpusId!.SourceTokenizedCorpusId!.CorpusId!.IsRtl,
                             SourceParatextId = parallelCorpusConnection.SourceConnector!.ParatextId,
                             TargetParatextId = parallelCorpusConnection.DestinationConnector!.ParatextId,
                         }
