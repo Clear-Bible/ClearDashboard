@@ -17,21 +17,28 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 {
     public class MarbleViewModel : ToolViewModel, IHandle<VerseChangedMessage>
     {
-        private readonly ILogger<MarbleViewModel> _logger;
-        private readonly DashboardProjectManager? _projectManager;
-        private readonly IEventAggregator? _eventAggregator;
-        private readonly TranslationSource _translationSource;
+        #region Commands
+
+        public ICommand LaunchLogosCommand { get; set; }
+        public ICommand SearchSenseCommand { get; set; }
+
+        #endregion Commands
 
         #region Member Variables   
 
         private List<SemanticDomainLookup>? _lookup;
         private string _currentVerse = "";
 
+        private readonly ILogger<MarbleViewModel> _logger;
+        private readonly DashboardProjectManager? _projectManager;
+        private readonly IEventAggregator? _eventAggregator;
+        private readonly TranslationSource _translationSource;
 
 
         #region BCV
@@ -229,7 +236,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             Title = "◕ " + "MARBLE";
             ContentId = "MARBLE";
             DockSide = EDockSide.Bottom;
+
+            // wire up the commands
+            LaunchLogosCommand = new RelayCommand(LaunchLogosStrongNumber);
+            SearchSenseCommand = new RelayCommandAsync(SearchSense);
         }
+
+
+
 
         protected override void OnViewAttached(object view, object context)
         {
@@ -381,6 +395,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             if (Senses.Count > 0)
             {
                 SelectedSense = Senses[0];
+            }
+        }
+
+        private async Task SearchSense(object obj)
+        {
+            if (obj is RelatedLemma lemma)
+            {
+                _selectedHebrew = lemma.Lemma;
+                await GetWord().ConfigureAwait(false);
+            }
+        }
+
+        private void LaunchLogosStrongNumber(object obj)
+        {
+            if (obj is null)
+            {
+                return;
+            }
+
+            var StrongNum = (string)obj;
+
+            var LogosRef = Convert.ToInt32(StrongNum.Substring(1));
+
+            //var LogosRef = Uri.EscapeDataString(chopped).Replace('%', '$');
+
+
+            //// OT or NT?
+            if (StrongNum.StartsWith("H"))
+            {
+                // Hebrew link
+                var hebrewPrefix = "logosres:strongs;ref=HebrewStrongs.";
+                LaunchWebPage.TryOpenUrl(hebrewPrefix + LogosRef);
+            }
+            else if (StrongNum.StartsWith("G"))
+            {
+                // Greek link
+                var greekPrefix = "logosres:strongs;ref=GreekStrongs.";
+                LaunchWebPage.TryOpenUrl(greekPrefix + LogosRef);
+            }
+            else if (StrongNum.StartsWith("A"))
+            {
+                // Aramaic link
+                var greekPrefix = "logosres:strongs;ref=HebrewStrongs.";
+                LaunchWebPage.TryOpenUrl(greekPrefix + LogosRef);
             }
         }
 

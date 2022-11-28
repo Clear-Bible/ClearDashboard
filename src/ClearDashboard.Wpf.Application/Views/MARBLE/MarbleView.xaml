@@ -273,7 +273,10 @@
                             Orientation="Vertical"
                             TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
-                            <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.StrongCodes}">
+                            <ListBox
+                                x:Name="LvStrongCodes"
+                                MaxHeight="300"
+                                ItemsSource="{Binding SelectedSense.StrongCodes}">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="Padding" Value="0" />
@@ -304,7 +307,9 @@
                                             <Button
                                                 Grid.Column="0"
                                                 Height="20"
-                                                VerticalAlignment="Center">
+                                                VerticalAlignment="Center"
+                                                Command="{Binding DataContext.LaunchLogosCommand, ElementName=LvStrongCodes}"
+                                                CommandParameter="{Binding}">
                                                 <Button.Style>
                                                     <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
                                                         <Setter Property="Padding" Value="0" />
@@ -390,6 +395,8 @@
                                             <Button
                                                 Grid.Column="0"
                                                 Height="20"
+                                                Command="{Binding DataContext.SearchSenseCommand, ElementName=LvStrongCodes}"
+                                                CommandParameter="{Binding}"
                                                 VerticalAlignment="Center">
                                                 <Button.Style>
                                                     <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
@@ -441,8 +448,8 @@
                 Margin="0"
                 IsSynchronizedWithCurrentItem="True"
                 ItemsSource="{Binding Senses}"
-                SelectedItem="{Binding SelectedSense}"
-                SelectedIndex="0">
+                SelectedIndex="0"
+                SelectedItem="{Binding SelectedSense}">
 
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
