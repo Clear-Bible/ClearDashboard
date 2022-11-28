@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.Wpf.Controls.Utils;
+using System;
 using System.Windows;
 using System.Windows.Media;
-using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Controls.Utils;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
@@ -41,7 +38,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <summary>
         /// Set to 'true' when the node is selected.
         /// </summary>
-        private bool _isSelected = false;
+        private bool _isSelected;
 
         #endregion Internal Data Members
 
@@ -177,11 +174,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
-
-        public List<TranslationSetInfo> TranslationSetInfo { get; set; } = new();
-
-        public List<AlignmentSetInfo> AlignmentSetInfo { get; set; } = new();
-
         public ParallelCorpusId? ParallelCorpusId { get; set; }
         public string? ParallelCorpusDisplayName { get; set; }
 
@@ -212,7 +204,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnSourceConnectorHotspotUpdated(object? sender, EventArgs e)
         {
-            SourceConnectorHotspot = SourceConnector.Hotspot;
+            SourceConnectorHotspot = SourceConnector!.Hotspot;
         }
 
         /// <summary>
@@ -220,7 +212,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         private void OnDestinationConnectorHotspotUpdated(object? sender, EventArgs e)
         {
-            DestConnectorHotspot = DestinationConnector.Hotspot;
+            DestConnectorHotspot = DestinationConnector!.Hotspot;
         }
 
         /// <summary>
