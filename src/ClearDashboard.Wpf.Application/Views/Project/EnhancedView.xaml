@@ -492,12 +492,8 @@
                                                 <userControls:VerseDisplay
                                                     x:Name="VerseDisplay"
                                                     Title=""
-                                                    Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                                                    FlowDirection="{Binding ElementName=InnerListView, Path=DataContext.IsRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                     HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     IsEnabled="True"
-                                                    IsRtl="{Binding ElementName=InnerListView, Path=DataContext.IsRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
-                                                    IsTargetRtl="{Binding ElementName=InnerListView, Path=DataContext.IsTargetRtl, Converter={StaticResource BoolFlowDirectionConverter}}"
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
                                                     ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
@@ -513,7 +509,10 @@
                                                     TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                                    Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                                                    TranslationClicked="TranslationClicked"
+                                                    >
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenClicked">
                                                             <i:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
@@ -625,6 +624,9 @@
                             </i:EventTrigger>
                             <i:EventTrigger EventName="NoteEditorMouseLeave">
                                 <i:CallMethodAction MethodName="NoteEditorMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="NoteSendToParatext">
+                                <i:CallMethodAction MethodName="NoteSendToParatext" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
                             </i:EventTrigger>
                             <i:EventTrigger EventName="LabelSelected">
                                 <i:CallMethodAction MethodName="LabelSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />

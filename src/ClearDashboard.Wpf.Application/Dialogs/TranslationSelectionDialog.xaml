@@ -12,6 +12,7 @@
         Height="500" Width="800">
     <Grid>
         <userControls:TranslationSelector
+            x:Name="TranslationSelectorControl"
             SelectedItem="{Binding CurrentTranslationOption}"
             TokenDisplayViewModel="{Binding TokenDisplay}"
             TranslationOptions="{Binding TranslationOptions}"
