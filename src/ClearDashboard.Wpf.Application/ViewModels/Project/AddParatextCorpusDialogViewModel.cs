@@ -78,8 +78,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _projects, value);
         }
 
-        private Tokenizer _selectedTokenizer = Tokenizer.LatinWordTokenizer;
-        public Tokenizer SelectedTokenizer
+        private Tokenizers _selectedTokenizer = Tokenizers.LatinWordTokenizer;
+        public Tokenizers SelectedTokenizer
         {
             get => _selectedTokenizer;
             set => Set(ref _selectedTokenizer, value);

@@ -5,22 +5,22 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Controls.Utils;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a connector (aka connection point) that can be attached to a node and is used to connect the node to another node.
     /// </summary>
-    public sealed class ConnectorViewModel : AbstractModelBase
+    public sealed class ParallelCorpusConnectorViewModel : AbstractModelBase
     {
         private readonly IEventAggregator? _eventAggregator;
-        private readonly DashboardProjectManager? _projectManager;
+    
 
         #region Internal Data Members
 
         /// <summary>
         /// The connections that are attached to this connector, or null if no connections are attached.
         /// </summary>
-        private ImpObservableCollection<ConnectionViewModel> _attachedConnections;
+        private ImpObservableCollection<ParallelCorpusConnectionViewModel>? _attachedConnections;
 
         /// <summary>
         /// The hotspot (or center) of the connector.
@@ -30,38 +30,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         #endregion Internal Data Members
 
-        public ConnectorViewModel(string name, IEventAggregator? eventAggregator, DashboardProjectManager? projectManager, string paratextProjectId)
+        public ParallelCorpusConnectorViewModel(string name, string paratextProjectId, ConnectorType connectorType, IEventAggregator? eventAggregator)
         {
             _eventAggregator = eventAggregator;
-            _projectManager = projectManager;
             Name = name;
-            Type = ConnectorType.Undefined;
-            ParatextID = paratextProjectId;
+            ConnectorType = connectorType;
+            ParatextId = paratextProjectId;
         }
 
-        public string ParatextID
-        {
-            get;
-            private set;
-        }
+        public string ParatextId { get; init; }
 
         /// <summary>
         /// The name of the connector.
         /// </summary>
-        public string Name
-        {
-            get;
-            private set;
-        }
+        public string Name { get; init; }
 
         /// <summary>
         /// Defines the type of the connector.
         /// </summary>
-        public ConnectorType Type
-        {
-            get;
-            internal set;
-        }
+        public ConnectorType ConnectorType { get; internal set; }
 
         /// <summary>
         /// Returns 'true' if the connector connected to another node.
@@ -70,6 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         {
             get
             {
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
                 return AttachedConnections.Any(connection => connection.SourceConnector != null && connection.DestinationConnector != null);
             }
         }
@@ -83,15 +71,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The connections that are attached to this connector, or null if no connections are attached.
         /// </summary>
-        public ImpObservableCollection<ConnectionViewModel> AttachedConnections
+        public ImpObservableCollection<ParallelCorpusConnectionViewModel> AttachedConnections
         {
             get
             {
                 if (_attachedConnections == null)
                 {
-                    _attachedConnections = new ImpObservableCollection<ConnectionViewModel>();
-                    _attachedConnections.ItemsAdded += new EventHandler<CollectionItemsChangedEventArgs>(OnAttachedConnectionsItemsAdded);
-                    _attachedConnections.ItemsRemoved += new EventHandler<CollectionItemsChangedEventArgs>(OnAttachedConnectionsItemsRemoved);
+                    _attachedConnections = new ImpObservableCollection<ParallelCorpusConnectionViewModel>();
+                    _attachedConnections.ItemsAdded += OnAttachedConnectionsItemsAdded;
+                    _attachedConnections.ItemsRemoved += OnAttachedConnectionsItemsRemoved;
                 }
 
                 return _attachedConnections;
@@ -101,7 +89,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The parent node that the connector is attached to, or null if the connector is not attached to any node.
         /// </summary>
-        public CorpusNodeViewModel ParentNode
+        public CorpusNodeViewModel? ParentNode
         {
             get;
             internal set;
@@ -128,28 +116,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         }
 
 
-        ///// <summary>
-        ///// Set to 'true' when the node is selected.
-        ///// </summary>
-        //private bool _isSelected = false;
-        ///// <summary>
-        ///// Set to 'true' when the node is selected.
-        ///// </summary>
-        //public bool IsSelected
-        //{
-        //    get => _isSelected;
-        //    set
-        //    {
-        //        Set(ref _isSelected, value);
-
-        //        if (_isSelected)
-        //        {
-        //            //_eventAggregator.PublishOnUIThreadAsync(new ConnectionSelectedChanagedMessage(this));
-        //        }
-        //    }
-        //}
-
-
         private Guid _selectedConnection;
 
         public Guid SelectedConnection
@@ -167,18 +133,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when the connector hotspot has been updated.
         /// </summary>
-        public event EventHandler<EventArgs> HotspotUpdated;
+        public event EventHandler<EventArgs>? HotspotUpdated;
 
         #region Private Methods
 
         /// <summary>
         /// Debug checking to ensure that no connection is added to the list twice.
         /// </summary>
-        private void OnAttachedConnectionsItemsAdded(object sender, CollectionItemsChangedEventArgs e)
+        private void OnAttachedConnectionsItemsAdded(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectionViewModel connection in e.Items)
+            foreach (ParallelCorpusConnectionViewModel connection in e.Items)
             {
-                connection.ConnectionChanged += new EventHandler<EventArgs>(OnConnectionChanged);
+                connection.ConnectionChanged += OnConnectionChanged;
             }
 
             if ((AttachedConnections.Count - e.Items.Count) == 0)
@@ -195,11 +161,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when connections have been removed from the connector.
         /// </summary>
-        private void OnAttachedConnectionsItemsRemoved(object sender, CollectionItemsChangedEventArgs e)
+        private void OnAttachedConnectionsItemsRemoved(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectionViewModel connection in e.Items)
+            foreach (ParallelCorpusConnectionViewModel connection in e.Items)
             {
-                connection.ConnectionChanged -= new EventHandler<EventArgs>(OnConnectionChanged);
+                connection.ConnectionChanged -= OnConnectionChanged;
             }
 
             if (AttachedConnections.Count == 0)
@@ -216,7 +182,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when a connection attached to the connector has changed.
         /// </summary>
-        private void OnConnectionChanged(object sender, EventArgs e)
+        private void OnConnectionChanged(object? sender, EventArgs e)
         {
             NotifyOfPropertyChange(() => IsConnectionAttached);
             NotifyOfPropertyChange(() => IsConnected);

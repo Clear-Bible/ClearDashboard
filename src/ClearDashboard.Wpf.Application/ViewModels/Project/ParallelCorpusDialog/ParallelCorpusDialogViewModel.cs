@@ -12,7 +12,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -24,12 +23,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
-   
+
     public class ParallelCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParallelCorpusDialogViewModel
     {
 
@@ -42,38 +42,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
 
-      
+
 
         public ParallelCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time 
         }
 
-        
-        public ParallelCorpusDialogViewModel(DialogMode dialogMode, 
-                                ConnectionViewModel connectionViewModel, 
-                                CorpusNodeViewModel sourceCorpusNodeViewModel, 
-                                CorpusNodeViewModel targetCorpusNodeViewModel, 
-                                DashboardProjectManager? projectManager, 
-                                INavigationService navigationService, 
+
+        public ParallelCorpusDialogViewModel(DialogMode dialogMode,
+                                ParallelCorpusConnectionViewModel parallelCorpusConnectionViewModel,
+                                CorpusNodeViewModel sourceCorpusNodeViewModel,
+                                CorpusNodeViewModel targetCorpusNodeViewModel,
+                                IEnumerable<TokenizedTextCorpusId> tokenizedCorpora,
+                                DashboardProjectManager? projectManager,
+                                INavigationService navigationService,
                                 ILogger<ParallelCorpusDialogViewModel> logger,
-                                IEventAggregator eventAggregator, 
-                                IMediator mediator, 
-                                ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager) 
+                                IEventAggregator eventAggregator,
+                                IMediator mediator,
+                                ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            _tokenizedCorpora = tokenizedCorpora;
             _longRunningTaskManager = longRunningTaskManager;
             CanOk = true;
 
             DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger!);
 
             DialogMode = dialogMode;
-            ConnectionViewModel = connectionViewModel;
+            ParallelCorpusConnectionViewModel = parallelCorpusConnectionViewModel;
             SourceCorpusNodeViewModel = sourceCorpusNodeViewModel;
             TargetCorpusNodeViewModel = targetCorpusNodeViewModel;
             SelectedSmtAlgorithm = SmtModelType.FastAlign;
         }
 
+        private readonly IEnumerable<TokenizedTextCorpusId> _tokenizedCorpora;
         private readonly LongRunningTaskManager _longRunningTaskManager;
         public LongRunningTask CurrentLongRunningTask { get; set; }
 
@@ -89,10 +92,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             set => Set(ref _targetCorpusNodeViewModel, value);
         }
 
-        public ConnectionViewModel ConnectionViewModel
+        public ParallelCorpusConnectionViewModel ParallelCorpusConnectionViewModel
         {
-            get => _connectionViewModel;
-            set => Set(ref _connectionViewModel, value);
+            get => _parallelCorpusConnectionViewModel;
+            set => Set(ref _parallelCorpusConnectionViewModel, value);
         }
 
         private SmtModelType _selectedSmtAlgorithm;
@@ -103,7 +106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
         public IWordAlignmentModel WordAlignmentModel { get; set; }
-        public DAL.Alignment.Corpora.ParallelCorpus ParallelTokenizedCorpus { get; set; }
+        public ParallelCorpus ParallelTokenizedCorpus { get; set; }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -129,11 +132,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             await ActivateItemAsync(Steps[0], cancellationToken);
 
             await base.OnInitializeAsync(cancellationToken);
-           
+
         }
 
 
-        public bool CanCancel => (CurrentTask != null && CurrentTask.Status != LongRunningTaskStatus.Running ) /* can always cancel */;
+        public bool CanCancel => (CurrentTask != null && CurrentTask.Status != LongRunningTaskStatus.Running) /* can always cancel */;
         public async void Cancel()
         {
             CancelCurrentTask();
@@ -180,7 +183,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public EngineParallelTextCorpus ParallelTextCorpus { get; set; }
 
-        private ConnectionViewModel _connectionViewModel;
+        private ParallelCorpusConnectionViewModel _parallelCorpusConnectionViewModel;
 
         public LongRunningTask? CurrentTask { get; set; }
 
@@ -189,17 +192,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public async Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName)
         {
-            var sourceNodeTokenization = SourceCorpusNodeViewModel.NodeTokenizations.FirstOrDefault();
-            if (sourceNodeTokenization == null)
+            // var sourceNodeTokenization = SourceCorpusNodeViewModel.Tokenizations.FirstOrDefault();
+            var sourceTokenizedTextCorpusId =
+                _tokenizedCorpora.FirstOrDefault(tc => tc.CorpusId.Id == _sourceCorpusNodeViewModel.CorpusId);
+            if (sourceTokenizedTextCorpusId == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
-                    $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{ConnectionViewModel.SourceConnector.ParentNode.CorpusId}'.");
+                    $"Cannot find the source TokenizedTextCorpusId associated to Corpus with Id '{ParallelCorpusConnectionViewModel.SourceConnector.ParentNode.CorpusId}'.");
             }
-            var targetNodeTokenization = TargetCorpusNodeViewModel.NodeTokenizations.FirstOrDefault();
-            if (sourceNodeTokenization == null)
+            //var targetNodeTokenization = TargetCorpusNodeViewModel.Tokenizations.FirstOrDefault();
+            var targetTokenizedTextCorpusId =
+                _tokenizedCorpora.FirstOrDefault(tc => tc.CorpusId.Id == _targetCorpusNodeViewModel.CorpusId);
+            if (targetTokenizedTextCorpusId == null)
             {
                 throw new MissingTokenizedTextCorpusIdException(
-                    $"Cannot find the target TokenizedTextCorpusId associated to Corpus with Id '{ConnectionViewModel.DestinationConnector.ParentNode.CorpusId}'.");
+                    $"Cannot find the target TokenizedTextCorpusId associated to Corpus with Id '{ParallelCorpusConnectionViewModel.DestinationConnector.ParentNode.CorpusId}'.");
             }
 
 
@@ -211,7 +218,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             try
             {
-                
+
                 Logger!.LogInformation(
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'.");
                 await SendBackgroundStatus(taskName,
@@ -219,10 +226,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     cancellationToken,
                     $"Retrieving tokenized source and target corpora for '{parallelCorpusDisplayName}'...");
 
-                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
-                    new TokenizedTextCorpusId(sourceNodeTokenization.TokenizedTextCorpusId));
-                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
-                    new TokenizedTextCorpusId(targetNodeTokenization.TokenizedTextCorpusId));
+                var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, sourceTokenizedTextCorpusId);
+                var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, targetTokenizedTextCorpusId);
 
                 Logger!.LogInformation($"Parallelizing source and target corpora");
                 await SendBackgroundStatus(taskName,
@@ -257,7 +262,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             catch (OperationCanceledException ex)
             {
                 Logger!.LogInformation($"AddParallelCorpus - operation canceled.");
-                
+
             }
             catch (MediatorErrorEngineException ex)
             {
@@ -304,9 +309,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource(null, null);
+                PlaySound.PlaySoundFromResource();
             }
-            
+
             return CurrentTask.Status;
         }
 
@@ -315,7 +320,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> TrainSmtModel()
         {
             IsBusy = true;
-            var taskName = TaskNames.TrainingSmtModel; 
+            var taskName = TaskNames.TrainingSmtModel;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask.CancellationTokenSource.Token;
             try
@@ -343,9 +348,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                                 message);
                             Logger!.LogInformation(message);
 
-
-                            // CODE REVIEW:  Is this a good idea? NO!
-                            //cancellationToken.ThrowIfCancellationRequested();
                         }
                     ), SymmetrizationHeuristic.GrowDiagFinalAnd);
 
@@ -404,7 +406,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource(null, null);
+                PlaySound.PlaySoundFromResource();
             }
 
 
@@ -412,7 +414,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
 
-        public TranslationSet TranslationSet { get; set; }
+        public TranslationSet? TranslationSet { get; set; }
         public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
         {
             IsBusy = true;
@@ -430,7 +432,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 var translationModel = WordAlignmentModel.GetTranslationTable();
 
                 cancellationToken.ThrowIfCancellationRequested();
-                
+
                 // RUSSELL - code review
                 TranslationSet = await TranslationSet.Create(null, AlignmentSet.AlignmentSetId,
                     translationSetDisplayName, new Dictionary<string, object>(),
@@ -490,7 +492,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
-            PlaySound.PlaySoundFromResource(null, null);
+            PlaySound.PlaySoundFromResource();
 
             return CurrentTask.Status;
 
@@ -499,7 +501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
 
-        public AlignmentSet AlignmentSet { get; set; }
+        public AlignmentSet? AlignmentSet { get; set; }
         public async Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName)
         {
             IsBusy = true;
@@ -530,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 Logger!.LogInformation($"Completed creating the AlignmentSet '{alignmentSetDisplayName}'");
 
-               CurrentTask.Status = LongRunningTaskStatus.Completed;
+                CurrentTask.Status = LongRunningTaskStatus.Completed;
             }
             catch (OperationCanceledException ex)
             {
@@ -556,7 +558,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
-                        exception:ex);
+                        exception: ex);
                 }
 
                 CurrentTask.Status = LongRunningTaskStatus.Failed;
@@ -579,7 +581,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource(null, null);
+                PlaySound.PlaySoundFromResource();
             }
 
             return CurrentTask.Status;
