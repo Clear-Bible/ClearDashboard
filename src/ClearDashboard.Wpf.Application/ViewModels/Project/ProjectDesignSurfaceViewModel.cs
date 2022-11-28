@@ -1073,16 +1073,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
         }
 
-        public void DeleteCorpusNode(CorpusNodeViewModel node)
+        public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
             // ****************************************************************************
             // CHRIS: need to implement code to delete Corpus and TokenizedCorpus here...
 
             // ****************************************************************************
+            var toplevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            var corpusId = toplevelProjectIds.CorpusIds.FirstOrDefault(c => c.Id == node.CorpusId);
 
             // Un-remark the following code to delete the ParallelCorpora and remove the connector between nodes. 
             foreach (var connection in node.AttachedConnections)
             {
+                //connection.ParallelCorpusId
                 DeleteParallelCorpusConnection(connection);
             }
 
