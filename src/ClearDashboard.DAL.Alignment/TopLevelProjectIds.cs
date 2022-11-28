@@ -49,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment
                 .Distinct();
 
             var parallelCorpusIds = allParallelCorpusIds
-                .Where(e => !containedParallelCorpusIds.Contains(e.Id));
+                .Where(e => containedParallelCorpusIds.Contains(e.Id));
 
             var allTokenizedTextCorpusIds = await TokenizedTextCorpus.GetAllTokenizedCorpusIds(mediator, null);
             var containedTokenizedTextCorpusIds =
@@ -59,8 +59,8 @@ namespace ClearDashboard.DAL.Alignment
                     .Select(e => e.TargetTokenizedCorpusId!.Id))
                 .Distinct();
 
-            var tokenizedTextCorpusIds = allTokenizedTextCorpusIds
-                .Where(e => !containedTokenizedTextCorpusIds.Contains(e.Id));
+            var tokenizedTextCorpusIds = allTokenizedTextCorpusIds.Distinct();
+               // .Where(e => containedTokenizedTextCorpusIds.Contains(e.Id));
 
             var allCorpusIds = await Corpus.GetAllCorpusIds(mediator);
             var containedCorpusIds =
@@ -69,7 +69,7 @@ namespace ClearDashboard.DAL.Alignment
                     .Distinct();
 
             var corpusIds = allCorpusIds
-                .Where(e => !containedCorpusIds.Contains(e.Id));
+                .Where(e => containedCorpusIds.Contains(e.Id));
 
             return new TopLevelProjectIds
             (

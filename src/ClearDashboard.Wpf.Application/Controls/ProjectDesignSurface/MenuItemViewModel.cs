@@ -4,13 +4,13 @@ using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
 public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBase
 {
     protected MenuItemViewModel()
     {
-        MenuItems = new ObservableCollection<TMenuItemViewModel>();
+        MenuItems = new BindableCollection<TMenuItemViewModel>();
         Command = new CommandViewModel(Execute);
         Enabled = true;
     }
@@ -72,7 +72,7 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
         set => Set(ref _projectDesignSurfaceViewModel, value);
     }
 
-    public ObservableCollection<TMenuItemViewModel>? MenuItems { get; set; }
+    public BindableCollection<TMenuItemViewModel>? MenuItems { get; set; }
 
     public ICommand? Command { get; protected set; }
 

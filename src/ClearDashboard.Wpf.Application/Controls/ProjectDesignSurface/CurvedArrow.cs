@@ -7,7 +7,7 @@ using System.Windows.Shapes;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines an arrow that has multiple points.
@@ -31,8 +31,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             DependencyProperty.Register("Points", typeof(PointCollection), typeof(CurvedArrow),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
-        public static readonly DependencyProperty NodeSourceProperty = DependencyProperty.Register(nameof(NodeSource), typeof(ConnectorViewModel), typeof(CurvedArrow), new PropertyMetadata(default(ConnectorViewModel)));
-        public static readonly DependencyProperty NodeTargetProperty = DependencyProperty.Register(nameof(NodeTarget), typeof(ConnectorViewModel), typeof(CurvedArrow), new PropertyMetadata(default(ConnectorViewModel)));
+        public static readonly DependencyProperty NodeSourceProperty = DependencyProperty.Register(nameof(NodeSource), typeof(ParallelCorpusConnectorViewModel), typeof(CurvedArrow), new PropertyMetadata(default(ParallelCorpusConnectorViewModel)));
+        public static readonly DependencyProperty NodeTargetProperty = DependencyProperty.Register(nameof(NodeTarget), typeof(ParallelCorpusConnectorViewModel), typeof(CurvedArrow), new PropertyMetadata(default(ParallelCorpusConnectorViewModel)));
         public static readonly DependencyProperty ConnectionIdProperty = DependencyProperty.Register(nameof(ConnectionId), typeof(Guid), typeof(CurvedArrow), new PropertyMetadata(default(Guid)));
 
         #endregion Dependency Property/Event Definitions
@@ -122,15 +122,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
-        public ConnectorViewModel NodeSource
+        public ParallelCorpusConnectorViewModel NodeSource
         {
-            get => (ConnectorViewModel)GetValue(NodeSourceProperty);
+            get => (ParallelCorpusConnectorViewModel)GetValue(NodeSourceProperty);
             set => SetValue(NodeSourceProperty, value);
         }
 
-        public ConnectorViewModel NodeTarget
+        public ParallelCorpusConnectorViewModel NodeTarget
         {
-            get => (ConnectorViewModel)GetValue(NodeTargetProperty);
+            get => (ParallelCorpusConnectorViewModel)GetValue(NodeTargetProperty);
             set => SetValue(NodeTargetProperty, value);
         }
 

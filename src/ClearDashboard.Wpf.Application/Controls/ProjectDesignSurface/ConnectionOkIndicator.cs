@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+﻿namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// This class is just a place holder for showing a 'connection ok' indicator in the graph.
