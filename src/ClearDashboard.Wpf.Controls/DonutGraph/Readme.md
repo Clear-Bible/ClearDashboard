@@ -1,0 +1,1 @@
+﻿https://www.codeproject.com/Articles/28098/A-WPF-Pie-Chart-with-Data-Binding-Support

@@ -1,5 +1,5 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels;
-using ClearDashboard.Wpf.Application.ViewModels.MARBLE;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using System.Windows;

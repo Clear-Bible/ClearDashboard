@@ -1,13 +1,13 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.Views.MARBLE.MarbleView"
+    x:Class="ClearDashboard.Wpf.Application.Views.Marble.MarbleView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.MARBLE"
-    xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.MARBLE"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Marble"
+    xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Marble"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;assembly=ClearDashboard.DAL.Models"
@@ -46,10 +46,6 @@
         <marble:MarbleViewModel x:Key="ViewModelsSource" />
     </UserControl.Resources>
 
-    <UserControl.DataContext>
-        <marble:MarbleViewModel />
-    </UserControl.DataContext>
-
     <Grid ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -63,12 +59,13 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+
         <!--  ROW 0  -->
         <StackPanel Orientation="Horizontal">
             <Button
                 Width="20"
                 Height="20"
-                Margin="5,5,0,0"
+                Margin="5,5,50,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
@@ -96,7 +93,6 @@
             </Button>
 
             <userControls:BcvUserControl
-                Margin="50,0,0,0"
                 BcvDictionary="{Binding Path=BcvDictionary}"
                 CurrentBcv="{Binding Path=CurrentBcv}"
                 IsControlEnabled="False"
@@ -175,15 +171,18 @@
         <!--  ROW 2  -->
 
         <!--  DataContext="{Binding Senses, Source={StaticResource ViewModelsSource}}"  -->
+        <!--  DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Senses}"  -->
         <pieChart:PieChartLayout
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Margin="10"
             HorizontalAlignment="Stretch"
-            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Senses}"
             ManuscriptTextProperty="ManuscriptWord"
             PlottedProperty="VerseTotal">
+            <pieChart:PieChartLayout.DataContext>
+                <Binding Path="Senses" />
+            </pieChart:PieChartLayout.DataContext>
             <pieChart:PieChartLayout.ColorSelector>
                 <pieChart:IndexedColourSelector Brushes="{StaticResource brushes}" />
             </pieChart:PieChartLayout.ColorSelector>
@@ -204,7 +203,7 @@
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Setter Property="IsExpanded" Value="True" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding PartsOfSpeech.Count}" Value="0">
+                                    <DataTrigger Binding="{Binding SelectedSense.PartsOfSpeech.Count}" Value="0">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -212,11 +211,11 @@
                         </Expander.Style>
                         <StackPanel
                             Margin="3"
-                            Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                            Background="{StaticResource MaterialDesignPaper}"
                             Orientation="Vertical"
                             TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
-                            <ListBox MaxHeight="300" ItemsSource="{Binding PartsOfSpeech}">
+                            <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.PartsOfSpeech}">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="Padding" Value="0" />
@@ -247,7 +246,7 @@
                                                 VerticalAlignment="Center"
                                                 FontSize="14"
                                                 FontWeight="Medium"
-                                                Text="{Binding}"
+                                                Text="{Binding .}"
                                                 TextWrapping="Wrap" />
                                         </Grid>
                                     </DataTemplate>
@@ -262,7 +261,7 @@
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Setter Property="IsExpanded" Value="True" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding StrongCodes.Count}" Value="0">
+                                    <DataTrigger Binding="{Binding SelectedSense.StrongCodes.Count}" Value="0">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -270,11 +269,11 @@
                         </Expander.Style>
                         <StackPanel
                             Margin="3"
-                            Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                            Background="{StaticResource MaterialDesignPaper}"
                             Orientation="Vertical"
                             TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
-                            <ListBox MaxHeight="300" ItemsSource="{Binding StrongCodes}">
+                            <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.StrongCodes}">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="Padding" Value="0" />
@@ -348,7 +347,7 @@
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Setter Property="IsExpanded" Value="True" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelatedLemmas.Count}" Value="0">
+                                    <DataTrigger Binding="{Binding SelectedSense.RelatedLemmas.Count}" Value="0">
                                         <Setter Property="Visibility" Value="Collapsed" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -356,11 +355,11 @@
                         </Expander.Style>
                         <StackPanel
                             Margin="3"
-                            Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                            Background="{StaticResource MaterialDesignPaper}"
                             Orientation="Vertical"
                             TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
-                            <ListBox MaxHeight="300" ItemsSource="{Binding RelatedLemmaList}">
+                            <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.RelatedLemmaList}">
                                 <ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="Padding" Value="0" />
@@ -397,7 +396,7 @@
                                                         <Setter Property="Padding" Value="0" />
                                                         <Setter Property="Visibility" Value="Visible" />
                                                         <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsAvailable}" Value="False">
+                                                            <DataTrigger Binding="{Binding SelectedSense.IsAvailable}" Value="False">
                                                                 <Setter Property="Visibility" Value="Collapsed" />
                                                             </DataTrigger>
                                                         </Style.Triggers>
@@ -441,7 +440,8 @@
                 x:Name="SensesListView"
                 Margin="0"
                 IsSynchronizedWithCurrentItem="True"
-                ItemsSource="{Binding}"
+                ItemsSource="{Binding Senses}"
+                SelectedItem="{Binding SelectedSense}"
                 SelectedIndex="0">
 
                 <ListView.ItemContainerStyle>
@@ -495,19 +495,18 @@
         </GroupBox>
 
         <ScrollViewer
-            Grid.Row="4"
+            Grid.Row="3"
             Grid.RowSpan="2"
             Grid.Column="1"
             Margin="5">
             <StackPanel Orientation="Vertical">
-
                 <Expander
                     Header="Definition"
                     IsExpanded="True"
                     Style="{StaticResource ExpanderStyle}">
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
@@ -520,7 +519,7 @@
                             Width="550"
                             Padding="3"
                             IsReadOnly="True"
-                            Text="{Binding Path=DescriptionShort}"
+                            Text="{Binding Path=SelectedSense.DescriptionShort}"
                             TextWrapping="Wrap" />
                         <TextBlock
                             Margin="0,5,0,0"
@@ -532,7 +531,7 @@
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Visibility" Value="Visible" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DescriptionLong}" Value="">
+                                        <DataTrigger Binding="{Binding SelectedSense.DescriptionLong}" Value="">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -543,13 +542,13 @@
                             Width="550"
                             Padding="3"
                             IsReadOnly="True"
-                            Text="{Binding Path=DescriptionLong}"
+                            Text="{Binding Path=SelectedSense.DescriptionLong}"
                             TextWrapping="Wrap">
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property="Visibility" Value="Visible" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DescriptionLong}" Value="">
+                                        <DataTrigger Binding="{Binding SelectedSense.DescriptionLong}" Value="">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -562,7 +561,7 @@
                             FontWeight="Bold"
                             Text="Glosses:"
                             TextDecorations="Underline" />
-                        <ListBox ItemsSource="{Binding Glosses}" />
+                        <ListBox ItemsSource="{Binding SelectedSense.Glosses}" />
                     </StackPanel>
                 </Expander>
 
@@ -573,10 +572,10 @@
                 <Expander Header="Verses" Style="{StaticResource ExpanderStyle}">
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
-                        <ListBox MaxHeight="300" ItemsSource="{Binding Verses}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Verses}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -636,7 +635,7 @@
                         <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Synonyms.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedSense.Synonyms.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -644,11 +643,11 @@
                     </Expander.Style>
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
-                        <ListBox MaxHeight="300" ItemsSource="{Binding Synonyms}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Synonyms}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -694,7 +693,7 @@
                         <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Antonyms.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedSense.Antonyms.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -702,10 +701,10 @@
                     </Expander.Style>
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
-                        <ListBox MaxHeight="300" ItemsSource="{Binding Antonyms}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Antonyms}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -750,7 +749,7 @@
                         <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Domains.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedSense.Domains.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -758,7 +757,7 @@
                     </Expander.Style>
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
@@ -767,7 +766,7 @@
                             Text="Domains:"
                             TextDecorations="Underline" />
 
-                        <ListBox MaxHeight="300" ItemsSource="{Binding Domains}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Domains}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -806,7 +805,7 @@
                             FontWeight="Bold"
                             Text="Sub Domains:"
                             TextDecorations="Underline" />
-                        <ListBox MaxHeight="300" ItemsSource="{Binding SubDomains}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.SubDomains}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -849,7 +848,7 @@
                         <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding CoreDomains.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedSense.CoreDomains.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -857,10 +856,10 @@
                     </Expander.Style>
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
-                        <ListBox MaxHeight="300" ItemsSource="{Binding CoreDomains}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.CoreDomains}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -902,7 +901,7 @@
                         <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Valencies.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedSense.Valencies.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -910,10 +909,10 @@
                     </Expander.Style>
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
-                        <ListBox MaxHeight="300" ItemsSource="{Binding Valencies}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Valencies}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />
@@ -955,7 +954,7 @@
                         <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding AlphabetTreeNodes.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedSense.AlphabetTreeNodes.Count}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -963,10 +962,10 @@
                     </Expander.Style>
                     <StackPanel
                         Margin="3"
-                        Background="{StaticResource PrimaryHueMidForegroundBrush}"
+                        Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
-                        <TreeView Name="treeview" ItemsSource="{Binding Path=AlphabetTreeNodes}">
+                        <TreeView Name="treeview" ItemsSource="{Binding Path=SelectedSense.AlphabetTreeNodes}">
                             <!--<b:Interaction.Triggers>
                         <b:EventTrigger EventName="SelectedItemChanged">
                             <b:InvokeCommandAction Command="{Binding Path=SelectedItemChangedCommand}" CommandParameter="{Binding ElementName=treeview, Path=SelectedItem}" />

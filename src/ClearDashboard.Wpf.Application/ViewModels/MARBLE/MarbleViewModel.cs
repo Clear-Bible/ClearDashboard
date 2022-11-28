@@ -3,33 +3,26 @@ using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.Views.Marble;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Translation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
-using ClearDashboard.Wpf.Application.Views.MARBLE;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using System.Xml.Linq;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
+namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 {
     public class MarbleViewModel : ToolViewModel, IHandle<VerseChangedMessage>
     {
-        private readonly ILogger<WordMeaningsViewModel> _logger;
+        private readonly ILogger<MarbleViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly IEventAggregator? _eventAggregator;
         private readonly TranslationSource _translationSource;
@@ -38,6 +31,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         private List<SemanticDomainLookup>? _lookup;
         private string _currentVerse = "";
+
 
 
         #region BCV
@@ -138,7 +132,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         #endregion //Observable Properties
 
-        private ObservableCollection<Senses> _senses;
+        private ObservableCollection<Senses> _senses = new();
         public ObservableCollection<Senses> Senses
         {
             get => _senses;
@@ -148,6 +142,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
                 NotifyOfPropertyChange(() => Senses);
             }
         }
+
+        private Senses _selectedSense;
+        public Senses SelectedSense
+        {
+            get => _selectedSense;
+            set
+            {
+                _selectedSense = value;
+                NotifyOfPropertyChange(() => SelectedSense);
+            }
+        }
+
 
 
 
@@ -209,7 +215,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
             // no-op
         }
 
-        public MarbleViewModel(INavigationService navigationService, ILogger<WordMeaningsViewModel> logger,
+        public MarbleViewModel(INavigationService navigationService, ILogger<MarbleViewModel> logger,
             DashboardProjectManager? projectManager, TranslationSource translationSource,
             IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
             : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
@@ -227,7 +233,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
         protected override void OnViewAttached(object view, object context)
         {
-            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            // grab the dictionary of all the verse lookups
+            if (ProjectManager?.CurrentParatextProject is not null)
+            {
+                BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+
+                var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                    .Select(g => g.First())
+                    .ToList();
+
+                foreach (var book in books)
+                {
+                    var bookId = book.Substring(0, 3);
+
+                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                    CurrentBcv.BibleBookList?.Add(bookName);
+                }
+            }
+            else
+            {
+                BcvDictionary = new Dictionary<string, string>();
+            }
+            
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
@@ -350,7 +378,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.MARBLE
 
 
             Senses = queryResult.Data;
-
+            if (Senses.Count > 0)
+            {
+                SelectedSense = Senses[0];
+            }
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)

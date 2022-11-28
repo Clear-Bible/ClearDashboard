@@ -46,7 +46,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.Application.ViewModels.MARBLE;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {

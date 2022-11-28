@@ -98,6 +98,11 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         {
             CollectionView myCollectionView = (CollectionView)CollectionViewSource.GetDefaultView(this.DataContext);
 
+            if (myCollectionView is null)
+            {
+                return;
+            }
+
             foreach (object item in myCollectionView)
             {
                 if (item is INotifyPropertyChanged)

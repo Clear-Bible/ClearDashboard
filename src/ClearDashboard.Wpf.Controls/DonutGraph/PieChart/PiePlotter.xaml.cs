@@ -87,11 +87,21 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
         /// <param name="e"></param>
         void DataContextChangedHandler(object sender, DependencyPropertyChangedEventArgs e)
         {
+            if (this.DataContext is null)
+            {
+                return;
+            }
+
+
             // handle the events that occur when the bound collection changes
             if (this.DataContext is INotifyCollectionChanged)
             {
                 INotifyCollectionChanged observable = (INotifyCollectionChanged)this.DataContext;
                 observable.CollectionChanged += new NotifyCollectionChangedEventHandler(BoundCollectionChanged);
+            }
+            else
+            {
+                return;
             }
 
             // handle the selection change events

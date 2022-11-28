@@ -315,7 +315,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     SubDomains = subDomains,
                     Synonyms = synonyms,
                     Antonyms = antonyms,
-                    //ManuscriptWord = _selectedHebrew,
+                    ManuscriptWord = _word,
                     Collocations = collocations,
                     Valencies = valencies,
                     StrongCodes = strongCodes,

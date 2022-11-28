@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.Application.Views.MARBLE
+namespace ClearDashboard.Wpf.Application.Views.Marble
 {
     /// <summary>
     /// Interaction logic for MarbleView.xaml
