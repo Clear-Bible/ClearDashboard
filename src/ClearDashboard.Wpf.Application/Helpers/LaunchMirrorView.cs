@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.Views;
 
 namespace ClearDashboard.Wpf.Application.Helpers
@@ -47,6 +50,16 @@ namespace ClearDashboard.Wpf.Application.Helpers
             {
                 widthZoom = heightZoom;
             }
+
+            // TODO
+            switch (datacontext)
+            {
+                case MarbleViewModel:
+                    Uri iconUri = new Uri("pack://application:,,,/Resources/donut_icon.ico", UriKind.RelativeOrAbsolute);
+                    mirror.Icon = BitmapFrame.Create(iconUri);
+                    break;
+            }
+            
 
             // scale the view accordingly
             mirror.MirrorViewRoot.LayoutTransform = new ScaleTransform(widthZoom, heightZoom);
