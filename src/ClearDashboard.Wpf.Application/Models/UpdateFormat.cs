@@ -215,6 +215,11 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static async Task<bool> CheckVersionCompatibility(string projectVersion)
         {
+            if (string.IsNullOrEmpty(projectVersion))
+            {
+                return false;
+            }
+
             var updateData = await GetUpdateDataFromFile();
             var parsedProjectVersion = ParseVersionString(projectVersion);
             if (parsedProjectVersion == null)
