@@ -33,6 +33,7 @@ public class TokenizedCorpus : SynchronizableTimestampedEntity
     public virtual ICollection<ParallelCorpus> TargetParallelCorpora { get; set; }
     public virtual ICollection<VerseRow> VerseRows { get; set; }
 
+    [ForeignKey(nameof(CorpusId))]
     public virtual Guid CorpusId { get; set; }
     public virtual Corpus? Corpus { get; set; }
 

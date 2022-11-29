@@ -10,8 +10,8 @@ public class TranslationModelEntry : IdentifiableEntity
         TargetTextScores = new HashSet<TranslationModelTargetTextScore>();
         // ReSharper restore VirtualMemberCallInConstructor
     }
-    [ForeignKey("TranslationSetId")]
-    public Guid? TranslationSetId { get; set; }
+    [ForeignKey(nameof(TranslationSetId))]
+    public Guid TranslationSetId { get; set; }
     public virtual TranslationSet? TranslationSet { get; set; }
     public string? SourceText { get; set; }
 

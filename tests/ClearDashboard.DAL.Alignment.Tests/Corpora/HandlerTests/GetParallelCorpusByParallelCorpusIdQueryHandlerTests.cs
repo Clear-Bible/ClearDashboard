@@ -258,7 +258,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             Assert.NotNull(parallelCorpusDB);
 
             // Remove the source tokenized corpus:
-            parallelCorpusDB!.SourceTokenizedCorpus = null;
+            parallelCorpusDB!.SourceTokenizedCorpusId = Guid.Empty;
 
             // Commit to database.  Should throw a DbUpdateException
             // containing a SqliteException 19 "FOREIGN KEY constraint failed"
@@ -270,7 +270,7 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
             Assert.NotNull(parallelCorpusDB);
 
             // Remove the target tokenized corpus:
-            parallelCorpusDB!.TargetTokenizedCorpus = null;
+            parallelCorpusDB!.TargetTokenizedCorpusId = Guid.Empty;
 
             // Commit to database.  Should throw a DbUpdateException
             // containing a SqliteException 19 "FOREIGN KEY constraint failed"

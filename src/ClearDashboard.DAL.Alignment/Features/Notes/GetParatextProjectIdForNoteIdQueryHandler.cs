@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
@@ -15,8 +16,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 {
     public class GetParatextProjectIdForNoteIdQueryHandler : ProjectDbContextQueryHandler<
         GetParatextProjectIdForNoteIdQuery,
-        RequestResult<Guid>,
-        Guid>
+        RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>,
+        (Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>
     {
         private readonly IMediator _mediator;
 
@@ -40,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         /// </remarks>
         /// <param name="noteId">The note for which to get the Paratext project ID.</param>
         /// <returns>The Paratext project ID if all three conditions are met; null otherwise.</returns>
-        protected override async Task<RequestResult<Guid>> GetDataAsync(GetParatextProjectIdForNoteIdQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>> GetDataAsync(GetParatextProjectIdForNoteIdQuery request, CancellationToken cancellationToken)
         {
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
@@ -53,7 +54,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
             if (!iids.Any())
             {
-                return new RequestResult<Guid>
+                return new RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>
                 (
                     success: false,
                     message: $"NoteId '{request.NoteId.Id}' not associated with any domain entity ids"
@@ -67,7 +68,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 if (t is null || t.Name != typeof(TokenId).Name)
                 {
                     var domainEntityType = t?.Name ?? "Unknown";
-                    return new RequestResult<Guid>
+                    return new RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>
                     (
                         success: false,
                         message: $"NoteId '{request.NoteId.Id}' associated with at least one non-TokenId domain entity of type '{domainEntityType}'"
@@ -82,6 +83,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             var tokenGroups = ProjectDbContext!.Tokens
                 .Include(e => e.TokenizedCorpus)
                     .ThenInclude(e => e!.Corpus)
+                        .ThenInclude(c => c!.User)
+                .Include(e => e.TokenizedCorpus)
+                    .ThenInclude(e => e!.User)
                 .Include(e => e.VerseRow)
                     .ThenInclude(e => e!.TokenComponents)
                 .Where(e => iids.Select(i => i.Id).Contains(e.Id))
@@ -91,7 +95,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
             if (tokenGroups.Count() != 1)
             {
-                return new RequestResult<Guid>
+                return new RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>
                 (
                     success: false,
                     message: $"NoteId '{request.NoteId.Id}' associated with Tokens not of a common VerseRow (i.e. common TokenizedCorpus, Book, Chapter and Verse)"
@@ -99,9 +103,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             }
 
             var associatedTokens = tokenGroups.Single();
+            var allTokensInVerse = associatedTokens.First().VerseRow!.TokenComponents.ToList();
 
             // Ensure that Tokens are contiguous within the VerseRow:
-            var verseRowTokenIdToIndex = associatedTokens.First().VerseRow!.TokenComponents
+            var verseRowTokenIdToIndex = allTokensInVerse
                 .Where(tc => tc.GetType() == typeof(Models.Token))
                 .Select(t => (Models.Token)t)
                 .OrderBy(t => t.WordNumber)
@@ -119,7 +124,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
 
             if (missing.Any())
             {
-                return new RequestResult<Guid>
+                return new RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>
                 (
                     success: false,
                     message: $"NoteId '{request.NoteId.Id}' associated with non-contiguous VerseRow Tokens"
@@ -131,13 +136,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             
             if (Guid.TryParse(paratextGuidAsString, out var paratextGuid))
             {
-                return new RequestResult<Guid>((
-                    paratextGuid
+                var tokenizedTextCorpusId = ModelHelper.BuildTokenizedTextCorpusId(associatedTokens.First().TokenizedCorpus!);
+                var verseTokens = allTokensInVerse.Select(t => ModelHelper.BuildToken(t));
+
+                return new RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>((
+                    (paratextGuid, tokenizedTextCorpusId, verseTokens)
                 ));
             }
             else
             {
-                return new RequestResult<Guid>
+                return new RequestResult<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)>
                 (
                     success: false,
                     message: $"NoteId '{request.NoteId.Id}' associated with Tokens of Corpus '{tokenGroups.Single().First().TokenizedCorpus!.CorpusId}', which has an invalid or empty ParatextGuid value '{paratextGuidAsString ?? string.Empty}'"

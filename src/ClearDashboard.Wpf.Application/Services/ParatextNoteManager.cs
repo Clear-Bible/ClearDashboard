@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using MediatR;
@@ -22,7 +26,19 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>The Paratext project ID if all three conditions are met; null otherwise.</returns>
         public static async Task<Guid?> GetParatextId(IMediator mediator, NoteId noteId)
         {
-            return await Note.GetParatextIdIfAssociatedContiguousTokensOnly(mediator, noteId);
+            var result = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(mediator, noteId);
+            if (result is null)
+            {
+                return null;
+            }
+
+            (Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens) = result.Value;
+            // FIXME ANDY!
+            // What do you want to do with 
+            //    tokenizedTextCorpusId
+            //    verseTokens
+
+            return paratextId;
         }
 
         /// <summary>
