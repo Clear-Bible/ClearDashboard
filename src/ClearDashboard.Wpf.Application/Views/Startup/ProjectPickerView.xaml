@@ -333,7 +333,7 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
@@ -509,7 +509,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem Grid.Column="4">
-                <userControls:ReleaseNotesUserControl></userControls:ReleaseNotesUserControl>
+                <userControls:ReleaseNotesUserControl />
             </StatusBarItem>
         </StatusBar>
     </Grid>
