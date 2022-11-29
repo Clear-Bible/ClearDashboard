@@ -12,19 +12,26 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
     public enum ReleaseNoteType
     {
+        [Description("Added")]
         Added,
+        [Description("Bug Fix")]
         BugFix,
+        [Description("Changed")]
         Changed,
+        [Description("Updated")]
         Updated,
+        [Description("Deferred")]
         Deferred,
+        [Description("Breaking Change")]
         BreakingChange
     }
-    
+
     public class UpdateFormat
     {
         public string Version { get; set; } = String.Empty;
@@ -35,11 +42,9 @@ namespace ClearDashboard.Wpf.Application.Models
 
     public class ReleaseNote
     {
-
-
         public ReleaseNoteType NoteType { get; set; } = ReleaseNoteType.Added;
         public string Note { get; set; } = String.Empty;
-        public string Version { get; set; }
+        public string VersionNumber { get; set; } = String.Empty;
     }
 
     public static class ReleaseNotesManager
@@ -60,12 +65,14 @@ namespace ClearDashboard.Wpf.Application.Models
 
                 try
                 {
-                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/new-json-format/ClearDashboard.json");
+                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/main/VersionHistory/ClearDashboard.json");
                     req.UserAgent = "[any words that is more than 5 characters]";
                     req.Accept = "application/json";
                     WebResponse response = req.GetResponse(); //Error Here
                     Stream dataStream = response.GetResponseStream();
-                    UpdateData = await JsonSerializer.DeserializeAsync<List<UpdateFormat>>(dataStream);
+                    
+                    var options = new JsonSerializerOptions { WriteIndented = true };
+                    UpdateData = await JsonSerializer.DeserializeAsync<List<UpdateFormat>>(dataStream, options);
                     UpdateDataUpdated = true;
                 }
                 catch (Exception)
@@ -112,10 +119,10 @@ namespace ClearDashboard.Wpf.Application.Models
             var selectUpdates = new List<UpdateFormat>();
             foreach (var update in updateDataList)
             {
-                if (CheckWebVersion(update.Version))
-                {
+                //if (CheckWebVersion(update.Version))
+                //{
                     selectUpdates.Add(update);
-                }
+                //}
             }
 
             UpdateData = selectUpdates;

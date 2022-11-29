@@ -47,6 +47,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
 
@@ -169,7 +170,7 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
 
-                                    <GridViewColumn Width="{Binding ElementName=ListView, Path=ActualWidth, Converter={converters:WidthSubtraction}, ConverterParameter='140'}">
+                                    <GridViewColumn Width="{Binding ElementName=NotesList, Path=ActualWidth, Converter={converters:WidthSubtraction}, ConverterParameter='170'}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock
@@ -187,7 +188,9 @@
                 </ItemContainerTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
         <Button
+            Grid.Row="1"
             x:Name="Close"
             Margin="10"
             HorizontalAlignment="Right"

@@ -121,7 +121,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             settings.ResizeMode = ResizeMode.CanResize;
-            settings.MinWidth = 600;
+            settings.MinWidth = 800;
             settings.MinHeight = 600;
             settings.Title = $"{titleString} - {_updateData?.Version}";
 
