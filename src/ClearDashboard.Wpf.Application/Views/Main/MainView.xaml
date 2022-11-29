@@ -136,11 +136,11 @@
                             </DataTemplate>
                         </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
 
-                        <panes:PanesTemplateSelector.WordMeaningsViewTemplate>
+                        <!--<panes:PanesTemplateSelector.WordMeaningsViewTemplate>
                             <DataTemplate>
                                 <paratextViews:WordMeaningsView />
                             </DataTemplate>
-                        </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
+                        </panes:PanesTemplateSelector.WordMeaningsViewTemplate>-->
 
                         <panes:PanesTemplateSelector.MarbleViewTemplate>
                             <DataTemplate>
