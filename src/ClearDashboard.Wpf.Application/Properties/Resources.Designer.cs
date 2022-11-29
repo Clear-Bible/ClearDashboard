@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2022-11-18T21:35:42
+        ///   Looks up a localized string similar to 2022-11-29T17:21:36
         ///.
         /// </summary>
         internal static string BuildDate {
