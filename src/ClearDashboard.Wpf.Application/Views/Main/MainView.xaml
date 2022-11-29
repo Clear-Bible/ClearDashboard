@@ -100,7 +100,7 @@
                     </TextBlock>
                 </controls:SidebarExpander.Header>
 
-                <local:ProjectDesignSurfaceView x:Name="ProjectDesignSurfaceControl" DataContext="{Binding ProjectDesignSurfaceViewModel}"  />
+                <local:ProjectDesignSurfaceView x:Name="ProjectDesignSurfaceControl" DataContext="{Binding ProjectDesignSurfaceViewModel}" />
             </controls:SidebarExpander>
 
             <DockingManager
