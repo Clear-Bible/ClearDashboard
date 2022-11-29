@@ -63,12 +63,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public bool LoadingDesignSurface { get; set; }
 
         public bool DesignSurfaceLoaded { get; set; }
+
         /// <summary>
         /// This is the design surface that is displayed in the window.
         /// It is the main part of the view-model.
         /// </summary>
-        private DesignSurfaceViewModel? _designSurfaceViewModel;
-        public DesignSurfaceViewModel? DesignSurfaceViewModel
+        private DesignSurfaceViewModel _designSurfaceViewModel;
+        public DesignSurfaceViewModel DesignSurfaceViewModel
         {
             get => _designSurfaceViewModel;
             private set => Set(ref _designSurfaceViewModel, value);
@@ -685,9 +686,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                   token: cancellationToken);
 
                             corpus.CorpusId.FontFamily = selectedProject.FontFamily;
+
+                            node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
 #pragma warning restore CS8604
                         }
-                        node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
+                       
 
 
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
