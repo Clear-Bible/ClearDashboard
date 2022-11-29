@@ -17,6 +17,7 @@ using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
@@ -44,13 +45,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
-using System.Windows.Shell;
-using System.IO.Compression;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.Wpf.Application.ViewModels.Marble;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
