@@ -22,12 +22,6 @@ using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using SIL.Extensions;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
-using System.Diagnostics;
-using System.Dynamic;
-using System.Collections.Generic;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {

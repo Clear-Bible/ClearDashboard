@@ -31,12 +31,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using ClearDashboard.Wpf.Application.Views.Shell;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
-using System.Security.Policy;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using System.Runtime.InteropServices;
-using System.Drawing;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {

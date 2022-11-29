@@ -23,7 +23,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-            <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+            <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
         </ResourceDictionary>
     </UserControl.Resources>

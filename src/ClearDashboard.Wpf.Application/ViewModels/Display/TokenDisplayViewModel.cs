@@ -83,18 +83,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         public bool HasNote => NoteIds.Any();
 
-        public void NoteAdded(NoteViewModel note)
+        public void NoteAdded(NoteViewModel? note)
         {
             //Notes.Add(note);
-            NoteIds.AddDistinct(note.NoteId);
+            NoteIds.AddDistinct(note!.NoteId!);
             //NotifyOfPropertyChange(nameof(Notes));
             NotifyOfPropertyChange(nameof(HasNote));
         }
 
-        public void NoteDeleted(NoteViewModel note)
+        public void NoteDeleted(NoteViewModel? note)
         {
             //Notes.Remove(note);
-            NoteIds.RemoveIfExists(note.NoteId);
+            NoteIds.RemoveIfExists(note!.NoteId!);
             //NotifyOfPropertyChange(nameof(Notes));
             NotifyOfPropertyChange(nameof(HasNote));
         }

@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-using ClearBible.Engine.Corpora;
+﻿using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using SIL.Machine.Corpora;
-using SIL.Scripture;
 using SIL.Machine.Tokenization;
+using SIL.Scripture;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using ClearBible.Engine.Utils;
-using MediatR;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Display
 {
