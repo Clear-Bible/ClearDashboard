@@ -1058,7 +1058,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusNode.CorpusId);
                 DesignSurfaceViewModel!.CreateCorpusNodeMenu(corpusNode, tokenizedCorpora);
+
+                foreach (var parallelCorpus in corpusNode.AttachedConnections)
+                {
+                    DesignSurfaceViewModel!.CreateConnectionMenu(parallelCorpus, topLevelProjectIds);
+                }
+               
             }
+
+
         }
 
         #endregion // Methods
