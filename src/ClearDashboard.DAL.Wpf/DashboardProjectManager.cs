@@ -111,7 +111,7 @@ public class DashboardProjectManager : ProjectManager
     private readonly INavigationService _navigationService;
 
     private bool _licenseCleared = false;
-    public static bool InComingChangesStarted { get; set; }
+    public static bool IncomingChangesStarted { get; set; }
 
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
@@ -220,12 +220,12 @@ public class DashboardProjectManager : ProjectManager
 
         {
             requestedVerses.Add(verse);
-            if (!InComingChangesStarted)
+            if (!IncomingChangesStarted)
             {
-                InComingChangesStarted = true;
+                IncomingChangesStarted = true;
                 CurrentVerse = verse;
                 await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
-                InComingChangesStarted = false;
+                IncomingChangesStarted = false;
 
                 if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))
                 {

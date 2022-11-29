@@ -33,12 +33,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>
     {
-        private NoteManager NoteManager { get; }
-        private IEventAggregator EventAggregator { get; }
+        private NoteManager? NoteManager { get; }
+        private IEventAggregator? EventAggregator { get; }
 
         private ILogger<VerseDisplayViewModel>? Logger { get; }
 
-        private IReadOnlyList<Token> SourceTokens { get; set; }
+        private IReadOnlyList<Token>? SourceTokens { get; set; }
         private EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
         public bool IsSourceRtl { get; set; }
         private IReadOnlyList<Token>? TargetTokens { get; set; }
@@ -97,12 +97,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
 
         private async Task BuildTokenDisplayViewModelsAsync()
         {
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens, SourceDetokenizer, IsSourceRtl, true);
+            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens!, SourceDetokenizer, IsSourceRtl, true);
             NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             
             if (TargetTokens != null)
             {
-                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer, IsSourceRtl, true);
+                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer!, IsSourceRtl, true);
                 NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
             }
 
@@ -120,8 +120,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                     PaddingBefore = paddedToken.paddingBefore,
                     PaddingAfter = paddedToken.paddingAfter,
                     Translation = GetTranslationForToken(paddedToken.token),
-                    NoteIds = await NoteManager.GetNoteIdsAsync(paddedToken.token.TokenId),
-                    IsSource = isSource
+                    NoteIds = await NoteManager!.GetNoteIdsAsync(paddedToken.token.TokenId),
+                    IsSource = isSource,
+                    
                 });
             }
             return result;
@@ -276,7 +277,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
                 // If translation propagates to other translations, then we need a fresh call to PopulateTranslations() and to rebuild the token displays.
                 if (translationActionType == TranslationActionTypes.PutPropagate)
                 {
-                    Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
+                    Translations = await GetTranslations(TranslationSet, SourceTokens!.Select(t => t.TokenId));
                     await BuildTokenDisplayViewModelsAsync();
                     await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
                 }
@@ -359,6 +360,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
         /// Constructor used via dependency injection.
         /// </summary>
         /// <param name="noteManager"></param>
+        /// <param name="eventAggregator"></param>
         /// <param name="logger"></param>
         // ReSharper disable once UnusedMember.Global
         public VerseDisplayViewModel(NoteManager noteManager, IEventAggregator eventAggregator, ILogger<VerseDisplayViewModel>? logger)

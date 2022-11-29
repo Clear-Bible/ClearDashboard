@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
@@ -31,7 +32,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -41,9 +41,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DataAccessLayer.Events;
-using ClearDashboard.Wpf.Application.Dialogs;
-using ClearDashboard.Wpf.Application.UserControls;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
@@ -89,11 +86,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // used for storing the displayed corpus order
         public List<DisplayOrder> DisplayOrder = new();
 
-        private List<TokenProject> _tokenProjects = new();
-        private List<ShowTokenizationWindowMessage> _projectMessages = new();
+        private readonly List<TokenProject> _tokenProjects = new();
+        private readonly List<ShowTokenizationWindowMessage> _projectMessages = new();
         
-        private List<ParallelProject> _parallelProjects = new();
-        private List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
+        private readonly List<ParallelProject> _parallelProjects = new();
+        private readonly List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
 
 
@@ -136,7 +133,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //    ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
 
                     // update this window with the Paratext verse
-                    CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+                    CurrentBcv.SetVerseFromId(_projectManager!.CurrentVerse);
                 }
 
                 _paratextSync = value;
@@ -212,12 +209,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else if (_verseChange != value)
                 {
-                    ProjectManager.CurrentVerse = value;
+                    ProjectManager!.CurrentVerse = value;
                     // push to Paratext
-                    if (ParatextSync && !DashboardProjectManager.InComingChangesStarted)
+                    if (ParatextSync && !DashboardProjectManager.IncomingChangesStarted)
                     {
                         Task.Run( () => 
-                        ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None)
+                            ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None)
                         );
                     }
 
@@ -262,7 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _tokenizationType, value);
         }
 
-        public TokenizedTextCorpus? currentTokenizedTextCorpus
+        public TokenizedTextCorpus? CurrentTokenizedTextCorpus
         {
             get => _currentTokenizedTextCorpus;
             set => Set(ref _currentTokenizedTextCorpus, value);
@@ -356,7 +353,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NoteManager = noteManager;
             _serviceProvider = serviceProvider;
 
-            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger);
+            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
             ContentId = "ENHANCEDVIEW";
 
             ProgressBarVisibility = Visibility.Collapsed;
@@ -401,7 +398,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 BcvDictionary = new Dictionary<string, string>();
             }
             
-            CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
+            CurrentBcv.SetVerseFromId(_projectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
 
@@ -492,7 +489,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private void DeleteCorpusRow(object obj)
         {
-            var row = obj as VersesDisplay;
+            var row = (VersesDisplay)obj ;
 
             // remove from the display
             var index = VersesDisplay.Select((element, index) => new { element, index })
@@ -563,23 +560,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             ProgressBarVisibility = Visibility.Visible;
 
-            TokenProject? project = null;
-            // check if we have this already
-            try
-            {
-                if (_tokenProjects.Count > 0)
-                {
-                    project = _tokenProjects.First(p =>
-                    {
-                        return p.ParatextProjectId == message.ParatextProjectId
-                               && p.TokenizationType == message.TokenizationType;
-                    }) ?? null;
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-            }
+
+            //CODE REVIEW:  what is the purpose of the following code between *********
+
+            // ***********************************************************************************************************
+            //TokenProject? project = null;
+            //// check if we have this already
+            //try
+            //{
+            //    if (_tokenProjects.Count > 0)
+            //    {
+            //        project = _tokenProjects.First(p => p.ParatextProjectId == message.ParatextProjectId
+            //                                            && p.TokenizationType == message.TokenizationType) ?? null;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    _logger.LogError(e.Message);
+            //}
+            // ***********************************************************************************************************
 
             ProgressBarVisibility = Visibility.Visible;
 
@@ -629,11 +628,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     else
                     {
                         // regular Paratext corpus
-                        var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+                        var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken)!;
                         if (result.Success && result.HasData)
                         {
-                            metadata = result.Data.FirstOrDefault(b =>
-                                           b.Id == message.ParatextProjectId.Replace("-", "")) ??
+                            metadata = result.Data!.FirstOrDefault(b =>
+                                           b.Id == message.ParatextProjectId!.Replace("-", "")) ??
                                        throw new InvalidOperationException();
                         }
                         else
@@ -660,7 +659,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (project is null)
                     {
                         // get the entirety of text for this corpus
-                        currentTokenizedTextCorpus =
+                        CurrentTokenizedTextCorpus =
                             await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId.Value));
 
                         // add this corpus to our master list
@@ -672,7 +671,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             CorpusId = message.CorpusId.Value,
                             TokenizedTextCorpusId = message.TokenizedTextCorpusId.Value,
                             Metadata = metadata,
-                            TokenizedTextCorpus = currentTokenizedTextCorpus,
+                            TokenizedTextCorpus = CurrentTokenizedTextCorpus,
                         });
 
                         // add in the message so we can get it later
@@ -680,7 +679,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     else
                     {
-                        currentTokenizedTextCorpus = project.TokenizedTextCorpus;
+                        CurrentTokenizedTextCorpus = project.TokenizedTextCorpus;
                     }
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -693,7 +692,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }), cancellationToken);
 
                     // get the rows for the current book and chapter
-                    var tokensTextRows = currentTokenizedTextCorpus[CurrentBook?.Code]
+                    var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
                         .GetRows()
                         .WithCancellation(localCancellationToken)
                         .Cast<TokensTextRow>()
@@ -1345,13 +1344,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
 
-                DashboardProjectManager.InComingChangesStarted = true;
+                DashboardProjectManager.IncomingChangesStarted = true;
 
                 // set the CurrentBcv prior to listening to the event
                 CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
                 NotifyOfPropertyChange(() => CurrentBcv);
-                DashboardProjectManager.InComingChangesStarted = false;
+                DashboardProjectManager.IncomingChangesStarted = false;
             }
             else
             {
@@ -1370,7 +1369,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 try
                 {
-                    currentTokenizedTextCorpus = message.TokenizedTextCorpus;
+                    CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
                     TokenizationType = message.TokenizationName;
                     CurrentBook = message.ProjectMetadata.AvailableBooks.First();
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -1383,7 +1382,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }), cancellationToken);
 
                     var tokensTextRows =
-                        currentTokenizedTextCorpus[CurrentBook?.Code]
+                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
                             .GetRows()
                             .WithCancellation(localCancellationToken)
                             .Cast<TokensTextRow>()

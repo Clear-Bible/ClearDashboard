@@ -1837,10 +1837,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (dockableWindows.Count == 1)
                 {
                     // there is only one doc window open, so we can just add to it
-                    var enhancedCorpusViewModels =
-                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
-                            EnhancedViewModel;
-                    if (enhancedCorpusViewModels is not null)
+                    if (Items.First(items => items.GetType() == typeof(EnhancedViewModel)) is EnhancedViewModel enhancedCorpusViewModels)
                     {
                         await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
                     }
@@ -1857,12 +1854,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // ReSharper disable once PossibleNullReferenceException
                         var guid = vm.Guid;
 
-                        var enhancedCorpusViewModels =
-                            Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
-                                    // ReSharper disable once UsePatternMatching
-                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
-                                EnhancedViewModel;
-                        if (enhancedCorpusViewModels is not null)
+                        if (Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
+                                .First(item => ((EnhancedViewModel)item).Guid == guid) is EnhancedViewModel enhancedCorpusViewModels)
                         {
                             await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
                             return;
@@ -1871,7 +1864,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            // unactivate any other doc windows before we add in the new one
+            // deactivate any other doc windows before we add in the new one
             var docWindows = _dockingManager.Layout.Descendents()
                 .OfType<LayoutDocument>();
             foreach (var document in docWindows)
@@ -1880,11 +1873,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
 
-            string tokenizationType = message.TokenizationType;
-            string paratextId = message.ParatextProjectId;
+            var tokenizationType = message.TokenizationType;
+            var paratextId = message.ParatextProjectId;
 
-            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
-            viewModel.CurrentCorpusName = message.ProjectName;
+            var viewModel = IoC.Get<EnhancedViewModel>();
+            viewModel.CurrentCorpusName = message!.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
@@ -1937,10 +1930,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
 
-                this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-                await OnInitializeAsync(CancellationToken.None);
-                await OnActivateAsync(CancellationToken.None);
-                await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+                if (result == true)
+                {
+                    NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+                    await OnInitializeAsync(CancellationToken.None);
+                    await OnActivateAsync(CancellationToken.None);
+                    await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+                }
             }
         }
 
