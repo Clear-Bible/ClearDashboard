@@ -1,15 +1,15 @@
-﻿using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
-using ClearDashboard.Wpf.Controls;
+﻿using ClearDashboard.Wpf.Controls;
 using System;
 using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
 namespace ClearDashboard.Wpf.Application.Views.Project
 {
     /// <summary>
-    /// This is a partial implementation of MainWindow that just contains most of the zooming and panning functionality.
+    /// This is a partial implementation of ProjectDesignSurfaceView that just contains most of the zooming and panning functionality.
     /// </summary>
     public partial class ProjectDesignSurfaceView
     {
@@ -49,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         private bool _prevZoomRectSet;
 
         /// <summary>
-        /// Event raised on mouse down in the NetworkView.
+        /// Event raised on mouse down in the ProjectDesignSurfaceView.
         /// </summary> 
         private void OnDesignSurfaceMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -87,7 +87,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         }
 
         /// <summary>
-        /// Event raised on mouse up in the NetworkView.
+        /// Event raised on mouse up in the ProjectDesignSurfaceView.
         /// </summary>
         private void OnDesignSurfaceMouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -140,14 +140,14 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         }
 
         /// <summary>
-        /// Event raised on mouse move in the NetworkView.
+        /// Event raised on mouse move in the ProjectDesignSurfaceView.
         /// </summary>
-        private void networkControl_MouseMove(object sender, MouseEventArgs e)
+        private void OnDesignSurfaceMouseMove(object sender, MouseEventArgs e)
         {
             if (_mouseHandlingMode == MouseHandlingMode.Panning)
             {
-                var curZoomAndPanControlMousePoint = e.GetPosition(zoomAndPanControl);
-                var dragOffset = curZoomAndPanControlMousePoint - _origZoomAndPanControlMouseDownPoint;
+                var currentPoint = e.GetPosition(zoomAndPanControl);
+                var dragOffset = currentPoint - _origZoomAndPanControlMouseDownPoint;
                 var dragThreshold = 10;
                 if (Math.Abs(dragOffset.X) > dragThreshold ||
                     Math.Abs(dragOffset.Y) > dragThreshold)
@@ -214,26 +214,26 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// <summary>
         /// Event raised by rotating the mouse wheel.
         /// </summary>
-        private void networkControl_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
 
             if (e.Delta > 0)
             {
-                var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
-                ZoomIn(curContentMousePoint);
+                var currentPoint = e.GetPosition(ProjectDesignSurface);
+                ZoomIn(currentPoint);
             }
             else if (e.Delta < 0)
             {
-                var curContentMousePoint = e.GetPosition(ProjectDesignSurface);
-                ZoomOut(curContentMousePoint);
+                var currentPoint = e.GetPosition(ProjectDesignSurface);
+                ZoomOut(currentPoint);
             }
         }
 
         /// <summary>
         /// Event raised when the user has double clicked in the zoom and pan control.
         /// </summary>
-        private void networkControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if ((Keyboard.Modifiers & ModifierKeys.Shift) == 0)
             {
@@ -247,7 +247,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void ZoomIn_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var o = ProjectDesignSurface.SelectedNode;
+           // var o = ProjectDesignSurface.SelectedNode;
 
             ZoomIn(new Point(zoomAndPanControl.ContentZoomFocusX, zoomAndPanControl.ContentZoomFocusY));
         }
@@ -289,7 +289,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             }
             else
             {
-                nodes = this.ViewModel.DesignSurface.CorpusNodes;
+                nodes = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CorpusNodes;
                 if (nodes.Count == 0)
                 {
                     return;
@@ -344,10 +344,6 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             zoomAndPanControl.AnimatedZoomTo(1.0);
         }
 
-        //private void ToggleCorpusVisibility_Executed(object sender, ExecutedRoutedEventArgs e)
-        //{
-        //    ViewModel.ToggleCorpusVisible("");
-        //}
 
         /// <summary>
         /// Jump back to the previous zoom level.
@@ -455,6 +451,9 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         //
         private void FadeOutDragZoomRect()
         {
+            //AnimationHelper.StartAnimation(DragZoomBorder, UIElement.OpacityProperty, 0.0, 0.1,
+            //    (sender, e) => DragZoomCanvas.Visibility = Visibility.Collapsed);
+
             AnimationHelper.StartAnimation(DragZoomBorder, UIElement.OpacityProperty, 0.0, 0.1,
                 delegate (object sender, EventArgs e)
                 {
@@ -480,17 +479,7 @@ namespace ClearDashboard.Wpf.Application.Views.Project
             _prevZoomRectSet = false;
         }
 
-        private void OnCorpusNodeProperties(object sender, ExecutedRoutedEventArgs e)
-        {
-            var corpus = (CorpusNodeViewModel)e.Parameter;
-            this.ViewModel.ShowCorpusProperties(corpus);
+      
 
-        }
-
-        private void OnConnectionProperties(object sender, ExecutedRoutedEventArgs e)
-        {
-            var connection = (ConnectionViewModel)e.Parameter;
-            this.ViewModel.ShowConnectionProperties(connection);
-        }
     }
 }

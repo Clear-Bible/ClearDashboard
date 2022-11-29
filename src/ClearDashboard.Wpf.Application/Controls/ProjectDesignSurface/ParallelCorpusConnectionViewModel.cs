@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.Wpf.Controls.Utils;
+using System;
 using System.Windows;
 using System.Windows.Media;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
-using ClearDashboard.Wpf.Controls.Utils;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a connection between two connectors (aka connection points) of two nodes.
     /// </summary>
-    public sealed class ConnectionViewModel : AbstractModelBase
+    public sealed class ParallelCorpusConnectionViewModel : AbstractModelBase
     {
         #region Internal Data Members
 
         /// <summary>
         /// The source connector the connection is attached to.
         /// </summary>
-        private ConnectorViewModel _sourceConnector;
+        private ParallelCorpusConnectorViewModel? _sourceConnector;
 
         /// <summary>
         /// The destination connector the connection is attached to.
         /// </summary>
-        private ConnectorViewModel _destinationConnector;
+        private ParallelCorpusConnectorViewModel? _destinationConnector;
 
         /// <summary>
         /// The source and dest hotspots used for generating connection points.
@@ -37,12 +33,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Points that make up the connection.
         /// </summary>
-        private PointCollection _points;
+        private PointCollection? _points;
 
         /// <summary>
         /// Set to 'true' when the node is selected.
         /// </summary>
-        private bool _isSelected = false;
+        private bool _isSelected;
 
         #endregion Internal Data Members
 
@@ -52,18 +48,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public bool IsSelected
         {
             get => _isSelected;
-            set
-            {
-                Set(ref _isSelected, value);
-            }
+            set => Set(ref _isSelected, value);
         }
 
         public bool IsRtl { get; set; }
 
         public Guid Id { get; set; } = Guid.NewGuid();
         
-        private ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> _menuItems = new();
-        public ObservableCollection<ParallelCorpusConnectionMenuItemViewModel> MenuItems
+        private BindableCollection<ParallelCorpusConnectionMenuItemViewModel> _menuItems = new();
+        public BindableCollection<ParallelCorpusConnectionMenuItemViewModel> MenuItems
         {
             get => _menuItems;
             set
@@ -76,7 +69,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The source connector the connection is attached to.
         /// </summary>
-        public ConnectorViewModel SourceConnector
+        public ParallelCorpusConnectorViewModel? SourceConnector
         {
             get => _sourceConnector;
             set
@@ -109,7 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The destination connector the connection is attached to.
         /// </summary>
-        public ConnectorViewModel DestinationConnector
+        public ParallelCorpusConnectorViewModel? DestinationConnector
         {
             get => _destinationConnector;
             set
@@ -171,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Points that make up the connection.
         /// </summary>
-        public PointCollection Points
+        public PointCollection? Points
         {
             get => _points;
             set
@@ -181,22 +174,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             }
         }
 
-
-        public List<TranslationSetInfo> TranslationSetInfo { get; set; } = new();
-
-        public List<AlignmentSetInfo> AlignmentSetInfo { get; set; } = new();
-
         public ParallelCorpusId? ParallelCorpusId { get; set; }
         public string? ParallelCorpusDisplayName { get; set; }
 
-        public string SourceFontFamily { get; set; } = "Segoe UI";
-        public string TargetFontFamily { get; set; } = "Segoe UI";
+        public string? SourceFontFamily { get; set; } = "Segoe UI";
+        public string? TargetFontFamily { get; set; } = "Segoe UI";
 
 
         /// <summary>
         /// Event fired when the connection has changed.
         /// </summary>
-        public event EventHandler<EventArgs> ConnectionChanged;
+        public event EventHandler<EventArgs>? ConnectionChanged;
 
         #region Private Methods
 
@@ -214,17 +202,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Event raised when the hotspot of the source connector has been updated.
         /// </summary>
-        private void OnSourceConnectorHotspotUpdated(object sender, EventArgs e)
+        private void OnSourceConnectorHotspotUpdated(object? sender, EventArgs e)
         {
-            SourceConnectorHotspot = SourceConnector.Hotspot;
+            SourceConnectorHotspot = SourceConnector!.Hotspot;
         }
 
         /// <summary>
         /// Event raised when the hotspot of the dest connector has been updated.
         /// </summary>
-        private void OnDestinationConnectorHotspotUpdated(object sender, EventArgs e)
+        private void OnDestinationConnectorHotspotUpdated(object? sender, EventArgs e)
         {
-            DestConnectorHotspot = DestinationConnector.Hotspot;
+            DestConnectorHotspot = DestinationConnector!.Hotspot;
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
@@ -11,13 +10,13 @@ using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Controls.Utils;
 using Size = System.Windows.Size;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines a node in the view-model.
     /// CorpusNodes are connected to other nodes through attached connectors (aka anchor/connection points).
     /// </summary>
-    public class CorpusNodeViewModel : AbstractModelBase, IHandle<ConnectionSelectedChangedMessage>
+    public class CorpusNodeViewModel : Screen, IHandle<ConnectionSelectedChangedMessage>
     {
 
         #region events
@@ -31,7 +30,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         public event EventHandler<EventArgs>? SizeChanged;
 
         #endregion
-
 
         #region Private Data Members
 
@@ -72,12 +70,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
         /// </summary>
-        private ImpObservableCollection<ConnectorViewModel> _inputConnectors = null;
+        private ImpObservableCollection<ParallelCorpusConnectorViewModel> _inputConnectors = null;
 
         /// <summary>
         /// List of output connectors (connections points) attached to the node.
         /// </summary>
-        private ImpObservableCollection<ConnectorViewModel> _outputConnectors = null;
+        private ImpObservableCollection<ParallelCorpusConnectorViewModel> _outputConnectors = null;
 
         /// <summary>
         /// Set to 'true' when the node is selected.
@@ -97,6 +95,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             set => Set(ref _name, value);
         }
 
+        [JsonIgnore]
         public string TranslationFontFamily { get; set; } = "Segoe UI";
 
         /// <summary>
@@ -120,6 +119,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// The Z index of the node.
         /// </summary>
+        [JsonIgnore]
         public int ZIndex
         {
             get => _zIndex;
@@ -135,6 +135,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         ///     When the size is computed via the UI it is then pushed into the view-model
         ///     so that our application code has access to the size of a node.
         /// </summary>
+        [JsonIgnore]
         public Size Size
         {
             get => _size;
@@ -151,19 +152,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
 
         #endregion Public Properties
 
-        
+
         #region Observable Properties
 
         /// <summary>
         /// List of input connectors (connections points) attached to the node.
         /// </summary>
-        public ImpObservableCollection<ConnectorViewModel> InputConnectors
+        [JsonIgnore]
+        public ImpObservableCollection<ParallelCorpusConnectorViewModel> InputConnectors
         {
             get
             {
                 if (_inputConnectors == null)
                 {
-                    _inputConnectors = new ImpObservableCollection<ConnectorViewModel>();
+                    _inputConnectors = new ImpObservableCollection<ParallelCorpusConnectorViewModel>();
                     _inputConnectors.ItemsAdded += OnInputConnectorsItemsAdded;
                     _inputConnectors.ItemsRemoved += OnInputConnectorsItemsRemoved;
                 }
@@ -175,13 +177,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// List of output connectors (connections points) attached to the node.
         /// </summary>
-        public ImpObservableCollection<ConnectorViewModel> OutputConnectors
+        [JsonIgnore]
+        public ImpObservableCollection<ParallelCorpusConnectorViewModel> OutputConnectors
         {
             get
             {
                 if (_outputConnectors == null)
                 {
-                    _outputConnectors = new ImpObservableCollection<ConnectorViewModel>();
+                    _outputConnectors = new ImpObservableCollection<ParallelCorpusConnectorViewModel>();
                     _outputConnectors.ItemsAdded += OnOutputConnectorsItemsAdded;
                     _outputConnectors.ItemsRemoved += OnOutputConnectorsItemsRemoved;
                 }
@@ -193,11 +196,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// A helper property that retrieves a list (a new list each time) of all connections attached to the node. 
         /// </summary>
-        public ICollection<ConnectionViewModel> AttachedConnections
+        [JsonIgnore]
+        public ICollection<ParallelCorpusConnectionViewModel> AttachedConnections
         {
             get
             {
-                var attachedConnections = new List<ConnectionViewModel>();
+                var attachedConnections = new List<ParallelCorpusConnectionViewModel>();
 
                 foreach (var connector in InputConnectors)
                 {
@@ -216,6 +220,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// <summary>
         /// Set to 'true' when the node is selected.
         /// </summary>
+        [JsonIgnore]
         public bool IsSelected
         {
             get => _isSelected;
@@ -223,88 +228,81 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
             {
                 Set(ref _isSelected, value);
 
-                if (_isSelected)
-                {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(this));
-                }
-                else
-                {
-                    _eventAggregator.PublishOnUIThreadAsync(new NodeSelectedChangedMessage(null));
-                }
+                _eventAggregator.PublishOnUIThreadAsync(_isSelected
+                    ? new NodeSelectedChangedMessage(this)
+                    : new NodeSelectedChangedMessage(null));
             }
         }
 
-        private List<SerializedTokenization> _nodeTokenizations = new();
-        public List<SerializedTokenization> NodeTokenizations
+        //private BindableCollection<SerializedTokenization> _tokenizations = new();
+        //public BindableCollection<SerializedTokenization> Tokenizations
+        //{
+        //    get => _tokenizations;
+        //    set =>Set(ref _tokenizations, value);
+        //}
+
+        [JsonIgnore]
+        public int TokenizationCount
         {
-            get => _nodeTokenizations;
-            set
-            {
-                _nodeTokenizations = value;
-                NotifyOfPropertyChange(() => NodeTokenizations);
-            }
+            get => _tokenizationCount;
+            set => Set(ref _tokenizationCount, value);
         }
+
+        //public void NotifyOfTokenizationCount()
+        //{
+        //    NotifyOfPropertyChange(()=>TokenizationCount);
+        //}
 
         private bool _isRtl;
-
-        public bool IsRTL
+        [JsonIgnore]
+        public bool IsRtl
         {
             get => _isRtl;
-            set
-            {
-                _isRtl = value;
-                NotifyOfPropertyChange(() => IsRTL);
-            }
+            set => Set(ref _isRtl, value);
         }
 
-
+        [JsonIgnore]
         private Guid _id = Guid.NewGuid();
         public Guid Id
         {
             get => _id;
-            set
-            {
-                _id = value;
-                NotifyOfPropertyChange(() => Id);
-            }
+            set => Set(ref _id, value);
         }
 
         private Guid _corpusId;
         public Guid CorpusId
         {
             get => _corpusId;
-            set
-            {
-                Set(ref _corpusId, value);
-                
-            }
+            set => Set(ref _corpusId, value);
         }
 
-        private ObservableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
-        public ObservableCollection<CorpusNodeMenuItemViewModel> MenuItems
+        [JsonIgnore]
+        private BindableCollection<CorpusNodeMenuItemViewModel> _menuItems = new();
+        public BindableCollection<CorpusNodeMenuItemViewModel> MenuItems
         {
             get => _menuItems;
-            set
-            {
-                _menuItems = value;
-                NotifyOfPropertyChange(() => MenuItems);
-            }
+            set => Set(ref _menuItems, value);
         }
 
         private string _paratextProjectId = string.Empty;
         /// <summary>
         /// The paratext guid
         /// </summary>
+        [JsonIgnore]
         public string ParatextProjectId
         {
             get => _paratextProjectId;
             set => Set(ref _paratextProjectId, value);
         }
 
+        
         private CorpusType _corpusType = CorpusType.Standard;
+        private int _tokenizationCount;
+
         /// <summary>
         /// The paratext project type
         /// </summary>
+        [JsonIgnore]
         public CorpusType CorpusType
         {
             get => _corpusType;
@@ -331,34 +329,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         #endregion //Constructor
 
 
-        #region Public Methods
-
-
-        #endregion Public Methods
-
         #region Private Methods
 
         /// <summary>
         /// Event raised when connectors are added to the node.
         /// </summary>
-        private void OnInputConnectorsItemsAdded(object sender, CollectionItemsChangedEventArgs e)
+        private void OnInputConnectorsItemsAdded(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = this;
-                connector.Type = ConnectorType.Input;
+                connector.ConnectorType = ConnectorType.Input;
             }
         }
 
         /// <summary>
         /// Event raised when connectors are removed from the node.
         /// </summary>
-        private void OnInputConnectorsItemsRemoved(object sender, CollectionItemsChangedEventArgs e)
+        private void OnInputConnectorsItemsRemoved(object? sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = null;
-                connector.Type = ConnectorType.Undefined;
+                connector.ConnectorType = ConnectorType.Undefined;
             }
         }
 
@@ -367,10 +360,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// </summary>
         private void OnOutputConnectorsItemsAdded(object sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = this;
-                connector.Type = ConnectorType.Output;
+                connector.ConnectorType = ConnectorType.Output;
             }
         }
 
@@ -379,12 +372,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         /// </summary>
         private void OnOutputConnectorsItemsRemoved(object sender, CollectionItemsChangedEventArgs e)
         {
-            foreach (ConnectorViewModel connector in e.Items)
+            foreach (ParallelCorpusConnectorViewModel connector in e.Items)
             {
                 connector.ParentNode = null;
-                connector.Type = ConnectorType.Undefined;
+                connector.ConnectorType = ConnectorType.Undefined;
             }
         }
+
+
+        #endregion Private Methods
 
         public Task HandleAsync(ConnectionSelectedChangedMessage message, CancellationToken cancellationToken)
         {
@@ -394,7 +390,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
         }
 
 
-
-        #endregion Private Methods
     }
 }

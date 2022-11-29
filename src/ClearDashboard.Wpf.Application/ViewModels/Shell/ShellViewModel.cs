@@ -11,6 +11,7 @@ using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Strings;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using ClearDashboard.Wpf.Application.Views.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -42,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public class ShellViewModel : DashboardApplicationScreen, IShellViewModel,
         IHandle<ParatextConnectedMessage>,
         IHandle<UserMessage>,
-        IHandle<GetApplicationWindowSettings>
+        IHandle<GetApplicationWindowSettings>, IHandle<UiLanguageChangedMessage>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -210,16 +211,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             set
             {
                 Set(ref _loadingApplication, value);
-                SetLanguage();
+                //SetLanguage();
             }
         }
 
         private void NavigationServiceOnNavigated(object sender, NavigationEventArgs e)
         {
-            SetLanguage();
+            //SetLanguage();
             var uri = e.Uri;
 
-            if (uri.OriginalString.Contains("HomeView.xaml"))
+            if (uri.OriginalString.Contains("MainView.xaml"))
             {
                 LoadingApplication = false;
             }
@@ -228,6 +229,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         protected override void OnViewReady(object view)
         {
             DeterminePopupHorizontalOffset((ShellView)view);
+            SetLanguage();
             base.OnViewReady(view);
         }
 
@@ -287,6 +289,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            SetLanguage();
             return base.OnInitializeAsync(cancellationToken);
         }
 
@@ -358,45 +361,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
            await EventAggregator!.PublishOnUIThreadAsync(new ToggleBackgroundTasksVisibilityMessage());
         }
 
+
+        private bool SettingLanguage { get; set; }
         public void SetLanguage()
         {
-            var culture = Settings.Default.language_code;
-            if (string.IsNullOrEmpty(culture))
+            SettingLanguage = true;
+            try
             {
-                var cultureName = "";
-                var currentCulture = Thread.CurrentThread.CurrentCulture;
-                if (currentCulture.Parent.Name is not "zh" or "pt")
+                var culture = Settings.Default.language_code;
+                if (string.IsNullOrEmpty(culture))
                 {
-                    cultureName = currentCulture.Name;//.Parent
+                    var cultureName = "";
+                    var currentCulture = Thread.CurrentThread.CurrentCulture;
+                    if (currentCulture.Parent.Name is not "zh" or "pt")
+                    {
+                        cultureName = currentCulture.Name;//.Parent
+                    }
+                    else
+                    {
+                        cultureName = currentCulture.Name;
+                    }
+
+                    try
+                    {
+                        culture = ((LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), cultureName.Replace("-", string.Empty))).ToString();
+                    }
+                    catch
+                    {
+                        culture = "en";
+                    }
+                }
+                // strip out any "-" characters so the string can be properly parsed into the target enum
+                //SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
+                _selectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
+
+                var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
+                if (languageFlowDirection.isRTL)
+                {
+                    ProjectManager!.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
                 }
                 else
                 {
-                    cultureName = currentCulture.Name;
+                    ProjectManager!.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
                 }
 
-                try
-                {
-                    culture = ((LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), cultureName.Replace("-", string.Empty))).ToString();
-                }
-                catch
-                {
-                    culture = "en";
-                }
+                WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
             }
-            // strip out any "-" characters so the string can be properly parsed into the target enum
-            SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
-
-            var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
-            if (languageFlowDirection.isRTL)
+            finally
             {
-                ProjectManager!.CurrentLanguageFlowDirection = FlowDirection.RightToLeft;
+               SettingLanguage = false;
             }
-            else
-            {
-                ProjectManager!.CurrentLanguageFlowDirection = FlowDirection.LeftToRight;
-            }
-
-            WindowFlowDirection = ProjectManager.CurrentLanguageFlowDirection;
+          
         }
 
 
@@ -432,5 +447,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         }
 
         #endregion
+
+        public async  Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (!SettingLanguage)
+            {
+                 SetLanguage();
+            }
+           
+            await Task.CompletedTask;
+        }
     }
 }

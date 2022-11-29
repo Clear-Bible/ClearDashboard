@@ -16,10 +16,16 @@ using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
 using System.Threading.Tasks;
 using System.Text;
 using SIL.Machine.Tokenization;
-using ClearDashboard.DataAccessLayer.Models;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using Token = ClearBible.Engine.Corpora.Token;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
+using Models = ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
+using ClearDashboard.DAL.Alignment.BackgroundServices;
+using System.Threading;
+using Autofac;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -462,6 +468,72 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
+    public async Task TranslationSet__NoTranslationFound()
+    {
+        try
+        {
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            //var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
+
+            //var translationSet = await translationModel.Create("display name", "smt model", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+            Assert.NotNull(translationSet);
+
+            Output.WriteLine("Denormalizing alignment set data");
+            await RunAlignmentSetDenormalizationAsync(Guid.Empty);
+
+            var tokenToCopy = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizedCorpusId == parallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId!.Id)
+                .FirstOrDefault();
+
+            Assert.NotNull(tokenToCopy);
+
+            var newModelToken = new Models.Token()
+            {
+                Id = Guid.NewGuid(),
+                BookNumber = tokenToCopy.BookNumber,
+                ChapterNumber = tokenToCopy.ChapterNumber,
+                VerseNumber = tokenToCopy.VerseNumber,
+                WordNumber = tokenToCopy.WordNumber,
+                SubwordNumber = tokenToCopy.SubwordNumber,
+                SurfaceText = "boobooboo",
+                EngineTokenId = tokenToCopy.EngineTokenId,
+                TrainingText ="booboobooboo",
+                VerseRowId = tokenToCopy.VerseRowId,
+                TokenizedCorpusId = tokenToCopy.TokenizedCorpusId
+            };
+
+            ProjectDbContext!.TokenComponents.Add(newModelToken);
+            await ProjectDbContext!.SaveChangesAsync();
+
+            var newTokenId = ModelHelper.BuildTokenId(newModelToken);
+
+            var translationsForNewToken = await translationSet.GetTranslations(new List<TokenId>() { newTokenId });
+            Assert.Single(translationsForNewToken);
+            Assert.Equal(newTokenId, translationsForNewToken.First().SourceToken.TokenId);
+            Assert.Equal("FromAlignmentModel", translationsForNewToken.First().OriginatedFrom);
+            Assert.Empty(translationsForNewToken.First().TargetTranslationText);
+            Assert.Null(translationsForNewToken.First().TranslationId);  // The Translation returned should be a default 'empty' translation - not from the DB
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
     public async Task TranslationSet__InvalidParallelCorpusId()
     {
         try
@@ -579,6 +651,13 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             throw eex;
         }
     }
+
+    private async Task RunAlignmentSetDenormalizationAsync(Guid alignmentSetId, CancellationToken cancellationToken = default)
+    {
+        var longRunningProgress = new TestLongRunningProgress(Output);
+        await Mediator!.Send(new DenormalizeAlignmentTopTargetsCommand(alignmentSetId, longRunningProgress), cancellationToken);
+    }
+
     private class IntoFakeCompositeTokensTextRowProcessor : IRowProcessor<TextRow>
     {
         public TextRow Process(TextRow textRow)
@@ -607,6 +686,35 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             }
 
             return new TokensTextRow(textRow);
+        }
+    }
+
+    private class TestLongRunningProgress : ILongRunningProgress<ProgressStatus>
+    {
+        protected ITestOutputHelper Output { get; private set; }
+        public TestLongRunningProgress(ITestOutputHelper output)
+        {
+            Output = output;
+        }
+
+        public void Report(ProgressStatus value)
+        {
+            Output.WriteLine($"Long running progress message: {value.Message}");
+        }
+
+        public void ReportCancelRequestReceived(string? description = null)
+        {
+            Output.WriteLine($"Long running progress cancel request received: {description}");
+        }
+
+        public void ReportCompleted(string? description = null)
+        {
+            Output.WriteLine($"Long running progress completed: {description}");
+        }
+
+        public void ReportException(Exception exception)
+        {
+            Output.WriteLine($"Long running progress exception: {exception.Message}");
         }
     }
 }

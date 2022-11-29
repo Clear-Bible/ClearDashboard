@@ -289,6 +289,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Display
             await NoteManager.NoteMouseLeaveAsync(e.Note, e.EntityIds);
         }
 
+        public async Task NoteSendToParatext(NoteEventArgs e)
+        {
+            await NoteManager.SendToParatextAsync(e.Note);
+        }
+
         public async Task NoteUpdated(NoteEventArgs e)
         {
             await NoteManager.UpdateNoteAsync(e.Note);

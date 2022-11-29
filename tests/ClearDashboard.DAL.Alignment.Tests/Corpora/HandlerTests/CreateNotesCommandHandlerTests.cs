@@ -633,4 +633,74 @@ public class CreateNotesCommandHandlerTests : TestBase
             await DeleteDatabaseContext();
         }
     }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__ParatextGuid()
+    {
+        try
+        {
+            var paratextGuid = Guid.NewGuid();
+            var sourceCorpus = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource",
+                paratextGuid.ToString());
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpus.CorpusId, "test", "tokenization");
+
+            var verseRows = ProjectDbContext!.VerseRows
+                .Include(v => v.TokenComponents)
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Take(2)
+                .ToList();
+
+            var verseRowOneTokens = verseRows.First().TokenComponents
+                .Select(t => ModelHelper.BuildToken(t))
+                .ToArray();
+
+            var verseRowTwoTokens = verseRows.Skip(1).First().TokenComponents
+                .Select(t => ModelHelper.BuildToken(t))
+                .ToArray();
+
+            var noteGood = await new Note { Text = "a good note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteGood.AssociateDomainEntity(Mediator!, verseRowOneTokens[3].TokenId);
+            await noteGood.AssociateDomainEntity(Mediator!, verseRowOneTokens[2].TokenId);
+            await noteGood.AssociateDomainEntity(Mediator!, verseRowOneTokens[4].TokenId);
+
+            var noteNonContiguous = await new Note { Text = "a non contiguous token note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteNonContiguous.AssociateDomainEntity(Mediator!, verseRowOneTokens[1].TokenId);
+            await noteNonContiguous.AssociateDomainEntity(Mediator!, verseRowOneTokens[3].TokenId);
+            await noteNonContiguous.AssociateDomainEntity(Mediator!, verseRowOneTokens[4].TokenId);
+
+            var noteMultipleVerseRows = await new Note { Text = "a multiple verse note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteMultipleVerseRows.AssociateDomainEntity(Mediator!, verseRowOneTokens[1].TokenId);
+            await noteMultipleVerseRows.AssociateDomainEntity(Mediator!, verseRowOneTokens[2].TokenId);
+            await noteMultipleVerseRows.AssociateDomainEntity(Mediator!, verseRowTwoTokens[0].TokenId);
+
+            var noteMuiltipleDomainEntityTypes = await new Note { Text = "a multiple domain entity type note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteMuiltipleDomainEntityTypes.AssociateDomainEntity(Mediator!, sourceTokenizedTextCorpus.TokenizedTextCorpusId);
+            await noteMuiltipleDomainEntityTypes.AssociateDomainEntity(Mediator!, verseRowTwoTokens[0].TokenId);
+            await noteMuiltipleDomainEntityTypes.AssociateDomainEntity(Mediator!, verseRowTwoTokens[1].TokenId);
+
+            var noteNoTokenAssociations = await new Note { Text = "a no token association note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteNoTokenAssociations.AssociateDomainEntity(Mediator!, sourceCorpus.CorpusId);
+            await noteNoTokenAssociations.AssociateDomainEntity(Mediator!, sourceTokenizedTextCorpus.TokenizedTextCorpusId);
+
+            var noteNoAssociations = await new Note { Text = "a no association note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+
+            var goodNoteParatextId = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteGood.NoteId!);
+            Assert.Equal(paratextGuid, goodNoteParatextId);
+
+            Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNonContiguous.NoteId!));
+            Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteMultipleVerseRows.NoteId!));
+            Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteMuiltipleDomainEntityTypes.NoteId!));
+            Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNoTokenAssociations.NoteId!));
+            Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNoAssociations.NoteId!));
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
 }

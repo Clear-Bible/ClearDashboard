@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface
+﻿namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
     /// <summary>
     /// Defines the current state of the mouse handling logic.

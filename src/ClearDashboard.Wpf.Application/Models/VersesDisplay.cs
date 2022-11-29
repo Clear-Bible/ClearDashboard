@@ -62,13 +62,13 @@ namespace ClearDashboard.Wpf.Application.Models
 
 
 
-        private Visibility _visiblity = Visibility.Collapsed;
+        private Visibility _visibility = Visibility.Collapsed;
         public Visibility Visibility
         {
-            get => _visiblity;
+            get => _visibility;
             set
             {
-                _visiblity = value;
+                _visibility = value;
                 NotifyOfPropertyChange(() => Visibility);
             }
         }
