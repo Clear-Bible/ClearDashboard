@@ -349,7 +349,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                     // CHECK AGAINST SPELLING
                     var spellingRecords =
-                        _spellingStatus.Status.FindAll(s => s.Word.ToLower() == biblicalTermsSpelling.ToLower());
+                        _spellingStatus.Status.FindAll(s => string.Equals(s.Word,
+                            biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
                     if (spellingRecords.Count == 0)
                     {
                         biblicalTermsSpelling = "";
