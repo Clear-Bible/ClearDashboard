@@ -13,6 +13,7 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Printing;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,6 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private bool _licenseCleared = false;
         private bool _runRegistration = false;
         public static bool GoToSetup = false;
+        public string Version { get; set; }
 
         public StartupDialogViewModel(INavigationService navigationService, ILogger<StartupDialogViewModel> logger,
             IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope,DashboardProjectManager projectManager)
@@ -37,7 +39,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             ProjectManager = projectManager;
 
             CanOk = true;
-            DisplayName = "Startup Dialog";
+
+            //get the assembly version
+            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
+            Version = $"Version: {thisVersion.Major}.{thisVersion.Minor}.{thisVersion.Build}.{thisVersion.Revision}";
+
+            DisplayName = "ClearDashboard " + Version;
         }
 
         public StartupDialogViewModel() { }

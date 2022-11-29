@@ -6,6 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Interfaces;
+using System.Reflection;
 
 namespace ClearDashboard.DataAccessLayer.Features.Projects
 {
@@ -26,7 +27,8 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
             {
                 var project = new Models.Project()
                 {
-                    ProjectName = request.ProjectName
+                    ProjectName = request.ProjectName,
+                    AppVersion = Assembly.GetEntryAssembly().GetName().Version.ToString()
                 };
 
                 await ProjectDbContext.Migrate();

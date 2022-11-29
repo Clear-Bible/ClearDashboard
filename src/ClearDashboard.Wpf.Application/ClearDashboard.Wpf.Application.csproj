@@ -37,6 +37,7 @@
     <None Remove="Resources\block_16.png" />
     <None Remove="Resources\ClearDashboard_logo_128.png" />
     <None Remove="Resources\Crystal Click 2.wav" />
+    <None Remove="Resources\donut_icon.ico" />
     <None Remove="Resources\GalSILB.ttf" />
     <None Remove="Resources\GalSILR.ttf" />
     <None Remove="Resources\GentiumPlus-Bold.ttf" />
@@ -44,7 +45,6 @@
     <None Remove="Resources\GentiumPlus-Italic.ttf" />
     <None Remove="Resources\GentiumPlus-Regular.ttf" />
     <None Remove="Resources\KadmosU.ttf" />
-    <None Remove="Resources\Layouts\Dashboard.Layout.config2" />
     <None Remove="Resources\logos_icon.png" />
     <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
@@ -86,9 +86,6 @@
     <Content Include="Assets\newproject.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Layouts\Dashboard.Layout.config2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -126,6 +123,9 @@
     </Resource>
     <Resource Include="Resources\block_16.png" />
     <Resource Include="Resources\ClearDashboard_logo_128.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\donut_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\GalSILB.ttf">
@@ -290,6 +290,12 @@
     <None Update="Resources\Layouts\Dashboard.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Paratext_Send32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\TailBlazor\Dragablz.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -448,4 +454,8 @@
     <Folder Include="Resources\TailBlazor\" />
     <Folder Include="ViewModels\About\" />
   </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
+  </Target>
 </Project>
