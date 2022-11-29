@@ -23,6 +23,7 @@ using ClearDashboard.DAL.Alignment.BackgroundServices;
 using Autofac;
 using System.Threading;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
+using ClearDashboard.DAL.CQRS;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -689,8 +690,16 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             var noteNoAssociations = await new Note { Text = "a no association note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
 
-            var goodNoteParatextId = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteGood.NoteId!);
-            Assert.Equal(paratextGuid, goodNoteParatextId);
+            var goodResult = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteGood.NoteId!);
+            Assert.NotNull(goodResult);
+
+            Assert.Equal(paratextGuid, goodResult.Value.paratextId);
+            Assert.Equal(sourceTokenizedTextCorpus.TokenizedTextCorpusId, goodResult.Value.tokenizedTextCorpusId);
+            Assert.Equal(verseRowOneTokens.Length, goodResult.Value.verseTokens.Count());
+            Assert.Equal<TokenId>(
+                verseRowOneTokens.OrderBy(t => t.TokenId.ToString()).Select(t => t.TokenId), 
+                goodResult.Value.verseTokens.OrderBy(t => t.TokenId.ToString()).Select(t => t.TokenId), 
+                new IIdEqualityComparer());
 
             Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNonContiguous.NoteId!));
             Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteMultipleVerseRows.NoteId!));
