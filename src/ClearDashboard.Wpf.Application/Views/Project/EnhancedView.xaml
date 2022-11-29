@@ -23,7 +23,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
-            <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+            <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
@@ -492,6 +492,7 @@
                                                 <userControls:VerseDisplay
                                                     x:Name="VerseDisplay"
                                                     Title=""
+                                                    Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                                                     HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     IsEnabled="True"
                                                     NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -505,13 +506,11 @@
                                                     TitleVisibility="Collapsed"
                                                     TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
+                                                    TranslationClicked="TranslationClicked"
                                                     TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    TranslationClicked="TranslationClicked"
-                                                    >
+                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="TokenClicked">
                                                             <i:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type projectViews:EnhancedView}}, Path=DataContext}" />
@@ -596,11 +595,11 @@
                     <userControls:NoteCollectionDisplay
                         Margin="0,0"
                         EntityIds="{Binding Path=SelectedTokens.EntityIds}"
-                        NoteMargin="0,0,0,10"
                         LabelBackground="BlanchedAlmond"
                         LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         LabelSuggestions="{Binding NoteManager.LabelSuggestions}"
+                        NoteMargin="0,0,0,10"
                         NoteTextFontSize="{Binding ElementName=NoteFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         Notes="{Binding NoteManager.CurrentNotes}"
                         TimestampFontSize="{Binding ElementName=TimestampFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
