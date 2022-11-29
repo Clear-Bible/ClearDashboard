@@ -6,5 +6,6 @@
         public bool IsRtl { get; set; }
         public string? DesignSurfaceLayout { get; set; }
         public string? WindowTabLayout { get; set; }
+        public string? AppVersion { get; set; }
     }
 }

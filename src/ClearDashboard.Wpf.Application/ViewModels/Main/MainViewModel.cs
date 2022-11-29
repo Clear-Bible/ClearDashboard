@@ -689,7 +689,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadDocuments()
         {
-            if (ProjectManager.CurrentProject.WindowTabLayout is null)
+            if (ProjectManager.CurrentProject?.WindowTabLayout is null)
             {
                 return;
             }

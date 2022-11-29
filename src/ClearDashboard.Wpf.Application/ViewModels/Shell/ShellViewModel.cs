@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Dynamic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text.Json;
@@ -30,6 +31,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ClearDashboard.Wpf.Application.Views.Shell;
+using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using System.Security.Policy;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Runtime.InteropServices;
+using System.Drawing;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -145,23 +152,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             get => _message;
             set => Set(ref _message, value);
         }
-
-        private Visibility _showUpdateLink = Visibility.Collapsed;
-        public Visibility ShowUpdateLink
-        {
-            get => _showUpdateLink;
-            set => Set(ref _showUpdateLink, value);
-        }
-
-
-        private Uri _updateUrl = new Uri("https://www.clear.bible");
-        public Uri UpdateUrl
-        {
-            get => _updateUrl;
-            set => Set(ref _updateUrl , value);
-        }
-
-        public List<ReleaseNote> UpdateNotes { get; set; }
 
         #endregion
 
@@ -306,7 +296,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             InitializeProjectManager();
-            CheckForProgramUpdates();
             await BackgroundTasksViewModel.ActivateAsync();
             await base.OnActivateAsync(cancellationToken);
         }
@@ -363,182 +352,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #endregion
 
         #region Methods
-
-        private async void CheckForProgramUpdates()
-        {
-            //var updateJson = new UpdateFormat
-            //{
-            //    Version = "0.4.0.0",
-            //    ReleaseDate = DateTime.Now.ToString(),
-            //    DownloadLink = "",
-            //};
-
-            //var releaseNote = new ReleaseNote
-            //{
-            //    NoteType = ReleaseNote.ReleaseNoteType.Added,
-            //    Note = "Alignments can now be added to the EnhancedView.  Pressing shift while hovering over tokens in either source or target will highlight the corresponding aligned token in the other related corpus. Alt hover will clear selection."
-            //};
-            //updateJson.ReleaseNotes.Add(releaseNote);
-            //releaseNote = new ReleaseNote
-            //{
-            //    NoteType = ReleaseNote.ReleaseNoteType.Added,
-            //    Note = "On adding in a new Paratext Corpus, you can now search for the corpus name in the dropdown box."
-            //};
-            //updateJson.ReleaseNotes.Add(releaseNote);
-
-            //var options = new JsonSerializerOptions { WriteIndented = true };
-            //string jsonString = JsonSerializer.Serialize(updateJson, options);
-            //File.WriteAllText(@"d:\temp\Dashboard.json", jsonString);
-
-            var connectedToInternet = await NetworkHelper.IsConnectedToInternet();           // check internet connection
-            if (!connectedToInternet)
-            {
-                return;
-            }
-
-
-            Stream stream;
-            try
-            {
-                var webClient = new WebClient();
-                stream = await webClient.OpenReadTaskAsync(new Uri("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/main/ClearDashboard.json", UriKind.Absolute));
-            }
-            catch (Exception)
-            {
-                return;
-            }
-
-            _updateData = await JsonSerializer.DeserializeAsync<UpdateFormat>(stream);
-            var isNewer = CheckWebVersion(_updateData.Version);
-
-            if (isNewer)
-            {
-                ShowUpdateLink = Visibility.Visible;
-                UpdateUrl = new Uri(_updateData.DownloadLink);
-                UpdateNotes = _updateData.ReleaseNotes;
-            }
-        }
-
-
-
-        private bool CheckWebVersion(string webVersion)
-        {
-            //convert string to version
-            var ver = webVersion.Split('.');
-            Version webVer;
-
-            switch (ver.Length)
-            {
-                case 4:
-                    try
-                    {
-                        webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), Convert.ToInt32(ver[3]));
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-
-                    break;
-                case 3:
-                    try
-                    {
-                        webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), Convert.ToInt32(ver[2]), 0);
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-
-                    break;
-                case 2:
-                    try
-                    {
-                        webVer = new Version(Convert.ToInt32(ver[0]), Convert.ToInt32(ver[1]), 0, 0);
-                    }
-                    catch (Exception)
-                    {
-                        return false;
-                    }
-
-                    break;
-                default:
-                {
-                    if (ver.Length == 2)
-                    {
-                        try
-                        {
-                            webVer = new Version(Convert.ToInt32(ver[0]), 0, 0, 0);
-                        }
-                        catch (Exception)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-
-                    break;
-                }
-            }
-
-
-            //get the assembly version
-            var thisVersion = Assembly.GetEntryAssembly().GetName().Version;
-
-            // compare
-            var result = webVer.CompareTo(thisVersion);
-
-            if (result == 1)
-            {
-                //newer release present on the web
-                return true;
-            }
-            return false;
-        }
-
-        public void ClickUpdateLink()
-        {
-            if (UpdateUrl.AbsoluteUri == "")
-            {
-                return;
-            }
-
-            try
-            {
-                var psi = new ProcessStartInfo
-                {
-                    FileName = UpdateUrl.AbsoluteUri,
-                    UseShellExecute = true
-                };
-                Process.Start(psi);
-            }
-            catch (Exception exception)
-            {
-                Debug.WriteLine(exception);
-            }
-        }
-
-        public void ShowNotes()
-        {
-            var localizedString = LocalizationStrings.Get("ShellView_ShowNotes", Logger);
-
-            dynamic settings = new ExpandoObject();
-            settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            settings.ResizeMode = ResizeMode.CanResize;
-            settings.MinWidth = 600;
-            settings.MinHeight = 600;
-            settings.Title = $"{localizedString} - {_updateData?.Version}";
-
-            var viewModel = IoC.Get<ShowUpdateNotesViewModel>();
-            viewModel.ReleaseNotes = new ObservableCollection<ReleaseNote>(UpdateNotes);
-
-            IWindowManager manager = new WindowManager();
-            manager.ShowWindowAsync(viewModel, null, settings);
-        }
-
 
         /// <summary>
         /// Button click for the background tasks on the status bar

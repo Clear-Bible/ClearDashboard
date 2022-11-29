@@ -23,9 +23,11 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool IsNew { get; set; }
         public string? ProjectName { get; set; }
 
-        public string ParatextProjectPath { get; set; } 
+        public string ParatextProjectPath { get; set; }
 
+        public string Version { get; set; }
 
+        public bool IsCompatibleVersion { get; set; } = true;
 
         public DateTimeOffset Modified { get; set; }
        

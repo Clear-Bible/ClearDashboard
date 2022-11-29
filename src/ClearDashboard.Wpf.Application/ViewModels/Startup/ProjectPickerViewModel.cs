@@ -21,6 +21,13 @@ using System.Windows.Input;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using SIL.Extensions;
+using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using System.Diagnostics;
+using System.Dynamic;
+using System.Collections.Generic;
+using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -226,12 +233,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-
-
             var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
             if (results.Success && results.HasData)
             {
                 DashboardProjects = results.Data;
+
+                foreach (var project in DashboardProjects)
+                {
+                    project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+                }
+
                 _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
                 _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
             }
