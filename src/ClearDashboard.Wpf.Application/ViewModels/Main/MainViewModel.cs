@@ -236,9 +236,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case "PINSID":
                             _windowIdToLoad = "PINS";
                             break;
-                        case "WordMeaningsID":
-                            _windowIdToLoad = "WORDMEANINGS";
-                            break;
+                        //case "WordMeaningsID":
+                        //    _windowIdToLoad = "WORDMEANINGS";
+                        //    break;
                         case "MarbleID":
                             _windowIdToLoad = "MARBLE";
                             break;
@@ -838,7 +838,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateItemAsync<BiblicalTermsViewModel>();
             PinsViewModel = await ActivateItemAsync<PinsViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
-            await ActivateItemAsync<WordMeaningsViewModel>();
+            //await ActivateItemAsync<WordMeaningsViewModel>();
             await ActivateItemAsync<MarbleViewModel>();
 
             // Activate the ProjectDesignSurfaceViewModel - this will call the appropriate
@@ -1259,7 +1259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = "🗐 " + LocalizationStrings.Get("MainView_WindowsTextCollections", Logger), Id = "TextCollectionID", ViewModel = this, },
                         
                         // Word Meanings
-                        new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
+                        //new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
                         
                         // MARBLE
                         new() { Header = "◕ MARBLE", Id = "MarbleID", ViewModel = this, },
@@ -1406,9 +1406,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.BiblicalTerms:
                             e.Content = GetToolViewModelFromItems("BiblicalTermsViewModel");
                             break;
-                        case WorkspaceLayoutNames.WordMeanings:
-                            e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
-                            break;
+                        //case WorkspaceLayoutNames.WordMeanings:
+                        //    e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
+                        //    break;
                         case WorkspaceLayoutNames.Marble:
                             e.Content = GetToolViewModelFromItems("MarbleViewModel");
                             break;
@@ -1456,7 +1456,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             case BiblicalTermsViewModel:
                             case ParatextViews.PinsViewModel:
                             case TextCollectionsViewModel:
-                            case WordMeaningsViewModel:
+                            //case WordMeaningsViewModel:
                             case MarbleViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
@@ -1546,7 +1546,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case BiblicalTermsViewModel:
                         case ParatextViews.PinsViewModel:
                         case TextCollectionsViewModel:
-                        case WordMeaningsViewModel:
+                        //case WordMeaningsViewModel:
                         case MarbleViewModel:
                             return (ToolViewModel)t;
                     }
@@ -1576,9 +1576,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case WorkspaceLayoutNames.TextCollection:
                     var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
-                case WorkspaceLayoutNames.WordMeanings:
-                    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
-                    return (vm3, vm3.Title, vm3.DockSide);
+                //case WorkspaceLayoutNames.WordMeanings:
+                //    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
+                //    return (vm3, vm3.Title, vm3.DockSide);
                 case WorkspaceLayoutNames.Marble:
                     var vm4 = GetToolViewModelFromItems("MarbleViewModel");
                     return (vm4, vm4.Title, vm4.DockSide);
@@ -1665,7 +1665,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
-                        case WorkspaceLayoutNames.WordMeanings:
+                        //case WorkspaceLayoutNames.WordMeanings:
                         case WorkspaceLayoutNames.Marble:
                         case WorkspaceLayoutNames.Pins:
                         case WorkspaceLayoutNames.TextCollection:
@@ -2132,7 +2132,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public const string BiblicalTerms = "BIBLICALTERMS";
         public const string Pins = "PINS";
         public const string TextCollection = "TEXTCOLLECTION";
-        public const string WordMeanings = "WORDMEANINGS";
+        //public const string WordMeanings = "WORDMEANINGS";
         public const string Marble = "MARBLE";
     }
 }

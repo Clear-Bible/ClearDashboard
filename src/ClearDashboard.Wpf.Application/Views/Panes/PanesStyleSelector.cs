@@ -58,10 +58,10 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return ToolStyle;
             }
 
-            if (item is WordMeaningsViewModel)
-            {
-                return ToolStyle;
-            }
+            //if (item is WordMeaningsViewModel)
+            //{
+            //    return ToolStyle;
+            //}
 
             if (item is MarbleViewModel)
             {

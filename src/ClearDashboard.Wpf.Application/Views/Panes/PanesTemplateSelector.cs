@@ -75,10 +75,10 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return BiblicalTermsViewTemplate;
             }
 
-            if (item is WordMeaningsViewModel)
-            {
-                return WordMeaningsViewTemplate;
-            }
+            //if (item is WordMeaningsViewModel)
+            //{
+            //    return WordMeaningsViewTemplate;
+            //}
 
             if (item is MarbleViewModel)
             {
