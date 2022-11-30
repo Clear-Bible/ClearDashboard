@@ -380,6 +380,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);
+                Senses.Clear();
                 return;
             }
 
