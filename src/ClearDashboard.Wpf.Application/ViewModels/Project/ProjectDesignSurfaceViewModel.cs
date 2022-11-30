@@ -1072,37 +1072,53 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #endregion // Methods
 
 
-        public void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
+        public async void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
         {
-            // *****************************************************************
-            // CHRIS: need to implement code to delete a parallel corpus here.
+            // ****************************************************************************
+            // MICHAEL: not sure what null checking (if any) needs to happen with 
+            // connection.ParallelCorpusId.  Also, this method will accept a third
+            // CancellationToken argument if you have one available here.
+            //
+            // If ParallelCorpusId is invalid/doesn't exist, this will throw an
+            // exception - do you want to catch it here or let it bubble out?
+            // ****************************************************************************
+            if (connection.ParallelCorpusId is not null)
+            {
+                await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+            }
 
-            // *****************************************************************
-
-            // Un-remark the following code to remove the connector between
-            // corpus nodes here.
-            //DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
+            // Removes the connector between corpus nodes:
+            DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
         }
 
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
-            // ****************************************************************************
-            // CHRIS: need to implement code to delete Corpus and TokenizedCorpus here...
-
-            // ****************************************************************************
-            var toplevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-
-            var corpusId = toplevelProjectIds.CorpusIds.FirstOrDefault(c => c.Id == node.CorpusId);
-
-            // Un-remark the following code to delete the ParallelCorpora and remove the connector between nodes. 
+            // Deletes the ParallelCorpora and removes the connector between nodes. 
             foreach (var connection in node.AttachedConnections)
             {
                 //connection.ParallelCorpusId
                 DeleteParallelCorpusConnection(connection);
             }
 
-            // Un-remark to remove the CorpusNode form the project design surface.
-            //DesignSurfaceViewModel!.DeleteCorpusNode(node);
+            var toplevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            var corpusId = toplevelProjectIds.CorpusIds.FirstOrDefault(c => c.Id == node.CorpusId);
+
+            // ****************************************************************************
+            // MICHAEL: not sure what needs to happen if 'corpusId' is null.  Also,
+            // this method will accept a third CancellationToken argument if you have
+            // one available here
+            //
+            // If corpusId is invalid/doesn't exist, this will throw an exception - do you 
+            // want to catch it here or let it bubble out?
+            // ****************************************************************************
+            if (corpusId is not null)
+            {
+                await Corpus.Delete(Mediator!, corpusId);
+            }
+
+            // Removes the CorpusNode form the project design surface:
+            DesignSurfaceViewModel!.DeleteCorpusNode(node);
         }
     }
 }
