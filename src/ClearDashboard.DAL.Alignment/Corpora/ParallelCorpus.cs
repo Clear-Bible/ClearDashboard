@@ -34,6 +34,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed();
         }
 
+        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        {
+            if (ParallelCorpusId == null)
+            {
+                return;
+            }
+
+            await Delete(mediator, ParallelCorpusId, token);
+        }
+
         public static async Task<ParallelCorpus> Get(
             IMediator mediator,
             ParallelCorpusId parallelCorpusId, 
@@ -50,6 +60,17 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId), 
                 data.verseMappings, 
                 data.parallelCorpusId);
+        }
+
+        public static async Task Delete(
+            IMediator mediator,
+            ParallelCorpusId parallelCorpusId,
+            CancellationToken token = default)
+        {
+            var command = new DeleteParallelCorpusByParallelCorpusIdCommand(parallelCorpusId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed(true);
         }
 
         internal ParallelCorpus(

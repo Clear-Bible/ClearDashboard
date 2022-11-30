@@ -229,6 +229,10 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     new Alignment.Translation.Translation(exampleTranslations[1].SourceToken!, $"toobedoo", "Assigned"),
                     TranslationActionTypes.PutNoPropagate);
 
+            await translationSet.PutTranslation(
+                new Alignment.Translation.Translation(exampleTranslations[2].SourceToken!, $"goobedoo", "Assigned"),
+                TranslationActionTypes.PutNoPropagate);
+
             var to = new Token(
                 new TokenId(
                     exampleTranslations[1].SourceToken!.TokenId.BookNumber,
@@ -245,6 +249,64 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             await translationSet.PutTranslation(
                     new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
                     TranslationActionTypes.PutPropagate);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            Assert.Single(ProjectDbContext.Translations.Where(t => t.TargetText == "goobedoo"));
+            Assert.Equal(10, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "shoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther)
+                .Count());
+            Assert.Equal(1, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "shoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.Assigned)
+                .Count());
+
+            await translationSet.PutTranslation(
+                    new Alignment.Translation.Translation(to, $"hoobedoo", "Assigned"),
+                    TranslationActionTypes.PutPropagate);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            Assert.Single(ProjectDbContext.Translations.Where(t => t.TargetText == "goobedoo"));
+            Assert.Equal(0, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "shoobedoo")
+                .Count());
+            Assert.Equal(10, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther)
+                .Count());
+            Assert.Equal(1, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.Assigned)
+                .Count());
+
+            var to2 = ModelHelper.BuildToken(ProjectDbContext.Translations
+                .Include(t => t.SourceTokenComponent)
+                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther)
+                .Skip(3)
+                .First()
+                .SourceTokenComponent!);
+
+            await translationSet.PutTranslation(
+                    new Alignment.Translation.Translation(to2, $"coobedoo", "Assigned"),
+                    TranslationActionTypes.PutPropagate);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            Assert.Single(ProjectDbContext.Translations.Where(t => t.TargetText == "goobedoo"));
+            Assert.Equal(0, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "shoobedoo")
+                .Count());
+            Assert.Equal(0, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther)
+                .Count());
+            Assert.Equal(1, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "hoobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.Assigned)
+                .Count());
+            Assert.Equal(9, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "coobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.FromOther)
+                .Count());
+            Assert.Equal(1, ProjectDbContext.Translations
+                .Where(t => t.TargetText == "coobedoo" && t.TranslationState == Models.TranslationOriginatedFrom.Assigned)
+                .Count());
+
 
             /*
             translationSet.PutTranslationModelEntry("one", new Dictionary<string, double>()
@@ -534,6 +596,82 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
+    public async Task TranslationSet__CorpusCascadeDelete()
+    {
+        try
+        {
+            var parallelCorpusId = await BuildSampleCorpusAlignmentTranslationData();
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var leftoverCorpusId = parallelCorpusId.TargetTokenizedCorpusId!.CorpusId!.Id;
+            var leftoverTokenizedCorpusId = parallelCorpusId.TargetTokenizedCorpusId!.Id;
+
+            await Corpus.Delete(Mediator!, parallelCorpusId.SourceTokenizedCorpusId!.CorpusId!);
+
+            Assert.Empty(ProjectDbContext!.ParallelCorpa);
+            Assert.Empty(ProjectDbContext!.TranslationSets);
+            Assert.Empty(ProjectDbContext!.Translations);
+            Assert.Empty(ProjectDbContext!.TranslationModelEntries);
+            Assert.Empty(ProjectDbContext!.Set<Models.TranslationModelTargetTextScore>());
+            Assert.Empty(ProjectDbContext!.AlignmentSets);
+            Assert.Empty(ProjectDbContext!.Alignments);
+
+            Assert.Single(ProjectDbContext!.Corpa);
+            Assert.Single(ProjectDbContext!.TokenizedCorpora);
+
+            Assert.NotEmpty(ProjectDbContext!.TokenComponents.Where(tc => tc.TokenizedCorpusId == leftoverTokenizedCorpusId));
+            Assert.Empty(ProjectDbContext!.TokenComponents.Where(tc => tc.TokenizedCorpusId != leftoverTokenizedCorpusId));
+
+            Assert.NotNull(ProjectDbContext!.Corpa.Where(c => c.Id == leftoverCorpusId).FirstOrDefault());
+            Assert.NotNull(ProjectDbContext!.TokenizedCorpora.Where(c => c.Id == leftoverTokenizedCorpusId).FirstOrDefault());
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async Task TranslationSet__ParallelCorpusCascadeDelete()
+    {
+        try
+        {
+            var parallelCorpusId = await BuildSampleCorpusAlignmentTranslationData();
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var leftoverCorpusIds = new List<Guid>() { parallelCorpusId.SourceTokenizedCorpusId!.CorpusId!.Id, parallelCorpusId.TargetTokenizedCorpusId!.CorpusId!.Id };
+            var leftoverTokenizedCorpusIds = new List<Guid>() { parallelCorpusId.SourceTokenizedCorpusId!.Id, parallelCorpusId.TargetTokenizedCorpusId!.Id };
+
+            await ParallelCorpus.Delete(Mediator!, parallelCorpusId);
+
+            Assert.Empty(ProjectDbContext!.ParallelCorpa);
+            Assert.Empty(ProjectDbContext!.TranslationSets);
+            Assert.Empty(ProjectDbContext!.Translations);
+            Assert.Empty(ProjectDbContext!.TranslationModelEntries);
+            Assert.Empty(ProjectDbContext!.Set<Models.TranslationModelTargetTextScore>());
+            Assert.Empty(ProjectDbContext!.AlignmentSets);
+            Assert.Empty(ProjectDbContext!.Alignments);
+
+            Assert.True(ProjectDbContext!.Corpa.Count() == 2);
+            Assert.True(ProjectDbContext!.TokenizedCorpora.Count() == 2);
+
+            Assert.NotEmpty(ProjectDbContext!.TokenComponents.Where(tc => leftoverTokenizedCorpusIds.Contains(tc.TokenizedCorpusId)));
+            Assert.Empty(ProjectDbContext!.TokenComponents.Where(tc => !leftoverTokenizedCorpusIds.Contains(tc.TokenizedCorpusId)));
+
+            Assert.Empty(ProjectDbContext!.Corpa.Where(c => !leftoverCorpusIds.Contains(c.Id)));
+            Assert.Empty(ProjectDbContext!.TokenizedCorpora.Where(c => !leftoverTokenizedCorpusIds.Contains(c.Id)));
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
     public async Task TranslationSet__InvalidParallelCorpusId()
     {
         try
@@ -560,6 +698,55 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         {
             await DeleteDatabaseContext();
         }
+    }
+
+    private async Task<ParallelCorpusId> BuildSampleCorpusAlignmentTranslationData()
+    {
+        var parallelTextCorpus = await BuildSampleEngineParallelTextCorpus();
+        var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+        var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+        var alignmentSet = await alignmentModel.Create(
+                "manuscript to zz_sur",
+                "fastalign",
+                false,
+                new Dictionary<string, object>(), //metadata
+                parallelCorpus.ParallelCorpusId,
+                Mediator!);
+        var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+        var translationModel = await BuildSampleTranslationModel(parallelTextCorpus);
+        var translationSet0 = await TranslationSet.Create(translationModel, alignmentSet.AlignmentSetId, "display name 2", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+        Assert.NotNull(translationSet);
+        Assert.NotNull(translationSet0);
+
+        var bookId = parallelCorpus.SourceCorpus.Texts.Select(t => t.Id).ToList().First();
+        var sourceTokens = parallelCorpus.SourceCorpus.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().First().Tokens;
+
+        var iteration = 0;
+        var exampleTranslations = new List<Alignment.Translation.Translation>();
+        foreach (var sourceToken in sourceTokens)
+        {
+            iteration++;
+
+            exampleTranslations.Add(new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"));
+            Output.WriteLine($"Token for adding Translation: {sourceToken.TokenId}");
+
+            if (iteration >= 5)
+            {
+                break;
+            }
+        }
+
+        foreach (var exampleTranslation in exampleTranslations)
+        {
+            await translationSet.PutTranslation(
+                exampleTranslation,
+                TranslationActionTypes.PutNoPropagate);
+        }
+
+        return parallelCorpus.ParallelCorpusId;
     }
 
     private async Task<EngineParallelTextCorpus> BuildSampleManuscriptToZZSurEngineParallelTextCorpus()

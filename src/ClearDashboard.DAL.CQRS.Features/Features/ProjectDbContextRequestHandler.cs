@@ -61,9 +61,12 @@ namespace ClearDashboard.DAL.CQRS.Features
             }
             catch (Exception ex)
             {
+                var innerExceptionMessage = (ex.InnerException is not null) ?
+                    $" (inner exception message: {ex.InnerException.Message})" :
+                    "";
                 return new TResponse
                 {
-                    Message = $"Exception type: {ex.GetType().Name}, having message: {ex.Message}",
+                    Message = $"Exception type: {ex.GetType().Name}, having message: {ex.Message}{innerExceptionMessage}",
                     Success = false
                 };
             }

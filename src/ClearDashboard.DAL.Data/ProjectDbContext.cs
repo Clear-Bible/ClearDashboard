@@ -204,10 +204,24 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasOne(e => e.SourceTokenizedCorpus)
                 .WithMany(e => e.SourceParallelCorpora);
 
-
             modelBuilder.Entity<ParallelCorpus>()
                 .HasOne(e => e.TargetTokenizedCorpus)
                 .WithMany(e => e.TargetParallelCorpora);
+
+            modelBuilder.Entity<ParallelCorpus>()
+                .HasMany(pc => pc.VerseMappings)
+                .WithOne(vm => vm.ParallelCorpus)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<VerseMapping>()
+                .HasMany(vm => vm.Verses)
+                .WithOne(v => v.VerseMapping)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Verse>()
+                .HasMany(v => v.TokenVerseAssociations)
+                .WithOne(tva => tva.Verse)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method
