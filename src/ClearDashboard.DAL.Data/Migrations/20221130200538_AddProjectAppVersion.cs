@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
-    public partial class appVersion : Migration
+    public partial class AddProjectAppVersion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,6 +13,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                 table: "Project",
                 type: "TEXT",
                 nullable: true);
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(name: "AppVersion", table: "Project");
         }
     }
 }
