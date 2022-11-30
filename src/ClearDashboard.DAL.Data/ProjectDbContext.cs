@@ -48,12 +48,16 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Note> Notes => Set<Note>();
         public virtual DbSet<Label> Labels => Set<Label>();
         public virtual DbSet<LabelNoteAssociation> LabelNoteAssociations => Set<LabelNoteAssociation>();
+        public virtual DbSet<LexicalItem> LexicalItems => Set<LexicalItem>();
+        public virtual DbSet<LexicalItemDefinition> LexicalItemDefinitions => Set<LexicalItemDefinition>();
         public virtual DbSet<NoteDomainEntityAssociation> NoteDomainEntityAssociations => Set<NoteDomainEntityAssociation>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
         public virtual DbSet<Project> Projects => Set<Project>();
         //public virtual DbSet<QuestionGroup> QuestionGroups => Set<QuestionGroup>();
         public virtual DbSet<RawContent> RawContent => Set<RawContent>();
+        public virtual DbSet<SemanticDomain> SemanticDomains => Set<SemanticDomain>();
+        public virtual DbSet<SemanticDomainLexicalItemDefinitionAssociation> SemanticDomainLexicalItemDefinitionAssociations => Set<SemanticDomainLexicalItemDefinitionAssociation>();
         public virtual DbSet<Token> Tokens => Set<Token>();
         public virtual DbSet<TokenComponent> TokenComponents => Set<TokenComponent>();
         public virtual DbSet<TokenComposite> TokenComposites => Set<TokenComposite>();
@@ -264,6 +268,12 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasMany(p => p.Labels)
                 .WithMany(p => p.Notes)
                 .UsingEntity<LabelNoteAssociation>();
+
+            modelBuilder
+                .Entity<SemanticDomain>()
+                .HasMany(p => p.LexicalItemDefinitions)
+                .WithMany(p => p.SemanticDomains)
+                .UsingEntity<SemanticDomainLexicalItemDefinitionAssociation>();
 
             modelBuilder.Entity<Verse>().HasIndex(e => e.BookNumber);
             modelBuilder.Entity<Verse>().HasIndex(e => e.ChapterNumber);

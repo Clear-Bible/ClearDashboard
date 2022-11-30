@@ -24,6 +24,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         }
 
+        public async void UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus)
+        {
+            var result = await mediator.Send(new GetBookIdsByTokenizedCorpusIdQuery(TokenizedTextCorpusId));
+            if (result.Success)
+            {
+                IEnumerable<string> targetTextIds = textCorpus.Texts.Select(t => t.Id);
+                var bookIdsToUpdate = targetTextIds.Except(result.Data.bookIds);
+            }
+        }
+
         public async void Update()
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
