@@ -371,9 +371,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <param name="mediator"></param>
         /// <param name="noteId"></param>
         /// <param name="token"></param>
-        /// <returns>(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?</returns>
+        /// <returns>(string paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?</returns>
         /// <exception cref="OperationCanceledException"></exception>
-        public static async Task<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?> GetParatextIdIfAssociatedContiguousTokensOnly(
+        public static async Task<(string paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?> GetParatextIdIfAssociatedContiguousTokensOnly(
             IMediator mediator,
             NoteId noteId,
             CancellationToken token = default)
