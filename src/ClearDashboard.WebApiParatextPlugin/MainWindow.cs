@@ -356,14 +356,14 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// textcollection panel in Paratext
         /// </summary>
         /// <returns></returns>
-        public List<TextCollection> GetTextCollectionsData()
+        public List<TextCollection> GetTextCollectionsData(bool fetchUsx=false)
         {
             // get the text collections
             List<TextCollection> textCollections = new();
 
             if (this.InvokeRequired)
             {
-                MethodInvoker del = delegate { GetTextCollectionsData(); };
+                MethodInvoker del = delegate { GetTextCollectionsData(fetchUsx); };
                 this.Invoke(del);
                 return _textCollections;
             }
@@ -384,66 +384,77 @@ namespace ClearDashboard.WebApiParatextPlugin
                             TextCollection textCollection = new();
                             if (project != null)
                             {
-                                IEnumerable<IUSFMToken> tokens = null;
-                                try
+                                if (fetchUsx)
                                 {
-                                    tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum,
-                                        _verseRef.VerseNum);
-                                }
-                                catch (Exception e)
-                                {
-                                    Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
-                                }
-
-                                if (tokens != null)
-                                {
-                                    textCollection.ReferenceShort = project.ShortName;
-
-                                    foreach (var token in tokens)
+                                    var bookUsx = project.GetUSX(_verseRef.BookNum);
+                                    textCollections.Add(new TextCollection()
                                     {
-                                        if (token is IUSFMMarkerToken marker)
+                                        ReferenceShort = project.ShortName,
+                                        Data = bookUsx
+                                    });
+                                }
+                                else
+                                {
+                                    IEnumerable<IUSFMToken> tokens = null;
+                                    try
+                                    {
+                                        tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
+                                    }
+
+                                    if (tokens != null)
+                                    {
+                                        textCollection.ReferenceShort = project.ShortName;
+
+                                        foreach (var token in tokens)
                                         {
-                                            if (marker.Type == MarkerType.Verse)
+                                            if (token is IUSFMMarkerToken marker)
                                             {
-                                                //skip
+                                                if (marker.Type == MarkerType.Verse)
+                                                {
+                                                    //skip
+                                                }
+                                                else if (marker.Type == MarkerType.Paragraph)
+                                                {
+                                                    textCollection.Data += "/ ";
+                                                }
+                                                else
+                                                {
+                                                    //textCollection.Data += $"{marker.Type} Marker: {marker.Data}";
+                                                }
                                             }
-                                            else if (marker.Type == MarkerType.Paragraph)
+                                            else if (token is IUSFMTextToken textToken)
                                             {
-                                                textCollection.Data += "/ ";
+                                                if (token.IsScripture)
+                                                {
+                                                    textCollection.Data += textToken.Text + " ";
+                                                }
+                                            }
+                                            else if (token is IUSFMAttributeToken)
+                                            {
+                                                textCollection.Data += "Attribute Token: " + token.ToString();
                                             }
                                             else
                                             {
-                                                //textCollection.Data += $"{marker.Type} Marker: {marker.Data}";
+                                                textCollection.Data += "Unexpected token type: " + token.ToString();
                                             }
                                         }
-                                        else if (token is IUSFMTextToken textToken)
+
+                                        // remove the last paragraph tag if at the end
+                                        if (textCollection.Data.Length > 2)
                                         {
-                                            if (token.IsScripture)
+                                            if (textCollection.Data.EndsWith("/ "))
                                             {
-                                                textCollection.Data += textToken.Text + " ";
+                                                textCollection.Data =
+                                                    textCollection.Data.Substring(0, textCollection.Data.Length - 2);
                                             }
                                         }
-                                        else if (token is IUSFMAttributeToken)
-                                        {
-                                            textCollection.Data += "Attribute Token: " + token.ToString();
-                                        }
-                                        else
-                                        {
-                                            textCollection.Data += "Unexpected token type: " + token.ToString();
-                                        }
-                                    }
 
-                                    // remove the last paragraph tag if at the end
-                                    if (textCollection.Data.Length > 2)
-                                    {
-                                        if (textCollection.Data.EndsWith("/ "))
-                                        {
-                                            textCollection.Data =
-                                                textCollection.Data.Substring(0, textCollection.Data.Length - 2);
-                                        }
+                                        textCollections.Add(textCollection);
                                     }
-
-                                    textCollections.Add(textCollection);
                                 }
                             }
                         }

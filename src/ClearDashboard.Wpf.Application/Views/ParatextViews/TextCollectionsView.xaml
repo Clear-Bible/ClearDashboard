@@ -70,40 +70,50 @@
                 VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
-        <Border
-            x:Name="LowerBorder"
-            Grid.Row="1"
-            Margin="5"
-            BorderBrush="{DynamicResource PrimaryHueDarkBrush}"
-            BorderThickness="1">
+        <StackPanel Grid.Row="1" Orientation="Vertical">
+            <WebBrowser x:Name="webBrowser" Height="200" Loaded="WebBrowser_OnLoaded"/>
+            <!--<Frame Name="myFrame" Source="../../Resources/page.html"/>-->
 
-            <ListView
-                x:Name="TextCollectionListView"
-                MinHeight="{Binding ElementName=LowerBorder, Path=ActualHeight}"
+            <!--<Button Name="WebBrowserTest" Click="WebBrowserTest_OnClick" />-->
+            <!--<Border
+                x:Name="LowerBorder"
+                Grid.Row="1"
                 Margin="5"
-                VerticalAlignment="Top"
-                ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">
-                <ListView.View>
-                    <GridView>
-                        <GridView.ColumnHeaderContainerStyle>
-                            <Style TargetType="{x:Type GridViewColumnHeader}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </Style>
-                        </GridView.ColumnHeaderContainerStyle>
+                BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                BorderThickness="1">
 
-                        <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=TextCollectionListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <helpers:BindableTextBlock
-                                        Width="Auto"
-                                        InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                        TextWrapping="Wrap" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </Border>
+                <ListView
+                    x:Name="TextCollectionListView"
+                    MinHeight="{Binding ElementName=LowerBorder, Path=ActualHeight}"
+                    Margin="5"
+                    VerticalAlignment="Top"
+                    ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">
+                    <ListView.View>
+                        <GridView>
+                            <GridView.ColumnHeaderContainerStyle>
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </GridView.ColumnHeaderContainerStyle>
+
+                            <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=TextCollectionListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <RichTextBox />
+                                            <helpers:BindableTextBlock
+                                                Width="Auto"
+                                                InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Border>-->
+        </StackPanel>
+
     </Grid>
 </UserControl>

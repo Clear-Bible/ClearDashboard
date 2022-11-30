@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -9,8 +11,10 @@ using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
@@ -22,7 +26,7 @@ using Microsoft.Extensions.Logging;
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class TextCollectionsViewModel : ToolViewModel, IHandle<TextCollectionChangedMessage>,
+    public class TextCollectionsViewModel : ToolViewModel,
         IHandle<VerseChangedMessage>
     {
         private readonly DashboardProjectManager? _projectManager;
@@ -51,7 +55,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => TextCollectionLists);
             }
         }
-
 
         #region BCV
         private bool _paratextSync = false;
@@ -175,17 +178,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task CallGetTextCollections()
         {
+            var workWithUsx = true;
             try
             {
-                var result = await ExecuteRequest(new GetTextCollectionsQuery(), CancellationToken.None)
-                    .ConfigureAwait(false);
-                await EventAggregator.PublishOnUIThreadAsync(
-                    new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
-
+                var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx), CancellationToken.None).ConfigureAwait(false);
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
 
                 if (result.Success)
                 {
-                    OnUIThread(() =>
+                    OnUIThread(async () =>
                     {
                         TextCollectionLists.Clear();
                         var data = result.Data;
@@ -197,9 +198,47 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             var endPart = textCollection.Data;
                             var startPart = textCollection.ReferenceShort;
 
-                            tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                            SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
+                            if (workWithUsx)
+                            {
+                                try
+                                {
+                                    //var list = UsxParser.ParseXMLToList(endPart);
+                                    //list.Reverse();
+                                    //var count = 0;
+                                    //foreach (var item in list)
+                                    //{
+                                    //    if (count < 100)
+                                    //    {
+                                    //        count++;
+                                    //        tc.Inlines.Insert(0, item.Inline);
+                                    //    }
+                                    //}
+                                    string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
+                                    var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
+                                    var htmlCollection = new TextCollection()
+                                    {
+                                        Data = html
+                                    };
+                                    var textCollectionList = new List<TextCollection>();
+                                    textCollectionList.Add(htmlCollection);
+                                    await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollectionList));
+                                    break;
+                                    //var html = UsxParser.ConvertXMLToHTML(endPart, CurrentBcv.Book, ProjectManager.CurrentParatextProject.Language.FontFamily,1);
 
+                                    //var strang = UsxParser.ParseXMLstring(endPart);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e);
+                                    throw;
+                                }
+                            }
+                            else
+                            {
+                                tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                            }
+
+                            SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
                             tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
 
                             TextCollectionLists.Add(tc);
@@ -216,12 +255,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
-        }
-
-        public Task HandleAsync(TextCollectionChangedMessage message, CancellationToken cancellationToken)
-        {
-            // TODO
-            return Task.CompletedTask;
         }
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
