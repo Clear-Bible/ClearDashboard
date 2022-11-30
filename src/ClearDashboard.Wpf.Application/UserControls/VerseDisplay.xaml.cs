@@ -14,9 +14,9 @@ using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 using SIL.Extensions;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {

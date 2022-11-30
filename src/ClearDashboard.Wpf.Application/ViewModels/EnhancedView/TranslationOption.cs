@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.Wpf.Application.ViewModels.Display
+﻿namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class TranslationOption
     {

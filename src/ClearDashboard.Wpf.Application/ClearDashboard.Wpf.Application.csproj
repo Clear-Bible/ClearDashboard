@@ -14,9 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\About\**" />
     <Compile Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="ViewModels\About\**" />
     <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <None Remove="ViewModels\About\**" />
     <None Remove="Views\DesignSurface\**" />
+    <Page Remove="ViewModels\About\**" />
     <Page Remove="Views\DesignSurface\**" />
   </ItemGroup>
 
@@ -452,7 +456,6 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="Resources\TailBlazor\" />
-    <Folder Include="ViewModels\About\" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

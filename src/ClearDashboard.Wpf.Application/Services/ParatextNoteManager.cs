@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 
 namespace ClearDashboard.Wpf.Application.Services

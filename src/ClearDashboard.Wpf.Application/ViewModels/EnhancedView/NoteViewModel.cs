@@ -7,7 +7,7 @@ using ClearDashboard.Wpf.Application.Collections;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Display
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class NoteViewModel : PropertyChangedBase
     {

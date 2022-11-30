@@ -5,10 +5,10 @@ using System.Windows.Controls;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
 
-namespace ClearDashboard.Wpf.Application.Views.Project
+namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 {
     /// <summary>
-    /// Interaction logic for EnhancedCorpusView.xaml
+    /// Interaction logic for EnhancedView.xaml
     /// </summary>
     public partial class EnhancedView : UserControl
     {

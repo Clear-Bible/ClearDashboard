@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {

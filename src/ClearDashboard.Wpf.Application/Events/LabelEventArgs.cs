@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Events
 {
