@@ -259,11 +259,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _tokenizationType, value);
         }
 
-        public TokenizedTextCorpus? CurrentTokenizedTextCorpus
-        {
-            get => _currentTokenizedTextCorpus;
-            set => Set(ref _currentTokenizedTextCorpus, value);
-        }
+        //public TokenizedTextCorpus? CurrentTokenizedTextCorpus
+        //{
+        //    get => _currentTokenizedTextCorpus;
+        //    set => Set(ref _currentTokenizedTextCorpus, value);
+        //}
 
         private Visibility? _progressBarVisibility = Visibility.Visible;
         public Visibility? ProgressBarVisibility
@@ -655,12 +655,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
 
                     var project = _tokenProjects.FirstOrDefault(p => p.CorpusId == message.CorpusId);
-
+                    
+                    TokenizedTextCorpus currentTokenizedTextCorpus;
                     if (project is null)
                     {
                         // get the entirety of text for this corpus
-                        CurrentTokenizedTextCorpus =
-                            await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId.Value));
+                        
+                        currentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator, new TokenizedTextCorpusId(message.TokenizedTextCorpusId.Value));
 
                         // add this corpus to our master list
                         _tokenProjects.Add(new TokenProject
@@ -671,7 +672,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             CorpusId = message.CorpusId.Value,
                             TokenizedTextCorpusId = message.TokenizedTextCorpusId.Value,
                             Metadata = metadata,
-                            TokenizedTextCorpus = CurrentTokenizedTextCorpus,
+                            TokenizedTextCorpus = currentTokenizedTextCorpus,
                         });
 
                         // add in the message so we can get it later
@@ -679,7 +680,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
                     else
                     {
-                        CurrentTokenizedTextCorpus = project.TokenizedTextCorpus;
+                        currentTokenizedTextCorpus = project.TokenizedTextCorpus;
                     }
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -691,17 +692,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
                         }), cancellationToken);
 
-                    // get the rows for the current book and chapter
-                    var tokensTextRows = CurrentTokenizedTextCorpus[CurrentBook?.Code]
-                        .GetRows()
-                        .WithCancellation(localCancellationToken)
-                        .Cast<TokensTextRow>()
-                        .Where(ttr => ttr
-                            .Tokens
-                            .Count(t => t
-                                .TokenId
-                                .ChapterNumber == CurrentBcv.ChapterNum) > 0)
-                        .ToList();
+
+                    List<TokensTextRow> tokensTextRows = new();
+                    try
+                    {
+                        // get the rows for the current book and chapter
+                        tokensTextRows = currentTokenizedTextCorpus[CurrentBook?.Code]
+                            .GetRows()
+                            .WithCancellation(localCancellationToken)
+                            .Cast<TokensTextRow>()
+                            .Where(ttr => ttr
+                                .Tokens
+                                .Count(t => t
+                                    .TokenId
+                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
+                            .ToList();
+                    }
+                    catch (Exception )
+                    {
+                        bookFound = false;
+                    }
 
 
                     // get the row for the current verse
@@ -735,12 +745,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
                     else
                     {
-                        var startNum = (VerseRef)tokensTextRowsRange[0].Ref;
-                        var endNum = (VerseRef)tokensTextRowsRange[^1].Ref;
-                        title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{startNum.VerseNum} - {endNum.VerseNum})";
+                        // check to see if we actually have a verse
+                        if (tokensTextRowsRange.Count > 0)
+                        {
+                            var startNum = (VerseRef)tokensTextRowsRange[0].Ref;
+                            var endNum = (VerseRef)tokensTextRowsRange[^1].Ref;
+                            title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{startNum.VerseNum} - {endNum.VerseNum})";
+
+                        }
+                        else
+                        {
+                            title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})";
+                        }
                     }
-
-
 
                     // combine verse list into one VerseDisplayViewModel
                     ObservableCollection<VerseDisplayViewModel> verses = new();
@@ -1369,7 +1386,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 try
                 {
-                    CurrentTokenizedTextCorpus = message.TokenizedTextCorpus;
+                    var currentTokenizedTextCorpus = message.TokenizedTextCorpus;
                     TokenizationType = message.TokenizationName;
                     CurrentBook = message.ProjectMetadata.AvailableBooks.First();
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -1382,7 +1399,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         }), cancellationToken);
 
                     var tokensTextRows =
-                        CurrentTokenizedTextCorpus[CurrentBook?.Code]
+                        currentTokenizedTextCorpus[CurrentBook?.Code]
                             .GetRows()
                             .WithCancellation(localCancellationToken)
                             .Cast<TokensTextRow>()
