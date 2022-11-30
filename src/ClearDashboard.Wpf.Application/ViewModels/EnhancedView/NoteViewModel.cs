@@ -18,8 +18,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteId? NoteId => Entity.NoteId;
         public EntityId<NoteId>? ThreadId => Entity.ThreadId;
 
-        public Guid? ParatextId { get; set; }
-        public bool EnableParatextSend => ParatextId.HasValue;
+        public string? ParatextId { get; set; }
+        public bool EnableParatextSend => !string.IsNullOrEmpty(ParatextId);
 
         public string? Text
         {
