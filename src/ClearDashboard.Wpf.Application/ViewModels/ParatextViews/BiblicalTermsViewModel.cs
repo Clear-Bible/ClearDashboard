@@ -506,7 +506,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _longRunningTaskManager = longRunningTaskManager;
             Title = "🕮 " + LocalizationStrings.Get("Windows_BiblicalTerms", Logger);
             ContentId = "BIBLICALTERMS";
-            DockSide = EDockSide.Bottom;
+            DockSide = DockSide.Bottom;
            ClearFilterCommand = new RelayCommand(ClearFilter);
         }
 

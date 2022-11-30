@@ -592,7 +592,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                     if (enhancedViewModel.DisplayOrder.Count > 0)
                     {
-                        var id = enhancedViewModel.Guid;
+                        var id = enhancedViewModel.PaneId;
 
                         // get the correct window for this view model so we can get the tab name
                         var title = enhancedViewModel.Title;
@@ -605,7 +605,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                     if (a.Content is EnhancedViewModel)
                                     {
                                         var vm = (EnhancedViewModel)a.Content;
-                                        if (vm.Guid == id)
+                                        if (vm.PaneId == id)
                                         {
                                             return true;
                                         }
@@ -1556,7 +1556,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return (ToolViewModel)Items[0];
         }
 
-        private (object vm, string title, PaneViewModel.EDockSide dockSide) LoadWindow(string windowTag)
+        private (object vm, string title, DockSide dockSide) LoadWindow(string windowTag)
         {
             // window has been closed so we need to reopen it
             switch (windowTag)
@@ -1584,7 +1584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     return (vm4, vm4.Title, vm4.DockSide);
 
             }
-            return (null, null, PaneViewModel.EDockSide.Bottom);
+            return (null, null, DockSide.Bottom);
         }
 
         /// <summary>
@@ -1683,11 +1683,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             windowPane.IsActive = true;
 
                             // set where it will doc on layout
-                            if (obj.dockSide == PaneViewModel.EDockSide.Bottom)
+                            if (obj.dockSide == DockSide.Bottom)
                             {
                                 windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
                             }
-                            else if (obj.dockSide == PaneViewModel.EDockSide.Left)
+                            else if (obj.dockSide == DockSide.Left)
                             {
                                 windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
                             }
@@ -1870,10 +1870,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         var vm = document.Content as EnhancedViewModel;
                         // ReSharper disable once PossibleNullReferenceException
-                        var guid = vm.Guid;
+                        var guid = vm.PaneId;
 
                         if (Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
-                                .First(item => ((EnhancedViewModel)item).Guid == guid) is EnhancedViewModel enhancedCorpusViewModels)
+                                .First(item => ((EnhancedViewModel)item).PaneId == guid) is EnhancedViewModel enhancedCorpusViewModels)
                         {
                             await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
                             return;
@@ -1971,7 +1971,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 var content = pane.Content as EnhancedViewModel;
                 // ReSharper disable once PossibleNullReferenceException
-                if (content.Guid != guid)
+                if (content.PaneId != guid)
                 {
                     pane.IsActive = false;
                 }
@@ -2008,12 +2008,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         var vm = document.Content as EnhancedViewModel;
                         // ReSharper disable once PossibleNullReferenceException
-                        var guid = vm.Guid;
+                        var guid = vm.PaneId;
 
                         var enhancedCorpusViewModels =
                             Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
                                     // ReSharper disable once UsePatternMatching
-                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
+                                    .First(item => ((EnhancedViewModel)item).PaneId == guid) as
                                 EnhancedViewModel;
                         if (enhancedCorpusViewModels is not null)
                         {
@@ -2079,7 +2079,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     var content = pane.Content as EnhancedViewModel;
                     // ReSharper disable once PossibleNullReferenceException
-                    if (content.Guid == windowGuid)
+                    if (content.PaneId == windowGuid)
                     {
                         pane.Close();
                         break;

@@ -1,64 +1,56 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Media;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 {
     /// <summary>
     /// 
     /// </summary>
-    public class PaneViewModel : DashboardApplicationScreen, IAvalonDockWindow
+    public class PaneViewModel : DashboardApplicationScreen, IAvalonDockWindow, IPaneViewModel
     {
-        public enum EDockSide
-        {
-            Left,
-            Bottom,
-        }
-
-
         #region Member Variables
 
         public ICommand RequestCloseCommand { get; set; }
 
-        private string _title = null;
-        private string _contentId = null;
-        private bool _isSelected = false;
-        private bool _isActive = false;
+        //private string _title = null;
+        private string? _contentId;
+        private bool _isSelected;
+        private bool _isActive;
         #endregion //Member Variables
 
         #region Public Properties
 
-        public Guid Guid = Guid.NewGuid();
-        public EDockSide DockSide = EDockSide.Bottom;
+        public Guid PaneId  => Guid.NewGuid();
+        public DockSide DockSide = DockSide.Bottom;
 
         #endregion //Public Properties
 
         #region Observable Properties
-        public string Title
-        {
-            get => _title;
-            set
-            {
-                if (_title != value)
-                {
-                    _title = value;
-                    NotifyOfPropertyChange(() => Title);
-                }
-            }
-        }
+        //public string Title
+        //{
+        //    get => _title;
+        //    set
+        //    {
+        //        if (_title != value)
+        //        {
+        //            _title = value;
+        //            NotifyOfPropertyChange(() => Title);
+        //        }
+        //    }
+        //}
 
-        public ImageSource IconSource { get; protected set; }
+        public ImageSource? IconSource { get; protected set; }
 
-        public string ContentId
+        public string? ContentId
         {
             get => _contentId;
             set
@@ -91,13 +83,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
             {
                 if (_isActive != value)
                 {
-                    _isActive = value;
-                    NotifyOfPropertyChange(() => IsActive);
+                    Set(ref _isActive, value);
 
-                    if (this.ContentId == "ENHANCEDVIEW" && value == true)
+                    if (this.ContentId == "ENHANCEDVIEW" && value)
                     {
                         // send out a notice that the active document has changed
-                        EventAggregator.PublishOnUIThreadAsync(new ActiveDocumentMessage(this.Guid));
+                        EventAggregator.PublishOnUIThreadAsync(new ActiveDocumentMessage(PaneId));
                     }
                 }
             }
@@ -106,8 +97,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         #endregion //Observable Properties
 
         #region Constructor
-        public PaneViewModel(): base()
+        public PaneViewModel()
         {
+            RequestCloseCommand = new RelayCommandAsync(RequestClose);
         }
 
         public PaneViewModel(INavigationService navigationService, ILogger logger,
@@ -123,9 +115,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
         #region Methods
 
-        private async Task RequestClose(object obj)
+        public async Task RequestClose(object obj)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.Guid));
+            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }
 
         #endregion // Methods

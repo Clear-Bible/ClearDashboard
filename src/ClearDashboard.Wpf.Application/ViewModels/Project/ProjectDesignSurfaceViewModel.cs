@@ -934,12 +934,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
             }
         }
-        
-
-
-
-       
-
 
         private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
@@ -1029,8 +1023,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SaveDesignSurfaceData();
             }
-
-
         }
 
 

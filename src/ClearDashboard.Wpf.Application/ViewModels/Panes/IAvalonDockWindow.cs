@@ -2,6 +2,6 @@
 {
     public interface IAvalonDockWindow
     {
-        string ContentId { get; }
+        string? ContentId { get; }
     }
 }

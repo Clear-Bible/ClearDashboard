@@ -56,6 +56,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected IEventAggregator? EventAggregator { get; }
         protected IMediator Mediator { get; }
 
+        // ReSharper disable once NotAccessedField.Local
         private readonly IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? _designSurfaceDataProvider;
         ///
         /// The current scale at which the content is being viewed.
@@ -211,6 +212,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+            Logger!.LogInformation("DesignSurfaceViewModel - OnDeactivateAsync called.");
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -232,9 +234,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         #region ctor
 
-        public DesignSurfaceViewModel(INavigationService? navigationService,
-            ILogger<DesignSurfaceViewModel>? logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator, 
+        public DesignSurfaceViewModel(ILogger<DesignSurfaceViewModel>? logger,
+             IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator, 
             IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider)
         {
             //_navigationService = navigationService;
