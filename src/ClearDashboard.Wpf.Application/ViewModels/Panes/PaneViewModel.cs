@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         #region Public Properties
 
         public Guid PaneId  => Guid.NewGuid();
-        public DockSide DockSide = DockSide.Bottom;
+        public DockSide DockSide { get; set; }
 
         #endregion //Public Properties
 
@@ -62,6 +62,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
                 }
             }
         }
+
+        //public DockSide DockSide { get; }
 
         public bool IsSelected
         {

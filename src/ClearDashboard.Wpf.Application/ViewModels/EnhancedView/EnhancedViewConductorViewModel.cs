@@ -22,6 +22,7 @@ public class EnhancedViewConductorViewModel : DashboardConductorAllActive<object
     public ImageSource? IconSource { get; }
     public bool IsSelected { get; set; }
     public string ContentId { get; set; }
+    public DockSide DockSide { get; }
 
 
     #region Commands

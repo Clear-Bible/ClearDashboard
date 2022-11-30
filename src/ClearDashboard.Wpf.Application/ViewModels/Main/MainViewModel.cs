@@ -1399,7 +1399,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         // Documents
                         case WorkspaceLayoutNames.EnhancedCorpus:
-                            e.Content = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
+                            //e.Content = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
+                            e.Content = GetPaneViewModelFromItems("EnhancedViewConductorViewModel");  
                             break;
 
                         // Tools
@@ -1510,7 +1511,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// </summary>
         /// <param name="vm"></param>
         /// <returns></returns>
-        private PaneViewModel GetPaneViewModelFromItems(string vm)
+        private IPaneViewModel GetPaneViewModelFromItems(string vm)
         {
             foreach (var t in Items)
             {
@@ -1520,12 +1521,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (type)
                     {
                         case EnhancedViewModel:
-                            return (PaneViewModel)t;
+                            return (IPaneViewModel)t;
+                        case EnhancedViewConductorViewModel:
+                            return (IPaneViewModel)t;
                     }
                 }
             }
 
-            return (PaneViewModel)Items[0];
+            return (IPaneViewModel)Items[0];
         }
 
 
@@ -1563,7 +1566,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 // DOCUMENTS
                 case WorkspaceLayoutNames.EnhancedCorpus:
-                    var vm14 = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
+                    //var vm14 = GetPaneViewModelFromItems("EnhancedCorpusViewModel");
+                    var vm14 = GetPaneViewModelFromItems("EnhancedViewConductorViewModel");
                     return (vm14, vm14.Title, vm14.DockSide);
 
                 // TOOLS

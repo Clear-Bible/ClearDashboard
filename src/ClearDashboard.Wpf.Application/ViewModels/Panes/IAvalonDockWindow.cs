@@ -3,5 +3,7 @@
     public interface IAvalonDockWindow
     {
         string? ContentId { get; }
+
+        DockSide DockSide { get; }
     }
 }

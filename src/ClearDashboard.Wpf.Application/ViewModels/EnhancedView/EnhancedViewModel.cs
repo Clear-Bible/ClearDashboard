@@ -50,7 +50,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public class EnhancedViewModel : PaneViewModel,
+    public class EnhancedViewModel : PaneViewModel, 
         IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
