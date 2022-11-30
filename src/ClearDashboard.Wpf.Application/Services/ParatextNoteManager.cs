@@ -24,7 +24,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="mediator"></param>
         /// <param name="noteId">The note for which to get the Paratext project ID.</param>
         /// <returns>The Paratext project ID if all three conditions are met; null otherwise.</returns>
-        public static async Task<Guid?> GetParatextId(IMediator mediator, NoteId noteId)
+        public static async Task<string?> GetParatextId(IMediator mediator, NoteId noteId)
         {
             var result = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(mediator, noteId);
             if (result is null)
@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 return null;
             }
 
-            (Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens) = result.Value;
+            (string paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens) = result.Value;
             // FIXME ANDY!
             // What do you want to do with 
             //    tokenizedTextCorpusId

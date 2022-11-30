@@ -24,6 +24,7 @@ using Autofac;
 using System.Threading;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -641,12 +642,12 @@ public class CreateNotesCommandHandlerTests : TestBase
     {
         try
         {
-            var paratextGuid = Guid.NewGuid();
+            var paratextId = Guid.NewGuid().ToString();
             var sourceCorpus = await Corpus.Create(Mediator!, false,
                 "New Testament 1",
                 "grc",
                 "Resource",
-                paratextGuid.ToString());
+                paratextId);
             var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, sourceCorpus.CorpusId, "test", "tokenization");
 
@@ -668,6 +669,9 @@ public class CreateNotesCommandHandlerTests : TestBase
             await noteGood.AssociateDomainEntity(Mediator!, verseRowOneTokens[3].TokenId);
             await noteGood.AssociateDomainEntity(Mediator!, verseRowOneTokens[2].TokenId);
             await noteGood.AssociateDomainEntity(Mediator!, verseRowOneTokens[4].TokenId);
+
+            var noteGoodSingleToken = await new Note { Text = "a good note having a single token", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteGoodSingleToken.AssociateDomainEntity(Mediator!, verseRowOneTokens[3].TokenId);
 
             var noteNonContiguous = await new Note { Text = "a non contiguous token note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
             await noteNonContiguous.AssociateDomainEntity(Mediator!, verseRowOneTokens[1].TokenId);
@@ -693,7 +697,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             var goodResult = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteGood.NoteId!);
             Assert.NotNull(goodResult);
 
-            Assert.Equal(paratextGuid, goodResult.Value.paratextId);
+            Assert.Equal(paratextId, goodResult.Value.paratextId);
             Assert.Equal(sourceTokenizedTextCorpus.TokenizedTextCorpusId, goodResult.Value.tokenizedTextCorpusId);
             Assert.Equal(verseRowOneTokens.Length, goodResult.Value.verseTokens.Count());
             Assert.Equal<TokenId>(
@@ -701,11 +705,130 @@ public class CreateNotesCommandHandlerTests : TestBase
                 goodResult.Value.verseTokens.OrderBy(t => t.TokenId.ToString()).Select(t => t.TokenId), 
                 new IIdEqualityComparer());
 
+            var goodResultSingleToken = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteGoodSingleToken.NoteId!);
+            Assert.NotNull(goodResultSingleToken);
+
+            Assert.Equal(paratextId, goodResultSingleToken.Value.paratextId);
+            Assert.Equal(sourceTokenizedTextCorpus.TokenizedTextCorpusId, goodResultSingleToken.Value.tokenizedTextCorpusId);
+            Assert.Equal(verseRowOneTokens.Length, goodResultSingleToken.Value.verseTokens.Count());
+            Assert.Equal<TokenId>(
+                verseRowOneTokens.OrderBy(t => t.TokenId.ToString()).Select(t => t.TokenId),
+                goodResultSingleToken.Value.verseTokens.OrderBy(t => t.TokenId.ToString()).Select(t => t.TokenId),
+                new IIdEqualityComparer());
+
             Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNonContiguous.NoteId!));
             Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteMultipleVerseRows.NoteId!));
             Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteMuiltipleDomainEntityTypes.NoteId!));
             Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNoTokenAssociations.NoteId!));
             Assert.Null(await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNoAssociations.NoteId!));
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__ParatextManuscriptGuid()
+    {
+        try
+        {
+            var sourceCorpusGreekManuscript = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource",
+                ManuscriptIds.GreekManuscriptId);
+            var sourceTokenizedTextCorpusGreekManuscript = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpusGreekManuscript.CorpusId, "test", "tokenization");
+
+            var tokenGreekManuscript = ProjectDbContext!.TokenComponents
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpusGreekManuscript.TokenizedTextCorpusId.Id)
+                .Take(1)
+                .Select(t => ModelHelper.BuildToken(t))
+                .First();
+
+            var noteManuscript = await new Note { Text = "a manuscript note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteManuscript.AssociateDomainEntity(Mediator!, tokenGreekManuscript.TokenId);
+
+            var nullResultManuscript = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteManuscript.NoteId!);
+            Assert.Null(nullResultManuscript);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__ParatextZZSurGuid()
+    {
+        try
+        {
+            var paratextIdZZSur = "2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f";
+            var sourceCorpusZZSur = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource",
+                paratextIdZZSur);
+            var sourceTokenizedTextCorpusZZSur = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpusZZSur.CorpusId, "test", "tokenization");
+
+            var verseRowZZSur = ProjectDbContext!.VerseRows
+                .Include(v => v.TokenComponents)
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpusZZSur.TokenizedTextCorpusId.Id)
+                .First();
+
+            var verseRowZZSurTokens = verseRowZZSur.TokenComponents
+                .Select(t => ModelHelper.BuildToken(t))
+                .ToArray();
+
+            var noteZZSur = await new Note { Text = "a zz_sur note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteZZSur.AssociateDomainEntity(Mediator!, verseRowZZSurTokens[0].TokenId);
+
+            var goodResultZZSur = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteZZSur.NoteId!);
+            Assert.NotNull(goodResultZZSur);
+
+            Assert.Equal(paratextIdZZSur, goodResultZZSur.Value.paratextId);
+            Assert.Equal(sourceTokenizedTextCorpusZZSur.TokenizedTextCorpusId, goodResultZZSur.Value.tokenizedTextCorpusId);
+            Assert.Equal(verseRowZZSurTokens.Length, goodResultZZSur.Value.verseTokens.Count());
+            Assert.Equal<TokenId>(
+                verseRowZZSurTokens.OrderBy(t => t.TokenId.ToString()).Select(t => t.TokenId),
+                goodResultZZSur.Value.verseTokens.OrderBy(t => t.TokenId.ToString()).Select(t => t.TokenId),
+                new IIdEqualityComparer());
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__ParatextNoParatextGuid()
+    {
+        try
+        {
+            var sourceCorpusNoParatext = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource",
+                string.Empty);
+            var sourceTokenizedTextCorpusNoParatext = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpusNoParatext.CorpusId, "test", "tokenization");
+
+            var tokenNoParatext = ProjectDbContext!.TokenComponents
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpusNoParatext.TokenizedTextCorpusId.Id)
+                .Take(1)
+                .Select(t => ModelHelper.BuildToken(t))
+                .First();
+
+            var noteNoParatext = await new Note { Text = "a no paratext note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteNoParatext.AssociateDomainEntity(Mediator!, tokenNoParatext.TokenId);
+
+            var nullResultNoParatext = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteNoParatext.NoteId!);
+            Assert.Null(nullResultNoParatext);
         }
         finally
         {
