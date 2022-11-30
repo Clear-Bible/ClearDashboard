@@ -895,7 +895,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 case "ShowVerseId":
 
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                    var tokenizedCorpus = topLevelProjectIds.TokenizedTextCorpusIds.FirstOrDefault(tc => tc.TokenizationFunction == corpusNodeMenuItem.Tokenizer);
+                    var tokenizedCorpus =
+                        topLevelProjectIds.TokenizedTextCorpusIds.FirstOrDefault(tc =>
+                            tc.CorpusId.Id == corpusNodeMenuItem.CorpusNodeViewModel.CorpusId);
 
                     if (tokenizedCorpus == null)
                     {

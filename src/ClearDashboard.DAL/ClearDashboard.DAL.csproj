@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\MarbleDataRequests\GetWhatIsThisWordSlice.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\marble-concordances\BHSAnalysis.xml" />
     <None Remove="Resources\marble-concordances\BHSLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\BHSSelectedLemmaConcordance.xml" />
