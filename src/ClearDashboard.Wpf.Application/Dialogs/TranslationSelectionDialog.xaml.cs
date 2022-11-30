@@ -1,5 +1,4 @@
 ﻿using System;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Events;
 using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Dialogs
 {

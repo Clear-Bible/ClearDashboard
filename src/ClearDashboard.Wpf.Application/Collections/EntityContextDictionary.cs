@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using ClearBible.Engine.Utils;
+﻿using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Notes;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {

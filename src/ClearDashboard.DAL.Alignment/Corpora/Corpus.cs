@@ -1,6 +1,8 @@
 ﻿using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Notes;
+using ClearDashboard.DAL.Alignment.Notes;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
@@ -20,6 +22,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         {
             // call the update handler
             // update 'this' instance with the metadata from the handler (the ones with setters only)
+        }
+
+        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        {
+            if (CorpusId == null)
+            {
+                return;
+            }
+
+            await Delete(mediator, CorpusId, token);
         }
 
         public static async Task<IEnumerable<CorpusId>> GetAllCorpusIds(IMediator mediator)
@@ -67,6 +79,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
+        }
+        public static async Task Delete(
+            IMediator mediator,
+            CorpusId corpusId,
+            CancellationToken token = default)
+        {
+            var command = new DeleteCorpusByCorpusIdCommand(corpusId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed(true);
         }
     }
 }

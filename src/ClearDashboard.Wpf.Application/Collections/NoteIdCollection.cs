@@ -1,12 +1,7 @@
-﻿using ClearBible.Engine.Utils;
-using System;
+﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Notes;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.DAL.CQRS;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {

@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ClearDashboard.Wpf.Application.Views.Display
+namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 {
     public partial class EnhancedViewDemoView
     {

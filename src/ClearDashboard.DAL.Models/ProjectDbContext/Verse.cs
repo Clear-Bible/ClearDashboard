@@ -26,7 +26,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual Corpus? Corpus { get; set; }
 
         [ForeignKey("VerseMappingId")]
-        public Guid? VerseMappingId { get; set; }
+        public Guid VerseMappingId { get; set; }
         public VerseMapping? VerseMapping { get; set; }
 
         public virtual ICollection<TokenVerseAssociation> TokenVerseAssociations { get; set; }

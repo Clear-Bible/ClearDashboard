@@ -19,8 +19,6 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
@@ -41,14 +39,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using EngineToken = ClearBible.Engine.Corpora.Token;
 using FontFamily = System.Windows.Media.FontFamily;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Project
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class EnhancedViewModel : PaneViewModel,
         IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
@@ -88,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private readonly List<TokenProject> _tokenProjects = new();
         private readonly List<ShowTokenizationWindowMessage> _projectMessages = new();
-        
+
         private readonly List<ParallelProject> _parallelProjects = new();
         private readonly List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
 
@@ -201,7 +201,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     return;
                 }
-                
+
                 if (_verseChange == "")
                 {
                     _verseChange = value;
@@ -213,7 +213,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // push to Paratext
                     if (ParatextSync && !DashboardProjectManager.IncomingChangesStarted)
                     {
-                        Task.Run( () => 
+                        Task.Run(() =>
                             ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None)
                         );
                     }
@@ -397,7 +397,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 BcvDictionary = new Dictionary<string, string>();
             }
-            
+
             CurrentBcv.SetVerseFromId(_projectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
@@ -448,7 +448,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 ProgressBarVisibility = Visibility.Visible;
                 _cancellationTokenSource = new CancellationTokenSource();
-                
+
                 await ShowParallelTranslation(_parallelMessages[i], _cancellationTokenSource.Token,
                     _cancellationTokenSource.Token);
             }
@@ -483,13 +483,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 return;
             }
-            
+
             VersesDisplay.Move(index, index + 1);
         }
 
         private void DeleteCorpusRow(object obj)
         {
-            var row = (VersesDisplay)obj ;
+            var row = (VersesDisplay)obj;
 
             // remove from the display
             var index = VersesDisplay.Select((element, index) => new { element, index })
@@ -515,19 +515,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             // remove stored collection
-            var tokenProject  = _tokenProjects.FirstOrDefault(x => x.CorpusId==row.CorpusId);
+            var tokenProject = _tokenProjects.FirstOrDefault(x => x.CorpusId == row.CorpusId);
             if (tokenProject is not null)
             {
                 _tokenProjects.Remove(tokenProject);
             }
-            
+
             // remove stored message
             var tokenMessage = _projectMessages.FirstOrDefault(x => x.CorpusId == row.CorpusId);
             if (tokenMessage is not null)
             {
                 _projectMessages.Remove(tokenMessage);
             }
-            
+
         }
 
         public void InnerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -653,7 +653,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             bookFound = true;
                         }
                     }
-                    
+
                     var project = _tokenProjects.FirstOrDefault(p => p.CorpusId == message.CorpusId);
 
                     if (project is null)
@@ -752,7 +752,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         await verseDisplayViewModel!.ShowCorpusAsync(
                             textRow,
                             //FIXME:surface serialization message.detokenizer,
-                            new EngineStringDetokenizer(new LatinWordDetokenizer()), 
+                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             message.IsRTL.Value);
 
                         verses.Add(verseDisplayViewModel);
@@ -775,7 +775,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         OnUIThread(() => { UpdateVerseDisplayWhenBookOutOfRange(message); });
                     }
-                   
+
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
                         new BackgroundTaskStatus
                         {
@@ -887,7 +887,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 });
 
                 // add to the grouping for saving
-                DisplayOrder.Add(new Models.DisplayOrder
+                DisplayOrder.Add(new DisplayOrder
                 {
                     MsgType = Models.DisplayOrder.MessageType.ShowTokenizationWindowMessage,
                     Data = message
@@ -1011,7 +1011,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 finally
                 {
                     _handleAsyncRunning = false;
-                    if (_cancellationTokenSource != null) 
+                    if (_cancellationTokenSource != null)
                         _cancellationTokenSource.Dispose();
 
                     // remove from the job stack
@@ -1060,7 +1060,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                         // ALIGNMENTS
                         await verseDisplayViewModel!.ShowAlignmentsAsync(
-                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
+                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
                             await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
                             //FIXME:surface serialization message.SourceDetokenizer, 
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
@@ -1086,7 +1086,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 //    LabelSuggestions = versesOut.First().LabelSuggestions;
                 //}
 
-                
+
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
                 if (message.AlignmentSetId != null)
                 {
@@ -1131,7 +1131,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             verseRange.Add(bbbcccvvv);
 
             int currentVerse = Convert.ToInt32(bbbcccvvv.Substring(6));
-            
+
             // get lower range first
             int j = 1;
             while (j <= offset)
@@ -1141,7 +1141,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     verseRange.Add(bbbcccvvv.Substring(0, 6) + (currentVerse - j).ToString("000"));
                 }
-                
+
                 j++;
             }
 
@@ -1185,7 +1185,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _parallelProjects.Add(new ParallelProject
                     {
                         ParallelCorpusId = guid,
-                        parallelTextRows= corpus,
+                        parallelTextRows = corpus,
                     });
                     stopwatch.Stop();
                     Logger?.LogInformation($"Retrieved parallel corpus first time {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -1199,7 +1199,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
 
                 var verses = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
-                
+
                 List<EngineParallelTextRow?> rows = new();
                 foreach (var verse in verses.parallelTextRows)
                 {
@@ -1300,7 +1300,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 });
 
                 // add to the grouping for saving
-                DisplayOrder.Add(new Models.DisplayOrder
+                DisplayOrder.Add(new DisplayOrder
                 {
                     MsgType = Models.DisplayOrder.MessageType.ShowParallelTranslationWindowMessage,
                     Data = message
@@ -1313,7 +1313,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 row.BorderColor = brush;
             }
 
-            
+
             NotifyOfPropertyChange(() => VersesDisplay);
         }
 
@@ -1533,10 +1533,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             NoteControlVisibility = Visibility.Visible;
         }
 
-//        public void ParatextSend(object sender, ParatextEventArgs e)
-//        {
-//            NoteManager.ParatextSend(e);
-//;        }
+        //        public void ParatextSend(object sender, ParatextEventArgs e)
+        //        {
+        //            NoteManager.ParatextSend(e);
+        //;        }
 
         public void FilterPins(object sender, NoteEventArgs e)
         {
@@ -1557,17 +1557,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Logger.LogError(ex, "Quick translation failed.");
             }
         }
-        
+
         public string TranslateText(string input)
         {
-          string url = String.Format
-          ("https://translate.googleapis.com/translate_a/single?client=gtx&sl={0}&tl={1}&dt=t&q={2}", "auto", "en", Uri.EscapeUriString(input));
-          HttpClient httpClient = new HttpClient();
-          string result = httpClient.GetStringAsync(url).Result;
+            string url = string.Format
+            ("https://translate.googleapis.com/translate_a/single?client=gtx&sl={0}&tl={1}&dt=t&q={2}", "auto", "en", Uri.EscapeUriString(input));
+            HttpClient httpClient = new HttpClient();
+            string result = httpClient.GetStringAsync(url).Result;
 
-          var items = result.Split("\"");
-          var translation = items[1];
-          return translation;
+            var items = result.Split("\"");
+            var translation = items[1];
+            return translation;
         }
 
         #endregion
@@ -1592,7 +1592,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteUpdated(object sender, NoteEventArgs e)
         {
-            Task.Run<TaskAwaiter>(() => NoteUpdatedAsync(e).GetAwaiter());
+            Task.Run(() => NoteUpdatedAsync(e).GetAwaiter());
         }
 
         public async Task NoteUpdatedAsync(NoteEventArgs e)
@@ -1603,7 +1603,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public void NoteSendToParatext(object sender, NoteEventArgs e)
         {
-            Task.Run<TaskAwaiter>(() => NoteSendToParatextAsync(e).GetAwaiter());
+            Task.Run(() => NoteSendToParatextAsync(e).GetAwaiter());
         }
 
         public async Task NoteSendToParatextAsync(NoteEventArgs e)
@@ -1653,7 +1653,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public void LabelAdded(object sender, LabelEventArgs e)
         {
             //WORKS
-            Task.Run<TaskAwaiter>(() => LabelAddedAsync(e).GetAwaiter());
+            Task.Run(() => LabelAddedAsync(e).GetAwaiter());
         }
 
         public async Task LabelAddedAsync(LabelEventArgs e)

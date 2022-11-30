@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {

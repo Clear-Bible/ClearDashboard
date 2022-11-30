@@ -21,7 +21,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 using DashboardApplication = System.Windows.Application;
 
 namespace ClearDashboard.Wpf.Application

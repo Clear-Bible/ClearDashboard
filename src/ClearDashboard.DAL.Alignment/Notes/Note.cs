@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
@@ -370,9 +371,9 @@ namespace ClearDashboard.DAL.Alignment.Notes
         /// <param name="mediator"></param>
         /// <param name="noteId"></param>
         /// <param name="token"></param>
-        /// <returns>Guid?</returns>
+        /// <returns>(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?</returns>
         /// <exception cref="OperationCanceledException"></exception>
-        public static async Task<Guid?> GetParatextIdIfAssociatedContiguousTokensOnly(
+        public static async Task<(Guid paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?> GetParatextIdIfAssociatedContiguousTokensOnly(
             IMediator mediator,
             NoteId noteId,
             CancellationToken token = default)
@@ -386,7 +387,7 @@ namespace ClearDashboard.DAL.Alignment.Notes
             }
             else if (result.Success)
             {
-                return result.Data;
+                return result.Data!;
             }
 
             return null;

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearBible.Engine.Corpora;
 using MediatR;
 using System.Diagnostics;
@@ -13,7 +12,9 @@ using Caliburn.Micro;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.Services
 {

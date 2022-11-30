@@ -18,6 +18,7 @@
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -124,7 +125,7 @@
 
                         <panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
                             <DataTemplate>
-                                <local:EnhancedView />
+                                <enhancedView:EnhancedView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
 
