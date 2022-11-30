@@ -1,9 +1,9 @@
 ﻿using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Models
 {

@@ -5,7 +5,7 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Display
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     /// <summary>
     /// A class containing the needed information to render a <see cref="Token"/> in the UI.

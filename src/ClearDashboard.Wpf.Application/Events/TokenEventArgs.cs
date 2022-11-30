@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Events
 {

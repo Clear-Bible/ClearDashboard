@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 
 namespace ClearDashboard.Wpf.Application.Services

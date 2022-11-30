@@ -10,7 +10,7 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 
@@ -21,7 +21,7 @@ using Token = ClearBible.Engine.Corpora.Token;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Display
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     /// <summary>
     /// A class containing the needed information to render a verse of <see cref="Token"/>s in the UI.

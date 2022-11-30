@@ -1,4 +1,11 @@
-﻿using ClearBible.Engine.Corpora;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -8,15 +15,8 @@ using ClearDashboard.Wpf.Application.Collections;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Display
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class MockVerseDisplayViewModel : VerseDisplayViewModel
     {

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Events
 {

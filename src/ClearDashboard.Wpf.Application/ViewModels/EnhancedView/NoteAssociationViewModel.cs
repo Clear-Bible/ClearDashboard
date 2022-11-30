@@ -2,7 +2,7 @@
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Display
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class NoteAssociationViewModel : PropertyChangedBase
     {
