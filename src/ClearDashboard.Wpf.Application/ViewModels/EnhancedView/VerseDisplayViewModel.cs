@@ -92,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private Translation? GetTranslationForToken(Token token)
         {
-            return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? new Translation(token);
+            return TranslationSet != null ? Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? new Translation(token) : null;
         }
 
         private async Task BuildTokenDisplayViewModelsAsync()
