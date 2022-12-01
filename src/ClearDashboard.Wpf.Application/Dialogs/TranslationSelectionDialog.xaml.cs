@@ -85,6 +85,7 @@ namespace ClearDashboard.Wpf.Application.Dialogs
             {
                 TranslationSelectorControl.TranslationControlsVisibility = Visibility.Visible;
                 ProgressBarVisibility = Visibility.Collapsed;
+                TranslationSelectorControl.TranslationValue.SelectAll();
                 TranslationSelectorControl.TranslationValue.Focus();
             });
         }
