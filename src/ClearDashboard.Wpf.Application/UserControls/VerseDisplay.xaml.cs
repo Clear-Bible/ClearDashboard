@@ -640,11 +640,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                     .Select(t => t.TokenId)
                                     .Contains(tdm.Token.TokenId))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -657,11 +657,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                     .Select(t => t.TokenId)
                                     .Contains(tdm.Token.TokenId))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -674,14 +674,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     verseDisplayViewModel.SourceTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
                     verseDisplayViewModel.TargetTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
