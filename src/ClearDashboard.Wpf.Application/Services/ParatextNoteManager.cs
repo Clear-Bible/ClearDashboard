@@ -10,6 +10,7 @@ using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -44,18 +45,17 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#endif
+
                 var result = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(mediator, noteId);
-#if DEBUG
+
                 stopwatch.Stop();
                 logger?.LogInformation($"Retrieved Paratext information for note {noteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                return result != null ? new ParatextSendNoteInformation(ParatextId:result.Value.paratextId, 
-                                                                    TokenizedTextCorpusId:result.Value.tokenizedTextCorpusId,
-                                                                    VerseTokens:result.Value.verseTokens)
+
+                return result != null ? new ParatextSendNoteInformation(ParatextId: result.Value.paratextId, 
+                                                                        TokenizedTextCorpusId: result.Value.tokenizedTextCorpusId,
+                                                                        VerseTokens: result.Value.verseTokens)
                                       : null;
             }
             catch (Exception e)
