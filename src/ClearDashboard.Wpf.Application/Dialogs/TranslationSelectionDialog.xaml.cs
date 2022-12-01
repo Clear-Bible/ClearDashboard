@@ -73,6 +73,11 @@ namespace ClearDashboard.Wpf.Application.Dialogs
 
                 OnUIThread(() =>
                 {
+                    if (CurrentTranslationOption == null)
+                    {
+                        TranslationSelectorControl.TranslationValue.Text = TokenDisplay.TargetTranslationText;
+                        TranslationSelectorControl.TranslationValue.SelectAll();
+                    }
                     TranslationSelectorControl.TranslationOptionsVisibility = Visibility.Visible;
                 });
             }
@@ -80,6 +85,7 @@ namespace ClearDashboard.Wpf.Application.Dialogs
             {
                 TranslationSelectorControl.TranslationControlsVisibility = Visibility.Visible;
                 ProgressBarVisibility = Visibility.Collapsed;
+                TranslationSelectorControl.TranslationValue.Focus();
             });
         }
 
