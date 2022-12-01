@@ -17,7 +17,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 public class EnhancedViewConductorViewModel : DashboardConductorAllActive<object>, IPaneViewModel, IAvalonDockWindow
 {
-    public Guid PaneId => Guid.NewGuid();
+    public Guid PaneId { get; private set; } 
    
     public ImageSource? IconSource { get; }
     public bool IsSelected { get; set; }
@@ -33,6 +33,24 @@ public class EnhancedViewConductorViewModel : DashboardConductorAllActive<object
 
 
     #endregion
+    private bool _isActive;
+    public new bool IsActive
+    {
+        get => _isActive;
+        set
+        {
+            if (_isActive != value)
+            {
+                Set(ref _isActive, value);
+
+                if (this.ContentId == "ENHANCEDVIEW" && value)
+                {
+                    // send out a notice that the active document has changed
+                    EventAggregator.PublishOnUIThreadAsync(new ActiveDocumentMessage(PaneId));
+                }
+            }
+        }
+    }
 
     public async Task RequestClose(object obj)
     {
@@ -69,8 +87,14 @@ public class EnhancedViewConductorViewModel : DashboardConductorAllActive<object
     {
         Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
         ContentId = "ENHANCEDVIEW";
+        PaneId = Guid.NewGuid();
 
         InitializeCommands();
+    }
+
+    protected override void OnViewAttached(object view, object context)
+    {
+        base.OnViewAttached(view, context);
     }
 
 
