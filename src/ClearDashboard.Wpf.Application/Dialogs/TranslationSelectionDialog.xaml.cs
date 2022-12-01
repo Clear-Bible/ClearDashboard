@@ -66,13 +66,27 @@ namespace ClearDashboard.Wpf.Application.Dialogs
 
         private async Task OnLoadedAsync()
         {
-            TranslationOptions = await VerseDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
-            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == TokenDisplay.TargetTranslationText);
+            if (TokenDisplay.Translation != null && !TokenDisplay.Translation.IsDefault)
+            {
+                TranslationOptions = await VerseDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
+                CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == TokenDisplay.TargetTranslationText);
 
+                OnUIThread(() =>
+                {
+                    if (CurrentTranslationOption == null)
+                    {
+                        TranslationSelectorControl.TranslationValue.Text = TokenDisplay.TargetTranslationText;
+                        TranslationSelectorControl.TranslationValue.SelectAll();
+                    }
+                    TranslationSelectorControl.TranslationOptionsVisibility = Visibility.Visible;
+                });
+            }
             OnUIThread(() =>
             {
                 TranslationSelectorControl.TranslationControlsVisibility = Visibility.Visible;
                 ProgressBarVisibility = Visibility.Collapsed;
+                TranslationSelectorControl.TranslationValue.SelectAll();
+                TranslationSelectorControl.TranslationValue.Focus();
             });
         }
 
