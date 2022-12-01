@@ -1172,9 +1172,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
-                "FromTranslationModel" => Brushes.Red,
-                "FromAlignmentModel" => Brushes.Red,
-                "FromOther" => Brushes.Blue,
+                Translation.OriginatedFromValues.FromTranslationModel => Brushes.Red,
+                Translation.OriginatedFromValues.FromAlignmentModel => Brushes.Red,
+                Translation.OriginatedFromValues.None => Brushes.Red,
+                Translation.OriginatedFromValues.FromOther => Brushes.Blue,
                 _ => Brushes.Black
             };
         }

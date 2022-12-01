@@ -52,7 +52,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnLabelTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (LabelSuggestions != null)
+            if (LabelSuggestions != null && LabelTextBox.Text.Length > 0)
             {
                 LabelSuggestionListBox.ItemsSource = LabelSuggestions.Where(ls => ls.Text.Contains(LabelTextBox.Text, StringComparison.InvariantCultureIgnoreCase));
                 OpenSuggestionPopup();

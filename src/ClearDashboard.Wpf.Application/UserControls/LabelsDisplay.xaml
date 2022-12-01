@@ -18,7 +18,7 @@
                 BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=BorderThickness}"
                 CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding Path=Text}" />
+                    <TextBlock Text="{Binding Path=Text}" Width="85"/>
                     <Button
                         Name="RemoveLabelButton"
                         Height="12"
@@ -28,7 +28,9 @@
                         BorderThickness="0"
                         Click="OnRemoveLabel"
                         FontSize="11"
-                        FontWeight="Bold">
+                        HorizontalContentAlignment="Right"
+                        FontWeight="Bold"
+                        ToolTip="Remove this label">
                         X
                     </Button>
                 </StackPanel>
