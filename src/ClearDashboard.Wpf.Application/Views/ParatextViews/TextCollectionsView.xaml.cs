@@ -22,58 +22,42 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
     /// <summary>
     /// Interaction logic for TextCollectionsView.xaml
     /// </summary>
-    public partial class TextCollectionsView : UserControl, IHandle<TextCollectionChangedMessage>
+    public partial class TextCollectionsView : UserControl//, IHandle<TextCollectionChangedMessage>
     {
-        private string html = @"<!DOCTYPE html>
-        <html lang=""en"">
-            <body>
-            <div>My Test HTML 'single quote', ""double quote""</div>
-            </body>
-        </html>";
+        //public bool TextCollectionLoaded { get; set; }
+        //public string DisplayHtml { get; set; }
+       
+
         public TextCollectionsView()
         {
             InitializeComponent();
 
-            webBrowser.NavigateToString(html);
-
-            IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
-            eventAggregator.Subscribe(this);
+            //IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            //eventAggregator.Subscribe(this);
         }
 
-        public Task HandleAsync(TextCollectionChangedMessage message, CancellationToken cancellationToken)
-        {
-            //var html = message.TextCollections.FirstOrDefault().Data;
+        //public Task HandleAsync(TextCollectionChangedMessage message, CancellationToken cancellationToken)
+        //{
+        //    DisplayHtml = message.TextCollections.FirstOrDefault().Data;
 
-            var html = "<html>\r\n  <head>\r\n    <title>Hello, World!</title>\r\n  </head>\r\n  <body>\r\n      <h1 class=\"title\">Hello World! </h1>\r\n  </body>\r\n</html>";
+        //    SetHtml(DisplayHtml, TextCollectionLoaded);
 
-            //webBrowser.NavigateToString(html);
+        //    return Task.CompletedTask;
+        //}
 
-            return Task.CompletedTask;
-        }
+        //private void WebBrowser_OnLoaded(object sender, RoutedEventArgs e)
+        //{
+        //    TextCollectionLoaded = true;
 
-        private void WebBrowserTest_OnClick(object sender, RoutedEventArgs e)
-        {
-            //Uri uri = new Uri("page.html", UriKind.Absolute);
-            //myFrame.Source = uri;
+        //    SetHtml(DisplayHtml, TextCollectionLoaded);
+        //}
 
-            //// Only absolute URIs can be navigated to  
-            //if (!uri.IsAbsoluteUri)
-            //{
-            //    MessageBox.Show("The Address URI must be absolute. For example, 'http://www.microsoft.com'");
-            //    return;
-            //}
-
-            // Navigate to the desired URL by calling the .Navigate method  
-            //this.webBrowser.Navigate(uri);
-            //webBrowser.NavigateToString("<html><body><b>Programmatic content</b></body></html>");
-        }
-
-        private void WebBrowser_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            //Dispatcher.BeginInvoke(() =>
-            //{
-            //    webBrowser.NavigateToString("<html><body>This works!</body></html>");
-            //});
-        }
+        //private void SetHtml(string html, bool condition)
+        //{
+        //    if (condition)
+        //    {
+        //        //webBrowser.NavigateToString(html);
+        //    }
+        //} 
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using Autofac;
@@ -55,6 +56,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 NotifyOfPropertyChange(() => TextCollectionLists);
             }
         }
+
+        private string _myHtml;
+
+        public string MyHtml
+        {
+            get { return _myHtml; }
+            set
+            {
+                _myHtml = value;
+                NotifyOfPropertyChange(() => MyHtml);
+            }
+        }
+
+        private bool _textCollectionCallInProgress = false;
 
         #region BCV
         private bool _paratextSync = false;
@@ -178,78 +193,97 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task CallGetTextCollections()
         {
-            var workWithUsx = true;
-            try
+            if (!_textCollectionCallInProgress)
             {
-                var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx), CancellationToken.None).ConfigureAwait(false);
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
+                _textCollectionCallInProgress = true;
 
-                if (result.Success)
+                var workWithUsx = true;
+                try
                 {
-                    OnUIThread(async () =>
+                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx), CancellationToken.None).ConfigureAwait(false);
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
+
+                    if (result.Success)
                     {
-                        TextCollectionLists.Clear();
-                        var data = result.Data;
-
-                        foreach (var textCollection in data)
+                        OnUIThread(async () =>
                         {
-                            TextCollectionList tc = new();
+                            TextCollectionLists.Clear();
+                            var data = result.Data;
 
-                            var endPart = textCollection.Data;
-                            var startPart = textCollection.ReferenceShort;
-
-                            if (workWithUsx)
+                            foreach (var textCollection in data)
                             {
-                                try
+                                TextCollectionList tc = new();
+
+                                var endPart = textCollection.Data;
+                                var startPart = textCollection.ReferenceShort;
+
+                                if (workWithUsx)
                                 {
-                                    //var list = UsxParser.ParseXMLToList(endPart);
-                                    //list.Reverse();
-                                    //var count = 0;
-                                    //foreach (var item in list)
-                                    //{
-                                    //    if (count < 100)
-                                    //    {
-                                    //        count++;
-                                    //        tc.Inlines.Insert(0, item.Inline);
-                                    //    }
-                                    //}
-                                    string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
-                                    var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
-                                    var htmlCollection = new TextCollection()
+                                    try
                                     {
-                                        Data = html
-                                    };
-                                    var textCollectionList = new List<TextCollection>();
-                                    textCollectionList.Add(htmlCollection);
-                                    await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollectionList));
-                                    break;
-                                    //var html = UsxParser.ConvertXMLToHTML(endPart, CurrentBcv.Book, ProjectManager.CurrentParatextProject.Language.FontFamily,1);
+                                        //var list = UsxParser.ParseXMLToList(endPart);
+                                        //list.Reverse();
+                                        //var count = 0;
+                                        //foreach (var item in list)
+                                        //{
+                                        //    if (count < 100)
+                                        //    {
+                                        //        count++;
+                                        //        tc.Inlines.Insert(0, item.Inline);
+                                        //    }
+                                        //}
 
-                                    //var strang = UsxParser.ParseXMLstring(endPart);
+                                        string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
+                                        var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
+                                        //MyHtml = html;
+                                        tc.MyHtml = html;
+
+                                        //_myHtml = @"<!DOCTYPE html>
+                                        //<html lang=""en"">
+                                        //    <body>
+                                        //    <div>My Test HTML 'single quote', ""double quote""</div>
+                                        //    </body>
+                                        //</html>";
+                                        //var htmlCollection = new TextCollection()
+                                        //{
+                                        //    Data = html
+                                        //};
+                                        //var textCollectionList = new List<TextCollection>();
+                                        //textCollectionList.Add(htmlCollection);
+                                        //await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollectionList));
+                                        //break;
+                                        //var html = UsxParser.ConvertXMLToHTML(endPart, CurrentBcv.Book, ProjectManager.CurrentParatextProject.Language.FontFamily,1);
+
+                                        //var strang = UsxParser.ParseXMLstring(endPart);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine(e);
+                                        throw;
+                                    }
                                 }
-                                catch (Exception e)
+                                else
                                 {
-                                    Console.WriteLine(e);
-                                    throw;
+                                    tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
                                 }
-                            }
-                            else
-                            {
-                                tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                            }
 
-                            SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
-                            tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
+                                SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
+                                tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
 
-                            TextCollectionLists.Add(tc);
-                        }
-                    });
+                                TextCollectionLists.Add(tc);
+                            }
+                        });
+                    }
                 }
+                catch (Exception e)
+                {
+                    Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
+                }
+
+                _textCollectionCallInProgress = false;
             }
-            catch (Exception e)
-            {
-                Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
-            }
+
+            
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
@@ -273,7 +307,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         #endregion // Methods
+    }
 
+    public class WebBrowserHelper
+    {
+        public static readonly DependencyProperty BodyProperty =
+            DependencyProperty.RegisterAttached("Body", typeof(string), typeof(WebBrowserHelper), new PropertyMetadata(OnBodyChanged));
 
+        public static string GetBody(DependencyObject dependencyObject)
+        {
+            return (string)dependencyObject.GetValue(BodyProperty);
+        }
+
+        public static void SetBody(DependencyObject dependencyObject, string body)
+        {
+            dependencyObject.SetValue(BodyProperty, body);
+        }
+
+        private static void OnBodyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var webBrowser = (WebBrowser)d;
+            webBrowser.NavigateToString((string)e.NewValue);
+        }
     }
 }
