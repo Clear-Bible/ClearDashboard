@@ -284,19 +284,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 await TranslationSet.PutTranslation(translation, translationActionType);
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Saved translation options for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Saved translation for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 // If translation propagates to other translations, then we need a fresh call to PopulateTranslations() and to rebuild the token displays.
-                if (translationActionType == TranslationActionTypes.PutPropagate)
-                {
-                    Translations = await GetTranslations(TranslationSet, SourceTokens!.Select(t => t.TokenId));
-                    await BuildTokenDisplayViewModelsAsync();
-                }
-                else
-                {
-                    UpdateTokenTranslation(SourceTokenDisplayViewModels, translation);
-                    UpdateTokenTranslation(TargetTokenDisplayViewModels, translation);
-                }
+                Translations = await GetTranslations(TranslationSet, SourceTokens!.Select(t => t.TokenId));
+                await BuildTokenDisplayViewModelsAsync();
+
                 await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
             }
             catch (Exception e)
