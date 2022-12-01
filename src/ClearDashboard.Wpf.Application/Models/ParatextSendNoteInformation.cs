@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 
-namespace ClearDashboard.Wpf.Application.Services;
+namespace ClearDashboard.Wpf.Application.Models;
 
 /// <summary>
 /// A record containing the metadata needed to send a note to Paratext.
@@ -20,4 +19,4 @@ namespace ClearDashboard.Wpf.Application.Services;
 /// <param name="ParatextId">The Paratext project ID.</param>
 /// <param name="TokenizedTextCorpusId">The <see cref="TokenizedTextCorpusId"/> for the related Paratext corpus.</param>
 /// <param name="VerseTokens">The tokens that make up the surrounding verse.</param>
-public record ParatextSendNoteInformation(Guid ParatextId, TokenizedTextCorpusId TokenizedTextCorpusId, IEnumerable<Token> VerseTokens);
+public record ParatextSendNoteInformation(string ParatextId, TokenizedTextCorpusId TokenizedTextCorpusId, IEnumerable<Token> VerseTokens);
