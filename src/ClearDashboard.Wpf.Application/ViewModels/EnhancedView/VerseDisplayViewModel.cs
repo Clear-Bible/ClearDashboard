@@ -92,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private Translation? GetTranslationForToken(Token token)
         {
-            return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? null;
+            return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? new Translation(token);
         }
 
         private async Task BuildTokenDisplayViewModelsAsync()
@@ -250,6 +250,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private void UpdateTokenTranslation(TokenDisplayViewModelCollection tokens, Translation translation)
+        {
+            if (tokens != null)
+            {
+                var token = tokens.FirstOrDefault(t => t.Token.TokenId.Id == translation.SourceToken.TokenId.Id);
+                if (token != null)
+                {
+                    token.Translation = translation;
+                }
+            }
+        }
+
         /// <summary>
         /// Saves a selected translation for a token to the database.
         /// </summary>
@@ -279,8 +291,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     Translations = await GetTranslations(TranslationSet, SourceTokens!.Select(t => t.TokenId));
                     await BuildTokenDisplayViewModelsAsync();
-                    await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
                 }
+                else
+                {
+                    UpdateTokenTranslation(SourceTokenDisplayViewModels, translation);
+                    UpdateTokenTranslation(TargetTokenDisplayViewModels, translation);
+                }
+                await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
             }
             catch (Exception e)
             {
