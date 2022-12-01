@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Core.Lifetime;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -67,17 +68,20 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                         var fileInfo = new FileInfo(file);
                         var directoryInfo = new DirectoryInfo(directoryName);
 
-                        var requestScope = ProjectNameDbContextFactory!.ServiceScope.BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-                        ProjectDbContext = ProjectNameDbContextFactory!.GetDatabaseContext(directoryInfo.Name ?? string.Empty, false, requestScope);
-
                         string version = "unavailable";
-                        try
+                        using (var requestScope = ProjectNameDbContextFactory!.ServiceScope.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
                         {
-                            version = ProjectDbContext.Result.Projects.FirstOrDefault().AppVersion;
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.LogError(ex,"Unable to obtain project version number.");
+                            //var requestScope = ProjectNameDbContextFactory!.ServiceScope.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+                            ProjectDbContext = ProjectNameDbContextFactory!.GetDatabaseContext(directoryInfo.Name ?? string.Empty, false, requestScope);
+
+                            try
+                            {
+                                version = ProjectDbContext.Result.Projects.FirstOrDefault().AppVersion;
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.LogError(ex,"Unable to obtain project version number.");
+                            }
                         }
 
                         // add as ListItem

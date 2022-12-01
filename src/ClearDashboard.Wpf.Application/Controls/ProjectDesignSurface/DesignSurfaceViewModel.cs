@@ -389,14 +389,14 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             // ReSharper disable once AsyncVoidLambda
             OnUIThread(async () =>
             {
-                var corpusNode = CorpusNodes.FirstOrDefault(b => b.Id == node.Id);
-                if (corpusNode is not null)
-                {
+                //var corpusNode = CorpusNodes.FirstOrDefault(b => b.Id == node.Id);
+                //if (node is not null)
+                //{
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator);
                     var tokenizedCorpora =
-                        topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusNode.CorpusId);
-                    CreateCorpusNodeMenu(corpusNode, tokenizedCorpora);
-                }
+                        topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == node.CorpusId);
+                    CreateCorpusNodeMenu(node, tokenizedCorpora);
+                //}
             });
 
             await Task.CompletedTask;

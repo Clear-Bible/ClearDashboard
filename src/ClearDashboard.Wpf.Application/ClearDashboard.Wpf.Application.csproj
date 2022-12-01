@@ -26,6 +26,8 @@
 
   <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
+    <Compile Remove="ViewModels\ParatextViews\WordMeaningsViewModel.cs" />
+    <Compile Remove="Views\ParatextViews\WordMeaningsView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -63,6 +65,10 @@
     <None Remove="Resources\settings_logo_96.png" />
     <None Remove="Resources\SILEOTSR.ttf" />
     <None Remove="Resources\tick_16.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\ParatextViews\WordMeaningsView.xaml" />
   </ItemGroup>
 
   <ItemGroup>

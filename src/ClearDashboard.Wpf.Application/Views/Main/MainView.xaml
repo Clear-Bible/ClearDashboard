@@ -6,6 +6,7 @@
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
@@ -18,7 +19,6 @@
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -137,11 +137,11 @@
                             </DataTemplate>
                         </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
 
-                        <panes:PanesTemplateSelector.WordMeaningsViewTemplate>
+                        <!--<panes:PanesTemplateSelector.WordMeaningsViewTemplate>
                             <DataTemplate>
                                 <paratextViews:WordMeaningsView />
                             </DataTemplate>
-                        </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
+                        </panes:PanesTemplateSelector.WordMeaningsViewTemplate>-->
 
                         <panes:PanesTemplateSelector.MarbleViewTemplate>
                             <DataTemplate>
