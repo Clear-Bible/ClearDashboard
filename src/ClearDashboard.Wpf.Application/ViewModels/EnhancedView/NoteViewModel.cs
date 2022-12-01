@@ -6,6 +6,7 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
