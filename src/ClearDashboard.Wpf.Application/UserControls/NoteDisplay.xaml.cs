@@ -398,11 +398,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteLabelClick(object sender, MouseButtonEventArgs e)
         {
+            BeginEdit();
+        }
+
+        private void BeginEdit()
+        {
             IsEditing = true;
 
             NoteTextBox.Focus();
             NoteTextBox.Select(NoteTextBox.Text.Length, 0);
-            
+
             OriginalNoteText = Note.Text;
         }
 
@@ -562,6 +567,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            if (AddMode)
+            {
+                NoteTextBox.Focus();
+            }
+            base.OnGotFocus(e);
+        }
+
+        private bool _firstClick = true;
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (AddMode && _firstClick)
+            {
+                BeginEdit();
+                _firstClick = false;
+            }
+        }
+
         #endregion Private event handlers
         #region Public Properties
 
@@ -607,9 +631,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
         public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Hidden;
+        public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
         public Visibility LabelSelectorVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
         public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
         public Visibility ParatextSendVisibility => !AddMode && Note.EnableParatextSend ? Visibility.Visible : Visibility.Hidden;
         private bool IsAssociationButtonClicked { get; set; }

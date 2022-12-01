@@ -213,6 +213,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Static DependencyProperties
 
         /// <summary>
+        /// Identifies the HighlightedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenBackgroundProperty = DependencyProperty.Register(nameof(HighlightedTokenBackground), typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.Aquamarine));
+
+        /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register(nameof(HorizontalSpacing), typeof(double), typeof(VerseDisplay),
@@ -634,11 +640,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                     .Select(t => t.TokenId)
                                     .Contains(tdm.Token.TokenId))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -651,11 +657,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                     .Select(t => t.TokenId)
                                     .Contains(tdm.Token.TokenId))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -668,14 +674,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     verseDisplayViewModel.SourceTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
                     verseDisplayViewModel.TargetTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
@@ -1073,6 +1079,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the background of highlighted tokens.
+        /// </summary>
+        public Brush HighlightedTokenBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenBackgroundProperty);
+            set => SetValue(HighlightedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
@@ -1195,7 +1210,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
         /// </summary>
-        public IEnumerable SourceTokens => VerseDisplayViewModel.SourceTokenDisplayViewModels;
+        public IEnumerable SourceTokens => VerseDisplayViewModel?.SourceTokenDisplayViewModels;
 
         /// <summary>
         /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.

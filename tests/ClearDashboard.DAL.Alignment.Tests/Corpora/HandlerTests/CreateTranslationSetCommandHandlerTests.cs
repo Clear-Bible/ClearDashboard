@@ -192,7 +192,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             {
                 iteration++;
 
-                exampleTranslations.Add(new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"));
+                exampleTranslations.Add(new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", Alignment.Translation.Translation.OriginatedFromValues.Assigned));
                 Output.WriteLine($"Token for adding Translation: {sourceToken.TokenId}");
 
                 if (iteration >= 5)
@@ -226,11 +226,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             // FIXME:  quick test of PutPropagate.  Need better tests of this
             await translationSet.PutTranslation(
-                    new Alignment.Translation.Translation(exampleTranslations[1].SourceToken!, $"toobedoo", "Assigned"),
+                    new Alignment.Translation.Translation(exampleTranslations[1].SourceToken!, $"toobedoo", Alignment.Translation.Translation.OriginatedFromValues.Assigned),
                     TranslationActionTypes.PutNoPropagate);
 
             await translationSet.PutTranslation(
-                new Alignment.Translation.Translation(exampleTranslations[2].SourceToken!, $"goobedoo", "Assigned"),
+                new Alignment.Translation.Translation(exampleTranslations[2].SourceToken!, $"goobedoo", Alignment.Translation.Translation.OriginatedFromValues.Assigned),
                 TranslationActionTypes.PutNoPropagate);
 
             var to = new Token(
@@ -247,7 +247,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 exampleTranslations[1].SourceToken!.TrainingText);
 
             await translationSet.PutTranslation(
-                    new Alignment.Translation.Translation(to, $"shoobedoo", "Assigned"),
+                    new Alignment.Translation.Translation(to, $"shoobedoo", Alignment.Translation.Translation.OriginatedFromValues.Assigned),
                     TranslationActionTypes.PutPropagate);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -285,7 +285,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                 .SourceTokenComponent!);
 
             await translationSet.PutTranslation(
-                    new Alignment.Translation.Translation(to2, $"coobedoo", "Assigned"),
+                    new Alignment.Translation.Translation(to2, $"coobedoo", Alignment.Translation.Translation.OriginatedFromValues.Assigned),
                     TranslationActionTypes.PutPropagate);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -482,7 +482,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                         {
                             Output.WriteLine($"\t\tTokenId: {sourceToken.TokenId}");
                             await translationSet.PutTranslation(
-                                new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"),
+                                new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", Alignment.Translation.Translation.OriginatedFromValues.Assigned),
                                 TranslationActionTypes.PutNoPropagate);
 
                             iteration++;
@@ -730,7 +730,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         {
             iteration++;
 
-            exampleTranslations.Add(new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", "Assigned"));
+            exampleTranslations.Add(new Alignment.Translation.Translation(sourceToken, $"booboo_{iteration}", Alignment.Translation.Translation.OriginatedFromValues.Assigned));
             Output.WriteLine($"Token for adding Translation: {sourceToken.TokenId}");
 
             if (iteration >= 5)

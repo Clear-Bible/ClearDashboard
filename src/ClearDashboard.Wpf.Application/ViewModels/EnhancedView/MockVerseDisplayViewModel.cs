@@ -56,9 +56,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             return new Random().Next(3) switch
             {
-                0 => "FromTranslationModel",
-                1 => "FromOther",
-                _ => "Assigned"
+                0 => Translation.OriginatedFromValues.FromTranslationModel,
+                1 => Translation.OriginatedFromValues.FromOther,
+                _ => Translation.OriginatedFromValues.Assigned
             };
         }
 
