@@ -66,9 +66,16 @@ namespace ClearDashboard.Wpf.Application.Dialogs
 
         private async Task OnLoadedAsync()
         {
-            TranslationOptions = await VerseDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
-            CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == TokenDisplay.TargetTranslationText);
+            if (TokenDisplay.Translation != null && !TokenDisplay.Translation.IsDefault)
+            {
+                TranslationOptions = await VerseDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
+                CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == TokenDisplay.TargetTranslationText);
 
+                OnUIThread(() =>
+                {
+                    TranslationSelectorControl.TranslationOptionsVisibility = Visibility.Visible;
+                });
+            }
             OnUIThread(() =>
             {
                 TranslationSelectorControl.TranslationControlsVisibility = Visibility.Visible;
