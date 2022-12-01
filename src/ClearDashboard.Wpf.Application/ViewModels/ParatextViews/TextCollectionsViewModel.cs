@@ -259,7 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                     catch (Exception e)
                                     {
                                         Console.WriteLine(e);
-                                        throw;
+                                        tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
                                     }
                                 }
                                 else

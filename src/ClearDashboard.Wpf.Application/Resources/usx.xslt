@@ -9,8 +9,6 @@
                 <!-- <link rel="stylesheet" href="bible.css" /> -->
                 <style>
 					body {
-					background-color: #303030;
-					color: white;
 					}
 					/* HTML5 display-role reset for older browsers */
 					font-size: 20px;
@@ -192,468 +190,509 @@
 
 					.x {
 					<!-- font-size: 16px; -->
-					box-sizing: border-box;
-					display: inline-block;
-					position: relative;
-					padding: 0 0.4em;
-					margin: 0 0.1em;
-					text-indent: 0;
-					text-align: left;
-					border-radius: 4px;
-					border: 1px solid #dcdcdc; }
-
-					.xo {
-					font-weight: bold; }
-
-					.xk {
-					font-style: italic; }
-
-					.xq {
-					font-style: italic; }
-
-					.notelink {
-					text-decoration: underline;
-					padding: 0.1em; }
-					.notelink, .notelink:hover, .notelink:active, .notelink:visited {
-					color: #6a6a6a; }
-					.notelink sup {
-					font-size: 0.7em;
-					letter-spacing: -0.03em;
-					vertical-align: 0.25em;
-					line-height: 0;
-					font-family: sans-serif;
-					font-weight: bold; }
-					.notelink + sup:before {
-					content: "\a0"; }
-
-					.f {
-					font-size: 16px;
-					display: inline-block;
-					box-sizing: border-box;
-					padding: 0 0.4em;
-					margin: 0 0.1em;
-					text-indent: 0;
-					text-align: left;
-					border-radius: 4px;
-					border: 1px solid #dcdcdc; }
-
-					.fr {
-					font-weight: bold; }
-
-					.fk {
-					font-style: italic;
-					font-variant: small-caps; }
-
-					[class^="fq"] {
-					font-style: italic; }
-
-					.fl {
-					font-style: italic;
-					font-weight: bold; }
-
-					.fv {
-					color: #515151;
-					font-size: 0.75em;
-					letter-spacing: -0.03em;
-					vertical-align: 0.25em;
-					line-height: 0;
-					font-family: sans-serif;
-					font-weight: bold; }
-					.fv:after {
-					content: "\a0"; }
-
-					.h {
-					text-align: center;
-					font-style: italic; }
-
-					[class^="imt"],
-					[class^="is"] {
-					text-align: center;
-					font-weight: bold;
-					font-size: 20px;
-					line-height: 50px;
-					margin-top: 25px;
-					margin-bottom: 25px; }
-
-					[class^="ip"] {
-					text-indent: 1em; }
-
-					.ipi {
-					padding-left: 1em;
-					padding-right: 1em; }
-
-					.im {
-					text-indent: 0; }
-
-					.imi {
-					text-indent: 0;
-					margin-left: 1em;
-					margin-right: 1em; }
-
-					.ipq {
-					font-style: italic;
-					margin-left: 1em;
-					margin-right: 1em; }
-
-					.imq {
-					margin-left: 1em;
-					margin-right: 1em; }
-
-					.ipr {
-					text-align: right;
-					text-indent: 0; }
-
-					[class^="iq"] {
-					margin-left: 1em;
-					margin-right: 1em; }
-
-					.iq2 {
-					text-indent: 1em; }
-
-					[class^="ili"] {
-					padding-left: 1em;
-					text-indent: -1em; }
-
-					.ili1 {
-					margin-left: 1em;
-					margin-right: 1em; }
-
-					.ili2 {
-					margin-left: 2em;
-					margin-right: 1em; }
-
-					.iot {
-					font-weight: bold;
-					font-size: 18px;
-					line-height: 25px;
-					margin-top: 25px;
-					text-align: center;
-					margin-bottom: 0px; }
-
-					.io,
-					.io1 {
-					margin-left: 1em;
-					margin-right: 0em; }
-
-					.io2 {
-					margin-left: 2em;
-					margin-right: 0em; }
-
-					.io3 {
-					margin-left: 3em;
-					margin-right: 0em; }
-
-					.io4 {
-					margin-left: 4em;
-					margin-right: 0em; }
-
-					.ior {
-					font-style: italic; }
-
-					.iex {
-					text-indent: 1em; }
-
-					.iqt {
-					text-indent: 1em;
-					font-style: italic; }
-
-					[class^="p"] {
-					text-indent: 1em; }
-
-					.m {
-					text-indent: 0 !important; }
-
-					.pmo {
-					text-indent: 0;
-					margin-left: 1em;
-					margin-right: 0em; }
-
-					.pm {
-					margin-left: 1em;
-					margin-right: 0em; }
-
-					.pmr {
-					text-align: right; }
-
-					.pmc {
-					margin-left: 1em;
-					margin-right: 0em; }
-
-					.pi {
-					margin-left: 1em;
-					margin-right: 0em; }
-
-					.pi1 {
-					margin-left: 2em;
-					margin-right: 0em; }
-
-					.pi2 {
-					margin-left: 3em;
-					margin-right: 0em; }
-
-					.pi3 {
-					margin-left: 4em;
-					margin-right: 0em; }
-
-					.mi {
-					margin-left: 1em;
-					margin-right: 0em;
-					text-indent: 0; }
-
-					.pc {
-					text-align: center;
-					text-indent: 0; }
-
-					.cls {
-					text-align: right; }
-
-					[class^="li"] {
-					padding-left: 1em;
-					text-indent: -1em;
-					margin-left: 1em;
-					margin-right: 0em; }
-
-					.li2 {
-					margin-left: 2em;
-					margin-right: 0em; }
-
-					.li3 {
-					margin-left: 3em;
-					margin-right: 0em; }
-
-					.li4 {
-					margin-left: 4em;
-					margin-right: 0em; }
+                  box-sizing: border-box;
+                  display: inline-block;
+                  position: relative;
+                  padding: 0 0.4em;
+                  margin: 0 0.1em;
+                  text-indent: 0;
+                  text-align: left;
+                  border-radius: 4px;
+                  border: 1px solid #dcdcdc; }
+
+                  .xo {
+                  font-weight: bold; }
+
+                  .xk {
+                  font-style: italic; }
+
+                  .xq {
+                  font-style: italic; }
+
+                  .notelink {
+                  text-decoration: underline;
+                  padding: 0.1em; }
+                  .notelink, .notelink:hover, .notelink:active, .notelink:visited {
+                  color: #6a6a6a; }
+                  .notelink sup {
+                  font-size: 0.7em;
+                  letter-spacing: -0.03em;
+                  vertical-align: 0.25em;
+                  line-height: 0;
+                  font-family: sans-serif;
+                  font-weight: bold; }
+                  .notelink + sup:before {
+                  content: "\a0"; }
+
+                  .f {
+                  font-size: 16px;
+                  display: inline-block;
+                  box-sizing: border-box;
+                  padding: 0 0.4em;
+                  margin: 0 0.1em;
+                  text-indent: 0;
+                  text-align: left;
+                  border-radius: 4px;
+                  border: 1px solid #dcdcdc; }
+
+                  .fr {
+                  font-weight: bold; }
+
+                  .fk {
+                  font-style: italic;
+                  font-variant: small-caps; }
+
+                  [class^="fq"] {
+                  font-style: italic; }
+
+                  .fl {
+                  font-style: italic;
+                  font-weight: bold; }
+
+                  .fv {
+                  color: #515151;
+                  font-size: 0.75em;
+                  letter-spacing: -0.03em;
+                  vertical-align: 0.25em;
+                  line-height: 0;
+                  font-family: sans-serif;
+                  font-weight: bold; }
+                  .fv:after {
+                  content: "\a0"; }
+
+                  .h {
+                  text-align: center;
+                  font-style: italic; }
+
+                  [class^="imt"],
+                  [class^="is"] {
+                  text-align: center;
+                  font-weight: bold;
+                  font-size: 20px;
+                  line-height: 50px;
+                  margin-top: 25px;
+                  margin-bottom: 25px; }
+
+                  [class^="ip"] {
+                  text-indent: 1em; }
+
+                  .ipi {
+                  padding-left: 1em;
+                  padding-right: 1em; }
+
+                  .im {
+                  text-indent: 0; }
+
+                  .imi {
+                  text-indent: 0;
+                  margin-left: 1em;
+                  margin-right: 1em; }
+
+                  .ipq {
+                  font-style: italic;
+                  margin-left: 1em;
+                  margin-right: 1em; }
+
+                  .imq {
+                  margin-left: 1em;
+                  margin-right: 1em; }
+
+                  .ipr {
+                  text-align: right;
+                  text-indent: 0; }
+
+                  [class^="iq"] {
+                  margin-left: 1em;
+                  margin-right: 1em; }
+
+                  .iq2 {
+                  text-indent: 1em; }
+
+                  [class^="ili"] {
+                  padding-left: 1em;
+                  text-indent: -1em; }
+
+                  .ili1 {
+                  margin-left: 1em;
+                  margin-right: 1em; }
+
+                  .ili2 {
+                  margin-left: 2em;
+                  margin-right: 1em; }
+
+                  .iot {
+                  font-weight: bold;
+                  font-size: 18px;
+                  line-height: 25px;
+                  margin-top: 25px;
+                  text-align: center;
+                  margin-bottom: 0px; }
+
+                  .io,
+                  .io1 {
+                  margin-left: 1em;
+                  margin-right: 0em; }
+
+                  .io2 {
+                  margin-left: 2em;
+                  margin-right: 0em; }
+
+                  .io3 {
+                  margin-left: 3em;
+                  margin-right: 0em; }
+
+                  .io4 {
+                  margin-left: 4em;
+                  margin-right: 0em; }
+
+                  .ior {
+                  font-style: italic; }
+
+                  .iex {
+                  text-indent: 1em; }
+
+                  .iqt {
+                  text-indent: 1em;
+                  font-style: italic; }
+
+                  [class^="p"] {
+                  text-indent: 1em; }
+
+                  .m {
+                  text-indent: 0 !important; }
+
+                  .pmo {
+                  text-indent: 0;
+                  margin-left: 1em;
+                  margin-right: 0em; }
+
+                  .pm {
+                  margin-left: 1em;
+                  margin-right: 0em; }
+
+                  .pmr {
+                  text-align: right; }
+
+                  .pmc {
+                  margin-left: 1em;
+                  margin-right: 0em; }
+
+                  .pi {
+                  margin-left: 1em;
+                  margin-right: 0em; }
+
+                  .pi1 {
+                  margin-left: 2em;
+                  margin-right: 0em; }
+
+                  .pi2 {
+                  margin-left: 3em;
+                  margin-right: 0em; }
+
+                  .pi3 {
+                  margin-left: 4em;
+                  margin-right: 0em; }
+
+                  .mi {
+                  margin-left: 1em;
+                  margin-right: 0em;
+                  text-indent: 0; }
+
+                  .pc {
+                  text-align: center;
+                  text-indent: 0; }
+
+                  .cls {
+                  text-align: right; }
+
+                  [class^="li"] {
+                  padding-left: 1em;
+                  text-indent: -1em;
+                  margin-left: 1em;
+                  margin-right: 0em; }
+
+                  .li2 {
+                  margin-left: 2em;
+                  margin-right: 0em; }
+
+                  .li3 {
+                  margin-left: 3em;
+                  margin-right: 0em; }
+
+                  .li4 {
+                  margin-left: 4em;
+                  margin-right: 0em; }
 
-					.b {
-					height: 25px; }
+                  .b {
+                  height: 25px; }
 
-					[class^="q"] {
-					padding-left: 1em;
-					text-indent: -1em;
-					margin-left: 1em;
-					margin-right: 0em; }
-
-					.q2 {
-					margin-left: 1.5em;
-					margin-right: 0em; }
-
-					.q3 {
-					margin-left: 2em;
-					margin-right: 0em; }
+                  [class^="q"] {
+                  padding-left: 1em;
+                  text-indent: -1em;
+                  margin-left: 1em;
+                  margin-right: 0em; }
+
+                  .q2 {
+                  margin-left: 1.5em;
+                  margin-right: 0em; }
+
+                  .q3 {
+                  margin-left: 2em;
+                  margin-right: 0em; }
 
-					.q4 {
-					margin-left: 2.5em;
-					margin-right: 0em; }
+                  .q4 {
+                  margin-left: 2.5em;
+                  margin-right: 0em; }
 
-					.qr {
-					text-align: right;
-					font-style: italic; }
+                  .qr {
+                  text-align: right;
+                  font-style: italic; }
 
-					.qc {
-					text-align: center; }
+                  .qc {
+                  text-align: center; }
 
-					.qs {
-					font-style: italic;
-					text-align: right; }
+                  .qs {
+                  font-style: italic;
+                  text-align: right; }
 
-					.qa {
-					text-align: center;
-					font-style: italic;
-					font-size: 1.1em;
-					margin-left: 0em;
-					margin-right: 0em; }
+                  .qa {
+                  text-align: center;
+                  font-style: italic;
+                  font-size: 1.1em;
+                  margin-left: 0em;
+                  margin-right: 0em; }
 
-					.qac {
-					margin-left: 0em;
-					margin-right: 0em;
-					padding: 0;
-					text-indent: 0;
-					font-style: italic; }
+                  .qac {
+                  margin-left: 0em;
+                  margin-right: 0em;
+                  padding: 0;
+                  text-indent: 0;
+                  font-style: italic; }
 
-					.qm2 {
-					margin-left: 1.5em;
-					margin-right: 0em; }
+                  .qm2 {
+                  margin-left: 1.5em;
+                  margin-right: 0em; }
 
-					.qm3 {
-					margin-left: 2em;
-					margin-right: 0em; }
+                  .qm3 {
+                  margin-left: 2em;
+                  margin-right: 0em; }
 
-					.qt {
-					font-style: italic;
-					text-indent: 0;
-					padding: 0;
-					margin: 0; }
-
-					.bk {
-					font-style: italic; }
-
-					.nd {
-					font-variant: small-caps; }
-
-					.add {
-					font-style: italic; }
-
-					.dc {
-					font-style: italic; }
-
-					.k {
-					font-weight: bold;
-					font-style: italic; }
-
-					.lit {
-					text-align: right;
-					font-weight: bold; }
-
-					.pn {
-					font-weight: bold;
-					text-decoration: underline; }
-
-					.sls {
-					font-style: italic; }
-
-					.tl {
-					font-style: italic; }
-
-					.wj {
-					color: #cc0000; }
-
-					.em {
-					font-style: italic; }
-
-					.bd {
-					font-weight: bold; }
-
-					.it {
-					font-style: italic; }
-
-					.bdit {
-					font-weight: bold;
-					font-style: italic; }
-
-					.no {
-					font-weight: normal;
-					font-style: normal; }
-
-					.sc {
-					font-variant: small-caps; }
-
-					.qt {
-					font-style: italic; }
-
-					.sig {
-					font-weight: normal;
-					font-style: italic; }
-
-					table {
-					width: 100%;
-					display: table; }
-
-					.tr {
-					display: table-row; }
-
-					[class^="th"] {
-					font-style: italic;
-					display: table-cell; }
-
-					[class^="thr"] {
-					text-align: right;
-					padding: 0 25px; }
-
-					[class^="tc"] {
-					display: table-cell; }
-
-					[class^="tcr"] {
-					text-align: right;
-					padding: 0 25px; }
-
-					[class^="mt"] {
-					text-align: center;
-					font-weight: bold;
-					letter-spacing: normal; }
-
-					.mt,
-
-					.mt1 {
-					font-size: 30px;
-					line-height: 50px;
-					text-align: center;
-					margin-top: 25px;
-					margin-bottom: 25px; }
-					.mt2 {
-					font-size: 20px;
-					line-height: 50px;
-					text-align: center;
-					margin-top: 25px;
-					font-style: italic;
-					margin-bottom: 25px; }
-
-					[class^="ms"],
-					.ms,
-					.ms1,
-					.ms2,
-					.ms3 {
-					text-align: center;
-					font-weight: bold;
-					font-size: 27px;
-					line-height: 50px;
-					margin-top: 25px;
-					margin-bottom: 0px; }
-
-					.mr {
-					font-size: 0.9em;
-					margin-bottom: 25px;
-					text-align: center;
-					font-weight: normal;
-					font-style: italic; }
-
-					.s,
-					.s1,
-					.s2,
-					.s3,
-					.s4 {
-					text-align: center;
-					color: #ffcc99;
-					font-size: 18px;
-					font-weight: bold;
-					font-style: italic;
-					line-height: 50px;
-					margin-bottom: 25px;
-					margin-top: 0px; }
-
-					.sr {
-					font-weight: normal;
-					font-style: italic;
-					text-align: center;
-					font-size: inherit;
-					letter-spacing: normal; }
-
-					.r {
-					font-size: 18px;
-					font-weight: normal;
-					font-style: italic;
-					text-align: center;
-					letter-spacing: normal; }
-
-					.rq {
-					font-size: inherit;
-					line-height: 25px;
-					font-style: italic;
-					text-align: right;
-					letter-spacing: normal; }
-
-					.d {
-					font-style: italic;
-					text-align: center;
-					font-size: inherit;
-					letter-spacing: normal; }
-
-					.sp {
-					text-align: left;
-					font-weight: normal;
-					font-style: italic;
-					font-size: inherit;
-					letter-spacing: normal; }
+                  .qt {
+                  font-style: italic;
+                  text-indent: 0;
+                  padding: 0;
+                  margin: 0; }
+
+                  .bk {
+                  font-style: italic; }
+
+                  .nd {
+                  font-variant: small-caps; }
+
+                  .add {
+                  font-style: italic; }
+
+                  .dc {
+                  font-style: italic; }
+
+                  .k {
+                  font-weight: bold;
+                  font-style: italic; }
+
+                  .lit {
+                  text-align: right;
+                  font-weight: bold; }
+
+                  .pn {
+                  font-weight: bold;
+                  text-decoration: underline; }
+
+                  .sls {
+                  font-style: italic; }
+
+                  .tl {
+                  font-style: italic; }
+
+                  .wj {
+                  color: #cc0000; }
+
+                  .em {
+                  font-style: italic; }
+
+                  .bd {
+                  font-weight: bold; }
+
+                  .it {
+                  font-style: italic; }
+
+                  .bdit {
+                  font-weight: bold;
+                  font-style: italic; }
+
+                  .no {
+                  font-weight: normal;
+                  font-style: normal; }
+
+                  .sc {
+                  font-variant: small-caps; }
+
+                  .qt {
+                  font-style: italic; }
+
+                  .sig {
+                  font-weight: normal;
+                  font-style: italic; }
+
+                  table {
+                  width: 100%;
+                  display: table; }
+
+                  .tr {
+                  display: table-row; }
+
+                  [class^="th"] {
+                  font-style: italic;
+                  display: table-cell; }
+
+                  [class^="thr"] {
+                  text-align: right;
+                  padding: 0 25px; }
+
+                  [class^="tc"] {
+                  display: table-cell; }
+
+                  [class^="tcr"] {
+                  text-align: right;
+                  padding: 0 25px; }
+
+                  [class^="mt"] {
+                  text-align: center;
+                  font-weight: bold;
+                  letter-spacing: normal; }
+
+                  .mt,
+
+                  .mt1 {
+                  font-size: 30px;
+                  line-height: 50px;
+                  text-align: center;
+                  margin-top: 25px;
+                  margin-bottom: 25px; }
+                  .mt2 {
+                  font-size: 20px;
+                  line-height: 50px;
+                  text-align: center;
+                  margin-top: 25px;
+                  font-style: italic;
+                  margin-bottom: 25px; }
+
+                  [class^="ms"],
+                  .ms,
+                  .ms1,
+                  .ms2,
+                  .ms3 {
+                  text-align: center;
+                  font-weight: bold;
+                  font-size: 27px;
+                  line-height: 50px;
+                  margin-top: 25px;
+                  margin-bottom: 0px; }
+
+                  .mr {
+                  font-size: 0.9em;
+                  margin-bottom: 25px;
+                  text-align: center;
+                  font-weight: normal;
+                  font-style: italic; }
+
+                  .s,
+                  .s1,
+                  .s2,
+                  .s3,
+                  .s4 {
+                  text-align: center;
+                  color: #ffcc99;
+                  font-size: 18px;
+                  font-weight: bold;
+                  font-style: italic;
+                  line-height: 50px;
+                  margin-bottom: 25px;
+                  margin-top: 0px; }
+
+                  .sr {
+                  font-weight: normal;
+                  font-style: italic;
+                  text-align: center;
+                  font-size: inherit;
+                  letter-spacing: normal; }
+
+                  .r {
+                  font-size: 18px;
+                  font-weight: normal;
+                  font-style: italic;
+                  text-align: center;
+                  letter-spacing: normal; }
+
+                  .rq {
+                  font-size: inherit;
+                  line-height: 25px;
+                  font-style: italic;
+                  text-align: right;
+                  letter-spacing: normal; }
+
+                  .d {
+                  font-style: italic;
+                  text-align: center;
+                  font-size: inherit;
+                  letter-spacing: normal; }
+
+                  .sp {
+                  text-align: left;
+                  font-weight: normal;
+                  font-style: italic;
+                  font-size: inherit;
+                  letter-spacing: normal; }
+
+                  .heb {
+                  color: #08450a;
+                  font-weight: bold;
+                  font-style: italic; }
+
+                  .scr {
+                  color: #7d0606;
+                  font-weight: bold; 
+                  font-style: normal;}
+
+                  .ver {
+                  font-family: "Courier";
+                  font-weight: bold; 
+                  font-style: normal;}
+
+                  .v {
+                  background-color:#e3e3e3;
+                  font-weight: bold;
+                  vertical-align: super;
+                  font-size:6px;
+                  font-style: normal;}
+
+                  .res {
+                  font-weight: bold; 
+                  font-style: normal;}
+
+                  .teu { 
+                  font-style: normal;
+                  text-decoration: underline;}
+
+                  .tec { 
+                  font-weight: bold;
+                  font-style: normal;}
+
+                  .s5 {
+                  font-color: #030ffc
+                  font-weight: bold;
+                  font-style: normal;}
+
+
                 </style>
             </head>
 	        <body>

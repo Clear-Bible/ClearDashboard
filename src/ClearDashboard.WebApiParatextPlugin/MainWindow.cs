@@ -395,30 +395,34 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     try
                                     {
                                         var query = "//*[@vid='"+_verseRef+ "' or sid='"+_verseRef+"']";
+                                        //var query = "//*[count(preceding-sibling::*[@sid='"+_verseRef+"'])=1]";
                                         var verseNodeList = xDoc.SelectNodes(query);
 
                                         if (verseNodeList.Count == 0)
                                         {
                                             textCollections = UsfmToTextCollection(project, textCollection, textCollections);
-                                            break;
                                         }
-
-                                        usxString = "<usx version=\"3.0\">";
-                                        foreach (XmlNode node in verseNodeList)
+                                        else
                                         {
-                                            usxString += node.OuterXml;
+                                            usxString = "<usx version=\"3.0\">";
+                                            foreach (XmlNode node in verseNodeList)
+                                            {
+                                                usxString += node.OuterXml;
+                                            }
+                                            usxString += "</usx>";
+
+                                            textCollections.Add(new TextCollection()
+                                            {
+                                                ReferenceShort = project.ShortName,
+                                                Data = usxString
+                                            });
                                         }
-                                        usxString += "</usx>";
                                     }
                                     catch (Exception ex)
                                     {
                                     }
 
-                                    textCollections.Add(new TextCollection()
-                                    {
-                                        ReferenceShort = project.ShortName,
-                                        Data = usxString
-                                    });
+                                    
                                 }
                                 else
                                 {

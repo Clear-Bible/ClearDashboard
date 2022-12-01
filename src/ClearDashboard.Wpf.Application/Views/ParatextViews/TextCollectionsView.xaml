@@ -85,8 +85,8 @@
 
             <ListView
                 x:Name="TextCollectionListView"
+                Width="{Binding ActualWidth, ElementName=LowerBorder}"
                 Height="{Binding ElementName=LowerBorder, Path=ActualHeight}"
-                Margin="5"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">
                 <ListView.View>
@@ -97,15 +97,15 @@
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
 
-                        <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=TextCollectionListView, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
+                        <GridViewColumn Width="{Binding ActualWidth, ElementName=TextCollectionListView}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Vertical">
+                                    <StackPanel Margin="0,0,30,0" Orientation="Vertical">
                                         <helpers:BindableTextBlock
                                             Width="Auto"
                                             InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                            TextWrapping="Wrap" />
-                                        <WebBrowser Name="myWebBrowser" paratextViews:WebBrowserHelper.Body="{Binding MyHtml}" />
+                                            TextWrapping="Wrap"/>
+                                        <WebBrowser Name="myWebBrowser" paratextViews:WebBrowserHelper.Body="{Binding MyHtml}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
