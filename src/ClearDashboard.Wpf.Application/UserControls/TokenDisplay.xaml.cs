@@ -24,6 +24,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register(nameof(ExtendedProperties), typeof(string), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the HighlightedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenBackgroundProperty = DependencyProperty.Register(nameof(HighlightedTokenBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Aquamarine));
+
+        /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register(nameof(HorizontalSpacing), typeof(double), typeof(TokenDisplay),
@@ -840,6 +846,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token background when it is highlighted.
+        /// </summary>
+        public Brush HighlightedTokenBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenBackgroundProperty);
+            set => SetValue(HighlightedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
@@ -1165,7 +1180,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
             NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
-            TokenBackground = TokenDisplayViewModel.IsSelected ? SelectedTokenBackground : Brushes.Transparent;
+            TokenBackground = TokenDisplayViewModel.IsHighlighted ? HighlightedTokenBackground
+                               : TokenDisplayViewModel.IsSelected ? SelectedTokenBackground 
+                               : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
