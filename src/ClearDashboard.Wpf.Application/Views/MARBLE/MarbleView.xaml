@@ -633,7 +633,7 @@
                                     CommandParameter="{Binding ElementName=rbAll, Path=Tag}"
                                     Content="All"
                                     GroupName="context"
-                                    IsChecked="False"
+                                    IsChecked="True"
                                     Tag="All" />
                                 <RadioButton
                                     Name="rbBook"
@@ -651,12 +651,12 @@
                                     CommandParameter="{Binding ElementName=rbChapter, Path=Tag}"
                                     Content="Chapter"
                                     GroupName="context"
-                                    IsChecked="True"
+                                    IsChecked="False"
                                     Tag="Chapter" />
                             </StackPanel>
                         </Border>
 
-                        <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Verses}">
+                        <ListBox MaxHeight="300" ItemsSource="{Binding Verses}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
                                     <Setter Property="Padding" Value="0" />

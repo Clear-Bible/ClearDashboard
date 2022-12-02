@@ -48,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             Chapter,
         }
 
-        private fiterReference _currentFilter = fiterReference.Chapter;
+        private fiterReference _currentFilter = fiterReference.All;
 
         #region BCV
         private bool _paratextSync = false;
@@ -162,27 +162,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         private Senses _selectedSense;
         public Senses SelectedSense
         {
-            get
-            {
-                if (_selectedSense is not null)
-                {
-                    SelectedVerseReferences = _selectedSense.Verses;
-                    FilterSenses();
-                }
-
-                return _selectedSense; 
-                
-            }
+            get => _selectedSense;
             set
             {
                 _selectedSense = value;
+                FilterSenses();
                 NotifyOfPropertyChange(() => SelectedSense);
             }
         }
+        
+        private List<CoupleOfStrings> _verses;
+        public List<CoupleOfStrings> Verses
+        {
+            get => _verses;
+            set
+            {
+                _verses = value;
+                NotifyOfPropertyChange(() => Verses);
+            }
+        }
+
+
+        
+
 
         private void FilterSenses()
         {
-            if (SelectedVerseReferences.Count == 0)
+            var tempSense = Senses.FirstOrDefault(x => x == SelectedSense);
+            if (tempSense is null)
+            {
+                return;
+            }
+
+            if (tempSense.Verses.Count == 0)
             {
                 return;
             }
@@ -190,17 +202,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             switch (_currentFilter)
             {
                 case fiterReference.All:
-                    SelectedSense.Verses = SelectedVerseReferences;
+                    Verses = tempSense.Verses;
                     break;
                 case fiterReference.Book:
                     string bbb = CurrentBcv.BBBCCCVVV.Substring(0, 3);
 
-                    SelectedSense.Verses = SelectedVerseReferences.Where(x => x.stringB.StartsWith(bbb)).ToList();
+                    Verses = tempSense.Verses.Where(x =>
+                    {
+                        return x.stringA.StartsWith(bbb);
+                    }).ToList();
                     break;
                 case fiterReference.Chapter:
-                    string bbbccc = CurrentBcv.BBBCCCVVV.Substring(0,6);
+                    string bbbccc = CurrentBcv.BBBCCCVVV;
+                    bbbccc = bbbccc.Substring(0,6);
 
-                    SelectedSense.Verses = SelectedVerseReferences.Where(x => x.stringB.StartsWith(bbbccc)).ToList();
+                    Verses = tempSense.Verses.Where(x => x.stringA.StartsWith(bbbccc)).ToList();
                     break;
             }
         }
@@ -443,11 +459,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             {
                 SelectedSense = Senses[0];
             }
+            
         }
 
         private Task SetContext(object arg)
         {
-            Console.WriteLine(arg);
+            if (arg.ToString() == "All")
+            {
+                _currentFilter = fiterReference.All;
+            }
+            else if (arg.ToString() == "Book")
+            {
+                _currentFilter = fiterReference.Book;
+            }
+            else
+            {
+                _currentFilter = fiterReference.Chapter;
+            }
+
+            FilterSenses();
             return Task.CompletedTask;
         }
 
