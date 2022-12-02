@@ -286,9 +286,7 @@ public class DashboardProjectManager : ProjectManager
     }
     
     public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
-    public List<ParatextProjectMetadata> ProjectsMetadata { get; set; } = new();
-
-    public void CheckLicense<TViewModel>(TViewModel viewModel)
+  public void CheckLicense<TViewModel>(TViewModel viewModel)
     {
         if (!_licenseCleared)
         {
