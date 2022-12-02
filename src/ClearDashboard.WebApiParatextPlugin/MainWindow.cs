@@ -398,27 +398,76 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         //var query = "//*[@vid='"+_verseRef+ "' or sid='"+_verseRef+"']";
                                         //var query = "//*[count(preceding-sibling::*[@sid='"+_verseRef+"'])=1]";
                                         //var query = "//*[preceding-sibling::*/verse[@sid='GEN 1:1'] and following-sibling::*/verse[@eid='GEN 1:1']]";
-                                        List<XmlNode> verseNodeList = new();// = xDoc.SelectNodes(query);
+                                        List<XmlNode> verseNodeList = new(); // = xDoc.SelectNodes(query);
 
                                         bool startMarkerFound = false;
+                                        bool endMarkerFound = false;
                                         var count = 0;
                                         foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
                                         {
-                                            //var startMarker = node.SelectNodes("//verse").Item(0);
+                                            endMarkerFound = false;
 
-                                            //if (startMarker != null && startMarker.Attributes != null && startMarker.Attributes["sid"] != null)
-                                            //{
-                                                if (node.OuterXml.Contains("sid=\""+_verseRef+"\""))
-                                                {
-                                                    startMarkerFound = true;
-                                                }
-                                                if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
-                                                {
-                                                    startMarkerFound = false;
-                                                }
-                                                //}
+                                            if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                                            {
+                                                startMarkerFound = true;
+                                            }
+                                            else if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                            {
+                                                startMarkerFound = false;
+                                                endMarkerFound = true;
+                                            }
+                                            else if(node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") || 
+                                                    node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
+                                            {
+                                                var nodeVerseElementList = node.SelectNodes("verse");
 
-                                            if (startMarkerFound)
+                                                if (nodeVerseElementList.Count > 0)
+                                                {
+                                                    var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                                                    var nodeSidValue = nodeVerseElement.Attributes["sid"];
+                                                    if (nodeSidValue != null)
+                                                    {
+                                                        //is _verseRef in verseValue?
+                                                        var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
+                                                        var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
+                                                        if (SidVerseNumberIsRange)
+                                                        {
+                                                            var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
+                                                            if (int.Parse(nodeSidVerseRange[0]) <= _verseRef.VerseNum &&
+                                                                _verseRef.VerseNum <= int.Parse(nodeSidVerseRange[1]))
+                                                            {
+                                                                startMarkerFound = true;
+                                                            }
+                                                        }
+                                                    }
+
+                                                    else
+                                                    {
+                                                        var nodeEidValue = nodeVerseElement.Attributes["eid"];
+                                                        //is _verseRef in verseValue?
+                                                        if (nodeEidValue != null)
+                                                        {
+                                                            var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
+                                                            var EidVerseNumberIsRange =
+                                                                nodeEidVerseNumber.Contains("-");
+                                                            if (EidVerseNumberIsRange)
+                                                            {
+                                                                var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
+                                                                if (int.Parse(nodeEidVerseRange[0]) <=
+                                                                    _verseRef.VerseNum && _verseRef.VerseNum <=
+                                                                    int.Parse(nodeEidVerseRange[1]))
+                                                                {
+                                                                    startMarkerFound = false;
+                                                                    endMarkerFound = true;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (startMarkerFound || endMarkerFound)
                                             {
                                                 verseNodeList.Add(node);
                                             }
@@ -426,7 +475,8 @@ namespace ClearDashboard.WebApiParatextPlugin
 
                                         if (verseNodeList.Count == 0)
                                         {
-                                            textCollections = UsfmToTextCollection(project, textCollection, textCollections);
+                                            textCollections = UsfmToTextCollection(project, textCollection,
+                                                textCollections);
                                         }
                                         else
                                         {
@@ -435,6 +485,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                             {
                                                 usxString += node.OuterXml;
                                             }
+
                                             usxString += "</usx>";
 
                                             textCollections.Add(new TextCollection()
@@ -447,8 +498,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     catch (Exception ex)
                                     {
                                     }
-
-                                    
                                 }
                                 else
                                 {
