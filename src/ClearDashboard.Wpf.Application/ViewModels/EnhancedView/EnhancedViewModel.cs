@@ -1625,8 +1625,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task NoteSendToParatextAsync(NoteEventArgs e)
         {
-            await NoteManager.SendToParatextAsync(e.Note);
-            Message = $"Note '{e.Note.Text}' sent to Paratext.";
+            try
+            {
+                await NoteManager.SendToParatextAsync(e.Note);
+                Message = $"Note '{e.Note.Text}' sent to Paratext.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not send note to Paratext: {ex.Message}";
+            }
         }
 
         public void NoteDeleted(object sender, NoteEventArgs e)
