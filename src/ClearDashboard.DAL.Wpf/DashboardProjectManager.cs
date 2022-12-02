@@ -23,8 +23,6 @@ using ClearDashboard.DataAccessLayer.Models.Paratext;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-
-
 public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
 
 public record GetApplicationWindowSettings();
