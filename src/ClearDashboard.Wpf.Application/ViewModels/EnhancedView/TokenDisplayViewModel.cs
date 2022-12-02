@@ -71,6 +71,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _isSelected, value);
         }
 
+        private bool _isHighlighted;
+        /// <summary>
+        /// Gets or sets whether this token is highlighted.
+        /// </summary>
+        public bool IsHighlighted
+        {
+            get => _isHighlighted;
+            set => Set(ref _isHighlighted, value);
+        }
+
         private bool _isNoteHovered;
         /// <summary>
         /// Gets or sets whether a note to which the token is associated is hovered by the mouse.

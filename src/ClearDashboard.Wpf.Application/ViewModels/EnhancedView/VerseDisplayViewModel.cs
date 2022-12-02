@@ -92,7 +92,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private Translation? GetTranslationForToken(Token token)
         {
-            return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? null;
+            return TranslationSet != null ? Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? new Translation(token) : null;
         }
 
         private async Task BuildTokenDisplayViewModelsAsync()
@@ -250,6 +250,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        private void UpdateTokenTranslation(TokenDisplayViewModelCollection tokens, Translation translation)
+        {
+            if (tokens != null)
+            {
+                var token = tokens.FirstOrDefault(t => t.Token.TokenId.Id == translation.SourceToken.TokenId.Id);
+                if (token != null)
+                {
+                    token.Translation = translation;
+                }
+            }
+        }
+
         /// <summary>
         /// Saves a selected translation for a token to the database.
         /// </summary>
@@ -272,15 +284,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 await TranslationSet.PutTranslation(translation, translationActionType);
 #if DEBUG
                 stopwatch.Stop();
-                Logger?.LogInformation($"Saved translation options for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger?.LogInformation($"Saved translation for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
 #endif
                 // If translation propagates to other translations, then we need a fresh call to PopulateTranslations() and to rebuild the token displays.
-                if (translationActionType == TranslationActionTypes.PutPropagate)
-                {
-                    Translations = await GetTranslations(TranslationSet, SourceTokens!.Select(t => t.TokenId));
-                    await BuildTokenDisplayViewModelsAsync();
-                    await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
-                }
+                Translations = await GetTranslations(TranslationSet, SourceTokens!.Select(t => t.TokenId));
+                await BuildTokenDisplayViewModelsAsync();
+
+                await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
             }
             catch (Exception e)
             {

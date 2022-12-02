@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using Label = ClearDashboard.DAL.Alignment.Notes.Label;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
@@ -18,12 +22,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteId? NoteId => Entity.NoteId;
         public EntityId<NoteId>? ThreadId => Entity.ThreadId;
 
-        public string? ParatextId { get; set; }
-        public bool EnableParatextSend => !string.IsNullOrEmpty(ParatextId);
-
-        public string? Text
+        public string Text
         {
-            get => Entity.Text;
+            get => Entity.Text ?? string.Empty;
             set
             {
                 if (Equals(value, Entity.Text)) return;
@@ -57,23 +58,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteAssociationViewModelCollection Associations
         {
             get => _associations;
-            set
-            {
-                if (Equals(value, _associations)) return;
-                _associations = value;
-                NotifyOfPropertyChange();
-            }
+            set => Set(ref _associations, value);
         }
 
         public NoteViewModelCollection Replies
         {
             get => _replies;
-            set
-            {
-                if (Equals(value, _replies)) return;
-                _replies = value;
-                NotifyOfPropertyChange();
-            }
+            set => Set(ref _replies, value);
         }
 
         /// <summary>
@@ -90,6 +81,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Gets the display name of the user that last modified the note.
         /// </summary>
         public string ModifiedBy => (Entity.NoteId != null && Entity.NoteId.UserId != null ? Entity.NoteId.UserId.DisplayName : string.Empty) ?? string.Empty;
+
+        /// <summary>
+        /// Gets whether this note is eligible to be sent to Paratext.
+        /// </summary>
+        public bool EnableParatextSend => ParatextSendNoteInformation != null;
+
+        /// <summary>
+        /// Gets or sets the Paratext information of the associated tokens, or null if the note is not eligible to be sent to Paratext.
+        /// </summary>
+        /// <remarks>
+        /// In order for a note to be sent to Paratext:
+        /// 
+        /// 1) All of the associated entities need to be tokens;
+        /// 2) All of the tokens must originate from the same Paratext corpus;
+        /// 3) All of the tokens must be contiguous in the corpus.
+        /// </remarks>
+        public ParatextSendNoteInformation? ParatextSendNoteInformation { get; set; }
 
         public NoteViewModel() : this(new Note())
         {
