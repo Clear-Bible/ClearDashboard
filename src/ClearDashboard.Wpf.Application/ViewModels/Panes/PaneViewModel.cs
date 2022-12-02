@@ -15,13 +15,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
     /// <summary>
     /// 
     /// </summary>
-    public class PaneViewModel : DashboardApplicationScreen, IAvalonDockWindow, IPaneViewModel
+    public class PaneViewModel : DashboardApplicationScreen,  IPaneViewModel
     {
         #region Member Variables
 
         public ICommand RequestCloseCommand { get; set; }
-
-        //private string _title = null;
         private string? _contentId;
         private bool _isSelected;
         private bool _isActive;
@@ -29,25 +27,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
         #region Public Properties
 
-        public Guid PaneId  => Guid.NewGuid();
+        public Guid PaneId { get; set;  }
         public DockSide DockSide { get; set; }
 
         #endregion //Public Properties
 
         #region Observable Properties
-        //public string Title
-        //{
-        //    get => _title;
-        //    set
-        //    {
-        //        if (_title != value)
-        //        {
-        //            _title = value;
-        //            NotifyOfPropertyChange(() => Title);
-        //        }
-        //    }
-        //}
-
         public ImageSource? IconSource { get; protected set; }
 
         public string? ContentId
@@ -62,8 +47,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
                 }
             }
         }
-
-        //public DockSide DockSide { get; }
 
         public bool IsSelected
         {
@@ -102,6 +85,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         public PaneViewModel()
         {
             RequestCloseCommand = new RelayCommandAsync(RequestClose);
+            PaneId = Guid.NewGuid();
         }
 
         public PaneViewModel(INavigationService navigationService, ILogger logger,
@@ -109,6 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             RequestCloseCommand = new RelayCommandAsync(RequestClose);
+            PaneId  = Guid.NewGuid();
         }
 
 
