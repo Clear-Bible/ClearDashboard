@@ -26,8 +26,6 @@ using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using ClearDashboard.Wpf.Application.Views.Main;
-using ClearDashboard.Wpf.Application.Views.Project;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -75,7 +73,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
-        private ProjectDesignSurfaceView _projectDesignSurfaceView;
         private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
 
         public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel
@@ -255,29 +252,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        private async Task StartDashboardAsync(int secondsToWait = 10)
-        {
-            _ = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
-
-            Logger.LogInformation("Opening a new instance of Dashboard.");
-            _ = await InternalStartDashboardAsync();
-
-
-            Logger.LogInformation($"Waiting {secondsToWait} seconds for Dashboard to completely start");
-            await Task.Delay(TimeSpan.FromSeconds(secondsToWait));
-        }
-
-        private async Task<Process> InternalStartDashboardAsync()
-        {
-            string programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
-            var dashboardInstallDirectory = Path.Combine(programFiles, "Clear Dashboard");
-            var process = Process.Start($"{dashboardInstallDirectory}\\ClearDashboard.Wpf.Application.exe");
-
-            return await Task.FromResult(process);
-        }
-
-        private ObservableCollection<MenuItemViewModel> _menuItems = new();
-        public ObservableCollection<MenuItemViewModel> MenuItems
+        private BindableCollection<MenuItemViewModel> _menuItems = new();
+        public BindableCollection<MenuItemViewModel> MenuItems
         {
             get => _menuItems;
             private set
@@ -401,11 +377,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public string ProjectName
         {
             get => _projectName;
-            set
-            {
-                _projectName = value;
-                NotifyOfPropertyChange(nameof(ProjectName));
-            }
+            set => Set(ref _projectName, value);
         }
 
         #endregion //Observable Properties
@@ -548,8 +520,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-
-
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
 
             await PinsViewModel.DeactivateAsync(close);
@@ -561,32 +531,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 OkSave();
             }
 
-            ////we need to cancel running background processes
-            ////check a bool to see if it already cancelled or already completed
-            //if (_longRunningTaskManager.HasTasks())
-            //{
-
-            //    _longRunningTaskManager.CancelAllTasks();
-
-            //    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-            //    {
-            //        Name = "Corpus",
-            //        Description = "Task was cancelled",
-            //        EndTime = DateTime.Now,
-            //        TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-            //    }), cancellationToken);
-
-               
-            //}
-
             // save the open document windows
             var serializedEnhancedViews = new List<EnhancedViewSerializationModel>();
             foreach (var window in Items)
             {
-                if (window is EnhancedViewModel)
+                if (window is EnhancedViewModel enhancedViewModel)
                 {
-                    var enhancedViewModel = (EnhancedViewModel)window;
-
                     if (enhancedViewModel.EnhancedViewItemMetadata.Count > 0)
                     {
                         var id = enhancedViewModel.PaneId;
@@ -597,15 +547,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             .OfType<LayoutDocument>()
                             .FirstOrDefault(a =>
                             {
-                                if (a.Content is not null)
+                                if (a.Content is EnhancedViewModel viewModel)
                                 {
-                                    if (a.Content is EnhancedViewModel)
+                                    if (viewModel.PaneId == id)
                                     {
-                                        var vm = (EnhancedViewModel)a.Content;
-                                        if (vm.PaneId == id)
-                                        {
-                                            return true;
-                                        }
+                                        return true;
                                     }
                                 }
                                 return false;
@@ -621,7 +567,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
                             EnhancedViewItems = enhancedViewModel.EnhancedViewItemMetadata,
-                            Title = title,
+                            Title = title!,
                             ParatextSync = enhancedViewModel.ParatextSync,
                             VerseOffset = enhancedViewModel.VerseOffsetRange,
                         });
@@ -652,7 +598,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // NB:  Call the following results "System.ObjectDisposedException: Instances cannot be resolved and nested lifetimes cannot be created from this LifetimeScope as it (or one of its parent scopes) has already been disposed."
             //await _projectDesignSurfaceViewModel.SaveCanvas();
-
+            // So we're using the following to save the PDS data to the project database
             Logger!.LogInformation("Saving ProjectDesignSurface layout.");
             ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
@@ -671,10 +617,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
-                _projectDesignSurfaceView = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
-
-                // subscribe to the event aggregator
-                //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
             await Task.Delay(250);
@@ -689,24 +631,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             
 
-            // regular Paratext corpus
-            //CancellationToken cancellationTokenProject = new();
-            //var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationTokenProject);
-            
-            //if (result.Success && result.HasData)
-            //{
-            //    ProjectMetadata = result.Data;
+          
 
-            //    ProjectManager.ProjectsMetadata = ProjectMetadata;
-            //}
-            //else
-            //{
-            //    throw new InvalidOperationException(result.Message);
-            //}
-
-            Stopwatch sw = new();
-            sw.Start();
-
+            Stopwatch sw = Stopwatch.StartNew();
             string json;
             var enhancedViews = LoadEnhancedViewMetadata();
 
@@ -763,11 +690,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     documentPane?.Children.Add(windowDockable);
                 }
 
-                foreach (var enhancedView in enhancedViews[i].EnhancedViewItems)
+                foreach (var enhancedView in enhancedViews[i].EnhancedViewItems!)
                 {
                     var cancellationToken = new CancellationToken();
                     var cancellationTokenLocal = new CancellationToken();
-                    if (enhancedView.MessageType == MessageType.ShowTokenizationWindowMessage)
+                    if (enhancedView.MessageType == MessageType.ShowTokenizationWindowMessage && enhancedView.Data != null)
                     {
                         try
                         {
@@ -779,12 +706,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 WriteIndented = true
                             };
 
-                            var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json, options);
+                            var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json!, options);
                             if (message is not null)
                             {
                                 viewModel.ProgressBarVisibility = Visibility.Visible;
-
-                                //await viewModel.ShowNewCorpusTokens(message, cancellationToken, cancellationTokenLocal);
 
                                 await viewModel.ShowCorpusText(message, cancellationToken, cancellationTokenLocal);
                                 await Task.Delay(1000, cancellationToken);
@@ -796,7 +721,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         }
 
                     }
-                    else if (enhancedView.MessageType == MessageType.ShowParallelTranslationWindowMessage)
+                    else if (enhancedView.MessageType == MessageType.ShowParallelTranslationWindowMessage && enhancedView.Data != null)
                     {
                         try
                         {
@@ -807,12 +732,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 IncludeFields = true,
                                 WriteIndented = true
                             };
-                            var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json, options);
+                            var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json!, options);
                             if (message is not null)
                             {
                                 viewModel.ProgressBarVisibility = Visibility.Visible;
                                 await viewModel.ShowParallelTranslation(message, cancellationToken, cancellationTokenLocal);
-                                await Task.Delay(1000);
+                                await Task.Delay(1000, cancellationTokenLocal);
                             }
                         }
                         catch (Exception e)
@@ -838,12 +763,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var json = ProjectManager.CurrentProject.WindowTabLayout;
 
-            //var options = new JsonSerializerOptions
-            //{
-            //    ReferenceHandler = ReferenceHandler.IgnoreCycles,
-            //    IncludeFields = true,
-            //    WriteIndented = true
-            //};
            return JsonSerializer.Deserialize<List<EnhancedViewSerializationModel>>(json);
  
         }
@@ -926,7 +845,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Methods
 
-        private async void ShowLogs()
+        private void ShowLogs()
         {
             var dashboardLogPath = IoC.Get<CaptureFilePathHook>();
 
@@ -946,7 +865,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             try
             {
                 var process = new Process();
-                process.StartInfo.WorkingDirectory = fileInfo.Directory.FullName;
+                process.StartInfo.WorkingDirectory = fileInfo.Directory!.FullName;
                 process.StartInfo.FileName = fileInfo.FullName;
                 process.StartInfo.Arguments = dashboardLogPath.Path;
                 process.Start();
@@ -959,7 +878,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         
         private async void GatherLogs()
         {
-            // get the application window size from shellviewmodel
             await EventAggregator.PublishOnUIThreadAsync(new GetApplicationWindowSettings());
             
             var destinationParatextLogPath = Path.Combine(Path.GetTempPath(), "paratext.log");
@@ -1112,19 +1030,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             documentPane?.Children.Add(windowDockable);
         }
 
-        private Task<TResponse> ExecuteRequest<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken)
-        {
-            IsBusy = true;
-            try
-            {
-                return ProjectManager?.ExecuteRequest(request, cancellationToken);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
         private ObservableCollection<LayoutFile> GetFileLayouts()
         {
             var id = 0;
@@ -1236,7 +1141,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // initiate the menu system
             MenuItems.Clear();
-            MenuItems = new ObservableCollection<MenuItemViewModel>
+            MenuItems = new BindableCollection<MenuItemViewModel>
             {
                 // File
                 new()
@@ -1308,7 +1213,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <summary>
         /// Save the layout
         /// </summary>
-        public async void OkSave()
+        public void OkSave()
         {
             var filePath = string.Empty;
             if (SelectedLayout == null)
@@ -1316,7 +1221,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // create a new layout
                 if (SelectedLayoutText != string.Empty)
                 {
-                    filePath = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath, "shared");
+                    filePath = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath!, "shared");
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
                 }
             }
@@ -1484,8 +1389,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 break;
 
                             case Project.ProjectDesignSurfaceViewModel:
-                                break;
-                            default:
                                 break;
                         }
                     }
@@ -1909,7 +1812,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var paratextId = message.ParatextProjectId;
 
             var viewModel = IoC.Get<EnhancedViewModel>();
-            viewModel.CurrentCorpusName = message!.ProjectName;
+            viewModel.CurrentCorpusName = message!.ProjectName!;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
@@ -1935,12 +1838,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
-            // pass up to the Project Design Surface the message
-            //if (_projectDesignSurfaceViewModel is not null)
-            //{
-            //    _projectDesignSurfaceViewModel.UiLanguageChangedMessage(message);
-            //}
-
             // rebuild the menu system with the new language
             RebuildMenu();
             await Task.CompletedTask;
@@ -1948,7 +1845,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
         {
-            if (!_longRunningTaskManager.HasTasks())
+            if (!_longRunningTaskManager!.HasTasks())
             {
                 if (menuItem.Id == "NewID")
                 {
@@ -1960,7 +1857,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 await OnDeactivateAsync(false, CancellationToken.None);
 
-                var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
+                var result = await WindowManager!.ShowDialogAsync(startupDialogViewModel);
 
                 if (result == true)
                 {
@@ -1999,14 +1896,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // the user wants to add to the currently active window
             if (message.IsNewWindow == false)
             {
-                var dockableWindows = _dockingManager.Layout.Descendents()
-                    .OfType<LayoutDocument>().ToList();
+                var dockableWindows = _dockingManager.Layout.Descendents().OfType<LayoutDocument>().ToList();
                 if (dockableWindows.Count == 1)
                 {
                     // there is only one doc window open, so we can just add to it
-                    if (Items.First(items => items.GetType() == typeof(EnhancedViewModel)) is EnhancedViewModel enhancedCorpusViewModels)
+                    if (Items.First(items => items.GetType() == typeof(EnhancedViewModel)) is EnhancedViewModel enhancedViewModel)
                     {
-                        await enhancedCorpusViewModels.ShowParallelTranslationTokens(message, cancellationToken);
+                        await enhancedViewModel.ShowParallelTranslationTokens(message, cancellationToken);
                     }
 
                     return;
