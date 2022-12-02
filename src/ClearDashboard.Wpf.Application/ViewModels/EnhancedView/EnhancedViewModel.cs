@@ -29,6 +29,7 @@ using SIL.Scripture;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -39,6 +40,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
@@ -50,7 +53,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public class EnhancedViewModel : PaneViewModel, 
+    public class EnhancedViewModel : DashboardConductorAllActive<object>, IPaneViewModel, 
         IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
@@ -84,7 +87,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
         // used for storing the displayed corpus order
-        public List<DisplayOrder> DisplayOrder = new();
+        public List<EnhancedViewItemMetadatum> EnhancedViewItemMetadata = new();
 
         private readonly List<TokenProject> _tokenProjects = new();
         private readonly List<ShowTokenizationWindowMessage> _projectMessages = new();
@@ -272,12 +275,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _progressBarVisibility, value);
         }
 
-        private ObservableCollection<VersesDisplay> _versesDisplay = new();
-        public ObservableCollection<VersesDisplay> VersesDisplay
-        {
-            get => _versesDisplay;
-            set => Set(ref _versesDisplay, value);
-        }
+        //private BindableCollection<VerseAwareEnhancedViewItemViewModel> _versesDisplay = new();
+        //public BindableCollection<VerseAwareEnhancedViewItemViewModel> VersesDisplay
+        //{
+        //    get => _versesDisplay;
+        //    set => Set(ref _versesDisplay, value);
+        //}
 
         public string? Message
         {
@@ -335,6 +338,74 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #endregion //Observable Properties
 
+        #region IPaneViewModel
+
+
+        public ICommand RequestCloseCommand { get; set; }
+
+        //private string _title = null;
+        private string? _contentId;
+        private bool _isSelected;
+        private bool _isActive;
+        #endregion //Member Variables
+
+        #region Public Properties
+
+        public Guid PaneId { get; set; }
+        public DockSide DockSide { get; set; }
+
+        public ImageSource? IconSource { get; protected set; }
+
+        public string? ContentId
+        {
+            get => _contentId;
+            set
+            {
+                if (_contentId != value)
+                {
+                    _contentId = value;
+                    NotifyOfPropertyChange(() => ContentId);
+                }
+            }
+        }
+
+        //public DockSide DockSide { get; }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                if (_isSelected != value)
+                {
+                    _isSelected = value;
+                    NotifyOfPropertyChange(() => IsSelected);
+                }
+            }
+        }
+
+        public new bool IsActive
+        {
+            get => _isActive;
+            set
+            {
+                if (_isActive != value)
+                {
+                    Set(ref _isActive, value);
+
+                    if (this.ContentId == "ENHANCEDVIEW" && value)
+                    {
+                        // send out a notice that the active document has changed
+                        EventAggregator.PublishOnUIThreadAsync(new ActiveDocumentMessage(PaneId));
+                    }
+                }
+            }
+        }
+        public async Task RequestClose(object obj)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
+        }
+        #endregion
 
         #region Constructor
 
@@ -362,15 +433,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
 
+            RequestCloseCommand = new RelayCommandAsync(RequestClose);
+
             VerseDisplay.EventAggregator = eventAggregator;
         }
 
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";
             TokensTextRows = new ObservableCollection<TokensTextRow>();
-            return base.OnInitializeAsync(cancellationToken);
+            await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
+            await base.OnInitializeAsync(cancellationToken);
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -459,9 +533,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private void MoveCorpusUp(object obj)
         {
-            var row = obj as VersesDisplay;
+            var row = obj as VerseAwareEnhancedViewItemViewModel;
 
-            var index = VersesDisplay.Select((element, index) => new { element, index })
+            //var index = VersesDisplay.Select((element, index) => new { element, index })
+            //    .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
+
+            var index = Items.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
             if (index < 1)
@@ -469,35 +546,58 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return;
             }
 
-            VersesDisplay.Move(index, index - 1);
+            //VersesDisplay.Move(index, index - 1);
+
+
+            //TODO:  Reolve moving items
+            //Items.Move(index, index - 1);
         }
 
         private void MoveCorpusDown(object obj)
         {
-            var row = obj as VersesDisplay;
+            var row = obj as VerseAwareEnhancedViewItemViewModel;
 
-            var index = VersesDisplay.Select((element, index) => new { element, index })
+            //var index = VersesDisplay.Select((element, index) => new { element, index })
+            //    .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
+
+            //if (index == VersesDisplay.Count - 1)
+            //{
+            //    return;
+            //}
+
+            //VersesDisplay.Move(index, index + 1);
+
+            var index = Items.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
-            if (index == VersesDisplay.Count - 1)
+            if (index == Items.Count - 1)
             {
                 return;
             }
 
-            VersesDisplay.Move(index, index + 1);
+
+            // TODO:  resolve move
+            //((ObservableCollection)Items).Move(index, index + 1);
         }
 
         private void DeleteCorpusRow(object obj)
         {
-            var row = (VersesDisplay)obj;
+            var row = (VerseAwareEnhancedViewItemViewModel)obj;
 
             // remove from the display
-            var index = VersesDisplay.Select((element, index) => new { element, index })
-                .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
+            //var index = VersesDisplay.Select((element, index) => new { element, index })
+            //    .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
-            VersesDisplay.RemoveAt(index);
+            //VersesDisplay.RemoveAt(index);
+
+
+            var index = Items.Select((element, index) => new { element, index })
+                .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
+            Items.RemoveAt(index);
+            //VersesDisplay.RemoveAt(index);
+
             // remove from the grouping for saving
-            DisplayOrder.RemoveAt(index);
+            EnhancedViewItemMetadata.RemoveAt(index);
 
             // remove from stored collection
             var project = _parallelProjects.FirstOrDefault(x => x.ParallelCorpusId == row.ParallelCorpusId);
@@ -760,7 +860,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
 
                     // combine verse list into one VerseDisplayViewModel
-                    ObservableCollection<VerseDisplayViewModel> verses = new();
+                    BindableCollection<VerseDisplayViewModel> verses = new();
 
                     foreach (var textRow in tokensTextRowsRange)
                     {
@@ -782,15 +882,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     //}
                     if (bookFound)
                     {
-                        OnUIThread(() =>
+                        OnUIThread(async () =>
                         {
-                            UpdateVersesDisplay(message, verses, title, false);
-                            NotifyOfPropertyChange(() => VersesDisplay);
+                            await UpdateVersesDisplay(message, verses, title, false);
+                            //NotifyOfPropertyChange(() => VersesDisplay);
+                            NotifyOfPropertyChange(() => Items);
                         });
                     }
                     else
                     {
-                        OnUIThread(() => { UpdateVerseDisplayWhenBookOutOfRange(message); });
+                        OnUIThread(async () => { await UpdateVerseDisplayWhenBookOutOfRange(message); });
                     }
 
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -818,7 +919,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             }), cancellationToken);
                     }
 
-                    OnUIThread(() => { UpdateVerseDisplayWhenBookOutOfRange(message); });
+                    OnUIThread(async () => { await UpdateVerseDisplayWhenBookOutOfRange(message); });
                 }
                 finally
                 {
@@ -842,9 +943,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }, cancellationToken);
         }
 
-        private void UpdateVerseDisplayWhenBookOutOfRange(ShowTokenizationWindowMessage message)
+        private async Task UpdateVerseDisplayWhenBookOutOfRange(ShowTokenizationWindowMessage message)
         {
-            UpdateVersesDisplay(message, new ObservableCollection<VerseDisplayViewModel>(),
+            await UpdateVersesDisplay(message, new BindableCollection<VerseDisplayViewModel>(),
                 message.ProjectName + " - " + message.TokenizationType +
                 "    No verse data in this verse range", false);
             ProgressBarVisibility = Visibility.Collapsed;
@@ -870,7 +971,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
-        private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
+        private async Task UpdateVersesDisplay(ShowTokenizationWindowMessage message, BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
         {
             // get the fontfamily for this project
             var mainViewModel = IoC.Get<MainViewModel>();
@@ -889,24 +990,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             var brush = GetCorpusBrushColor(message);
 
-            var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == message.CorpusId);
+            //var row = VersesDisplay.FirstOrDefault(v => v.CorpusId == message.CorpusId);
+            var verseAwareViewModels =
+                Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel));
+            var row = verseAwareViewModels.Cast<VerseAwareEnhancedViewItemViewModel>().FirstOrDefault(v => v.CorpusId == message.CorpusId);
             if (row is null)
             {
-                VersesDisplay.Add(new VersesDisplay
-                {
-                    CorpusId = message.CorpusId.Value,
-                    BorderColor = brush,
-                    ShowTranslation = showTranslations,
-                    RowTitle = title,
-                    Verses = verses,
-                    IsRtl = message.IsRTL.Value,
-                    SourceFontFamily = family,
-                });
+                var viewModel = await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>();
+                viewModel.CorpusId = message.CorpusId.Value;
+                viewModel.BorderColor = brush;
+                viewModel.ShowTranslation = showTranslations;
+                viewModel.Title = title;
+                viewModel.Verses = verses;
+                viewModel.IsRtl = message.IsRTL.Value;
+                viewModel.SourceFontFamily = family;
+
+                //VersesDisplay.Add(new VerseAwareEnhancedViewItemViewModel
+                //{
+                //    CorpusId = message.CorpusId.Value,
+                //    BorderColor = brush,
+                //    ShowTranslation = showTranslations,
+                //    RowTitle = title,
+                //    Verses = verses,
+                //    IsRtl = message.IsRTL.Value,
+                //    SourceFontFamily = family,
+                //});
 
                 // add to the grouping for saving
-                DisplayOrder.Add(new DisplayOrder
+                EnhancedViewItemMetadata.Add(new EnhancedViewItemMetadatum
                 {
-                    MsgType = Models.DisplayOrder.MessageType.ShowTokenizationWindowMessage,
+                    MessageType = MessageType.ShowTokenizationWindowMessage,
                     Data = message
                 });
             }
@@ -915,7 +1028,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 row.CorpusId = message.CorpusId.Value;
                 row.BorderColor = brush;
                 row.ShowTranslation = showTranslations;
-                row.RowTitle = title;
+                row.Title = title;
                 row.Verses = verses;
                 row.IsRtl = message.IsRTL.Value;
             }
@@ -926,7 +1039,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 Debug.WriteLine($"INCOMMING ID: {verseDisplayViewModel.Id}");
             }
 
-            NotifyOfPropertyChange(() => VersesDisplay);
+            //NotifyOfPropertyChange(() => VersesDisplay);
+            NotifyOfPropertyChange(() => Items);
         }
 
         private static Brush? GetCorpusBrushColor(ShowTokenizationWindowMessage message)
@@ -1051,7 +1165,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
         {
             List<TokenDisplayViewModel> verseTokens = new();
-            var versesOut = new ObservableCollection<VerseDisplayViewModel>();
+            var versesOut = new BindableCollection<VerseDisplayViewModel>();
 
             List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
 
@@ -1061,10 +1175,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (rows is null)
             {
 
-                OnUIThread(() =>
+                OnUIThread(async () =>
                 {
-                    UpdateParallelCorpusDisplay(message, versesOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
-                    NotifyOfPropertyChange(() => VersesDisplay);
+                    await UpdateParallelCorpusDisplay(message, versesOut, message.ParallelCorpusDisplayName + "    No verse data in this verse range", true);
+                    //NotifyOfPropertyChange(() => VersesDisplay);
+                    NotifyOfPropertyChange(() => Items);
                 });
             }
             else
@@ -1132,10 +1247,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     title += $"{bcv.VerseNum})";
                 }
 
-                OnUIThread(() =>
+                OnUIThread(async () =>
                 {
-                    UpdateParallelCorpusDisplay(message, versesOut, title);
-                    NotifyOfPropertyChange(() => VersesDisplay);
+                    await UpdateParallelCorpusDisplay(message, versesOut, title);
+                    //NotifyOfPropertyChange(() => VersesDisplay);
+                    NotifyOfPropertyChange(() => Items);
                 });
             }
 
@@ -1232,8 +1348,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private void UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message,
-            ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations = true)
+        private async Task UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message,
+            BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations = true)
         {
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
@@ -1265,11 +1381,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
 
 
-            VersesDisplay? row;
+            VerseAwareEnhancedViewItemViewModel? row;
             if (message.AlignmentSetId is null)
             {
                 // interlinear
-                row = VersesDisplay.FirstOrDefault(v =>
+                //row = VersesDisplay.FirstOrDefault(v =>
+                //    v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
+                //    v.TranslationSetId == Guid.Parse(message.TranslationSetId));
+
+                var verseAwareViewModels =
+                    Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel));
+               
+                row = verseAwareViewModels.Cast<VerseAwareEnhancedViewItemViewModel>().FirstOrDefault(v =>
                     v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
                     v.TranslationSetId == Guid.Parse(message.TranslationSetId));
 
@@ -1277,7 +1400,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             else
             {
                 // alignment
-                row = VersesDisplay.FirstOrDefault(v =>
+                //row = VersesDisplay.FirstOrDefault(v =>
+                //    v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
+                //    v.AlignmentSetId == Guid.Parse(message.AlignmentSetId));
+
+                var verseAwareViewModels =
+                    Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel));
+
+                row = verseAwareViewModels.Cast<VerseAwareEnhancedViewItemViewModel>().FirstOrDefault(v =>
                     v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
                     v.AlignmentSetId == Guid.Parse(message.AlignmentSetId));
 
@@ -1299,39 +1429,56 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     translationSetId = Guid.Parse(message.TranslationSetId);
                 }
 
-                VersesDisplay.Add(new VersesDisplay
-                {
-                    AlignmentSetId = alignmentSetId,
-                    ParallelCorpusId = Guid.Parse(message.ParallelCorpusId),
-                    TranslationSetId = translationSetId,
-                    CorpusId = Guid.Parse(message.ParallelCorpusId),
-                    BorderColor = brush,
-                    ShowTranslation = showTranslations,
-                    RowTitle = title,
-                    Verses = verses,
-                    IsRtl = message.IsRTL,
-                    IsTargetRtl = message.IsTargetRTL ?? false,
-                    SourceFontFamily = familySource,
-                    TargetFontFamily = familyTarget,
-                    TranslationFontFamily = familyTarget,
-                });
+                var viewModel = await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>();
+
+                viewModel.AlignmentSetId = alignmentSetId;
+                viewModel.ParallelCorpusId = Guid.Parse(message.ParallelCorpusId);
+                viewModel.TranslationSetId = translationSetId;
+                viewModel.CorpusId = Guid.Parse(message.ParallelCorpusId);
+                viewModel.BorderColor = brush;
+                viewModel.ShowTranslation = showTranslations;
+                viewModel.Title = title;
+                viewModel.Verses = verses;
+                viewModel.IsRtl = message.IsRTL;
+                viewModel.IsTargetRtl = message.IsTargetRTL ?? false;
+                viewModel.SourceFontFamily = familySource;
+                viewModel.TargetFontFamily = familyTarget;
+                viewModel.TranslationFontFamily = familyTarget;
+
+                //VersesDisplay.Add(new VerseAwareEnhancedViewItemViewModel
+                //{
+                //    AlignmentSetId = alignmentSetId,
+                //    ParallelCorpusId = Guid.Parse(message.ParallelCorpusId),
+                //    TranslationSetId = translationSetId,
+                //    CorpusId = Guid.Parse(message.ParallelCorpusId),
+                //    BorderColor = brush,
+                //    ShowTranslation = showTranslations,
+                //    RowTitle = title,
+                //    Verses = verses,
+                //    IsRtl = message.IsRTL,
+                //    IsTargetRtl = message.IsTargetRTL ?? false,
+                //    SourceFontFamily = familySource,
+                //    TargetFontFamily = familyTarget,
+                //    TranslationFontFamily = familyTarget,
+                //});
 
                 // add to the grouping for saving
-                DisplayOrder.Add(new DisplayOrder
+                EnhancedViewItemMetadata.Add(new EnhancedViewItemMetadatum
                 {
-                    MsgType = Models.DisplayOrder.MessageType.ShowParallelTranslationWindowMessage,
+                    MessageType = MessageType.ShowParallelTranslationWindowMessage,
                     Data = message
                 });
             }
             else
             {
-                row.RowTitle = title;
+                row.Title = title;
                 row.Verses = verses;
                 row.BorderColor = brush;
             }
 
 
-            NotifyOfPropertyChange(() => VersesDisplay);
+            //NotifyOfPropertyChange(() => VersesDisplay);
+            NotifyOfPropertyChange(() => Items);
         }
 
         #endregion
@@ -1601,7 +1748,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             OnUIThread(async () =>
             {
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
-                NotifyOfPropertyChange(() => VersesDisplay);
+                //NotifyOfPropertyChange(() => VersesDisplay);
+                NotifyOfPropertyChange(() => Items);
             });
 
             Message = $"Note '{e.Note.Text}' added to tokens {string.Join(", ", e.EntityIds.Select(id => id.ToString()))}";
@@ -1641,7 +1789,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 OnUIThread(async () =>
                 {
                     await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
-                    NotifyOfPropertyChange(() => VersesDisplay);
+                    //NotifyOfPropertyChange(() => VersesDisplay);
+                    NotifyOfPropertyChange(() => Items);
                 });
             }
             Message = $"Note '{e.Note.Text}' deleted from tokens ({string.Join(", ", e.EntityIds.Select(id => id.ToString()))})";

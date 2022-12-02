@@ -14,6 +14,7 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
+    xmlns:cm="http://caliburnmicro.com"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -352,7 +353,7 @@
                 x:Name="OuterListView"
                 Grid.ColumnSpan="2"
                 Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                ItemsSource="{Binding VersesDisplay}"
+                ItemsSource="{Binding Items}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.IsDeferredScrollingEnabled="True"
                 VirtualizingStackPanel.IsVirtualizing="True"
@@ -447,13 +448,13 @@
                                             VerticalAlignment="Center"
                                             FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                             FontWeight="Bold"
-                                            Text="{Binding RowTitle}" />
+                                            Text="{Binding Title}" />
 
                                     </StackPanel>
-
+                                    <ContentControl cm:View.Model="{Binding .}" HorizontalAlignment="Left" />
                                     <!--  INNER LISTVIEW  -->
 
-                                    <ListView
+                                    <!--<ListView
                                         x:Name="InnerListView"
                                         Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
                                         HorizontalAlignment="Stretch"
@@ -546,7 +547,7 @@
                                                 </userControls:VerseDisplay>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
-                                    </ListView>
+                                    </ListView>-->
                                 </StackPanel>
                             </Border>
                         </Grid>

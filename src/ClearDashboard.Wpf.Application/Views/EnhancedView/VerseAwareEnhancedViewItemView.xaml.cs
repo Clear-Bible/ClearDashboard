@@ -1,17 +1,23 @@
-﻿using System;
+﻿using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.Events;
+using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using ClearDashboard.Wpf.Application.Dialogs;
-using ClearDashboard.Wpf.Application.Events;
 
 namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 {
     /// <summary>
-    /// Interaction logic for EnhancedView.xaml
+    /// Interaction logic for VerseAwareEnhancedViewItemView.xaml
     /// </summary>
-    public partial class EnhancedViewConductorView : UserControl
+    public partial class VerseAwareEnhancedViewItemView : UserControl
     {
+        public VerseAwareEnhancedViewItemView()
+        {
+            InitializeComponent();
+        }
+
+
         public void TranslationClicked(object sender, RoutedEventArgs routedEventArgs)
         {
             Task.Run(() => TranslationClickedAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());
@@ -28,11 +34,6 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
                 dialog.ShowDialog();
             }
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowTranslationSelectionDialog);
-        }
-
-        public EnhancedViewConductorView()
-        {
-            InitializeComponent();
         }
     }
 }
