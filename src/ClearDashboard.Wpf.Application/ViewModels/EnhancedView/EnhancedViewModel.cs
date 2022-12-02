@@ -522,11 +522,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private void MoveCorpusUp(object obj)
         {
-            var row = obj as VerseAwareEnhancedViewItemViewModel;
-
-    
-
-            var index = Items.Select((element, index) => new { element, index })
+            var row = obj as EnhancedViewItemViewModel;
+            var index = MoveableItems.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
             if (index < 1)
@@ -534,24 +531,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return;
             }
 
-            //TODO:  Resolve moving items
-            //Items.Move(index, index - 1);
+            MoveableItems.Move(index, index - 1);
         }
 
         private void MoveCorpusDown(object obj)
         {
-            var row = obj as VerseAwareEnhancedViewItemViewModel;
-            var index = Items.Select((element, index) => new { element, index })
+            var row = obj as EnhancedViewItemViewModel;
+            var index = MoveableItems.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
 
             if (index == Items.Count - 1)
             {
                 return;
             }
+            MoveableItems.Move(index, index +1);
 
-
-            // TODO:  resolve move
-            //((ObservableCollection)Items).Move(index, index + 1);
         }
 
         private void DeleteCorpusRow(object obj)
