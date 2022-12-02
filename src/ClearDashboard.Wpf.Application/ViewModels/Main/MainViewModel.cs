@@ -44,6 +44,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Annotations;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -583,14 +584,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //}
 
             // save the open document windows
-            var serializedEnhancedViews = new List<SerializedEnhancedView>();
+            var serializedEnhancedViews = new List<EnhancedViewSerializationModel>();
             foreach (var window in Items)
             {
                 if (window is EnhancedViewModel)
                 {
                     var enhancedViewModel = (EnhancedViewModel)window;
 
-                    if (enhancedViewModel.DisplayOrder.Count > 0)
+                    if (enhancedViewModel.EnhancedViewItemMetadata.Count > 0)
                     {
                         var id = enhancedViewModel.PaneId;
 
@@ -620,10 +621,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         }
                         
                         // get the displayed contents
-                        serializedEnhancedViews.Add(new SerializedEnhancedView
+                        serializedEnhancedViews.Add(new EnhancedViewSerializationModel
                         {
                             BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
-                            DisplayOrder = enhancedViewModel.DisplayOrder,
+                            EnhancedViewItems = enhancedViewModel.EnhancedViewItemMetadata,
                             Title = title,
                             ParatextSync = enhancedViewModel.ParatextSync,
                             VerseOffset = enhancedViewModel.VerseOffsetRange,
@@ -690,40 +691,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadDocuments()
         {
-            if (ProjectManager.CurrentProject?.WindowTabLayout is null)
-            {
-                return;
-            }
+            
 
             // regular Paratext corpus
-            CancellationToken cancellationTokenProject = new();
-            var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationTokenProject);
+            //CancellationToken cancellationTokenProject = new();
+            //var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationTokenProject);
             
-            if (result.Success && result.HasData)
-            {
-                ProjectMetadata = result.Data;
+            //if (result.Success && result.HasData)
+            //{
+            //    ProjectMetadata = result.Data;
 
-                ProjectManager.ProjectsMetadata = ProjectMetadata;
-            }
-            else
-            {
-                throw new InvalidOperationException(result.Message);
-            }
+            //    ProjectManager.ProjectsMetadata = ProjectMetadata;
+            //}
+            //else
+            //{
+            //    throw new InvalidOperationException(result.Message);
+            //}
 
             Stopwatch sw = new();
             sw.Start();
 
-            var json = ProjectManager.CurrentProject.WindowTabLayout;
+            string json;
+            var enhancedViews = LoadEnhancedViewMetadata();
 
-            JsonSerializerOptions options = new()
+            if (enhancedViews == null)
             {
-                ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                IncludeFields = true,
-                WriteIndented = true
-            };
-            List<SerializedEnhancedView> deserialized = JsonSerializer.Deserialize<List<SerializedEnhancedView>>(json, options);
+                return;
+            }
 
-            for (int i = 0; i < deserialized.Count; i++)
+            for (int i = 0; i < enhancedViews.Count; i++)
             {
                 EnhancedViewModel viewModel = null;
                 if (i == 0)
@@ -748,11 +744,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     newWindow = true;
                 }
 
-                viewModel.Title = deserialized[i].Title;
-                viewModel.VerseOffsetRange = deserialized[i].VerseOffset;
+                viewModel.Title = enhancedViews[i].Title;
+                viewModel.VerseOffsetRange = enhancedViews[i].VerseOffset;
                 viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-                viewModel.ParatextSync = deserialized[i].ParatextSync;
-                viewModel.CurrentBcv.SetVerseFromId(deserialized[i].BBBCCCVVV);
+                viewModel.ParatextSync = enhancedViews[i].ParatextSync;
+                viewModel.CurrentBcv.SetVerseFromId(enhancedViews[i].BBBCCCVVV);
                 viewModel.ProgressBarVisibility = Visibility.Visible;
 
                 if (newWindow)
@@ -764,22 +760,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     var windowDockable = new LayoutDocument
                     {
                         Content = viewModel,
-                        Title = deserialized[i].Title,
+                        Title = enhancedViews[i].Title,
                     };
 
                     var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
                     documentPane?.Children.Add(windowDockable);
                 }
 
-                foreach (var displayOrder in deserialized[i].DisplayOrder)
+                foreach (var enhancedView in enhancedViews[i].EnhancedViewItems)
                 {
                     var cancellationToken = new CancellationToken();
                     var cancellationTokenLocal = new CancellationToken();
-                    if (displayOrder.MsgType == DisplayOrder.MessageType.ShowTokenizationWindowMessage)
+                    if (enhancedView.MessageType == MessageType.ShowTokenizationWindowMessage)
                     {
                         try
                         {
-                            json = displayOrder.Data.ToString();
+                            json = enhancedView.Data.ToString();
+                            var options = new JsonSerializerOptions
+                            {
+                                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                                IncludeFields = true,
+                                WriteIndented = true
+                            };
+
                             var message = JsonSerializer.Deserialize<ShowTokenizationWindowMessage>(json, options);
                             if (message is not null)
                             {
@@ -797,11 +800,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         }
 
                     }
-                    else if (displayOrder.MsgType == DisplayOrder.MessageType.ShowParallelTranslationWindowMessage)
+                    else if (enhancedView.MessageType == MessageType.ShowParallelTranslationWindowMessage)
                     {
                         try
                         {
-                            json = displayOrder.Data.ToString();
+                            json = enhancedView.Data.ToString();
+                            var options = new JsonSerializerOptions
+                            {
+                                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                                IncludeFields = true,
+                                WriteIndented = true
+                            };
                             var message = JsonSerializer.Deserialize<ShowParallelTranslationWindowMessage>(json, options);
                             if (message is not null)
                             {
@@ -820,7 +829,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             sw.Stop();
-            Logger.LogInformation($"LoadDocuments - Total Load Time {deserialized.Count} documents in {sw.ElapsedMilliseconds} ms");
+            Logger.LogInformation($"LoadDocuments - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
+        }
+
+        [CanBeNull]
+        private List<EnhancedViewSerializationModel> LoadEnhancedViewMetadata()
+        {
+            if (ProjectManager.CurrentProject?.WindowTabLayout is null)
+            {
+                return null;
+            }
+
+            var json = ProjectManager.CurrentProject.WindowTabLayout;
+
+            //var options = new JsonSerializerOptions
+            //{
+            //    ReferenceHandler = ReferenceHandler.IgnoreCycles,
+            //    IncludeFields = true,
+            //    WriteIndented = true
+            //};
+           return JsonSerializer.Deserialize<List<EnhancedViewSerializationModel>>(json);
+ 
         }
 
         private async void Initialize()
@@ -1521,8 +1550,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (type)
                     {
                         case EnhancedViewModel:
-                            return (IPaneViewModel)t;
-                        case EnhancedViewConductorViewModel:
                             return (IPaneViewModel)t;
                     }
                 }
