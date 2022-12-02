@@ -541,12 +541,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            if (!SelectedTokens.Any())
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+            if (tokenDisplay is { IsSelected: false })
             {
-                var control = e.Source as FrameworkElement;
-                var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-                UpdateSelection(tokenDisplay!, false);
+                UpdateSelection(tokenDisplay, false);
             }
+
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }
 
@@ -1465,12 +1466,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 EventAggregator.SubscribeOnUIThread(this);
             }
         }
-
-        //public VerseDisplay(IEventAggregator eventAggregator) : this()
-        //{
-        //    EventAggregator = eventAggregator;
-        //    EventAggregator.SubscribeOnUIThread(this);
-        //}
-
     }
 }

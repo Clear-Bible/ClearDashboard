@@ -1521,7 +1521,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
         {
+            Task.Run(() => TokenRightButtonDownAsync(e).GetAwaiter());
+        }        
+        
+        public async Task TokenRightButtonDownAsync(TokenEventArgs e)
+        {
             UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
+            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
+            NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
         }
 
