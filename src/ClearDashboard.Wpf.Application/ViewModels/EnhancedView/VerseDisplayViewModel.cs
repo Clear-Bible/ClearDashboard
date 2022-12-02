@@ -103,10 +103,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             
             if (TargetTokens != null)
             {
-                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer!, IsSourceRtl, true);
+                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer!, IsTargetRtl, false);
                 NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
             }
-
         }
 
         private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
