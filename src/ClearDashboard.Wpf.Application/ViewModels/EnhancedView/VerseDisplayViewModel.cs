@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
@@ -153,22 +154,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion
 
         #region Event Handlers
-        public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
+
+        private static void UnselectTokens(TokenDisplayViewModelCollection collection, TokenDisplayViewModelCollection selectedTokens)
         {
-            var selectedTokens = SourceTokenDisplayViewModels.Where(t => t.IsSelected);
-            foreach (var token in selectedTokens)
+            var currentlySelectedTokens = collection.Where(t => t.IsSelected);
+            foreach (var token in currentlySelectedTokens)
             {
-                if (!message.SelectedTokens.Contains(token))
+                if (!selectedTokens.Contains(token))
                 {
                     token.IsSelected = false;
                 }
             }
+        }
+
+        public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            UnselectTokens(SourceTokenDisplayViewModels, message.SelectedTokens);
+            UnselectTokens(TargetTokenDisplayViewModels, message.SelectedTokens);
+            
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
-            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId)))
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId, new IIdEqualityComparer())))
+            {
+                token.NoteAdded(message.Note);
+            }
+            foreach (var token in TargetTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId, new IIdEqualityComparer())))
             {
                 token.NoteAdded(message.Note);
             }
@@ -178,7 +191,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(NoteDeletedMessage message, CancellationToken cancellationToken)
         {
-            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId)))
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId, new IIdEqualityComparer())))
+            {
+                token.NoteDeleted(message.Note);
+            }
+            foreach (var token in TargetTokenDisplayViewModels.Where(t => message.Entities.Contains(t.Token.TokenId, new IIdEqualityComparer())))
             {
                 token.NoteDeleted(message.Note);
             }
@@ -187,7 +204,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(NoteMouseEnterMessage message, CancellationToken cancellationToken)
         {
-            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.Equals(t.Token.TokenId))))
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId))))
+            {
+                token.IsNoteHovered = true;
+            }
+            foreach (var token in TargetTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId))))
             {
                 token.IsNoteHovered = true;
             }
@@ -196,7 +217,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(NoteMouseLeaveMessage message, CancellationToken cancellationToken)
         {
-            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.Equals(t.Token.TokenId))))
+            foreach (var token in SourceTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId))))
+            {
+                token.IsNoteHovered = false;
+            }
+            foreach (var token in TargetTokenDisplayViewModels.Where(t => message.Note.Associations.Any(a => a.AssociatedEntityId.IdEquals(t.Token.TokenId))))
             {
                 token.IsNoteHovered = false;
             }
