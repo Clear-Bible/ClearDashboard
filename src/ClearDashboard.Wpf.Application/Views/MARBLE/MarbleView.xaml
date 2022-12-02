@@ -16,7 +16,7 @@
     x:Name="MarbleViewControl"
     d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="450"
+    d:DesignHeight="8000"
     d:DesignWidth="800"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -46,7 +46,7 @@
         <marble:MarbleViewModel x:Key="ViewModelsSource" />
     </UserControl.Resources>
 
-    <Grid ShowGridLines="False">
+    <Grid x:Name="MainGrid" ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -656,6 +656,61 @@
                             </StackPanel>
                         </Border>
 
+                        <Border Background="{StaticResource MahApps.Brushes.Accent3}">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding VerseTextId}" Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel Orientation="Vertical" Margin="5">
+                                <TextBlock Foreground="{StaticResource SecondaryHueDarkBrush}" Text="{Binding VerseTextId}" TextDecorations="Underline" />
+                                <TextBlock
+                                    FontFamily="{Binding VerseTextFontFamily}"
+                                    Text="{Binding VerseText}"
+                                    TextWrapping="Wrap" >
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FlowDirection" Value="LeftToRight" />
+                                            <Setter Property="FontSize" Value="16" />
+                                            <Setter Property="FontFamily" Value="SBL Greek" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsTargetRtl }" Value="True">
+                                                    <Setter Property="FlowDirection" Value="RightToLeft" />
+                                                    <Setter Property="FontSize" Value="20" />
+                                                    <Setter Property="FontFamily" Value="SBL Hebrew" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBlock
+                                    FontFamily="{Binding SourceTextFontFamily}"
+                                    Text="{Binding SourceText}"
+                                    TextWrapping="Wrap" >
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FlowDirection" Value="LeftToRight" />
+                                            <Setter Property="FontSize" Value="16" />
+                                            <Setter Property="FontFamily" Value="SBL Greek" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding LexicalLinks[0].IsRtl}" Value="True">
+                                                
+                                                    <Setter Property="FlowDirection" Value="RightToLeft" />
+                                                    <Setter Property="FontSize" Value="20" />
+                                                    <Setter Property="FontFamily" Value="SBL Hebrew" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
                         <ListBox MaxHeight="300" ItemsSource="{Binding Verses}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -686,7 +741,11 @@
                                         </Grid.ColumnDefinitions>
 
 
-                                        <Button VerticalAlignment="Center">
+                                        <Button
+                                            x:Name="VerseButton"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.GetVerseDetailCommand}"
+                                            CommandParameter="{Binding ElementName=VerseButton, Path=DataContext}">
                                             <Button.Style>
                                                 <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="{x:Type Button}">
                                                     <Setter Property="Padding" Value="0" />
