@@ -16,12 +16,6 @@
         Width="Auto"
         HorizontalAlignment="Left"
         Orientation="Vertical">
-        <StackPanel.ContextMenu>
-            <ContextMenu>
-                <MenuItem Click="OnCreateNote" Header="Create Note" />
-                <MenuItem Click="OnFilterPins" Header="Filter Pins" />
-            </ContextMenu>
-        </StackPanel.ContextMenu>
         <Button
             x:Name="TokenButton"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
@@ -41,6 +35,7 @@
             Width="{Binding ElementName=SurfaceTextBlock, Path=ActualWidth}"
             materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Click="OnTokenClicked"
+            ContextMenuOpening="OnTokenContextMenuOpening"
             MouseDoubleClick="OnTokenDoubleClicked"
             MouseEnter="OnTokenMouseEnter"
             MouseLeave="OnTokenMouseLeave"
@@ -49,7 +44,12 @@
             MouseRightButtonUp="OnTokenRightButtonUp"
             MouseWheel="OnTokenMouseWheel"
             PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
-
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Click="OnCreateNote" Header="Create Note" />
+                    <MenuItem Click="OnFilterPins" Header="Filter Pins" />
+                </ContextMenu>
+            </Button.ContextMenu>
             <TextBlock
                 x:Name="SurfaceTextBlock"
                 Margin="0"
