@@ -7,11 +7,11 @@ using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
@@ -44,7 +44,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Annotations;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -63,11 +62,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>
     {
-        private readonly LongRunningTaskManager _longRunningTaskManager;
-        private ILifetimeScope LifetimeScope { get; }
-        private IWindowManager WindowManager { get; }
-        public INavigationService NavigationService { get; set; }
-        private NoteManager NoteManager { get; }
+        private readonly LongRunningTaskManager? _longRunningTaskManager;
+        private ILifetimeScope? LifetimeScope { get; }
+        private IWindowManager? WindowManager { get; }
+        public INavigationService? NavigationService { get; set; }
+        private NoteManager? NoteManager { get; }
 #nullable disable
         #region Member Variables
         private IEventAggregator EventAggregator { get; }
@@ -113,9 +112,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 NotifyOfPropertyChange(() => ParatextSync);
             }
         }
-
-        private bool IncomingChangesStarted { get; set; }
-
         private bool _isBusy;
         public bool IsBusy
         {
@@ -536,7 +532,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     await ProjectManager.LoadProject(Parameter.ProjectName);
                 }
 
-                await NoteManager.InitializeAsync();
+                await NoteManager!.InitializeAsync();
 
             }
 
@@ -914,16 +910,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 BCVDictionary = new Dictionary<string, string>();
             }
 
-
-            IncomingChangesStarted = true;
-
             // set the CurrentBcv prior to listening to the event
             CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
 
             //CalculateBooks();
             //CalculateChapters();
             //CalculateVerses();
-            IncomingChangesStarted = false;
 
             // Subscribe to changes of the Book Chapter Verse data object.
             CurrentBcv.PropertyChanged += BcvChanged;
@@ -1809,12 +1801,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
-                IncomingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
                 //CalculateChapters();
                 //CalculateVerses();
-                IncomingChangesStarted = false;
             }
         }
 
@@ -1823,14 +1813,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (ProjectManager?.CurrentParatextProject is not null)
             {
-                try
-                {
+                
                     // send to log
                     await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
 
                     BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-                    IncomingChangesStarted = true;
 
                     // add in the books to the dropdown list
                     //CalculateBooks();
@@ -1842,11 +1830,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     //CalculateVerses();
 
                     NotifyOfPropertyChange(() => CurrentBcv);
-                }
-                finally
-                {
-                    IncomingChangesStarted = false;
-                }
 
             }
             else
@@ -2021,10 +2004,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (dockableWindows.Count == 1)
                 {
                     // there is only one doc window open, so we can just add to it
-                    var enhancedCorpusViewModels =
-                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
-                            EnhancedViewModel;
-                    if (enhancedCorpusViewModels is not null)
+                    if (Items.First(items => items.GetType() == typeof(EnhancedViewModel)) is EnhancedViewModel enhancedCorpusViewModels)
                     {
                         await enhancedCorpusViewModels.ShowParallelTranslationTokens(message, cancellationToken);
                     }
@@ -2102,9 +2082,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var windowGuid = message.guid;
 
             var dockableWindows = _dockingManager.Layout.Descendents()
-                .OfType<LayoutDocument>();
+                .OfType<LayoutDocument>().ToArray();
 
-            if (dockableWindows.Count() > 1)
+            if (dockableWindows.Length > 1)
             {
                 foreach (var pane in dockableWindows)
                 {
