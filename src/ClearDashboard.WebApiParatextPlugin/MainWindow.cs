@@ -26,6 +26,7 @@ using System.Windows.Forms;
 using System.Xml;
 using SIL.Extensions;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
+using System.Security.Cryptography;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -394,9 +395,34 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     xDoc.LoadXml(usxString);
                                     try
                                     {
-                                        var query = "//*[@vid='"+_verseRef+ "' or sid='"+_verseRef+"']";
+                                        //var query = "//*[@vid='"+_verseRef+ "' or sid='"+_verseRef+"']";
                                         //var query = "//*[count(preceding-sibling::*[@sid='"+_verseRef+"'])=1]";
-                                        var verseNodeList = xDoc.SelectNodes(query);
+                                        //var query = "//*[preceding-sibling::*/verse[@sid='GEN 1:1'] and following-sibling::*/verse[@eid='GEN 1:1']]";
+                                        List<XmlNode> verseNodeList = new();// = xDoc.SelectNodes(query);
+
+                                        bool startMarkerFound = false;
+                                        var count = 0;
+                                        foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
+                                        {
+                                            //var startMarker = node.SelectNodes("//verse").Item(0);
+
+                                            //if (startMarker != null && startMarker.Attributes != null && startMarker.Attributes["sid"] != null)
+                                            //{
+                                                if (node.OuterXml.Contains("sid=\""+_verseRef+"\""))
+                                                {
+                                                    startMarkerFound = true;
+                                                }
+                                                if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                                {
+                                                    startMarkerFound = false;
+                                                }
+                                                //}
+
+                                            if (startMarkerFound)
+                                            {
+                                                verseNodeList.Add(node);
+                                            }
+                                        }
 
                                         if (verseNodeList.Count == 0)
                                         {
