@@ -188,7 +188,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        private async Task<TViewModel?> ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
+        private new async Task<TViewModel?> ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
             where TViewModel : Screen
         {
 
@@ -196,9 +196,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //   OnViewLoaded is not called.
 
             var viewModel = LifetimeScope!.Resolve<TViewModel>();
-          
+
             viewModel.Parent = this;
             viewModel.ConductWith(this);
+
+            // Binding ProjectDesignView to the the view model.  Note this is different
+            // from other conductors where we bind to view/viewmodel pair.
             var view = ViewLocator.LocateForModel(this, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
