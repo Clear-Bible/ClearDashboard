@@ -98,8 +98,8 @@ namespace ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings
             }
         }
 
-        private List<string> _verses = new();
-        public List<string> Verses
+        private List<CoupleOfStrings> _verses = new();
+        public List<CoupleOfStrings> Verses
         {
             get => _verses;
             set

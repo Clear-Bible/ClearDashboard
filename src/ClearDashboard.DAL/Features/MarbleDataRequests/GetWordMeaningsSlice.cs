@@ -155,11 +155,18 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 Console.WriteLine($"Total Sense Verses: {totalSenseVerseCount.Count}");
                 totalVerses += totalSenseVerseCount.Count;
 
+                List<CoupleOfStrings> verseList = new();
                 List<string> verses = new();
                 foreach (var verse in totalSenseVerseCount)
                 {
                     var verseRef = VerseHelper.ConvertVerseIdToReference(verse.Value);
                     verses.Add(verseRef);
+
+                    verseList.Add(new CoupleOfStrings
+                    {
+                        stringA = verse.Value,
+                        stringB = verseRef,
+                    });
                 }
 
 
@@ -167,7 +174,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
 
                 var lexSense = senses.Elements("LEXSense")
-                    .FirstOrDefault(x => x.Attribute("LanguageCode").Value.Equals("en"));
+                    .FirstOrDefault(x => x.Attribute("LanguageCode").Value.Equals(_languageCode));
 
                 var definitionLong = lexSense.Element("DefinitionLong").Value;
                 var definationShort = lexSense.Element("DefinitionShort").Value;
@@ -216,11 +223,10 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 var contextualMeaning = meaning.Element("CONMeanings")
                     .Elements("ContextualMeaning").ToList();
 
-                //List<ContextualMeaning> contextualMeanings = new();
                 ObservableCollection<TreeNode> root = new();
                 foreach (var conMeaning in contextualMeaning)
                 {
-                    var meaningId = conMeaning.Attribute("Id").Value.Substring(9);
+                    var meaningId = conMeaning.Attribute("Id").Value.Substring(12);
 
                     var conForms = conMeaning.Elements("CONForms")
                         .Elements("CONForm")
@@ -237,6 +243,8 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                         .Select(x => x.Value)
                         .ToList();
 
+
+                    // verse references - convert to readable version
                     var conReferences = conMeaning.Elements("CONReferences")
                         .Elements("CONReference")
                         .Select(x => x.Value)
@@ -256,25 +264,23 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
                     ObservableCollection<TreeNode> memberNode = new();
 
-
-
-
                     // Get the sense definition for this contextual meaning
                     var conSenses = conMeaning.Elements("CONSenses").ToList();
                     var sensesList = conSenses.Elements("CONSense").ToList();
-                    var english = sensesList.Where(x =>
+                    // filter down to only the right language group
+                    var selectedLanguage = sensesList.Where(x =>
                     {
-                        if (x.Attribute("LanguageCode").Value == "en")
+                        if (x.Attribute("LanguageCode").Value == _languageCode)
                         {
                             return true;
                         };
                         return false;
                     });
-                    if (english.Any())
+                    if (selectedLanguage.Any())
                     {
-                        var DefinitionLong = english.Elements("DefinitionLong").FirstOrDefault()?.Value;
-                        var DefinitionShort = english.Elements("DefinitionShort").FirstOrDefault()?.Value;
-                        var Glosses = english.Elements("Glosses")
+                        var DefinitionLong = selectedLanguage.Elements("DefinitionLong").FirstOrDefault()?.Value;
+                        var DefinitionShort = selectedLanguage.Elements("DefinitionShort").FirstOrDefault()?.Value;
+                        var Glosses = selectedLanguage.Elements("Glosses")
                             .Elements("Gloss")
                             .Select(x => x.Value)
                             .ToList();
@@ -285,6 +291,11 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                         }
 
                         memberNode = AddToTreeNode(Glosses, "Glosses", memberNode);
+
+                        if (Glosses.Count > 0)
+                        {
+                            meaningId += " :: " + Glosses[0];
+                        }
                     }
 
                     memberNode = AddToTreeNode(conForms, "Forms", memberNode);
@@ -300,8 +311,6 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     });
                 }
 
-
-
                 Senses sense = new Senses()
                 {
                     Sense = String.Join("; ", glosses),
@@ -309,7 +318,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     DescriptionShort = definationShort,
                     Glosses = glosses,
                     VerseTotal = totalSenseVerseCount.Count,
-                    Verses = verses,
+                    Verses = verseList,
                     CoreDomains = coreDomains,
                     Domains = domains,
                     SubDomains = subDomains,
@@ -323,8 +332,6 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     RelatedLemmaList = relatedLemmasList,
                     PartsOfSpeech = partsOfSpeech,
                     AlphabetTreeNodes = root,
-                    //LexicalLinks = _lexicalLinks,
-                    //SelectedLexicalLink = _lexicalLinks[0],
                 };
 
                 temp.Add(sense);

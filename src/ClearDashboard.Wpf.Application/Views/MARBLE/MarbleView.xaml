@@ -560,7 +560,7 @@
                             IsReadOnly="True"
                             Text="{Binding Path=SelectedSense.DescriptionShort}"
                             TextWrapping="Wrap" />
-                        
+
                         <TextBlock
                             Margin="0,5,0,0"
                             Padding="3"
@@ -578,7 +578,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        
+
                         <TextBox
                             Width="550"
                             Padding="3"
@@ -596,7 +596,7 @@
                                 </Style>
                             </TextBox.Style>
                         </TextBox>
-                        
+
                         <TextBlock
                             Margin="0,5,0,0"
                             Padding="3"
@@ -617,6 +617,45 @@
                         Background="{StaticResource MaterialDesignPaper}"
                         Orientation="Vertical"
                         TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                        <Border Background="{StaticResource MahApps.Brushes.Accent4}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock
+                                    Margin="10"
+                                    VerticalAlignment="Center"
+                                    TextDecorations="Underline">
+                                    Scope:
+                                </TextBlock>
+                                <RadioButton
+                                    Name="rbAll"
+                                    Margin="10"
+                                    Command="{Binding Path=SetContextCommand}"
+                                    CommandParameter="{Binding ElementName=rbAll, Path=Tag}"
+                                    Content="All"
+                                    GroupName="context"
+                                    IsChecked="False"
+                                    Tag="All" />
+                                <RadioButton
+                                    Name="rbBook"
+                                    Margin="10"
+                                    Command="{Binding Path=SetContextCommand}"
+                                    CommandParameter="{Binding ElementName=rbBook, Path=Tag}"
+                                    Content="Book"
+                                    GroupName="context"
+                                    IsChecked="False"
+                                    Tag="Book" />
+                                <RadioButton
+                                    Name="rbChapter"
+                                    Margin="10"
+                                    Command="{Binding Path=SetContextCommand}"
+                                    CommandParameter="{Binding ElementName=rbChapter, Path=Tag}"
+                                    Content="Chapter"
+                                    GroupName="context"
+                                    IsChecked="True"
+                                    Tag="Chapter" />
+                            </StackPanel>
+                        </Border>
+
                         <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.Verses}">
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="ListBoxItem">
@@ -662,7 +701,7 @@
                                             Grid.Column="1"
                                             Margin="3"
                                             VerticalAlignment="Center"
-                                            Text="{Binding}"
+                                            Text="{Binding stringB}"
                                             TextWrapping="Wrap" />
                                     </Grid>
                                 </DataTemplate>

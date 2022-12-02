@@ -27,6 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         public ICommand LaunchLogosCommand { get; set; }
         public ICommand SearchSenseCommand { get; set; }
+        public ICommand SetContextCommand { get; set; }
 
         #endregion Commands
 
@@ -40,6 +41,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         private readonly IEventAggregator? _eventAggregator;
         private readonly TranslationSource _translationSource;
 
+        private enum fiterReference
+        {
+            All,
+            Book,
+            Chapter,
+        }
+
+        private fiterReference _currentFilter = fiterReference.Chapter;
 
         #region BCV
         private bool _paratextSync = false;
@@ -153,7 +162,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         private Senses _selectedSense;
         public Senses SelectedSense
         {
-            get => _selectedSense;
+            get
+            {
+                if (_selectedSense is not null)
+                {
+                    SelectedVerseReferences = _selectedSense.Verses;
+                    FilterSenses();
+                }
+
+                return _selectedSense; 
+                
+            }
             set
             {
                 _selectedSense = value;
@@ -161,6 +180,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
+        private void FilterSenses()
+        {
+            if (SelectedVerseReferences.Count == 0)
+            {
+                return;
+            }
+            
+            switch (_currentFilter)
+            {
+                case fiterReference.All:
+                    SelectedSense.Verses = SelectedVerseReferences;
+                    break;
+                case fiterReference.Book:
+                    string bbb = CurrentBcv.BBBCCCVVV.Substring(0, 3);
+
+                    SelectedSense.Verses = SelectedVerseReferences.Where(x => x.stringB.StartsWith(bbb)).ToList();
+                    break;
+                case fiterReference.Chapter:
+                    string bbbccc = CurrentBcv.BBBCCCVVV.Substring(0,6);
+
+                    SelectedSense.Verses = SelectedVerseReferences.Where(x => x.stringB.StartsWith(bbbccc)).ToList();
+                    break;
+            }
+        }
+
+        private List<CoupleOfStrings> SelectedVerseReferences { get; set; } = new();
 
 
 
@@ -240,6 +285,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(LaunchLogosStrongNumber);
             SearchSenseCommand = new RelayCommandAsync(SearchSense);
+            SetContextCommand = new RelayCommandAsync(SetContext);
         }
 
 
@@ -398,6 +444,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 SelectedSense = Senses[0];
             }
         }
+
+        private Task SetContext(object arg)
+        {
+            Console.WriteLine(arg);
+            return Task.CompletedTask;
+        }
+
+
 
         private async Task SearchSense(object obj)
         {
