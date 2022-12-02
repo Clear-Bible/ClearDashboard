@@ -676,6 +676,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
+        private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var args = e;
+        }
+
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenDoubleClickedEvent, e);
@@ -1213,5 +1218,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CalculateLayout();
         }
+
     }
 }
