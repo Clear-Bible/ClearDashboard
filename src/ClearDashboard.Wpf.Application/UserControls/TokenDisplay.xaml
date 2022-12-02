@@ -46,7 +46,7 @@
             PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
             <Button.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Click="OnCreateNote" Header="Create Note" />
+                    <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
                     <MenuItem Click="OnFilterPins" Header="Filter Pins" />
                 </ContextMenu>
             </Button.ContextMenu>
