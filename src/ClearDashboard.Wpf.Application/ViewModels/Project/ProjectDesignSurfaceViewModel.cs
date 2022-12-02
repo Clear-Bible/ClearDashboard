@@ -405,8 +405,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 .Transform<SetTrainingByTrainingLowercase>()
                 .Transform<AddPronominalReferencesToTokens>();
 
-            var bookInfo = new BookInfo();
-            var books = bookInfo.GenerateScriptureBookList()
+            var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
                     .Select(t => t.Id)
                     .Contains(bi.Code))
@@ -531,8 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 .Transform<SetTrainingByTrainingLowercase>()
                 .Transform<AddPronominalReferencesToTokens>();
 
-            var bookInfo = new BookInfo();
-            var books = bookInfo.GenerateScriptureBookList()
+                var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
                     .Select(t => t.Id)
                     .Contains(bi.Code))

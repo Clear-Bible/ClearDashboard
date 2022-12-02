@@ -662,8 +662,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     if (message.ParatextProjectId == ManuscriptIds.HebrewManuscriptId)
                     {
                         // our fake Manuscript corpus
-                        var bookInfo = new BookInfo();
-                        var books = bookInfo.GenerateScriptureBookList();
+                        var books = BookInfo.GenerateScriptureBookList();
 
                         metadata = new ParatextProjectMetadata
                         {
@@ -675,9 +674,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
                     else if (message.ParatextProjectId == ManuscriptIds.GreekManuscriptId)
                     {
-                        // our fake Manuscript corpus
-                        var bookInfo = new BookInfo();
-                        var books = bookInfo.GenerateScriptureBookList();
+                        // our fake Greek Manuscript corpus
+                        var books = BookInfo.GenerateScriptureBookList();
 
                         metadata = new ParatextProjectMetadata
                         {
