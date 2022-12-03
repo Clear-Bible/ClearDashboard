@@ -484,9 +484,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             EventAggregator.SubscribeOnUIThread(this);
             Logger.LogInformation($"Subscribing {nameof(MainViewModel)} to the EventAggregator");
-
+            _dockingManager.ActiveContentChanged += OnActiveContentChanged;
 
             await base.OnActivateAsync(cancellationToken);
+        }
+
+        private void OnActiveContentChanged(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -521,6 +526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
+            _dockingManager.ActiveContentChanged -= OnActiveContentChanged;
 
             await PinsViewModel.DeactivateAsync(close);
             await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
@@ -617,6 +623,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
+               
             }
 
             await Task.Delay(250);
