@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using SIL.Extensions;
@@ -211,6 +212,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TranslateQuick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
         #endregion
         #region Static DependencyProperties
+
+        /// <summary>
+        /// Identifies the HighlightedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenBackgroundProperty = DependencyProperty.Register(nameof(HighlightedTokenBackground), typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.Aquamarine));
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
@@ -535,12 +542,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            if (!SelectedTokens.Any())
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+            if (tokenDisplay is { IsSelected: false })
             {
-                var control = e.Source as FrameworkElement;
-                var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-                UpdateSelection(tokenDisplay!, false);
+                UpdateSelection(tokenDisplay, false);
             }
+
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }
 
@@ -565,7 +573,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         if (tokenDisplayViewModel.IsSource)
                         {
                             targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -580,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 });
                             ;
                             sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -597,7 +605,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         else
                         {
                             sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -612,7 +620,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 });
                             ;
                             targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -632,13 +640,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             {
                                 if (sourceTokens
                                     .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId))
+                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -649,13 +657,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             {
                                 if (targetTokens
                                     .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId))
+                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -668,14 +676,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     verseDisplayViewModel.SourceTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
                     verseDisplayViewModel.TargetTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
@@ -1073,6 +1081,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the background of highlighted tokens.
+        /// </summary>
+        public Brush HighlightedTokenBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenBackgroundProperty);
+            set => SetValue(HighlightedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
@@ -1450,12 +1467,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 EventAggregator.SubscribeOnUIThread(this);
             }
         }
-
-        //public VerseDisplay(IEventAggregator eventAggregator) : this()
-        //{
-        //    EventAggregator = eventAggregator;
-        //    EventAggregator.SubscribeOnUIThread(this);
-        //}
-
     }
 }

@@ -1559,7 +1559,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
         {
+            Task.Run(() => TokenRightButtonDownAsync(e).GetAwaiter());
+        }        
+        
+        public async Task TokenRightButtonDownAsync(TokenEventArgs e)
+        {
             UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
+            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
+            NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
         }
 
@@ -1663,8 +1670,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task NoteSendToParatextAsync(NoteEventArgs e)
         {
-            await NoteManager.SendToParatextAsync(e.Note);
-            Message = $"Note '{e.Note.Text}' sent to Paratext.";
+            try
+            {
+                await NoteManager.SendToParatextAsync(e.Note);
+                Message = $"Note '{e.Note.Text}' sent to Paratext.";
+            }
+            catch (Exception ex)
+            {
+                Message = $"Could not send note to Paratext: {ex.Message}";
+            }
         }
 
         public void NoteDeleted(object sender, NoteEventArgs e)
