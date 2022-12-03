@@ -13,8 +13,8 @@ namespace ClearDashboard.Wpf.Application.Collections
 
         public string CombinedSurfaceText { get; private set; } = string.Empty;
 
-        public EntityIdCollection EntityIds => new(Items.Select(t => t.Token.TokenId));
-
+        public EntityIdCollection EntityIds { get; set; } = new();
+            
         public NoteIdCollection NoteIds
         {
             get
@@ -35,6 +35,16 @@ namespace ClearDashboard.Wpf.Application.Collections
         public TokenDisplayViewModelCollection(TokenDisplayViewModel token) : this()
         {
             Add(token);
+        }
+
+        public bool Contains(TokenId tokenId)
+        {
+            return Items.Any(i => i.Token.TokenId.IdEquals(tokenId.Id));
+        }
+
+        public bool Contains(Token token)
+        {
+            return Contains(token.TokenId);
         }
 
         public void Remove(TokenId tokenId)
@@ -64,7 +74,7 @@ namespace ClearDashboard.Wpf.Application.Collections
             CombinedSurfaceText = string.Join(", ", Items.Select(t => t.SurfaceText));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(CombinedSurfaceText)));
 
-            //EntityIds = new EntityIdCollection(Items.Select(t => t.Token.TokenId));
+            EntityIds = new EntityIdCollection(Items.Select(t => t.Token.TokenId));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(EntityIds)));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(NoteIds)));
         }

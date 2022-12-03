@@ -633,7 +633,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
         public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
         public Visibility LabelSelectorVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
+        public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
         public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
         public Visibility ParatextSendVisibility => !AddMode && Note.EnableParatextSend ? Visibility.Visible : Visibility.Hidden;
         private bool IsAssociationButtonClicked { get; set; }
