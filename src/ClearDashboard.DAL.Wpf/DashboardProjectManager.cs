@@ -20,9 +20,10 @@ using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
-
+public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
 
 public record GetApplicationWindowSettings();
