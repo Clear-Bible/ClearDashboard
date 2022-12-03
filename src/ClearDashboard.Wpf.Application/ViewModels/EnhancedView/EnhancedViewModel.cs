@@ -52,7 +52,7 @@ using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class EnhancedViewModel : DashboardConductorAllActive<object>, IPaneViewModel, 
-        IHandle<ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage>,
+        IHandle<TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
@@ -235,12 +235,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Observable Properties
 
-        private ObservableCollection<TokensTextRow>? _tokensTextRows;
-        public ObservableCollection<TokensTextRow>? TokensTextRows
-        {
-            get => _tokensTextRows;
-            set => Set(ref _tokensTextRows, value);
-        }
+       
 
         private string _currentCorpusName = string.Empty;
         public string CurrentCorpusName
@@ -278,8 +273,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _message, value);
         }
 
-        private ObservableCollection<TokensTextRow>? _verses;
-        public ObservableCollection<TokensTextRow>? Verses
+        private BindableCollection<TokensTextRow>? _verses;
+        public BindableCollection<TokensTextRow>? Verses
         {
             get => _verses;
             set => Set(ref _verses, value);
@@ -432,8 +427,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";
-            TokensTextRows = new ObservableCollection<TokensTextRow>();
-            await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
+          
+           // await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
             await base.OnInitializeAsync(cancellationToken);
         }
 
@@ -704,12 +699,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     TokenizationType = message.TokenizationType;
 
-                    var bookFound = false;
-                    foreach (var book in metadata.AvailableBooks.Where(book => book.Code == CurrentBcv.BookName))
-                    {
-                        CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
-                        bookFound = true;
-                    }
+                    var bookFound = metadata.AvailableBooks.Any(b => b.Code == CurrentBcv.BookName);
+                    CurrentBook = metadata.AvailableBooks.FirstOrDefault(b => b.Code == CurrentBcv.BookName);
+                    //foreach (var book in metadata.AvailableBooks.Where(book => book.Code == CurrentBcv.BookName))
+                    //{
+                    //    CurrentBook = metadata?.AvailableBooks.First(b => b.Code == CurrentBcv.BookName);
+                    //    bookFound = true;
+                    //}
 
                     var project = _tokenProjects.FirstOrDefault(p => p.CorpusId == message.CorpusId);
 
@@ -1420,7 +1416,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async Task HandleAsync(ProjectDesignSurfaceViewModel.TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
@@ -1519,9 +1515,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion
 
         #endregion // Methods
-
-
-
 
         #region Event Handlers
 
