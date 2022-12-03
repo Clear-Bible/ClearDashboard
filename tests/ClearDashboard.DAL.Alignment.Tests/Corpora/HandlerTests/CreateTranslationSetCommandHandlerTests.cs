@@ -26,6 +26,7 @@ using ClearDashboard.DAL.Alignment.BackgroundServices;
 using System.Threading;
 using Autofac;
 using SIL.Machine.Utils;
+using ClearDashboard.DAL.Alignment.Lexicon;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -579,14 +580,99 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             ProjectDbContext!.TokenComponents.Add(newModelToken);
             await ProjectDbContext!.SaveChangesAsync();
 
-            var newTokenId = ModelHelper.BuildTokenId(newModelToken);
+            var newToken = ModelHelper.BuildToken(newModelToken);
 
-            var translationsForNewToken = await translationSet.GetTranslations(new List<TokenId>() { newTokenId });
+            var translationsForNewToken = await translationSet.GetTranslations(new List<TokenId>() { newToken.TokenId });
             Assert.Single(translationsForNewToken);
-            Assert.Equal(newTokenId, translationsForNewToken.First().SourceToken.TokenId);
+            Assert.Equal(newToken.TokenId, translationsForNewToken.First().SourceToken.TokenId);
             Assert.Equal("FromAlignmentModel", translationsForNewToken.First().OriginatedFrom);
             Assert.Empty(translationsForNewToken.First().TargetTranslationText);
             Assert.Null(translationsForNewToken.First().TranslationId);  // The Translation returned should be a default 'empty' translation - not from the DB
+
+            var tme = await translationSet.GetTranslationModelEntryForToken(newToken);
+            Assert.NotNull(tme);
+            Assert.Empty(tme);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async Task TranslationSet__Lexicon()
+    {
+        try
+        {
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+            Assert.NotNull(translationSet);
+
+            Output.WriteLine("Denormalizing alignment set data");
+            await RunAlignmentSetDenormalizationAsync(Guid.Empty);
+
+            var tokensToQuery = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizedCorpusId == parallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId!.Id)
+                .Take(4)
+                .ToArray();
+
+            Assert.NotNull(tokensToQuery);
+            Assert.Equal(4, tokensToQuery.Length);
+
+            var lexicalItem1 = await new LexicalItem { 
+                Text = tokensToQuery[0].TrainingText,
+                Language = parallelCorpus.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language
+            }.Create(Mediator!);
+            await lexicalItem1.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { 
+                Text = "li1_def1",
+                Language = parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language
+            });
+            await lexicalItem1.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { Text = "li1_def2" /* no language */ });
+
+            var lexicalItem2 = await new LexicalItem { Text = tokensToQuery[1].TrainingText /* no language */  }.Create(Mediator!);
+            await lexicalItem2.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { Text = "li2_def1" /* no language */ });
+            await lexicalItem2.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { 
+                Text = "li2_def2",
+                Language = "bogus"
+            });
+            await lexicalItem2.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { 
+                Text = "li2_def3",
+                Language = parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language
+            });
+
+            var lexicalItem3 = await new LexicalItem { Text = tokensToQuery[3].TrainingText, Language = "bogus"  }.Create(Mediator!);
+            await lexicalItem3.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { Text = "li3_def1" /* no language */ });
+
+            var tokenIds = tokensToQuery.Where(t => t.TrainingText != ",").Select(t => ModelHelper.BuildTokenId(t));
+
+            var translations = await translationSet.GetTranslations(tokenIds);
+            Assert.Equal(3, translations.Count());
+
+            var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == "FromLexicon");
+            Assert.Equal(2, translationsFromLexicon.Count());
+
+            var translation1 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexicalItem1.Text).FirstOrDefault();
+            Assert.NotNull(translation1);
+            Assert.Null(translation1.TranslationId);
+            Assert.Equal(tokensToQuery[0].Id, translation1.SourceToken.TokenId.Id);
+            Assert.Equal("li1_def1/li1_def2", translation1.TargetTranslationText);
+
+            var translation2 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexicalItem2.Text).FirstOrDefault();
+            Assert.NotNull(translation2);
+            Assert.Null(translation2.TranslationId);
+            Assert.Equal(tokensToQuery[1].Id, translation2.SourceToken.TokenId.Id);
+            Assert.Equal("li2_def1/li2_def3", translation2.TargetTranslationText);
         }
         finally
         {

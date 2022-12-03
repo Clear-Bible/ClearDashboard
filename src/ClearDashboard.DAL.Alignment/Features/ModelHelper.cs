@@ -2,6 +2,7 @@
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Data;
@@ -431,6 +432,33 @@ namespace ClearDashboard.DAL.Alignment.Features
                 note.NoteDomainEntityAssociations
                     .Select(nd => nd.DomainEntityIdName!.CreateInstanceByNameAndSetId((Guid)nd.DomainEntityIdGuid!)).ToHashSet()
             );
+        }
+
+        public static LexicalItemId BuildLexicalItemId(Models.LexicalItem lexicalItem)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.LexicalItem, LexicalItemId>(lexicalItem);
+        }
+
+        public static LexicalItemDefinitionId BuildLexicalItemDefinitionId(Models.LexicalItemDefinition lexicalItemDefinition)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.LexicalItemDefinition, LexicalItemDefinitionId>(lexicalItemDefinition);
+        }
+
+        public static SemanticDomainId BuildSemanticDomainId(Models.SemanticDomain semanticDomain)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.SemanticDomain, SemanticDomainId>(semanticDomain);
+        }
+
+        private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity) 
+            where T : Models.SynchronizableTimestampedEntity 
+            where I : SimpleSynchronizableTimestampedEntityId<I>, new()
+        {
+            if (entity.User == null)
+            {
+                throw new MediatorErrorEngineException($"DB Note passed to Build{typeof(I).Name} does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
+
+            return SimpleSynchronizableTimestampedEntityId<I>.Create(entity.Id, entity.Created, BuildUserId(entity.User!));
         }
 
         public static Type? FindEntityIdGenericType(this Type givenType)

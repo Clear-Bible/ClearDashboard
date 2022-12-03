@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class SemanticDomain : IdentifiableEntity
+    public class SemanticDomain : SynchronizableTimestampedEntity
     {
         public SemanticDomain()
         {

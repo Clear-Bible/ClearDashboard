@@ -1,11 +1,10 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public record LexicalItemDefinitionId : BaseId
+    public class LexicalItemDefinitionId : SimpleSynchronizableTimestampedEntityId<LexicalItemDefinitionId>
     {
-        public LexicalItemDefinitionId(Guid id) : base(id)
-        {
-        }
     }
 }

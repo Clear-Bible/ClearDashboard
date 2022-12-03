@@ -1,11 +1,10 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Features;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public record SemanticDomainId : BaseId
+    public class SemanticDomainId : SimpleSynchronizableTimestampedEntityId<SemanticDomainId>
     {
-        public SemanticDomainId(Guid id) : base(id)
-        {
-        }
     }
 }

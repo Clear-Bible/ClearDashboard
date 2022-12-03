@@ -67,9 +67,10 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             return this;
         }
 
-        public async void PutLexicalItemDefinition(IMediator mediator, LexicalItemDefinition lexicalItemDefinition, CancellationToken token = default)
+        public async Task PutLexicalItemDefinition(IMediator mediator, LexicalItemDefinition lexicalItemDefinition, CancellationToken token = default)
         {
-            if (lexicalItemDefinitions_.Any(l => l.LexicalItemDefinitionId == lexicalItemDefinition.LexicalItemDefinitionId))
+            if (lexicalItemDefinition.LexicalItemDefinitionId is not null && 
+                lexicalItemDefinitions_.Any(l => l.LexicalItemDefinitionId == lexicalItemDefinition.LexicalItemDefinitionId))
             {
                 return;
             }
@@ -77,10 +78,6 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             if (LexicalItemId is null)
             {
                 throw new MediatorErrorEngineException("Create LexicalItem before associating with given LexicalItemDefinition");
-            }
-            if (lexicalItemDefinition.LexicalItemDefinitionId is null)
-            {
-                throw new MediatorErrorEngineException("Create given LexicalItemDefinition before associating with LexicalItem");
             }
 
             var result = await mediator.Send(new PutLexicalItemDefinitionCommand(LexicalItemId, lexicalItemDefinition), token);
