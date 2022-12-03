@@ -485,7 +485,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         {
                             // Add Verses to focused enhanced view
                             Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", Logger!),
-                            Id = "AddTranslationToEnhancedViewId",
+                            Id = "AddInterlinearToEnhancedViewId",
                             ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                             IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
                             TranslationSetId = translationSet.Id.ToString(),

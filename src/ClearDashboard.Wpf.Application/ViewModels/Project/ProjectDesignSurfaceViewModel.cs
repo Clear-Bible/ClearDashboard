@@ -52,7 +52,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Member Variables
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
-        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
+        //public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly IWindowManager? _windowManager;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
@@ -530,7 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 .Transform<SetTrainingByTrainingLowercase>()
                 .Transform<AddPronominalReferencesToTokens>();
 
-                var books = BookInfo.GenerateScriptureBookList()
+            var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
                     .Select(t => t.Id)
                     .Contains(bi.Code))
@@ -841,7 +841,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.TargetParatextId));
                     }
                     break;
-                case "AddTranslationToEnhancedViewId":
+                case "AddInterlinearToEnhancedViewId":
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
