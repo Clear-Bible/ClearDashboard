@@ -15,7 +15,7 @@
     x:Name="MarbleViewControl"
     d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="8000"
+    d:DesignHeight="900"
     d:DesignWidth="800"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="{DynamicResource MaterialDesignFont}"
@@ -233,11 +233,11 @@
                             BorderBrush="{StaticResource MaterialDesignLightBackground}"
                             BorderThickness="2"
                             CornerRadius="3">
+
                             <Button
                                 x:Name="ShowLogos"
-                                Grid.Column="1"
-                                Width="32"
-                                Height="32"
+                                Width="26"
+                                Height="26"
                                 Padding="0"
                                 VerticalAlignment="Center"
                                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
@@ -245,8 +245,8 @@
                                 CommandParameter="{Binding}">
                                 <Button.Content>
                                     <Image
-                                        Width="32"
-                                        Height="32"
+                                        Width="26"
+                                        Height="26"
                                         Source="/Resources/logos_icon.png" />
                                 </Button.Content>
                             </Button>
