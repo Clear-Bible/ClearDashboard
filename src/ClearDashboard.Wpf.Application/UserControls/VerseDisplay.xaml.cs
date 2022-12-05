@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using SIL.Extensions;
@@ -572,7 +573,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         if (tokenDisplayViewModel.IsSource)
                         {
                             targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -587,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 });
                             ;
                             sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -604,7 +605,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         else
                         {
                             sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -619,7 +620,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 });
                             ;
                             targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -639,7 +640,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             {
                                 if (sourceTokens
                                     .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId))
+                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
                                 {
                                     tdm.IsHighlighted = true;
                                 }
@@ -656,7 +657,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             {
                                 if (targetTokens
                                     .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId))
+                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
                                 {
                                     tdm.IsHighlighted = true;
                                 }
