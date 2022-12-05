@@ -23,6 +23,7 @@
                 Click="ClickUpdateLink_OnClick"
                 Style="{StaticResource TransparentButton}">
                 <TextBlock
+                    Name="UpdateLink"
                     Cursor="Hand"
                     Foreground="DodgerBlue"
                     Text="{helpers:Localization ShellView_UpdateFound}"
