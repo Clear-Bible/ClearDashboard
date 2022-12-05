@@ -146,15 +146,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
 
         #region Public Properties
+        
+        
 
-        public bool IsTargetRtl = false;
-
+        
         #endregion //Public Properties
 
 
         #region Observable Properties
 
         #endregion //Observable Properties
+
+        private bool _isTargetRtl = false;
+        public bool IsTargetRtl
+        {
+            get => _isTargetRtl;
+            set
+            {
+                _isTargetRtl = value;
+                NotifyOfPropertyChange(() => IsTargetRtl);
+            }
+        }
+
 
         private ObservableCollection<Senses> _senses = new();
         public ObservableCollection<Senses> Senses
@@ -235,7 +248,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private bool _isOT;
+        private bool _isOT = false;
         public bool IsOT
         {
             get => _isOT;
@@ -582,6 +595,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             if (Senses.Count > 0)
             {
                 SelectedSense = Senses[0];
+            }
+
+            // get ot/nt
+            var bookNum = int.Parse(CurrentBcv.BBBCCCVVV.Substring(0, 3));
+            if (bookNum < 40)
+            {
+                IsOT = true;
+            }
+            else
+            {
+                IsOT = false;
             }
 
         }
