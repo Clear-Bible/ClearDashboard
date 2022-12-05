@@ -33,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             //no-op
         }
 
-        public AboutViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
+        public AboutViewModel(INavigationService navigationService, ILogger<AboutViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {

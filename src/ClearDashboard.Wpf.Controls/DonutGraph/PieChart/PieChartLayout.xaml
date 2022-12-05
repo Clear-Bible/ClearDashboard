@@ -9,7 +9,7 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <!--  http://cebla5.spaces.live.com/?_c11_BlogPart_BlogPart=blogview&_c=BlogPart&partqs=cat%3DWPF  -->
-    <Grid>
+    <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
