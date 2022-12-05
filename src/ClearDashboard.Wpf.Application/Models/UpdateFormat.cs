@@ -65,7 +65,7 @@ namespace ClearDashboard.Wpf.Application.Models
 
                 try
                 {
-                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/Version-0.4.4.0/VersionHistory/ClearDashboard.json");
+                    HttpWebRequest req = (HttpWebRequest)WebRequest.Create("https://raw.githubusercontent.com/Clear-Bible/CLEAR_External_Releases/main/VersionHistory/ClearDashboard.json");
                     req.UserAgent = "[any words that is more than 5 characters]";
                     req.Accept = "application/json";
                     WebResponse response = req.GetResponse(); //Error Here
