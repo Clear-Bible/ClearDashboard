@@ -721,6 +721,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
 
+        private void OnToolTipOpening(object sender, ToolTipEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(ExtendedProperties))
+            {
+                e.Handled = true;
+            }
+        }
+
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
@@ -1219,6 +1227,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CalculateLayout();
         }
-
     }
 }

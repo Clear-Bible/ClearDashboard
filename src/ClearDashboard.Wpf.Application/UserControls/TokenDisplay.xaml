@@ -43,7 +43,8 @@
             MouseRightButtonDown="OnTokenRightButtonDown"
             MouseRightButtonUp="OnTokenRightButtonUp"
             MouseWheel="OnTokenMouseWheel"
-            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
+            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"
+            ToolTipOpening="OnToolTipOpening">
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
@@ -61,9 +62,8 @@
                     HorizontalOffset="10"
                     Placement="Left"
                     PlacementRectangle="50,0,0,0"
-                    VerticalOffset="20"
-                    Visibility="{Binding ElementName=ExtendedPropertiesTreeViewName, Path=Visibility}">
-                    <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
+                    VerticalOffset="20">
+                        <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
                 </ToolTip>
             </Button.ToolTip>
         </Button>
