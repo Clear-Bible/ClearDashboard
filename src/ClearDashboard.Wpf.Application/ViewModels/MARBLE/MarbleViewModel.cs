@@ -535,8 +535,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             if (_lexicalLinks.Count > 0)
             {
-                SelectedHebrew = _lexicalLinks[0].Word;
                 SelectedLexicalLink = _lexicalLinks[0];
+                SelectedHebrew = _lexicalLinks[0].Word;
                 await GetWord().ConfigureAwait(false);
             }
             NotifyOfPropertyChange(() => LexicalLinks);
@@ -677,7 +677,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 return;
             }
             
-
             var StrongNum = (string)obj;
             // remove all the alphabetic characters
             var LogosRef = Regex.Replace(StrongNum, "[^0-9.]", "");
