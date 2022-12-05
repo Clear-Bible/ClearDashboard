@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Marble"
     xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Marble"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -230,24 +229,28 @@
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <Button
-                            x:Name="ShowLogos"
-                            Grid.Column="1"
-                            Width="32"
-                            Height="32"
-                            Margin="5,0,0,0"
-                            Padding="0"
-                            VerticalAlignment="Center"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            Command="{Binding DataContext.LaunchLogosCommand, ElementName=MainGrid}"
-                            CommandParameter="{Binding}">
-                            <Button.Content>
-                                <Image
-                                    Width="32"
-                                    Height="32"
-                                    Source="/Resources/logos_icon.png" />
-                            </Button.Content>
-                        </Button>
+                        <Border
+                            BorderBrush="{StaticResource MaterialDesignLightBackground}"
+                            BorderThickness="2"
+                            CornerRadius="3">
+                            <Button
+                                x:Name="ShowLogos"
+                                Grid.Column="1"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                Command="{Binding DataContext.LaunchLogosCommand, ElementName=MainGrid}"
+                                CommandParameter="{Binding}">
+                                <Button.Content>
+                                    <Image
+                                        Width="32"
+                                        Height="32"
+                                        Source="/Resources/logos_icon.png" />
+                                </Button.Content>
+                            </Button>
+                        </Border>
 
                         <TextBlock
                             Margin="8,0,0,0"
@@ -257,12 +260,12 @@
                             Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                             Text="{Binding DataContext.SelectedHebrew, ElementName=MainGrid}" />
 
-                        
+
                         <TextBlock
                             Margin="8,0,0,0"
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                            Text="{Binding }" />
+                            Text="{Binding}" />
                     </StackPanel>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
@@ -676,10 +679,10 @@
                                     IsChecked="True"
                                     Tag="All" />
                                 <RadioButton
-                                    Name="rbBook"
+                                    Name="RbBook"
                                     Margin="10"
                                     Command="{Binding Path=SetContextCommand}"
-                                    CommandParameter="{Binding ElementName=rbBook, Path=Tag}"
+                                    CommandParameter="{Binding ElementName=RbBook, Path=Tag}"
                                     Content="Book"
                                     GroupName="context"
                                     IsChecked="False"
