@@ -172,7 +172,7 @@
 
                 <ListBox ItemsSource="{Binding LexicalLinks}" SelectedValue="{Binding SelectedLexicalLink, Mode=TwoWay}">
                     <ListBox.Style>
-                        <Style BasedOn="{StaticResource MaterialDesignChoiceChipAccentListBox}" TargetType="ListBox">
+                        <Style BasedOn="{StaticResource MaterialDesignChoiceChipPrimaryListBox}" TargetType="ListBox">
                             <Setter Property="FlowDirection" Value="LeftToRight" />
                             <Setter Property="FontSize" Value="16" />
                             <Setter Property="FontFamily" Value="SBL Greek" />
@@ -227,6 +227,46 @@
             Width="Auto"
             Margin="10,5,10,10"
             Header="General Information">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            x:Name="ShowLogos"
+                            Grid.Column="1"
+                            Width="32"
+                            Height="32"
+                            Margin="5,0,0,0"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            Command="{Binding DataContext.LaunchLogosCommand, ElementName=MainGrid}"
+                            CommandParameter="{Binding}">
+                            <Button.Content>
+                                <Image
+                                    Width="32"
+                                    Height="32"
+                                    Source="/Resources/logos_icon.png" />
+                            </Button.Content>
+                        </Button>
+
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Text="{Binding DataContext.SelectedHebrew, ElementName=MainGrid}" />
+
+                        
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                            Text="{Binding }" />
+                    </StackPanel>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+
             <ScrollViewer>
                 <StackPanel Orientation="Horizontal">
                     <Expander Header="Parts of Speech   ">
@@ -340,7 +380,7 @@
                                                 Grid.Column="0"
                                                 Height="20"
                                                 VerticalAlignment="Center"
-                                                Command="{Binding DataContext.LaunchLogosCommand, ElementName=LvStrongCodes}"
+                                                Command="{Binding DataContext.LaunchLogosStrongNumberCommand, ElementName=LvStrongCodes}"
                                                 CommandParameter="{Binding}">
                                                 <Button.Style>
                                                     <Style BasedOn="{StaticResource MaterialDesignFlatButton}" TargetType="Button">
@@ -667,19 +707,22 @@
                                     </Style.Triggers>
                                 </Style>
                             </Border.Style>
-                            <StackPanel Orientation="Vertical" Margin="5">
-                                <TextBlock Foreground="{StaticResource SecondaryHueDarkBrush}" Text="{Binding VerseTextId}" TextDecorations="Underline" />
+                            <StackPanel Margin="5" Orientation="Vertical">
+                                <TextBlock
+                                    Foreground="{StaticResource SecondaryHueDarkBrush}"
+                                    Text="{Binding VerseTextId}"
+                                    TextDecorations="Underline" />
                                 <TextBlock
                                     FontFamily="{Binding VerseTextFontFamily}"
                                     Text="{Binding VerseText}"
-                                    TextWrapping="Wrap" >
+                                    TextWrapping="Wrap">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="FlowDirection" Value="LeftToRight" />
                                             <Setter Property="FontSize" Value="16" />
                                             <Setter Property="FontFamily" Value="SBL Greek" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsTargetRtl }" Value="True">
+                                                <DataTrigger Binding="{Binding IsTargetRtl}" Value="True">
                                                     <Setter Property="FlowDirection" Value="RightToLeft" />
                                                     <Setter Property="FontSize" Value="20" />
                                                     <Setter Property="FontFamily" Value="SBL Hebrew" />
@@ -691,7 +734,7 @@
                                 <TextBlock
                                     FontFamily="{Binding SourceTextFontFamily}"
                                     Text="{Binding SourceText}"
-                                    TextWrapping="Wrap" >
+                                    TextWrapping="Wrap">
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="FlowDirection" Value="LeftToRight" />
@@ -699,7 +742,7 @@
                                             <Setter Property="FontFamily" Value="SBL Greek" />
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding LexicalLinks[0].IsRtl}" Value="True">
-                                                
+
                                                     <Setter Property="FlowDirection" Value="RightToLeft" />
                                                     <Setter Property="FontSize" Value="20" />
                                                     <Setter Property="FontFamily" Value="SBL Hebrew" />

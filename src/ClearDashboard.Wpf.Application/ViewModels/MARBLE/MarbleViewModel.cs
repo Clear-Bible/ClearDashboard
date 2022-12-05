@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -28,6 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         #region Commands
 
         public ICommand LaunchLogosCommand { get; set; }
+        public ICommand LaunchLogosStrongNumberCommand { get; set; }
         public ICommand SearchSenseCommand { get; set; }
         public ICommand SetContextCommand { get; set; }
         public ICommand GetVerseDetailCommand { get; set; }
@@ -325,7 +327,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             DockSide = EDockSide.Bottom;
 
             // wire up the commands
-            LaunchLogosCommand = new RelayCommand(LaunchLogosStrongNumber);
+            LaunchLogosCommand = new RelayCommand(LaunchLogos);
+            LaunchLogosStrongNumberCommand = new RelayCommand(LaunchLogosStrongNumber);
             SearchSenseCommand = new RelayCommandAsync(SearchSense);
             SetContextCommand = new RelayCommandAsync(SetContext);
             GetVerseDetailCommand = new RelayCommandAsync(GetVerseDetail);
@@ -520,6 +523,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             if (_lexicalLinks.Count > 0)
             {
                 SelectedHebrew = _lexicalLinks[0].Word;
+                SelectedLexicalLink = _lexicalLinks[0];
                 await GetWord().ConfigureAwait(false);
             }
             NotifyOfPropertyChange(() => LexicalLinks);
@@ -616,19 +620,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private void LaunchLogosStrongNumber(object obj)
+
+        private void LaunchLogos(object obj)
         {
             if (obj is null)
             {
                 return;
             }
 
+
+            var safeUrl = Uri.EscapeDataString(SelectedHebrew).Replace('%', '$');
+
+            // OT or NT?
+            if (CurrentBcv.BookNum < 40)
+            {
+                // Hebrew link
+                var hebrewPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fhe$2F";
+                LaunchWebPage.TryOpenUrl(hebrewPrefix + safeUrl);
+            }
+            else
+            {
+                // Greek link
+                var greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
+                LaunchWebPage.TryOpenUrl(greekPrefix + safeUrl);
+            }
+        }
+
+        private void LaunchLogosStrongNumber(object obj)
+        {
+            if (SelectedHebrew == "")
+            {
+                return;
+            }
+            
+
             var StrongNum = (string)obj;
-
-            var LogosRef = Convert.ToInt32(StrongNum.Substring(1));
-
-            //var LogosRef = Uri.EscapeDataString(chopped).Replace('%', '$');
-
+            // remove all the alphabetic characters
+            var LogosRef = Regex.Replace(StrongNum, "[^0-9.]", "");
 
             //// OT or NT?
             if (StrongNum.StartsWith("H"))
