@@ -1,0 +1,185 @@
+{
+   "tag_options" : {
+      "gender" : [
+         "-",
+         "c",
+         "f",
+         "m"
+      ],
+      "language" : [
+            "H",
+            "A"
+         ],
+      "number" : [
+            "-",
+            "s",
+            "d",
+            "p"
+         ],
+      "part_of_speech" : [
+            "vb",
+            "ns",
+            "np",
+            "ab",
+            "aj",
+            "pr",
+            "cj",
+            "pp",
+            "pd",
+            "pi",
+            "ij",
+            "ng",
+            "ir",
+            "ar"
+         ],
+      "state" : [
+            "-",
+            "a",
+            "c",
+            "e"
+         ],
+      "suffix_gender" : [
+          "-",
+          "c",
+          "f",
+          "m"
+         ],
+      "suffix_number" : [
+            "-",
+            "s",
+            "p"
+         ],
+      "suffix_person" : [
+            "-",
+            "1",
+            "2",
+            "3"
+         ],
+      "person" : [
+            "-",
+            "1",
+            "2",
+            "3"
+         ],
+      "verbal_stem" : [
+            "----",
+            "afel",
+            "esht",
+            "etpa",
+            "etpe",
+            "etta",
+            "haf-",
+            "hif-",
+            "hit-",
+            "hof-",
+            "hotp",
+            "hsht",
+            "htpa",
+            "htpe",
+            "htpo",
+            "nif-",
+            "nit-",
+            "pael",
+            "pasq",
+            "peal",
+            "peil",
+            "piel",
+            "poal",
+            "poel",
+            "pual",
+            "qal-",
+            "shaf",
+            "tif-"
+         ],
+      "verbal_tense" : [
+            "----",
+            "impf",
+            "impv",
+            "infa",
+            "infc",
+            "perf",
+            "ptca",
+            "ptcp",
+            "wayq",
+            "weyq"
+         ]
+   },
+   "tag_root" : "part_of_speech",
+   "tag_sequence" : {
+         "ab" : [
+            "language"
+         ],
+         "aj" : [
+               "gender",
+               "number",
+               "state",
+               "suffix_person",
+               "suffix_gender",
+               "suffix_number",
+               "language"
+            ],
+         "ar" : [
+               "language"
+            ],
+         "cj" : [
+               "language"
+            ],
+         "ij" : [
+               "suffix_person",
+               "suffix_gender",
+               "suffix_number",
+               "language"
+            ],
+         "ir" : [
+               "suffix_person",
+               "suffix_gender",
+               "suffix_number",
+               "language"
+            ],
+         "ng" : [
+               "language"
+            ],
+         "np" : [
+               "gender",
+               "number",
+               "language"
+            ],
+         "ns" : [
+               "gender",
+               "number",
+               "state",
+               "suffix_person",
+               "suffix_gender",
+               "suffix_number",
+               "language"
+            ],
+         "pd" : [
+               "gender",
+               "number",
+               "language"
+            ],
+         "pi" : [
+               "language"
+            ],
+         "pp" : [
+               "person", "gender", "number",
+               "language"
+            ],
+         "pr" : [
+               "suffix_person",
+               "suffix_gender",
+               "suffix_number",
+               "language"
+            ],
+         "vb" : [
+               "verbal_stem",
+               "verbal_tense",
+               "person", "gender", "number",
+               "state",
+               "suffix_person",
+               "suffix_gender",
+               "suffix_number",
+               "language"
+            ]
+      }
+}

@@ -289,63 +289,7 @@
 
                     <ScrollViewer>
                         <StackPanel Orientation="Horizontal">
-                            <Expander Header="Parts of Speech   ">
-                                <Expander.Style>
-                                    <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                        <Setter Property="IsExpanded" Value="True" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding SelectedSense.PartsOfSpeech.Count}" Value="0">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Expander.Style>
-                                <StackPanel
-                                    Margin="3"
-                                    Background="{StaticResource MaterialDesignPaper}"
-                                    Orientation="Vertical"
-                                    TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
-                                    <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.PartsOfSpeech}">
-                                        <ListBox.ItemContainerStyle>
-                                            <Style TargetType="ListBoxItem">
-                                                <Setter Property="Padding" Value="0" />
-                                                <Setter Property="Margin" Value="0" />
-                                                <Setter Property="Height" Value="30" />
-
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsSelected" Value="True">
-                                                        <Setter Property="FontWeight" Value="Bold" />
-                                                        <Setter Property="Background" Value="Transparent" />
-                                                        <Setter Property="Foreground" Value="Black" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ListBox.ItemContainerStyle>
-
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid Margin="3" HorizontalAlignment="Stretch">
-                                                    <Grid.Background>
-                                                        <SolidColorBrush Color="#EBEBEB" />
-                                                    </Grid.Background>
-
-
-                                                    <!--  the name of this item  -->
-                                                    <TextBlock
-                                                        Margin="3"
-                                                        VerticalAlignment="Center"
-                                                        FontSize="14"
-                                                        FontWeight="Medium"
-                                                        Text="{Binding .}"
-                                                        TextWrapping="Wrap" />
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </StackPanel>
-                            </Expander>
 
                             <Expander Header="Strong Codes   ">
                                 <Expander.Style>
@@ -437,6 +381,82 @@
                                 </StackPanel>
                             </Expander>
 
+                            <Expander Header="Parts of Speech   ">
+                                <Expander.Style>
+                                    <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Setter Property="IsExpanded" Value="True" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedSense.PartsOfSpeech.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Expander.Style>
+                                <StackPanel
+                                    Margin="3"
+                                    Background="{StaticResource MaterialDesignPaper}"
+                                    Orientation="Vertical"
+                                    TextBlock.Foreground="{StaticResource MaterialDesignBody}">
+
+                                    <ListBox MaxHeight="300" ItemsSource="{Binding SelectedSense.PartsOfSpeech}">
+                                        <ListBox.ItemContainerStyle>
+                                            <Style TargetType="ListBoxItem">
+                                                <Setter Property="Padding" Value="0" />
+                                                <Setter Property="Margin" Value="0" />
+                                                <Setter Property="Height" Value="30" />
+
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                        <Setter Property="Background" Value="Transparent" />
+                                                        <Setter Property="Foreground" Value="Black" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ListBox.ItemContainerStyle>
+
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="3" HorizontalAlignment="Stretch">
+                                                    <Grid.Background>
+                                                        <SolidColorBrush Color="#EBEBEB" />
+                                                    </Grid.Background>
+
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <!--  instance id number  -->
+                                                        <TextBlock
+                                                            Margin="3"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="14"
+                                                            FontWeight="Medium"
+                                                            Foreground="{StaticResource PrimaryHueMidBrush}"
+                                                            Text="{Binding Id}"
+                                                            TextWrapping="Wrap" />
+                                                        <!--  pos short  -->
+                                                        <TextBlock
+                                                            Margin="3"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="14"
+                                                            FontWeight="Medium"
+                                                            Text="{Binding Abbr}"
+                                                            TextWrapping="Wrap" />
+                                                        <!--  pos Long  -->
+                                                        <TextBlock
+                                                            Margin="3"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="14"
+                                                            FontWeight="Medium"
+                                                            Foreground="{StaticResource PrimaryHueMidBrush}"
+                                                            Text="{Binding Long}"
+                                                            TextWrapping="Wrap" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </StackPanel>
+                            </Expander>
 
                             <Expander Header="Related Lemmas   ">
                                 <Expander.Style>
@@ -482,6 +502,7 @@
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="30" />
                                                         <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="Auto" />
                                                     </Grid.ColumnDefinitions>
 
                                                     <Button
@@ -504,9 +525,20 @@
                                                         <materialDesign:PackIcon Kind="Magnify" />
                                                     </Button>
 
-                                                    <!--  the name of this item  -->
+                                                    <!--  the instance id  -->
                                                     <TextBlock
                                                         Grid.Column="1"
+                                                        Margin="3"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="14"
+                                                        FontWeight="Medium"
+                                                        Foreground="{StaticResource PrimaryHueMidBrush}"
+                                                        Text="{Binding Id}"
+                                                        TextWrapping="Wrap" />
+
+                                                    <!--  the source word  -->
+                                                    <TextBlock
+                                                        Grid.Column="2"
                                                         Margin="3"
                                                         VerticalAlignment="Center"
                                                         FontWeight="Medium"
