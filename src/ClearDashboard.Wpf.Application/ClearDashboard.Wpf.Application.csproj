@@ -103,7 +103,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearApplicationFoundation" Version="1.0.36" />
+    <PackageReference Include="ClearApplicationFoundation" Version="1.0.41" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
