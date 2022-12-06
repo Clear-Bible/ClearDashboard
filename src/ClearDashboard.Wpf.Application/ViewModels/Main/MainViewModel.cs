@@ -5,12 +5,12 @@ using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
@@ -28,7 +28,6 @@ using ClearDashboard.Wpf.Application.Views.Main;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -44,9 +43,8 @@ using Point = System.Drawing.Point;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
+
     public class MainViewModel : Conductor<IScreen>.Collection.AllActive,
-                IHandle<VerseChangedMessage>,
-                IHandle<ProjectChangedMessage>,
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
                 IHandle<AddTokenizedCorpusToEnhancedViewMessage>,
@@ -57,21 +55,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>
     {
-        private readonly LongRunningTaskManager? _longRunningTaskManager;
-        private ILifetimeScope? LifetimeScope { get; }
-        private IWindowManager? WindowManager { get; }
-        public INavigationService? NavigationService { get; set; }
-        private NoteManager? NoteManager { get; }
-#nullable disable
         #region Member Variables
+        #nullable disable
+        private readonly LongRunningTaskManager _longRunningTaskManager;
+        private ILifetimeScope LifetimeScope { get; }
+        private IWindowManager WindowManager { get; }
+        private INavigationService NavigationService { get; set; }
+        private NoteManager NoteManager { get; }
+
+       
         private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
         private ILogger<MainViewModel> Logger { get; }
 
-#pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
-        private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
+       
 
+        private string _lastLayout = "";
+
+        private WindowSettings _windowSettings;
+        #endregion //Member Variables
+
+        #region Public Properties
+
+        private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
         public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel
         {
             get => _projectDesignSurfaceViewModel;
@@ -84,18 +91,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             get => _pinsViewModel;
             set => Set(ref _pinsViewModel, value);
         }
-#pragma warning restore CA1416 // Validate platform compatibility
-
-        private string _lastLayout = "";
-
-        private WindowSettings _windowSettings;
-
-
-
-
-        #endregion //Member Variables
-
-        #region Public Properties
 
         private bool _paratextSync = true;
         // ReSharper disable once UnusedMember.Global
@@ -116,7 +111,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
 
-        public List<ParatextProjectMetadata> ProjectMetadata = new();
+        private List<ParatextProjectMetadata> _projectMetadata = new();
 
         #endregion //Public Properties
 
@@ -147,13 +142,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             get => _selectedLayoutText;
             set => Set(ref _selectedLayoutText, value);
-        }
-
-        private Dictionary<string, string> _bcvDictionary;
-        private Dictionary<string, string> BCVDictionary
-        {
-            get => _bcvDictionary;
-            set => Set(ref _bcvDictionary, value);
         }
 
         private string _windowIdToLoad;
@@ -278,16 +266,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        private BookChapterVerseViewModel _currentBcv = new();
-        public BookChapterVerseViewModel CurrentBcv
-        {
-            get => _currentBcv;
-            set
-            {
-                _currentBcv = value;
-                NotifyOfPropertyChange(() => CurrentBcv);
-            }
-        }
 
         private LayoutFile _selectedLayout;
         public LayoutFile SelectedLayout
@@ -393,14 +371,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            await LoadParatextProjectMetadata(cancellationToken);
             await LoadProject();
             await NoteManager!.InitializeAsync();
             await RebuildMainMenu();
             await ActivateDockedWindowViewModels();
             await LoadAvalonDockLayout();
             await LoadEnhancedViewTabs();
-            await ConfigureCurrentBcv();
+           // await ConfigureCurrentBcv();
             await base.OnInitializeAsync(cancellationToken);
+        }
+
+        private async Task LoadParatextProjectMetadata(CancellationToken cancellationToken)
+        {
+            var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken)!;
+            if (result.Success && result.HasData)
+            {
+                _projectMetadata = result.Data;
+            }
         }
 
 
@@ -694,39 +682,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         //}
 
-        private async Task ConfigureCurrentBcv()
-        {
-            // grab the dictionary of all the verse lookups
-            if (ProjectManager?.CurrentParatextProject is not null)
-            {
-                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+        //private async Task ConfigureCurrentBcv()
+        //{
+        //    // grab the dictionary of all the verse lookups
+        //    if (ProjectManager?.CurrentParatextProject is not null)
+        //    {
+        //        BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
 
-                var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
-                    .Select(g => g.First())
-                    .ToList();
+        //        var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
+        //            .Select(g => g.First())
+        //            .ToList();
 
-                foreach (var book in books)
-                {
-                    var bookId = book.Substring(0, 3);
+        //        foreach (var book in books)
+        //        {
+        //            var bookId = book.Substring(0, 3);
 
-                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+        //            var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
 
-                    CurrentBcv.BibleBookList?.Add(bookName);
-                }
-            }
-            else
-            {
-                BCVDictionary = new Dictionary<string, string>();
-            }
+        //            CurrentBcv.BibleBookList?.Add(bookName);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        BCVDictionary = new Dictionary<string, string>();
+        //    }
 
-            // set the CurrentBcv prior to listening to the event
-            CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
+        //    // set the CurrentBcv prior to listening to the event
+        //    CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
 
-            // Subscribe to changes of the Book Chapter Verse data object.
-            //CurrentBcv.PropertyChanged += BcvChanged;
+        //    // Subscribe to changes of the Book Chapter Verse data object.
+        //    //CurrentBcv.PropertyChanged += BcvChanged;
 
-            await Task.CompletedTask;
-        }
+        //    await Task.CompletedTask;
+        //}
 
         private async Task ActivateDockedWindowViewModels()
         {
@@ -1532,105 +1520,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning restore CA1416 // Validate platform compatibility
         }
 
-        private void BcvChanged(object sender, PropertyChangedEventArgs e)
-        {
-            //if (ParatextSync && InComingChangesStarted == false)
-            //{
-            //    string verseId;
-            //    bool somethingChanged = false;
-            //    if (e.PropertyName == "BookNum")
-            //    {
-            //        // book switch so find the first chapter and verse for that book
-            //        verseId = BCVDictionary.Values.First(b => b[..3] == CurrentBcv.Book);
-            //        if (verseId != "")
-            //        {
-            //            InComingChangesStarted = true;
-            //            CurrentBcv.SetVerseFromId(verseId);
-
-            //            CalculateChapters();
-            //            CalculateVerses();
-            //            InComingChangesStarted = false;
-            //            somethingChanged = true;
-            //        }
-            //    }
-            //    else if (e.PropertyName == "Chapter")
-            //    {
-            //        // ReSharper disable once InconsistentNaming
-            //        var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
-
-            //        // chapter switch so find the first verse for that book and chapter
-            //        verseId = BCVDictionary.Values.First(b => b.Substring(0, 6) == BBBCCC);
-            //        if (verseId != "")
-            //        {
-            //            InComingChangesStarted = true;
-            //            CurrentBcv.SetVerseFromId(verseId);
-
-            //            CalculateVerses();
-            //            InComingChangesStarted = false;
-            //            somethingChanged = true;
-            //        }
-            //    }
-            //    else if (e.PropertyName == "Verse")
-            //    {
-            //        InComingChangesStarted = true;
-            //        CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-            //        InComingChangesStarted = false;
-            //        somethingChanged = true;
-            //    }
-
-            //    if (somethingChanged)
-            //    {
-            //        // send to the event aggregator for everyone else to hear about a verse change
-            //        EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentBcv.BBBCCCVVV));
-
-            //        // push to Paratext
-            //        if (ParatextSync)
-            //        {
-            //            _ = Task.Run(() => ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
-            //        }
-            //    }
-
-            //}
-        }
-
-        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
-        {
-            if (CurrentBcv.BibleBookList.Count == 0)
-            {
-                return;
-            }
-
-            if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
-            {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
-
-                CurrentBcv.SetVerseFromId(message.Verse);
-
-                //CalculateChapters();
-                //CalculateVerses();
-            }
-        }
-
-        // ReSharper disable once UnusedMember.Global
-        public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
-        {
-            if (ProjectManager?.CurrentParatextProject is not null)
-            {
-
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
-                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-                // set the CurrentBcv prior to listening to the event
-                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-                NotifyOfPropertyChange(() => CurrentBcv);
-            }
-            else
-            {
-                BCVDictionary = new Dictionary<string, string>();
-            }
-        }
-
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
         {
             OnUIThread(() => ShowProgressBar = message.Show);
@@ -1875,7 +1764,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public string GetFontFamilyFromParatextProjectId(string paratextProjectId)
         {
-            var sourceProject = ProjectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
+            var sourceProject = _projectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
             if (sourceProject is not null)
             {
                 return sourceProject.FontFamily;
