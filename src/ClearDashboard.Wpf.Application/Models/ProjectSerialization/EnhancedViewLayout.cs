@@ -5,7 +5,7 @@ namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization
     /// <summary>
     /// Represents a serialized enhanced view.
     /// </summary>
-    public class EnhancedViewSerializationModel
+    public class EnhancedViewLayout
     {
         public string? Title { get; set; } = string.Empty;
         public bool ParatextSync { get; set; }
