@@ -29,7 +29,7 @@ public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetad
 public record GetApplicationWindowSettings();
 public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
-public record ShowTokenizationWindowMessage(
+public record AddTokenizedCorpusToEnhancedViewMessage(
     string? ParatextProjectId, 
     string? ProjectName,
     string? TokenizationType,
@@ -40,7 +40,7 @@ public record ShowTokenizationWindowMessage(
     bool? IsRTL, 
     bool? IsNewWindow);
 
-public record ShowParallelTranslationWindowMessage(
+public record AddAlignmentToEnhancedViewMessage(
     string? TranslationSetId, 
     string? AlignmentSetId, 
     string? DisplayName, 

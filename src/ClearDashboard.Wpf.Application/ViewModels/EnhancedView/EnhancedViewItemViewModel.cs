@@ -1,8 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using Caliburn.Micro;
+
 // ReSharper disable InconsistentNaming
+
+
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+
 public abstract class EnhancedViewItemViewModel : Screen
 {
    
@@ -28,5 +32,7 @@ public abstract class EnhancedViewItemViewModel : Screen
         get => _title;
         set => Set(ref _title, value);
     }
+
+    public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
 }

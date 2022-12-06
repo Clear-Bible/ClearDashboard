@@ -24,7 +24,6 @@ using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -32,7 +31,6 @@ using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -68,7 +66,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #endregion
 
-
         #region Member Variables
         private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
@@ -87,10 +84,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public List<EnhancedViewItemMetadatum> EnhancedViewItemMetadata = new();
 
         private readonly List<TokenProject> _tokenProjects = new();
-        private readonly List<ShowTokenizationWindowMessage> _projectMessages = new();
+        private readonly List<AddTokenizedCorpusToEnhancedViewMessage> _projectMessages = new();
 
         private readonly List<ParallelProject> _parallelProjects = new();
-        private readonly List<ShowParallelTranslationWindowMessage> _parallelMessages = new();
+        private readonly List<AddAlignmentToEnhancedViewMessage> _parallelMessages = new();
 
 
 
@@ -108,14 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public VerseDisplayViewModel SelectedVerseDisplayViewModel
         {
             get => _selectedVerseDisplayViewModel;
-            set
-            {
-                if (_selectedVerseDisplayViewModel != value)
-                {
-                    _selectedVerseDisplayViewModel = value;
-                    NotifyOfPropertyChange(() => SelectedVerseDisplayViewModel);
-                }
-            }
+            set => Set(ref _selectedVerseDisplayViewModel, value);
         }
 
 
@@ -136,8 +126,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     CurrentBcv.SetVerseFromId(_projectManager!.CurrentVerse);
                 }
 
-                _paratextSync = value;
-                NotifyOfPropertyChange(() => ParatextSync);
+                Set(ref _paratextSync, value);
             }
         }
 
@@ -145,22 +134,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public Dictionary<string, string> BcvDictionary
         {
             get => _bcvDictionary;
-            set
-            {
-                _bcvDictionary = value;
-                NotifyOfPropertyChange(() => BcvDictionary);
-            }
+            set => Set(ref _bcvDictionary, value);
         }
 
         private BookChapterVerseViewModel _currentBcv = new();
         public BookChapterVerseViewModel CurrentBcv
         {
             get => _currentBcv;
-            set
-            {
-                _currentBcv = value;
-                NotifyOfPropertyChange(() => CurrentBcv);
-            }
+            set => Set(ref _currentBcv, value);
         }
 
         private int _verseOffsetRange;
@@ -169,13 +150,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _verseOffsetRange;
             set
             {
-                if (value != _verseOffsetRange)
+                var set = Set(ref _verseOffsetRange, value);
+                if (set)
                 {
-                    _verseOffsetRange = value;
-#pragma warning disable CS4014
+                    #pragma warning disable CS4014
                     VerseChangeRerender();
-#pragma warning restore CS4014
-                    NotifyOfPropertyChange(() => _verseOffsetRange);
+                    #pragma warning restore CS4014
                 }
             }
         }
@@ -234,18 +214,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion //Public Properties
 
         #region Observable Properties
-
-       
+      
 
         private string _currentCorpusName = string.Empty;
         public string CurrentCorpusName
         {
             get => _currentCorpusName;
-            set
-            {
-                _currentCorpusName = value;
-                NotifyOfPropertyChange(() => CurrentCorpusName);
-            }
+            set => Set(ref _currentCorpusName, value);
         }
 
         public string? TokenizationType
@@ -344,14 +319,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public string? ContentId
         {
             get => _contentId;
-            set
-            {
-                if (_contentId != value)
-                {
-                    _contentId = value;
-                    NotifyOfPropertyChange(() => ContentId);
-                }
-            }
+            set => Set(ref _contentId, value);
         }
 
         //public DockSide DockSide { get; }
@@ -359,14 +327,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public bool IsSelected
         {
             get => _isSelected;
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    NotifyOfPropertyChange(() => IsSelected);
-                }
-            }
+            set => Set(ref _isSelected, value);
         }
 
         public new bool IsActive
@@ -421,6 +382,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             RequestCloseCommand = new RelayCommandAsync(RequestClose);
 
             VerseDisplay.EventAggregator = eventAggregator;
+            PaneId = Guid.NewGuid();
         }
 
 
@@ -608,12 +570,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Corpus
 
-        public async Task ShowCorpusTokens(ShowTokenizationWindowMessage message, CancellationToken cancellationToken)
+        public async Task ShowCorpusTokens(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
+
 
             ProgressBarVisibility = Visibility.Visible;
 
@@ -642,7 +605,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await ShowCorpusText(message, cancellationToken, localCancellationToken);
         }
 
-        public async Task ShowCorpusText(ShowTokenizationWindowMessage message, CancellationToken cancellationToken,
+        public async Task ShowCorpusText(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken,
             CancellationToken localCancellationToken)
         {
             // add this to the job stack
@@ -768,8 +731,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
 
                     // get the row for the current verse
-                    int index = 0;
-                    for (int i = 0; i < tokensTextRows.Count; i++)
+                    var index = 0;
+                    for (var i = 0; i < tokensTextRows.Count; i++)
                     {
                         var verseRef = (VerseRef)tokensTextRows[i].Ref;
 
@@ -791,7 +754,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     var tokensTextRowsRange = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
 
                     // set the title to include the verse range
-                    string title = message.ProjectName + " - " + message.TokenizationType;
+                    var title = message.ProjectName + " - " + message.TokenizationType;
                     if (tokensTextRowsRange.Count == 1)
                     {
                         title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})";
@@ -895,7 +858,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }, cancellationToken);
         }
 
-        private async Task UpdateVerseDisplayWhenBookOutOfRange(ShowTokenizationWindowMessage message)
+        private async Task UpdateVerseDisplayWhenBookOutOfRange(AddTokenizedCorpusToEnhancedViewMessage message)
         {
             await UpdateVersesDisplay(message, new BindableCollection<VerseDisplayViewModel>(),
                 message.ProjectName + " - " + message.TokenizationType +
@@ -923,7 +886,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return null;
         }
 
-        private async Task UpdateVersesDisplay(ShowTokenizationWindowMessage message, BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
+        private async Task UpdateVersesDisplay(AddTokenizedCorpusToEnhancedViewMessage message, BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
         {
             // get the font family for this project
             var mainViewModel = IoC.Get<MainViewModel>();
@@ -980,7 +943,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NotifyOfPropertyChange(() => Items);
         }
 
-        private static Brush? GetCorpusBrushColor(ShowTokenizationWindowMessage message)
+        private static Brush? GetCorpusBrushColor(AddTokenizedCorpusToEnhancedViewMessage message)
         {
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush;
@@ -1017,7 +980,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Parallel
 
-        public async Task ShowParallelTranslationTokens(ShowParallelTranslationWindowMessage message, CancellationToken cancellationToken)
+        public async Task ShowParallelTranslationTokens(AddAlignmentToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Received TokenizedTextCorpusMessage.");
             _handleAsyncRunning = true;
@@ -1028,7 +991,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await ShowParallelTranslation(message, cancellationToken, localCancellationToken);
         }
 
-        public async Task ShowParallelTranslation(ShowParallelTranslationWindowMessage message,
+        public async Task ShowParallelTranslation(AddAlignmentToEnhancedViewMessage message,
             CancellationToken cancellationToken, CancellationToken localCancellationToken)
         {
 
@@ -1096,7 +1059,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }, cancellationToken);
         }
 
-        private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(ShowParallelTranslationWindowMessage message)
+        private async Task<List<TokenDisplayViewModel>> BuildTokenDisplayViewModels(AddAlignmentToEnhancedViewMessage message)
         {
             List<TokenDisplayViewModel> verseTokens = new();
             var versesOut = new BindableCollection<VerseDisplayViewModel>();
@@ -1222,7 +1185,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return verseRange;
         }
 
-        private async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, ShowParallelTranslationWindowMessage message)
+        private async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, AddAlignmentToEnhancedViewMessage message)
         {
             try
             {
@@ -1274,7 +1237,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels  => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
-        private async Task UpdateParallelCorpusDisplay(ShowParallelTranslationWindowMessage message,
+        private async Task UpdateParallelCorpusDisplay(AddAlignmentToEnhancedViewMessage message,
             BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations = true)
         {
             // same color as defined in SharedVisualTemplates.xaml

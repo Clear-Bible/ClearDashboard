@@ -793,12 +793,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
 
+      
+
+
+
         public async Task ExecuteConnectionMenuCommand(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
             switch (connectionMenuItem.Id)
             {
-                case "AddTranslationSetId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTranslationSet:
                     // find the right connection to send
                     var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
 
@@ -812,21 +816,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Logger!.LogError("Could not find connection with id {0}", connectionMenuItem.ConnectionId);
                     }
                     break;
-                case "SeparatorId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.Separator:
                     // no-op
                     break;
-                case "PropertiesId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowParallelCorpusProperties:
                     // node properties
                     SelectedDesignSurfaceComponent = connectionViewModel;
                     break;
-                case "CreateNewInterlinearId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.CreateNewInterlinear:
                     await AddNewInterlinear(connectionMenuItem);
                     break;
-                case "AddAlignmentToEnhancedViewId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView: 
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
-                            new ShowParallelTranslationWindowMessage(
+                            new AddAlignmentToEnhancedViewMessage(
                                 null,
                                 connectionMenuItem.AlignmentSetId,
                                 connectionMenuItem.DisplayName,
@@ -836,16 +841,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
                                 connectionMenuItem.IsTargetRTL,
-                                IsNewWindow: false,
+                                IsNewWindow: connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
                                 connectionMenuItem.SourceParatextId,
                                 connectionMenuItem.TargetParatextId));
                     }
                     break;
-                case "AddInterlinearToEnhancedViewId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView:
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
-                            new ShowParallelTranslationWindowMessage(
+                            new AddAlignmentToEnhancedViewMessage(
                                 connectionMenuItem.TranslationSetId,
                                 null,
                                 connectionMenuItem.DisplayName,
@@ -855,7 +861,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization null,
                                 null,
-                                IsNewWindow: false,
+                                IsNewWindow:connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView,
                                 connectionMenuItem.SourceParatextId,
                                 connectionMenuItem.TargetParatextId));
                     }
@@ -865,6 +871,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
             }
         }
+
+
 
         public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel? corpusNodeMenuItem)
         {
@@ -884,16 +892,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             switch (corpusNodeMenuItem.Id)
             {
-                case "AddTokenizationId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddParatextCorpus:
                     // kick off the add new tokenization dialog
                     await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
                     break;
-                case "SeparatorId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.Separator:
                     // no-op
                     break;
 
-                case "AddToEnhancedViewId":
-                case "ShowVerseId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView:
 
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
                     var tokenizedCorpus =
@@ -906,10 +914,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         return;
                     }
 
-                    var showInNewWindow = corpusNodeMenuItem.Id == "ShowVerseId";
+
 
                     await EventAggregator.PublishOnUIThreadAsync(
-                        new ShowTokenizationWindowMessage(
+                        new AddTokenizedCorpusToEnhancedViewMessage(
                             corpusNodeViewModel.ParatextProjectId,
                             ProjectName: corpusNodeViewModel.Name,
                             TokenizationType: corpusNodeMenuItem.Tokenizer!,
@@ -918,13 +926,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             corpusNodeViewModel.CorpusType,
                             //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             corpusNodeViewModel.IsRtl,
-                            IsNewWindow: showInNewWindow));
+                            IsNewWindow: corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView));
                     break;
-                case "PropertiesId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowCorpusNodeProperties:
                     // node properties
                     SelectedDesignSurfaceComponent = corpusNodeViewModel;
                     break;
-                case "TokenizerPropertiesId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowTokenizationProperties:
                     //TODO:  Fix this
 
                     // get the selected tokenizer

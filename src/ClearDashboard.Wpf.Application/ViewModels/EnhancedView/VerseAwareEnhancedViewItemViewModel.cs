@@ -1,29 +1,11 @@
 ﻿using Caliburn.Micro;
 using System;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Media;
 // ReSharper disable InconsistentNaming
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public class TestEnhancedViewItemViewModel : EnhancedViewItemViewModel
-    {
-        public string? Message { get; set; }
-
-        public TestEnhancedViewItemViewModel()
-        {
-            Title = "TestEnhancedViewItemViewModel";
-            Message = "This message was created in the TestEnhancedViewItemViewModel constructor.";
-        }
-
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            return base.OnActivateAsync(cancellationToken);
-        }
-    }
-
-
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel
     {
         private Guid _corpusId;
@@ -111,6 +93,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _isTargetRtl;
             set => Set(ref _isTargetRtl, value);
+        }
+
+        private VerseDisplayViewModel _selectedVerseDisplayViewModel;
+        public VerseDisplayViewModel SelectedVerseDisplayViewModel
+        {
+            get => _selectedVerseDisplayViewModel;
+            set => Set(ref _selectedVerseDisplayViewModel, value);
+        }
+
+        public void InnerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                var verseDisplayViewModel = e.AddedItems[0] as VerseDisplayViewModel;
+                if (verseDisplayViewModel is not null)
+                {
+                    SelectedVerseDisplayViewModel = verseDisplayViewModel;
+                }
+            }
         }
     }
 }
