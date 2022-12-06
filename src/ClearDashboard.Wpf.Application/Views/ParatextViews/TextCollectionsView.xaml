@@ -89,7 +89,18 @@
                 Height="{Binding ElementName=LowerBorder, Path=ActualHeight}"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">
-                <ListView.View>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,30,0" Orientation="Vertical">
+                            <helpers:BindableTextBlock
+                                Width="Auto"
+                                InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
+                                TextWrapping="Wrap" />
+                            <WebBrowser Name="myWebBrowser" paratextViews:WebBrowserHelper.Body="{Binding MyHtml}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <!--<ListView.View>
                     <GridView>
                         <GridView.ColumnHeaderContainerStyle>
                             <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -111,7 +122,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
-                </ListView.View>
+                </ListView.View>-->
             </ListView>
         </Border>
         <!--</StackPanel>-->

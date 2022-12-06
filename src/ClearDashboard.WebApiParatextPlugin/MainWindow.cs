@@ -391,10 +391,10 @@ namespace ClearDashboard.WebApiParatextPlugin
                                 {
                                     var usxString = project.GetUSX(_verseRef.BookNum);
                                     
-                                    XmlDocument xDoc = new();
-                                    xDoc.LoadXml(usxString);
                                     try
                                     {
+                                        XmlDocument xDoc = new();
+                                        xDoc.LoadXml(usxString);
                                         //var query = "//*[@vid='"+_verseRef+ "' or sid='"+_verseRef+"']";
                                         //var query = "//*[count(preceding-sibling::*[@sid='"+_verseRef+"'])=1]";
                                         //var query = "//*[preceding-sibling::*/verse[@sid='GEN 1:1'] and following-sibling::*/verse[@eid='GEN 1:1']]";
@@ -497,6 +497,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     }
                                     catch (Exception ex)
                                     {
+                                        //TODO Log that there was an issue, possibly a text collection not found 
                                     }
                                 }
                                 else
