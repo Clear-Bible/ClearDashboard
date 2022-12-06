@@ -99,6 +99,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
 
         #region Paratext overrides - standard functions
+
         public override void OnAddedToParent(IPluginChildWindow parent, IWindowPluginHost host, string state)
         {
             parent.SetTitle(ClearDashboardWebApiPlugin.PluginName);
@@ -148,7 +149,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
                 AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
-                    return null;
+                return null;
             }
             // Load the most up to date version
             Assembly assembly;
@@ -568,7 +569,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             var projects = _host.GetAllProjects(true);
 
 
-            var metadata=  projects.Select(project =>
+            var metadata = projects.Select(project =>
                 {
                     var metaData = new ParatextProjectMetadata
                     {
@@ -586,7 +587,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     try
                     {
                         // check to see if this font is installed locally
-                        FontFamily family =new FontFamily(project.Language.Font.FontFamily);
+                        FontFamily family = new FontFamily(project.Language.Font.FontFamily);
                     }
                     catch (Exception e)
                     {
@@ -595,7 +596,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                             fontError = true;
                             AppendText(Color.PaleVioletRed, $"Project: {project.ShortName} FontFamily Warning: {e.Message} on this computer");
                         }
-                        
+
                         // use the default font
                         metaData.FontFamily = "Segoe UI";
                     }
@@ -612,7 +613,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
             var directories = directoryInfo.GetDirectories();
-            foreach (var directory in directories.Where(directory=> projectNames.Contains(directory.Name)))
+            foreach (var directory in directories.Where(directory => projectNames.Contains(directory.Name)))
             {
                 var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
                 if (projectMetadatum != null)
@@ -737,7 +738,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             //{
             //    var referenceUsfm = GetReferenceUSFM(proj.Guid);
             //}
-            
+
 
             return allProjects;
         }
@@ -847,7 +848,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             }
 
-            
+
             if (project.Type != null)
             {
                 paratextProject.CorpusType = CorpusType.Unknown;
@@ -1007,7 +1008,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 switch (project.Versification.Type)
                 {
-    
+
                     case StandardScrVersType.English:
                         versificationBookIds.Versification = ScrVers.English;
                         break;
@@ -1034,8 +1035,27 @@ namespace ClearDashboard.WebApiParatextPlugin
                         break;
                 }
 
+
+
                 var books = project.AvailableBooks.Where(b => b.Code != "");
                 versificationBookIds.BookAbbreviations = books.Select(item => item.Code).ToList();
+
+                foreach (var book in books)
+                {
+                    versificationBookIds.WorkedOnBooks.Add(new WorkedOnBook
+                    {
+                        BookCode = book.Code,
+                        BookId = book.Number,
+                        IsWorkedOn = false
+                    });
+                }
+
+                // do a check to see if there is any data in each of the books
+                foreach (var book in versificationBookIds.WorkedOnBooks)
+                {
+                    book.IsWorkedOn = CheckUsfmBookForVerseData(project.ID, book.BookCode);
+                }
+
                 return versificationBookIds;
             }
             return new VersificationBookIds();
@@ -1048,9 +1068,9 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// called from: ClearDashboard.WebApiParatextPlugin.Features.BookUsfm
         /// </summary>
         /// <param name="paratextProjectId"></param>
-        /// <param name="bookId"></param>
+        /// <param name="bookCode"></param>
         /// <returns></returns>
-        public List<UsfmVerse> GetUsfmForBook(string paratextProjectId, string bookId)
+        public List<UsfmVerse> GetUsfmForBook(string paratextProjectId, string bookCode)
         {
             // get all the projects & resources
             var projects = _host.GetAllProjects(true);
@@ -1065,13 +1085,13 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
 
             // filter down to the book desired
-            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookId);
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookCode);
             if (book == null)
             {
-                AppendText(Color.Orange, $"Could not find a book with Id = '{bookId}'. Returning an empty list.");
+                AppendText(Color.Orange, $"Could not find a book with Id = '{bookCode}'. Returning an empty list.");
                 return verses;
             }
-            
+
             // only return information for "bible books" and not the extra material
             // TODO - is this true??
             if (BibleBookScope.IsBibleBook(book.Code) == false)
@@ -1091,7 +1111,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             catch (Exception)
             {
-                AppendText(Color.Orange, $"No Scripture for {bookId}");
+                AppendText(Color.Orange, $"No Scripture for {bookCode}");
                 return null;
             }
 
@@ -1232,6 +1252,71 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             return verses;
 
+        }
+
+        public bool CheckUsfmBookForVerseData(string paratextProjectId, string bookCode)
+        {
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            // get the right project
+            var project = projects.FirstOrDefault(p => p.ID == paratextProjectId);
+
+            var verses = new List<UsfmVerse>();
+            if (project == null)
+            {
+                AppendText(Color.Orange, $"Could not find a project with Id = '{paratextProjectId}'. Returning an empty list.");
+                return false;
+            }
+
+            // filter down to the book desired
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookCode);
+            if (book == null)
+            {
+                AppendText(Color.Orange, $"Could not find a book with Id = '{bookCode}'. Returning an empty list.");
+                return false;
+            }
+
+            // only return information for "bible books" and not the extra material
+            // TODO - is this true??
+            if (BibleBookScope.IsBibleBook(book.Code) == false)
+            {
+                AppendText(Color.Orange, $"'{book.Code}' is not a bible book. Returning an empty list.");
+                return false;
+            }
+
+
+
+            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+            try
+            {
+                // get tokens by book number (from object) and chapter
+                tokens = project.GetUSFMTokens(book.Number);
+            }
+            catch (Exception)
+            {
+                AppendText(Color.Orange, $"No Scripture for {bookCode}");
+                return false;
+            }
+
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMTextToken textToken)
+                {
+                    if (token.IsScripture)
+                    {
+                        // verse text
+                        if (textToken.Text.Trim() != "")
+                        {
+                            //AppendText(Color.Green, $"Processing {book.Code} TRUE");
+                            return true;
+                        }
+                    }
+                }
+
+            }
+
+            //AppendText(Color.PaleVioletRed, $"Processing {book.Code} FALSE");
+            return false;
         }
 
         #endregion
