@@ -371,6 +371,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _serviceProvider = serviceProvider;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
+
             ContentId = "ENHANCEDVIEW";
 
             ProgressBarVisibility = Visibility.Collapsed;
