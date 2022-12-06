@@ -975,6 +975,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             }
         }
 
+        private MainViewModel MainViewModel => ProjectDesignSurfaceViewModel.MainViewModel;
+
         /// <summary>
         /// Called when the user has finished dragging out the new connection.
         /// </summary>
@@ -1063,11 +1065,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     TargetParatextId: newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId,
                     ConnectorGuid: newParallelCorpusConnection.Id));
 
-                var mainViewModel = IoC.Get<MainViewModel>();
-                newParallelCorpusConnection.SourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(newParallelCorpusConnection.SourceConnector.ParentNode
+
+                //var mainViewModel = IoC.Get<MainViewModel>();
+                newParallelCorpusConnection.SourceFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(newParallelCorpusConnection.SourceConnector.ParentNode
                     .ParatextProjectId);
 
-                newParallelCorpusConnection.TargetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(newParallelCorpusConnection.DestinationConnector.ParentNode
+                newParallelCorpusConnection.TargetFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(newParallelCorpusConnection.DestinationConnector.ParentNode
                     .ParatextProjectId);
 
                 await ProjectDesignSurfaceViewModel.AddParallelCorpus(newParallelCorpusConnection);
