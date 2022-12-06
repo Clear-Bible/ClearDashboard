@@ -64,6 +64,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public bool DesignSurfaceLoaded { get; set; }
 
+        public MainViewModel MainViewModel => (MainViewModel)Parent;
+
         /// <summary>
         /// This is the design surface that is displayed in the window.
         /// It is the main part of the view-model.
