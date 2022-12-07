@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Events
 {

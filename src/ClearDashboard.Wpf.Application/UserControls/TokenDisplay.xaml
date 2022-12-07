@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Display"
+    xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DataContext="{d:DesignInstance Type=display:TokenDisplayViewModel}"
@@ -16,12 +16,6 @@
         Width="Auto"
         HorizontalAlignment="Left"
         Orientation="Vertical">
-        <StackPanel.ContextMenu>
-            <ContextMenu>
-                <MenuItem Click="OnCreateNote" Header="Create Note" />
-                <MenuItem Click="OnFilterPins" Header="Filter Pins" />
-            </ContextMenu>
-        </StackPanel.ContextMenu>
         <Button
             x:Name="TokenButton"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
@@ -41,6 +35,7 @@
             Width="{Binding ElementName=SurfaceTextBlock, Path=ActualWidth}"
             materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Click="OnTokenClicked"
+            ContextMenuOpening="OnTokenContextMenuOpening"
             MouseDoubleClick="OnTokenDoubleClicked"
             MouseEnter="OnTokenMouseEnter"
             MouseLeave="OnTokenMouseLeave"
@@ -49,7 +44,12 @@
             MouseRightButtonUp="OnTokenRightButtonUp"
             MouseWheel="OnTokenMouseWheel"
             PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
-
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
+                    <MenuItem Click="OnFilterPins" Header="Filter Pins" />
+                </ContextMenu>
+            </Button.ContextMenu>
             <TextBlock
                 x:Name="SurfaceTextBlock"
                 Margin="0"

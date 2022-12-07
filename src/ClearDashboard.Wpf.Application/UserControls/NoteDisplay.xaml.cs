@@ -10,7 +10,7 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 using FontStyle = System.Windows.FontStyle;
@@ -114,6 +114,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent NoteEditorMouseLeaveEvent = EventManager.RegisterRoutedEvent
             ("NoteEditorMouseLeave", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
+
+        /// <summary>
+        /// Identifies the NoteSendToParatext routed event.
+        /// </summary>
+        public static readonly RoutedEvent NoteSendToParatextEvent = EventManager.RegisterRoutedEvent
+            ("NoteSendToParatext", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(NoteDisplay));
 
         /// <summary>
         /// Identifies the NoteUpdated routed event.
@@ -392,11 +398,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnNoteLabelClick(object sender, MouseButtonEventArgs e)
         {
+            BeginEdit();
+        }
+
+        private void BeginEdit()
+        {
             IsEditing = true;
 
             NoteTextBox.Focus();
             NoteTextBox.Select(NoteTextBox.Text.Length, 0);
-            
+
             OriginalNoteText = Note.Text;
         }
 
@@ -439,11 +450,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseLabelEvent(LabelRemovedEvent, labelEventArgs!);
         }
 
-        private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
-        {
-            ConfirmDeletePopup.IsOpen = true;
-        }
-
         private void RaiseNoteEvent(RoutedEvent routedEvent)
         {
             RaiseEvent(new NoteEventArgs
@@ -452,6 +458,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 EntityIds = EntityIds,
                 Note = Note
             });
+        }
+
+        private void ConfirmNoteDeletion(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = true;
         }
 
         private void DeleteNoteConfirmed(object sender, RoutedEventArgs e)
@@ -463,6 +474,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void DeleteNoteCancelled(object sender, RoutedEventArgs e)
         {
             ConfirmDeletePopup.IsOpen = false;
+        }
+
+        private void ConfirmParatextSend(object sender, RoutedEventArgs e)
+        {
+            ConfirmParatextSendPopup.IsOpen = true;
+        }
+
+        private void ParatextSendConfirmed(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(NoteSendToParatextEvent);
+            ConfirmParatextSendPopup.IsOpen = false;
+        }
+
+        private void ParatextSendCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmParatextSendPopup.IsOpen = false;
         }
 
         private void RaiseNoteAssociationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
@@ -540,6 +567,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        protected override void OnGotFocus(RoutedEventArgs e)
+        {
+            if (AddMode)
+            {
+                NoteTextBox.Focus();
+            }
+            base.OnGotFocus(e);
+        }
+
+        private bool _firstClick = true;
+        protected override void OnMouseDown(MouseButtonEventArgs e)
+        {
+            if (AddMode && _firstClick)
+            {
+                BeginEdit();
+                _firstClick = false;
+            }
+        }
+
         #endregion Private event handlers
         #region Public Properties
 
@@ -585,10 +631,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public Visibility NoteLabelVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
         public Visibility NoteTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
         public Visibility TimestampRowVisibility => AddMode || IsChanged ? Visibility.Collapsed : Visibility.Visible;
-        public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Hidden;
+        public Visibility ButtonVisibility => IsChanged ? Visibility.Visible : Visibility.Collapsed;
         public Visibility LabelSelectorVisibility => AddMode ? Visibility.Collapsed : Visibility.Visible;
         public Visibility AssociationsVisibility => AddMode || !IsAssociationButtonClicked ? Visibility.Collapsed : Visibility.Visible;
         public Visibility AssociationsButtonVisibility => IsAssociationButtonClicked ? Visibility.Hidden : Visibility.Visible;
+        public Visibility ParatextSendVisibility => !AddMode && Note.EnableParatextSend ? Visibility.Visible : Visibility.Hidden;
         private bool IsAssociationButtonClicked { get; set; }
         /// <summary>
         /// Gets or sets the collection of <see cref="EntityId{T}"/> associated with the note.
@@ -1048,6 +1095,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(NoteEditorMouseLeaveEvent, value);
             remove => RemoveHandler(NoteEditorMouseLeaveEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests a note be sent to Paratext.
+        /// </summary>
+        public event RoutedEventHandler NoteSendToParatext
+        {
+            add => AddHandler(NoteSendToParatextEvent, value);
+            remove => RemoveHandler(NoteSendToParatextEvent, value);
         }
 
         /// <summary>

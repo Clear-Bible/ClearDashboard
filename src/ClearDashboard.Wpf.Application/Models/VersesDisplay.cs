@@ -1,14 +1,9 @@
-﻿using ClearBible.Engine.Corpora;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+﻿using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -62,13 +57,13 @@ namespace ClearDashboard.Wpf.Application.Models
 
 
 
-        private Visibility _visiblity = Visibility.Collapsed;
+        private Visibility _visibility = Visibility.Collapsed;
         public Visibility Visibility
         {
-            get => _visiblity;
+            get => _visibility;
             set
             {
-                _visiblity = value;
+                _visibility = value;
                 NotifyOfPropertyChange(() => Visibility);
             }
         }
@@ -108,22 +103,22 @@ namespace ClearDashboard.Wpf.Application.Models
 
         #region FontFamily
 
-        private FontFamily _targetFontFamily;
-        public FontFamily TargetFontFamily
+        private FontFamily? _targetFontFamily;
+        public FontFamily? TargetFontFamily
         {
             get => _targetFontFamily;
             set => Set(ref _targetFontFamily, value);
         }
 
-        private FontFamily _sourceFontFamily;
-        public FontFamily SourceFontFamily
+        private FontFamily? _sourceFontFamily;
+        public FontFamily? SourceFontFamily
         {
             get => _sourceFontFamily;
             set => Set(ref _sourceFontFamily, value);
         }
 
-        private FontFamily _translationFontFamily;
-        public FontFamily TranslationFontFamily
+        private FontFamily? _translationFontFamily;
+        public FontFamily? TranslationFontFamily
         {
             get => _translationFontFamily;
             set => Set(ref _translationFontFamily, value);

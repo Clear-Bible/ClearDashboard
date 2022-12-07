@@ -3,17 +3,26 @@ using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
+using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using ClearDashboard.Wpf.Application.Views.Main;
@@ -25,6 +34,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -32,20 +44,8 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using DockingManager = AvalonDock.DockingManager;
-using System.Dynamic;
-using ClearApplicationFoundation.LogHelpers;
-using System.Drawing.Imaging;
-using System.Drawing;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using Point = System.Drawing.Point;
-using System.Windows.Shell;
-using System.IO.Compression;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.DataAccessLayer;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -65,6 +65,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
+        public INavigationService NavigationService { get; set; }
         private NoteManager NoteManager { get; }
 #nullable disable
         #region Member Variables
@@ -74,8 +75,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 #pragma warning disable CA1416 // Validate platform compatibility
         private DockingManager _dockingManager = new();
-        private ProjectDesignSurfaceView _projectDesignSurfaceControl;
+        private ProjectDesignSurfaceView _projectDesignSurfaceView;
         private ProjectDesignSurfaceViewModel _projectDesignSurfaceViewModel;
+
+        public ProjectDesignSurfaceViewModel ProjectDesignSurfaceViewModel
+        {
+            get => _projectDesignSurfaceViewModel;
+            set => Set(ref _projectDesignSurfaceViewModel, value);
+        }
+
+        public PinsViewModel PinsViewModel
+        {
+            get => _pinsViewModel;
+            set => Set(ref _pinsViewModel, value);
+        }
 #pragma warning restore CA1416 // Validate platform compatibility
 
         private string _lastLayout = "";
@@ -100,7 +113,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        private bool InComingChangesStarted { get; set; }
+        private bool IncomingChangesStarted { get; set; }
 
         private bool _isBusy;
         public bool IsBusy
@@ -223,8 +236,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case "PINSID":
                             _windowIdToLoad = "PINS";
                             break;
-                        case "WordMeaningsID":
-                            _windowIdToLoad = "WORDMEANINGS";
+                        //case "WordMeaningsID":
+                        //    _windowIdToLoad = "WORDMEANINGS";
+                        //    break;
+                        case "MarbleID":
+                            _windowIdToLoad = "MARBLE";
                             break;
                         case "TextCollectionID":
                             _windowIdToLoad = "TEXTCOLLECTION";
@@ -382,6 +398,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
         private string _projectName;
+        private PinsViewModel _pinsViewModel;
+
+
         public string ProjectName
         {
             get => _projectName;
@@ -461,8 +480,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //            }
         }
 
-        public INavigationService NavigationService { get; set; }
-
 
         /// <summary>
         /// Binds the viewmodel to it's view prior to activating so that the OnViewAttached method of the
@@ -478,7 +495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         //    await ActivateItemAsync(viewModel, cancellationToken);
         //}
 
-        private async Task ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
+        private async Task<TViewModel> ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
             where TViewModel : Screen
         {
 
@@ -491,6 +508,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
+            return viewModel;
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -507,7 +525,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (Parameter != null)
             {
 
-                Logger.LogInformation($"Received {Parameter.ProjectName}.");
+                Logger.LogInformation($"Loading project '{Parameter.ProjectName}'.");
                 if (Parameter.IsNew)
                 {
                     await ProjectManager.CreateNewProject(Parameter.ProjectName);
@@ -518,6 +536,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
 
                 await NoteManager.InitializeAsync();
+
             }
 
             await base.OnInitializeAsync(cancellationToken);
@@ -527,17 +546,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
-            
-
-            
-
-
             base.OnViewLoaded(view);
         }
 
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
+
+
             Logger.LogInformation($"{nameof(MainViewModel)} is deactivating.");
+
+            await PinsViewModel.DeactivateAsync(close);
+            await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
 
             if (_lastLayout == "")
             {
@@ -633,12 +652,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             EventAggregator?.Unsubscribe(this);
 
             // save the design surface
-            //await _projectDesignSurfaceViewModel.DeactivateAsync(false);
 
+            // NB:  Call the following results "System.ObjectDisposedException: Instances cannot be resolved and nested lifetimes cannot be created from this LifetimeScope as it (or one of its parent scopes) has already been disposed."
+            //await _projectDesignSurfaceViewModel.SaveCanvas();
+
+            Logger!.LogInformation("Saving ProjectDesignSurface layout.");
             ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
 
-            //await _projectDesignSurfaceViewModel.SaveCanvas();
+            Items.Clear();
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
@@ -652,14 +674,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 // ReSharper disable once AssignNullToNotNullAttribute
                 _dockingManager = (DockingManager)currentView.FindName("DockManager");
-                _projectDesignSurfaceControl = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
+                _projectDesignSurfaceView = (ProjectDesignSurfaceView)currentView.FindName("ProjectDesignSurfaceControl");
 
                 // subscribe to the event aggregator
                 //_dockingManager.ActiveContentChanged += new EventHandler(OnActiveDocumentChanged);
             }
 
             await Task.Delay(250);
-            Init();
+            Initialize();
 
 
             // load the document window contents
@@ -668,7 +690,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadDocuments()
         {
-            if (ProjectManager.CurrentProject.WindowTabLayout is null)
+            if (ProjectManager.CurrentProject?.WindowTabLayout is null)
             {
                 return;
             }
@@ -801,11 +823,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Logger.LogInformation($"LoadDocuments - Total Load Time {deserialized.Count} documents in {sw.ElapsedMilliseconds} ms");
         }
 
-        private async void Init()
+        private async void Initialize()
         {
             RebuildMenu();
 
-            SetupProjectDesignSurface();
+            //await SetupProjectDesignSurface();
 
             Items.Clear();
 
@@ -814,10 +836,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // tools
             await ActivateItemAsync<BiblicalTermsViewModel>();
-            await ActivateItemAsync<PinsViewModel>();
+            PinsViewModel = await ActivateItemAsync<PinsViewModel>();
             await ActivateItemAsync<TextCollectionsViewModel>();
-            await ActivateItemAsync<WordMeaningsViewModel>();
+            //await ActivateItemAsync<WordMeaningsViewModel>();
+            await ActivateItemAsync<MarbleViewModel>();
 
+            // Activate the ProjectDesignSurfaceViewModel - this will call the appropriate
+            // Caliburn.Micro Screen lifecycle methods.  Also note that this will add ProjectDesignSurfaceViewModel 
+            // as the last Screen managed by this conductor implementation.
+            ProjectDesignSurfaceViewModel = await ActivateItemAsync<ProjectDesignSurfaceViewModel>();
             // remove all existing windows
             var layoutSerializer = new XmlLayoutSerializer(_dockingManager);
 
@@ -831,7 +858,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 //var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
                 //Settings.Default.LastLayout = filePath;
                 // check to see if the layout exists
-                string layoutPath = Settings.Default.LastLayout;
+                var layoutPath = Settings.Default.LastLayout;
                 LoadLayout(layoutSerializer, File.Exists(layoutPath) ? layoutPath : FileLayouts[0].LayoutPath);
             }
 
@@ -839,6 +866,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             if (ProjectManager?.CurrentParatextProject is not null)
             {
                 BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+
+                var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                    .Select(g => g.First())
+                    .ToList();
+
+                foreach (var book in books)
+                {
+                    var bookId = book.Substring(0, 3);
+
+                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                    CurrentBcv.BibleBookList?.Add(bookName);
+                }
             }
             else
             {
@@ -846,7 +886,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
 
-            InComingChangesStarted = true;
+            IncomingChangesStarted = true;
 
             // set the CurrentBcv prior to listening to the event
             CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
@@ -854,22 +894,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //CalculateBooks();
             //CalculateChapters();
             //CalculateVerses();
-            InComingChangesStarted = false;
+            IncomingChangesStarted = false;
 
             // Subscribe to changes of the Book Chapter Verse data object.
             CurrentBcv.PropertyChanged += BcvChanged;
         }
 
-        private void SetupProjectDesignSurface()
-        {
-            _projectDesignSurfaceViewModel = IoC.Get<ProjectDesignSurfaceViewModel>();
-            var view = ViewLocator.LocateForModel(_projectDesignSurfaceViewModel, null, null);
-            ViewModelBinder.Bind(_projectDesignSurfaceViewModel, view, null);
-            _projectDesignSurfaceControl.DataContext = _projectDesignSurfaceViewModel;
-
-            // force a load to happen as it is getting swallowed up elsewhere
-            _projectDesignSurfaceViewModel.LoadCanvas();
-        }
 
         #endregion //Constructor
 
@@ -884,21 +914,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return;
             }
 
-            string tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
+            var tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
 
-            FileInfo fi = new FileInfo(tailBlazorPath);
-            if (fi.Exists == false)
+            var fileInfo = new FileInfo(tailBlazorPath);
+            if (fileInfo.Exists == false)
             {
                 return;
             }
 
             try
             {
-                Process p = new Process();
-                p.StartInfo.WorkingDirectory = fi.Directory.FullName;
-                p.StartInfo.FileName = fi.FullName;
-                p.StartInfo.Arguments = dashboardLogPath.Path;
-                p.Start();
+                var process = new Process();
+                process.StartInfo.WorkingDirectory = fileInfo.Directory.FullName;
+                process.StartInfo.FileName = fileInfo.FullName;
+                process.StartInfo.Arguments = dashboardLogPath.Path;
+                process.Start();
             }
             catch (Exception e)
             {
@@ -969,8 +999,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         {
                             graphics.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
                         }
-
-
                         bitmap.Save(destinationScreenShotPath, ImageFormat.Jpeg);
                     }
                 }
@@ -981,7 +1009,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            
             List<string> files = new();
             if (destinationParatextLogPath != "")
             {
@@ -1040,7 +1067,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void AddNewEnhancedView()
         {
-            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
+            var viewModel = IoC.Get<EnhancedViewModel>();
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
@@ -1079,7 +1106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private ObservableCollection<LayoutFile> GetFileLayouts()
         {
-            int id = 0;
+            var id = 0;
             ObservableCollection<LayoutFile> fileLayouts = new();
             // add in the default layouts
             var path = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts");
@@ -1089,8 +1116,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 foreach (var file in files.Where(f => !f.StartsWith("Project")))
                 {
-                    FileInfo fileInfo = new FileInfo(file);
-                    string name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
+                    var fileInfo = new FileInfo(file);
+                    var name = fileInfo.Name.Substring(0, fileInfo.Name.Length - ".Layout.config".Length);
 
                     fileLayouts.Add(new LayoutFile
                     {
@@ -1232,7 +1259,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = "🗐 " + LocalizationStrings.Get("MainView_WindowsTextCollections", Logger), Id = "TextCollectionID", ViewModel = this, },
                         
                         // Word Meanings
-                        new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
+                        //new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
+                        
+                        // MARBLE
+                        new() { Header = "◕ MARBLE", Id = "MarbleID", ViewModel = this, },
                     }
                 },
                 
@@ -1376,8 +1406,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.BiblicalTerms:
                             e.Content = GetToolViewModelFromItems("BiblicalTermsViewModel");
                             break;
-                        case WorkspaceLayoutNames.WordMeanings:
-                            e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
+                        //case WorkspaceLayoutNames.WordMeanings:
+                        //    e.Content = GetToolViewModelFromItems("WordMeaningsViewModel");
+                        //    break;
+                        case WorkspaceLayoutNames.Marble:
+                            e.Content = GetToolViewModelFromItems("MarbleViewModel");
                             break;
                         case WorkspaceLayoutNames.Pins:
                             e.Content = GetToolViewModelFromItems("PinsViewModel");
@@ -1421,10 +1454,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 break;
 
                             case BiblicalTermsViewModel:
-                            case PinsViewModel:
+                            case ParatextViews.PinsViewModel:
                             case TextCollectionsViewModel:
-                            case WordMeaningsViewModel:
+                            //case WordMeaningsViewModel:
+                            case MarbleViewModel:
                                 _tools.Add((ToolViewModel)t);
+                                break;
+
+                            case Project.ProjectDesignSurfaceViewModel:
+                                break;
+                            default:
                                 break;
                         }
                     }
@@ -1505,9 +1544,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     switch (type)
                     {
                         case BiblicalTermsViewModel:
-                        case PinsViewModel:
+                        case ParatextViews.PinsViewModel:
                         case TextCollectionsViewModel:
-                        case WordMeaningsViewModel:
+                        //case WordMeaningsViewModel:
+                        case MarbleViewModel:
                             return (ToolViewModel)t;
                     }
                 }
@@ -1536,9 +1576,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 case WorkspaceLayoutNames.TextCollection:
                     var vm8 = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (vm8, vm8.Title, vm8.DockSide);
-                case WorkspaceLayoutNames.WordMeanings:
-                    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
-                    return (vm3, vm3.Title, vm3.DockSide);
+                //case WorkspaceLayoutNames.WordMeanings:
+                //    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
+                //    return (vm3, vm3.Title, vm3.DockSide);
+                case WorkspaceLayoutNames.Marble:
+                    var vm4 = GetToolViewModelFromItems("MarbleViewModel");
+                    return (vm4, vm4.Title, vm4.DockSide);
 
             }
             return (null, null, PaneViewModel.EDockSide.Bottom);
@@ -1622,7 +1665,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                         // Tools
                         case WorkspaceLayoutNames.BiblicalTerms:
-                        case WorkspaceLayoutNames.WordMeanings:
+                        //case WorkspaceLayoutNames.WordMeanings:
+                        case WorkspaceLayoutNames.Marble:
                         case WorkspaceLayoutNames.Pins:
                         case WorkspaceLayoutNames.TextCollection:
 
@@ -1734,12 +1778,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // send to log
                 await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
-                InComingChangesStarted = true;
+                IncomingChangesStarted = true;
                 CurrentBcv.SetVerseFromId(message.Verse);
 
                 //CalculateChapters();
                 //CalculateVerses();
-                InComingChangesStarted = false;
+                IncomingChangesStarted = false;
             }
         }
 
@@ -1748,24 +1792,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (ProjectManager?.CurrentParatextProject is not null)
             {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
+                try
+                {
+                    // send to log
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: Project Change"), cancellationToken);
 
 
-                BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-                InComingChangesStarted = true;
+                    BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+                    IncomingChangesStarted = true;
 
-                // add in the books to the dropdown list
-                //CalculateBooks();
+                    // add in the books to the dropdown list
+                    //CalculateBooks();
 
-                // set the CurrentBcv prior to listening to the event
-                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                    // set the CurrentBcv prior to listening to the event
+                    CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
 
-                //CalculateChapters();
-                //CalculateVerses();
+                    //CalculateChapters();
+                    //CalculateVerses();
 
-                NotifyOfPropertyChange(() => CurrentBcv);
-                InComingChangesStarted = false;
+                    NotifyOfPropertyChange(() => CurrentBcv);
+                }
+                finally
+                {
+                    IncomingChangesStarted = false;
+                }
+
             }
             else
             {
@@ -1804,10 +1855,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 if (dockableWindows.Count == 1)
                 {
                     // there is only one doc window open, so we can just add to it
-                    var enhancedCorpusViewModels =
-                        Items.First(items => items.GetType() == typeof(EnhancedViewModel)) as
-                            EnhancedViewModel;
-                    if (enhancedCorpusViewModels is not null)
+                    if (Items.First(items => items.GetType() == typeof(EnhancedViewModel)) is EnhancedViewModel enhancedCorpusViewModels)
                     {
                         await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
                     }
@@ -1824,12 +1872,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // ReSharper disable once PossibleNullReferenceException
                         var guid = vm.Guid;
 
-                        var enhancedCorpusViewModels =
-                            Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
-                                    // ReSharper disable once UsePatternMatching
-                                    .First(item => ((EnhancedViewModel)item).Guid == guid) as
-                                EnhancedViewModel;
-                        if (enhancedCorpusViewModels is not null)
+                        if (Items.Where(items => items.GetType() == typeof(EnhancedViewModel))
+                                .First(item => ((EnhancedViewModel)item).Guid == guid) is EnhancedViewModel enhancedCorpusViewModels)
                         {
                             await enhancedCorpusViewModels.ShowCorpusTokens(message, cancellationToken);
                             return;
@@ -1838,7 +1882,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            // unactivate any other doc windows before we add in the new one
+            // deactivate any other doc windows before we add in the new one
             var docWindows = _dockingManager.Layout.Descendents()
                 .OfType<LayoutDocument>();
             foreach (var document in docWindows)
@@ -1847,11 +1891,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
 
-            string tokenizationType = message.TokenizationType;
-            string paratextId = message.ParatextProjectId;
+            var tokenizationType = message.TokenizationType;
+            var paratextId = message.ParatextProjectId;
 
-            EnhancedViewModel viewModel = IoC.Get<EnhancedViewModel>();
-            viewModel.CurrentCorpusName = message.ProjectName;
+            var viewModel = IoC.Get<EnhancedViewModel>();
+            viewModel.CurrentCorpusName = message!.ProjectName;
             viewModel.Title = message.ProjectName + " (" + tokenizationType + ")";
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
@@ -1875,18 +1919,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
 
-        public Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
             // pass up to the Project Design Surface the message
-            if (_projectDesignSurfaceViewModel is not null)
-            {
-                _projectDesignSurfaceViewModel.UiLanguageChangedMessage(message);
-            }
+            //if (_projectDesignSurfaceViewModel is not null)
+            //{
+            //    _projectDesignSurfaceViewModel.UiLanguageChangedMessage(message);
+            //}
 
             // rebuild the menu system with the new language
             RebuildMenu();
-
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         public async Task ExecuteMenuCommand(MenuItemViewModel menuItem)
@@ -1905,10 +1948,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
                 var result = await WindowManager.ShowDialogAsync(startupDialogViewModel);
 
-                this.NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
-                await OnInitializeAsync(CancellationToken.None);
-                await OnActivateAsync(CancellationToken.None);
-                await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+                if (result == true)
+                {
+                    NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
+                    await OnInitializeAsync(CancellationToken.None);
+                    await OnActivateAsync(CancellationToken.None);
+                    await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+                }
             }
         }
 
@@ -2059,21 +2105,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public string GetFontFamilyFromParatextProjectId(string paratextProjectId)
         {
+            if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
+            {
+                return ManuscriptIds.HebrewFontFamily;
+            }
+
+            if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
+            {
+                return ManuscriptIds.GreekFontFamily;
+            }
+
             var sourceProject = ProjectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
             if (sourceProject is not null)
             {
                 return sourceProject.FontFamily;
-            }
-            else
-            {
-                if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
-                {
-                    return ManuscriptIds.HebrewFontFamily;
-                }
-                else if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
-                {
-                    return ManuscriptIds.GreekFontFamily;
-                }
             }
             return "Segoe UI";
         }
@@ -2086,6 +2131,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public const string BiblicalTerms = "BIBLICALTERMS";
         public const string Pins = "PINS";
         public const string TextCollection = "TEXTCOLLECTION";
-        public const string WordMeanings = "WORDMEANINGS";
+        //public const string WordMeanings = "WORDMEANINGS";
+        public const string Marble = "MARBLE";
     }
 }

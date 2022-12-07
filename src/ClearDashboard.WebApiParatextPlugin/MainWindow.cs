@@ -18,6 +18,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
@@ -55,6 +57,8 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private List<TextCollection> _textCollections = new();
         private List<ParatextProjectMetadata> _projectMetadata;
+        private bool _hasFontErrorBeenDisplayed = false;
+
         #endregion
 
         #region startup
@@ -149,7 +153,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
                 AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
-                    return null;
+                return null;
             }
             // Load the most up to date version
             Assembly assembly;
@@ -170,15 +174,24 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void StartWebHost()
         {
-            AppendText(Color.Green, $"StartWebApplication called");
+            int portNumber = 9000;
+
+            // check to see if the port is in use which means that we probably have 
+            // a window open already
+            if (PortInUse(portNumber))
+            {
+                PortInUseMethod();
+                return;
+            }
+
+            AppendText(Color.Green, "StartWebApplication called");
 
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += FailedAssemblyResolutionHandler;
 
             try
             {
-                var baseAddress = "http://localhost:9000/";
-
+                var baseAddress = $"http://localhost:{portNumber}/";
                 WebAppProxy?.Dispose();
 
                 // Start OWIN host 
@@ -189,14 +202,27 @@ namespace ClearDashboard.WebApiParatextPlugin
                         WebHostStartup.Configuration(appBuilder);
                     });
 
-
-
                 AppendText(Color.Green, "Owin Web Api host started");
+            }
+            catch (Exception e)
+            {
+                if (e.InnerException.Message.StartsWith("Failed to listen on prefix 'http://localhost:"))
+                {
+                    PortInUseMethod();
+                }
             }
             finally
             {
                 currentDomain.AssemblyResolve -= FailedAssemblyResolutionHandler;
             }
+        }
+
+        private void PortInUseMethod()
+        {
+            ClearTextWindow();
+
+            AppendText(Color.Purple,
+                $"\n\nIF YOU WISH TO SWITCH THE DASHBOARD PLUGIN TO BE ASSOCIATED WITH THE {_project.ShortName} PROJECT, PLEASE CLOSE ALL OTHER OPEN DASHBOARD PLUGIN WINDOWS FIRST.");
         }
 
         /// <summary>
@@ -282,6 +308,29 @@ namespace ClearDashboard.WebApiParatextPlugin
 
 
         #region Methods
+
+        /// <summary>
+        /// Method to check if a port is in use or not
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private bool PortInUse(int port)
+        {
+            bool inUse = false;
+
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
+
+            foreach (IPEndPoint endPoint in ipEndPoints)
+            {
+                if (endPoint.Port == port)
+                {
+                    inUse = true;
+                    break;
+                }
+            }
+            return inUse;
+        }
 
         private void OnExceptionOccurred(Exception exception)
         {
@@ -643,6 +692,13 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="e"></param>
         private void btnClearWindow_Click(object sender, EventArgs e)
         {
+            ClearTextWindow();
+
+            AppendText(Color.Green, DateTime.Now.ToShortTimeString());
+        }
+
+        private void ClearTextWindow()
+        {
             // clear out the existing data
             if (rtb.InvokeRequired)
             {
@@ -652,8 +708,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 rtb.Clear();
             }
-
-            AppendText(Color.Green, DateTime.Now.ToShortTimeString());
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -687,6 +741,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         {
             if (_projectMetadata == null)
             {
+                bool fontError = false;
                 var projects = _host.GetAllProjects(true);
 
 
@@ -708,11 +763,16 @@ namespace ClearDashboard.WebApiParatextPlugin
                     try
                     {
                         // check to see if this font is installed locally
-                        FontFamily family =new FontFamily(project.Language.Font.FontFamily);
+                        FontFamily family = new FontFamily(project.Language.Font.FontFamily);
                     }
                     catch (Exception e)
                     {
                         AppendText(Color.Orange, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
+                        if (_hasFontErrorBeenDisplayed == false)
+                        {
+                            fontError = true;
+                            AppendText(Color.PaleVioletRed, $"Project: {project.ShortName} FontFamily Warning: {e.Message} on this computer");
+                        }
 
                         // use the default font
                         metaData.FontFamily = "Segoe UI";
@@ -747,9 +807,14 @@ namespace ClearDashboard.WebApiParatextPlugin
                         projectMetadatum.CorpusType = CorpusType.Resource;
                     }
                 }
-
                 _projectMetadata = metadata;
             }
+
+             if (fontError)
+            {
+                _hasFontErrorBeenDisplayed = true;
+            }
+
             return _projectMetadata;
         }
 
@@ -852,7 +917,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             //{
             //    var referenceUsfm = GetReferenceUSFM(proj.Guid);
             //}
-            
+
 
             return allProjects;
         }
@@ -962,7 +1027,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             }
 
-            
+
             if (project.Type != null)
             {
                 paratextProject.CorpusType = CorpusType.Unknown;
@@ -1122,7 +1187,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 switch (project.Versification.Type)
                 {
-    
+
                     case StandardScrVersType.English:
                         versificationBookIds.Versification = ScrVers.English;
                         break;
@@ -1186,7 +1251,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 AppendText(Color.Orange, $"Could not find a book with Id = '{bookId}'. Returning an empty list.");
                 return verses;
             }
-            
+
             // only return information for "bible books" and not the extra material
             // TODO - is this true??
             if (BibleBookScope.IsBibleBook(book.Code) == false)

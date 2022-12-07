@@ -6,7 +6,7 @@ using System.Windows.Media;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -22,6 +22,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the ExtendedProperties dependency property.
         /// </summary>
         public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register(nameof(ExtendedProperties), typeof(string), typeof(TokenDisplay));
+
+        /// <summary>
+        /// Identifies the HighlightedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenBackgroundProperty = DependencyProperty.Register(nameof(HighlightedTokenBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Aquamarine));
 
         /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
@@ -670,6 +676,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
+        private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var args = e;
+        }
+
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenDoubleClickedEvent, e);
@@ -684,6 +695,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }
+
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
@@ -837,6 +849,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (string)GetValue(ExtendedPropertiesProperty);
             set => SetValue(ExtendedPropertiesProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the token background when it is highlighted.
+        /// </summary>
+        public Brush HighlightedTokenBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenBackgroundProperty);
+            set => SetValue(HighlightedTokenBackgroundProperty, value);
         }
 
         /// <summary>
@@ -1165,16 +1186,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
             TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
             NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
-            TokenBackground = TokenDisplayViewModel.IsSelected ? SelectedTokenBackground : Brushes.Transparent;
+            TokenBackground = TokenDisplayViewModel.IsHighlighted ? HighlightedTokenBackground
+                               : TokenDisplayViewModel.IsSelected ? SelectedTokenBackground 
+                               : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
             TranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
-                "FromTranslationModel" => Brushes.Red,
-                "FromAlignmentModel" => Brushes.Red,
-                "FromOther" => Brushes.Blue,
+                Translation.OriginatedFromValues.FromTranslationModel => Brushes.Red,
+                Translation.OriginatedFromValues.FromAlignmentModel => Brushes.Red,
+                Translation.OriginatedFromValues.None => Brushes.Red,
+                Translation.OriginatedFromValues.FromOther => Brushes.Blue,
                 _ => Brushes.Black
             };
         }
@@ -1195,5 +1219,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CalculateLayout();
         }
+
     }
 }

@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
@@ -55,7 +56,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private readonly IMediator _mediator;
         private readonly LongRunningTaskManager _longRunningTaskManager;
 
-        private ObservableList<PinsDataTable> GridData { get; } = new();
+        private BindableCollection<PinsDataTable> GridData { get; } = new();
 
         #endregion //Member Variables
 
@@ -186,9 +187,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }), cancellationToken);
 
             // ReSharper disable once MethodSupportsCancellation
-            _ = Task.Run(() =>
+            _ = Task.Run(async () =>
             {
-                GenerateData().ConfigureAwait(false);
+                await GenerateData().ConfigureAwait(false);
             }).ConfigureAwait(true);
 #pragma warning restore CS4014
 
@@ -212,6 +213,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
                 }), cancellationToken);
             }
+
+            EventAggregator?.Unsubscribe(this);
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
@@ -346,7 +349,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                     // CHECK AGAINST SPELLING
                     var spellingRecords =
-                        _spellingStatus.Status.FindAll(s => s.Word.ToLower() == biblicalTermsSpelling.ToLower());
+                        _spellingStatus.Status.FindAll(s => string.Equals(s.Word,
+                            biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
                     if (spellingRecords.Count == 0)
                     {
                         biblicalTermsSpelling = "";
@@ -467,27 +471,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             // not found in either the BiblicalTerms or AllBiblicalTerms.xml lists
                             gloss = biblicalTermsSense == "" ? sourceWord : biblicalTermsSense;
 
-                            GridData.Add(new PinsDataTable
+                            Dispatcher.CurrentDispatcher.Invoke(() =>
                             {
-                                Id = Guid.NewGuid(),
-                                XmlSource = "TR",
-                                XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath, "TermRenderings.xml"),
-                                Code = "KeyTerm",
-                                OriginID = terms.Id,
-                                Gloss = gloss,
-                                Lang = "",
-                                Lform = "",
-                                Match = "KeyTerm" + targetRendering,
-                                Notes = noteList,
-                                Phrase = "",
-                                Prefix = "",
-                                Refs = "",
-                                SimpRefs = "0",
-                                Source = targetRendering + biblicalTermsSpelling,
-                                Stem = "",
-                                Suffix = "",
-                                Word = "",
+                                GridData.Add(new PinsDataTable
+                                {
+                                    Id = Guid.NewGuid(),
+                                    XmlSource = "TR",
+                                    XmlPath = Path.Combine(_projectManager.CurrentParatextProject?.DirectoryPath, "TermRenderings.xml"),
+                                    Code = "KeyTerm",
+                                    OriginID = terms.Id,
+                                    Gloss = gloss,
+                                    Lang = "",
+                                    Lform = "",
+                                    Match = "KeyTerm" + targetRendering,
+                                    Notes = noteList,
+                                    Phrase = "",
+                                    Prefix = "",
+                                    Refs = "",
+                                    SimpRefs = "0",
+                                    Source = targetRendering + biblicalTermsSpelling,
+                                    Stem = "",
+                                    Suffix = "",
+                                    Word = "",
+                                });
                             });
+                          
                         }
                     }
 
@@ -657,6 +665,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
             catch (Exception ex)
             {
+                Logger!.LogError(ex, "An unpected error occurred while generating the PINS data.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(

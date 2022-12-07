@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\MarbleDataRequests\GetWhatIsThisWordSlice.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\marble-concordances\BHSAnalysis.xml" />
     <None Remove="Resources\marble-concordances\BHSLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\BHSSelectedLemmaConcordance.xml" />
@@ -556,6 +560,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_bhs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_gnt_long.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_gnt_simple.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_translations_bhs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_translations_gnt.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -563,6 +582,10 @@
     <None Update="Resources\ManuscriptVerses.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MarbleHelpers\DataFiles\" />
   </ItemGroup>
 
 </Project>

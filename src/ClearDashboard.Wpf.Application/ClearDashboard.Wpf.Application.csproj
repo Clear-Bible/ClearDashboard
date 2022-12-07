@@ -8,21 +8,27 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2022</Copyright>
-    <AssemblyVersion>0.4.3.0</AssemblyVersion>
-    <FileVersion>0.4.3.0</FileVersion>
-    <Version>0.4.3.0</Version>
+    <AssemblyVersion>0.4.4.0</AssemblyVersion>
+    <FileVersion>0.4.4.0</FileVersion>
+    <Version>0.4.4.0</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\About\**" />
     <Compile Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="ViewModels\About\**" />
     <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <None Remove="ViewModels\About\**" />
     <None Remove="Views\DesignSurface\**" />
+    <Page Remove="ViewModels\About\**" />
     <Page Remove="Views\DesignSurface\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
+    <Compile Remove="ViewModels\ParatextViews\WordMeaningsViewModel.cs" />
+    <Compile Remove="Views\ParatextViews\WordMeaningsView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +44,7 @@
     <None Remove="Resources\block_16.png" />
     <None Remove="Resources\ClearDashboard_logo_128.png" />
     <None Remove="Resources\Crystal Click 2.wav" />
+    <None Remove="Resources\donut_icon.ico" />
     <None Remove="Resources\GalSILB.ttf" />
     <None Remove="Resources\GalSILR.ttf" />
     <None Remove="Resources\GentiumPlus-Bold.ttf" />
@@ -45,12 +52,12 @@
     <None Remove="Resources\GentiumPlus-Italic.ttf" />
     <None Remove="Resources\GentiumPlus-Regular.ttf" />
     <None Remove="Resources\KadmosU.ttf" />
-    <None Remove="Resources\Layouts\Dashboard.Layout.config2" />
     <None Remove="Resources\logos_icon.png" />
     <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
+    <None Remove="Resources\Paratext_Send32.png" />
     <None Remove="Resources\Paratext_white_Icon48.png" />
     <None Remove="Resources\SBL_grk.ttf" />
     <None Remove="Resources\SBL_Hbrw.ttf" />
@@ -59,6 +66,10 @@
     <None Remove="Resources\settings_logo_96.png" />
     <None Remove="Resources\SILEOTSR.ttf" />
     <None Remove="Resources\tick_16.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\ParatextViews\WordMeaningsView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -84,9 +95,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\newproject.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resources\Layouts\Dashboard.Layout.config2">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -129,6 +137,9 @@
     <Resource Include="Resources\ClearDashboard_logo_128.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\donut_icon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\GalSILB.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -165,6 +176,9 @@
     <Resource Include="Resources\Paratext_Disconnected32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Paratext_Send32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Paratext_white_Icon48.png" />
     <Resource Include="Resources\SBL_grk.ttf" />
     <Resource Include="Resources\SBL_Hbrw.ttf" />
@@ -184,6 +198,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -203,6 +222,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.am.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -278,6 +301,9 @@
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -438,7 +464,6 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="Resources\TailBlazor\" />
-    <Folder Include="ViewModels\About\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
@@ -455,4 +480,8 @@
     <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-arm64</RuntimeIdentifier>
     <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
   </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
+  </Target>
 </Project>

@@ -31,28 +31,29 @@ public record GetApplicationWindowSettings();
 public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
 public record ShowTokenizationWindowMessage(
-    string ParatextProjectId, 
-    string ProjectName,
-    string TokenizationType,
-    Guid CorpusId, 
-    Guid TokenizedTextCorpusId, 
+    string? ParatextProjectId, 
+    string? ProjectName,
+    string? TokenizationType,
+    Guid? CorpusId, 
+    Guid? TokenizedTextCorpusId, 
     CorpusType CorpusType,
     //FIXME:surface serializationEngineStringDetokenizer Detokenizer,
-    bool IsRTL, bool IsNewWindow);
+    bool? IsRTL, 
+    bool? IsNewWindow);
 
 public record ShowParallelTranslationWindowMessage(
     string? TranslationSetId, 
     string? AlignmentSetId, 
-    string DisplayName, 
-    string ParallelCorpusId,
+    string? DisplayName, 
+    string? ParallelCorpusId,
     string? ParallelCorpusDisplayName,
     //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
     bool IsRTL,
     //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
     bool? IsTargetRTL, 
-    bool IsNewWindow,
-    string SourceParatextId,
-    string TargetParatextId);
+    bool? IsNewWindow,
+    string? SourceParatextId,
+    string? TargetParatextId);
 
 public record CloseDockingPane(Guid guid);
 public record UiLanguageChangedMessage(string LanguageCode);
@@ -82,7 +83,7 @@ public record CreateProjectMessage(string Message);
 
 
 #region ProjectDesignSurfaceMessages
-public record NodeSelectedChangedMessage(object Node);
+public record NodeSelectedChangedMessage(object? Node);
 public record ConnectionSelectedChangedMessage(Guid ConnectorId);
 public record CorpusAddedMessage(string ParatextId);
 public record CorpusDeletedMessage(string ParatextId);
@@ -111,7 +112,7 @@ public class DashboardProjectManager : ProjectManager
     private readonly INavigationService _navigationService;
 
     private bool _licenseCleared = false;
-    public static bool InComingChangesStarted { get; set; }
+    public static bool IncomingChangesStarted { get; set; }
 
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
@@ -220,12 +221,12 @@ public class DashboardProjectManager : ProjectManager
 
         {
             requestedVerses.Add(verse);
-            if (!InComingChangesStarted)
+            if (!IncomingChangesStarted)
             {
-                InComingChangesStarted = true;
+                IncomingChangesStarted = true;
                 CurrentVerse = verse;
                 await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
-                InComingChangesStarted = false;
+                IncomingChangesStarted = false;
 
                 if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))
                 {

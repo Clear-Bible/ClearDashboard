@@ -1,8 +1,9 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
 using System.Windows;
 using System.Windows.Controls;
+using ClearDashboard.Wpf.Application.ViewModels.Marble;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Views.Panes
 {
@@ -57,11 +58,15 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
                 return ToolStyle;
             }
 
-            if (item is WordMeaningsViewModel)
+            //if (item is WordMeaningsViewModel)
+            //{
+            //    return ToolStyle;
+            //}
+
+            if (item is MarbleViewModel)
             {
                 return ToolStyle;
             }
-
 
             if (item is PinsViewModel)
             {

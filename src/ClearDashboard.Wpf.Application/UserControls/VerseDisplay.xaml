@@ -6,14 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />
+
         <DataTemplate x:Key="SourceTokenDisplay">
             <local:TokenDisplay
                 DataContext="{Binding}"
+                HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalAlignment="Left"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteIndicatorColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorColor}"
@@ -22,7 +26,7 @@
                 SelectedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedTokenBackground}"
                 ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
-                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}"
+                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                 TokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontFamily}"
                 TokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontSize}"
                 TokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontStyle}"
@@ -68,6 +72,7 @@
         <DataTemplate x:Key="TargetTokenDisplay">
             <local:TokenDisplay
                 DataContext="{Binding}"
+                HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalAlignment="Left"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteIndicatorColor="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorColor}"
@@ -76,7 +81,7 @@
                 SelectedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SelectedTokenBackground}"
                 ShowNoteIndicator="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowNoteIndicators}"
                 ShowTranslation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ShowTranslations}"
-                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}"
+                TokenFlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                 TokenFontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFontFamily}"
                 TokenFontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFontSize}"
                 TokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFontStyle}"
@@ -121,24 +126,24 @@
         </DataTemplate>
         <ItemsPanelTemplate x:Key="SourceWrapPanelTemplate">
             <WrapPanel 
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}" 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" 
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" 
                 />
         </ItemsPanelTemplate>
         <ItemsPanelTemplate x:Key="TargetWrapPanelTemplate">
             <WrapPanel 
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}" 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}" 
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
         <ItemsPanelTemplate x:Key="SourceStackPanelTemplate">
             <StackPanel 
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}" 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" 
                 HorizontalAlignment="Left" 
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
         <ItemsPanelTemplate x:Key="TargetStackPanelTemplate">
             <StackPanel 
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}" 
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" 
                 HorizontalAlignment="Left" 
                 Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />
         </ItemsPanelTemplate>
@@ -161,7 +166,7 @@
             Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
             >
             <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFlowDirection}"
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                 ItemTemplate="{StaticResource SourceTokenDisplay}"
                 ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceItemsPanelTemplate}"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceTokens}" />
@@ -174,7 +179,7 @@
             Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetVisibility}">
             <ItemsControl
-                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetFlowDirection}"
+                FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsTargetRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                 ItemTemplate="{StaticResource TargetTokenDisplay}"
                 ItemsPanel="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetItemsPanelTemplate}"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TargetTokens}"

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearBible.Engine.Utils;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {

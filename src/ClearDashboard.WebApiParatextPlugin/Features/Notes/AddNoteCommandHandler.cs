@@ -35,77 +35,70 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Notes
         }
         public Task<RequestResult<IProjectNote>> Handle(AddNoteCommand request, CancellationToken cancellationToken)
         {
+            if (request.Data.ParatextProjectId.Equals(string.Empty))
+            {
+                throw new Exception($"paratextprojectid is not set");
+            }
+            IProject project;
             try
             {
-                if (request.Data.ParatextProjectId.Equals(string.Empty))
-                {
-                    throw new Exception($"paratextprojectid is not set");
-                }
-                IProject project;
-                try
-                {
-                    project = _host.GetAllProjects(true)
-                        .Where(p => p.ID.Equals(request.Data.ParatextProjectId))
-                        .First();
-                }
-                catch (Exception)
-                {
-                    throw new Exception($"paratextprojectid {request.Data.ParatextProjectId} not found");
-                }
-
-                IVerseRef verseRef;
-                if (request.Data.Book != -1 && request.Data.Chapter != -1 && request.Data.Verse != -1)
-                {
-                    verseRef = project.Versification.CreateReference(request.Data.Book, request.Data.Chapter, request.Data.Verse);
-                }
-                else
-                {
-                    verseRef = _parent.CurrentState.VerseRef;
-                }
-
-                using var writeLock = project.RequestWriteLock(_mainWindow, WriteLockReleaseRequested, WriteLockScope.ProjectNotes);
-                if (writeLock == null)
-                {
-                    throw new Exception("Couldn't obtain write lock required to add note. Abandoning operation.");
-                }
-                else
-                {
-                    IScriptureTextSelection anchor = null;
-                    if (request.Data.SelectedText == string.Empty)
-                    {
-                        anchor = project.GetScriptureSelectionForVerse(verseRef);
-                    }
-                    else
-                    {
-                        IReadOnlyList<IScriptureTextSelection> anchors;
-
-                        anchors = project.FindMatchingScriptureSelections(verseRef, request.Data.SelectedText, wholeWord: false);
-                        if (anchors.Count != 0)
-                        {
-                            if (anchors.Count() > request.Data.OccuranceIndexOfSelectedTextInVerseText)
-                                anchor = anchors[request.Data.OccuranceIndexOfSelectedTextInVerseText];
-                            else
-                                throw new Exception($"Couldn't find match for occurance index {request.Data.OccuranceIndexOfSelectedTextInVerseText} of selected text {request.Data.SelectedText}");
-                        }
-                    }
-                    if (anchor == null)
-                    {
-                        throw new Exception("Cannot find matching text in verse. Note not added to Paratext.");
-                    }
-                    List<CommentParagraph> commentParagraphs = new List<CommentParagraph>();
-                    foreach (var paragraph in request.Data.NoteParagraphs)
-                    {
-                        commentParagraphs.Add(new CommentParagraph(new FormattedString(paragraph)));
-                    }
-
-                    var noteAdded = project.AddNote(writeLock, anchor, commentParagraphs, assignedUser: new UserInfo(request.Data.ParatextUser));
-                    //cannot return IProjectNote return value from AddNote because it has a circular reference and the json serializer used with signalr cannot serialize the object.
-                    return Task.FromResult(new RequestResult<IProjectNote>(null));
-                }
+                project = _host.GetAllProjects(true)
+                    .Where(p => p.ID.Equals(request.Data.ParatextProjectId))
+                    .First();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception($"Type: {ex.GetType().FullName} Details: {ex}");
+                throw new Exception($"paratextprojectid {request.Data.ParatextProjectId} not found");
+            }
+
+            IVerseRef verseRef;
+            if (request.Data.Book != -1 && request.Data.Chapter != -1 && request.Data.Verse != -1)
+            {
+                verseRef = project.Versification.CreateReference(request.Data.Book, request.Data.Chapter, request.Data.Verse);
+            }
+            else
+            {
+                verseRef = _parent.CurrentState.VerseRef;
+            }
+
+            using var writeLock = project.RequestWriteLock(_mainWindow, WriteLockReleaseRequested, WriteLockScope.ProjectNotes);
+            if (writeLock == null)
+            {
+                throw new Exception("Couldn't obtain write lock required to add note.");
+            }
+            else
+            {
+                IScriptureTextSelection anchor = null;
+                if (request.Data.SelectedText == string.Empty)
+                {
+                    anchor = project.GetScriptureSelectionForVerse(verseRef);
+                }
+                else
+                {
+                    IReadOnlyList<IScriptureTextSelection> anchors;
+
+                    anchors = project.FindMatchingScriptureSelections(verseRef, request.Data.SelectedText, wholeWord: false);
+                    if (anchors.Count != 0)
+                    {
+                        if (anchors.Count() > request.Data.OccuranceIndexOfSelectedTextInVerseText)
+                            anchor = anchors[request.Data.OccuranceIndexOfSelectedTextInVerseText];
+                        else
+                            throw new Exception($"Couldn't find match for occurance index {request.Data.OccuranceIndexOfSelectedTextInVerseText} of selected text {request.Data.SelectedText}");
+                    }
+                }
+                if (anchor == null)
+                {
+                    throw new Exception("Cannot find matching text in verse. Note not added to Paratext.");
+                }
+                List<CommentParagraph> commentParagraphs = new List<CommentParagraph>();
+                foreach (var paragraph in request.Data.NoteParagraphs)
+                {
+                    commentParagraphs.Add(new CommentParagraph(new FormattedString(paragraph)));
+                }
+
+                var noteAdded = project.AddNote(writeLock, anchor, commentParagraphs, assignedUser: new UserInfo(request.Data.ParatextUser));
+                //cannot return IProjectNote return value from AddNote because it has a circular reference and the json serializer used with signalr cannot serialize the object.
+                return Task.FromResult(new RequestResult<IProjectNote>(null));
             }
         }
 

@@ -7,9 +7,9 @@ namespace ClearDashboard.Wpf.Application.Helpers
 {
     public static class PlaySound
     {
-        public static void PlaySoundFromResource(object sender, EventArgs e)
+        public static void PlaySoundFromResource()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            var assembly = Assembly.GetExecutingAssembly();
 
             var audio = Assembly.GetExecutingAssembly()
                 .GetManifestResourceNames()
@@ -17,9 +17,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 .ToList();
 
 
-            System.IO.Stream s = assembly.GetManifestResourceStream("ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav");
-            SoundPlayer player = new SoundPlayer(s);
-            player.Play();
+            using var stream =
+                assembly.GetManifestResourceStream("ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav");
+            {
+                var player = new SoundPlayer(stream);
+                player.Play();
+            }
         }
     }
 }

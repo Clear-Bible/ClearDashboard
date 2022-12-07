@@ -8,7 +8,6 @@ using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using System.Reflection;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +15,8 @@ using System.Threading;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -100,6 +101,17 @@ namespace ClearDashboard.Wpf.Application
         }
     }
 
+    internal class ProjectDesignSurfaceModule : Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            //builder.RegisterType<CorpusNodeViewModel>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectDesignSurfaceDataProvider>()
+                .As<IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>>()
+                .InstancePerLifetimeScope();
+            base.Load(builder);
+        }
+    }
 
     internal class ApplicationModule : Module
     {
