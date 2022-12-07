@@ -27,7 +27,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 throw new MediatorErrorEngineException($"Unable to create SemanticDomain - Text property has not been set");
             }
 
-            var command = new CreateSemanticDomainCommand(Text);
+            var command = new CreateOrUpdateSemanticDomainCommand(null, Text);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();

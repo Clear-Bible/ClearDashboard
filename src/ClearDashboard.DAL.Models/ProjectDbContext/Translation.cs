@@ -14,4 +14,6 @@ public class Translation : SynchronizableTimestampedEntity
 
     [ForeignKey("SourceTokenComponentId")]
     public virtual TokenComponent? SourceTokenComponent { get; set; }
+
+    public DateTimeOffset? Deleted { get; set; }
 }

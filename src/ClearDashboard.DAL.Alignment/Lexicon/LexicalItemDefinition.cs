@@ -19,7 +19,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             set;
 #endif
         }
-        public string? Text { get; set; }
+        public string? TrainingText { get; set; }
         public string? Language { get; set; }
 
 #if DEBUG
@@ -46,10 +46,10 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         {
             semanticDomains_ = new ObservableCollection<SemanticDomain>();
         }
-        internal LexicalItemDefinition(LexicalItemDefinitionId lexicalItemDefinitionId, string text, string? language, ICollection<SemanticDomain> semanticDomains)
+        internal LexicalItemDefinition(LexicalItemDefinitionId lexicalItemDefinitionId, string trainingText, string? language, ICollection<SemanticDomain> semanticDomains)
         {
             LexicalItemDefinitionId = lexicalItemDefinitionId;
-            Text = text;
+            TrainingText = trainingText;
             Language = language;
             semanticDomains_ = new ObservableCollection<SemanticDomain>(semanticDomains.DistinctBy(sd => sd.SemanticDomainId)); ;
         }

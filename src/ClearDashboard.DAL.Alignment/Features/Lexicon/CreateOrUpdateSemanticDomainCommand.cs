@@ -3,6 +3,7 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public record CreateSemanticDomainCommand(
+    public record CreateOrUpdateSemanticDomainCommand(
+        SemanticDomainId? SemanticDomainId,
         string Text) : ProjectRequestCommand<SemanticDomainId>;
 }

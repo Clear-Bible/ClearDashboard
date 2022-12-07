@@ -19,16 +19,15 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             set;
 #endif
         }
-        public string? Text { get; set; }
+        public string? TrainingText { get; set; }
         public string? Language { get; set; }
-        public string? Type { get; set; }
 
 #if DEBUG
         private ObservableCollection<LexicalItemDefinition> lexicalItemDefinitions_;
 #else
         // RELEASE MODIFIED
-        //private readonly ObservableCollection<SemanticDomain> semanticDomains_;
-        private ObservableCollection<SemanticDomain> semanticDomains_;
+        //private readonly ObservableCollection<LexicalItemDefinition> lexicalItemDefinitions_;
+        private ObservableCollection<LexicalItemDefinition> lexicalItemDefinitions_;
 #endif
 
         public ObservableCollection<LexicalItemDefinition> LexicalItemDefinitions
@@ -43,22 +42,43 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 #endif
         }
 
+#if DEBUG
+        private ObservableCollection<LexicalItemSurfaceText> lexicalItemSurfaceTexts_;
+#else
+        // RELEASE MODIFIED
+        //private readonly ObservableCollection<LexicalItemSurfaceText> lexicalItemSurfaceTexts_;
+        private ObservableCollection<LexicalItemSurfaceText> lexicalItemSurfaceTexts_;
+#endif
+
+        public ObservableCollection<LexicalItemSurfaceText> LexicalItemSurfaceTexts
+        {
+            get { return lexicalItemSurfaceTexts_; }
+#if DEBUG
+            set { lexicalItemSurfaceTexts_ = value; }
+#else
+            // RELEASE MODIFIED
+            //set { lexicalItemSurfaceTexts_ = value; }
+            set { lexicalItemSurfaceTexts_ = value; }
+#endif
+        }
+
         public LexicalItem()
         {
             lexicalItemDefinitions_ = new ObservableCollection<LexicalItemDefinition>();
+            lexicalItemSurfaceTexts_ = new ObservableCollection<LexicalItemSurfaceText>();
         }
-        internal LexicalItem(LexicalItemId lexicalItemId, string text, string? language, string? type, ICollection<LexicalItemDefinition> lexicalItemDefinitions)
+        internal LexicalItem(LexicalItemId lexicalItemId, string trainingText, string? language, ICollection<LexicalItemDefinition> lexicalItemDefinitions, ICollection<LexicalItemSurfaceText> lexicalItemSurfaceTexts)
         {
             LexicalItemId = lexicalItemId;
-            Text = text;
+            TrainingText = trainingText;
             Language = language;
-            Type = type;
             lexicalItemDefinitions_ = new ObservableCollection<LexicalItemDefinition>(lexicalItemDefinitions.DistinctBy(l => l.LexicalItemDefinitionId)); ;
+            lexicalItemSurfaceTexts_ = new ObservableCollection<LexicalItemSurfaceText>(lexicalItemSurfaceTexts.DistinctBy(l => l.LexicalItemSurfaceTextId)); ;
         }
 
         public async Task<LexicalItem> Create(IMediator mediator, CancellationToken token = default)
         {
-            var command = new CreateLexicalItemCommand(Text ?? string.Empty, Language, Type);
+            var command = new CreateOrUpdateLexicalItemCommand(null, TrainingText ?? string.Empty, Language);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
@@ -88,6 +108,27 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             lexicalItemDefinitions_.Add(lexicalItemDefinition);
         }
 
+        public async Task PutLexicalItemSurfaceText(IMediator mediator, LexicalItemSurfaceText lexicalItemSurfaceText, CancellationToken token = default)
+        {
+            if (lexicalItemSurfaceText.LexicalItemSurfaceTextId is not null &&
+                lexicalItemSurfaceTexts_.Any(l => l.LexicalItemSurfaceTextId == lexicalItemSurfaceText.LexicalItemSurfaceTextId))
+            {
+                return;
+            }
+
+            if (LexicalItemId is null)
+            {
+                throw new MediatorErrorEngineException("Create LexicalItem before associating with given LexicalItemSurfaceText");
+            }
+
+            var result = await mediator.Send(new PutLexicalItemSurfaceTextCommand(LexicalItemId, lexicalItemSurfaceText), token);
+            result.ThrowIfCanceledOrFailed();
+
+            lexicalItemSurfaceText.LexicalItemSurfaceTextId = result.Data!;
+
+            lexicalItemSurfaceTexts_.Add(lexicalItemSurfaceText);
+        }
+
         public async Task Delete(IMediator mediator, CancellationToken token = default)
         {
             if (LexicalItemId == null)
@@ -103,10 +144,12 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         public static async Task<LexicalItem?> Get(
             IMediator mediator,
-            string text,
+            string trainingText,
+            string language,
+            string? definitionLanguage,
             CancellationToken token = default)
         {
-            var command = new GetLexicalItemByTextQuery(text);
+            var command = new GetLexicalItemByTextQuery(trainingText, language, definitionLanguage);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);

@@ -20,4 +20,6 @@ public class Alignment : SynchronizableTimestampedEntity
     [ForeignKey("AlignmentSetId")]
     public Guid AlignmentSetId { get; set; }
     public virtual AlignmentSet? AlignmentSet { get; set; }
+
+    public DateTimeOffset? Deleted { get; set; }
 }

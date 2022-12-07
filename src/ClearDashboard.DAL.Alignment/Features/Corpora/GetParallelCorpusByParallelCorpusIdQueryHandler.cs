@@ -102,6 +102,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Where(vm => vm.Verses != null)
                 .Select(vm =>
                 {
+                    var sourceVerseMappingComposites = new List<CompositeToken>();
+                    var targetVerseMappingComposites = new List<CompositeToken>();
+
                     var sourceVerses = vm.Verses
                         .Where(v => v.CorpusId == sourceCorpusId)
                         .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
@@ -116,12 +119,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 .Where(tva => tva.TokenComponent != null)
                                 .OrderBy(tva => tva.Position)
                                 .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
-                            
-                            // FIXME:  We don't have anywhere to put these yet to return them
-                            //var sourceCompositeIds = parallelCorpus.TokenComposites
-                            //        .Where(tc => tc.TokenizedCorpusId == parallelCorpus.SourceTokenizedCorpusId)
-                            //        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
-                            //        .Select(tc => ModelHelper.BuildTokenId(tc));
+
+                            sourceVerseMappingComposites.AddRange(parallelCorpus.TokenComposites
+                                    .Where(tc => tc.TokenizedCorpusId == parallelCorpus.SourceTokenizedCorpusId)
+                                    .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
+                                    .Select(tc => ModelHelper.BuildCompositeToken(tc)));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
@@ -145,11 +147,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 .OrderBy(tva => tva.Position)
                                 .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
 
-                            // FIXME:  We don't have anywhere to put these yet to return them
-                            //var targetCompositeIds = parallelCorpus.TokenComposites
-                            //        .Where(tc => tc.TokenizedCorpusId == parallelCorpus.TargetTokenizedCorpusId)
-                            //        .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
-                            //        .Select(tc => ModelHelper.BuildTokenId(tc));
+                            targetVerseMappingComposites.AddRange(parallelCorpus.TokenComposites
+                                    .Where(tc => tc.TokenizedCorpusId == parallelCorpus.TargetTokenizedCorpusId)
+                                    .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
+                                    .Select(tc => ModelHelper.BuildCompositeToken(tc)));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
@@ -158,7 +159,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 targetTokenIds);
                         });
 
-                    return new VerseMapping(sourceVerses, targetVerses);
+                    return new VerseMapping(sourceVerses, targetVerses, sourceVerseMappingComposites, targetVerseMappingComposites);
                 });
 
             return verseMappings;

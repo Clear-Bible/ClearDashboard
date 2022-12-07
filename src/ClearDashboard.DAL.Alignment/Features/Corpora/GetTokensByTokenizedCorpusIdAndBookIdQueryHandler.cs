@@ -30,13 +30,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 <IEnumerable<VerseTokens>>>
             GetDataAsync(GetTokensByTokenizedCorpusIdAndBookIdQuery request, CancellationToken cancellationToken)
         {
-            var bookNumberForAbbreviation = GetBookNumberForSILAbbreviation(request.BookId);
+            var bookNumberForAbbreviation = ModelHelper.GetBookNumberForSILAbbreviation(request.BookId);
 
             // We do a ToList() here to avoid 'cannot create expression tree'
             // errors in the VerseTokens GroupBy below
             var bookNumberAsPaddedString = $"{bookNumberForAbbreviation:000}";
             var verseRows = ProjectDbContext.VerseRows
-                .Include(vr => vr.TokenComponents)
+                .Include(vr => vr.TokenComponents.Where(tc => tc.Deleted == null))
                 .Where(vr => vr.TokenizedCorpusId == request.TokenizedCorpusId.Id)
                 .Where(vr => vr.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
                 .OrderBy(vr => vr.BookChapterVerse)
@@ -104,30 +104,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             (
                 verseTokens
             );
-        }
-
-        private static int GetBookNumberForSILAbbreviation(string silBookAbbreviation)
-        {
-            var bookMappingDatum = FileGetBookIds.BookIds
-                .FirstOrDefault(bookDatum => bookDatum.silCannonBookAbbrev == silBookAbbreviation);
-
-            if (bookMappingDatum == null)
-            {
-                throw new Exception(
-                    $"Unable to map book abbreviation: {silBookAbbreviation} to book number."
-                );
-            }
-
-            if (Int32.TryParse(bookMappingDatum.silCannonBookNum, out int intifiedBookNumber))
-            {
-                return intifiedBookNumber;
-            }
-            else
-            {
-                throw new Exception(
-                    $"Unable to parse book number {bookMappingDatum.silCannonBookNum} for SIL Book abbreviation {silBookAbbreviation}"
-                );
-            }
         }
     }
 }

@@ -9,12 +9,13 @@ namespace ClearDashboard.DataAccessLayer.Models
         {
             // ReSharper disable VirtualMemberCallInConstructor
             LexicalItemDefinitions = new HashSet<LexicalItemDefinition>();
+            LexicalItemSurfaceTexts = new HashSet<LexicalItemSurfaceText>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
         public string? Language { get; set; }
-        public string? Type { get; set; }
-        public string? Text { get; set; }
+        public string? TrainingText { get; set; }
         public ICollection<LexicalItemDefinition> LexicalItemDefinitions { get; set; }
+        public ICollection<LexicalItemSurfaceText> LexicalItemSurfaceTexts { get; set; }
     }
 }

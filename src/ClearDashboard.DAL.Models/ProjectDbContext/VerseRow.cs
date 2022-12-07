@@ -24,7 +24,5 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Guid TokenizedCorpusId { get; set; }
         public virtual TokenizedCorpus? TokenizedCorpus { get; set; }
         public virtual ICollection<TokenComponent> TokenComponents { get; set; }
-
-        public DateTimeOffset? Deleted { get; set; }
     }
 }

@@ -64,6 +64,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var tokenIdGuids = request.TokenIds.Select(t => t.Id).ToList();
 
             var translations = ModelHelper.AddIdIncludesTranslationsQuery(ProjectDbContext!)
+                .Where(tr => tr.Deleted == null)
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
                 .Where(tr => tokenIdGuids.Contains(tr.SourceTokenComponentId))
                 .Select(t => new Alignment.Translation.Translation(
@@ -238,6 +239,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     var sourceTextToTopTargetTrainingText = ProjectDbContext!.Alignments
                         .Include(a => a.SourceTokenComponent)
                         .Include(a => a.TargetTokenComponent)
+                        .Where(a => a.Deleted == null)
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
                         .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
                         .ToList()

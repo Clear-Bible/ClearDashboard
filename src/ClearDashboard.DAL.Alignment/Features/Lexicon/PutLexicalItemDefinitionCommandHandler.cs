@@ -17,14 +17,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
     public class PutLexicalItemDefinitionCommandHandler : ProjectDbContextCommandHandler<PutLexicalItemDefinitionCommand,
         RequestResult<LexicalItemDefinitionId>, LexicalItemDefinitionId>
     {
-        private readonly IMediator _mediator;
-
-        public PutLexicalItemDefinitionCommandHandler(IMediator mediator,
+        public PutLexicalItemDefinitionCommandHandler(
             ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
             ILogger<PutLexicalItemDefinitionCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
             logger)
         {
-            _mediator = mediator;
         }
 
         protected override async Task<RequestResult<LexicalItemDefinitionId>> SaveDataAsync(PutLexicalItemDefinitionCommand request,
@@ -43,7 +40,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     );
                 }
 
-                lexicalItemDefinition.Text = request.LexicalItemDefinition.Text;
+                lexicalItemDefinition.TrainingText = request.LexicalItemDefinition.TrainingText;
                 lexicalItemDefinition.Language = request.LexicalItemDefinition.Language;
             }
             else
@@ -51,7 +48,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 lexicalItemDefinition = new Models.LexicalItemDefinition
                 {
                     Id = request.LexicalItemDefinition.LexicalItemDefinitionId?.Id ?? Guid.NewGuid(),
-                    Text = request.LexicalItemDefinition.Text,
+                    TrainingText = request.LexicalItemDefinition.TrainingText,
                     Language = request.LexicalItemDefinition.Language,
                     LexicalItemId = request.LexicalItemId.Id
                 };

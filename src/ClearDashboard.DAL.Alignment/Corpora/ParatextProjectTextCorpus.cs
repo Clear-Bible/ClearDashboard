@@ -5,6 +5,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using MediatR;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
+using static ClearBible.Engine.Persistence.FileGetBookIds;
 using GetVersificationAndBookIdByParatextProjectIdQuery = ClearDashboard.DAL.Alignment.Features.Corpora.GetVersificationAndBookIdByParatextProjectIdQuery;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
@@ -28,17 +29,41 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         public static async Task<ParatextProjectTextCorpus> Get(
             IMediator mediator,
-            string paratextProjectId, CancellationToken token)
+            string paratextProjectId,
+            IEnumerable<string>? bookIds = null,
+            CancellationToken token = default)
         {
             var command = new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId);
 
             var result = await mediator.Send(command, token);
             if (result.Success)
             {
+                var bookAbbreviations = (bookIds is not null && bookIds.Any()) 
+                    ? result.Data.bookAbbreviations.Intersect(bookIds) 
+                    : result.Data.bookAbbreviations;
+
                 return new ParatextProjectTextCorpus(
                     command.ParatextProjectId, 
-                    mediator, result.Data.versification ?? throw new InvalidParameterEngineException(name: "versification", value: "null"), 
-                    result.Data.bookAbbreviations);
+                    mediator, result.Data.versification ?? throw new InvalidParameterEngineException(name: "versification", value: "null"),
+                    bookAbbreviations);
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(result.Message);
+            }
+        }
+
+        public static async Task<IEnumerable<string>> GetBookIds(
+            IMediator mediator,
+            string paratextProjectId,
+            CancellationToken token = default)
+        {
+            var command = new GetVersificationAndBookIdByParatextProjectIdQuery(paratextProjectId);
+
+            var result = await mediator.Send(command, token);
+            if (result.Success)
+            {
+                return result.Data.bookAbbreviations;
             }
             else
             {
