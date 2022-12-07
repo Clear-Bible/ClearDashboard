@@ -115,7 +115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
 
-        private List<ParatextProjectMetadata> _projectMetadata = new();
+        public List<ParatextProjectMetadata> ProjectMetadata = new();
 
         #endregion //Public Properties
 
@@ -390,7 +390,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var result = await ProjectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken)!;
             if (result.Success && result.HasData)
             {
-                _projectMetadata = result.Data;
+                //ProjectMetadata = result.Data;
+                ProjectManager!.ProjectMetadata = result.Data;
             }
         }
 

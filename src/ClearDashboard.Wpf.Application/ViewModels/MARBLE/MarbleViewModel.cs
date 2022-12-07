@@ -505,7 +505,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                     SourceTextFontFamily = "SBL Greek";
                 }
 
-                var project = ProjectManager.ProjectsMetadata.FirstOrDefault(x => x.Id == ProjectManager.CurrentParatextProject.Guid);
+                var project = ProjectManager!.ProjectMetadata.FirstOrDefault(x => x.Id == ProjectManager.CurrentParatextProject.Guid);
 
                 VerseText = verseText;
                 VerseTextFontFamily = project.FontFamily;

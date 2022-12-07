@@ -112,6 +112,8 @@ public class DashboardProjectManager : ProjectManager
     private bool _licenseCleared = false;
     public static bool IncomingChangesStarted { get; set; }
 
+    public List<ParatextProjectMetadata> ProjectMetadata = new();
+
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
         EventAggregator = eventAggregator;
