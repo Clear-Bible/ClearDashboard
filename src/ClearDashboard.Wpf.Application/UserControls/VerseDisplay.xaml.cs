@@ -493,18 +493,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void UpdateSelection(TokenDisplayViewModel token, bool addToSelection)
         {
-            var tokenIsSelected = token.IsSelected;
+            var tokenIsSelected = token.IsTokenSelected;
             if (!addToSelection)
             {
                 foreach (var selectedToken in SelectedTokens)
                 {
-                    selectedToken.IsSelected = false;
+                    selectedToken.IsTokenSelected = false;
                 }
                 SelectedTokens.Clear();
             }
 
-            token.IsSelected = !tokenIsSelected;
-            if (token.IsSelected)
+            token.IsTokenSelected = !tokenIsSelected;
+            if (token.IsTokenSelected)
             {
                 SelectedTokens.Add(token);
             }
@@ -544,7 +544,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             var control = e.Source as FrameworkElement;
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            if (tokenDisplay is { IsSelected: false })
+            if (tokenDisplay is { IsTokenSelected: false })
             {
                 UpdateSelection(tokenDisplay, false);
             }

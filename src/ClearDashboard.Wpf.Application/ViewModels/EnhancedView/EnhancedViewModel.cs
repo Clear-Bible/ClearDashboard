@@ -1494,7 +1494,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
                 }
 
-                if (!token.IsSelected)
+                if (!token.IsTokenSelected)
                 {
                     SelectedTokens.Remove(token);
                 }

@@ -180,7 +180,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         SelectedTokens.Add(selectedToken);
                     }
                 }
-                if (!token.IsSelected)
+                if (!token.IsTokenSelected)
                 {
                     SelectedTokens.Remove(token);
                 }
@@ -242,7 +242,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            e.TokenDisplayViewModel.IsSelected = true;
+            e.TokenDisplayViewModel.IsTokenSelected = true;
             SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
             NotePaneVisibility = Visibility.Visible;
         }

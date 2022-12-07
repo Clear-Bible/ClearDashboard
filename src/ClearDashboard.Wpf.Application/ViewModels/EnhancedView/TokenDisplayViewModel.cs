@@ -17,7 +17,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public Token Token { get; }
 
-        public bool IsSource { get; set; }
+        /// <summary>
+        /// Gets or sets whether this is a source token.
+        /// </summary>
+        /// <remarks>
+        /// If true, this is a source token.  If false, this is a target token (alignment).
+        /// </remarks>
+        public bool IsSource { get; set; } = true;
 
         /// <summary>
         /// Padding to be rendered before the token, as determined by a <see cref="EngineStringDetokenizer"/>.
@@ -61,14 +67,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public NoteIdCollection NoteIds { get; set; } = new();
 
-        private bool _isSelected;
+        private bool _isTokenSelected;
         /// <summary>
         /// Gets or sets whether this token is selected.
         /// </summary>
-        public bool IsSelected
+        public bool IsTokenSelected
         {
-            get => _isSelected;
-            set => Set(ref _isSelected, value);
+            get => _isTokenSelected;
+            set => Set(ref _isTokenSelected, value);
+        }        
+        
+        private bool _isTranslationSelected;
+        /// <summary>
+        /// Gets or sets whether the translation for this token is selected.
+        /// </summary>
+        public bool IsTranslationSelected
+        {
+            get => _isTranslationSelected;
+            set => Set(ref _isTranslationSelected, value);
         }
 
         private bool _isHighlighted;
@@ -95,17 +111,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void NoteAdded(NoteViewModel? note)
         {
-            //Notes.Add(note);
             NoteIds.AddDistinct(note!.NoteId!);
-            //NotifyOfPropertyChange(nameof(Notes));
             NotifyOfPropertyChange(nameof(HasNote));
         }
 
         public void NoteDeleted(NoteViewModel? note)
         {
-            //Notes.Remove(note);
             NoteIds.RemoveIfExists(note!.NoteId!);
-            //NotifyOfPropertyChange(nameof(Notes));
             NotifyOfPropertyChange(nameof(HasNote));
         }
 

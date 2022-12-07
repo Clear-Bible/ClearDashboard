@@ -156,12 +156,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private static void UnselectTokens(TokenDisplayViewModelCollection collection, TokenDisplayViewModelCollection selectedTokens)
         {
-            var currentlySelectedTokens = collection.Where(t => t.IsSelected);
+            var currentlySelectedTokens = collection.Where(t => t.IsTokenSelected);
             foreach (var token in currentlySelectedTokens)
             {
                 if (!selectedTokens.Contains(token))
                 {
-                    token.IsSelected = false;
+                    token.IsTokenSelected = false;
                 }
             }
         }

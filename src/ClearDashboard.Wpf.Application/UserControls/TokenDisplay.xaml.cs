@@ -1195,7 +1195,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
             NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
             TokenBackground = TokenDisplayViewModel.IsHighlighted ? HighlightedTokenBackground
-                               : TokenDisplayViewModel.IsSelected ? SelectedTokenBackground 
+                               : TokenDisplayViewModel.IsTokenSelected ? SelectedTokenBackground 
                                : Brushes.Transparent;
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
