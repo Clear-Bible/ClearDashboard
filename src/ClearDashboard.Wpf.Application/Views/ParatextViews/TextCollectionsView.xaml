@@ -82,9 +82,9 @@
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="1">
 
-            <cef:ChromiumWebBrowser x:Name="Browser" Address="https://www.google.com" />
 
-            <!--<ListView
+
+            <ListView
                 x:Name="TextCollectionListView"
                 Width="{Binding ActualWidth, ElementName=LowerBorder}"
                 Height="{Binding ElementName=LowerBorder, Path=ActualHeight}"
@@ -106,17 +106,22 @@
                                             Width="Auto"
                                             InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
                                             TextWrapping="Wrap" />
-                                        <WebBrowser
+                                        <cef:ChromiumWebBrowser
+                                            x:Name="TextCollectionWebBrowser"
+                                            Width="{Binding ActualWidth, ElementName=TextCollectionListView}"
+                                            Height="200"
+                                            paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}" />
+                                        <!--<WebBrowser
                                             Name="myWebBrowser"
                                             Height="200"
-                                            paratextViews:WebBrowserHelper.Body="{Binding MyHtml}" />
+                                            paratextViews:WebBrowserHelper.Body="{Binding MyHtml}" />-->
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
                 </ListView.View>
-            </ListView>-->
+            </ListView>
         </Border>
     </Grid>
 </UserControl>

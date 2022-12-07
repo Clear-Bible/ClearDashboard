@@ -11,6 +11,8 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
+using CefSharp;
+using CefSharp.Wpf;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
@@ -309,10 +311,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         #endregion // Methods
     }
 
-    public class WebBrowserHelper
+    //public class WebBrowserHelper
+    //{
+    //    public static readonly DependencyProperty BodyProperty =
+    //        DependencyProperty.RegisterAttached("Body", typeof(string), typeof(WebBrowserHelper), new PropertyMetadata(OnBodyChanged));
+
+    //    public static string GetBody(DependencyObject dependencyObject)
+    //    {
+    //        return (string)dependencyObject.GetValue(BodyProperty);
+    //    }
+
+    //    public static void SetBody(DependencyObject dependencyObject, string body)
+    //    {
+    //        dependencyObject.SetValue(BodyProperty, body);
+    //    }
+
+    //    private static void OnBodyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    //    {
+    //        var webBrowser = (WebBrowser)d;
+    //        webBrowser.NavigateToString((string)e.NewValue);
+    //    }
+    //}
+
+    public class ChromiumWebBrowserHelper
     {
         public static readonly DependencyProperty BodyProperty =
-            DependencyProperty.RegisterAttached("Body", typeof(string), typeof(WebBrowserHelper), new PropertyMetadata(OnBodyChanged));
+            DependencyProperty.RegisterAttached("Body", typeof(string), typeof(ChromiumWebBrowserHelper), new PropertyMetadata(OnBodyChanged));
 
         public static string GetBody(DependencyObject dependencyObject)
         {
@@ -326,8 +350,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private static void OnBodyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var webBrowser = (WebBrowser)d;
-            webBrowser.NavigateToString((string)e.NewValue);
+            var chromiumWebBrowser = (ChromiumWebBrowser)d;
+            chromiumWebBrowser.LoadHtml((string)e.NewValue, "http://ClearDashboard.Wpf.Application.TextCollection/"); //.NavigateToString((string)e.NewValue);
         }
     }
 }
