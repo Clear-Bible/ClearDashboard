@@ -245,40 +245,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 {
                                     try
                                     {
-                                        //var list = UsxParser.ParseXMLToList(endPart);
-                                        //list.Reverse();
-                                        //var count = 0;
-                                        //foreach (var item in list)
-                                        //{
-                                        //    if (count < 100)
-                                        //    {
-                                        //        count++;
-                                        //        tc.Inlines.Insert(0, item.Inline);
-                                        //    }
-                                        //}
-
                                         string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
                                         var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
-                                        //MyHtml = html;
                                         tc.MyHtml = html;
-
-                                        //_myHtml = @"<!DOCTYPE html>
-                                        //<html lang=""en"">
-                                        //    <body>
-                                        //    <div>My Test HTML 'single quote', ""double quote""</div>
-                                        //    </body>
-                                        //</html>";
-                                        //var htmlCollection = new TextCollection()
-                                        //{
-                                        //    Data = html
-                                        //};
-                                        //var textCollectionList = new List<TextCollection>();
-                                        //textCollectionList.Add(htmlCollection);
-                                        //await EventAggregator.PublishOnUIThreadAsync(new TextCollectionChangedMessage(textCollectionList));
-                                        //break;
-                                        //var html = UsxParser.ConvertXMLToHTML(endPart, CurrentBcv.Book, ProjectManager.CurrentParatextProject.Language.FontFamily,1);
-
-                                        //var strang = UsxParser.ParseXMLstring(endPart);
                                     }
                                     catch (Exception e)
                                     {
@@ -332,28 +301,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         #endregion // Methods
     }
-
-    //public class WebBrowserHelper
-    //{
-    //    public static readonly DependencyProperty BodyProperty =
-    //        DependencyProperty.RegisterAttached("Body", typeof(string), typeof(WebBrowserHelper), new PropertyMetadata(OnBodyChanged));
-
-    //    public static string GetBody(DependencyObject dependencyObject)
-    //    {
-    //        return (string)dependencyObject.GetValue(BodyProperty);
-    //    }
-
-    //    public static void SetBody(DependencyObject dependencyObject, string body)
-    //    {
-    //        dependencyObject.SetValue(BodyProperty, body);
-    //    }
-
-    //    private static void OnBodyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    //    {
-    //        var webBrowser = (WebBrowser)d;
-    //        webBrowser.NavigateToString((string)e.NewValue);
-    //    }
-    //}
 
     public class ChromiumWebBrowserHelper
     {

@@ -68,22 +68,12 @@
                 VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
-
-        <!--<StackPanel Grid.Row="1" Orientation="Vertical">-->
-        <!--<WebBrowser x:Name="webBrowser" Height="200" Loaded="WebBrowser_OnLoaded"/>-->
-
-        <!--<Frame Name="myFrame" Source="../../Resources/page.html"/>-->
-
-        <!--<Button Name="WebBrowserTest" Click="WebBrowserTest_OnClick" />-->
         <Border
             x:Name="LowerBorder"
             Grid.Row="1"
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="1">
-
-
-
             <ListView
                 x:Name="TextCollectionListView"
                 Width="{Binding ActualWidth, ElementName=LowerBorder}"
@@ -111,10 +101,6 @@
                                             Width="{Binding ActualWidth, ElementName=TextCollectionListView}"
                                             Height="200"
                                             paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}" />
-                                        <!--<WebBrowser
-                                            Name="myWebBrowser"
-                                            Height="200"
-                                            paratextViews:WebBrowserHelper.Body="{Binding MyHtml}" />-->
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

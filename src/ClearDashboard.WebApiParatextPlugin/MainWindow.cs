@@ -444,10 +444,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     {
                                         XmlDocument xDoc = new();
                                         xDoc.LoadXml(usxString);
-                                        //var query = "//*[@vid='"+_verseRef+ "' or sid='"+_verseRef+"']";
-                                        //var query = "//*[count(preceding-sibling::*[@sid='"+_verseRef+"'])=1]";
-                                        //var query = "//*[preceding-sibling::*/verse[@sid='GEN 1:1'] and following-sibling::*/verse[@eid='GEN 1:1']]";
-                                        List<XmlNode> verseNodeList = new(); // = xDoc.SelectNodes(query);
+                                        List<XmlNode> verseNodeList = new();
 
                                         bool startMarkerFound = false;
                                         bool endMarkerFound = false;
@@ -546,7 +543,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     }
                                     catch (Exception ex)
                                     {
-                                        //TODO Log that there was an issue, possibly a text collection not found 
+                                        Log.Error(ex, "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
                                     }
                                 }
                                 else
@@ -808,13 +805,13 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                 }
                 _projectMetadata = metadata;
-            }
 
-             if (fontError)
-            {
-                _hasFontErrorBeenDisplayed = true;
+                if (fontError)
+                {
+                    _hasFontErrorBeenDisplayed = true;
+                }
             }
-
+            
             return _projectMetadata;
         }
 

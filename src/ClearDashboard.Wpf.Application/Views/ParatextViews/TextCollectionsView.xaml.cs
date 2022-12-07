@@ -24,40 +24,9 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
     /// </summary>
     public partial class TextCollectionsView : UserControl//, IHandle<TextCollectionChangedMessage>
     {
-        //public bool TextCollectionLoaded { get; set; }
-        //public string DisplayHtml { get; set; }
-       
-
         public TextCollectionsView()
         {
             InitializeComponent();
-
-            //IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
-            //eventAggregator.Subscribe(this);
         }
-
-        //public Task HandleAsync(TextCollectionChangedMessage message, CancellationToken cancellationToken)
-        //{
-        //    DisplayHtml = message.TextCollections.FirstOrDefault().Data;
-
-        //    SetHtml(DisplayHtml, TextCollectionLoaded);
-
-        //    return Task.CompletedTask;
-        //}
-
-        //private void WebBrowser_OnLoaded(object sender, RoutedEventArgs e)
-        //{
-        //    TextCollectionLoaded = true;
-
-        //    SetHtml(DisplayHtml, TextCollectionLoaded);
-        //}
-
-        //private void SetHtml(string html, bool condition)
-        //{
-        //    if (condition)
-        //    {
-        //        //webBrowser.NavigateToString(html);
-        //    }
-        //} 
     }
 }
