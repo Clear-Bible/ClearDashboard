@@ -18,6 +18,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
@@ -51,6 +53,9 @@ namespace ClearDashboard.WebApiParatextPlugin
         private delegate void AppendMsgTextDelegate(Color color, string text);
 
         private List<TextCollection> _textCollections = new();
+
+        private bool _hasFontErrorBeenDisplayed = false;
+
         #endregion
 
         #region startup
@@ -145,7 +150,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             if (!ExpectedFailedToLoadAssemblies.Contains(truncatedName))
             {
                 AppendText(Color.Orange, $"Cannot load {args.RequestingAssembly?.FullName} which is not part of the expected assemblies that will not properly be loaded by the plug-in, returning null.");
-                    return null;
+                return null;
             }
             // Load the most up to date version
             Assembly assembly;
@@ -166,15 +171,24 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         private void StartWebHost()
         {
-            AppendText(Color.Green, $"StartWebApplication called");
+            int portNumber = 9000;
+
+            // check to see if the port is in use which means that we probably have 
+            // a window open already
+            if (PortInUse(portNumber))
+            {
+                PortInUseMethod();
+                return;
+            }
+
+            AppendText(Color.Green, "StartWebApplication called");
 
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += FailedAssemblyResolutionHandler;
 
             try
             {
-                var baseAddress = "http://localhost:9000/";
-
+                var baseAddress = $"http://localhost:{portNumber}/";
                 WebAppProxy?.Dispose();
 
                 // Start OWIN host 
@@ -185,14 +199,27 @@ namespace ClearDashboard.WebApiParatextPlugin
                         WebHostStartup.Configuration(appBuilder);
                     });
 
-
-
                 AppendText(Color.Green, "Owin Web Api host started");
+            }
+            catch (Exception e)
+            {
+                if (e.InnerException.Message.StartsWith("Failed to listen on prefix 'http://localhost:"))
+                {
+                    PortInUseMethod();
+                }
             }
             finally
             {
                 currentDomain.AssemblyResolve -= FailedAssemblyResolutionHandler;
             }
+        }
+
+        private void PortInUseMethod()
+        {
+            ClearTextWindow();
+
+            AppendText(Color.Purple,
+                $"\n\nIF YOU WISH TO SWITCH THE DASHBOARD PLUGIN TO BE ASSOCIATED WITH THE {_project.ShortName} PROJECT, PLEASE CLOSE ALL OTHER OPEN DASHBOARD PLUGIN WINDOWS FIRST.");
         }
 
         /// <summary>
@@ -278,6 +305,29 @@ namespace ClearDashboard.WebApiParatextPlugin
 
 
         #region Methods
+
+        /// <summary>
+        /// Method to check if a port is in use or not
+        /// </summary>
+        /// <param name="port"></param>
+        /// <returns></returns>
+        private bool PortInUse(int port)
+        {
+            bool inUse = false;
+
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] ipEndPoints = ipProperties.GetActiveTcpListeners();
+
+            foreach (IPEndPoint endPoint in ipEndPoints)
+            {
+                if (endPoint.Port == port)
+                {
+                    inUse = true;
+                    break;
+                }
+            }
+            return inUse;
+        }
 
         private void OnExceptionOccurred(Exception exception)
         {
@@ -518,6 +568,13 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// <param name="e"></param>
         private void btnClearWindow_Click(object sender, EventArgs e)
         {
+            ClearTextWindow();
+
+            AppendText(Color.Green, DateTime.Now.ToShortTimeString());
+        }
+
+        private void ClearTextWindow()
+        {
             // clear out the existing data
             if (rtb.InvokeRequired)
             {
@@ -527,8 +584,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 rtb.Clear();
             }
-
-            AppendText(Color.Green, DateTime.Now.ToShortTimeString());
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -560,10 +615,12 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public List<ParatextProjectMetadata> GetProjectMetadata()
         {
+            bool fontError = false;
+
             var projects = _host.GetAllProjects(true);
 
 
-            var metadata=  projects.Select(project =>
+            var metadata = projects.Select(project =>
                 {
                     var metaData = new ParatextProjectMetadata
                     {
@@ -581,11 +638,15 @@ namespace ClearDashboard.WebApiParatextPlugin
                     try
                     {
                         // check to see if this font is installed locally
-                        FontFamily family =new FontFamily(project.Language.Font.FontFamily);
+                        FontFamily family = new FontFamily(project.Language.Font.FontFamily);
                     }
                     catch (Exception e)
                     {
-                        AppendText(Color.Red, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
+                        if (_hasFontErrorBeenDisplayed == false)
+                        {
+                            fontError = true;
+                            AppendText(Color.PaleVioletRed, $"Project: {project.ShortName} FontFamily Warning: {e.Message} on this computer");
+                        }
 
                         // use the default font
                         metaData.FontFamily = "Segoe UI";
@@ -603,7 +664,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
             var directories = directoryInfo.GetDirectories();
-            foreach (var directory in directories.Where(directory=> projectNames.Contains(directory.Name)))
+            foreach (var directory in directories.Where(directory => projectNames.Contains(directory.Name)))
             {
                 var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
                 if (projectMetadatum != null)
@@ -619,6 +680,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     projectMetadatum.CorpusType = CorpusType.Resource;
                 }
+            }
+
+            if (fontError)
+            {
+                _hasFontErrorBeenDisplayed = true;
             }
 
             return metadata;
@@ -723,7 +789,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             //{
             //    var referenceUsfm = GetReferenceUSFM(proj.Guid);
             //}
-            
+
 
             return allProjects;
         }
@@ -833,7 +899,7 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             }
 
-            
+
             if (project.Type != null)
             {
                 paratextProject.CorpusType = CorpusType.Unknown;
@@ -993,7 +1059,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             {
                 switch (project.Versification.Type)
                 {
-    
+
                     case StandardScrVersType.English:
                         versificationBookIds.Versification = ScrVers.English;
                         break;
@@ -1021,7 +1087,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
 
                 var books = project.AvailableBooks.Where(b => b.Code != "");
-                versificationBookIds.BookAbbreviations = books.Select(item => item.Code).ToList();
+                versificationBookIds.BookAbbreviations = books
+                    .Where(item => CheckUsfmBookForVerseData(project.ID, item.Code))
+                    .Select(item => item.Code)
+                    .ToList();
+
                 return versificationBookIds;
             }
             return new VersificationBookIds();
@@ -1057,7 +1127,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                 AppendText(Color.Orange, $"Could not find a book with Id = '{bookId}'. Returning an empty list.");
                 return verses;
             }
-            
+
             // only return information for "bible books" and not the extra material
             // TODO - is this true??
             if (BibleBookScope.IsBibleBook(book.Code) == false)
@@ -1218,6 +1288,71 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             return verses;
 
+        }
+
+        public bool CheckUsfmBookForVerseData(string paratextProjectId, string bookCode)
+        {
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            // get the right project
+            var project = projects.FirstOrDefault(p => p.ID == paratextProjectId);
+
+            var verses = new List<UsfmVerse>();
+            if (project == null)
+            {
+                AppendText(Color.Orange, $"Could not find a project with Id = '{paratextProjectId}'. Returning an empty list.");
+                return false;
+            }
+
+            // filter down to the book desired
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookCode);
+            if (book == null)
+            {
+                AppendText(Color.Orange, $"Could not find a book with Id = '{bookCode}'. Returning an empty list.");
+                return false;
+            }
+
+            // only return information for "bible books" and not the extra material
+            // TODO - is this true??
+            if (BibleBookScope.IsBibleBook(book.Code) == false)
+            {
+                AppendText(Color.Orange, $"'{book.Code}' is not a bible book. Returning an empty list.");
+                return false;
+            }
+
+
+
+            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+            try
+            {
+                // get tokens by book number (from object) and chapter
+                tokens = project.GetUSFMTokens(book.Number);
+            }
+            catch (Exception)
+            {
+                AppendText(Color.Orange, $"No Scripture for {bookCode}");
+                return false;
+            }
+
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMTextToken textToken)
+                {
+                    if (token.IsScripture)
+                    {
+                        // verse text
+                        if (textToken.Text.Trim() != "")
+                        {
+                            //AppendText(Color.Green, $"Processing {book.Code} TRUE");
+                            return true;
+                        }
+                    }
+                }
+
+            }
+
+            //AppendText(Color.PaleVioletRed, $"Processing {book.Code} FALSE");
+            return false;
         }
 
         #endregion

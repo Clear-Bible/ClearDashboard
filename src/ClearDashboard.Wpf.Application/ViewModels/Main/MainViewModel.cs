@@ -1770,21 +1770,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public string GetFontFamilyFromParatextProjectId(string paratextProjectId)
         {
-            var sourceProject = _projectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
+            if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
+            {
+                return ManuscriptIds.HebrewFontFamily;
+            }
+
+            if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
+            {
+                return ManuscriptIds.GreekFontFamily;
+            }
+
+            var sourceProject = ProjectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
             if (sourceProject is not null)
             {
                 return sourceProject.FontFamily;
-            }
-            else
-            {
-                if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
-                {
-                    return ManuscriptIds.HebrewFontFamily;
-                }
-                else if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
-                {
-                    return ManuscriptIds.GreekFontFamily;
-                }
             }
             return "Segoe UI";
         }

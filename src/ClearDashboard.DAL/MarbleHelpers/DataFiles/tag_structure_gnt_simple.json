@@ -1,0 +1,326 @@
+{
+   "tag_options" : {
+      "case" : [
+         "-",
+         "a",
+         "d",
+         "g",
+         "n",
+         "v"
+      ],
+      "case_possessed" : [
+            "-",
+            "a",
+            "d",
+            "g",
+            "n",
+            "v"
+         ],
+      "declinable" : [
+            "-",
+            "i",
+            "d"
+         ],
+      "gender" : [
+            "-",
+            "m",
+            "f",
+            "n"
+         ],
+      "gender_possessed" : [
+            "-",
+            "m",
+            "f",
+            "n"
+         ],
+      "level" : [
+            "--",
+            "cp",
+            "-p",
+            "c-"
+         ],
+      "location" : [
+            "-",
+            "e",
+            "b",
+            "p",
+            "f"
+         ],
+      "mood" : [
+            "-",
+            "i",
+            "m",
+            "o",
+            "n",
+            "p",
+            "s",
+            "r"
+         ],
+      "number" : [
+            "-",
+            "s",
+            "p"
+         ],
+      "number_possessed" : [
+            "-",
+            "s",
+            "p"
+         ],
+      "part_of_speech" : [
+            "adjc",
+            "advb",
+            "anum",
+            "aram",
+            "artc",
+            "cndp",
+            "conj",
+            "hebr",
+            "intj",
+            "nlet",
+            "noun",
+            "nprp",
+            "part",
+            "pcir",
+            "pcor",
+            "pdem",
+            "pidf",
+            "pirg",
+            "pnct",
+            "ppos",
+            "pprs",
+            "prec",
+            "prel",
+            "prep",
+            "prfl",
+            "pstp",
+            "vfin",
+            "vinf",
+            "vptc"
+         ],
+      "person" : [
+            "-",
+            "1",
+            "2",
+            "3"
+         ],
+      "separator_dash" : [
+            "-"
+         ],
+      "taxis" : [
+            "-",
+            "c",
+            "s"
+         ],
+      "tense" : [
+            "--",
+            "-f",
+            "-a",
+            "2r",
+            "-l",
+            "-i",
+            "2f",
+            "-p",
+            "-r",
+            "2l",
+            "2a"
+         ],
+      "voice" : [
+            "-",
+            "a",
+            "e",
+            "d",
+            "m",
+            "o",
+            "n",
+            "p"
+         ]
+   },
+   "tag_root" : "part_of_speech",
+   "tag_sequence" : {
+         "adjc" : [
+            "separator_dash",
+            "declinable",
+            "case",
+            "gender",
+            "number"
+         ],
+         "advb" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "anum" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "aram" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "artc" : [
+               "separator_dash",
+               "declinable",
+               "case",
+               "gender",
+               "number"
+            ],
+         "cndp" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "conj" : [
+               "separator_dash",
+               "declinable",
+               "taxis",
+               "location",
+               "level"
+            ],
+         "hebr" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "intj" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "nlet" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "noun" : [
+               "separator_dash",
+               "declinable",
+               "case",
+               "gender",
+               "number"
+            ],
+         "nprp" : [
+               "separator_dash",
+               "declinable",
+               "case",
+               "gender",
+               "number"
+            ],
+         "part" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "pcir" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "pcor" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "pdem" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "pidf" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "pirg" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "pnct" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "ppos" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "number",
+               "case_possessed",
+               "gender_possessed",
+               "number_possessed"
+            ],
+         "pprs" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "prec" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "prel" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "prep" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "prfl" : [
+               "separator_dash",
+               "declinable",
+               "person",
+               "case",
+               "gender",
+               "number"
+            ],
+         "pstp" : [
+               "separator_dash",
+               "declinable"
+            ],
+         "vfin" : [
+               "separator_dash",
+               "declinable",
+               "tense",
+               "voice",
+               "mood",
+               "person",
+               "number"
+            ],
+         "vinf" : [
+               "separator_dash",
+               "declinable",
+               "tense",
+               "voice"
+            ],
+         "vptc" : [
+               "separator_dash",
+               "declinable",
+               "tense",
+               "voice",
+               "mood",
+               "case",
+               "gender",
+               "number"
+            ]
+      }
+}

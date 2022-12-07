@@ -13,6 +13,21 @@ namespace ClearDashboard.Wpf.Application.Helpers
     {
         public static void Show(object datacontext, double actualWidth, double actualHeight)
         {
+            bool found = false;
+            foreach (var window in App.Current.Windows)
+            {
+                if (window is MirrorView)
+                {
+                    (window as MirrorView).Close();
+                    found = true;
+                }
+            }
+
+            if (found)
+            {
+                return;
+            }
+
             // create instance of MirrorView
             var mirror = new MirrorView
             {
