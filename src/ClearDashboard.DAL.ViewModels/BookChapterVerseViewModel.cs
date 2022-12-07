@@ -175,6 +175,11 @@ namespace ClearDashboard.DAL.ViewModels
         // ReSharper disable once InconsistentNaming
         public string BBBCCCVVV => Concat(Book, ChapterIdText, VerseIdText);
 
+        public int GetBBBCCCVVV()
+        {
+            return Convert.ToInt32(BBBCCCVVV);
+        }
+
         /// <summary>
         /// Based on the properties of this object, it returns the complete verse location ID. Modified function for compatibility.
         /// </summary>

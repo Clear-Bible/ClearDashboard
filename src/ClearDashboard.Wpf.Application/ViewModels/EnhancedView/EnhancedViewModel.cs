@@ -24,6 +24,7 @@ using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.Views.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using Brush = System.Windows.Media.Brush;
@@ -92,7 +94,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private readonly List<ParallelProject> _parallelProjects = new();
         private readonly List<AddAlignmentToEnhancedViewMessage> _parallelMessages = new();
 
-
+        public EnhancedViewLayout EnhancedViewLayout
+        {
+            get => _enhancedViewLayout;
+            set => Set(ref _enhancedViewLayout, value);
+        }
 
         #endregion //Member Variables
 
@@ -400,7 +406,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             PaneId = Guid.NewGuid();
         }
 
+        public async Task Initialize(EnhancedViewLayout enhancedViewLayout)
+        {
+            EnhancedViewLayout = enhancedViewLayout;
 
+            Title = enhancedViewLayout.Title;
+            VerseOffsetRange = enhancedViewLayout.VerseOffset;
+            BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
+            ParatextSync = enhancedViewLayout.ParatextSync;
+            CurrentBcv.SetVerseFromId(enhancedViewLayout.BBBCCCVVV);
+            ProgressBarVisibility = Visibility.Visible;
+
+
+            await Task.CompletedTask;
+        }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";
@@ -724,63 +743,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         }), cancellationToken);
 
 
-                    List<TokensTextRow> tokensTextRows = new();
-                    try
-                    {
-                        // get the rows for the current book and chapter
-                        tokensTextRows = currentTokenizedTextCorpus[CurrentBook?.Code]
-                            .GetRows()
-                            .WithCancellation(localCancellationToken)
-                            .Cast<TokensTextRow>()
-                            .Where(ttr => ttr
-                                .Tokens
-                                .Count(t => t
-                                    .TokenId
-                                    .ChapterNumber == CurrentBcv.ChapterNum) > 0)
-                            .ToList();
-                    }
-                    catch (Exception )
-                    {
-                        bookFound = false;
-                    }
 
-
-                    // get the row for the current verse
-                    var index = 0;
-                    for (var i = 0; i < tokensTextRows.Count; i++)
-                    {
-                        var verseRef = (VerseRef)tokensTextRows[i].Ref;
-
-                        if (verseRef.VerseNum == CurrentBcv.VerseNum)
-                        {
-                            index = i;
-                            break;
-                        }
-                    }
-
-                    var lowEnd = index - VerseOffsetRange;
-                    if (lowEnd < 0)
-                        lowEnd = 0;
-
-                    var upperEnd = index + VerseOffsetRange;
-
-                    // filter down to only these verses
-                    var offset = upperEnd - lowEnd + 1;
-                    var tokensTextRowsRange = tokensTextRows.Skip(lowEnd).Take(offset).ToList();
-
+                    var offset = (ushort)VerseOffsetRange;
+                    var verseRange = currentTokenizedTextCorpus.GetByVerseRange(new VerseRef(CurrentBcv.GetBBBCCCVVV()), offset, offset);
+                    var tokensTextRowsRange = verseRange.textRows.Select(v => new TokensTextRow(v)).ToArray();
+                    var indexOfVerse = verseRange.indexOfVerse;
+                 
                     // set the title to include the verse range
                     var title = message.ProjectName + " - " + message.TokenizationType;
-                    if (tokensTextRowsRange.Count == 1)
+                    if (tokensTextRowsRange.Length == 1)
                     {
                         title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{CurrentBcv.VerseNum})";
                     }
                     else
                     {
                         // check to see if we actually have a verse
-                        if (tokensTextRowsRange.Count > 0)
+                        if (tokensTextRowsRange.Length > 0)
                         {
                             var startNum = (VerseRef)tokensTextRowsRange[0].Ref;
                             var endNum = (VerseRef)tokensTextRowsRange[^1].Ref;
+                            //var startNum = indexOfVerse - offset;
+                            //var endNum = indexOfVerse + offset;
                             title += $" ({CurrentBcv.BookName} {CurrentBcv.ChapterNum}:{startNum.VerseNum} - {endNum.VerseNum})";
 
                         }
@@ -828,7 +811,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         new BackgroundTaskStatus
                         {
                             Name = "Fetch Book",
-                            Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
+                            Description = $"Found {tokensTextRowsRange.Length} TokensTextRow entities.",
                             StartTime = DateTime.Now,
                             TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
                         }), cancellationToken);
@@ -1092,22 +1075,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             List<TokenDisplayViewModel> verseTokens = new();
             var versesOut = new BindableCollection<VerseDisplayViewModel>();
-            var rows = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
+            var rows = await GetVerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
 
-
-            // var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-            // var parallelCorpusId =
-            //     topLevelProjectIds.ParallelCorpusIds.FirstOrDefault(p => p.Id.ToString() == message.ParallelCorpusId);
-
-            //var corpus = await ParallelCorpus.Get(Mediator, parallelCorpusId);
-            //var result = corpus.GetByVerseRange(new VerseRef(Convert.ToInt32(CurrentBcv.BBBCCCVVV)), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
             //var verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
-            //var rows = result.parallelTextRows;
-
-            var verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
-
-
-
 
             if (rows is null)
             {
@@ -1120,8 +1090,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                //NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
-                //foreach (var row in rows.Cast<EngineParallelTextRow>())
                 foreach (var row in rows)
                 {
                     var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
@@ -1133,7 +1101,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
                             //FIXME:surface serialization message.SourceDetokenizer, 
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            message.IsRTL,
+                            message.IsRTL.Value,
                             //FIXME:surface serialization message.TargetDetokenizer ?? throw new InvalidParameterEngineException(name: "message.TargetDetokenizer", value: "null", message: "message.TargetDetokenizer must not be null when message.AlignmentSetId is not null."),
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             message.IsTargetRTL ?? throw new InvalidDataEngineException(name: "IsTargetRTL", value: "null"));
@@ -1145,7 +1113,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null")),
                             //FIXME:surface serialization message.SourceDetokenizer, 
                             new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            message.IsRTL);
+                            message.IsRTL.Value);
                     versesOut.Add(verseDisplayViewModel);
                 }
 
@@ -1160,6 +1128,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     // INTERLINEARS
                     title += " " + LocalizationStrings.Get("EnhancedView_Interlinear", _logger);
                 }
+
+                var verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
 
                 var bcv = new BookChapterVerseViewModel();
                 if (rows.Count() <= 1)
@@ -1226,7 +1196,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return verseRange;
         }
 
-        private async Task<List<EngineParallelTextRow?>> VerseTextRow(int bbbcccvvv, AddAlignmentToEnhancedViewMessage message)
+        private async Task<List<EngineParallelTextRow>> GetVerseTextRow(int bbbcccvvv, AddAlignmentToEnhancedViewMessage message)
         {
             try
             {
@@ -1261,13 +1231,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 var verses = corpus.GetByVerseRange(new VerseRef(bbbcccvvv), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
 
-                List<EngineParallelTextRow?> rows = new();
-                foreach (var verse in verses.parallelTextRows)
-                {
-                    rows.Add(verse as EngineParallelTextRow);
-                }
+                var rows = verses.parallelTextRows.Select(v => (EngineParallelTextRow)v).ToList();
 
-                return rows;  // return verses.parallelTextRows.FirstOrDefault() as EngineParallelTextRow;
+                return rows;  
             }
             catch (Exception e)
             {
@@ -1284,7 +1250,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             // same color as defined in SharedVisualTemplates.xaml
             Brush brush = Brushes.SaddleBrown;
 
-            // get the fontfamily for this project
+            // get the font family for this project
             var sourceFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
             var targetFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
 
@@ -1354,7 +1320,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 viewModel.ShowTranslation = showTranslations;
                 viewModel.Title = title;
                 viewModel.Verses = verses;
-                viewModel.IsRtl = message.IsRTL;
+                viewModel.IsRtl = message.IsRTL.Value;
                 viewModel.IsTargetRtl = message.IsTargetRTL ?? false;
                 viewModel.SourceFontFamily = fontFamilySource;
                 viewModel.TargetFontFamily = fontFamilyTarget;
@@ -1823,6 +1789,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region VerseControlMethods
 
         private Visibility _noteControlVisibility = Visibility.Collapsed;
+        private EnhancedViewLayout _enhancedViewLayout;
+
         public Visibility NoteControlVisibility
         {
             get => _noteControlVisibility;

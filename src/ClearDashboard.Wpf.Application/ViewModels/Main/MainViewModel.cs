@@ -40,6 +40,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Exceptions;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -58,11 +59,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<FilterPinsMessage>
     {
         #region Member Variables
+
         #nullable disable
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
-        private INavigationService NavigationService { get; set; }
+        private INavigationService NavigationService { get; }
         private NoteManager NoteManager { get; }
 
        
@@ -415,27 +417,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 await SaveAvalonDockLayout();
             }
 
-            // save the open document windows
-            var enhancedViewLayoutsOld = new List<EnhancedViewLayoutOld>();
-            foreach (var item in Items)
-            {
-                if (item is EnhancedViewModel enhancedViewModel)
-                {
-                    if (enhancedViewModel.EnhancedViewItemMetadataOld.Count > 0)
-                    {
-                        // get the displayed contents
-                        enhancedViewLayoutsOld.Add(new EnhancedViewLayoutOld
-                        {
-                            BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
-                            EnhancedViewItems = enhancedViewModel.EnhancedViewItemMetadataOld,
-                            Title = enhancedViewModel.Title,
-                            ParatextSync = enhancedViewModel.ParatextSync,
-                            VerseOffset = enhancedViewModel.VerseOffsetRange,
-                        });
-                    }
-                }
-            }
+            await SaveProjectData();
 
+            UnsubscribeFromEventAggregator();
+
+
+            // Clear the items in the event the user is switching projects.
+            Items.Clear();
+
+            return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        private void UnsubscribeFromEventAggregator()
+        {
+            // unsubscribe to the event aggregator
+            Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
+            EventAggregator?.Unsubscribe(this);
+        }
+
+        private async Task SaveProjectData()
+        {
+            try
+            {
+                await SaveProjectEnhancedViewTabs();
+                await SaveProjectDesignSurface();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e.Message);
+            }
+        }
+
+        private async Task SaveProjectEnhancedViewTabs()
+        {
             var enhancedViewLayouts = new List<EnhancedViewLayout>();
             foreach (var item in Items)
             {
@@ -456,46 +470,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
 
-            try
+            var options = CreateDiscriminatedJsonSerializerOptions();
+            ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(enhancedViewLayouts, options);
+            await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
+
+        }
+
+        private static JsonSerializerOptions CreateDiscriminatedJsonSerializerOptions()
+        {
+            var options = new JsonSerializerOptions
             {
-                JsonSerializerOptions options = new()
-                {
-                    IncludeFields = true,
-                    WriteIndented = false,
-                  
-                };
-                ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(enhancedViewLayoutsOld, options);
+                IncludeFields = true,
+                WriteIndented = false,
+            };
+            options.SetupExtensions();
+            var registry = options.GetDiscriminatorConventionRegistry();
+            registry.ClearConventions();
+            registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(options, "_t"));
+            registry.RegisterType<InterlinearEnhancedViewItemMetadatum>();
+            registry.RegisterType<AlignmentEnhancedViewItemMetadatum>();
+            registry.RegisterType<TokenizedCorpusEnhancedViewItemMetadatum>();
+            return options;
+        }
 
-
-                options = new JsonSerializerOptions
-                {
-                    IncludeFields = true,
-                    WriteIndented = false,
-
-                };
-                options.SetupExtensions();
-                var registry = options.GetDiscriminatorConventionRegistry();
-                registry.ClearConventions();
-                registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(options, "_t"));
-                registry.RegisterType<InterlinearEnhancedViewItemMetadatum>();
-                registry.RegisterType<AlignmentEnhancedViewItemMetadatum>();
-                registry.RegisterType<TokenizedCorpusEnhancedViewItemMetadatum>();
-      
-
-
-                var json = JsonSerializer.Serialize(enhancedViewLayouts, options);
-                Console.WriteLine(json);
-
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e.Message);
-            }
-
-            // unsubscribe to the event aggregator
-            Logger.LogInformation($"Unsubscribing {nameof(MainViewModel)} to the EventAggregator");
-            EventAggregator?.Unsubscribe(this);
-
+        private async Task SaveProjectDesignSurface()
+        {
             // save the design surface
             // NB:  Call the following results "System.ObjectDisposedException: Instances cannot be resolved and nested lifetimes cannot be created from this LifetimeScope as it (or one of its parent scopes) has already been disposed."
             //await _projectDesignSurfaceViewModel.SaveCanvas();
@@ -503,12 +502,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             Logger!.LogInformation("Saving ProjectDesignSurface layout.");
             ProjectManager.CurrentProject.DesignSurfaceLayout = _projectDesignSurfaceViewModel.SerializeDesignSurface();
             await ProjectManager.UpdateProject(ProjectManager.CurrentProject);
-
-            Items.Clear();
-
-            return base.OnDeactivateAsync(close, cancellationToken);
         }
-        
+
         protected override async void OnViewLoaded(object view)
         {
             // send out a notice that the project is loaded up
@@ -595,7 +590,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private IEnumerable<EnhancedViewModel> EnhancedViewModels => Items.Where(item => item is EnhancedViewModel).Cast<EnhancedViewModel>();
 
-        private void LoadEnhancedViewData(List<EnhancedViewLayoutOld> enhancedViews)
+        private void LoadEnhancedViewData(List<EnhancedViewLayout> enhancedViews)
         {
             foreach (var enhancedView in enhancedViews)
             {
@@ -612,40 +607,58 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         var cancellationToken = new CancellationToken();
                         var cancellationTokenLocal = new CancellationToken();
 
-                        //TODO:  FIX ME! GERFEN
-                        if (enhancedViewItem.MessageType == MessageType.ShowTokenizationWindowMessage &&
-                            enhancedViewItem.Data != null)
+                        if (enhancedViewItem.GetType()== typeof(TokenizedCorpusEnhancedViewItemMetadatum) )
+                        {
+                            var item = (TokenizedCorpusEnhancedViewItemMetadatum)enhancedViewItem;
+                            try
+                            {
+                               
+                                var message =  new AddTokenizedCorpusToEnhancedViewMessage(item.ParatextProjectId,item.ProjectName, item.TokenizationType, item.CorpusId, item.TokenizedTextCorpusId, item.CorpusType, item.IsRtl, item.IsNewWindow);
+                                await enhancedViewModel.ShowCorpusText(message, cancellationToken, cancellationTokenLocal);
+                                await Task.Delay(100, cancellationToken);
+                              
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.LogError(e, "Error loading tokenization window");
+                            }
+
+ 
+                        }
+                        else if (enhancedViewItem.GetType() == typeof(AlignmentEnhancedViewItemMetadatum))
                         {
                             try
                             {
-                                var json = enhancedViewItem.Data.ToString();
-                                var message = JsonSerializer.Deserialize<AddTokenizedCorpusToEnhancedViewMessage>(json!);
-                                if (message is not null)
-                                {
-                                    await enhancedViewModel.ShowCorpusText(message, cancellationToken, cancellationTokenLocal);
-                                    await Task.Delay(100, cancellationToken);
-                                }
+                                var item = (AlignmentEnhancedViewItemMetadatum)enhancedViewItem;
+                                var message = new AddAlignmentToEnhancedViewMessage(null, item.AlignmentSetId,
+                                    item.DisplayName, item.ParallelCorpusId, item.ParallelCorpusDisplayName, item.IsRtl,
+                                    item.IsTargetRtl, item.IsNewWindow, item.SourceParatextId, item.TargetParatextId);
+                          
+                                enhancedViewModel.ProgressBarVisibility = Visibility.Visible;
+                                await enhancedViewModel.ShowParallelTranslation(message, cancellationToken,
+                                    cancellationTokenLocal);
+                                await Task.Delay(100, cancellationTokenLocal);
+                      
                             }
                             catch (Exception e)
                             {
                                 Logger.LogError(e, "Error loading tokenization window");
                             }
                         }
-                        else if (enhancedViewItem.MessageType ==
-                                 MessageType.ShowParallelTranslationWindowMessage &&
-                                 enhancedViewItem.Data != null)
+                        else if (enhancedViewItem.GetType() == typeof(InterlinearEnhancedViewItemMetadatum))
                         {
                             try
                             {
-                                var json = enhancedViewItem.Data.ToString();
-                                var message = JsonSerializer.Deserialize<AddAlignmentToEnhancedViewMessage>(json!);
-                                if (message is not null)
-                                {
-                                    enhancedViewModel.ProgressBarVisibility = Visibility.Visible;
-                                    await enhancedViewModel.ShowParallelTranslation(message, cancellationToken,
-                                        cancellationTokenLocal);
-                                    await Task.Delay(100, cancellationTokenLocal);
-                                }
+                                var item = (InterlinearEnhancedViewItemMetadatum)enhancedViewItem;
+                                var message = new AddAlignmentToEnhancedViewMessage(item.TranslationSetId, null,
+                                    item.DisplayName, item.ParallelCorpusId, item.ParallelCorpusDisplayName, item.IsRtl,
+                                    item.IsTargetRtl, item.IsNewWindow, item.SourceParatextId, item.TargetParatextId);
+
+                                enhancedViewModel.ProgressBarVisibility = Visibility.Visible;
+                                await enhancedViewModel.ShowParallelTranslation(message, cancellationToken,
+                                    cancellationTokenLocal);
+                                await Task.Delay(100, cancellationTokenLocal);
+
                             }
                             catch (Exception e)
                             {
@@ -657,10 +670,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        private async Task DrawEnhancedViewTabs(List<EnhancedViewLayoutOld> enhancedViews)
+        private async Task DrawEnhancedViewTabs(List<EnhancedViewLayout> enhancedViewLayouts)
         {
             int index = 0;
-            foreach (var enhancedView in enhancedViews)
+            foreach (var enhancedViewLayout in enhancedViewLayouts)
             {
                 EnhancedViewModel enhancedViewModel = null;
                 if (index == 0)
@@ -669,32 +682,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     enhancedViewModel = (EnhancedViewModel)Items.FirstOrDefault(vm => vm is EnhancedViewModel);
                 }
 
-                var isNewEnhancedView = false;
-                if (enhancedViewModel is null)
+                var isNewEnhancedView = enhancedViewModel is null;
+                if (isNewEnhancedView)
                 {
                     // create a new one
                     enhancedViewModel = await ActivateItemAsync<EnhancedViewModel>();
-                    isNewEnhancedView = true;
-                }
-                //  EnhancedViewModel
-                enhancedViewModel.Title = enhancedView.Title;
-                enhancedViewModel.VerseOffsetRange = enhancedView.VerseOffset;
-                enhancedViewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-                enhancedViewModel.ParatextSync = enhancedView.ParatextSync;
-                enhancedViewModel.CurrentBcv.SetVerseFromId(enhancedView.BBBCCCVVV);
-                enhancedViewModel.ProgressBarVisibility = Visibility.Visible;
 
-                if (isNewEnhancedView)
-                {
                     var enhancedViewLayoutDocument = new LayoutDocument
                     {
                         Content = enhancedViewModel,
-                        Title = enhancedView.Title,
+                        Title = enhancedViewLayout.Title,
                     };
 
 
                     AddNewEnhancedViewTab(enhancedViewLayoutDocument);
                 }
+
+                await enhancedViewModel.Initialize(enhancedViewLayout);
                 await Task.Delay(100);
             }
         }
@@ -706,59 +710,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
       
-        private List<EnhancedViewLayoutOld> LoadEnhancedViewTabLayout()
+        private List<EnhancedViewLayout> LoadEnhancedViewTabLayout()
         {
             if (ProjectManager.CurrentProject?.WindowTabLayout is null)
             {
                 return null;
             }
             var json = ProjectManager.CurrentProject.WindowTabLayout;
-            return JsonSerializer.Deserialize<List<EnhancedViewLayoutOld>>(json);
+            var options = CreateDiscriminatedJsonSerializerOptions();
+            return JsonSerializer.Deserialize<List<EnhancedViewLayout>>(json, options);
         }
-
-        //private async Task Initialize()
-        //{
-        //    await RebuildMainMenu();
-        //    await ActivateDockedWindowViewModels();
-        //    await LoadAvalonDockLayout();
-        //    await LoadEnhancedViewTabs();
-        //    await ConfigureCurrentBcv();
-
-        //}
-
-        //private async Task ConfigureCurrentBcv()
-        //{
-        //    // grab the dictionary of all the verse lookups
-        //    if (ProjectManager?.CurrentParatextProject is not null)
-        //    {
-        //        BCVDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-
-        //        var books = BCVDictionary.Values.GroupBy(b => b.Substring(0, 3))
-        //            .Select(g => g.First())
-        //            .ToList();
-
-        //        foreach (var book in books)
-        //        {
-        //            var bookId = book.Substring(0, 3);
-
-        //            var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
-
-        //            CurrentBcv.BibleBookList?.Add(bookName);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        BCVDictionary = new Dictionary<string, string>();
-        //    }
-
-        //    // set the CurrentBcv prior to listening to the event
-        //    CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
-
-        //    // Subscribe to changes of the Book Chapter Verse data object.
-        //    //CurrentBcv.PropertyChanged += BcvChanged;
-
-        //    await Task.CompletedTask;
-        //}
 
         private async Task ActivateDockedWindowViewModels()
         {
@@ -790,8 +751,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
             else
             {
-                //var filePath = Path.Combine(Environment.CurrentDirectory, @"Resources\Layouts\Dashboard.Layout.config");
-                //Settings.Default.LastLayout = filePath;
                 // check to see if the layout exists
                 var layoutPath = Settings.Default.LastLayout;
                 LoadLayout(layoutSerializer, File.Exists(layoutPath) ? layoutPath : FileLayouts[0].LayoutPath);
@@ -1180,11 +1139,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task SaveAvalonDockLayout()
         {
+
             var filePath = string.Empty;
             if (SelectedLayout == null)
             {
                 // create a new layout
-                if (SelectedLayoutText != string.Empty)
+                if (!string.IsNullOrEmpty(SelectedLayoutText))
                 {
                     filePath = Path.Combine(ProjectManager.CurrentParatextProject.DirectoryPath!, "shared");
                     filePath = Path.Combine(filePath, Helpers.Helpers.SanitizeFileName(SelectedLayoutText) + ".Layout.config");
@@ -1272,7 +1232,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // from current layout using the content ids
             // LayoutSerializationCallback should anyway be handled to attach contents
             // not currently loaded
-#pragma warning disable CA1416 // Validate platform compatibility
+            #pragma warning disable CA1416 // Validate platform compatibility
             layoutSerializer.LayoutSerializationCallback += (_, e) =>
             {
                 if (e.Model.ContentId is not null)
@@ -1293,7 +1253,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     };
                 }
             };
-#pragma warning restore CA1416 // Validate platform compatibility
+            #pragma warning restore CA1416 // Validate platform compatibility
             try
             {
                 layoutSerializer.Deserialize(filePath);
@@ -1424,9 +1384,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // DOCUMENTS
                 case WorkspaceLayoutNames.EnhancedView:
                     var enhancedViewModel = GetPaneViewModelFromItems("EnhancedViewModel");
-                    //var vm14 = GetPaneViewModelFromItems("EnhancedViewConductorViewModel");
                     return (enhancedViewModel, enhancedViewModel.Title, enhancedViewModel.DockSide);
-
                 // TOOLS
                 case WorkspaceLayoutNames.BiblicalTerms:
                     var biblicalTermsViewModel = GetToolViewModelFromItems("BiblicalTermsViewModel");
@@ -1438,8 +1396,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     var textCollectionsViewModel = GetToolViewModelFromItems("TextCollectionsViewModel");
                     return (textCollectionsViewModel, textCollectionsViewModel.Title, textCollectionsViewModel.DockSide);
                 //case WorkspaceLayoutNames.WordMeanings:
-                //    var vm3 = GetToolViewModelFromItems("WordMeaningsViewModel");
-                //    return (vm3, vm3.Title, vm3.DockSide);
+                //    var wordMeaningsViewModel = GetToolViewModelFromItems("WordMeaningsViewModel");
+                //    return (wordMeaningsViewModel, wordMeaningsViewModel.Title, wordMeaningsViewModel.DockSide);
                 case WorkspaceLayoutNames.Marble:
                     var marbleViewModel = GetToolViewModelFromItems("MarbleViewModel");
                     return (marbleViewModel, marbleViewModel.Title, marbleViewModel.DockSide);
@@ -1528,7 +1486,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.Marble:
                         case WorkspaceLayoutNames.Pins:
                         case WorkspaceLayoutNames.TextCollection:
-
+                        {
                             // window has been closed so reload it
                             windowPane = new LayoutAnchorable
                             {
@@ -1550,10 +1508,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                             {
                                 windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
                             }
+
                             break;
-
+                        }
                     }
-
                 }
                 else
                 {
@@ -1561,7 +1519,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
 
             }
-#pragma warning restore CA1416 // Validate platform compatibility
+            #pragma warning restore CA1416 // Validate platform compatibility
         }
 
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
@@ -1617,6 +1575,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             await DeactivateDockedWindows();
 
+
+            //TODO:  How should this be refactored?
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             viewModel.CurrentCorpusName = message!.ProjectName!;
             viewModel.Title = $"{message.ProjectName} ({message.TokenizationType})"; // message.ProjectName + " (" + tokenizationType + ")";
@@ -1630,7 +1590,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 ContentId = message.ParatextProjectId,
                 Content = viewModel,
-                Title = $"⳼{message.ProjectName} ({message.TokenizationType})", // message.ProjectName + " (" + tokenizationType + ")",
+                Title = $"⳼ {message.ProjectName} ({message.TokenizationType})", 
                 IsActive = true
             };
 
@@ -1740,6 +1700,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             await DeactivateDockedWindows();
 
+
+            // TODO:  How should this be refactored?
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             viewModel.Title = message.DisplayName;
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
@@ -1825,14 +1787,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
             }
             return "Segoe UI";
-        }
-    }
-
-    internal class MissingEnhancedViewModelException : Exception
-    {
-        public MissingEnhancedViewModelException(string message) : base(message)
-        {
-            
         }
     }
 }

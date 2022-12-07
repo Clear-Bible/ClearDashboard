@@ -47,7 +47,7 @@ public record AddAlignmentToEnhancedViewMessage(
     string? ParallelCorpusId,
     string? ParallelCorpusDisplayName,
     //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
-    bool IsRTL,
+    bool? IsRTL,
     //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
     bool? IsTargetRTL, 
     bool? IsNewWindow,
