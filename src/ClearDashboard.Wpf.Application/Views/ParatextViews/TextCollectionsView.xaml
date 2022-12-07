@@ -2,17 +2,15 @@
     x:Class="ClearDashboard.Wpf.Application.Views.ParatextViews.TextCollectionsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
     xmlns:cm="http://caliburnmicro.com"
-    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:viewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels"
     d:DataContext="{d:DesignInstance Type=paratextViews:TextCollectionsViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -25,6 +23,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
+            <!--<RowDefinition Height="*" />-->
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <Button
@@ -83,24 +82,15 @@
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="1">
 
-            <ListView
+            <cef:ChromiumWebBrowser x:Name="Browser" Address="https://www.google.com" />
+
+            <!--<ListView
                 x:Name="TextCollectionListView"
                 Width="{Binding ActualWidth, ElementName=LowerBorder}"
                 Height="{Binding ElementName=LowerBorder, Path=ActualHeight}"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="0,0,30,0" Orientation="Vertical">
-                            <helpers:BindableTextBlock
-                                Width="Auto"
-                                InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                TextWrapping="Wrap" />
-                            <WebBrowser Name="myWebBrowser" paratextViews:WebBrowserHelper.Body="{Binding MyHtml}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-                <!--<ListView.View>
+                <ListView.View>
                     <GridView>
                         <GridView.ColumnHeaderContainerStyle>
                             <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -115,17 +105,18 @@
                                         <helpers:BindableTextBlock
                                             Width="Auto"
                                             InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                            TextWrapping="Wrap"/>
-                                        <WebBrowser Name="myWebBrowser" paratextViews:WebBrowserHelper.Body="{Binding MyHtml}"/>
+                                            TextWrapping="Wrap" />
+                                        <WebBrowser
+                                            Name="myWebBrowser"
+                                            Height="200"
+                                            paratextViews:WebBrowserHelper.Body="{Binding MyHtml}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                     </GridView>
-                </ListView.View>-->
-            </ListView>
+                </ListView.View>
+            </ListView>-->
         </Border>
-        <!--</StackPanel>-->
-
     </Grid>
 </UserControl>
