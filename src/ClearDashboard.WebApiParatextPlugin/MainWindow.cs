@@ -1087,7 +1087,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                 }
 
                 var books = project.AvailableBooks.Where(b => b.Code != "");
-                versificationBookIds.BookAbbreviations = books.Select(item => item.Code).ToList();
+                versificationBookIds.BookAbbreviations = books
+                    .Where(item => CheckUsfmBookForVerseData(project.ID, item.Code))
+                    .Select(item => item.Code)
+                    .ToList();
+
                 return versificationBookIds;
             }
             return new VersificationBookIds();
@@ -1284,6 +1288,71 @@ namespace ClearDashboard.WebApiParatextPlugin
 
             return verses;
 
+        }
+
+        public bool CheckUsfmBookForVerseData(string paratextProjectId, string bookCode)
+        {
+            // get all the projects & resources
+            var projects = _host.GetAllProjects(true);
+            // get the right project
+            var project = projects.FirstOrDefault(p => p.ID == paratextProjectId);
+
+            var verses = new List<UsfmVerse>();
+            if (project == null)
+            {
+                AppendText(Color.Orange, $"Could not find a project with Id = '{paratextProjectId}'. Returning an empty list.");
+                return false;
+            }
+
+            // filter down to the book desired
+            var book = project.AvailableBooks.FirstOrDefault(b => b.Code == bookCode);
+            if (book == null)
+            {
+                AppendText(Color.Orange, $"Could not find a book with Id = '{bookCode}'. Returning an empty list.");
+                return false;
+            }
+
+            // only return information for "bible books" and not the extra material
+            // TODO - is this true??
+            if (BibleBookScope.IsBibleBook(book.Code) == false)
+            {
+                AppendText(Color.Orange, $"'{book.Code}' is not a bible book. Returning an empty list.");
+                return false;
+            }
+
+
+
+            IEnumerable<IUSFMToken> tokens = new List<IUSFMToken>();
+            try
+            {
+                // get tokens by book number (from object) and chapter
+                tokens = project.GetUSFMTokens(book.Number);
+            }
+            catch (Exception)
+            {
+                AppendText(Color.Orange, $"No Scripture for {bookCode}");
+                return false;
+            }
+
+            foreach (var token in tokens)
+            {
+                if (token is IUSFMTextToken textToken)
+                {
+                    if (token.IsScripture)
+                    {
+                        // verse text
+                        if (textToken.Text.Trim() != "")
+                        {
+                            //AppendText(Color.Green, $"Processing {book.Code} TRUE");
+                            return true;
+                        }
+                    }
+                }
+
+            }
+
+            //AppendText(Color.PaleVioletRed, $"Processing {book.Code} FALSE");
+            return false;
         }
 
         #endregion
