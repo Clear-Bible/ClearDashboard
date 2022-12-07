@@ -51,6 +51,9 @@ namespace ClearDashboard.WebApiParatextPlugin
         private delegate void AppendMsgTextDelegate(Color color, string text);
 
         private List<TextCollection> _textCollections = new();
+
+        private bool _hasFontErrorBeenDisplayed = false;
+
         #endregion
 
         #region startup
@@ -560,6 +563,8 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public List<ParatextProjectMetadata> GetProjectMetadata()
         {
+            bool fontError = false;
+
             var projects = _host.GetAllProjects(true);
 
 
@@ -585,8 +590,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                     catch (Exception e)
                     {
-                        AppendText(Color.Red, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
-
+                        if (_hasFontErrorBeenDisplayed == false)
+                        {
+                            fontError = true;
+                            AppendText(Color.PaleVioletRed, $"Project: {project.ShortName} FontFamily Warning: {e.Message} on this computer");
+                        }
+                        
                         // use the default font
                         metaData.FontFamily = "Segoe UI";
                     }
@@ -619,6 +628,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                 {
                     projectMetadatum.CorpusType = CorpusType.Resource;
                 }
+            }
+
+            if (fontError)
+            {
+                _hasFontErrorBeenDisplayed = true;
             }
 
             return metadata;
