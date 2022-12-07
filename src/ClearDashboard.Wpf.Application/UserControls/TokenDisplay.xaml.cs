@@ -101,31 +101,31 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.Transparent));
 
         /// <summary>
-        /// Identifies the SourceFlowDirection dependency property.
+        /// Identifies the TokenFlowDirection dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFlowDirectionProperty = DependencyProperty.Register(nameof(TokenFlowDirection), typeof(FlowDirection), typeof(TokenDisplay),
             new PropertyMetadata(FlowDirection.LeftToRight));
 
         /// <summary>
-        /// Identifies the SourceFontFamily dependency property.
+        /// Identifies the TokenFontFamily dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontFamilyProperty = DependencyProperty.Register(nameof(TokenFontFamily), typeof(FontFamily), typeof(TokenDisplay),
             new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
 
         /// <summary>
-        /// Identifies the SourceFontSize dependency property.
+        /// Identifies the TokenFontSize dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontSizeProperty = DependencyProperty.Register(nameof(TokenFontSize), typeof(double), typeof(TokenDisplay),
             new PropertyMetadata(18d));
 
         /// <summary>
-        /// Identifies the SourceFontStyle dependency property.
+        /// Identifies the TokenFontStyle dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontStyleProperty = DependencyProperty.Register(nameof(TokenFontStyle), typeof(FontStyle), typeof(TokenDisplay),
             new PropertyMetadata(FontStyles.Normal));
 
         /// <summary>
-        /// Identifies the SourceFontWeight dependency property.
+        /// Identifies the TokenFontWeight dependency property.
         /// </summary>
         public static readonly DependencyProperty TokenFontWeightProperty = DependencyProperty.Register(nameof(TokenFontWeight), typeof(FontWeight), typeof(TokenDisplay),
             new PropertyMetadata(FontWeights.SemiBold));
@@ -147,6 +147,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty TranslationAlignmentProperty = DependencyProperty.Register(nameof(TranslationAlignment), typeof(HorizontalAlignment), typeof(TokenDisplay),
             new PropertyMetadata(HorizontalAlignment.Center, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the TranslationBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TranslationBackgroundProperty = DependencyProperty.Register(nameof(TranslationBackground), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.Transparent));
 
         /// <summary>
         /// Identifies the TranslationColor dependency property.
@@ -1078,6 +1084,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the translation background.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token's selection status.
+        /// </remarks>
+        public Brush TranslationBackground
+        {
+            get => (Brush)GetValue(TranslationBackgroundProperty);
+            set => SetValue(TranslationBackgroundProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the <see cref="Brush"/> to use for displaying the translation, based on its TranslationState.
         /// </summary>
         /// <remarks>
@@ -1200,6 +1218,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
+            TranslationBackground = TokenDisplayViewModel.IsTranslationSelected ? SelectedTokenBackground : Brushes.Transparent; 
             TranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch
             {
