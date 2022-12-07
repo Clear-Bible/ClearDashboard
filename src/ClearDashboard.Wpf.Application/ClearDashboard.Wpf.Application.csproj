@@ -104,6 +104,8 @@
 
   <ItemGroup>
     <PackageReference Include="ClearApplicationFoundation" Version="1.0.41" />
+    <PackageReference Include="Dahomey.Json" Version="1.12.2" />
+    <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />

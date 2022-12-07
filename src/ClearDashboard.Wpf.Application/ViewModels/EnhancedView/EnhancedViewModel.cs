@@ -46,6 +46,7 @@ using EngineToken = ClearBible.Engine.Corpora.Token;
 using FontFamily = System.Windows.Media.FontFamily;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -58,11 +59,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
 
         #region Commands
-
+        
         public ICommand MoveCorpusDownRowCommand { get; set; }
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
-
 
         #endregion
 
@@ -81,6 +81,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
 
         // used for storing the displayed corpus order
+        //public List<EnhancedViewItemMetadatumOld> EnhancedViewItemMetadata = new();
+        public List<EnhancedViewItemMetadatumOld> EnhancedViewItemMetadataOld = new();
+
         public List<EnhancedViewItemMetadatum> EnhancedViewItemMetadata = new();
 
         private readonly List<TokenProject> _tokenProjects = new();
@@ -100,17 +103,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public List<string> WorkingJobs { get; set; } = new();
 
         public NoteManager NoteManager { get; set; }
+   
+        private MainViewModel MainViewModel => (MainViewModel)Parent;
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
+
         public VerseDisplayViewModel SelectedVerseDisplayViewModel
         {
             get => _selectedVerseDisplayViewModel;
             set => Set(ref _selectedVerseDisplayViewModel, value);
         }
-
-
+        
         #region BCV
         private bool _paratextSync = true;
+
         public bool ParatextSync
         {
             get => _paratextSync;
@@ -131,6 +137,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private Dictionary<string, string> _bcvDictionary;
+
         public Dictionary<string, string> BcvDictionary
         {
             get => _bcvDictionary;
@@ -160,7 +167,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-
+ 
         public BookInfo? CurrentBook
         {
             get => _currentBook;
@@ -172,6 +179,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private string _verseChange = string.Empty;
+
         public string VerseChange
         {
             get => _verseChange;
@@ -198,7 +206,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         );
                     }
 
-                    _verseChange = value;
+                  _verseChange = value;
 
 #pragma warning disable CS4014
                     VerseChangeRerender();
@@ -214,9 +222,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion //Public Properties
 
         #region Observable Properties
-      
+
+
+    
 
         private string _currentCorpusName = string.Empty;
+   
         public string CurrentCorpusName
         {
             get => _currentCorpusName;
@@ -242,6 +253,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _progressBarVisibility, value);
         }
 
+
         public string? Message
         {
             get => _message;
@@ -255,7 +267,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _verses, value);
         }
 
+
         public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
+
         public EngineStringDetokenizer TargetDetokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
 
         public IEnumerable<Translation> CurrentTranslations { get; set; }
@@ -300,7 +314,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region IPaneViewModel
 
-
         public ICommand RequestCloseCommand { get; set; }
 
         //private string _title = null;
@@ -312,6 +325,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region Public Properties
 
         public Guid PaneId { get; set; }
+
         public DockSide DockSide { get; set; }
 
         public ImageSource? IconSource { get; protected set; }
@@ -390,7 +404,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";
-          
+            
            // await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
             await base.OnInitializeAsync(cancellationToken);
         }
@@ -515,7 +529,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
             Items.RemoveAt(index);
             // remove from the grouping for saving
-            EnhancedViewItemMetadata.RemoveAt(index);
+            EnhancedViewItemMetadataOld.RemoveAt(index);
 
             if (row is VerseAwareEnhancedViewItemViewModel)
             {
@@ -889,9 +903,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task UpdateVersesDisplay(AddTokenizedCorpusToEnhancedViewMessage message, BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
         {
-            // get the font family for this project
-            var mainViewModel = IoC.Get<MainViewModel>();
-            var fontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.ParatextProjectId);
+            var fontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.ParatextProjectId);
 
             FontFamily family;
             try
@@ -919,11 +931,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 viewModel.IsRtl = message.IsRTL.Value;
                 viewModel.SourceFontFamily = family;
 
-                // add to the grouping for saving
-                EnhancedViewItemMetadata.Add(new EnhancedViewItemMetadatum
+
+                EnhancedViewItemMetadataOld.Add(new EnhancedViewItemMetadatumOld
                 {
                     MessageType = MessageType.ShowTokenizationWindowMessage,
                     Data = message
+                });
+
+                // add to the grouping for saving
+                EnhancedViewItemMetadata.Add(new TokenizedCorpusEnhancedViewItemMetadatum
+                {
+                    //MessageType = MessageType.ShowTokenizationWindowMessage,
+                    //Data = message
+                    CorpusId = message.CorpusId.Value,
+                    CorpusType = message.CorpusType,
+                    IsNewWindow = message.IsNewWindow,
+                    IsRtl = message.IsRTL,
+                    ParatextProjectId = message.ParatextProjectId,
+                    ProjectName = message.ProjectName,
+                    TokenizedTextCorpusId = message.TokenizedTextCorpusId,
+                    TokenizationType = message.TokenizationType
+
                 });
             }
             else
@@ -1064,11 +1092,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             List<TokenDisplayViewModel> verseTokens = new();
             var versesOut = new BindableCollection<VerseDisplayViewModel>();
-
-            List<string> verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
-
-
             var rows = await VerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
+
+
+            // var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            // var parallelCorpusId =
+            //     topLevelProjectIds.ParallelCorpusIds.FirstOrDefault(p => p.Id.ToString() == message.ParallelCorpusId);
+
+            //var corpus = await ParallelCorpus.Get(Mediator, parallelCorpusId);
+            //var result = corpus.GetByVerseRange(new VerseRef(Convert.ToInt32(CurrentBcv.BBBCCCVVV)), (ushort)VerseOffsetRange, (ushort)VerseOffsetRange);
+            //var verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
+            //var rows = result.parallelTextRows;
+
+            var verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
+
+
+
 
             if (rows is null)
             {
@@ -1082,6 +1121,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             else
             {
                 //NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
+                //foreach (var row in rows.Cast<EngineParallelTextRow>())
                 foreach (var row in rows)
                 {
                     var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
@@ -1122,7 +1162,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
 
                 var bcv = new BookChapterVerseViewModel();
-                if (rows.Count <= 1)
+                if (rows.Count() <= 1)
                 {
                     // only one verse
                     bcv.SetVerseFromId(verseRange[0]);
@@ -1245,37 +1285,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Brush brush = Brushes.SaddleBrown;
 
             // get the fontfamily for this project
-            var mainViewModel = IoC.Get<MainViewModel>();
-            var sourceFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
-            var targetFontFamily = mainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
+            var sourceFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
+            var targetFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
 
-            FontFamily familySource;
+            FontFamily fontFamilySource;
             try
             {
-                familySource = new(sourceFontFamily);
+                fontFamilySource = new(sourceFontFamily);
             }
             catch (Exception e)
             {
-                familySource = new("Segoe UI");
+                fontFamilySource = new("Segoe UI");
             }
 
-            FontFamily familyTarget;
+            FontFamily fontFamilyTarget;
             try
             {
-                familyTarget = new(targetFontFamily);
+                fontFamilyTarget = new(targetFontFamily);
             }
             catch (Exception e)
             {
-                familyTarget = new("Segoe UI");
+                fontFamilyTarget = new("Segoe UI");
             }
 
 
 
-            VerseAwareEnhancedViewItemViewModel? row;
+            VerseAwareEnhancedViewItemViewModel? enhancedViewItemViewModel;
             if (message.AlignmentSetId is null)
             {
                 // interlinear
-               row = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
+               enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
                     v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
                     v.TranslationSetId == Guid.Parse(message.TranslationSetId));
 
@@ -1283,23 +1322,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             else
             {
                 // alignment
-               row = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
+               enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
                     v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
                     v.AlignmentSetId == Guid.Parse(message.AlignmentSetId));
 
             }
 
 
-            if (row is null)
+            if (enhancedViewItemViewModel is null)
             {
-                Guid alignmentSetId = Guid.Empty;
+                var alignmentSetId = Guid.Empty;
                 if (message.AlignmentSetId is not null)
                 {
                     alignmentSetId = Guid.Parse(message.AlignmentSetId);
                     brush = Brushes.DarkGreen;
                 }
 
-                Guid translationSetId = Guid.Empty;
+                var translationSetId = Guid.Empty;
                 if (message.TranslationSetId is not null)
                 {
                     translationSetId = Guid.Parse(message.TranslationSetId);
@@ -1317,13 +1356,46 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 viewModel.Verses = verses;
                 viewModel.IsRtl = message.IsRTL;
                 viewModel.IsTargetRtl = message.IsTargetRTL ?? false;
-                viewModel.SourceFontFamily = familySource;
-                viewModel.TargetFontFamily = familyTarget;
-                viewModel.TranslationFontFamily = familyTarget;
+                viewModel.SourceFontFamily = fontFamilySource;
+                viewModel.TargetFontFamily = fontFamilyTarget;
+                viewModel.TranslationFontFamily = fontFamilyTarget;
 
-            
+
+                if (message.AlignmentSetId is not null)
+                {
+                    EnhancedViewItemMetadata.Add(new AlignmentEnhancedViewItemMetadatum
+                    {
+                       AlignmentSetId = message.AlignmentSetId,
+                       DisplayName = message.DisplayName,
+                       IsNewWindow = message.IsNewWindow,
+                       IsRtl = message.IsRTL,
+                       IsTargetRtl = message.IsTargetRTL,
+                       ParallelCorpusDisplayName = message.ParallelCorpusDisplayName,
+                       ParallelCorpusId = message.ParallelCorpusId,
+                       SourceParatextId = message.SourceParatextId,
+                       TargetParatextId = message.TargetParatextId
+                       
+                    });
+                }
+
+                if (message.TranslationSetId is not null)
+                {
+                    EnhancedViewItemMetadata.Add(new InterlinearEnhancedViewItemMetadatum
+                    {
+                        TranslationSetId = message.TranslationSetId,
+                        DisplayName = message.DisplayName,
+                        IsNewWindow = message.IsNewWindow,
+                        IsRtl = message.IsRTL,
+                        IsTargetRtl = message.IsTargetRTL,
+                        ParallelCorpusDisplayName = message.ParallelCorpusDisplayName,
+                        ParallelCorpusId = message.ParallelCorpusId,
+                        SourceParatextId = message.SourceParatextId,
+                        TargetParatextId = message.TargetParatextId
+
+                    });
+                }
                 // add to the grouping for saving
-                EnhancedViewItemMetadata.Add(new EnhancedViewItemMetadatum
+                EnhancedViewItemMetadataOld.Add(new EnhancedViewItemMetadatumOld
                 {
                     MessageType = MessageType.ShowParallelTranslationWindowMessage,
                     Data = message
@@ -1331,9 +1403,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                row.Title = title;
-                row.Verses = verses;
-                row.BorderColor = brush;
+                enhancedViewItemViewModel.Title = title;
+                enhancedViewItemViewModel.Verses = verses;
+                enhancedViewItemViewModel.BorderColor = brush;
             }
 
             NotifyOfPropertyChange(() => Items);

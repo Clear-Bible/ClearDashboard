@@ -1,14 +1,7 @@
-﻿namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization
-{
-    public class EnhancedViewItemMetadatum
-    {
-        public MessageType MessageType { get; set; }
-        public object? Data { get; set; }
-    }
+﻿namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
-    public enum MessageType
-    {
-        ShowTokenizationWindowMessage,
-        ShowParallelTranslationWindowMessage
-    }
+public abstract class EnhancedViewItemMetadatum
+{
+    public bool? IsRtl { get; set; }
+    public bool? IsNewWindow { get; set; }
 }

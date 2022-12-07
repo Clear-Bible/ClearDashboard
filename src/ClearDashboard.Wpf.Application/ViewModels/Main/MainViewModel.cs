@@ -25,6 +25,8 @@ using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using ClearDashboard.Wpf.Application.Views.Main;
+using Dahomey.Json;
+using Dahomey.Json.Serialization.Conventions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -378,7 +380,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await ActivateDockedWindowViewModels();
             await LoadAvalonDockLayout();
             await LoadEnhancedViewTabs();
-           // await ConfigureCurrentBcv();
             await base.OnInitializeAsync(cancellationToken);
         }
 
@@ -415,12 +416,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // save the open document windows
+            var enhancedViewLayoutsOld = new List<EnhancedViewLayoutOld>();
+            foreach (var item in Items)
+            {
+                if (item is EnhancedViewModel enhancedViewModel)
+                {
+                    if (enhancedViewModel.EnhancedViewItemMetadataOld.Count > 0)
+                    {
+                        // get the displayed contents
+                        enhancedViewLayoutsOld.Add(new EnhancedViewLayoutOld
+                        {
+                            BBBCCCVVV = enhancedViewModel.CurrentBcv.BBBCCCVVV,
+                            EnhancedViewItems = enhancedViewModel.EnhancedViewItemMetadataOld,
+                            Title = enhancedViewModel.Title,
+                            ParatextSync = enhancedViewModel.ParatextSync,
+                            VerseOffset = enhancedViewModel.VerseOffsetRange,
+                        });
+                    }
+                }
+            }
+
             var enhancedViewLayouts = new List<EnhancedViewLayout>();
             foreach (var item in Items)
             {
                 if (item is EnhancedViewModel enhancedViewModel)
                 {
-                    if (enhancedViewModel.EnhancedViewItemMetadata.Count > 0)
+                    if (enhancedViewModel.EnhancedViewItemMetadataOld.Count > 0)
                     {
                         // get the displayed contents
                         enhancedViewLayouts.Add(new EnhancedViewLayout
@@ -440,9 +461,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 JsonSerializerOptions options = new()
                 {
                     IncludeFields = true,
-                    WriteIndented = false
+                    WriteIndented = false,
+                  
                 };
-                ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(enhancedViewLayouts, options);
+                ProjectManager.CurrentProject.WindowTabLayout = JsonSerializer.Serialize(enhancedViewLayoutsOld, options);
+
+
+                options = new JsonSerializerOptions
+                {
+                    IncludeFields = true,
+                    WriteIndented = false,
+
+                };
+                options.SetupExtensions();
+                var registry = options.GetDiscriminatorConventionRegistry();
+                registry.ClearConventions();
+                registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(options, "_t"));
+                registry.RegisterType<InterlinearEnhancedViewItemMetadatum>();
+                registry.RegisterType<AlignmentEnhancedViewItemMetadatum>();
+                registry.RegisterType<TokenizedCorpusEnhancedViewItemMetadatum>();
+      
+
+
+                var json = JsonSerializer.Serialize(enhancedViewLayouts, options);
+                Console.WriteLine(json);
 
             }
             catch (Exception e)
@@ -553,7 +595,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private IEnumerable<EnhancedViewModel> EnhancedViewModels => Items.Where(item => item is EnhancedViewModel).Cast<EnhancedViewModel>();
 
-        private void LoadEnhancedViewData(List<EnhancedViewLayout> enhancedViews)
+        private void LoadEnhancedViewData(List<EnhancedViewLayoutOld> enhancedViews)
         {
             foreach (var enhancedView in enhancedViews)
             {
@@ -569,6 +611,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         var cancellationToken = new CancellationToken();
                         var cancellationTokenLocal = new CancellationToken();
+
+                        //TODO:  FIX ME! GERFEN
                         if (enhancedViewItem.MessageType == MessageType.ShowTokenizationWindowMessage &&
                             enhancedViewItem.Data != null)
                         {
@@ -613,7 +657,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-        private async Task DrawEnhancedViewTabs(List<EnhancedViewLayout> enhancedViews)
+        private async Task DrawEnhancedViewTabs(List<EnhancedViewLayoutOld> enhancedViews)
         {
             int index = 0;
             foreach (var enhancedView in enhancedViews)
@@ -662,14 +706,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
       
-        private List<EnhancedViewLayout> LoadEnhancedViewTabLayout()
+        private List<EnhancedViewLayoutOld> LoadEnhancedViewTabLayout()
         {
             if (ProjectManager.CurrentProject?.WindowTabLayout is null)
             {
                 return null;
             }
             var json = ProjectManager.CurrentProject.WindowTabLayout;
-            return JsonSerializer.Deserialize<List<EnhancedViewLayout>>(json);
+            return JsonSerializer.Deserialize<List<EnhancedViewLayoutOld>>(json);
         }
 
         //private async Task Initialize()
@@ -1586,7 +1630,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 ContentId = message.ParatextProjectId,
                 Content = viewModel,
-                Title = $"{message.ProjectName} ({message.TokenizationType})", // message.ProjectName + " (" + tokenizationType + ")",
+                Title = $"⳼{message.ProjectName} ({message.TokenizationType})", // message.ProjectName + " (" + tokenizationType + ")",
                 IsActive = true
             };
 
