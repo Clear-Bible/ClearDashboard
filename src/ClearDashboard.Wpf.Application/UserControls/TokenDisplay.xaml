@@ -16,6 +16,13 @@
         Width="Auto"
         HorizontalAlignment="Left"
         Orientation="Vertical">
+        <Rectangle
+            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorHeight}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorMargin}"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorComputedColor}"
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorVisibility}" />
         <Button
             x:Name="TokenButton"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"

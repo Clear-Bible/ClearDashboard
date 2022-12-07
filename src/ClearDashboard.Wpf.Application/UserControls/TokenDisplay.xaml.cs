@@ -19,6 +19,30 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Static DependencyProperties
 
         /// <summary>
+        /// Identifies the CompositeIndicatorComputedColor dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CompositeIndicatorComputedColorProperty = DependencyProperty.Register(nameof(CompositeIndicatorComputedColor), typeof(Brush), typeof(TokenDisplay),
+            new PropertyMetadata(Brushes.LightGray));
+
+        /// <summary>
+        /// Identifies the CompositeIndicatorHeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CompositeIndicatorHeightProperty = DependencyProperty.Register(nameof(CompositeIndicatorHeight), typeof(double), typeof(TokenDisplay),
+            new PropertyMetadata(1d, OnLayoutChanged));
+
+        /// <summary>
+        /// Identifies the CompositeIndicatorMargin dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CompositeIndicatorMarginProperty = DependencyProperty.Register(nameof(CompositeIndicatorMargin), typeof(Thickness), typeof(TokenDisplay),
+            new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
+        /// <summary>
+        /// Identifies the CompositeIndicatorVisibility dependency property.
+        /// </summary>
+        public static readonly DependencyProperty CompositeIndicatorVisibilityProperty = DependencyProperty.Register(nameof(CompositeIndicatorVisibility), typeof(Visibility), typeof(TokenDisplay),
+            new PropertyMetadata(Visibility.Visible));
+
+        /// <summary>
         /// Identifies the ExtendedProperties dependency property.
         /// </summary>
         public static readonly DependencyProperty ExtendedPropertiesProperty = DependencyProperty.Register(nameof(ExtendedProperties), typeof(string), typeof(TokenDisplay));
@@ -42,7 +66,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(Brushes.LightGray));
 
         /// <summary>
-        /// Identifies the NoteIndicatorColor dependency property.
+        /// Identifies the NoteIndicatorComputedColor dependency property.
         /// </summary>
         public static readonly DependencyProperty NoteIndicatorComputedColorProperty = DependencyProperty.Register(nameof(NoteIndicatorComputedColor), typeof(Brush), typeof(TokenDisplay),
             new PropertyMetadata(Brushes.LightGray));
@@ -857,6 +881,50 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public Properties
         /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the composite token indicator.
+        /// </summary>
+        /// <remarks>
+        /// This should normally not be set explicitly; it is computed based on whether the token is part of a composite token.
+        /// </remarks>
+        public Brush CompositeIndicatorComputedColor
+        {
+            get => (Brush)GetValue(CompositeIndicatorComputedColorProperty);
+            private set => SetValue(CompositeIndicatorComputedColorProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the composite indicator.
+        /// </summary>
+        public double CompositeIndicatorHeight
+        {
+            get => (double)GetValue(CompositeIndicatorHeightProperty);
+            set => SetValue(CompositeIndicatorHeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the margin around the composite indicator.
+        /// </summary>
+        /// <remarks>
+        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// </remarks>
+        public Thickness CompositeIndicatorMargin
+        {
+            get => (Thickness)GetValue(CompositeIndicatorMarginProperty);
+            set => SetValue(CompositeIndicatorMarginProperty, value);
+        }
+
+
+        /// <summary>
+        /// Gets or sets the <see cref="Visibility"/> of the composite indicator.
+        /// </summary>
+        /// This should normally not be set explicitly; it is computed based on whether the token is part of a composite token.
+        public Visibility CompositeIndicatorVisibility
+        {
+            get => (Visibility)GetValue(CompositeIndicatorVisibilityProperty);
+            set => SetValue(CompositeIndicatorVisibilityProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the extendedProperties to be displayed.
         /// </summary>
         public string? ExtendedProperties
@@ -1201,23 +1269,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateLayout()
         {
-            var leftMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingBefore.Length * HorizontalSpacing : 0;
-            var rightMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingAfter.Length * HorizontalSpacing : 0;
-            var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(leftMargin, HorizontalSpacing / 2) : 0;
-            var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(rightMargin, HorizontalSpacing / 2) : 0;
+            var tokenLeftMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingBefore.Length * HorizontalSpacing : 0;
+            var tokenRightMargin = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.PaddingAfter.Length * HorizontalSpacing : 0;
+            var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
+            var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
 
-            TokenMargin = new Thickness(leftMargin, 0, rightMargin, 0);
-            NoteIndicatorMargin = new Thickness(leftMargin, 0, 0, TokenVerticalSpacing);
-            TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
-            TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
-            NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
-            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
+            CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, TokenVerticalSpacing);
+            CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeToken ? Visibility.Visible : Visibility.Hidden;
+            CompositeIndicatorComputedColor = TokenDisplayViewModel.CompositeIndicatorColor;
+            
             TokenBackground = TokenDisplayViewModel.IsHighlighted ? HighlightedTokenBackground
-                               : TokenDisplayViewModel.IsTokenSelected ? SelectedTokenBackground 
-                               : Brushes.Transparent;
-
+                : TokenDisplayViewModel.IsTokenSelected ? SelectedTokenBackground
+                : Brushes.Transparent;
+            TokenMargin = new Thickness(tokenLeftMargin, 0, tokenRightMargin, 0);
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
+
+            NoteIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, TokenVerticalSpacing);
+            NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
+            NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
+
+            TranslationMargin = new Thickness(translationLeftMargin, 0, translationRightMargin, TranslationVerticalSpacing);
+            TranslationVisibility = (ShowTranslation && TokenDisplayViewModel.Translation != null) ? Visibility.Visible : Visibility.Collapsed;
             TranslationBackground = TokenDisplayViewModel.IsTranslationSelected ? SelectedTokenBackground : Brushes.Transparent; 
             TranslationText = TokenDisplayViewModel.TargetTranslationText;
             TranslationColor = TokenDisplayViewModel.TranslationState switch

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
@@ -18,12 +19,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public Token Token { get; }
 
         /// <summary>
+        /// Gets or sets the parent <see cref="CompositeToken"/> of this token, if any.
+        /// </summary>
+        public CompositeToken? CompositeToken { get; set; }
+
+        /// <summary>
+        /// Gets whether this is token is part of a composite token.
+        /// </summary>
+        public bool IsCompositeToken => CompositeToken != null;
+
+        /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>
         /// <remarks>
         /// If true, this is a source token.  If false, this is a target token (alignment).
         /// </remarks>
         public bool IsSource { get; set; } = true;
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> to use when displaying a composite token indicator.
+        /// </summary>
+        public Brush CompositeIndicatorColor { get; set; } = Brushes.Transparent;
 
         /// <summary>
         /// Padding to be rendered before the token, as determined by a <see cref="EngineStringDetokenizer"/>.
