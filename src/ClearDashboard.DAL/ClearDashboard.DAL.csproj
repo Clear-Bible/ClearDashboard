@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\DashboardProjects\DashboardProjectSlice.cs" />
     <Compile Remove="Features\MarbleDataRequests\GetWhatIsThisWordSlice.cs" />
   </ItemGroup>
 

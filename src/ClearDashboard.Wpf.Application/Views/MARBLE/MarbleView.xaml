@@ -150,18 +150,20 @@
                     BorderThickness="2"
                     CornerRadius="5">
                     <StackPanel Orientation="Vertical">
-                        <controls:AutoCompleteComboBox
-                            Width="200"
-                            Height="Auto"
-                            Margin="30,0,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            ItemsSource="{Binding Projects}"
-                            SelectedItem="{Binding SelectedProject}"
-                            Style="{StaticResource MaterialDesignComboBox}"
-                            TextSearch.TextPath="LongName">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Search Hebrew/Greek" />
+                            <controls:AutoCompleteComboBox
+                                Width="200"
+                                Height="Auto"
+                                Margin="30,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                ItemsSource="{Binding Projects}"
+                                SelectedItem="{Binding SelectedProject}"
+                                Style="{StaticResource MaterialDesignComboBox}"
+                                TextSearch.TextPath="LongName">
 
-                            <!--<controls:AutoCompleteComboBox.ItemTemplate>
+                                <!--<controls:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
@@ -172,7 +174,34 @@
                         </DataTemplate>
                     </controls:AutoCompleteComboBox.ItemTemplate>-->
 
-                        </controls:AutoCompleteComboBox>
+                            </controls:AutoCompleteComboBox>
+
+                            <Label Content="Search English" />
+                            <controls:AutoCompleteComboBox
+                                Width="200"
+                                Height="Auto"
+                                Margin="30,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                ItemsSource="{Binding Projects}"
+                                SelectedItem="{Binding SelectedProject}"
+                                Style="{StaticResource MaterialDesignComboBox}"
+                                TextSearch.TextPath="LongName">
+
+                                <!--<controls:AutoCompleteComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
+                                <TextBlock FontSize="24" Text="{Binding Name}" />
+                                <TextBlock FontSize="12" Text="{Binding LongName}" />
+                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:AutoCompleteComboBox.ItemTemplate>-->
+
+                            </controls:AutoCompleteComboBox>
+                        </StackPanel>
+
 
                         <ListBox ItemsSource="{Binding LexicalLinks}" SelectedValue="{Binding SelectedLexicalLink, Mode=TwoWay}">
                             <ListBox.Style>
