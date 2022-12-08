@@ -43,6 +43,7 @@ using System.Windows;
 using ClearDashboard.Wpf.Application.Exceptions;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
+using ClearDashboard.Wpf.Application.Views.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -456,7 +457,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 if (item is EnhancedViewModel enhancedViewModel)
                 {
-                    if (enhancedViewModel.EnhancedViewItemMetadataOld.Count > 0)
+                    if (enhancedViewModel.EnhancedViewItemMetadata.Count > 0)
                     {
                         // get the displayed contents
                         enhancedViewLayouts.Add(new EnhancedViewLayout
@@ -583,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
        
             await DrawEnhancedViewTabs(enhancedViews);
-            LoadEnhancedViewData(enhancedViews);
+            await LoadEnhancedViewData(enhancedViews);
       
             sw.Stop();
             Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
@@ -591,7 +592,93 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private IEnumerable<EnhancedViewModel> EnhancedViewModels => Items.Where(item => item is EnhancedViewModel).Cast<EnhancedViewModel>();
 
-        private void LoadEnhancedViewData(List<EnhancedViewLayout> enhancedViews)
+
+        private async Task LoadEnhancedViewData(List<EnhancedViewLayout> enhancedViews)
+        {
+            //foreach (var enhancedView in enhancedViews)
+            await Parallel.ForEachAsync(enhancedViews, new ParallelOptions(), async (enhancedView, cancellationToken) =>
+
+            {
+                var enhancedViewModel = EnhancedViewModels.FirstOrDefault(item => item.Title == enhancedView.Title);
+
+                if (enhancedViewModel == null)
+                {
+                    throw new MissingEnhancedViewModelException(
+                        $"Cannot locate an EnhancedViewModel for '{enhancedView.Title}'");
+                }
+
+                await enhancedViewModel.LoadData(cancellationToken);
+
+                //// ReSharper disable once AsyncVoidLambda
+                //Parallel.ForEach(enhancedView.EnhancedViewItems!, async (enhancedViewItem) =>
+                //{
+                //    var cancellationToken = new CancellationToken();
+                //    var cancellationTokenLocal = new CancellationToken();
+
+                //    if (enhancedViewItem.GetType() == typeof(TokenizedCorpusEnhancedViewItemMetadatum))
+                //    {
+                //        var item = (TokenizedCorpusEnhancedViewItemMetadatum)enhancedViewItem;
+                //        try
+                //        {
+
+                //            var message = new AddTokenizedCorpusToEnhancedViewMessage(item.ParatextProjectId, item.ProjectName, item.TokenizationType, item.CorpusId, item.TokenizedTextCorpusId, item.CorpusType, item.IsRtl, item.IsNewWindow);
+                //            await enhancedViewModel.ShowCorpusText(message, cancellationToken, cancellationTokenLocal);
+                //            await Task.Delay(100, cancellationToken);
+
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Logger.LogError(e, "Error loading tokenization window");
+                //        }
+
+
+                //    }
+                //    else if (enhancedViewItem.GetType() == typeof(AlignmentEnhancedViewItemMetadatum))
+                //    {
+                //        try
+                //        {
+                //            var item = (AlignmentEnhancedViewItemMetadatum)enhancedViewItem;
+                //            var message = new AddAlignmentToEnhancedViewMessage(null, item.AlignmentSetId,
+                //                item.DisplayName, item.ParallelCorpusId, item.ParallelCorpusDisplayName, item.IsRtl,
+                //                item.IsTargetRtl, item.IsNewWindow, item.SourceParatextId, item.TargetParatextId);
+
+                //            enhancedViewModel.ProgressBarVisibility = Visibility.Visible;
+                //            await enhancedViewModel.ShowParallelTranslation(message, cancellationToken,
+                //                cancellationTokenLocal);
+                //            await Task.Delay(100, cancellationTokenLocal);
+
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Logger.LogError(e, "Error loading tokenization window");
+                //        }
+                //    }
+                //    else if (enhancedViewItem.GetType() == typeof(InterlinearEnhancedViewItemMetadatum))
+                //    {
+                //        try
+                //        {
+                //            var item = (InterlinearEnhancedViewItemMetadatum)enhancedViewItem;
+                //            var message = new AddAlignmentToEnhancedViewMessage(item.TranslationSetId, null,
+                //                item.DisplayName, item.ParallelCorpusId, item.ParallelCorpusDisplayName, item.IsRtl,
+                //                item.IsTargetRtl, item.IsNewWindow, item.SourceParatextId, item.TargetParatextId);
+
+                //            enhancedViewModel.ProgressBarVisibility = Visibility.Visible;
+                //            await enhancedViewModel.ShowParallelTranslation(message, cancellationToken,
+                //                cancellationTokenLocal);
+                //            await Task.Delay(100, cancellationTokenLocal);
+
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Logger.LogError(e, "Error loading tokenization window");
+                //        }
+                //    }
+                //}
+                //);
+            });
+        }
+
+        private void LoadEnhancedViewDataOld(List<EnhancedViewLayout> enhancedViews)
         {
             foreach (var enhancedView in enhancedViews)
             {

@@ -158,6 +158,7 @@ namespace ClearDashboard.DAL.ViewModels
                 NotifyOfPropertyChange(nameof(VerseNum));
                 NotifyOfPropertyChange(nameof(VerseIdText));
                 NotifyOfPropertyChange(nameof(BBBCCCVVV));
+                NotifyOfPropertyChange(nameof(BBBCCCVVVasInteger));
             }
         }
 
@@ -174,6 +175,8 @@ namespace ClearDashboard.DAL.ViewModels
         /// </summary>
         // ReSharper disable once InconsistentNaming
         public string BBBCCCVVV => Concat(Book, ChapterIdText, VerseIdText);
+
+        public int BBBCCCVVVasInteger => Convert.ToInt32(BBBCCCVVV);
 
         public int GetBBBCCCVVV()
         {

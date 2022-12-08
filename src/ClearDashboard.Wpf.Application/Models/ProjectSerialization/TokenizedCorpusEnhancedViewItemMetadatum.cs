@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
 using Dahomey.Json.Attributes;
 
@@ -13,4 +15,7 @@ public class TokenizedCorpusEnhancedViewItemMetadatum : EnhancedViewItemMetadatu
     public Guid? CorpusId { get; set; }
     public Guid? TokenizedTextCorpusId { get; set; }
     public CorpusType CorpusType { get; set; }
+
+    [JsonIgnore]
+    public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 }

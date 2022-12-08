@@ -1,13 +1,18 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using MediatR;
+using Microsoft.Extensions.Logging;
 
 // ReSharper disable InconsistentNaming
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
-public abstract class EnhancedViewItemViewModel : Screen
+public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 {
    
     protected Visibility _visibility = Visibility.Collapsed;
@@ -34,5 +39,12 @@ public abstract class EnhancedViewItemViewModel : Screen
     }
 
     public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
+
+    protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager,
+        INavigationService? navigationService, ILogger logger, IEventAggregator? eventAggregator,
+        IMediator? mediator, ILifetimeScope? lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+    {
+        
+    }
 
 }

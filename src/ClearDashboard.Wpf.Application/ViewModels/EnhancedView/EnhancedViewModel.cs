@@ -52,7 +52,7 @@ using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public class EnhancedViewModel : DashboardConductorAllActive<object>, IPaneViewModel, 
+    public class EnhancedViewModel : DashboardConductorAllActive<object>, IPaneViewModel,
         IHandle<TokenizedTextCorpusLoadedMessage>,
         IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
 
         #region Commands
-        
+
         public ICommand MoveCorpusDownRowCommand { get; set; }
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
@@ -81,10 +81,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
-
-        // used for storing the displayed corpus order
-        //public List<EnhancedViewItemMetadatumOld> EnhancedViewItemMetadata = new();
-        public List<EnhancedViewItemMetadatumOld> EnhancedViewItemMetadataOld = new();
 
         public List<EnhancedViewItemMetadatum> EnhancedViewItemMetadata = new();
 
@@ -109,7 +105,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public List<string> WorkingJobs { get; set; } = new();
 
         public NoteManager NoteManager { get; set; }
-   
+
         private MainViewModel MainViewModel => (MainViewModel)Parent;
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
@@ -119,7 +115,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _selectedVerseDisplayViewModel;
             set => Set(ref _selectedVerseDisplayViewModel, value);
         }
-        
+
         #region BCV
         private bool _paratextSync = true;
 
@@ -166,14 +162,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 var set = Set(ref _verseOffsetRange, value);
                 if (set)
                 {
-                    #pragma warning disable CS4014
+#pragma warning disable CS4014
                     VerseChangeRerender();
-                    #pragma warning restore CS4014
+#pragma warning restore CS4014
                 }
             }
         }
 
- 
+
         public BookInfo? CurrentBook
         {
             get => _currentBook;
@@ -212,7 +208,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         );
                     }
 
-                  _verseChange = value;
+                    _verseChange = value;
 
 #pragma warning disable CS4014
                     VerseChangeRerender();
@@ -230,10 +226,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region Observable Properties
 
 
-    
+
 
         private string _currentCorpusName = string.Empty;
-   
+
         public string CurrentCorpusName
         {
             get => _currentCorpusName;
@@ -415,16 +411,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
             ParatextSync = enhancedViewLayout.ParatextSync;
             CurrentBcv.SetVerseFromId(enhancedViewLayout.BBBCCCVVV);
-            ProgressBarVisibility = Visibility.Visible;
-
 
             await Task.CompletedTask;
         }
+
+
+        public async Task LoadData(CancellationToken token)
+        {
+            await Parallel.ForEachAsync(EnhancedViewLayout.EnhancedViewItems!, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    var verseAwareEnhancedViewItemViewModel = await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>(cancellationToken);
+                    await verseAwareEnhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+                });
+                
+            });
+            //foreach (var enhancedViewItemMetadatum in EnhancedViewLayout.EnhancedViewItems)
+            //{
+            //    var verseAwareEnhancedViewItemViewModel = await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>();
+            //    await verseAwareEnhancedViewItemViewModel.GetData(enhancedViewItemMetadatum);
+
+            //}
+        }
+
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";
-            
-           // await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
+
+            // await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
             await base.OnInitializeAsync(cancellationToken);
         }
 
@@ -490,25 +505,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            for (var i = 0; i < _tokenProjects.Count; i++)
-            {
-                ProgressBarVisibility = Visibility.Visible;
-                _cancellationTokenSource = new CancellationTokenSource();
+            //for (var i = 0; i < _tokenProjects.Count; i++)
+            //{
+            //    ProgressBarVisibility = Visibility.Visible;
+            //    _cancellationTokenSource = new CancellationTokenSource();
 
-                await ShowCorpusText(_projectMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
-            }
+            //    await ShowCorpusText(_projectMessages[i], _cancellationTokenSource.Token, _cancellationTokenSource.Token);
+            //}
 
-            foreach (var t in _parallelMessages)
-            {
-                ProgressBarVisibility = Visibility.Visible;
-                _cancellationTokenSource = new CancellationTokenSource();
+            //foreach (var t in _parallelMessages)
+            //{
+            //    ProgressBarVisibility = Visibility.Visible;
+            //    _cancellationTokenSource = new CancellationTokenSource();
 
-                await ShowParallelTranslation(t, _cancellationTokenSource.Token,
-                    _cancellationTokenSource.Token);
-            }
+            //    await ShowParallelTranslation(t, _cancellationTokenSource.Token,
+            //        _cancellationTokenSource.Token);
+            //}
+            _cancellationTokenSource = new CancellationTokenSource();
+            await ReloadData();
 
             sw.Stop();
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
+        }
+
+        private async Task ReloadData()
+        {
+            await Parallel.ForEachAsync(VerseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, cancellationToken) =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    await viewModel.RefreshData(cancellationToken);
+                });
+
+            });
         }
 
         private void MoveCorpusUp(object obj)
@@ -535,7 +564,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 return;
             }
-            MoveableItems.Move(index, index +1);
+            MoveableItems.Move(index, index + 1);
 
         }
 
@@ -548,7 +577,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 .FirstOrDefault(x => x.element.Equals(row))?.index ?? -1;
             Items.RemoveAt(index);
             // remove from the grouping for saving
-            EnhancedViewItemMetadataOld.RemoveAt(index);
+            EnhancedViewItemMetadata.RemoveAt(index);
 
             if (row is VerseAwareEnhancedViewItemViewModel)
             {
@@ -611,33 +640,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _cancellationTokenSource = new CancellationTokenSource();
             var localCancellationToken = _cancellationTokenSource.Token;
 
-
-            ProgressBarVisibility = Visibility.Visible;
-
-
-            //CODE REVIEW:  what is the purpose of the following code between *********
-
-            // ***********************************************************************************************************
-            //TokenProject? project = null;
-            //// check if we have this already
-            //try
-            //{
-            //    if (_tokenProjects.Count > 0)
-            //    {
-            //        project = _tokenProjects.First(p => p.ParatextProjectId == message.ParatextProjectId
-            //                                            && p.TokenizationType == message.TokenizationType) ?? null;
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    _logger.LogError(e.Message);
-            //}
-            // ***********************************************************************************************************
-
             ProgressBarVisibility = Visibility.Visible;
 
             await ShowCorpusText(message, cancellationToken, localCancellationToken);
         }
+
+        public static ParatextProjectMetadata HebrewManuscriptMetadata => new ParatextProjectMetadata
+        {
+            Id = ManuscriptIds.HebrewManuscriptId,
+            CorpusType = CorpusType.ManuscriptHebrew,
+            Name = "Macula Hebrew",
+            AvailableBooks = BookInfo.GenerateScriptureBookList(),
+        };
+
+        public static ParatextProjectMetadata GreekManuscriptMetadata => new ParatextProjectMetadata
+        {
+            Id = ManuscriptIds.GreekManuscriptId,
+            CorpusType = CorpusType.ManuscriptGreek,
+            Name = "Macula Greek",
+            AvailableBooks = BookInfo.GenerateScriptureBookList(),
+        };
 
         public async Task ShowCorpusText(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken,
             CancellationToken localCancellationToken)
@@ -653,29 +675,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     if (message.ParatextProjectId == ManuscriptIds.HebrewManuscriptId)
                     {
-                        // our fake Manuscript corpus
-                        var books = BookInfo.GenerateScriptureBookList();
-
-                        metadata = new ParatextProjectMetadata
-                        {
-                            Id = ManuscriptIds.HebrewManuscriptId,
-                            CorpusType = CorpusType.ManuscriptHebrew,
-                            Name = "Macula Hebrew",
-                            AvailableBooks = books,
-                        };
+                        metadata = HebrewManuscriptMetadata;
                     }
                     else if (message.ParatextProjectId == ManuscriptIds.GreekManuscriptId)
                     {
-                        // our fake Greek Manuscript corpus
-                        var books = BookInfo.GenerateScriptureBookList();
-
-                        metadata = new ParatextProjectMetadata
-                        {
-                            Id = ManuscriptIds.GreekManuscriptId,
-                            CorpusType = CorpusType.ManuscriptGreek,
-                            Name = "Macula Greek",
-                            AvailableBooks = books,
-                        };
+                        metadata = GreekManuscriptMetadata;
                     }
                     else
                     {
@@ -710,7 +714,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     if (project is null)
                     {
                         // get the entirety of text for this corpus
-                        
+
                         currentTokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, new TokenizedTextCorpusId(message.TokenizedTextCorpusId.Value));
 
                         // add this corpus to our master list
@@ -748,7 +752,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     var verseRange = currentTokenizedTextCorpus.GetByVerseRange(new VerseRef(CurrentBcv.GetBBBCCCVVV()), offset, offset);
                     var tokensTextRowsRange = verseRange.textRows.Select(v => new TokensTextRow(v)).ToArray();
                     var indexOfVerse = verseRange.indexOfVerse;
-                 
+
                     // set the title to include the verse range
                     var title = message.ProjectName + " - " + message.TokenizationType;
                     if (tokensTextRowsRange.Length == 1)
@@ -872,9 +876,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             return await DAL.Alignment.Translation.AlignmentSet.Get(new AlignmentSetId(Guid.Parse(alignmentSetId)), mediator);
         }
-        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int bbbcccvvv)
+        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> textRows, int bbbcccvvv)
         {
-            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
+            var textRow = textRows.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
             if (textRow != null)
             {
                 var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
@@ -901,7 +905,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             var brush = GetCorpusBrushColor(message);
 
-           
+
             var row = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v => v.CorpusId == message.CorpusId);
             if (row is null)
             {
@@ -914,12 +918,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 viewModel.IsRtl = message.IsRTL.Value;
                 viewModel.SourceFontFamily = family;
 
-
-                EnhancedViewItemMetadataOld.Add(new EnhancedViewItemMetadatumOld
-                {
-                    MessageType = MessageType.ShowTokenizationWindowMessage,
-                    Data = message
-                });
 
                 // add to the grouping for saving
                 EnhancedViewItemMetadata.Add(new TokenizedCorpusEnhancedViewItemMetadatum
@@ -1077,8 +1075,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var versesOut = new BindableCollection<VerseDisplayViewModel>();
             var rows = await GetVerseTextRow(Convert.ToInt32(CurrentBcv.BBBCCCVVV), message);
 
-            //var verseRange = GetValidVerseRange(CurrentBcv.BBBCCCVVV, VerseOffsetRange);
-
             if (rows is null)
             {
 
@@ -1205,7 +1201,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
 
                 var stopwatch = Stopwatch.StartNew();
-  
+
                 // check if this project exist or not
                 var project = _parallelProjects.FirstOrDefault(x => x.ParallelCorpusId == guid);
                 ParallelCorpus corpus;
@@ -1216,7 +1212,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     _parallelProjects.Add(new ParallelProject
                     {
                         ParallelCorpusId = guid,
-                        parallelTextRows = corpus,
+                        ParallelCorpus = corpus,
                     });
                     stopwatch.Stop();
                     Logger?.LogInformation($"Retrieved parallel corpus first time {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
@@ -1224,7 +1220,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
                 else
                 {
-                    corpus = project.parallelTextRows;
+                    corpus = project.ParallelCorpus;
                     stopwatch.Stop();
                     Logger?.LogInformation($"Retrieved parallel corpus subsequent times {corpus.ParallelCorpusId.Id} in {stopwatch.ElapsedMilliseconds} ms");
                 }
@@ -1233,7 +1229,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 var rows = verses.parallelTextRows.Select(v => (EngineParallelTextRow)v).ToList();
 
-                return rows;  
+                return rows;
             }
             catch (Exception e)
             {
@@ -1242,7 +1238,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels  => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
+        private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
         private async Task UpdateParallelCorpusDisplay(AddAlignmentToEnhancedViewMessage message,
             BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations = true)
@@ -1280,17 +1276,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (message.AlignmentSetId is null)
             {
                 // interlinear
-               enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
-                    v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
-                    v.TranslationSetId == Guid.Parse(message.TranslationSetId));
+                enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
+                     v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
+                     v.TranslationSetId == Guid.Parse(message.TranslationSetId));
 
             }
             else
             {
                 // alignment
-               enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
-                    v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
-                    v.AlignmentSetId == Guid.Parse(message.AlignmentSetId));
+                enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
+                     v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
+                     v.AlignmentSetId == Guid.Parse(message.AlignmentSetId));
 
             }
 
@@ -1331,16 +1327,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     EnhancedViewItemMetadata.Add(new AlignmentEnhancedViewItemMetadatum
                     {
-                       AlignmentSetId = message.AlignmentSetId,
-                       DisplayName = message.DisplayName,
-                       IsNewWindow = message.IsNewWindow,
-                       IsRtl = message.IsRTL,
-                       IsTargetRtl = message.IsTargetRTL,
-                       ParallelCorpusDisplayName = message.ParallelCorpusDisplayName,
-                       ParallelCorpusId = message.ParallelCorpusId,
-                       SourceParatextId = message.SourceParatextId,
-                       TargetParatextId = message.TargetParatextId
-                       
+                        AlignmentSetId = message.AlignmentSetId,
+                        DisplayName = message.DisplayName,
+                        IsNewWindow = message.IsNewWindow,
+                        IsRtl = message.IsRTL,
+                        IsTargetRtl = message.IsTargetRTL,
+                        ParallelCorpusDisplayName = message.ParallelCorpusDisplayName,
+                        ParallelCorpusId = message.ParallelCorpusId,
+                        SourceParatextId = message.SourceParatextId,
+                        TargetParatextId = message.TargetParatextId
+
                     });
                 }
 
@@ -1360,12 +1356,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     });
                 }
-                // add to the grouping for saving
-                EnhancedViewItemMetadataOld.Add(new EnhancedViewItemMetadatumOld
-                {
-                    MessageType = MessageType.ShowParallelTranslationWindowMessage,
-                    Data = message
-                });
+              
             }
             else
             {
@@ -1562,8 +1553,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
         {
             Task.Run(() => TokenRightButtonDownAsync(e).GetAwaiter());
-        }        
-        
+        }
+
         public async Task TokenRightButtonDownAsync(TokenEventArgs e)
         {
             UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
@@ -1799,5 +1790,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #endregion
 
+      
     }
 }

@@ -1,4 +1,7 @@
 ﻿
+using System.Text.Json.Serialization;
+using ClearDashboard.DAL.Alignment.Corpora;
+
 namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
 public abstract class ParallelCorpusEnhancedViewItemMetadatum : EnhancedViewItemMetadatum
@@ -9,4 +12,7 @@ public abstract class ParallelCorpusEnhancedViewItemMetadatum : EnhancedViewItem
     public bool? IsTargetRtl { get; set; }
     public string? SourceParatextId { get; set; }
     public string? TargetParatextId { get; set; }
+
+    [JsonIgnore]
+    public ParallelCorpus? ParallelCorpus { get; set; }
 }
