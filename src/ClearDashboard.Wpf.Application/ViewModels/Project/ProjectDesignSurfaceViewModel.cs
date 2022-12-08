@@ -699,20 +699,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var textCorpus = dialogViewModel.SelectedTokenizer switch
                         {
                             Tokenizers.LatinWordTokenizer =>
-                               (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
+                               (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                .Tokenize<LatinWordTokenizer>()
                                .Transform<IntoTokensTextRowProcessor>()
                                .Transform<SetTrainingBySurfaceLowercase>(),
                             Tokenizers.WhitespaceTokenizer =>
-                               (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
+                               (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                .Tokenize<WhitespaceTokenizer>()
                                .Transform<IntoTokensTextRowProcessor>()
                                .Transform<SetTrainingBySurfaceLowercase>(),
-                            Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
+                            Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                .Tokenize<ZwspWordTokenizer>()
                                .Transform<IntoTokensTextRowProcessor>()
                                .Transform<SetTrainingBySurfaceLowercase>(),
-                            _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
+                            _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                .Tokenize<WhitespaceTokenizer>()
                                .Transform<IntoTokensTextRowProcessor>()
                                .Transform<SetTrainingBySurfaceLowercase>()

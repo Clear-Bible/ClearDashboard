@@ -81,6 +81,7 @@ public record CreateProjectMessage(string Message);
 
 
 
+
 #region ProjectDesignSurfaceMessages
 public record NodeSelectedChangedMessage(object? Node);
 public record ConnectionSelectedChangedMessage(Guid ConnectorId);
