@@ -4,6 +4,19 @@ namespace ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings
 {
     public class RelatedLemma
     {
+        private string _Id;
+        public string Id
+        {
+            get => _Id;
+            set
+            {
+                _Id = value;
+                RaisePropertyChangeEvent("Id");
+            }
+        }
+
+
+
         private string _lemma;
         public string Lemma
         {

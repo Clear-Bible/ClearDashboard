@@ -98,8 +98,8 @@ namespace ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings
             }
         }
 
-        private List<string> _verses = new();
-        public List<string> Verses
+        private List<CoupleOfStrings> _verses = new();
+        public List<CoupleOfStrings> Verses
         {
             get => _verses;
             set
@@ -201,8 +201,8 @@ namespace ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings
 
 
 
-        private List<string> _relatedLemmas;
-        public List<string> RelatedLemmas
+        private List<CoupleOfStrings> _relatedLemmas;
+        public List<CoupleOfStrings> RelatedLemmas
         {
             get => _relatedLemmas;
             set
@@ -212,8 +212,8 @@ namespace ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings
             }
         }
 
-        private List<string> _partsOfSpeech;
-        public List<string> PartsOfSpeech
+        private List<PartsOfSpeech> _partsOfSpeech;
+        public List<PartsOfSpeech> PartsOfSpeech
         {
             get => _partsOfSpeech;
             set

@@ -16,6 +16,8 @@ using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
 using Unidecode.NET;
 using System.Xml.Linq;
 using System.Collections.ObjectModel;
+using ClearDashboard.DataAccessLayer.MarbleHelpers;
+using SIL.Extensions;
 
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
@@ -31,6 +33,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
         private string _word;
         private List<SemanticDomainLookup> _lookup;
         private ObservableCollection<Senses> Senses = new();
+        private bool _isOT = false;
 
         public GetWordMeaningsSliceHandler(ILogger<GetWordMeaningsSliceHandler> logger) : base(logger)
         {
@@ -72,6 +75,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
             if (_bcv.BookNum < 40)
             {
                 ResourceName = @$"SDBH\{result.FileName}.XML";
+                _isOT = true;
             }
             else
             {
@@ -121,22 +125,81 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 .ToList();
 
             var baseform = entry.Elements("BaseForms")
-                .Elements("BaseForm");
-
-            var partsOfSpeech = baseform.Elements("PartsOfSpeech")
-                .Elements("PartOfSpeech")
-                .Select(x => x.Value)
+                .Elements("BaseForm")
                 .ToList();
 
-            var relatedLemmas = baseform.Elements("RelatedLemmas")
-                .Elements("RelatedLemma")
-                .Select(x => x.Value)
-                .ToList();
+            List<CoupleOfStrings> relatedLemmas = new();
+            List<PartsOfSpeech> partsOfSpeech = new();
+            List<RelatedLemma> relatedLemmasList = new(); 
+            foreach (var xElement in baseform)
+            {
+                var idBaseform = xElement.Attribute("Id").Value;
+                if (idBaseform.Length >= 9)
+                {
+                    idBaseform = idBaseform.Substring(6, 3);
+                }
 
-            // check each lemma to see if it is in the CSV list
-            List<RelatedLemma> relatedLemmasList = CheckIfInCSV(relatedLemmas);
+                var partsOfSpeechTmp = xElement.Elements("PartsOfSpeech")
+                    .Elements("PartOfSpeech")
+                    .Select(x => x.Value)
+                    .ToList();
+
+                string decoded;
+                foreach (var element in partsOfSpeechTmp)
+                {
+                    var path = Path.Combine(Environment.CurrentDirectory, @"MarbleHelpers\DataFiles");
+
+                    if (_isOT)
+                    {
+                        var provider = PartsOfSpeechHelper.GetHebrewProvider(path);
+                        decoded = PartsOfSpeechHelper.DecodeTag(provider, element, "eng-long");
+                    }
+                    else
+                    {
+                        var provider = PartsOfSpeechHelper.GetGreekProvider(path);
+                        decoded = PartsOfSpeechHelper.DecodeTag(provider, element, "eng-long");
+                    }
+
+                    if (decoded == "")
+                    {
+                        partsOfSpeech.Add(new PartsOfSpeech
+                        {
+                            Id = idBaseform,
+                            Abbr = element,
+                            Long = ""
+                        });
+                    }
+                    else
+                    {
+                        partsOfSpeech.Add(new PartsOfSpeech
+                        {
+                            Id = idBaseform,
+                            Abbr = element,
+                            Long = $"({decoded})"
+                        });
+                    }
 
 
+                }
+
+
+                var relatedLemmasTmp = xElement.Elements("RelatedLemmas")
+                    .Elements("RelatedLemma")
+                    .Select(x => x.Value)
+                    .ToList();
+                relatedLemmas.Clear();
+                relatedLemmas.AddRange(relatedLemmasTmp.Select(x => new CoupleOfStrings
+                {
+                    stringA = idBaseform,
+                    stringB = x
+                }));
+
+
+                // check each lemma to see if it is in the CSV list
+               
+                relatedLemmasList.AddRange(CheckIfInCSV(relatedLemmas));
+            }
+            
             var lexMeanings = entry.Elements("BaseForms")
                 .Elements("BaseForm")
                 .Elements("LEXMeanings")
@@ -155,11 +218,18 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 Console.WriteLine($"Total Sense Verses: {totalSenseVerseCount.Count}");
                 totalVerses += totalSenseVerseCount.Count;
 
+                List<CoupleOfStrings> verseList = new();
                 List<string> verses = new();
                 foreach (var verse in totalSenseVerseCount)
                 {
                     var verseRef = VerseHelper.ConvertVerseIdToReference(verse.Value);
                     verses.Add(verseRef);
+
+                    verseList.Add(new CoupleOfStrings
+                    {
+                        stringA = verse.Value,
+                        stringB = verseRef,
+                    });
                 }
 
 
@@ -167,7 +237,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
 
                 var lexSense = senses.Elements("LEXSense")
-                    .FirstOrDefault(x => x.Attribute("LanguageCode").Value.Equals("en"));
+                    .FirstOrDefault(x => x.Attribute("LanguageCode").Value.Equals(_languageCode));
 
                 var definitionLong = lexSense.Element("DefinitionLong").Value;
                 var definationShort = lexSense.Element("DefinitionShort").Value;
@@ -216,11 +286,10 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 var contextualMeaning = meaning.Element("CONMeanings")
                     .Elements("ContextualMeaning").ToList();
 
-                //List<ContextualMeaning> contextualMeanings = new();
                 ObservableCollection<TreeNode> root = new();
                 foreach (var conMeaning in contextualMeaning)
                 {
-                    var meaningId = conMeaning.Attribute("Id").Value.Substring(9);
+                    var meaningId = conMeaning.Attribute("Id").Value.Substring(12);
 
                     var conForms = conMeaning.Elements("CONForms")
                         .Elements("CONForm")
@@ -237,6 +306,8 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                         .Select(x => x.Value)
                         .ToList();
 
+
+                    // verse references - convert to readable version
                     var conReferences = conMeaning.Elements("CONReferences")
                         .Elements("CONReference")
                         .Select(x => x.Value)
@@ -256,25 +327,23 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
                     ObservableCollection<TreeNode> memberNode = new();
 
-
-
-
                     // Get the sense definition for this contextual meaning
                     var conSenses = conMeaning.Elements("CONSenses").ToList();
                     var sensesList = conSenses.Elements("CONSense").ToList();
-                    var english = sensesList.Where(x =>
+                    // filter down to only the right language group
+                    var selectedLanguage = sensesList.Where(x =>
                     {
-                        if (x.Attribute("LanguageCode").Value == "en")
+                        if (x.Attribute("LanguageCode").Value == _languageCode)
                         {
                             return true;
                         };
                         return false;
                     });
-                    if (english.Any())
+                    if (selectedLanguage.Any())
                     {
-                        var DefinitionLong = english.Elements("DefinitionLong").FirstOrDefault()?.Value;
-                        var DefinitionShort = english.Elements("DefinitionShort").FirstOrDefault()?.Value;
-                        var Glosses = english.Elements("Glosses")
+                        var DefinitionLong = selectedLanguage.Elements("DefinitionLong").FirstOrDefault()?.Value;
+                        var DefinitionShort = selectedLanguage.Elements("DefinitionShort").FirstOrDefault()?.Value;
+                        var Glosses = selectedLanguage.Elements("Glosses")
                             .Elements("Gloss")
                             .Select(x => x.Value)
                             .ToList();
@@ -285,6 +354,11 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                         }
 
                         memberNode = AddToTreeNode(Glosses, "Glosses", memberNode);
+
+                        if (Glosses.Count > 0)
+                        {
+                            meaningId += " :: " + Glosses[0];
+                        }
                     }
 
                     memberNode = AddToTreeNode(conForms, "Forms", memberNode);
@@ -300,8 +374,6 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     });
                 }
 
-
-
                 Senses sense = new Senses()
                 {
                     Sense = String.Join("; ", glosses),
@@ -309,7 +381,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     DescriptionShort = definationShort,
                     Glosses = glosses,
                     VerseTotal = totalSenseVerseCount.Count,
-                    Verses = verses,
+                    Verses = verseList,
                     CoreDomains = coreDomains,
                     Domains = domains,
                     SubDomains = subDomains,
@@ -323,8 +395,6 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     RelatedLemmaList = relatedLemmasList,
                     PartsOfSpeech = partsOfSpeech,
                     AlphabetTreeNodes = root,
-                    //LexicalLinks = _lexicalLinks,
-                    //SelectedLexicalLink = _lexicalLinks[0],
                 };
 
                 temp.Add(sense);
@@ -342,7 +412,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
         }
 
 
-        private List<RelatedLemma> CheckIfInCSV(List<string> relatedLemmas)
+        private List<RelatedLemma> CheckIfInCSV(List<CoupleOfStrings> relatedLemmas)
         {
             var temp = new List<RelatedLemma>();
             if (_lookup is null)
@@ -351,7 +421,8 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 {
                     temp.Add(new RelatedLemma
                     {
-                        Lemma = lemma,
+                        Id = lemma.stringA,
+                        Lemma = lemma.stringB,
                         IsAvailable = true
                     });
                 }
@@ -365,7 +436,8 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 {
                     temp.Add(new RelatedLemma
                     {
-                        Lemma = relatedLemma,
+                        Id = relatedLemma.stringA,
+                        Lemma = relatedLemma.stringB,
                         IsAvailable = false
                     });
                 }
@@ -373,7 +445,8 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 {
                     temp.Add(new RelatedLemma
                     {
-                        Lemma = relatedLemma,
+                        Id = relatedLemma.stringA,
+                        Lemma = relatedLemma.stringB,
                         IsAvailable = true
                     });
                 }
@@ -401,307 +474,307 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
         /// <param name="filename"></param>
         /// <param name="bcv"></param>
         /// <returns></returns>
-        private List<MarbleResource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerseViewModel bcv,
-            string languageCode)
-        {
-            Dictionary<string, LexicalLookUp> SDBG = new Dictionary<string, LexicalLookUp>();
-            Dictionary<string, LexicalLookUp> SDBH = new Dictionary<string, LexicalLookUp>();
+        //private List<MarbleResource> GetLemmaListFromMarbleIndexes(string filename, BookChapterVerseViewModel bcv,
+        //    string languageCode)
+        //{
+        //    Dictionary<string, LexicalLookUp> SDBG = new Dictionary<string, LexicalLookUp>();
+        //    Dictionary<string, LexicalLookUp> SDBH = new Dictionary<string, LexicalLookUp>();
 
-            XmlDocument doc = new XmlDocument();
-            doc.Load(filename);
-            //XmlNodeList prop = doc.SelectNodes($"//verse[@chapter='{bcv.BookNum}' and @pubnumber='{bcv.Verse}']");
-            string bbbcccvvv = bcv.BBBCCCVVV.PadLeft(9, '0');
-            XmlNodeList prop =
-                doc.SelectNodes($"//MARBLELink[starts-with(@Id,'{bbbcccvvv}')]/LexicalLinks/LexicalLink");
+        //    XmlDocument doc = new XmlDocument();
+        //    doc.Load(filename);
+        //    //XmlNodeList prop = doc.SelectNodes($"//verse[@chapter='{bcv.BookNum}' and @pubnumber='{bcv.Verse}']");
+        //    string bbbcccvvv = bcv.BBBCCCVVV.PadLeft(9, '0');
+        //    XmlNodeList prop =
+        //        doc.SelectNodes($"//MARBLELink[starts-with(@Id,'{bbbcccvvv}')]/LexicalLinks/LexicalLink");
 
-            // loop through the XML getting al the LexicalLinks for this verse
-            List<MarbleIndexLinks> lexicalLinks = new List<MarbleIndexLinks>();
-            foreach (XmlNode item in prop)
-            {
-                var link = item.InnerText;
+        //    // loop through the XML getting al the LexicalLinks for this verse
+        //    List<MarbleIndexLinks> lexicalLinks = new List<MarbleIndexLinks>();
+        //    foreach (XmlNode item in prop)
+        //    {
+        //        var link = item.InnerText;
 
-                string[] s = link.Split(':');
+        //        string[] s = link.Split(':');
 
-                if (s.Length == 3)
-                {
-                    lexicalLinks.Add(new MarbleIndexLinks
-                    {
-                        DictionaryName = s[0],
-                        SenseID = s[2],
-                        Lemma = s[1],
-                    });
-                }
-            }
+        //        if (s.Length == 3)
+        //        {
+        //            lexicalLinks.Add(new MarbleIndexLinks
+        //            {
+        //                DictionaryName = s[0],
+        //                SenseID = s[2],
+        //                Lemma = s[1],
+        //            });
+        //        }
+        //    }
 
-            List<MarbleResource> resourceList = new List<MarbleResource>();
+        //    List<MarbleResource> resourceList = new List<MarbleResource>();
 
-            // load up the resources
-            int ID = 0;
-            foreach (var lexicalLink in lexicalLinks)
-            {
-                LexicalLookUp item = null;
+        //    // load up the resources
+        //    int ID = 0;
+        //    foreach (var lexicalLink in lexicalLinks)
+        //    {
+        //        LexicalLookUp item = null;
 
-                // get the database name
-                if (lexicalLink.DictionaryName == "SDBG")
-                {
-                    if (SDBG.Count == 0)
-                    {
-                        SDBG = ReadInLookupList("SDBG");
-                    }
+        //        // get the database name
+        //        if (lexicalLink.DictionaryName == "SDBG")
+        //        {
+        //            if (SDBG.Count == 0)
+        //            {
+        //                SDBG = ReadInLookupList("SDBG");
+        //            }
 
-                    if (SDBG.ContainsKey(lexicalLink.Lemma))
-                    {
-                        item = SDBG[lexicalLink.Lemma];
-                    }
+        //            if (SDBG.ContainsKey(lexicalLink.Lemma))
+        //            {
+        //                item = SDBG[lexicalLink.Lemma];
+        //            }
 
-                }
-                else
-                {
-                    if (SDBH.Count == 0)
-                    {
-                        SDBH = ReadInLookupList("SDBH");
-                    }
+        //        }
+        //        else
+        //        {
+        //            if (SDBH.Count == 0)
+        //            {
+        //                SDBH = ReadInLookupList("SDBH");
+        //            }
 
-                    if (SDBH.ContainsKey(lexicalLink.Lemma))
-                    {
-                        item = SDBH[lexicalLink.Lemma];
-                    }
-                }
+        //            if (SDBH.ContainsKey(lexicalLink.Lemma))
+        //            {
+        //                item = SDBH[lexicalLink.Lemma];
+        //            }
+        //        }
 
-                if (item != null)
-                {
-                    // read in the XML file and go to the line number
-                    // read in the lookup file and put into a dictionary lookup
-                    string startupPath = AppDomain.CurrentDomain.BaseDirectory;
-                    string fileName = Path.Combine(startupPath,
-                        $@"resources\{lexicalLink.DictionaryName}\{item.DictionaryName}.xml");
+        //        if (item != null)
+        //        {
+        //            // read in the XML file and go to the line number
+        //            // read in the lookup file and put into a dictionary lookup
+        //            string startupPath = AppDomain.CurrentDomain.BaseDirectory;
+        //            string fileName = Path.Combine(startupPath,
+        //                $@"resources\{lexicalLink.DictionaryName}\{item.DictionaryName}.xml");
 
-                    if (!File.Exists(fileName))
-                    {
-                        return new List<MarbleResource>();
-                    }
+        //            if (!File.Exists(fileName))
+        //            {
+        //                return new List<MarbleResource>();
+        //            }
 
-                    // read the file into a string array
-                    string[] lines = File.ReadAllLines(fileName);
-                    if (item.LineNum < lines.Length)
-                    {
-                        StringBuilder sb = new StringBuilder();
-                        sb.AppendLine(lines[item.LineNum - 1]);
+        //            // read the file into a string array
+        //            string[] lines = File.ReadAllLines(fileName);
+        //            if (item.LineNum < lines.Length)
+        //            {
+        //                StringBuilder sb = new StringBuilder();
+        //                sb.AppendLine(lines[item.LineNum - 1]);
 
-                        for (int i = item.LineNum; i < lines.Length; i++)
-                        {
-                            if (lines[i].Trim().ToLower() == "</lexicon_entry>")
-                            {
-                                sb.AppendLine(lines[i]);
-                                break;
-                            }
-                            else
-                            {
-                                sb.AppendLine(lines[i]);
-                            }
-                        }
+        //                for (int i = item.LineNum; i < lines.Length; i++)
+        //                {
+        //                    if (lines[i].Trim().ToLower() == "</lexicon_entry>")
+        //                    {
+        //                        sb.AppendLine(lines[i]);
+        //                        break;
+        //                    }
+        //                    else
+        //                    {
+        //                        sb.AppendLine(lines[i]);
+        //                    }
+        //                }
 
-                        string xmlSnippet = sb.ToString();
+        //                string xmlSnippet = sb.ToString();
 
-                        if (xmlSnippet.Length > 0)
-                        {
-                            doc = new XmlDocument();
-                            doc.LoadXml(xmlSnippet);
+        //                if (xmlSnippet.Length > 0)
+        //                {
+        //                    doc = new XmlDocument();
+        //                    doc.LoadXml(xmlSnippet);
 
-                            XmlNodeList nodeList = doc.SelectNodes($"//LEXMeanings/LEXMeaning");
+        //                    XmlNodeList nodeList = doc.SelectNodes($"//LEXMeanings/LEXMeaning");
 
-                            try
-                            {
-                                //Debug.WriteLine(xmlSnippet);
-                                foreach (XmlNode node in nodeList)
-                                {
-                                    string senseID = node.Attributes["Id"].Value;
-                                    if (senseID.Length > 9)
-                                    {
-                                        senseID = senseID.Substring(9, 3);
-                                    }
-                                    else
-                                    {
-                                        senseID = "0";
-                                    }
+        //                    try
+        //                    {
+        //                        //Debug.WriteLine(xmlSnippet);
+        //                        foreach (XmlNode node in nodeList)
+        //                        {
+        //                            string senseID = node.Attributes["Id"].Value;
+        //                            if (senseID.Length > 9)
+        //                            {
+        //                                senseID = senseID.Substring(9, 3);
+        //                            }
+        //                            else
+        //                            {
+        //                                senseID = "0";
+        //                            }
 
 
-                                    int iSenseID = Convert.ToInt32(senseID);
-                                    int ilinkSenseID = Convert.ToInt32(lexicalLink.SenseID);
+        //                            int iSenseID = Convert.ToInt32(senseID);
+        //                            int ilinkSenseID = Convert.ToInt32(lexicalLink.SenseID);
 
-                                    //if (iSenseID - 1 == ilinkSenseID)
-                                    //{
-                                    XmlNodeList nodeEntry = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"]?.Value}]")!;
-                                    MarbleResource marbleResource = new MarbleResource();
+        //                            //if (iSenseID - 1 == ilinkSenseID)
+        //                            //{
+        //                            XmlNodeList nodeEntry = doc.SelectNodes($"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"]?.Value}]")!;
+        //                            MarbleResource marbleResource = new MarbleResource();
 
-                                    if (nodeEntry.Count > 0)
-                                    {
-                                        // get the domain
-                                        var nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXDomains/LEXDomain");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.Domains += nodeInner.InnerText + ", ";
-                                        }
+        //                            if (nodeEntry.Count > 0)
+        //                            {
+        //                                // get the domain
+        //                                var nodes = doc.SelectNodes(
+        //                                    $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXDomains/LEXDomain");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.Domains += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // get the subdomain
-                                        nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSubDomains");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.SubDomains += nodeInner.InnerText + ", ";
-                                        }
+        //                                // get the subdomain
+        //                                nodes = doc.SelectNodes(
+        //                                    $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSubDomains");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.SubDomains += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // get the definition long
-                                        nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/DefinitionLong");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.DefinitionLong += nodeInner.InnerText + ", ";
-                                        }
+        //                                // get the definition long
+        //                                nodes = doc.SelectNodes(
+        //                                    $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/DefinitionLong");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.DefinitionLong += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // get the definition short
-                                        nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/DefinitionShort");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.DefinitionShort += nodeInner.InnerText + ", ";
-                                        }
+        //                                // get the definition short
+        //                                nodes = doc.SelectNodes(
+        //                                    $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/DefinitionShort");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.DefinitionShort += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // get the glosses
-                                        nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/Glosses/Gloss");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.Glosses += nodeInner.InnerText + ", ";
-                                        }
+        //                                // get the glosses
+        //                                nodes = doc.SelectNodes(
+        //                                    $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/Glosses/Gloss");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.Glosses += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // get the comments
-                                        nodes = doc.SelectNodes(
-                                            $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/Comments");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.Comment += nodeInner.InnerText + ", ";
-                                        }
+        //                                // get the comments
+        //                                nodes = doc.SelectNodes(
+        //                                    $"//LEXMeanings/LEXMeaning[@Id={node.Attributes["Id"].Value}]/LEXSenses/LEXSense[@LanguageCode='{languageCode}']/Comments");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.Comment += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // get the Strong
-                                        nodes = doc.SelectNodes($"//StrongCodes");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.Strong += nodeInner.InnerText + ", ";
-                                        }
+        //                                // get the Strong
+        //                                nodes = doc.SelectNodes($"//StrongCodes");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.Strong += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // get the PoS
-                                        nodes = doc.SelectNodes($"//BaseForms/BaseForm/PartsOfSpeech/PartOfSpeech");
-                                        foreach (XmlNode nodeInner in nodes)
-                                        {
-                                            marbleResource.PoS += nodeInner.InnerText + ", ";
-                                        }
+        //                                // get the PoS
+        //                                nodes = doc.SelectNodes($"//BaseForms/BaseForm/PartsOfSpeech/PartOfSpeech");
+        //                                foreach (XmlNode nodeInner in nodes)
+        //                                {
+        //                                    marbleResource.PoS += nodeInner.InnerText + ", ";
+        //                                }
 
-                                        // remove the commas
-                                        if (marbleResource.Comment != "")
-                                        {
-                                            marbleResource.Comment = marbleResource.Comment.Trim();
-                                            marbleResource.Comment = marbleResource.Comment.Substring(0, marbleResource.Comment.Length - 1);
-                                        }
+        //                                // remove the commas
+        //                                if (marbleResource.Comment != "")
+        //                                {
+        //                                    marbleResource.Comment = marbleResource.Comment.Trim();
+        //                                    marbleResource.Comment = marbleResource.Comment.Substring(0, marbleResource.Comment.Length - 1);
+        //                                }
 
-                                        if (marbleResource.DefinitionLong != "")
-                                        {
-                                            marbleResource.DefinitionLong = marbleResource.DefinitionLong.Trim();
-                                            marbleResource.DefinitionLong =
-                                                marbleResource.DefinitionLong.Substring(0, marbleResource.DefinitionLong.Length - 1);
-                                        }
+        //                                if (marbleResource.DefinitionLong != "")
+        //                                {
+        //                                    marbleResource.DefinitionLong = marbleResource.DefinitionLong.Trim();
+        //                                    marbleResource.DefinitionLong =
+        //                                        marbleResource.DefinitionLong.Substring(0, marbleResource.DefinitionLong.Length - 1);
+        //                                }
 
-                                        if (marbleResource.DefinitionShort != "")
-                                        {
-                                            marbleResource.DefinitionShort = marbleResource.DefinitionShort.Trim();
-                                            marbleResource.DefinitionShort =
-                                                marbleResource.DefinitionShort.Substring(0, marbleResource.DefinitionShort.Length - 1);
-                                        }
+        //                                if (marbleResource.DefinitionShort != "")
+        //                                {
+        //                                    marbleResource.DefinitionShort = marbleResource.DefinitionShort.Trim();
+        //                                    marbleResource.DefinitionShort =
+        //                                        marbleResource.DefinitionShort.Substring(0, marbleResource.DefinitionShort.Length - 1);
+        //                                }
 
-                                        if (marbleResource.Domains != "")
-                                        {
-                                            marbleResource.Domains = marbleResource.Domains.Trim();
-                                            marbleResource.Domains = marbleResource.Domains.Substring(0, marbleResource.Domains.Length - 1);
-                                        }
+        //                                if (marbleResource.Domains != "")
+        //                                {
+        //                                    marbleResource.Domains = marbleResource.Domains.Trim();
+        //                                    marbleResource.Domains = marbleResource.Domains.Substring(0, marbleResource.Domains.Length - 1);
+        //                                }
 
-                                        if (marbleResource.SubDomains != "")
-                                        {
-                                            marbleResource.SubDomains = marbleResource.SubDomains.Trim();
-                                            marbleResource.SubDomains = marbleResource.SubDomains.Substring(0, marbleResource.SubDomains.Length - 1);
-                                        }
+        //                                if (marbleResource.SubDomains != "")
+        //                                {
+        //                                    marbleResource.SubDomains = marbleResource.SubDomains.Trim();
+        //                                    marbleResource.SubDomains = marbleResource.SubDomains.Substring(0, marbleResource.SubDomains.Length - 1);
+        //                                }
 
-                                        if (marbleResource.Glosses != "")
-                                        {
-                                            marbleResource.Glosses = marbleResource.Glosses.Trim();
-                                            marbleResource.Glosses = marbleResource.Glosses.Substring(0, marbleResource.Glosses.Length - 1);
-                                        }
+        //                                if (marbleResource.Glosses != "")
+        //                                {
+        //                                    marbleResource.Glosses = marbleResource.Glosses.Trim();
+        //                                    marbleResource.Glosses = marbleResource.Glosses.Substring(0, marbleResource.Glosses.Length - 1);
+        //                                }
 
-                                        if (marbleResource.Strong != "")
-                                        {
-                                            marbleResource.Strong = marbleResource.Strong.Trim();
-                                            marbleResource.Strong = marbleResource.Strong.Substring(0, marbleResource.Strong.Length - 1);
-                                        }
+        //                                if (marbleResource.Strong != "")
+        //                                {
+        //                                    marbleResource.Strong = marbleResource.Strong.Trim();
+        //                                    marbleResource.Strong = marbleResource.Strong.Substring(0, marbleResource.Strong.Length - 1);
+        //                                }
 
-                                        marbleResource.SenseId = senseID;
-                                        marbleResource.PoS = marbleResource.PoS.Trim();
-                                        marbleResource.Word = lexicalLink.Lemma;
+        //                                marbleResource.SenseId = senseID;
+        //                                marbleResource.PoS = marbleResource.PoS.Trim();
+        //                                marbleResource.Word = lexicalLink.Lemma;
 
-                                        marbleResource.LogosRef = Uri.EscapeDataString(marbleResource.Word).Replace('%', '$');
+        //                                marbleResource.LogosRef = Uri.EscapeDataString(marbleResource.Word).Replace('%', '$');
 
-                                        // TODO will need to check if this is enough for Hebrew too
-                                        if (bcv.BookNum < 40)
-                                        {
-                                            // hebrew word
-                                            marbleResource.WordTransliterated = Hebrew.Transliterate(lexicalLink.Lemma);
-                                        }
-                                        else
-                                        {
-                                            // greek word
-                                            marbleResource.WordTransliterated = lexicalLink.Lemma.Unidecode();
-                                        }
+        //                                // TODO will need to check if this is enough for Hebrew too
+        //                                if (bcv.BookNum < 40)
+        //                                {
+        //                                    // hebrew word
+        //                                    marbleResource.WordTransliterated = Hebrew.Transliterate(lexicalLink.Lemma);
+        //                                }
+        //                                else
+        //                                {
+        //                                    // greek word
+        //                                    marbleResource.WordTransliterated = lexicalLink.Lemma.Unidecode();
+        //                                }
 
-                                        marbleResource.Id = ID;
+        //                                marbleResource.Id = ID;
 
-                                        if (iSenseID - 1 == ilinkSenseID)
-                                        {
-                                            marbleResource.IsSense = true;
-                                        }
+        //                                if (iSenseID - 1 == ilinkSenseID)
+        //                                {
+        //                                    marbleResource.IsSense = true;
+        //                                }
 
-                                        resourceList.Add(marbleResource);
-                                    }
+        //                                resourceList.Add(marbleResource);
+        //                            }
 
-                                    //}
+        //                            //}
 
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                _logger.LogError(ex.Message);
-                            }
-                        }
-                    }
-                }
+        //                        }
+        //                    }
+        //                    catch (Exception ex)
+        //                    {
+        //                        _logger.LogError(ex.Message);
+        //                    }
+        //                }
+        //            }
+        //        }
 
-                ID++;
+        //        ID++;
 
-            }
+        //    }
 
-            // group by to get the totals
+        //    // group by to get the totals
 
-            var groups = resourceList.GroupBy(p => p.Id);
-            foreach (var group in groups)
-            {
-                int count = group.Count();
+        //    var groups = resourceList.GroupBy(p => p.Id);
+        //    foreach (var group in groups)
+        //    {
+        //        int count = group.Count();
 
-                foreach (var item in group)
-                {
-                    item.TotalSenses = count;
-                }
-            }
+        //        foreach (var item in group)
+        //        {
+        //            item.TotalSenses = count;
+        //        }
+        //    }
 
-            return resourceList;
-        }
+        //    return resourceList;
+        //}
 
 
         /// <summary>
