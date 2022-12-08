@@ -7,5 +7,9 @@ using MediatR;
 
 namespace ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections
 {
-    public record GetTextCollectionsQuery() : IRequest<RequestResult<List<TextCollection>>>;
+    public record GetTextCollectionsQuery(bool FetchUsx = false) : IRequest<RequestResult<List<TextCollection>>>
+    {
+        public bool FetchUsx { get; } = FetchUsx;
+
+    };
 }
