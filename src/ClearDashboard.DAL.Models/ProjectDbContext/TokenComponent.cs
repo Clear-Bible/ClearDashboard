@@ -19,7 +19,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? ExtendedProperties { get; set; }
 
         [ForeignKey("VerseRowId")]
-        public Guid VerseRowId { get; set; }
+        public Guid? VerseRowId { get; set; }
         public virtual VerseRow? VerseRow { get; set; }
 
         [ForeignKey("TokenizedCorpusId")]

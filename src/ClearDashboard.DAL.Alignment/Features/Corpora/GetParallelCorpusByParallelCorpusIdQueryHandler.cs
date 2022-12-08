@@ -36,6 +36,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
 
         {
+            await Task.CompletedTask;
+
             //DB Impl notes: use command.ParallelCorpusId to retrieve from ParallelCorpus table and return
             //1. the result of gathering all the VerseMappings to build an VerseMapping list.
             //2. associated source and target TokenizedCorpusId
@@ -44,11 +46,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 ModelHelper.AddIdIncludesParallelCorpaQuery(ProjectDbContext)
                     .Include(pc => pc.VerseMappings)
                         .ThenInclude(vm => vm.Verses)
-                            .ThenInclude(v => v.TokenVerseAssociations)
+                            .ThenInclude(v => v.TokenVerseAssociations.Where(tva => tva.Deleted == null))
                                 .ThenInclude(tva => tva.TokenComponent)
-                    .Include(pc => pc.TokenComposites)
+                    .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
                         .ThenInclude(tc => tc.VerseRow)
-                    .Include(pc => pc.TokenComposites)
+                    .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
                         .ThenInclude(tc => tc.Tokens)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 

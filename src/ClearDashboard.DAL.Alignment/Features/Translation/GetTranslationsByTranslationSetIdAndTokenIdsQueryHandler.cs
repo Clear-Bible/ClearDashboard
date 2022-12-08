@@ -193,12 +193,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .Include(li => li.LexicalItemDefinitions
                         .Where(lid => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(lid.Language) || lid.Language == targetLanguage))
                     .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
-                    .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.Text))
+                    .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.TrainingText))
                     .ToList()
-                    .SelectMany(li => sourceTokenTrainingTexts[li.Text!]
+                    .SelectMany(li => sourceTokenTrainingTexts[li.TrainingText!]
                         .Select(t => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(t),
-                            string.Join("/", li.LexicalItemDefinitions.Select(lid => lid.Text)),
+                            string.Join("/", li.LexicalItemDefinitions.Select(lid => lid.TrainingText)),
                             "FromLexicon")
                         )
                     ));

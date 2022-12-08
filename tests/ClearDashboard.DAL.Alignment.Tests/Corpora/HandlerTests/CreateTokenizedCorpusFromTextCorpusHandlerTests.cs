@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 using System.Text;
+using ClearDashboard.DAL.Alignment.Features;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -161,6 +162,60 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
                 Output.WriteLine("");
             }
+        }
+        catch (Exception ex)
+        {
+            Output.WriteLine(ex.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void TokenizedCorpus__CreateCompositeTokensApi()
+    {
+        try
+        {
+            var textCorpus = CreateFakeTextCorpusWithComposite(false);
+
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction);
+
+            Assert.NotNull(tokenizedTextCorpus);
+            Assert.All(tokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var verseRows = ProjectDbContext!.VerseRows
+                .Include(vr => vr.TokenComponents)
+                .Take(2)
+                .ToArray();
+
+            var tokensForComposite1 = verseRows[0].Tokens.Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            var composite1 = new CompositeToken(tokensForComposite1);
+            composite1.TokenId.Id = Guid.NewGuid();
+
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, null);
+
+            var tokensForComposite2 = verseRows[0].Tokens.Skip(1).Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            var composite2 = new CompositeToken(tokensForComposite2);
+            composite2.TokenId.Id = composite1.TokenId.Id;
+
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, null);
+
+            var tokensForComposite3 = verseRows[0].Tokens.Skip(2).Take(3).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            tokensForComposite3.AddRange(verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)));
+            var composite3 = new CompositeToken(tokensForComposite3);
+            composite3.TokenId.Id = composite1.TokenId.Id;
+
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, null);
         }
         catch (Exception ex)
         {

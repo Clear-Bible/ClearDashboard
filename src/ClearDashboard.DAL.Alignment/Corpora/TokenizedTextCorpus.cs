@@ -88,9 +88,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification);
         }
 
-        public static async Task AddCompositeToken(IMediator mediator, CompositeToken compositeToken, ParallelCorpusId? paralleCorpusId)
+        public static async Task PutCompositeToken(IMediator mediator, CompositeToken compositeToken, ParallelCorpusId? paralleCorpusId)
         {
+            var command = new PutCompositeTokenCommand(compositeToken, paralleCorpusId);
 
+            var result = await mediator.Send(command);
+            result.ThrowIfCanceledOrFailed(true);
         }
     }
 }

@@ -105,22 +105,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     // delete(soft delete so notes references work ?) all tokens and alignments.
                                     var tokensToSoftDelete = ProjectDbContext.TokenComponents
-                                        .Include(tc => tc.TokenVerseAssociations)
-                                            .ThenInclude(tva => tva.Verse)
-                                                .ThenInclude(v => v!.VerseMapping)
-                                                    .ThenInclude(vm => vm!.ParallelCorpus)
+                                        .Include(tc => tc.TokenVerseAssociations.Where(tva => tva.Deleted == null))
                                         .Include(tc => tc.Translations.Where(t => t.Deleted == null))
                                         .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
                                         .Include(tc => tc.TargetAlignments.Where(a => a.Deleted == null))
                                         .Where(tc => tc.Deleted == null)
                                         .Where(tc => tc.VerseRowId == verseRowDb.Id);
 
-                                    // FIXME:  what should happen if there is a TokenVerseAssociation for a token
-                                    // we are deleting here?
-
                                     foreach (var tc in tokensToSoftDelete)
                                     {
                                         tc.Deleted = deletedDateTime;
+                                        foreach (var e in tc.TokenVerseAssociations) { e.Deleted = deletedDateTime; }
                                         foreach (var e in tc.Translations) { e.Deleted = deletedDateTime; }
                                         foreach (var e in tc.SourceAlignments) { e.Deleted = deletedDateTime; }
                                         foreach (var e in tc.TargetAlignments) { e.Deleted = deletedDateTime; }

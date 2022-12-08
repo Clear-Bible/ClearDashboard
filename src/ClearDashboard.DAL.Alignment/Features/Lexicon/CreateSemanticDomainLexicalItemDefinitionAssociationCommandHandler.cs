@@ -65,7 +65,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             ProjectDbContext.SemanticDomainLexicalItemDefinitionAssociations.Add(semanticDomainLexicalItemDefinitionAssociation);
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-            return new RequestResult<Unit>();
+            return new RequestResult<Unit>(Unit.Value);
         }
     }
 }

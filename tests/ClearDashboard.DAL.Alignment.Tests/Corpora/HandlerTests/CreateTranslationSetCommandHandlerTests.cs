@@ -631,28 +631,28 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             Assert.Equal(4, tokensToQuery.Length);
 
             var lexicalItem1 = await new LexicalItem { 
-                Text = tokensToQuery[0].TrainingText,
+                TrainingText = tokensToQuery[0].TrainingText,
                 Language = parallelCorpus.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language
             }.Create(Mediator!);
             await lexicalItem1.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { 
-                Text = "li1_def1",
+                TrainingText = "li1_def1",
                 Language = parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language
             });
-            await lexicalItem1.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { Text = "li1_def2" /* no language */ });
+            await lexicalItem1.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { TrainingText = "li1_def2" /* no language */ });
 
-            var lexicalItem2 = await new LexicalItem { Text = tokensToQuery[1].TrainingText /* no language */  }.Create(Mediator!);
-            await lexicalItem2.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { Text = "li2_def1" /* no language */ });
+            var lexicalItem2 = await new LexicalItem { TrainingText = tokensToQuery[1].TrainingText /* no language */  }.Create(Mediator!);
+            await lexicalItem2.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { TrainingText = "li2_def1" /* no language */ });
             await lexicalItem2.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { 
-                Text = "li2_def2",
+                TrainingText = "li2_def2",
                 Language = "bogus"
             });
             await lexicalItem2.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { 
-                Text = "li2_def3",
+                TrainingText = "li2_def3",
                 Language = parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language
             });
 
-            var lexicalItem3 = await new LexicalItem { Text = tokensToQuery[3].TrainingText, Language = "bogus"  }.Create(Mediator!);
-            await lexicalItem3.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { Text = "li3_def1" /* no language */ });
+            var lexicalItem3 = await new LexicalItem { TrainingText = tokensToQuery[3].TrainingText, Language = "bogus"  }.Create(Mediator!);
+            await lexicalItem3.PutLexicalItemDefinition(Mediator!, new LexicalItemDefinition { TrainingText = "li3_def1" /* no language */ });
 
             var tokenIds = tokensToQuery.Where(t => t.TrainingText != ",").Select(t => ModelHelper.BuildTokenId(t));
 
@@ -662,13 +662,13 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == "FromLexicon");
             Assert.Equal(2, translationsFromLexicon.Count());
 
-            var translation1 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexicalItem1.Text).FirstOrDefault();
+            var translation1 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexicalItem1.TrainingText).FirstOrDefault();
             Assert.NotNull(translation1);
             Assert.Null(translation1.TranslationId);
             Assert.Equal(tokensToQuery[0].Id, translation1.SourceToken.TokenId.Id);
             Assert.Equal("li1_def1/li1_def2", translation1.TargetTranslationText);
 
-            var translation2 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexicalItem2.Text).FirstOrDefault();
+            var translation2 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexicalItem2.TrainingText).FirstOrDefault();
             Assert.NotNull(translation2);
             Assert.Null(translation2.TranslationId);
             Assert.Equal(tokensToQuery[1].Id, translation2.SourceToken.TokenId.Id);
