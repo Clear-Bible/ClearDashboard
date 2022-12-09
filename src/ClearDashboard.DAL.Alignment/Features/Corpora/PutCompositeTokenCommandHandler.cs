@@ -33,24 +33,39 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Where(tc => tc.Id == request.CompositeToken.TokenId.Id)
                 .FirstOrDefault();
 
-            if (existingTokenComposite is not null && existingTokenComposite.Tokens.Count == request.CompositeToken.Tokens.Count())
+            var compositeCandiateGuids = request.CompositeToken.Select(t => t.TokenId.Id);
+
+            if (existingTokenComposite is not null)
             {
-                if (!request.CompositeToken.Tokens
-                    .Select(t => t.TokenId.Id)
-                    .Except(existingTokenComposite.Tokens.Select(t => t.Id))
-                    .Any())
+                if (!compositeCandiateGuids.Any())
                 {
+                    // Remove incoming empty composite (but not its children tokens! ... needs testing)
+                    ProjectDbContext.TokenComposites.Remove(existingTokenComposite);
+                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+
                     return new RequestResult<Unit>(Unit.Value);
+                }
+                else if (existingTokenComposite.Tokens.Count == compositeCandiateGuids.Count())
+                {
+                    if (!compositeCandiateGuids
+                        .Except(existingTokenComposite.Tokens.Select(t => t.Id))
+                        .Any())
+                    {
+                        // No change!
+                        return new RequestResult<Unit>(Unit.Value);
+                    }
                 }
             }
 
             // Validate the composite:
             var compositeCandidatesDb = ProjectDbContext.Tokens
                 .Include(t => t.TokenizedCorpus)
-                .Where(tc => request.CompositeToken.Select(t => t.TokenId.Id).Contains(tc.Id))
+                .Include(t => t.VerseRow)
+                .Include(t => t.TokenComposite)
+                .Where(tc => compositeCandiateGuids.Contains(tc.Id))
                 .ToDictionary(tc => tc.Id, tc => tc);
 
-            if (compositeCandidatesDb.Count < request.CompositeToken.Tokens.Count())
+            if (compositeCandidatesDb.Count < compositeCandiateGuids.Count())
             {
                 return new RequestResult<Unit>
                 (
@@ -59,9 +74,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
-            var tokenizedCorpusIds = compositeCandidatesDb.Values.GroupBy(t => t.TokenizedCorpusId).Select(g => g.Key);
+            var tokenizedCorpora = compositeCandidatesDb.Values
+                .GroupBy(t => t.TokenizedCorpus)
+                .Select(t => t.Key);
 
-            if (tokenizedCorpusIds.Count() > 1)
+            if (tokenizedCorpora.Count() > 1)
             {
                 return new RequestResult<Unit>
                 (
@@ -70,82 +87,85 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
+            var compositeCorpusId = tokenizedCorpora.First()!.CorpusId;
+
             if (request.ParallelCorpusId is not null)
             {
-                var tokenIdToBCV = compositeCandidatesDb.Values
-                    .ToDictionary(tc => tc.Id, tc => new
+                // In this section we are trying to find all VerseMappings that relate to any of the
+                // candidate composite child tokens.  Either by Verse+TokenVerseAssociation or Verse Book/Chapter/Verse.
+                // Then, we validate that all these child tokens are relate either these two ways with all
+                // resulting VerseMapping candidates.  
+
+                var bcvGroups = compositeCandidatesDb.Values
+                    .GroupBy(tc => tc.VerseRow!.BookChapterVerse!)
+                    .Select(g => new
                     {
-                        B = int.Parse(tc.VerseRow!.BookChapterVerse![..3]),
-                        C = int.Parse(tc.VerseRow!.BookChapterVerse![3..3]),
-                        V = int.Parse(tc.VerseRow!.BookChapterVerse![6..3])
+                        Ids = g.Select(t => t.Id),
+                        B = int.Parse(g.Key[..3]),
+                        C = int.Parse(g.Key[3..^3]),
+                        V = int.Parse(g.Key[6..^0])
                     });
 
-                var firstBCV = tokenIdToBCV.First().Value;
-
-                var candidateVerseMappingsDb = ProjectDbContext.Verses
+                // Find all VerseMappings that relate to any of the composite child tokens by Verse+TokenVerseAssociation
+                var matchingVerseMappingsDb = ProjectDbContext.Verses
+                    .Include(v => v.TokenVerseAssociations)
                     .Include(v => v.VerseMapping)
                         .ThenInclude(vm => vm!.Verses)
                             .ThenInclude(v => v.TokenVerseAssociations)
-                    .Include(v => v.TokenVerseAssociations)
                     .Where(v => v.VerseMapping!.ParallelCorpusId == request.ParallelCorpusId.Id)
-                    .Where(v => 
-                         v.TokenVerseAssociations.Any(tva => tokenIdToBCV.ContainsKey(tva.TokenComponentId)) ||
-                        (v.BookNumber == firstBCV.B && v.ChapterNumber == firstBCV.C && v.VerseNumber == firstBCV.V))
-                    .ToList()
-                    .GroupBy(v => v.VerseMapping)
-                    .Select(g => g.Key);
+                    .Where(v => v.CorpusId == compositeCorpusId)
+                    .Where(v => v.TokenVerseAssociations.Any(tva => compositeCandiateGuids.Contains(tva.TokenComponentId)))
+                    .Select(v => v.VerseMapping!)
+                    .ToList();
 
-                var candidateVerseMappingTvas = candidateVerseMappingsDb
-                    .Where(vm => vm!.Verses
-                        .Any(v => v.TokenVerseAssociations
-                            .Any(tva => compositeCandidatesDb.ContainsKey(tva.TokenComponentId))));
-
-                if (candidateVerseMappingTvas.Count() > 1)
+                // Find all VerseMappings that relate to any of the composite child tokens by Verse book/chapter/verse
+                foreach (var bcvGroup in bcvGroups)
                 {
-                    return new RequestResult<Unit>
-                    (
-                        success: false,
-                        message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request contains tokens more than one VerseMapping TokenVerseAssociation"
-                    );
+                    matchingVerseMappingsDb.AddRange(ProjectDbContext.Verses
+                        .Include(v => v.VerseMapping)
+                            .ThenInclude(vm => vm!.Verses)
+                                .ThenInclude(v => v.TokenVerseAssociations)
+                        .Where(v => v.VerseMapping!.ParallelCorpusId == request.ParallelCorpusId.Id)
+                        .Where(v => v.CorpusId == compositeCorpusId)
+                        .Where(v => v.BookNumber == bcvGroup.B && v.ChapterNumber == bcvGroup.C && v.VerseNumber == bcvGroup.V)
+                        .Select(v => v.VerseMapping!));
                 }
 
-                if (candidateVerseMappingTvas.Any())
-                {
-                    // If there is a VerseMapping from the database that has a TokenVerseAssociation
-                    // pointing to one of the CompositeToken children, that's the only VerseMapping
-                    // candidate left:
-                    candidateVerseMappingsDb = candidateVerseMappingTvas;
-                }
+                var idBcvs = bcvGroups
+                    .SelectMany(g => g.Ids, (g, id) => new { id, g.B, g.C, g.V })
+                    .ToDictionary(i => i.id, i => i);
 
-                foreach (var verseMappingCandidateDb in candidateVerseMappingsDb)
+                foreach (var matchingVerseMappingDb in matchingVerseMappingsDb.DistinctBy(vm => vm.Id))
                 {
-                    var tokensInVerseMapCount = 0;
+                    var tokensInVerseMappingCount = 0;
                     foreach (var compositeCandidateDbId in compositeCandidatesDb.Keys)
                     {
-                        if (verseMappingCandidateDb!.Verses
+                        if (matchingVerseMappingDb!.Verses
                             .Any(v => v.TokenVerseAssociations
                                 .Any(tva => compositeCandidateDbId == tva.TokenComponentId)))
                         {
-                            tokensInVerseMapCount++;
+                            tokensInVerseMappingCount++;
                             continue;
                         }
 
-                        var bcv = tokenIdToBCV[compositeCandidateDbId];
-                        if (verseMappingCandidateDb!.Verses
+                        var bcv = idBcvs[compositeCandidateDbId];
+                        if (matchingVerseMappingDb!.Verses
                             .Where(v => v.BookNumber == bcv.B && v.ChapterNumber == bcv.C && v.VerseNumber == bcv.V)
                             .Any())
                         {
-                            tokensInVerseMapCount++;
+                            tokensInVerseMappingCount++;
                             continue;
                         }
                     }
 
-                    if (tokensInVerseMapCount != compositeCandidatesDb.Count)
+                    // If any of the composite child tokens does not relate to this VerseMapping
+                    // using the criteria above, then return an error:
+                    if (tokensInVerseMappingCount != compositeCandidatesDb.Count)
                     {
                         return new RequestResult<Unit>
                         (
                             success: false,
-                            message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request contains tokens from multiple VerseMappings"
+                            message: $"CompositeToken '{request.CompositeToken.TokenId}' only has some child tokens present in VerseMapping candidate '{matchingVerseMappingDb.Id}'"
                         );
                     }
                 }
@@ -164,26 +184,31 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 }
             }
 
-            // Add or update:
+            // Add or update, possibly remove remaining empty composite(s)
             if (existingTokenComposite is not null)
             {
-                var childrenGuidsToAdd = request.CompositeToken.Tokens
-                    .Select(t => t.TokenId.Id)
-                    .Except(existingTokenComposite.Tokens.Select(t => t.Id));
+                var childrenTokensToAdd = compositeCandidatesDb.Values
+                    .ExceptBy(existingTokenComposite.Tokens.Select(t => t.Id), t => t.Id);
                 
-                foreach (var guid in childrenGuidsToAdd)
+                foreach (var toAdd in childrenTokensToAdd)
                 {
-                    existingTokenComposite.Tokens.Add(compositeCandidatesDb[guid]);
+                    var previousTokenComposite = toAdd.TokenComposite;
+                    previousTokenComposite?.Tokens.Remove(toAdd);
+
+                    existingTokenComposite.Tokens.Add(toAdd);
+
+                    if (previousTokenComposite is not null && !previousTokenComposite.Tokens.Any())
+                    {
+                        ProjectDbContext.TokenComposites.Remove(previousTokenComposite);
+                    }
                 }
 
-                var childrenGuidsToRemove = existingTokenComposite.Tokens
-                    .Select(t => t.Id)
-                    .Except(request.CompositeToken.Tokens.Select(t => t.TokenId.Id));
+                var childrenTokensToRemove = existingTokenComposite.Tokens
+                    .ExceptBy(compositeCandiateGuids, t => t.Id);
 
-                foreach (var guid in childrenGuidsToRemove)
+                foreach (var toRemove in childrenTokensToRemove)
                 {
-                    var toRemove = existingTokenComposite.Tokens.Where(t => t.Id == guid).First();
-                    existingTokenComposite.Tokens.Remove(toRemove);
+                     existingTokenComposite.Tokens.Remove(toRemove);
                 }
             }
             else

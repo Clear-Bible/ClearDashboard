@@ -13,6 +13,7 @@ using Xunit;
 using Xunit.Abstractions;
 using System.Text;
 using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Exceptions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -210,12 +211,13 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, null);
 
+            // Exception case:  multiple VerseRow tokens in non-ParallelCorpus Composite
             var tokensForComposite3 = verseRows[0].Tokens.Skip(2).Take(3).Select(tc => ModelHelper.BuildToken(tc)).ToList();
             tokensForComposite3.AddRange(verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)));
             var composite3 = new CompositeToken(tokensForComposite3);
             composite3.TokenId.Id = composite1.TokenId.Id;
 
-            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, null);
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, null));
         }
         catch (Exception ex)
         {

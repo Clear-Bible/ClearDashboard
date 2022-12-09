@@ -19,6 +19,7 @@ using Verse = ClearBible.Engine.Corpora.Verse;
 using SIL.Extensions;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using ClearDashboard.DAL.Alignment.Features;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -401,6 +402,62 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.Null(result.Data);
             Assert.Contains("targettokenizedcorpus not found", result.Message.ToLower());
             Output.WriteLine(result.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void ParallelCorpus__CreateCompositeTokensApi()
+    {
+        try
+        {
+            var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
+            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, targetCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var sourceTokensByGuid = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .ToDictionary(t => t.Id, t => ModelHelper.BuildToken(t));
+            var targetTokensByGuid = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizedCorpusId == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .ToDictionary(t => t.Id, t => ModelHelper.BuildToken(t));
+
+            Assert.True(sourceTokensByGuid.Keys.Count > 50);
+            Assert.True(targetTokensByGuid.Keys.Count > 50);
+            Assert.Empty(sourceTokensByGuid.Keys.Intersect(targetTokensByGuid.Keys));
+
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+            Assert.NotNull(parallelTextCorpus.VerseMappingList);
+            Assert.True(parallelTextCorpus.VerseMappingList!.Count >= 5);
+
+            var sourceVerses = parallelTextCorpus.VerseMappingList[0].SourceVerses.ToList();
+            var targetVerses = parallelTextCorpus.VerseMappingList[0].TargetVerses.ToList();
+            sourceVerses[0] = new Verse(
+                sourceVerses[0].Book, 
+                sourceVerses[0].ChapterNum, 
+                sourceVerses[0].VerseNum, 
+                sourceTokensByGuid.Values.Take(2).Select(t => t.TokenId));
+            parallelTextCorpus.VerseMappingList[0] = new VerseMapping(sourceVerses, targetVerses);
+
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            var composite1 = new CompositeToken(sourceTokensByGuid.Values.Take(2));
+            composite1.TokenId.Id = Guid.NewGuid();
+
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, parallelTokenizedCorpus.ParallelCorpusId);
+        }
+        catch (Exception ex)
+        {
+            Output.WriteLine(ex.Message);
         }
         finally
         {

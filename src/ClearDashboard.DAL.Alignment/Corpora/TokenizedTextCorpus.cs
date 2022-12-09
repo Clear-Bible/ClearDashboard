@@ -88,9 +88,23 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification);
         }
 
-        public static async Task PutCompositeToken(IMediator mediator, CompositeToken compositeToken, ParallelCorpusId? paralleCorpusId)
+        /// <summary>
+        /// If the incoming CompositeToken is new (not in the database yet) this method creates it
+        /// 
+        /// If the incoming CompositeToken already exists in the database and tokens have been added
+        /// or removed from it, this saves those changes.  If it has any tokens that are part of 
+        /// another Composite in the database, this method removes them from the other/previous one.  
+        /// 
+        /// If the incoming CompositeToken is empty and is already in the database, it is removed from
+        /// the database.  
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="compositeToken"></param>
+        /// <param name="parallelCorpusId"></param>
+        /// <returns></returns>
+        public static async Task PutCompositeToken(IMediator mediator, CompositeToken compositeToken, ParallelCorpusId? parallelCorpusId)
         {
-            var command = new PutCompositeTokenCommand(compositeToken, paralleCorpusId);
+            var command = new PutCompositeTokenCommand(compositeToken, parallelCorpusId);
 
             var result = await mediator.Send(command);
             result.ThrowIfCanceledOrFailed(true);
