@@ -362,6 +362,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
 
+            TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
         }
 

@@ -55,6 +55,7 @@
             <Button.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
+                    <MenuItem x:Name="JoinTokensMenuItem" Click="OnJoinTokens" Header="Join Tokens" />
                     <MenuItem Click="OnFilterPins" Header="Filter Pins" />
                 </ContextMenu>
             </Button.ContextMenu>
