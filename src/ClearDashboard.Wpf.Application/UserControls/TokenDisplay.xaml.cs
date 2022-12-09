@@ -941,7 +941,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(NoteCreateEvent, e);
         }
 
-        private void OnJoinTokens(object sender, RoutedEventArgs e)
+        private void OnTokenJoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenJoinEvent, e);
         }

@@ -1556,12 +1556,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void NoteCreate(object sender, NoteEventArgs e)
         {
             NoteControlVisibility = Visibility.Visible;
+        }        
+        
+        public void TokenJoin(object sender, TokenEventArgs e)
+        {
+            var args = e;
         }
-
-        //        public void ParatextSend(object sender, ParatextEventArgs e)
-        //        {
-        //            NoteManager.ParatextSend(e);
-        //;        }
 
         public void FilterPins(object sender, NoteEventArgs e)
         {

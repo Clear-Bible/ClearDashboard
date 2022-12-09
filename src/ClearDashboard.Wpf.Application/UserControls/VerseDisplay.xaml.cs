@@ -98,6 +98,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenJoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenJoinEvent = EventManager.RegisterRoutedEvent
+            ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationClickedEvent = EventManager.RegisterRoutedEvent
@@ -531,6 +537,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenDoubleClickedEvent, e);
         }
 
+        private void OnTokenJoin(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenJoinEvent, e);
+        }
+        
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
@@ -540,6 +551,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }
+
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
@@ -902,6 +914,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenMouseWheelEvent, value);
             remove => RemoveHandler(TokenMouseWheelEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to join multiple tokens into a composite token.
+        /// </summary>
+        public event RoutedEventHandler TokenJoin
+        {
+            add => AddHandler(TokenJoinEvent, value);
+            remove => RemoveHandler(TokenJoinEvent, value);
         }
 
         /// <summary>

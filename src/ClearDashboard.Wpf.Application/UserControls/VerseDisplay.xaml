@@ -53,6 +53,7 @@
                 TokenDoubleClicked="OnTokenDoubleClicked"
                 TokenLeftButtonDown="OnTokenLeftButtonDown"
                 TokenLeftButtonUp="OnTokenLeftButtonUp"
+                TokenJoin="OnTokenJoin"
                 TokenMouseEnter="OnTokenMouseEnter"
                 TokenMouseLeave="OnTokenMouseLeave"
                 TokenMouseWheel="OnTokenMouseWheel"
@@ -106,6 +107,7 @@
                 TranslateQuick="OnTranslateQuick"
                 TokenClicked="OnTokenClicked"
                 TokenDoubleClicked="OnTokenDoubleClicked"
+                TokenJoin="OnTokenJoin"
                 TokenLeftButtonDown="OnTokenLeftButtonDown"
                 TokenLeftButtonUp="OnTokenLeftButtonUp"
                 TokenMouseEnter="OnTokenMouseEnter"
@@ -163,8 +165,7 @@
             BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderBrush}"
             BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseBorderThickness}"
             Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VerseMargin}"
-            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}"
-            >
+            Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=VersePadding}">
             <ItemsControl
                 FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(display:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}"
                 ItemTemplate="{StaticResource SourceTokenDisplay}"
