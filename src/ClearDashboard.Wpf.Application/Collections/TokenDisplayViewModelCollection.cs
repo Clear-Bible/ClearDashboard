@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Caliburn.Micro;
@@ -35,6 +36,10 @@ namespace ClearDashboard.Wpf.Application.Collections
         public TokenDisplayViewModelCollection(TokenDisplayViewModel token) : this()
         {
             Add(token);
+        }
+
+        public TokenDisplayViewModelCollection(IEnumerable<TokenDisplayViewModel> tokens) : base(tokens)
+        {
         }
 
         public bool Contains(TokenId tokenId)
@@ -78,5 +83,8 @@ namespace ClearDashboard.Wpf.Application.Collections
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(EntityIds)));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(NoteIds)));
         }
+
+        public TokenDisplayViewModelCollection SelectedTokens => new(Items.Where(i => i.IsTokenSelected));
+        public TokenDisplayViewModelCollection SelectedTranslations => new(Items.Where(i => i.IsTranslationSelected));
     }
 }
