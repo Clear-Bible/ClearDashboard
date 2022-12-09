@@ -409,7 +409,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <param name="parallelCorpusConnection"></param>
         /// <param name="topLevelProjectIds"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void CreateConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
+        public void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
         {
             // initiate the menu system
             parallelCorpusConnection.MenuItems.Clear();

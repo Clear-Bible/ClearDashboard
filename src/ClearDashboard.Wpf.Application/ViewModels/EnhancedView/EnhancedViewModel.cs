@@ -5,13 +5,11 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.Services;
@@ -42,8 +40,6 @@ using Uri = System.Uri;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class EnhancedViewModel : DashboardConductorAllActive<object>, IPaneViewModel,
-        IHandle<TokenizedTextCorpusLoadedMessage>,
-        IHandle<BackgroundTaskChangedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>
@@ -61,11 +57,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
        
-        private CancellationTokenSource? _cancellationTokenSource;
-        private bool? _handleAsyncRunning;
-        private string? _tokenizationType;
+     
+      
         private string? _message;
-        private BookInfo? _currentBook;
+      
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
@@ -84,11 +79,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool IsRtl { get; set; }
 
-        public List<string> WorkingJobs { get; set; } = new();
-
+   
         public NoteManager NoteManager { get; set; }
 
-        private MainViewModel MainViewModel => (MainViewModel)Parent;
+        public MainViewModel MainViewModel => (MainViewModel)Parent;
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
 
@@ -125,7 +119,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private Dictionary<string, string> _bcvDictionary;
-
         public Dictionary<string, string> BcvDictionary
         {
             get => _bcvDictionary;
@@ -163,7 +156,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-
+        private BookInfo? _currentBook;
         public BookInfo? CurrentBook
         {
             get => _currentBook;
@@ -175,7 +168,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private string _verseChange = string.Empty;
-
         public string VerseChange
         {
             get => _verseChange;
@@ -245,24 +237,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _currentCorpusName, value);
         }
 
-        public string? TokenizationType
-        {
-            get => _tokenizationType;
-            set => Set(ref _tokenizationType, value);
-        }
-
-        //public TokenizedTextCorpus? CurrentTokenizedTextCorpus
-        //{
-        //    get => _currentTokenizedTextCorpus;
-        //    set => Set(ref _currentTokenizedTextCorpus, value);
-        //}
-
-        private Visibility? _progressBarVisibility = Visibility.Visible;
-        public Visibility? ProgressBarVisibility
-        {
-            get => _progressBarVisibility;
-            set => Set(ref _progressBarVisibility, value);
-        }
+       
+      
 
 
         public string? Message
@@ -347,8 +323,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _contentId, value);
         }
 
-        //public DockSide DockSide { get; }
-
+ 
         public bool IsSelected
         {
             get => _isSelected;
@@ -399,12 +374,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             ContentId = "ENHANCEDVIEW";
 
-            ProgressBarVisibility = Visibility.Collapsed;
-
             MoveCorpusDownRowCommand = new RelayCommand(MoveCorpusDown);
             MoveCorpusUpRowCommand = new RelayCommand(MoveCorpusUp);
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
-
             RequestCloseCommand = new RelayCommandAsync(RequestClose);
 
             VerseDisplay.EventAggregator = eventAggregator;
@@ -434,12 +406,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
             {
-                //_ = await Task.Factory.StartNew(async () =>
-                //{
-                    await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
-                //}, cancellationToken);
+                await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
+
             });
-            
         }
 
         private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
@@ -495,20 +464,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            //we need to cancel this process here
-            //check a bool to see if it already cancelled or already completed
-            if (_handleAsyncRunning.HasValue && _handleAsyncRunning.Value)
-            {
-                _cancellationTokenSource?.Cancel();
-                EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-                {
-                    Name = "Fetch Book",
-                    Description = "Task was cancelled",
-                    EndTime = DateTime.Now,
-                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-                }), cancellationToken);
-            }
-            return base.OnDeactivateAsync(close, cancellationToken);
+            //no-op for now.
+           return base.OnDeactivateAsync(close, cancellationToken);
         }
 
 
@@ -998,98 +955,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async Task HandleAsync(TokenizedTextCorpusLoadedMessage message, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("Received TokenizedTextCorpusMessage.");
-            _handleAsyncRunning = true;
-            _cancellationTokenSource = new CancellationTokenSource();
-            var localCancellationToken = _cancellationTokenSource.Token;
-            ProgressBarVisibility = Visibility.Visible;
-            await Task.Factory.StartNew(async () =>
-            {
-                try
-                {
-                    var currentTokenizedTextCorpus = message.TokenizedTextCorpus;
-                    TokenizationType = message.TokenizationName;
-                    CurrentBook = message.ProjectMetadata.AvailableBooks.First();
-                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                        new BackgroundTaskStatus
-                        {
-                            Name = "Fetch Book",
-                            Description = $"Getting book '{CurrentBook?.Code}'...",
-                            StartTime = DateTime.Now,
-                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
-                        }), cancellationToken);
-
-                    var tokensTextRows =
-                        currentTokenizedTextCorpus[CurrentBook?.Code]
-                            .GetRows()
-                            .WithCancellation(localCancellationToken)
-                            .Cast<TokensTextRow>()
-                            .Where(ttr => ttr
-                                .Tokens
-                                .Count(t => t
-                                    .TokenId
-                                    .ChapterNumber == CurrentBook?.Number) > 0)
-                            .ToList();
-
-                    OnUIThread(() =>
-                    {
-                        ProgressBarVisibility = Visibility.Collapsed;
-                    });
-                    await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                        new BackgroundTaskStatus
-                        {
-                            Name = "Fetch Book",
-                            Description = $"Found {tokensTextRows.Count} TokensTextRow entities.",
-                            StartTime = DateTime.Now,
-                            TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-                        }), cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    if (!localCancellationToken.IsCancellationRequested)
-                    {
-                        await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-                            new BackgroundTaskStatus
-                            {
-                                Name = "Fetch Book",
-                                EndTime = DateTime.Now,
-                                ErrorMessage = $"{ex}",
-                                TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
-                            }), cancellationToken);
-                    }
-                }
-                finally
-                {
-                    _handleAsyncRunning = false;
-                    _cancellationTokenSource.Dispose();
-                }
-            }, cancellationToken);
-        }
-
-
-        public async Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
-        {
-            var incomingMessage = message.Status;
-
-            if (incomingMessage.Name == "Fetch Book" && incomingMessage.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
-            {
-                _cancellationTokenSource?.Cancel();
-
-                // return that your task was cancelled
-                incomingMessage.EndTime = DateTime.Now;
-                incomingMessage.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                incomingMessage.Description = "Task was cancelled";
-
-                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(incomingMessage), cancellationToken);
-            }
-            await Task.CompletedTask;
-        }
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {
-            BcvDictionary = _projectManager.CurrentParatextProject.BcvDictionary;
+            BcvDictionary = _projectManager!.CurrentParatextProject.BcvDictionary;
 
             return Task.CompletedTask;
         }

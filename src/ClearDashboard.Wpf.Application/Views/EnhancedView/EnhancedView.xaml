@@ -557,18 +557,7 @@
             </ListView>
 
 
-            <ProgressBar
-                Grid.Column="1"
-                Width="76"
-                Height="75"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource SecondaryHueMidBrush}"
-                IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
-                Visibility="{Binding ProgressBarVisibility}"
-                Value="0" />
-
+            
             <controls:SidebarExpander
                 Grid.Row="0"
                 Grid.Column="2"

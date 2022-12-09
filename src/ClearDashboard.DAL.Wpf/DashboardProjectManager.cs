@@ -43,7 +43,7 @@ public record ApplicationWindowSettings(WindowSettings WindowSettings);
 //public record AddTokenizedCorpusToEnhancedViewMessage(TokenizedCorpusEnhancedViewItemMetadatum Metadatum);
 
 
-public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
+//public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
 //public record AddAlignmentToEnhancedViewMessage(
 //    string? TranslationSetId, 

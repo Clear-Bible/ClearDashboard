@@ -30,6 +30,10 @@ using ClearDashboard.DAL.Alignment.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using SIL.Machine.Corpora;
+using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 
 // ReSharper disable InconsistentNaming
 
@@ -185,19 +189,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 _ = await Task.Factory.StartNew(async () =>
                     {
+                        Verses.Clear();
 
                         ProgressBarVisibility = Visibility.Visible;
                         switch (EnhancedViewItemMetadatum)
                         {
                             case AlignmentEnhancedViewItemMetadatum alignmentEnhancedViewItemMetadatum:
                                 await GetAlignmentData(alignmentEnhancedViewItemMetadatum, cancellationToken);
+                                OnUIThread(() =>
+                                {
+                                    AlignmentSetId = Guid.Parse(alignmentEnhancedViewItemMetadatum.AlignmentSetId!);
+                                    ParallelCorpusId = Guid.Parse(alignmentEnhancedViewItemMetadatum.ParallelCorpusId!);
+                                    BorderColor = Brushes.DarkGreen;
+                                    SourceFontFamily = GetFontFamily(alignmentEnhancedViewItemMetadatum.SourceParatextId!);
+                                    var targetFontFamily = GetFontFamily(alignmentEnhancedViewItemMetadatum.TargetParatextId!);
+                                    TargetFontFamily = targetFontFamily;
+                                    TranslationFontFamily = targetFontFamily;
+                                    ShowTranslation = true;
+                                    IsRtl = alignmentEnhancedViewItemMetadatum.IsRtl ?? false;
+                                    IsTargetRtl = alignmentEnhancedViewItemMetadatum.IsTargetRtl ?? false;
+                                });
+                            
                                 break;
                             case InterlinearEnhancedViewItemMetadatum interlinearEnhancedViewItemMetadatum:
                                 await GetInterlinearData(interlinearEnhancedViewItemMetadatum, cancellationToken);
+                                OnUIThread(() =>
+                                {
+                                    TranslationSetId = Guid.Parse(interlinearEnhancedViewItemMetadatum.TranslationSetId!);
+                                    ParallelCorpusId = Guid.Parse(interlinearEnhancedViewItemMetadatum.ParallelCorpusId!);
+                                    BorderColor = Brushes.SaddleBrown;
+                                    SourceFontFamily = GetFontFamily(interlinearEnhancedViewItemMetadatum.SourceParatextId!);
+                                    var targetFontFamily = GetFontFamily(interlinearEnhancedViewItemMetadatum.TargetParatextId!);
+                                    TargetFontFamily = targetFontFamily;
+                                    TranslationFontFamily = targetFontFamily;
+                                    ShowTranslation = true;
+                                    IsRtl = interlinearEnhancedViewItemMetadatum.IsRtl ?? false;
+                                    IsTargetRtl = interlinearEnhancedViewItemMetadatum.IsTargetRtl ?? false;
+                                  
+                                });
+                               
                                 break;
                             case TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusEnhancedViewItemMetadatum:
-                                await GetTokenizedCorpusData(tokenizedCorpusEnhancedViewItemMetadatum,
-                                    cancellationToken);
+                                await GetTokenizedCorpusData(tokenizedCorpusEnhancedViewItemMetadatum, cancellationToken);
+                                OnUIThread(() =>
+                                {
+                                    BorderColor = GetCorpusBrushColor(tokenizedCorpusEnhancedViewItemMetadatum.CorpusType);
+                                    CorpusId = tokenizedCorpusEnhancedViewItemMetadatum.CorpusId ?? Guid.NewGuid();
+                                    SourceFontFamily = GetFontFamily(tokenizedCorpusEnhancedViewItemMetadatum.ParatextProjectId!);
+                                    ShowTranslation = false;
+                                    IsRtl = tokenizedCorpusEnhancedViewItemMetadatum.IsRtl ?? false;
+                                });
+                             
                                 break;
                         }
                     }, cancellationToken);
@@ -243,8 +285,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!, new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value));
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
-                var verseRange = metadatum.TokenizedTextCorpus.GetByVerseRange(new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
-                var tokensTextRowsRange = verseRange.textRows.Select(v => new TokensTextRow(v)).ToArray();
+                (IEnumerable<TextRow> textRows, int indexOfVerse) verseRange;
+                TokensTextRow[] tokensTextRowsRange;
+                try
+                {
+                    verseRange =
+                        metadatum.TokenizedTextCorpus.GetByVerseRange(
+                            new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
+                    tokensTextRowsRange = verseRange.textRows.Select(v => new TokensTextRow(v)).ToArray();
+                }
+                catch (KeyNotFoundException)
+                {
+                    Logger!.LogInformation($"Verses for the book '{ParentViewModel.CurrentBcv.BookName}' were not found in TokenizedTextCorpus '{metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.DisplayName}'.");
+                    OnUIThread(() => { Title = CreateNoVerseDataTitle(metadatum); });
+                    return;
+                }
+
 
                 var bookFound = metadata.AvailableBooks.Any(b => b.Code == ParentViewModel.CurrentBcv.BookName);
 
@@ -518,11 +574,92 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task<TranslationSet> GetTranslationSet(string translationSetId)
         {
-            return await TranslationSet.Get(new TranslationSetId(Guid.Parse(translationSetId)), Mediator!);
+           var translationSet =  await TranslationSet.Get(new TranslationSetId(Guid.Parse(translationSetId)), Mediator!);
+           return translationSet;
         }
         public async Task<AlignmentSet> GetAlignmentSet(string alignmentSetId)
         {
-            return await AlignmentSet.Get(new AlignmentSetId(Guid.Parse(alignmentSetId)), Mediator!);
+            var alignmentSet =  await AlignmentSet.Get(new AlignmentSetId(Guid.Parse(alignmentSetId)), Mediator!);
+            return alignmentSet;
+        }
+
+        private static Brush GetCorpusBrushColor(CorpusType corpusType)
+        {
+            Brush brush = Brushes.Blue;
+            switch (corpusType)
+            {
+                case CorpusType.Standard:
+                    var converter = new BrushConverter();
+                    brush = (Brush)converter.ConvertFromString("#7FC9FF");
+                    break;
+                case CorpusType.BackTranslation:
+                    brush = Brushes.Orange;
+                    break;
+                case CorpusType.Resource:
+                    brush = Brushes.PaleGoldenrod;
+                    break;
+                case CorpusType.Unknown:
+                    brush = Brushes.Silver;
+                    break;
+                case CorpusType.ManuscriptHebrew:
+                    brush = Brushes.MediumOrchid;
+                    break;
+                case CorpusType.ManuscriptGreek:
+                    brush = Brushes.MediumOrchid;
+                    break;
+                default:
+                    brush = Brushes.Blue;
+                    break;
+            }
+
+            return brush;
+        }
+
+        private (FontFamily sourceFontFamily, FontFamily targetFontFamily) GetSourceAndTargetFontFamilies(string sourceParatextProjectId, string targetParatextProjectId)
+        {
+            // get the font family for this project
+            var sourceFontFamily = ParentViewModel.MainViewModel.GetFontFamilyFromParatextProjectId(sourceParatextProjectId);
+            var targetFontFamily = ParentViewModel.MainViewModel.GetFontFamilyFromParatextProjectId(targetParatextProjectId);
+
+            FontFamily fontFamilySource;
+            try
+            {
+                fontFamilySource = new(sourceFontFamily);
+            }
+            catch (Exception e)
+            {
+                fontFamilySource = new("Segoe UI");
+            }
+
+            FontFamily fontFamilyTarget;
+            try
+            {
+                fontFamilyTarget = new(targetFontFamily);
+            }
+            catch (Exception e)
+            {
+                fontFamilyTarget = new("Segoe UI");
+            }
+
+            return (fontFamilySource, fontFamilyTarget);
+        }
+
+
+        private FontFamily GetFontFamily(string paratextProjectId)
+        {
+            var fontFamilyName = ParentViewModel.MainViewModel.GetFontFamilyFromParatextProjectId(paratextProjectId);
+
+            FontFamily fontFamily;
+            try
+            {
+                fontFamily = new(fontFamilyName);
+            }
+            catch (Exception e)
+            {
+                fontFamily = new("Segoe UI");
+            }
+
+            return fontFamily;
         }
     }
 }

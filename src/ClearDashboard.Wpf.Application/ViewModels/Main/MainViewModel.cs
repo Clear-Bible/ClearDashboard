@@ -36,6 +36,7 @@ using System.Drawing.Imaging;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,20 +65,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
     {
         #region Member Variables
 
-        #nullable disable
+#nullable disable
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
         private INavigationService NavigationService { get; }
         private NoteManager NoteManager { get; }
 
-       
+
         private IEventAggregator EventAggregator { get; }
         private DashboardProjectManager ProjectManager { get; }
         private ILogger<MainViewModel> Logger { get; }
 
         private DockingManager _dockingManager = new();
-       
+
 
         private string _lastLayout = "";
 
@@ -136,7 +137,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             get => _gridIsVisible;
             set => Set(ref _gridIsVisible, value);
         }
-        
+
         private Visibility _deleteGridIsVisible = Visibility.Collapsed;
         public Visibility DeleteGridIsVisible
         {
@@ -420,7 +421,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     Logger.LogInformation($"Removed EnhancedView '{e.Document.Title}");
                 }
             }
-            
+
         }
 
         protected override async Task<Task> OnDeactivateAsync(bool close, CancellationToken cancellationToken)
@@ -429,8 +430,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _dockingManager.ActiveContentChanged -= OnActiveContentChanged;
             _dockingManager.DocumentClosed -= OnEnhancedViewClosed;
 
-            await PinsViewModel.DeactivateAsync(close);
-            await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
 
             if (_lastLayout == "")
             {
@@ -439,9 +438,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             await SaveProjectData();
-
             UnsubscribeFromEventAggregator();
 
+            await PinsViewModel.DeactivateAsync(close);
+           // await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
 
             // Clear the items in the event the user is switching projects.
             Items.Clear();
@@ -472,6 +472,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async Task SaveProjectEnhancedViewTabs()
         {
             var enhancedViewLayouts = new List<EnhancedViewLayout>();
+            Logger!.LogInformation("Saving ProjectDesignSurface layout.");
             foreach (var item in Items)
             {
                 if (item is EnhancedViewModel enhancedViewModel)
@@ -560,7 +561,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async void OnActiveContentChanged(object sender, EventArgs e)
         {
-           await DeactivateDockedWindows();
+            await DeactivateDockedWindows();
         }
 
         private async Task LoadProject()
@@ -579,7 +580,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
         }
 
-      
+
 
         private async Task LoadEnhancedViewTabs()
         {
@@ -590,10 +591,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 return;
             }
-       
+
             await DrawEnhancedViewTabs(enhancedViews);
             await LoadEnhancedViewData(enhancedViews);
-      
+
             sw.Stop();
             Logger.LogInformation($"LoadEnhancedViewTabs - Total Load Time {enhancedViews.Count} documents in {sw.ElapsedMilliseconds} ms");
         }
@@ -617,7 +618,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             });
         }
 
-    
+
         private async Task DrawEnhancedViewTabs(List<EnhancedViewLayout> enhancedViewLayouts)
         {
             int index = 0;
@@ -657,16 +658,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             documentPane?.Children.Add(windowDockable);
         }
 
-      
+
         private List<EnhancedViewLayout> LoadEnhancedViewTabLayout()
         {
             if (ProjectManager.CurrentProject?.WindowTabLayout is null)
             {
-                return null;
+                var newLayouts = new List<EnhancedViewLayout>();
+                //if (Items.Count == 1)
+                //{
+                    newLayouts.Add(
+                        new EnhancedViewLayout
+                        {
+                            ParatextSync = false,
+                            Title = "⳼ ENHANCED VIEW",
+                            VerseOffset = 0
+
+                        });
+                //}
+                return newLayouts;
             }
             var json = ProjectManager.CurrentProject.WindowTabLayout;
             var options = CreateDiscriminatedJsonSerializerOptions();
-            return JsonSerializer.Deserialize<List<EnhancedViewLayout>>(json, options);
+            var layouts = JsonSerializer.Deserialize<List<EnhancedViewLayout>>(json, options);
+
+            //if (layouts == null)
+            //{
+            //    layouts = new List<EnhancedViewLayout>();
+            //}
+
+            return layouts;
         }
 
         private async Task ActivateDockedWindowViewModels(CancellationToken cancellationToken)
@@ -682,17 +702,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             //await ActivateItemAsync<WordMeaningsViewModel>();
             await ActivateItemAsync<MarbleViewModel>(cancellationToken);
 
-            await Execute.OnUIThreadAsync(async () =>
-            {
-                // Activate the ProjectDesignSurfaceViewModel - this will call the appropriate
-                // Caliburn.Micro Screen lifecycle methods.  Also note that this will add ProjectDesignSurfaceViewModel 
-                // as the last Screen managed by this conductor implementation.
-                ProjectDesignSurfaceViewModel =
-                    await ActivateItemAsync<ProjectDesignSurfaceViewModel>(cancellationToken);
-            });
-         
 
-            await Task.Delay(250, cancellationToken);
+            _ = await Task.Factory.StartNew(async () =>
+            {
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    // Activate the ProjectDesignSurfaceViewModel - this will call the appropriate
+                    // Caliburn.Micro Screen lifecycle methods.  Also note that this will add ProjectDesignSurfaceViewModel 
+                    // as the last Screen managed by this conductor implementation.
+                    ProjectDesignSurfaceViewModel =
+                        await ActivateItemAsync<ProjectDesignSurfaceViewModel>(cancellationToken);
+                    await ProjectDesignSurfaceViewModel.Initialize(cancellationToken);
+
+                });
+            }, cancellationToken);
+
+
+
+            await Task.Delay(1000, cancellationToken);
         }
 
         private async Task LoadAvalonDockLayout()
@@ -1159,7 +1186,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             DeleteGridIsVisible = Visibility.Collapsed;
         }
-      
+
         private void LoadLayoutById(string layoutId)
         {
             var layoutFile = FileLayouts.SingleOrDefault(f => f.LayoutID == layoutId);
@@ -1186,7 +1213,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // from current layout using the content ids
             // LayoutSerializationCallback should anyway be handled to attach contents
             // not currently loaded
-            #pragma warning disable CA1416 // Validate platform compatibility
+#pragma warning disable CA1416 // Validate platform compatibility
             layoutSerializer.LayoutSerializationCallback += (_, e) =>
             {
                 if (e.Model.ContentId is not null)
@@ -1207,7 +1234,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     };
                 }
             };
-            #pragma warning restore CA1416 // Validate platform compatibility
+#pragma warning restore CA1416 // Validate platform compatibility
             try
             {
                 layoutSerializer.Deserialize(filePath);
@@ -1440,31 +1467,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.Marble:
                         case WorkspaceLayoutNames.Pins:
                         case WorkspaceLayoutNames.TextCollection:
-                        {
-                            // window has been closed so reload it
-                            windowPane = new LayoutAnchorable
                             {
-                                ContentId = windowTag
-                            };
+                                // window has been closed so reload it
+                                windowPane = new LayoutAnchorable
+                                {
+                                    ContentId = windowTag
+                                };
 
-                            // setup the right ViewModel for the pane
-                            obj = LoadWindow(windowTag);
-                            windowPane.Content = obj.vm;
-                            windowPane.Title = obj.title;
-                            windowPane.IsActive = true;
+                                // setup the right ViewModel for the pane
+                                obj = LoadWindow(windowTag);
+                                windowPane.Content = obj.vm;
+                                windowPane.Title = obj.title;
+                                windowPane.IsActive = true;
 
-                            // set where it will doc on layout
-                            if (obj.dockSide == DockSide.Bottom)
-                            {
-                                windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                                // set where it will doc on layout
+                                if (obj.dockSide == DockSide.Bottom)
+                                {
+                                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
+                                }
+                                else if (obj.dockSide == DockSide.Left)
+                                {
+                                    windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
+                                }
+
+                                break;
                             }
-                            else if (obj.dockSide == DockSide.Left)
-                            {
-                                windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
-                            }
-
-                            break;
-                        }
                     }
                 }
                 else
@@ -1473,7 +1500,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
 
             }
-            #pragma warning restore CA1416 // Validate platform compatibility
+#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         public async Task HandleAsync(ProgressBarVisibilityMessage message, CancellationToken cancellationToken)
@@ -1498,7 +1525,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <exception cref="NotImplementedException"></exception>
         public async Task HandleAsync(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
-         
+
             // the user wants to add to the currently active window
             if (message.Metadatum.IsNewWindow == false)
             {
@@ -1506,9 +1533,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     .OfType<LayoutDocument>().ToList();
                 if (dockableWindows.Count == 1)
                 {
-                   // await EnhancedViewModels.First().ShowCorpusTokens(message, cancellationToken);
-                   await EnhancedViewModels.First().AddItem(message.Metadatum, cancellationToken);
-                   return;
+                    // await EnhancedViewModels.First().ShowCorpusTokens(message, cancellationToken);
+                    await EnhancedViewModels.First().AddItem(message.Metadatum, cancellationToken);
+                    return;
                 }
 
                 // more than one enhanced corpus window is open and active
@@ -1519,10 +1546,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         // ReSharper disable once PossibleNullReferenceException
                         var guid = enhancedViewModel.PaneId;
 
-                        
+
                         if (EnhancedViewModels.Any(item => item.PaneId == guid))
                         {
-                            //await enhancedViewModel.ShowCorpusTokens(message, cancellationToken);
                             await enhancedViewModel.AddItem(message.Metadatum, cancellationToken);
                             return;
                         }
@@ -1553,14 +1579,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 ContentId = message.Metadatum.ParatextProjectId,
                 Content = viewModel,
-                Title = $"⳼ {message.Metadatum.ProjectName} ({message.Metadatum.TokenizationType})", 
+                Title = $"⳼ {message.Metadatum.ProjectName} ({message.Metadatum.TokenizationType})",
                 IsActive = true
             };
 
             var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
             documentPane?.Children.Add(windowDockable);
 
-           // await viewModel.ShowCorpusTokens(message, cancellationToken);
+            // await viewModel.ShowCorpusTokens(message, cancellationToken);
         }
 
         private async Task DeactivateDockedWindows()
@@ -1629,8 +1655,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
-    public async Task HandleAsync(AddInterlinearToEnhancedViewMessage message, CancellationToken cancellationToken)
-    {
+        public async Task HandleAsync(AddInterlinearToEnhancedViewMessage message, CancellationToken cancellationToken)
+        {
             // the user wants to add to the currently active window
             if (message.Metadatum.IsNewWindow == false)
             {
@@ -1731,7 +1757,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
 
-         
+
             // make a new document for the windows
             var windowDockable = new LayoutDocument
             {
