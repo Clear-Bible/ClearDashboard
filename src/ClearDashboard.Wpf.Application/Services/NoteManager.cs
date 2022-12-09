@@ -15,6 +15,8 @@ using ClearDashboard.Wpf.Application.Collections;
 
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using Paratext.PluginInterfaces;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -25,6 +27,8 @@ namespace ClearDashboard.Wpf.Application.Services
         private IEventAggregator EventAggregator { get; }
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
+        private IUserProvider UserProvider { get; }
+
 
         // TODO: localize
         private static string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
@@ -173,7 +177,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
-                await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, Logger);
+                await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
@@ -477,11 +481,12 @@ namespace ClearDashboard.Wpf.Application.Services
             LabelSuggestions = await GetLabelSuggestionsAsync();
         }
 
-        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator)
+        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider)
         {
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
+            UserProvider = userProvider;
         }
     }
 }

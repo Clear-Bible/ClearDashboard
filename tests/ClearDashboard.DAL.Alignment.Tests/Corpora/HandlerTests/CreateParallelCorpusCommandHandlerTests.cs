@@ -20,6 +20,7 @@ using SIL.Extensions;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Exceptions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -413,6 +414,12 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
     [Trait("Category", "Handlers")]
     public async void ParallelCorpus__CreateCompositeTokensApi()
     {
+        // The primary testing of the PutCompositeToken API is in 
+        // CreateTokenizedCorpusFromTextCorpusHandlerTests.TokenizedCorpus__CreateCompositeTokensApi.
+        // This test adds in non-null ParallelCorpusId testing, most of which involves testing
+        // the validation rules around ALL composite token children being in every VerseMapping
+        // that ANY of the child tokens match (because of either a direct Verse+TokenVerseAssociation
+        // relationship or an implied Verse book/chapter/verse relationship).
         try
         {
             var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
@@ -450,14 +457,54 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
 
-            var composite1 = new CompositeToken(sourceTokensByGuid.Values.Take(2));
+            // Two tokens in TokenVerseAssociations, and two additional ones:
+            var composite1 = new CompositeToken(sourceTokensByGuid.Values.Take(4));
             composite1.TokenId.Id = Guid.NewGuid();
 
+            var sw = new Stopwatch();
+            sw.Start();
+
             await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, parallelTokenizedCorpus.ParallelCorpusId);
-        }
-        catch (Exception ex)
-        {
-            Output.WriteLine(ex.Message);
+
+            sw.Stop();
+            Output.WriteLine($"Elapsed={sw.Elapsed} - ParallelCorpus PutCompositeToken (good)");
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var tokenComposite1 = ProjectDbContext.TokenComposites.Include(tc => tc.Tokens)
+                .Where(tc => tc.Id == composite1.TokenId.Id)
+                .FirstOrDefault();
+
+            Assert.NotNull(tokenComposite1);
+            Assert.Equal(composite1.Tokens.Count(), tokenComposite1.Tokens.Count);
+            Assert.Empty(composite1.Tokens.Select(t => t.TokenId.Id).Except(tokenComposite1.Tokens.Select(tc => tc.Id)));
+
+            // Can't mix tokens from multiple tokenized corpora
+            var composite2 = new CompositeToken(sourceTokensByGuid.Values.Skip(1).Take(3).Union(targetTokensByGuid.Values.Take(2)));
+            composite2.TokenId.Id = Guid.NewGuid();
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, parallelTokenizedCorpus.ParallelCorpusId));
+
+            // Can't use group of tokens of which only some are in a given VerseMapping:
+            var otherVerse = parallelTextCorpus.VerseMappingList[7].SourceVerses.First();
+            var otherVerseBcv = $"{otherVerse.BookNum:000}{otherVerse.ChapterNum:000}{otherVerse.VerseNum:000}";
+            var otherVerseMappingTokens = ProjectDbContext.Tokens.Include(t => t.VerseRow)
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Where(t => t.VerseRow!.BookChapterVerse == otherVerseBcv)
+                .Take(3)
+                .Select(t => ModelHelper.BuildToken(t));
+
+            var composite3TestTokens = sourceTokensByGuid.Values.Skip(1).Take(3).ToList();
+            composite3TestTokens.AddRange(otherVerseMappingTokens);
+            var composite3 = new CompositeToken(composite3TestTokens);
+            composite3.TokenId.Id = Guid.NewGuid();
+
+            sw.Restart();
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus.ParallelCorpusId));
+
+            sw.Stop();
+            Output.WriteLine($"Elapsed={sw.Elapsed} - ParallelCorpus PutCompositeToken with multiple VerseMapping candidates (error)");
         }
         finally
         {

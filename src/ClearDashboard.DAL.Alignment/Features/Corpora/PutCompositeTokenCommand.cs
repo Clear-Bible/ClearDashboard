@@ -1,6 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.CQRS.Features;
 using MediatR;
 

@@ -1,26 +1,25 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Features.DashboardProjects;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
-using ClearDashboard.Wpf.Application.Strings;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Extensions;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using SIL.Extensions;
+using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
@@ -29,7 +28,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
     {
         #region Member Variables
         private readonly ParatextProxy _paratextProxy;
+        private readonly IMediator _mediator;
         private readonly TranslationSource? _translationSource;
+
+        private string _ProjectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
         #endregion
 
         #region Observable Objects
@@ -210,6 +212,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
+            _mediator = mediator;
             AlertVisibility = Visibility.Collapsed;
             _translationSource = translationSource;
             NoProjectVisibility = Visibility.Visible;
@@ -227,19 +230,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
-            var results = await ExecuteRequest(new GetDashboardProjectQuery(), CancellationToken.None);
-            if (results.Success && results.HasData)
-            {
-                DashboardProjects = results.Data;
-
-                foreach (var project in DashboardProjects)
-                {
-                    project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
-                }
-
-                _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
-                _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
-            }
+            await GetProjectsVersion().ConfigureAwait(false);
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
@@ -258,6 +249,58 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             await base.OnActivateAsync(cancellationToken);
         }
+
+        private async Task GetProjectsVersion()
+        {
+            DashboardProjects.Clear();
+
+            // check for Projects subfolder
+            var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
+
+            foreach (var directoryName in directories)
+            {
+                // find the Alignment JSONs
+                var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName),
+                    "*.sqlite");
+                foreach (var file in files)
+                {
+                    var fileInfo = new FileInfo(file);
+                    var directoryInfo = new DirectoryInfo(directoryName);
+
+                    string version = "unavailable";
+
+
+                    var results =
+                        await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
+                    if (results.Success && results.HasData)
+                    {
+                        version = results.Data;
+                    }
+
+                    // add as ListItem
+                    var dashboardProject = new DashboardProject
+                    {
+                        Modified = fileInfo.LastWriteTime,
+                        ProjectName = directoryInfo.Name,
+                        ShortFilePath = fileInfo.Name,
+                        FullFilePath = fileInfo.FullName,
+                        Version = version
+                    };
+
+                    DashboardProjects.Add(dashboardProject);
+                }
+            }
+
+            foreach (var project in DashboardProjects)
+            {
+                project.IsCompatibleVersion =
+                    await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+            }
+
+            _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
+            _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
+        }
+
         #endregion Constructor
 
         #region Methods

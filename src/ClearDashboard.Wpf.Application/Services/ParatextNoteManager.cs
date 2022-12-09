@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
 using ClearDashboard.Wpf.Application.Models;
@@ -15,6 +17,7 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using Note = ClearDashboard.DAL.Alignment.Notes.Note;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -41,7 +44,7 @@ namespace ClearDashboard.Wpf.Application.Services
         /// * An <see cref="IEnumerable{Token}"/> of the tokens making up the surrounding verse.
         /// Otherwise, null.
         /// </returns>
-        private static async Task<ParatextSendNoteInformation?> GetParatextSendNoteInformationAsync(IMediator mediator, NoteId noteId, ILogger? logger = null)
+        private static async Task<ParatextSendNoteInformation?> GetParatextSendNoteInformationAsync(IMediator mediator, NoteId noteId, IUserProvider userProvider, ILogger? logger = null)
         {
             try
             {
@@ -53,7 +56,28 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 logger?.LogInformation($"Retrieved Paratext information for note {noteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                return result != null ? new ParatextSendNoteInformation(ParatextId: result.Value.paratextId, 
+                string paratextUserName = userProvider.CurrentUser?.ParatextUserName ?? throw new Exception("IUserProvider CurrentUser is null");
+
+                bool canAddNoteForProjectAndUerQuery = false;
+                if (result != null)
+                {
+                    stopwatch.Restart();
+                    var r = await mediator.Send(new CanAddNoteForProjectAndUserQuery(paratextUserName, result.Value.paratextId));
+                    stopwatch.Stop();
+
+                    if (r.Success)
+                    {
+                        canAddNoteForProjectAndUerQuery = r.Data;
+                        logger?.LogInformation($"Checked can add note for project {result.Value.paratextId} and user {paratextUserName}. Result is {canAddNoteForProjectAndUerQuery}");
+                    }
+                    else
+                    {
+                        logger?.LogCritical($"Error checking can add note for project {result.Value.paratextId} and user {paratextUserName}: {r.Message}");
+                        throw new MediatorErrorEngineException(r.Message);
+                    }
+                }
+
+                return (result != null && canAddNoteForProjectAndUerQuery) ? new ParatextSendNoteInformation(ParatextId: result.Value.paratextId, 
                                                                         TokenizedTextCorpusId: result.Value.tokenizedTextCorpusId,
                                                                         VerseTokens: result.Value.verseTokens)
                                       : null;
@@ -81,9 +105,9 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="note">The note for which to populate the Paratext project ID.</param>
         /// <param name="logger">A <see cref="ILogger"/> for logging the operation.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public static async Task PopulateParatextDetailsAsync(IMediator mediator, NoteViewModel note, ILogger? logger = null)
+        public static async Task PopulateParatextDetailsAsync(IMediator mediator, NoteViewModel note, IUserProvider userProvider, ILogger? logger = null)
         {
-            note.ParatextSendNoteInformation = await GetParatextSendNoteInformationAsync(mediator, note.NoteId!, logger);
+            note.ParatextSendNoteInformation = await GetParatextSendNoteInformationAsync(mediator, note.NoteId!, userProvider, logger);
         }
 
         /// <summary>

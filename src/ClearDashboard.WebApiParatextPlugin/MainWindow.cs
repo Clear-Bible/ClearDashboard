@@ -25,7 +25,10 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml;
+using SIL.Extensions;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
+using System.Security.Cryptography;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -53,7 +56,7 @@ namespace ClearDashboard.WebApiParatextPlugin
         private delegate void AppendMsgTextDelegate(Color color, string text);
 
         private List<TextCollection> _textCollections = new();
-
+        private List<ParatextProjectMetadata> _projectMetadata;
         private bool _hasFontErrorBeenDisplayed = false;
 
         #endregion
@@ -405,14 +408,14 @@ namespace ClearDashboard.WebApiParatextPlugin
         /// textcollection panel in Paratext
         /// </summary>
         /// <returns></returns>
-        public List<TextCollection> GetTextCollectionsData()
+        public List<TextCollection> GetTextCollectionsData(bool fetchUsx=false)
         {
             // get the text collections
             List<TextCollection> textCollections = new();
 
             if (this.InvokeRequired)
             {
-                MethodInvoker del = delegate { GetTextCollectionsData(); };
+                MethodInvoker del = delegate { GetTextCollectionsData(fetchUsx); };
                 this.Invoke(del);
                 return _textCollections;
             }
@@ -433,66 +436,119 @@ namespace ClearDashboard.WebApiParatextPlugin
                             TextCollection textCollection = new();
                             if (project != null)
                             {
-                                IEnumerable<IUSFMToken> tokens = null;
-                                try
+                                if (fetchUsx)
                                 {
-                                    tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum,
-                                        _verseRef.VerseNum);
-                                }
-                                catch (Exception e)
-                                {
-                                    Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
-                                }
-
-                                if (tokens != null)
-                                {
-                                    textCollection.ReferenceShort = project.ShortName;
-
-                                    foreach (var token in tokens)
+                                    var usxString = project.GetUSX(_verseRef.BookNum);
+                                    
+                                    try
                                     {
-                                        if (token is IUSFMMarkerToken marker)
+                                        XmlDocument xDoc = new();
+                                        xDoc.LoadXml(usxString);
+                                        List<XmlNode> verseNodeList = new();
+
+                                        bool startMarkerFound = false;
+                                        bool endMarkerFound = false;
+                                        var count = 0;
+                                        foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
                                         {
-                                            if (marker.Type == MarkerType.Verse)
+                                            endMarkerFound = false;
+
+                                            if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
                                             {
-                                                //skip
+                                                startMarkerFound = true;
                                             }
-                                            else if (marker.Type == MarkerType.Paragraph)
+                                            else if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                             {
-                                                textCollection.Data += "/ ";
+                                                startMarkerFound = false;
+                                                endMarkerFound = true;
                                             }
-                                            else
+                                            else if(node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") || 
+                                                    node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
                                             {
-                                                //textCollection.Data += $"{marker.Type} Marker: {marker.Data}";
+                                                var nodeVerseElementList = node.SelectNodes("verse");
+
+                                                if (nodeVerseElementList.Count > 0)
+                                                {
+                                                    var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                                                    var nodeSidValue = nodeVerseElement.Attributes["sid"];
+                                                    if (nodeSidValue != null)
+                                                    {
+                                                        //is _verseRef in verseValue?
+                                                        var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
+                                                        var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
+                                                        if (SidVerseNumberIsRange)
+                                                        {
+                                                            var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
+                                                            if (int.Parse(nodeSidVerseRange[0]) <= _verseRef.VerseNum &&
+                                                                _verseRef.VerseNum <= int.Parse(nodeSidVerseRange[1]))
+                                                            {
+                                                                startMarkerFound = true;
+                                                            }
+                                                        }
+                                                    }
+
+                                                    else
+                                                    {
+                                                        var nodeEidValue = nodeVerseElement.Attributes["eid"];
+                                                        //is _verseRef in verseValue?
+                                                        if (nodeEidValue != null)
+                                                        {
+                                                            var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
+                                                            var EidVerseNumberIsRange =
+                                                                nodeEidVerseNumber.Contains("-");
+                                                            if (EidVerseNumberIsRange)
+                                                            {
+                                                                var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
+                                                                if (int.Parse(nodeEidVerseRange[0]) <=
+                                                                    _verseRef.VerseNum && _verseRef.VerseNum <=
+                                                                    int.Parse(nodeEidVerseRange[1]))
+                                                                {
+                                                                    startMarkerFound = false;
+                                                                    endMarkerFound = true;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            if (startMarkerFound || endMarkerFound)
+                                            {
+                                                verseNodeList.Add(node);
                                             }
                                         }
-                                        else if (token is IUSFMTextToken textToken)
+
+                                        if (verseNodeList.Count == 0)
                                         {
-                                            if (token.IsScripture)
-                                            {
-                                                textCollection.Data += textToken.Text + " ";
-                                            }
-                                        }
-                                        else if (token is IUSFMAttributeToken)
-                                        {
-                                            textCollection.Data += "Attribute Token: " + token.ToString();
+                                            textCollections = UsfmToTextCollection(project, textCollection,
+                                                textCollections);
                                         }
                                         else
                                         {
-                                            textCollection.Data += "Unexpected token type: " + token.ToString();
+                                            usxString = "<usx version=\"3.0\">";
+                                            foreach (XmlNode node in verseNodeList)
+                                            {
+                                                usxString += node.OuterXml;
+                                            }
+
+                                            usxString += "</usx>";
+
+                                            textCollections.Add(new TextCollection()
+                                            {
+                                                ReferenceShort = project.ShortName,
+                                                Data = usxString
+                                            });
                                         }
                                     }
-
-                                    // remove the last paragraph tag if at the end
-                                    if (textCollection.Data.Length > 2)
+                                    catch (Exception ex)
                                     {
-                                        if (textCollection.Data.EndsWith("/ "))
-                                        {
-                                            textCollection.Data =
-                                                textCollection.Data.Substring(0, textCollection.Data.Length - 2);
-                                        }
+                                        Log.Error(ex, "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
                                     }
-
-                                    textCollections.Add(textCollection);
+                                }
+                                else
+                                {
+                                    textCollections = UsfmToTextCollection(project, textCollection, textCollections);
                                 }
                             }
                         }
@@ -503,6 +559,71 @@ namespace ClearDashboard.WebApiParatextPlugin
             _textCollections = textCollections;
 
             return _textCollections;
+        }
+
+        private List<TextCollection> UsfmToTextCollection(IProject project, TextCollection textCollection, List<TextCollection> textCollections)
+        {
+            IEnumerable<IUSFMToken> tokens = null;
+            try
+            {
+                tokens = project.GetUSFMTokens(_verseRef.BookNum, _verseRef.ChapterNum, _verseRef.VerseNum);
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, $"Cannot get USFM Tokens for {project.ShortName} : {e.Message}");
+            }
+
+            if (tokens != null)
+            {
+                textCollection.ReferenceShort = project.ShortName;
+
+                foreach (var token in tokens)
+                {
+                    if (token is IUSFMMarkerToken marker)
+                    {
+                        if (marker.Type == MarkerType.Verse)
+                        {
+                            //skip
+                        }
+                        else if (marker.Type == MarkerType.Paragraph)
+                        {
+                            textCollection.Data += "/ ";
+                        }
+                        else
+                        {
+                            //textCollection.Data += $"{marker.Type} Marker: {marker.Data}";
+                        }
+                    }
+                    else if (token is IUSFMTextToken textToken)
+                    {
+                        if (token.IsScripture)
+                        {
+                            textCollection.Data += textToken.Text + " ";
+                        }
+                    }
+                    else if (token is IUSFMAttributeToken)
+                    {
+                        textCollection.Data += "Attribute Token: " + token.ToString();
+                    }
+                    else
+                    {
+                        textCollection.Data += "Unexpected token type: " + token.ToString();
+                    }
+                }
+
+                // remove the last paragraph tag if at the end
+                if (textCollection.Data.Length > 2)
+                {
+                    if (textCollection.Data.EndsWith("/ "))
+                    {
+                        textCollection.Data =
+                            textCollection.Data.Substring(0, textCollection.Data.Length - 2);
+                    }
+                }
+
+                textCollections.Add(textCollection);
+            }
+            return textCollections;
         }
 
 
@@ -615,12 +736,13 @@ namespace ClearDashboard.WebApiParatextPlugin
 
         public List<ParatextProjectMetadata> GetProjectMetadata()
         {
-            bool fontError = false;
+            if (_projectMetadata == null)
+            {
+                bool fontError = false;
+                var projects = _host.GetAllProjects(true);
 
-            var projects = _host.GetAllProjects(true);
 
-
-            var metadata = projects.Select(project =>
+                var metadata = projects.Select(project =>
                 {
                     var metaData = new ParatextProjectMetadata
                     {
@@ -642,6 +764,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                     catch (Exception e)
                     {
+                        AppendText(Color.Orange, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
                         if (_hasFontErrorBeenDisplayed == false)
                         {
                             fontError = true;
@@ -655,39 +778,41 @@ namespace ClearDashboard.WebApiParatextPlugin
                     return metaData;
                 }).ToList();
 
-            var projectNames = metadata.Select(project => project.Name).ToList();
+                var projectNames = metadata.Select(project => project.Name).ToList();
 
-            //foreach (var project in metadata)
-            //{
-            //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
-            //}
+                //foreach (var project in metadata)
+                //{
+                //    AppendText(Color.CadetBlue, $"Project: {project.Name} : Font Family: {project.FontFamily}");
+                //}
 
-            var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
-            var directories = directoryInfo.GetDirectories();
-            foreach (var directory in directories.Where(directory => projectNames.Contains(directory.Name)))
-            {
-                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
-                if (projectMetadatum != null)
+                var directoryInfo = new DirectoryInfo(GetParatextProjectsPath());
+                var directories = directoryInfo.GetDirectories();
+                foreach (var directory in directories.Where(directory => projectNames.Contains(directory.Name)))
                 {
-                    projectMetadatum.ProjectPath = directory.FullName;
+                    var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                    if (projectMetadatum != null)
+                    {
+                        projectMetadatum.ProjectPath = directory.FullName;
+                    }
+                }
+
+                foreach (var directory in directories.Where(directory => !projectNames.Contains(directory.Name)))
+                {
+                    var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
+                    if (projectMetadatum != null)
+                    {
+                        projectMetadatum.CorpusType = CorpusType.Resource;
+                    }
+                }
+                _projectMetadata = metadata;
+
+                if (fontError)
+                {
+                    _hasFontErrorBeenDisplayed = true;
                 }
             }
-
-            foreach (var directory in directories.Where(directory => !projectNames.Contains(directory.Name)))
-            {
-                var projectMetadatum = metadata.FirstOrDefault(metadatum => metadatum.Name == directory.Name);
-                if (projectMetadatum != null)
-                {
-                    projectMetadatum.CorpusType = CorpusType.Resource;
-                }
-            }
-
-            if (fontError)
-            {
-                _hasFontErrorBeenDisplayed = true;
-            }
-
-            return metadata;
+            
+            return _projectMetadata;
         }
 
         /// <summary>

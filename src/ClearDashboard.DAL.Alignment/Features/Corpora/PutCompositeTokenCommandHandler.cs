@@ -1,10 +1,7 @@
-﻿using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -39,7 +36,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             {
                 if (!compositeCandiateGuids.Any())
                 {
-                    // Remove incoming empty composite (but not its children tokens! ... needs testing)
                     ProjectDbContext.TokenComposites.Remove(existingTokenComposite);
                     _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
