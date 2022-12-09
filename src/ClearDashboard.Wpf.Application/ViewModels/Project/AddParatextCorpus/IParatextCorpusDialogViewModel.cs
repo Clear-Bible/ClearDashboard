@@ -10,6 +10,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
     public interface IParatextCorpusDialogViewModel
     {
 
+        string? CurrentStepTitle { get; set; }
+        string? CurrentProject { get; set; }
+
+
         List<IWorkflowStepViewModel>? Steps { get; }
 
 

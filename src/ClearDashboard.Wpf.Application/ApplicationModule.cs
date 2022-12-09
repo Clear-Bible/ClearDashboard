@@ -150,8 +150,7 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
             builder.RegisterParallelCorpusDialogDependencies();
-            // TODO
-            //builder.RegisterParatextDialogDependencies();  
+            builder.RegisterParatextDialogDependencies();  
 
             //builder.RegisterSmtModelDialogDependencies();
         }

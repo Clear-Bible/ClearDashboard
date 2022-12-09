@@ -17,7 +17,7 @@ using SIL.Scripture;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 {
-    public class ParatextCorpusStepViewModel: DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, ParallelCorpusStepViewModel>
+    public class ParatextCorpusStepViewModel: DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, ParatextCorpusStepViewModel>
     {
         #region Member Variables   
 
@@ -66,8 +66,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
         }
 
         public ParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
-            INavigationService navigationService, ILogger<ParallelCorpusStepViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpusStepViewModel> validator)
+            INavigationService navigationService, ILogger<ParatextCorpusStepViewModel> logger, IEventAggregator eventAggregator,
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParatextCorpusStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             DialogMode = dialogMode;
