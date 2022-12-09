@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.Alignment.Exceptions;
+﻿using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
@@ -27,6 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public async void Update()
         {
             // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
+            await Task.FromException(new NotImplementedException());
         }
 
         public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId? corpusId)
@@ -46,6 +48,28 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed(true);
 
             return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification);
+        }
+
+        /// <summary>
+        /// If the incoming CompositeToken is new (not in the database yet) this method creates it
+        /// 
+        /// If the incoming CompositeToken already exists in the database and tokens have been added
+        /// or removed from it, this saves those changes.  If it has any tokens that are part of 
+        /// another Composite in the database, this method removes them from the other/previous one.  
+        /// 
+        /// If the incoming CompositeToken is empty and is already in the database, it is removed from
+        /// the database.  
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="compositeToken"></param>
+        /// <param name="parallelCorpusId"></param>
+        /// <returns></returns>
+        public static async Task PutCompositeToken(IMediator mediator, CompositeToken compositeToken, ParallelCorpusId? parallelCorpusId)
+        {
+            var command = new PutCompositeTokenCommand(compositeToken, parallelCorpusId);
+
+            var result = await mediator.Send(command);
+            result.ThrowIfCanceledOrFailed(true);
         }
     }
 }
