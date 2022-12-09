@@ -30,21 +30,13 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
         set => Set(ref _borderColor, value);
     }
 
-
-    protected string _title = string.Empty;
-    public string Title
-    {
-        get => _title;
-        set => Set(ref _title, value);
-    }
-
     public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
     protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager,
-        INavigationService? navigationService, ILogger logger, IEventAggregator? eventAggregator,
+        INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
         IMediator? mediator, ILifetimeScope? lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
-        
+        // no-op
     }
 
 }

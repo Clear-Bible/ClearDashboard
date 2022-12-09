@@ -23,36 +23,41 @@ using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
-public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
+
 public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
 
 public record GetApplicationWindowSettings();
 public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
-public record AddTokenizedCorpusToEnhancedViewMessage(
-    string? ParatextProjectId, 
-    string? ProjectName,
-    string? TokenizationType,
-    Guid? CorpusId, 
-    Guid? TokenizedTextCorpusId, 
-    CorpusType CorpusType,
-    //FIXME:surface serializationEngineStringDetokenizer Detokenizer,
-    bool? IsRTL, 
-    bool? IsNewWindow);
+//public record AddTokenizedCorpusToEnhancedViewMessage(
+//    string? ParatextProjectId, 
+//    string? ProjectName,
+//    string? TokenizationType,
+//    Guid? CorpusId, 
+//    Guid? TokenizedTextCorpusId, 
+//    CorpusType CorpusType,
+//    //FIXME:surface serializationEngineStringDetokenizer Detokenizer,
+//    bool? IsRTL, 
+//    bool? IsNewWindow);
 
-public record AddAlignmentToEnhancedViewMessage(
-    string? TranslationSetId, 
-    string? AlignmentSetId, 
-    string? DisplayName, 
-    string? ParallelCorpusId,
-    string? ParallelCorpusDisplayName,
-    //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
-    bool? IsRTL,
-    //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
-    bool? IsTargetRTL, 
-    bool? IsNewWindow,
-    string? SourceParatextId,
-    string? TargetParatextId);
+//public record AddTokenizedCorpusToEnhancedViewMessage(TokenizedCorpusEnhancedViewItemMetadatum Metadatum);
+
+
+public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
+
+//public record AddAlignmentToEnhancedViewMessage(
+//    string? TranslationSetId, 
+//    string? AlignmentSetId, 
+//    string? DisplayName, 
+//    string? ParallelCorpusId,
+//    string? ParallelCorpusDisplayName,
+//    //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
+//    bool? IsRTL,
+//    //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
+//    bool? IsTargetRTL, 
+//    bool? IsNewWindow,
+//    string? SourceParatextId,
+//    string? TargetParatextId);
 
 public record CloseDockingPane(Guid guid);
 public record UiLanguageChangedMessage(string LanguageCode);

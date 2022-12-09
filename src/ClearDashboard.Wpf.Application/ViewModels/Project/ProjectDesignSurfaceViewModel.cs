@@ -38,6 +38,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -833,19 +834,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
-                            new AddAlignmentToEnhancedViewMessage(
-                                null,
-                                connectionMenuItem.AlignmentSetId,
-                                connectionMenuItem.DisplayName,
-                                connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
-                                connectionMenuItem.ParallelCorpusDisplayName,
+                            new AddAlignmentSetToEnhancedViewMessage(new AlignmentEnhancedViewItemMetadatum
+                            {
+                                AlignmentSetId = connectionMenuItem.AlignmentSetId,
+                                DisplayName = connectionMenuItem.DisplayName,
+                                ParallelCorpusId = connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
+                                ParallelCorpusDisplayName = connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRtl,
+                                IsRtl = connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsTargetRTL,
-                                IsNewWindow: connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
-                                connectionMenuItem.SourceParatextId,
-                                connectionMenuItem.TargetParatextId));
+                                IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                                IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
+                                SourceParatextId = connectionMenuItem.SourceParatextId,
+                                TargetParatextId = connectionMenuItem.TargetParatextId
+                            }
+                        ));
                     }
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToCurrentEnhancedView:
@@ -853,19 +856,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
-                            new AddAlignmentToEnhancedViewMessage(
-                                connectionMenuItem.TranslationSetId,
-                                null,
-                                connectionMenuItem.DisplayName,
-                                connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
-                                connectionMenuItem.ParallelCorpusDisplayName,
+                            new AddInterlinearToEnhancedViewMessage(new InterlinearEnhancedViewItemMetadatum
+                            {
+                                
+                                 TranslationSetId  = connectionMenuItem.TranslationSetId,
+                                 DisplayName = connectionMenuItem.DisplayName,
+                                 ParallelCorpusId = connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
+                                 ParallelCorpusDisplayName = connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRtl,
+                                 IsRtl = connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization null,
-                                null,
-                                IsNewWindow:connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView,
-                                connectionMenuItem.SourceParatextId,
-                                connectionMenuItem.TargetParatextId));
+                                 IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView,
+                                 IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                                 SourceParatextId = connectionMenuItem.SourceParatextId,
+                                TargetParatextId = connectionMenuItem.TargetParatextId
+                            }
+                        ));
                     }
                     break;
                 default:
@@ -919,16 +925,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
                     await EventAggregator.PublishOnUIThreadAsync(
-                        new AddTokenizedCorpusToEnhancedViewMessage(
-                            corpusNodeViewModel.ParatextProjectId,
-                            ProjectName: corpusNodeViewModel.Name,
-                            TokenizationType: corpusNodeMenuItem.Tokenizer!,
-                            CorpusId: tokenizedCorpus.CorpusId!.Id,
-                            TokenizedTextCorpusId: tokenizedCorpus.Id,
-                            corpusNodeViewModel.CorpusType,
+                        new AddTokenizedCorpusToEnhancedViewMessage(new TokenizedCorpusEnhancedViewItemMetadatum{
+                            ParatextProjectId = corpusNodeViewModel.ParatextProjectId,
+                            ProjectName = corpusNodeViewModel.Name,
+                            TokenizationType= corpusNodeMenuItem.Tokenizer!,
+                            CorpusId= tokenizedCorpus.CorpusId!.Id,
+                            TokenizedTextCorpusId= tokenizedCorpus.Id,
+                            CorpusType=corpusNodeViewModel.CorpusType,
                             //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            corpusNodeViewModel.IsRtl,
-                            IsNewWindow: corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView));
+                            IsRtl = corpusNodeViewModel.IsRtl,
+                            IsNewWindow= corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView}));
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowCorpusNodeProperties:
                     // node properties
