@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\DashboardProjects\DashboardProjectSlice.cs" />
     <Compile Remove="Features\MarbleDataRequests\GetWhatIsThisWordSlice.cs" />
   </ItemGroup>
 
@@ -26,6 +27,7 @@
     <None Remove="Resources\marble-concordances\GNTAnalysis.xml" />
     <None Remove="Resources\marble-concordances\GNTLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\GNTSelectedLemmaConcordance.xml" />
+    <None Remove="Resources\marble-concordances\SemanticDomainsLookup.sqlite" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1CH.XML" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1CO.XML" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1JN.XML" />
@@ -160,6 +162,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\marble-concordances\GNTSelectedLemmaConcordance.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\marble-concordances\SemanticDomainsLookup.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\marble-indexes-full\MARBLELinks-1CH.XML">
