@@ -1526,35 +1526,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public async Task HandleAsync(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
 
-            // the user wants to add to the currently active window
-            if (message.Metadatum.IsNewWindow == false)
-            {
-                var dockableWindows = _dockingManager.Layout.Descendents()
-                    .OfType<LayoutDocument>().ToList();
-                if (dockableWindows.Count == 1)
-                {
-                    // await EnhancedViewModels.First().ShowCorpusTokens(message, cancellationToken);
-                    await EnhancedViewModels.First().AddItem(message.Metadatum, cancellationToken);
-                    return;
-                }
-
-                // more than one enhanced corpus window is open and active
-                foreach (var document in dockableWindows)
-                {
-                    if (document.IsActive && document.Content is EnhancedViewModel enhancedViewModel)
-                    {
-                        // ReSharper disable once PossibleNullReferenceException
-                        var guid = enhancedViewModel.PaneId;
-
-
-                        if (EnhancedViewModels.Any(item => item.PaneId == guid))
-                        {
-                            await enhancedViewModel.AddItem(message.Metadatum, cancellationToken);
-                            return;
-                        }
-                    }
-                }
-            }
+            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
 
             await DeactivateDockedWindows();
 
@@ -1587,6 +1559,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             documentPane?.Children.Add(windowDockable);
 
             // await viewModel.ShowCorpusTokens(message, cancellationToken);
+        }
+
+        private async Task<bool> TryUpdateExistingEnhancedViewTab(EnhancedViewItemMetadatum metadatum,
+            CancellationToken cancellationToken)
+        {
+            // the user wants to add to the currently active window
+            if (metadatum.IsNewWindow == false)
+            {
+                var dockableWindows = _dockingManager.Layout.Descendents()
+                    .OfType<LayoutDocument>().ToList();
+                if (dockableWindows.Count == 1)
+                {
+                    // await EnhancedViewModels.First().ShowCorpusTokens(message, cancellationToken);
+                    await EnhancedViewModels.First().AddItem(metadatum, cancellationToken);
+                    return true;
+                }
+
+                // more than one enhanced corpus window is open and active
+                foreach (var document in dockableWindows)
+                {
+                    if (document.IsActive && document.Content is EnhancedViewModel enhancedViewModel)
+                    {
+                        // ReSharper disable once PossibleNullReferenceException
+                        var guid = enhancedViewModel.PaneId;
+
+
+                        if (EnhancedViewModels.Any(item => item.PaneId == guid))
+                        {
+                            await enhancedViewModel.AddItem(metadatum, cancellationToken);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         private async Task DeactivateDockedWindows()
@@ -1657,36 +1665,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(AddInterlinearToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
-            // the user wants to add to the currently active window
-            if (message.Metadatum.IsNewWindow == false)
-            {
-                var dockableWindows = _dockingManager.Layout.Descendents()
-                    .OfType<LayoutDocument>().ToList();
-                if (dockableWindows.Count == 1)
-                {
-                    // await EnhancedViewModels.First().ShowCorpusTokens(message, cancellationToken);
-                    await EnhancedViewModels.First().AddItem(message.Metadatum, cancellationToken);
-                    return;
-                }
-
-                // more than one enhanced corpus window is open and active
-                foreach (var document in dockableWindows)
-                {
-                    if (document.IsActive && document.Content is EnhancedViewModel enhancedViewModel)
-                    {
-                        // ReSharper disable once PossibleNullReferenceException
-                        var guid = enhancedViewModel.PaneId;
-
-
-                        if (EnhancedViewModels.Any(item => item.PaneId == guid))
-                        {
-                            //await enhancedViewModel.ShowCorpusTokens(message, cancellationToken);
-                            await enhancedViewModel.AddItem(message.Metadatum, cancellationToken);
-                            return;
-                        }
-                    }
-                }
-            }
+            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
 
             await DeactivateDockedWindows();
 
@@ -1722,36 +1701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public async Task HandleAsync(AddAlignmentSetToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
 
-            // the user wants to add to the currently active window
-            if (message.Metadatum.IsNewWindow == false)
-            {
-                var dockableWindows = _dockingManager.Layout.Descendents()
-                    .OfType<LayoutDocument>().ToList();
-                if (dockableWindows.Count == 1)
-                {
-                    // await EnhancedViewModels.First().ShowCorpusTokens(message, cancellationToken);
-                    await EnhancedViewModels.First().AddItem(message.Metadatum, cancellationToken);
-                    return;
-                }
-
-                // more than one enhanced corpus window is open and active
-                foreach (var document in dockableWindows)
-                {
-                    if (document.IsActive && document.Content is EnhancedViewModel enhancedViewModel)
-                    {
-                        // ReSharper disable once PossibleNullReferenceException
-                        var guid = enhancedViewModel.PaneId;
-
-
-                        if (EnhancedViewModels.Any(item => item.PaneId == guid))
-                        {
-                            //await enhancedViewModel.ShowCorpusTokens(message, cancellationToken);
-                            await enhancedViewModel.AddItem(message.Metadatum, cancellationToken);
-                            return;
-                        }
-                    }
-                }
-            }
+            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
 
             await DeactivateDockedWindows();
 
