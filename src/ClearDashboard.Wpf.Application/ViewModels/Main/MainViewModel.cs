@@ -1692,7 +1692,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // TODO:  How should this be refactored?
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-            viewModel.Title = message.Metadatum.DisplayName;
+            await viewModel.Initialize(new EnhancedViewLayout
+            {
+                ParatextSync = false,
+                Title = $"{message.Metadatum.DisplayName}",
+                VerseOffset = 0
+            });
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
@@ -1752,6 +1757,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // TODO:  How should this be refactored?
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+            await viewModel.Initialize(new EnhancedViewLayout
+            {
+                ParatextSync = false,
+                Title = $"{message.Metadatum.DisplayName}",
+                VerseOffset = 0
+            });
             viewModel.Title = message.Metadatum.DisplayName;
             viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
