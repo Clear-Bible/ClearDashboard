@@ -24,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora
 
         [Fact]
         [Trait("Requires", "Paratext ZZ_SUR on test machine, paratextprojectid 2d2be644c2f6107a5b911a5df8c63dc69fa4ef6f")]
-        public async void AddNoteToSingleToken()
+        public async void AddNoteToSelectionAndVerse()
         {
             try
             {
