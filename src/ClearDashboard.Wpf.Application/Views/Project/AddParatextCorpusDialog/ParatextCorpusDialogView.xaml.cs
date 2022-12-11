@@ -1,6 +1,6 @@
 ﻿using ClearDashboard.Wpf.Application.Controls;
 
-namespace ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpus
+namespace ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog
 {
     /// <summary>
     /// Interaction logic for ParatextCorpusDialogView.xaml

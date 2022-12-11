@@ -1,0 +1,877 @@
+﻿<UserControl
+    x:Class="ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog.SelectBooksStepView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FlowDirection="{Binding WindowFlowDirection}"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+
+    <!--  Background="{DynamicResource MaterialDesignPaper}"  -->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+
+        <Label
+            Grid.Row="0"
+            Margin="5,3,0,0"
+            HorizontalAlignment="Center"
+            Content="SELECT BOOKS TO PROCESS"
+            FontWeight="Bold"
+            Foreground="{StaticResource PrimaryHueMidBrush}" />
+
+        <Border
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            BorderBrush="{StaticResource MaterialDesignBody}"
+            BorderThickness="2"
+            CornerRadius="4" />
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            BorderBrush="{StaticResource MaterialDesignBody}"
+            BorderThickness="2"
+            CornerRadius="4" />
+
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+            <!--  Backcolors for book groupings  -->
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="5"
+                Grid.Column="0"
+                Background="Cyan"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="5"
+                Grid.RowSpan="12"
+                Grid.Column="0"
+                Background="Coral"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="17"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Background="LimeGreen"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Grid.Column="1"
+                Background="LimeGreen"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="2"
+                Grid.RowSpan="17"
+                Grid.Column="1"
+                Background="Magenta"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="4"
+                Grid.Column="2"
+                Background="MediumPurple"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="4"
+                Grid.Column="2"
+                Background="Gold"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="5"
+                Grid.RowSpan="15"
+                Grid.Column="2"
+                Background="MediumSpringGreen"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="0"
+                Grid.RowSpan="6"
+                Grid.Column="3"
+                Background="MediumSpringGreen"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+            <Border
+                Grid.Row="6"
+                Grid.Column="3"
+                Background="Turquoise"
+                BorderBrush="{StaticResource MaterialDesignBody}"
+                BorderThickness="2"
+                CornerRadius="4"
+                Opacity="0.1" />
+
+
+            <CheckBox
+                x:Name="Chk01"
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[0].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[0].BookName}"
+                Foreground="{Binding SelectedBooks[0].BookColor}"
+                IsEnabled="{Binding SelectedBooks[0].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk02"
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[1].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[1].BookName}"
+                Foreground="{Binding SelectedBooks[1].BookColor}"
+                IsEnabled="{Binding SelectedBooks[1].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk03"
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[2].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[2].BookName}"
+                Foreground="{Binding SelectedBooks[2].BookColor}"
+                IsEnabled="{Binding SelectedBooks[2].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk04"
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[3].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[3].BookName}"
+                Foreground="{Binding SelectedBooks[3].BookColor}"
+                IsEnabled="{Binding SelectedBooks[3].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk05"
+                Grid.Row="4"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[4].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[4].BookName}"
+                Foreground="{Binding SelectedBooks[4].BookColor}"
+                IsEnabled="{Binding SelectedBooks[4].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk06"
+                Grid.Row="5"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[5].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[5].BookName}"
+                Foreground="{Binding SelectedBooks[5].BookColor}"
+                IsEnabled="{Binding SelectedBooks[5].IsEnabled}" />
+
+
+            <CheckBox
+                x:Name="Chk07"
+                Grid.Row="6"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[6].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[6].BookName}"
+                Foreground="{Binding SelectedBooks[6].BookColor}"
+                IsEnabled="{Binding SelectedBooks[6].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk08"
+                Grid.Row="7"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[7].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[7].BookName}"
+                Foreground="{Binding SelectedBooks[7].BookColor}"
+                IsEnabled="{Binding SelectedBooks[7].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk09"
+                Grid.Row="8"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[8].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[8].BookName}"
+                Foreground="{Binding SelectedBooks[8].BookColor}"
+                IsEnabled="{Binding SelectedBooks[8].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk10"
+                Grid.Row="9"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[9].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[9].BookName}"
+                Foreground="{Binding SelectedBooks[9].BookColor}"
+                IsEnabled="{Binding SelectedBooks[9].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk11"
+                Grid.Row="10"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[10].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[10].BookName}"
+                Foreground="{Binding SelectedBooks[10].BookColor}"
+                IsEnabled="{Binding SelectedBooks[10].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk12"
+                Grid.Row="11"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[11].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[11].BookName}"
+                Foreground="{Binding SelectedBooks[11].BookColor}"
+                IsEnabled="{Binding SelectedBooks[11].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk13"
+                Grid.Row="12"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[12].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[12].BookName}"
+                Foreground="{Binding SelectedBooks[12].BookColor}"
+                IsEnabled="{Binding SelectedBooks[12].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk14"
+                Grid.Row="13"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[13].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[13].BookName}"
+                Foreground="{Binding SelectedBooks[13].BookColor}"
+                IsEnabled="{Binding SelectedBooks[13].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk15"
+                Grid.Row="14"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[14].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[14].BookName}"
+                Foreground="{Binding SelectedBooks[14].BookColor}"
+                IsEnabled="{Binding SelectedBooks[14].IsEnabled}" />
+
+
+            <CheckBox
+                x:Name="Chk16"
+                Grid.Row="15"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[15].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[15].BookName}"
+                Foreground="{Binding SelectedBooks[15].BookColor}"
+                IsEnabled="{Binding SelectedBooks[15].IsEnabled}" />
+
+
+            <CheckBox
+                x:Name="Chk17"
+                Grid.Row="16"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[16].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[16].BookName}"
+                Foreground="{Binding SelectedBooks[16].BookColor}"
+                IsEnabled="{Binding SelectedBooks[16].IsEnabled}" />
+
+
+            <CheckBox
+                x:Name="Chk18"
+                Grid.Row="17"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[17].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[17].BookName}"
+                Foreground="{Binding SelectedBooks[17].BookColor}"
+                IsEnabled="{Binding SelectedBooks[17].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk19"
+                Grid.Row="18"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[18].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[18].BookName}"
+                Foreground="{Binding SelectedBooks[18].BookColor}"
+                IsEnabled="{Binding SelectedBooks[18].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk20"
+                Grid.Row="19"
+                Grid.Column="0"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[19].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[19].BookName}"
+                Foreground="{Binding SelectedBooks[19].BookColor}"
+                IsEnabled="{Binding SelectedBooks[19].IsEnabled}" />
+
+
+            <CheckBox
+                x:Name="Chk21"
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[20].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[20].BookName}"
+                Foreground="{Binding SelectedBooks[20].BookColor}"
+                IsEnabled="{Binding SelectedBooks[20].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk22"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[21].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[21].BookName}"
+                Foreground="{Binding SelectedBooks[21].BookColor}"
+                IsEnabled="{Binding SelectedBooks[21].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk23"
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[22].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[22].BookName}"
+                Foreground="{Binding SelectedBooks[22].BookColor}"
+                IsEnabled="{Binding SelectedBooks[22].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk24"
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[23].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[23].BookName}"
+                Foreground="{Binding SelectedBooks[23].BookColor}"
+                IsEnabled="{Binding SelectedBooks[23].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk25"
+                Grid.Row="4"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[24].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[24].BookName}"
+                Foreground="{Binding SelectedBooks[24].BookColor}"
+                IsEnabled="{Binding SelectedBooks[24].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk26"
+                Grid.Row="5"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[25].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[25].BookName}"
+                Foreground="{Binding SelectedBooks[25].BookColor}"
+                IsEnabled="{Binding SelectedBooks[25].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk27"
+                Grid.Row="6"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[26].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[26].BookName}"
+                Foreground="{Binding SelectedBooks[26].BookColor}"
+                IsEnabled="{Binding SelectedBooks[26].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk28"
+                Grid.Row="7"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[27].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[27].BookName}"
+                Foreground="{Binding SelectedBooks[27].BookColor}"
+                IsEnabled="{Binding SelectedBooks[27].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk29"
+                Grid.Row="8"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[28].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[28].BookName}"
+                Foreground="{Binding SelectedBooks[28].BookColor}"
+                IsEnabled="{Binding SelectedBooks[28].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk30"
+                Grid.Row="9"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[29].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[29].BookName}"
+                Foreground="{Binding SelectedBooks[29].BookColor}"
+                IsEnabled="{Binding SelectedBooks[29].IsEnabled}" />
+
+            <CheckBox
+                x:Name="Chk31"
+                Grid.Row="10"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[30].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[30].BookName}"
+                Foreground="{Binding SelectedBooks[30].BookColor}"
+                IsEnabled="{Binding SelectedBooks[30].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk32"
+                Grid.Row="11"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[31].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[31].BookName}"
+                Foreground="{Binding SelectedBooks[31].BookColor}"
+                IsEnabled="{Binding SelectedBooks[31].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk33"
+                Grid.Row="12"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[32].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[32].BookName}"
+                Foreground="{Binding SelectedBooks[32].BookColor}"
+                IsEnabled="{Binding SelectedBooks[32].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk34"
+                Grid.Row="13"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[33].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[33].BookName}"
+                Foreground="{Binding SelectedBooks[33].BookColor}"
+                IsEnabled="{Binding SelectedBooks[33].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk35"
+                Grid.Row="14"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[34].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[34].BookName}"
+                Foreground="{Binding SelectedBooks[34].BookColor}"
+                IsEnabled="{Binding SelectedBooks[34].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk36"
+                Grid.Row="15"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[35].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[35].BookName}"
+                Foreground="{Binding SelectedBooks[35].BookColor}"
+                IsEnabled="{Binding SelectedBooks[35].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk37"
+                Grid.Row="16"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[36].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[36].BookName}"
+                Foreground="{Binding SelectedBooks[36].BookColor}"
+                IsEnabled="{Binding SelectedBooks[36].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk38"
+                Grid.Row="17"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[37].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[37].BookName}"
+                Foreground="{Binding SelectedBooks[37].BookColor}"
+                IsEnabled="{Binding SelectedBooks[37].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk39"
+                Grid.Row="18"
+                Grid.Column="1"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[38].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[38].BookName}"
+                Foreground="{Binding SelectedBooks[38].BookColor}"
+                IsEnabled="{Binding SelectedBooks[38].IsEnabled}" />
+
+            <!--  New Testament  -->
+
+            <CheckBox
+                x:Name="Chk40"
+                Grid.Row="0"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[39].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[39].BookName}"
+                Foreground="{Binding SelectedBooks[39].BookColor}"
+                IsEnabled="{Binding SelectedBooks[39].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk41"
+                Grid.Row="1"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[40].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[40].BookName}"
+                Foreground="{Binding SelectedBooks[40].BookColor}"
+                IsEnabled="{Binding SelectedBooks[40].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk42"
+                Grid.Row="2"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[41].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[41].BookName}"
+                Foreground="{Binding SelectedBooks[41].BookColor}"
+                IsEnabled="{Binding SelectedBooks[41].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk43"
+                Grid.Row="3"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[42].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[42].BookName}"
+                Foreground="{Binding SelectedBooks[42].BookColor}"
+                IsEnabled="{Binding SelectedBooks[42].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk44"
+                Grid.Row="4"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[43].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[43].BookName}"
+                Foreground="{Binding SelectedBooks[43].BookColor}"
+                IsEnabled="{Binding SelectedBooks[43].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk45"
+                Grid.Row="5"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[44].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[44].BookName}"
+                Foreground="{Binding SelectedBooks[44].BookColor}"
+                IsEnabled="{Binding SelectedBooks[44].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk46"
+                Grid.Row="6"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[45].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[45].BookName}"
+                Foreground="{Binding SelectedBooks[45].BookColor}"
+                IsEnabled="{Binding SelectedBooks[45].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk47"
+                Grid.Row="7"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[46].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[46].BookName}"
+                Foreground="{Binding SelectedBooks[46].BookColor}"
+                IsEnabled="{Binding SelectedBooks[46].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk48"
+                Grid.Row="8"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[47].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[47].BookName}"
+                Foreground="{Binding SelectedBooks[47].BookColor}"
+                IsEnabled="{Binding SelectedBooks[47].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk49"
+                Grid.Row="9"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[48].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[48].BookName}"
+                Foreground="{Binding SelectedBooks[48].BookColor}"
+                IsEnabled="{Binding SelectedBooks[48].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk50"
+                Grid.Row="10"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[49].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[49].BookName}"
+                Foreground="{Binding SelectedBooks[49].BookColor}"
+                IsEnabled="{Binding SelectedBooks[49].IsEnabled}" />
+
+
+
+            <CheckBox
+                x:Name="Chk51"
+                Grid.Row="11"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[50].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[50].BookName}"
+                Foreground="{Binding SelectedBooks[50].BookColor}"
+                IsEnabled="{Binding SelectedBooks[50].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk52"
+                Grid.Row="12"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[51].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[51].BookName}"
+                Foreground="{Binding SelectedBooks[51].BookColor}"
+                IsEnabled="{Binding SelectedBooks[51].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk53"
+                Grid.Row="13"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[52].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[52].BookName}"
+                Foreground="{Binding SelectedBooks[52].BookColor}"
+                IsEnabled="{Binding SelectedBooks[52].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk54"
+                Grid.Row="14"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[53].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[53].BookName}"
+                Foreground="{Binding SelectedBooks[53].BookColor}"
+                IsEnabled="{Binding SelectedBooks[53].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk55"
+                Grid.Row="15"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[54].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[54].BookName}"
+                Foreground="{Binding SelectedBooks[54].BookColor}"
+                IsEnabled="{Binding SelectedBooks[54].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk56"
+                Grid.Row="16"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[55].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[55].BookName}"
+                Foreground="{Binding SelectedBooks[55].BookColor}"
+                IsEnabled="{Binding SelectedBooks[55].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk57"
+                Grid.Row="17"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[56].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[56].BookName}"
+                Foreground="{Binding SelectedBooks[56].BookColor}"
+                IsEnabled="{Binding SelectedBooks[56].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk58"
+                Grid.Row="18"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[57].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[57].BookName}"
+                Foreground="{Binding SelectedBooks[57].BookColor}"
+                IsEnabled="{Binding SelectedBooks[57].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk59"
+                Grid.Row="19"
+                Grid.Column="2"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[58].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[58].BookName}"
+                Foreground="{Binding SelectedBooks[58].BookColor}"
+                IsEnabled="{Binding SelectedBooks[58].IsEnabled}" />
+
+
+            <CheckBox
+                x:Name="Chk60"
+                Grid.Row="0"
+                Grid.Column="3"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[59].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[59].BookName}"
+                Foreground="{Binding SelectedBooks[59].BookColor}"
+                IsEnabled="{Binding SelectedBooks[59].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk61"
+                Grid.Row="1"
+                Grid.Column="3"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[60].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[60].BookName}"
+                Foreground="{Binding SelectedBooks[60].BookColor}"
+                IsEnabled="{Binding SelectedBooks[60].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk62"
+                Grid.Row="2"
+                Grid.Column="3"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[61].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[61].BookName}"
+                Foreground="{Binding SelectedBooks[61].BookColor}"
+                IsEnabled="{Binding SelectedBooks[61].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk63"
+                Grid.Row="3"
+                Grid.Column="3"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[62].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[62].BookName}"
+                Foreground="{Binding SelectedBooks[62].BookColor}"
+                IsEnabled="{Binding SelectedBooks[62].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk64"
+                Grid.Row="4"
+                Grid.Column="3"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[63].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[63].BookName}"
+                Foreground="{Binding SelectedBooks[63].BookColor}"
+                IsEnabled="{Binding SelectedBooks[63].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk65"
+                Grid.Row="5"
+                Grid.Column="3"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[64].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[64].BookName}"
+                Foreground="{Binding SelectedBooks[64].BookColor}"
+                IsEnabled="{Binding SelectedBooks[64].IsEnabled}" />
+            <CheckBox
+                x:Name="Chk66"
+                Grid.Row="6"
+                Grid.Column="3"
+                Margin="20,0,0,0"
+                Checked="{Binding SelectedBooks[65].IsSelected, Mode=TwoWay}"
+                Content="{Binding SelectedBooks[65].BookName}"
+                Foreground="{Binding SelectedBooks[65].BookColor}"
+                IsEnabled="{Binding SelectedBooks[65].IsEnabled}" />
+        </Grid>
+
+        <!--  Progress Bar  -->
+        <ProgressBar
+            Grid.Row="2"
+            Width="170"
+            Height="170"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{StaticResource PrimaryHueMidBrush}"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgBarVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Value="60" />
+
+
+        <!--  Bottom row of buttons  -->
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="5"
+            Orientation="Horizontal">
+            <Grid Width="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="300" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Width="50"
+                    Command="{Binding OTButtonClick}"
+                    Content="OT"
+                    FontSize="12" />
+                <Button
+                    Width="50"
+                    Margin="5,0,0,0"
+                    Command="{Binding NTButtonClick}"
+                    Content="NT"
+                    FontSize="12" />
+                <Button
+                    Width="120"
+                    Margin="5,0,0,0"
+                    Command="{Binding SelectAllButtonClick}"
+                    Content="SELECT ALL"
+                    FontSize="12" />
+                <Button
+                    Width="120"
+                    Margin="5,0,0,0"
+                    Command="{Binding UnselectAllButtonClick}"
+                    Content="UNSELECT ALL"
+                    FontSize="12" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Width="80"
+                    Margin="55,0,0,0"
+                    Command="{Binding NavigateBack}"
+                    Content="BACK"
+                    FontSize="12" />
+                <Button
+                    Width="90"
+                    Margin="15,0,0,0"
+                    Command="{Binding NavigateForward}"
+                    Content="CONTINUE"
+                    FontSize="12"
+                    IsEnabled="{Binding ContinueEnabled}" />
+            </StackPanel>
+
+        </StackPanel>
+
+
+    </Grid>
+</UserControl>

@@ -11,7 +11,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,18 +21,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using ValidationResult = FluentValidation.Results.ValidationResult;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Project
+
+namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 {
-    public class AddParatextCorpusDialogViewModel : ValidatingApplicationScreen<AddParatextCorpusDialogViewModel>
+    public class AddParatextCorpusStepViewModel : ValidatingApplicationScreen<AddParatextCorpusStepViewModel>
     {
         #region Member Variables
 
-        private readonly ILogger<AddParatextCorpusDialogViewModel>? _logger;
+        private readonly ILogger<AddParatextCorpusStepViewModel>? _logger;
         private readonly DashboardProjectManager? _projectManager;
         private CorpusSourceType _corpusSourceType;
         private List<ParatextProjectMetadata>? _projects;
         private ParatextProjectMetadata? _selectedProject;
-        
+
         private string? _corpusNameToSelect;
 
         #endregion //Member Variables
@@ -93,7 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Set(ref _selectedProject, value);
 
                 CheckUsfm();
-                
+
                 ValidationResult = Validator?.Validate(this);
                 CanOk = ValidationResult.IsValid;
             }
@@ -134,17 +134,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         #region Constructor
-        public AddParatextCorpusDialogViewModel()
+        public AddParatextCorpusStepViewModel()
         {
             // used by Caliburn Micro for design time    
         }
 
-        public AddParatextCorpusDialogViewModel(INavigationService? navigationService,
-            ILogger<AddParatextCorpusDialogViewModel>? logger,
+        public AddParatextCorpusStepViewModel(INavigationService? navigationService,
+            ILogger<AddParatextCorpusStepViewModel>? logger,
             DashboardProjectManager? projectManager,
             IEventAggregator? eventAggregator,
-            IValidator<AddParatextCorpusDialogViewModel> validator, 
-            IMediator? mediator, 
+            IValidator<AddParatextCorpusStepViewModel> validator,
+            IMediator? mediator,
             ILifetimeScope? lifetimeScope)
             : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
@@ -172,7 +172,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //no-op.
                 }
             }
-            
+
             return base.OnInitializeAsync(cancellationToken);
 
         }
@@ -207,7 +207,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             Clipboard.SetText(sb.ToString());
         }
-    
+
 
 
         private async Task CheckUsfm()
@@ -234,7 +234,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
                     ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", _logger);
                 }
-                
+
             }
 
             ShowSpinner = Visibility.Collapsed;
@@ -258,5 +258,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         #endregion // Methods
+
     }
 }

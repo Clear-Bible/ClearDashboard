@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus;
+using ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -87,10 +88,14 @@ namespace ClearDashboard.Wpf.Application
                 .Keyed<IWorkflowStepViewModel>("ParatextCorpusDialog")
                 .WithMetadata("Order", 1);
 
+            
+            builder.RegisterType<AddParatextCorpusStepView>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("ParatextCorpusDialog")
+                .WithMetadata("Order", 2);
 
             builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("ParatextCorpusDialog")
-                .WithMetadata("Order", 2);
+                .WithMetadata("Order", 3);
         }
 
 

@@ -19,10 +19,19 @@ using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Windows;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using Newtonsoft.Json;
+using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
+using FluentValidation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 {
-    public class ParatextCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParatextCorpusDialogViewModel
+    public class ParatextCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParatextCorpusDialogViewModel //, ValidatingApplicationScreen<ParatextCorpusDialogViewModel>
     {
         internal class TaskNames
         {
@@ -32,15 +41,93 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 
         #region Member Variables   
 
+        private readonly ILogger<ParatextCorpusDialogViewModel>? _logger;
+        private readonly DashboardProjectManager? _projectManager;
+        private CorpusSourceType _corpusSourceType;
+        private List<ParatextProjectMetadata>? _projects;
+        private ParatextProjectMetadata? _selectedProject;
+
+        private string? _corpusNameToSelect;
+
         #endregion //Member Variables
 
 
         #region Public Properties
 
+        public enum CorpusType
+        {
+            Manuscript,
+            Other
+        }
+
+        public string? Parameter { get; set; }
+
+
         #endregion //Public Properties
 
 
         #region Observable Properties
+
+        private Visibility _showSpinner = Visibility.Collapsed;
+        public Visibility ShowSpinner
+        {
+            get => _showSpinner;
+            set
+            {
+                _showSpinner = value;
+                NotifyOfPropertyChange(() => ShowSpinner);
+            }
+        }
+
+
+        public CorpusSourceType CorpusSourceType
+        {
+            get => _corpusSourceType;
+            set => Set(ref _corpusSourceType, value);
+        }
+
+        public List<ParatextProjectMetadata>? Projects
+        {
+            get => _projects;
+            set => Set(ref _projects, value);
+        }
+
+        private Tokenizers _selectedTokenizer = Tokenizers.LatinWordTokenizer;
+        public Tokenizers SelectedTokenizer
+        {
+            get => _selectedTokenizer;
+            set => Set(ref _selectedTokenizer, value);
+        }
+
+        public ParatextProjectMetadata? SelectedProject
+        {
+            get => _selectedProject;
+            set
+            {
+                Set(ref _selectedProject, value);
+
+                _ = CheckUsfm();
+
+                // TODO
+                //ValidationResult = Validator?.Validate(this);
+                //CanOk = ValidationResult.IsValid;
+            }
+        }
+
+
+        private ObservableCollection<UsfmError> _usfmErrors = new();
+        public ObservableCollection<UsfmError> UsfmErrors
+        {
+            get => _usfmErrors;
+            set
+            {
+                _usfmErrors = value;
+                NotifyOfPropertyChange(() => UsfmErrors);
+            }
+        }
+
+
+
 
         private bool _canOk;
         public bool CanOk
@@ -49,6 +136,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
             set => Set(ref _canOk, value);
         }
 
+
+        private string _errorTitle;
+        public string ErrorTitle
+        {
+            get => _errorTitle;
+            set
+            {
+                _errorTitle = value;
+                NotifyOfPropertyChange(() => ErrorTitle);
+            }
+        }
 
         #endregion //Observable Properties
 
@@ -61,13 +159,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
         }
 
         public ParatextCorpusDialogViewModel(DialogMode dialogMode,
-            DashboardProjectManager? projectManager,
-            INavigationService navigationService,
             ILogger<ParatextCorpusDialogViewModel> logger,
+            DashboardProjectManager? projectManager,
             IEventAggregator eventAggregator,
+            IValidator<ParatextCorpusDialogViewModel> validator,
+            ILifetimeScope lifetimeScope,
+            INavigationService navigationService,
             IMediator mediator,
-            ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
+            LongRunningTaskManager longRunningTaskManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            // TODO
+        //: base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             CanOk = true;
 
@@ -75,6 +177,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
             DisplayName = LocalizationStrings.Get("ParatextCorpusDialog_ParatextCorpus", Logger!);
 
             DialogMode = dialogMode;
+
+            _logger = logger;
+            _projectManager = projectManager;
+
+            ErrorTitle = Helpers.LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -102,31 +210,108 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 
             await base.OnInitializeAsync(cancellationToken);
 
+            if (!string.IsNullOrEmpty(Parameter))
+            {
+                try
+                {
+                    var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(Parameter);
+                    foreach (var value in values)
+                    {
+                        _corpusNameToSelect = value.Key;
+                        break;
+                    }
+                }
+                catch (Exception)
+                {
+                    //no-op.
+                }
+            }
+
         }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            CorpusSourceType = CorpusSourceType.Paratext;
+            var result = await _projectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+            if (result.Success)
+            {
+                Projects = result.Data.OrderBy(p => p.Name).ToList();
+            }
+
+            await base.OnActivateAsync(cancellationToken);
+        }
 
         #endregion //Constructor
 
 
         #region Methods
 
+        public void CopyToClipboard()
+        {
+            Clipboard.Clear();
+            StringBuilder sb = new StringBuilder();
+            foreach (var error in UsfmErrors)
+            {
+                sb.AppendLine($"{error.Reference}\t{error.Error}");
+            }
+
+            Clipboard.SetText(sb.ToString());
+        }
+
+
+
+        private async Task CheckUsfm()
+        {
+            if (SelectedProject is null)
+            {
+                return;
+            }
+
+            ShowSpinner = Visibility.Visible;
+
+            var result = await _projectManager.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
+            if (result.Success)
+            {
+                var errors = result.Data;
+
+                if (errors.NumberOfErrors == 0)
+                {
+                    UsfmErrors = new();
+                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+                }
+                else
+                {
+                    UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
+                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", _logger);
+                }
+
+            }
+
+            ShowSpinner = Visibility.Collapsed;
+        }
+
+        // TODO
+        //protected override ValidationResult Validate()
+        //{
+        //    return (SelectedProject != null) ? Validator?.Validate(this) : null;
+        //}
+
+
         public async void Ok()
         {
             await TryCloseAsync(true);
         }
 
-        public void Cancel()
+        public bool CanCancel => true /* can always cancel */;
+
+        public async void Cancel()
         {
-            throw new NotImplementedException();
+            await TryCloseAsync(false);
         }
 
         #endregion // Methods
 
-
-
-
-
-
+        
     }
 
     

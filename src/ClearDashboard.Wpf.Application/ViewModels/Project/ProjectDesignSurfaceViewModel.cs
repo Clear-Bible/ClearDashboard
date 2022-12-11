@@ -18,6 +18,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus;
 using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.Views.Project;
@@ -636,6 +637,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task AddParatextCorpus(string selectedParatextProjectId)
         {
             Logger!.LogInformation("AddParatextCorpus called.");
+
+
+            var dialogViewModelNew = LifetimeScope!.Resolve<ParatextCorpusDialogViewModel>();
+            var resultNew = await _windowManager!.ShowDialogAsync(dialogViewModelNew, null, DashboardProjectManager.NewProjectDialogSettings);
+
+
+
 
             var dialogViewModel = LifetimeScope!.Resolve<AddParatextCorpusDialogViewModel>();
             var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
