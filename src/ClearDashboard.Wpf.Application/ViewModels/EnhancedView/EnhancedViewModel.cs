@@ -39,7 +39,8 @@ using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public class EnhancedViewModel : DashboardConductorAllActive<object>, IPaneViewModel,
+    public class EnhancedViewModel : DashboardConductorAllActive<EnhancedViewItemViewModel>, IPaneViewModel,
+        IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>
@@ -393,6 +394,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             ParatextSync = enhancedViewLayout.ParatextSync;
             CurrentBcv.SetVerseFromId(enhancedViewLayout.BBBCCCVVV);
 
+            EventAggregator.SubscribeOnPublishedThread(this);
+
             await Task.CompletedTask;
         }
 
@@ -539,39 +542,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        public void InnerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems.Count > 0)
-            {
-                if (e.AddedItems[0] is VerseDisplayViewModel verseDisplayViewModel)
-                {
-                    SelectedVerseDisplayViewModel = verseDisplayViewModel;
-                }
-            }
-        }
-
-
-        //public void LaunchMirrorView(double actualWidth, double actualHeight)
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //public void VerseSelected(object sender, SelectionChangedEventArgs e)
         //{
-        //    LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
+        //    if (e.AddedItems.Count > 0)
+        //    {
+        //        if (e.AddedItems[0] is VerseDisplayViewModel verseDisplayViewModel)
+        //        {
+        //            SelectedVerseDisplayViewModel = verseDisplayViewModel;
+        //        }
+        //    }
         //}
 
-
-        #region Corpus
-
-        //public async Task ShowCorpusTokens(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken)
-        //{
-        //    _logger.LogInformation("Received TokenizedTextCorpusMessage.");
-        //    _handleAsyncRunning = true;
-        //    _cancellationTokenSource = new CancellationTokenSource();
-        //    var localCancellationToken = _cancellationTokenSource.Token;
-
-        //    EnhancedViewLayout!.EnhancedViewItems.Add(message.Metadatum);
-            
-        //    ProgressBarVisibility = Visibility.Visible;
-
-        //    await ShowCorpusText(message, cancellationToken, localCancellationToken);
-        //}
 
         public static ParatextProjectMetadata HebrewManuscriptMetadata => new ParatextProjectMetadata
         {
@@ -588,333 +574,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Name = "Macula Greek",
             AvailableBooks = BookInfo.GenerateScriptureBookList(),
         };
-
-
-        //public async Task<DAL.Alignment.Translation.TranslationSet> GetTranslationSet(string translationSetId)
-        //{
-        //    return await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(translationSetId)), Mediator!);
-        //}
-        //public static async Task<DAL.Alignment.Translation.AlignmentSet> GetAlignmentSet(string alignmentSetId, IMediator mediator)
-        //{
-        //    return await DAL.Alignment.Translation.AlignmentSet.Get(new AlignmentSetId(Guid.Parse(alignmentSetId)), mediator);
-        //}
-        //private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> textRows, int bbbcccvvv)
-        //{
-        //    var textRow = textRows.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
-        //    if (textRow != null)
-        //    {
-        //        var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-        //        return detokenizer.Detokenize(textRow.Tokens);
-        //    }
-
-        //    return null;
-        //}
-
-        private async Task UpdateVersesDisplay(AddTokenizedCorpusToEnhancedViewMessage message, BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
-        {
-            var fontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.Metadatum.ParatextProjectId);
-
-            FontFamily family;
-            try
-            {
-                family = new(fontFamily);
-            }
-            catch (Exception e)
-            {
-                family = new("Segoe UI");
-            }
-
-
-            var brush = GetCorpusBrushColor(message);
-
-
-            var row = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v => v.CorpusId == message.Metadatum.CorpusId);
-            if (row is null)
-            {
-                var viewModel = await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>();
-                viewModel.CorpusId = message.Metadatum.CorpusId.Value;
-                viewModel.BorderColor = brush;
-                viewModel.ShowTranslation = showTranslations;
-                viewModel.Title = title;
-                viewModel.Verses = verses;
-                viewModel.IsRtl = message.Metadatum.IsRtl.Value;
-                viewModel.SourceFontFamily = family;
-
-
-                // add to the grouping for saving
-                EnhancedViewLayout!.EnhancedViewItems.Add(message.Metadatum);
-            }
-            else
-            {
-                row.CorpusId = message.Metadatum.CorpusId.Value;
-                row.BorderColor = brush;
-                row.ShowTranslation = showTranslations;
-                row.Title = title;
-                row.Verses = verses;
-                row.IsRtl = message.Metadatum.IsRtl.Value;
-            }
-
-            //do a dump of VerseDisplayViewModel Ids
-            foreach (var verseDisplayViewModel in verses)
-            {
-                Debug.WriteLine($"INCOMMING ID: {verseDisplayViewModel.Id}");
-            }
-            NotifyOfPropertyChange(() => Items);
-        }
-
-        private static Brush? GetCorpusBrushColor(AddTokenizedCorpusToEnhancedViewMessage message)
-        {
-            // same color as defined in SharedVisualTemplates.xaml
-            Brush brush;
-            switch (message.Metadatum.CorpusType)
-            {
-                case CorpusType.Standard:
-                    var converter = new BrushConverter();
-                    brush = (Brush)converter.ConvertFromString("#7FC9FF");
-                    break;
-                case CorpusType.BackTranslation:
-                    brush = Brushes.Orange;
-                    break;
-                case CorpusType.Resource:
-                    brush = Brushes.PaleGoldenrod;
-                    break;
-                case CorpusType.Unknown:
-                    brush = Brushes.Silver;
-                    break;
-                case CorpusType.ManuscriptHebrew:
-                    brush = Brushes.MediumOrchid;
-                    break;
-                case CorpusType.ManuscriptGreek:
-                    brush = Brushes.MediumOrchid;
-                    break;
-                default:
-                    brush = Brushes.Blue;
-                    break;
-            }
-
-            return brush;
-        }
-
-        #endregion
-
-        #region Parallel
-
-        //public async Task ShowParallelTranslationTokens(AddAlignmentToEnhancedViewMessage message, CancellationToken cancellationToken)
-        //{
-        //    _logger.LogInformation("Received TokenizedTextCorpusMessage.");
-        //    _handleAsyncRunning = true;
-        //    _cancellationTokenSource = new CancellationTokenSource();
-        //    var localCancellationToken = _cancellationTokenSource.Token;
-        //    ProgressBarVisibility = Visibility.Visible;
-
-        //    await ShowParallelTranslation(message, cancellationToken, localCancellationToken);
-        //}
-
-        //public async Task ShowParallelTranslation(AddAlignmentToEnhancedViewMessage message,
-        //    CancellationToken cancellationToken, CancellationToken localCancellationToken)
-        //{
-
-        //    WorkingJobs.Add(message.TranslationSetId);
-
-        //    var msg = _parallelMessages.Where(p =>
-        //        p.TranslationSetId == message.TranslationSetId && p.AlignmentSetId == message.AlignmentSetId && p.ParallelCorpusId == message.ParallelCorpusId).ToList();
-        //    if (msg.Count == 0)
-        //    {
-        //        _parallelMessages.Add(message);
-        //    }
-
-        //    // current project
-        //    _ = await Task.Factory.StartNew(async () =>
-        //    {
-        //        try
-        //        {
-        //            ProgressBarVisibility = Visibility.Visible;
-
-        //            var verseTokens = await BuildTokenDisplayViewModels(message);
-        //            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-        //                new BackgroundTaskStatus
-        //                {
-        //                    Name = "Fetch Book",
-        //                    Description = $"Found {verseTokens.Count} TokensTextRow entities.",
-        //                    StartTime = DateTime.Now,
-        //                    TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-        //                }), cancellationToken);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Logger.LogError(ex, "The attempt to ShowNewParallelTranslation failed.");
-        //            if (!localCancellationToken.IsCancellationRequested)
-        //            {
-        //                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
-        //                    new BackgroundTaskStatus
-        //                    {
-        //                        Name = "Fetch Book",
-        //                        EndTime = DateTime.Now,
-        //                        ErrorMessage = $"{ex}",
-        //                        TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
-        //                    }), cancellationToken);
-        //            }
-        //        }
-        //        finally
-        //        {
-        //            _handleAsyncRunning = false;
-        //            if (_cancellationTokenSource != null)
-        //                _cancellationTokenSource.Dispose();
-
-        //            // remove from the job stack
-        //            for (int i = WorkingJobs.Count - 1; i >= 0; i--)
-        //            {
-        //                if (WorkingJobs[i] == message.TranslationSetId)
-        //                {
-        //                    WorkingJobs.RemoveAt(i);
-        //                }
-        //            }
-
-        //            if (WorkingJobs.Count == 0)
-        //            {
-        //                ProgressBarVisibility = Visibility.Collapsed;
-        //            }
-        //        }
-        //    }, cancellationToken);
-        //}
-
-      
-
-      
-
-      
-
-    
-
-        //private async Task UpdateParallelCorpusDisplay(AddAlignmentToEnhancedViewMessage message,
-        //    BindableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations = true)
-        //{
-        //    // same color as defined in SharedVisualTemplates.xaml
-        //    Brush brush = Brushes.SaddleBrown;
-
-        //    // get the font family for this project
-        //    var sourceFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.SourceParatextId);
-        //    var targetFontFamily = MainViewModel.GetFontFamilyFromParatextProjectId(message.TargetParatextId);
-
-        //    FontFamily fontFamilySource;
-        //    try
-        //    {
-        //        fontFamilySource = new(sourceFontFamily);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        fontFamilySource = new("Segoe UI");
-        //    }
-
-        //    FontFamily fontFamilyTarget;
-        //    try
-        //    {
-        //        fontFamilyTarget = new(targetFontFamily);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        fontFamilyTarget = new("Segoe UI");
-        //    }
-
-
-
-        //    VerseAwareEnhancedViewItemViewModel? enhancedViewItemViewModel;
-        //    if (message.AlignmentSetId is null)
-        //    {
-        //        // interlinear
-        //        enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
-        //             v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
-        //             v.TranslationSetId == Guid.Parse(message.TranslationSetId));
-
-        //    }
-        //    else
-        //    {
-        //        // alignment
-        //        enhancedViewItemViewModel = VerseAwareEnhancedViewItemViewModels.FirstOrDefault(v =>
-        //             v.CorpusId == Guid.Parse(message.ParallelCorpusId) &&
-        //             v.AlignmentSetId == Guid.Parse(message.AlignmentSetId));
-
-        //    }
-
-
-        //    if (enhancedViewItemViewModel is null)
-        //    {
-        //        var alignmentSetId = Guid.Empty;
-        //        if (message.AlignmentSetId is not null)
-        //        {
-        //            alignmentSetId = Guid.Parse(message.AlignmentSetId);
-        //            brush = Brushes.DarkGreen;
-        //        }
-
-        //        var translationSetId = Guid.Empty;
-        //        if (message.TranslationSetId is not null)
-        //        {
-        //            translationSetId = Guid.Parse(message.TranslationSetId);
-        //        }
-
-        //        var viewModel = await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>();
-
-        //        viewModel.AlignmentSetId = alignmentSetId;
-        //        viewModel.ParallelCorpusId = Guid.Parse(message.ParallelCorpusId);
-        //        viewModel.TranslationSetId = translationSetId;
-        //        viewModel.CorpusId = Guid.Parse(message.ParallelCorpusId);
-        //        viewModel.BorderColor = brush;
-        //        viewModel.ShowTranslation = showTranslations;
-        //        viewModel.Title = title;
-        //        viewModel.Verses = verses;
-        //        viewModel.IsRtl = message.IsRTL.Value;
-        //        viewModel.IsTargetRtl = message.IsTargetRTL ?? false;
-        //        viewModel.SourceFontFamily = fontFamilySource;
-        //        viewModel.TargetFontFamily = fontFamilyTarget;
-        //        viewModel.TranslationFontFamily = fontFamilyTarget;
-
-
-        //        if (message.AlignmentSetId is not null)
-        //        {
-        //            EnhancedViewLayout.EnhancedViewItems.Add(new AlignmentEnhancedViewItemMetadatum
-        //            {
-        //                AlignmentSetId = message.AlignmentSetId,
-        //                DisplayName = message.DisplayName,
-        //                IsNewWindow = message.IsNewWindow,
-        //                IsRtl = message.IsRTL,
-        //                IsTargetRtl = message.IsTargetRTL,
-        //                ParallelCorpusDisplayName = message.ParallelCorpusDisplayName,
-        //                ParallelCorpusId = message.ParallelCorpusId,
-        //                SourceParatextId = message.SourceParatextId,
-        //                TargetParatextId = message.TargetParatextId
-
-        //            });
-        //        }
-
-        //        if (message.TranslationSetId is not null)
-        //        {
-        //            EnhancedViewLayout.EnhancedViewItems.Add(new InterlinearEnhancedViewItemMetadatum
-        //            {
-        //                TranslationSetId = message.TranslationSetId,
-        //                DisplayName = message.DisplayName,
-        //                IsNewWindow = message.IsNewWindow,
-        //                IsRtl = message.IsRTL,
-        //                IsTargetRtl = message.IsTargetRTL,
-        //                ParallelCorpusDisplayName = message.ParallelCorpusDisplayName,
-        //                ParallelCorpusId = message.ParallelCorpusId,
-        //                SourceParatextId = message.SourceParatextId,
-        //                TargetParatextId = message.TargetParatextId
-
-        //            });
-        //        }
-              
-        //    }
-        //    else
-        //    {
-        //        enhancedViewItemViewModel.Title = title;
-        //        enhancedViewItemViewModel.Verses = verses;
-        //        enhancedViewItemViewModel.BorderColor = brush;
-        //    }
-
-        //    NotifyOfPropertyChange(() => Items);
-        //}
-
-        #endregion
 
 
         #region IHandle
@@ -960,6 +619,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             BcvDictionary = _projectManager!.CurrentParatextProject.BcvDictionary;
 
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(VerseSelectedMessage message, CancellationToken cancellationToken)
+        {
+            SelectedVerseDisplayViewModel = message.SelectedVerseDisplayViewModel;
             return Task.CompletedTask;
         }
 
@@ -1046,14 +711,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteControlVisibility = Visibility.Visible;
         }
 
-        //        public void ParatextSend(object sender, ParatextEventArgs e)
-        //        {
-        //            NoteManager.ParatextSend(e);
-        //;        }
-
+    
         public void FilterPins(object sender, NoteEventArgs e)
         {
-            //WORKS
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
@@ -1172,13 +832,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void LabelAdded(object sender, LabelEventArgs e)
         {
-            //WORKS
             Task.Run(() => LabelAddedAsync(e).GetAwaiter());
         }
 
         public async Task LabelAddedAsync(LabelEventArgs e)
         {
-            //WORKS
             if (SelectedVerseDisplayViewModel is null)
             {
                 return;
@@ -1209,13 +867,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void LabelRemoved(object sender, LabelEventArgs e)
         {
-            //WORKS
             Task.Run(() => LabelRemovedAsync(e).GetAwaiter());
         }
 
         public async Task LabelRemovedAsync(LabelEventArgs e)
         {
-            //WORKS
             if (e.Note.NoteId != null)
             {
                 await NoteManager.DetachNoteLabel(e.Note, e.Label);
@@ -1225,7 +881,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void CloseNotePaneRequested(object sender, RoutedEventArgs args)
         {
-            //WORKS
             NoteControlVisibility = Visibility.Collapsed;
         }
 
@@ -1248,6 +903,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #endregion
 
-      
+
+    
     }
 }

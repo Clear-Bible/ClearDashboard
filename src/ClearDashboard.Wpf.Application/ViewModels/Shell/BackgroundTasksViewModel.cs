@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Helpers;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -92,8 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
                 backgroundTaskStatus.EndTime = DateTime.Now;
                 backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                //TODO:  Localize
-                backgroundTaskStatus.Description = "Task was cancelled";
+                backgroundTaskStatus.Description = LocalizationStrings.Get("BackgroundTasks_TaskCancelled", _logger!);
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
 
                 ToggleSpinner();

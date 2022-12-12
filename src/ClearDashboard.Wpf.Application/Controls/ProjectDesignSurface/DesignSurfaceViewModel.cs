@@ -502,7 +502,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         },
                         new ParallelCorpusConnectionMenuItemViewModel
                         {
-                            Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", Logger!),
+                            Header = LocalizationStrings.Get("Pds_AddConnectionToNewEnhancedViewMenu", Logger!),
                             Id =DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView,
                             ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                             IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
@@ -576,7 +576,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         new ParallelCorpusConnectionMenuItemViewModel
                         {
                             // Add Verses to focused enhanced view
-                            Header = LocalizationStrings.Get("Pds_AddConnectionToEnhancedViewMenu", Logger!),
+                            Header = LocalizationStrings.Get("Pds_AddConnectionToNewEnhancedViewMenu", Logger!),
                             Id =DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
                             ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                             IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
@@ -653,7 +653,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             new CorpusNodeMenuItemViewModel
                             {
                                 // Show Verses in New Windows
-                                Header = LocalizationStrings.Get("Pds_ShowVersesMenu", Logger!),
+                                Header = LocalizationStrings.Get("Pds_AddToNewEnhancedViewMenu", Logger!),
                                 Id = DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView, ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentText.ToString(),
                                 CorpusNodeViewModel = corpusNode,

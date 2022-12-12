@@ -25,6 +25,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Point = System.Windows.Point;
 
 // ReSharper disable InconsistentNaming

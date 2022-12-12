@@ -9,6 +9,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 {

@@ -7,7 +7,10 @@
              xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+             xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+             xmlns:cm="http://caliburnmicro.com"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=enhancedView:VerseAwareEnhancedViewItemViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
@@ -30,14 +33,8 @@
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
         ScrollViewer.IsDeferredScrollingEnabled="True"
         VirtualizingStackPanel.IsVirtualizing="True"
-        VirtualizingStackPanel.VirtualizationMode="Recycling">
-
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="SelectionChanged">
-                    <b:CallMethodAction MethodName="InnerListView_SelectionChanged" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-
+        VirtualizingStackPanel.VirtualizationMode="Recycling"
+        cm:Message.Attach="[Event SelectionChanged] = [Action VerseSelected($this, $eventArgs)]">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Height" Value="Auto" />
@@ -79,6 +76,7 @@
                                                     TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                     Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                                                    <!--cm:Message.Attach="[Event TranslationClicked] = [Action TranslationClicked($this, $eventArgs)]"-->
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="TokenClicked">
                                 <b:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />

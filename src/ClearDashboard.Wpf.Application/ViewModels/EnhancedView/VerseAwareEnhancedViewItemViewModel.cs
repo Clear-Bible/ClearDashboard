@@ -11,7 +11,6 @@ using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
@@ -29,11 +28,10 @@ using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using ClearDashboard.DAL.Alignment.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 using SIL.Machine.Corpora;
-using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
+using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.Events;
 
 // ReSharper disable InconsistentNaming
 
@@ -42,6 +40,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel,
             IHandle<VerseChangedMessage>
     {
+        public IWindowManager WindowManager { get; }
 
         //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 
@@ -149,20 +148,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager,
             INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
+            WindowManager = windowManager;
         }
 
-        public void InnerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+      
+        public async void VerseSelected(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0)
+            if (e.AddedItems != null && e.AddedItems.Count > 0)
             {
                 if (e.AddedItems[0] is VerseDisplayViewModel verseDisplayViewModel)
                 {
                     SelectedVerseDisplayViewModel = verseDisplayViewModel;
+                    await EventAggregator.PublishOnUIThreadAsync(new VerseSelectedMessage(verseDisplayViewModel));
                 }
             }
         }
+
+        public async  void TranslationClicked(object sender, TranslationEventArgs args)
+        {
+           var s = await WindowManager.ShowDialogAsync(new TranslationSelectionDialog(args.TokenDisplay!,
+                args.VerseDisplay!));
+        }
+
+    
 
         private Visibility? _progressBarVisibility = Visibility.Hidden;
         public Visibility? ProgressBarVisibility
@@ -346,16 +356,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private static string CreateNoVerseDataTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum)
+        private  string CreateNoVerseDataTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum)
         {
             // TODO:  localize the message
-            var localizedMessage = "No verse data in this verse range.";
+            var localizedMessage = LocalizationStrings.Get("EnhancedView_NoVerseData", Logger!); ;
             return $"{metadatum.ProjectName} - {metadatum.TokenizationType}    {localizedMessage}";
         }
 
-        private static string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
+        private string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
         {
-            var localizedMessage = "No verse data in this verse range.";
+            var localizedMessage = LocalizationStrings.Get("EnhancedView_NoVerseData", Logger!); ;
             return $"{metadatum.ParallelCorpusDisplayName}   {localizedMessage}";
         }
 

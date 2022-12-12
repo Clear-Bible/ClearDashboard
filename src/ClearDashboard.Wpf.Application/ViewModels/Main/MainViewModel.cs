@@ -430,6 +430,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             _dockingManager.ActiveContentChanged -= OnActiveContentChanged;
             _dockingManager.DocumentClosed -= OnEnhancedViewClosed;
 
+           
 
             if (_lastLayout == "")
             {
@@ -441,7 +442,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             UnsubscribeFromEventAggregator();
 
             await PinsViewModel.DeactivateAsync(close);
-           // await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
+            // await ProjectDesignSurfaceViewModel.DeactivateAsync(close);
+
+            foreach (var screen in Items)
+            {
+                await screen.DeactivateAsync(true, cancellationToken);
+            }
 
             // Clear the items in the event the user is switching projects.
             Items.Clear();
@@ -1743,7 +1749,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <returns></returns>
         public Task HandleAsync(CloseDockingPane message, CancellationToken cancellationToken)
         {
-            var windowGuid = message.guid;
+            var windowGuid = message.Guid;
 
             var dockableWindows = _dockingManager.Layout.Descendents()
                 .OfType<LayoutDocument>().ToArray();
