@@ -269,6 +269,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 else
                 {
                     var translationsFromAlignmentModel = ProjectDbContext.AlignmentTopTargetTrainingTexts
+                        .Include(a => a.SourceTokenComponent!)
+                            .ThenInclude(tc => ((TokenComposite)tc).Tokens)
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
                         .Where(a => tokenGuidsNotFound.Contains(a.SourceTokenComponentId))
                         .Select(a => new Alignment.Translation.Translation(

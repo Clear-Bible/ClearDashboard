@@ -51,6 +51,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<LabelNoteAssociation> LabelNoteAssociations => Set<LabelNoteAssociation>();
         public virtual DbSet<LexicalItem> LexicalItems => Set<LexicalItem>();
         public virtual DbSet<LexicalItemDefinition> LexicalItemDefinitions => Set<LexicalItemDefinition>();
+        public virtual DbSet<LexicalItemSurfaceText> LexicalItemSurfaceTexts => Set<LexicalItemSurfaceText>();
         public virtual DbSet<NoteDomainEntityAssociation> NoteDomainEntityAssociations => Set<NoteDomainEntityAssociation>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();

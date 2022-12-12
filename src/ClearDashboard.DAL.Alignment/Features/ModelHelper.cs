@@ -383,7 +383,8 @@ namespace ClearDashboard.DAL.Alignment.Features
         public static IQueryable<Models.Translation> AddIdIncludesTranslationsQuery(ProjectDbContext projectDbContext)
         {
             return projectDbContext.Translations
-                .Include(e => e.SourceTokenComponent)
+                .Include(e => e.SourceTokenComponent!)
+                    .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
                 .Include(e => e.TranslationSet)
                     .ThenInclude(e => e!.ParallelCorpus)
                         .ThenInclude(e => e!.SourceTokenizedCorpus)
