@@ -765,15 +765,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     foreach (var textRow in tokensTextRowsRange)
                     {
-                        var verseDisplayViewModel = _serviceProvider.GetService<VerseDisplayViewModel>();
-                        //FIXME: detokenizer should come from message.Detokenizer.
-                        await verseDisplayViewModel!.ShowCorpusAsync(
-                            textRow,
-                            //FIXME:surface serialization message.detokenizer,
-                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            message.IsRTL.Value);
-
-                        verses.Add(verseDisplayViewModel);
+                        verses.Add(await CreateCorpusViewModel(textRow, currentTokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, message.IsRTL.Value));
                     }
 
                     //if (verses.Any())
@@ -841,6 +833,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     }
                 }
             }, cancellationToken);
+        }
+
+        private async Task<VerseDisplayViewModel> CreateCorpusViewModel(TokensTextRow textRow, EngineStringDetokenizer detokenizer, bool isRtl)
+        {
+            try
+            {
+                var verseDisplayViewModel = LifetimeScope!.Resolve<CorpusDisplayViewModel>(
+                    new NamedParameter("textRow", textRow),
+                    new NamedParameter("sourceDetokenizer", detokenizer),
+                    new NamedParameter("isRtl", isRtl)
+                    );
+                await verseDisplayViewModel.InitializeAsync();
+                return verseDisplayViewModel;
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogCritical($"Could not create CorpusViewModel: {ex.Message}");
+                throw;
+            }
         }
 
         private void UpdateVerseDisplayWhenBookOutOfRange(ShowTokenizationWindowMessage message)

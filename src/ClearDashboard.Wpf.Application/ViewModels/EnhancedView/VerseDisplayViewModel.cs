@@ -8,7 +8,6 @@ using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -36,13 +35,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
         private NoteManager? NoteManager { get; }
         private IEventAggregator? EventAggregator { get; }
-
         private ILogger<VerseDisplayViewModel>? Logger { get; }
 
-        private IReadOnlyList<Token>? SourceTokens { get; set; }
-        private EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
+        protected TokenCollection? SourceTokens { get; set; }
+        protected EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
         public bool IsSourceRtl { get; set; }
-        private IReadOnlyList<Token>? TargetTokens { get; set; }
+        private TokenCollection? TargetTokens { get; set; }
         private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
         public bool IsTargetRtl { get; set; }
 
@@ -323,12 +321,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        public virtual async Task InitializeAsync()
+        {
+            await BuildTokenDisplayViewModelsAsync();
+        }
+
         public async Task ShowCorpusAsync(
             TokensTextRow textRow, 
             EngineStringDetokenizer sourceDetokenizer, 
             bool isRtl)
         {
-            SourceTokens = textRow.Tokens.GetPositionalSortedBaseTokens().ToList();
+            SourceTokens = new TokenCollection(textRow.Tokens.GetPositionalSortedBaseTokens().ToList());
             SourceDetokenizer = sourceDetokenizer;
             IsSourceRtl = isRtl;
             IsTargetRtl = false;
@@ -346,7 +349,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EngineStringDetokenizer sourceDetokenizer,
             bool isSourceRtl)
         {
-            SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
+            SourceTokens = new TokenCollection(engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens"));
             SourceDetokenizer = sourceDetokenizer;
             IsSourceRtl = isSourceRtl;
             IsTargetRtl = false;
@@ -367,11 +370,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EngineStringDetokenizer targetDetokenizer,
             bool isTargetRtl)
         {
-            SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
+            SourceTokens = new TokenCollection(engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens"));
             SourceDetokenizer = sourceDetokenizer;
             IsSourceRtl = isSourceRtl;
 
-            TargetTokens = engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no target tokens");
+            TargetTokens = new TokenCollection(engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no target tokens"));
             TargetDetokenizer = targetDetokenizer;
             IsTargetRtl = isTargetRtl;
 
