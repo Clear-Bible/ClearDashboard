@@ -231,19 +231,16 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static bool IsBreakingChangePresent(List<UpdateFormat> updateDataList, Version projectVersion)
         {
-            if (updateDataList != null)
+            foreach (var update in updateDataList)
             {
-                foreach (var update in updateDataList)
+                var updateVersion = ParseVersionString(update.Version);
+                if (!CheckWebVersion(update.Version) && IsNewerVersion(projectVersion, updateVersion))
                 {
-                    var updateVersion = ParseVersionString(update.Version);
-                    if (!CheckWebVersion(update.Version) && IsNewerVersion(projectVersion, updateVersion))
+                    foreach (var releaseNote in update.ReleaseNotes)
                     {
-                        foreach (var releaseNote in update.ReleaseNotes)
+                        if (releaseNote.NoteType == ReleaseNoteType.BreakingChange)
                         {
-                            if (releaseNote.NoteType == ReleaseNoteType.BreakingChange)
-                            {
-                                return true;
-                            }
+                            return true;
                         }
                     }
                 }
