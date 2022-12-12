@@ -25,6 +25,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override async Task<RequestResult<Unit>> SaveDataAsync(PutCompositeTokenCommand request,
             CancellationToken cancellationToken)
         {
+            if (request.CompositeToken.Tokens.Count() == 1)
+            {
+                return new RequestResult<Unit>
+                (
+                    success: false,
+                    message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request contains a single token"
+                );
+            }
+
             var existingTokenComposite = ProjectDbContext.TokenComposites
                 .Include(tc => tc.Tokens)
                 .Where(tc => tc.Id == request.CompositeToken.TokenId.Id)

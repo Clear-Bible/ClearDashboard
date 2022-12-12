@@ -1414,7 +1414,6 @@ namespace ClearDashboard.WebApiParatextPlugin
             return verses;
 
         }
-
         public bool CheckUsfmBookForVerseData(string paratextProjectId, string bookCode)
         {
             // get all the projects & resources

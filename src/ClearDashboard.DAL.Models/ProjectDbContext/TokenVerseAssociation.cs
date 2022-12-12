@@ -12,4 +12,6 @@ public class TokenVerseAssociation : SynchronizableTimestampedEntity
     [ForeignKey(nameof(VerseId))]
     public Guid VerseId { get; set; }
     public Verse? Verse { get; set; }
+
+    public DateTimeOffset? Deleted { get; set; }
 }

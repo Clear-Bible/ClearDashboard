@@ -1,4 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
@@ -23,6 +24,43 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation));
             }
 
+        }
+
+        public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, CancellationToken token = default)
+        {
+            try
+            {
+                _ = textCorpus.Cast<TokensTextRow>();
+            }
+            catch (InvalidCastException)
+            {
+                throw new InvalidTypeEngineException(message: $"Corpus must be tokenized and transformed into TokensTextRows, e.g. corpus.Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+            }
+
+            var result = await mediator.Send(
+                new GetBookIdsByTokenizedCorpusIdQuery(TokenizedTextCorpusId), 
+                token);
+            result.ThrowIfCanceledOrFailed();
+
+            var updateOrAddResult = await mediator.Send(
+                new UpdateOrAddVersesInTokenizedCorpusCommand(TokenizedTextCorpusId, textCorpus, result.Data.bookIds), 
+                token);
+            updateOrAddResult.ThrowIfCanceledOrFailed();
+
+            foreach (var bookAbbreviation in updateOrAddResult.Data!)
+            {
+                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation));
+            }
+        }
+
+        public async void DeleteVerses(IMediator mediator, IEnumerable<VerseRef> verseRefs)
+        {
+            await Task.FromException(new NotImplementedException());
+        }
+
+        public async void Delete(IMediator mediator, IEnumerable<string>? books = null)
+        {
+            await Task.FromException(new NotImplementedException());
         }
 
         public async void Update()

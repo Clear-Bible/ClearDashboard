@@ -15,7 +15,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
     public class AlignmentAddingRemovingEvent : INotification
     {
         public IEnumerable<Models.Alignment> AlignmentsRemoving { get; }
-        public Models.Alignment AlignmentAdding { get; }
+        public Models.Alignment? AlignmentAdding { get; }
         public ProjectDbContext ProjectDbContext { get; }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
         /// <param name="alignmentsRemoving"></param>
         /// <param name="alignmentAdding"></param>
         /// <param name="projectDbContext"></param>
-        public AlignmentAddingRemovingEvent(IEnumerable<Models.Alignment> alignmentsRemoving, Models.Alignment alignmentAdding, ProjectDbContext projectDbContext)
+        public AlignmentAddingRemovingEvent(IEnumerable<Models.Alignment> alignmentsRemoving, Models.Alignment? alignmentAdding, ProjectDbContext projectDbContext)
         {
             AlignmentsRemoving = alignmentsRemoving;
             AlignmentAdding = alignmentAdding;
