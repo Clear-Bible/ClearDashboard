@@ -276,10 +276,6 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Translation>().HasIndex(e => e.SourceTokenComponentId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.SourceTokenComponentId);
-
-            modelBuilder.Entity<LexicalItem>()
-                .HasIndex(p => new { p.TrainingText, p.Language })
-                .IsUnique();
         }
 
         //public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()

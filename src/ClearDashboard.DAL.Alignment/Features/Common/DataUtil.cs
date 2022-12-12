@@ -2,7 +2,6 @@
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.Interfaces;

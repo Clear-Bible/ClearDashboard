@@ -19,8 +19,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         RequestResult<IEnumerable<Alignment.Translation.Translation>>,
         IEnumerable<Alignment.Translation.Translation>>
     {
-        protected LexiconDbContext? LexiconDbContext { get; set; } = null;
-
         public GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
@@ -169,50 +167,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             // 2.  Try Lexicon
-            if (tokenGuidsNotFound.Any() && LexiconDbContext is not null && LexiconDbContext.LexicalItems.Any())
-            {
-#if DEBUG
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Add lexicon translations (start)");
-#endif
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-                var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
-                    .Include(tc => ((TokenComposite)tc).Tokens)
-                    .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
-                    .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
-                    .Where(tc => tc.TrainingText != null)
-                    .ToList()
-                    .GroupBy(tc => tc.TrainingText!)
-                    .ToDictionary(g => g.Key, g => g.Select(i => i));
-
-                cancellationToken.ThrowIfCancellationRequested();
-
-                combined.AddRange(LexiconDbContext.LexicalItems
-                    .Include(li => li.LexicalItemDefinitions
-                        .Where(lid => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(lid.Language) || lid.Language == targetLanguage))
-                    .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
-                    .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.TrainingText))
-                    .ToList()
-                    .SelectMany(li => sourceTokenTrainingTexts[li.TrainingText!]
-                        .Select(t => new Alignment.Translation.Translation(
-                            ModelHelper.BuildToken(t),
-                            string.Join("/", li.LexicalItemDefinitions.Select(lid => lid.TrainingText)),
-                            "FromLexicon")
-                        )
-                    ));
-
-                tokenGuidsNotFound = tokenGuidsNotFound
-                    .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid))
-                    .ToList();
-
-#if DEBUG
-                sw.Stop();
-                Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from Lexicon '{translationSet.DisplayName}' (end)");
-#endif
-            }
+            // [Lexicon code goes here!]
 
             // 3.  For any leftovers, try the Alignments:
             if (tokenGuidsNotFound.Any())
