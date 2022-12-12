@@ -203,5 +203,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var row = GetMockVerseTextRow(BBBCCCVVV);
             //await BindAsync(row);
         }
+
+        public MockVerseDisplayViewModel() : base(null, null, null)
+        {
+            
+        }
     }
 }
