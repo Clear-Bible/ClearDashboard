@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Validators;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -14,7 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
-    public class ParatextCorpusStepViewModel: DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, ParatextCorpusStepViewModel>
+    public class ParatextCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, ParatextCorpusStepViewModel>
     {
         #region Member Variables   
 
@@ -76,7 +77,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         public ParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ParatextCorpusStepViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParatextCorpusStepViewModel> validator)
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, 
+            IValidator<ParatextCorpusStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             DialogMode = dialogMode;

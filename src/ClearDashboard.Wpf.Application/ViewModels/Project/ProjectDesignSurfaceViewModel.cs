@@ -658,8 +658,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 //    var translationSet = dialogViewModel!.TranslationSet;
 
 
-                //    newParallelCorpusConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
-                //    newParallelCorpusConnection.ParallelCorpusDisplayName =
+                //    newParallelorpusConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
+                //    newParallelCCorpusConnection.ParallelCorpusDisplayName =
                 //        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
 
                 //    topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);

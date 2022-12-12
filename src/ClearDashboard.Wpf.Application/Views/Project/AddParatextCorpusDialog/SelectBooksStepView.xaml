@@ -859,13 +859,13 @@
                     Width="80"
                     Margin="55,0,0,0"
                     Command="{Binding NavigateBack}"
-                    Content="BACK"
+                    Content="CANCEL"
                     FontSize="12" />
                 <Button
                     Width="90"
                     Margin="15,0,0,0"
                     Command="{Binding NavigateForward}"
-                    Content="CONTINUE"
+                    Content="OK"
                     FontSize="12"
                     IsEnabled="{Binding ContinueEnabled}" />
             </StackPanel>
