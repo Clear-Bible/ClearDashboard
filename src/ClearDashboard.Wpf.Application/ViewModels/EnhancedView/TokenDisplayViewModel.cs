@@ -26,10 +26,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </remarks>
         public bool IsSource { get; set; } = true;
 
+        private CompositeToken? _compositeToken;
         /// <summary>
         /// Gets or sets the parent <see cref="CompositeToken"/> of this token, if any.
         /// </summary>
-        public CompositeToken? CompositeToken { get; set; }
+        public CompositeToken? CompositeToken
+        {
+            get => _compositeToken;
+            set
+            {
+                if (Set(ref _compositeToken, value))
+                {
+                    NotifyOfPropertyChange(nameof(IsCompositeToken));
+                    NotifyOfPropertyChange(nameof(CompositeIndicatorColor));
+                }
+            }
+        }
 
         /// <summary>
         /// Gets whether this is token is part of a composite token.
@@ -39,7 +51,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> to use when displaying a composite token indicator.
         /// </summary>
-        public Brush CompositeIndicatorColor { get; set; } = Brushes.Transparent;
+        public Brush CompositeIndicatorColor => CompositeTokenColors.Get(CompositeToken);
 
         /// <summary>
         /// Padding to be rendered before the token, as determined by a <see cref="EngineStringDetokenizer"/>.
