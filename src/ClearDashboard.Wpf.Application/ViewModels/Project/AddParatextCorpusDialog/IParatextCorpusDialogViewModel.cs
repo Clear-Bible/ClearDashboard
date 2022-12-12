@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -12,6 +13,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
 
         List<IWorkflowStepViewModel>? Steps { get; }
+        ParatextProjectMetadata SelectedProject { get; set; }
 
 
         void Ok();

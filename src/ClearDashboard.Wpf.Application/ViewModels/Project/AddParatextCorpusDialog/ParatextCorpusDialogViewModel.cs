@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
@@ -16,10 +9,16 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -36,10 +35,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         private readonly ILogger<ParatextCorpusDialogViewModel>? _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly ILifetimeScope _lifetimeScope;
-        private CorpusSourceType _corpusSourceType;
-        private List<ParatextProjectMetadata>? _projects;
-        private ParatextProjectMetadata? _selectedProject;
-
+        
         private string? _corpusNameToSelect;
 
         #endregion //Member Variables
@@ -72,19 +68,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             }
         }
 
-
+        
+        private CorpusSourceType _corpusSourceType;
         public CorpusSourceType CorpusSourceType
         {
             get => _corpusSourceType;
             set => Set(ref _corpusSourceType, value);
         }
 
+        
+        private List<ParatextProjectMetadata>? _projects;
         public List<ParatextProjectMetadata>? Projects
         {
             get => _projects;
             set => Set(ref _projects, value);
         }
 
+        
         private Tokenizers _selectedTokenizer = Tokenizers.LatinWordTokenizer;
         public Tokenizers SelectedTokenizer
         {
@@ -92,6 +92,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             set => Set(ref _selectedTokenizer, value);
         }
 
+        
+        private ParatextProjectMetadata? _selectedProject;
         public ParatextProjectMetadata? SelectedProject
         {
             get => _selectedProject;
@@ -112,9 +114,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 NotifyOfPropertyChange(() => UsfmErrors);
             }
         }
-
-
-
 
         private bool _canOk;
         public bool CanOk

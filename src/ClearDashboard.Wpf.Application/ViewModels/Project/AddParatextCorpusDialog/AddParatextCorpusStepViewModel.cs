@@ -249,10 +249,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         public async void Ok()
         {
-            await TryCloseAsync(true);
+
+            ParentViewModel.SelectedProject = SelectedProject;
+            await MoveForwards();
         }
 
-        
+
         public async void Cancel()
         {
             await TryCloseAsync(false);
