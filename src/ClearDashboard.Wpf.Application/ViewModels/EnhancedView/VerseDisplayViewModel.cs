@@ -37,6 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private IEventAggregator? EventAggregator { get; }
         private ILogger<VerseDisplayViewModel>? Logger { get; }
 
+        protected TokenMap SourceTokenMap { get; set; }
         protected TokenCollection? SourceTokens { get; set; }
         protected EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
         public bool IsSourceRtl { get; set; }
@@ -96,9 +97,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task BuildTokenDisplayViewModelsAsync()
         {
-            SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens!, SourceDetokenizer, IsSourceRtl, true);
-            NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
-            
+            if (SourceTokenMap != null)
+            {
+                SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokenMap.PaddedTokens, IsSourceRtl, true);
+                NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+            }
+
+            if (SourceTokens != null)
+            {
+                SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens!, SourceDetokenizer, IsSourceRtl, true);
+                NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+            }
+
             if (TargetTokens != null)
             {
                 TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer!, IsTargetRtl, false);
@@ -108,9 +118,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
         {
+            return await BuildTokenDisplayViewModelsAsync(new PaddedTokenCollection(GetPaddedTokens(tokens, detokenizer)), isRtl, isSource);
+        }        
+        
+        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(PaddedTokenCollection paddedTokens, bool isRtl, bool isSource)
+        {
             var result = new TokenDisplayViewModelCollection();
             
-            var paddedTokens = GetPaddedTokens(tokens, detokenizer);
             foreach (var paddedToken in paddedTokens)
             {
                 result.Add(new TokenDisplayViewModel(paddedToken.token)

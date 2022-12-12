@@ -9,26 +9,17 @@ using ClearDashboard.Wpf.Application.Collections;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public class CorpusDisplayViewModel : VerseDisplayViewModel
+    internal class CorpusDisplayViewModel : VerseDisplayViewModel
     {
-        private readonly TokensTextRow _textRow;
-
-        public override Task InitializeAsync()
-        {
-            SourceTokens = new TokenCollection(_textRow.Tokens.GetPositionalSortedBaseTokens());
-            return base.InitializeAsync();
-        }
-
         public CorpusDisplayViewModel(TokensTextRow textRow,
-                                      EngineStringDetokenizer sourceDetokenizer,
+                                      EngineStringDetokenizer detokenizer,
                                       bool isRtl,
                                       NoteManager noteManager, 
                                       IEventAggregator eventAggregator, 
                                       ILogger<VerseDisplayViewModel>? logger)
             : base(noteManager, eventAggregator, logger)
         {
-            _textRow = textRow;
-            SourceDetokenizer = sourceDetokenizer;
+            SourceTokenMap = new TokenMap(textRow.Tokens, detokenizer);
             IsSourceRtl = isRtl;
         }
     }

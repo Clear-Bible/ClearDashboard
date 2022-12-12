@@ -841,7 +841,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 var verseDisplayViewModel = LifetimeScope!.Resolve<CorpusDisplayViewModel>(
                     new NamedParameter("textRow", textRow),
-                    new NamedParameter("sourceDetokenizer", detokenizer),
+                    new NamedParameter("detokenizer", detokenizer),
                     new NamedParameter("isRtl", isRtl)
                     );
                 await verseDisplayViewModel.InitializeAsync();
