@@ -159,6 +159,7 @@
 					}
 
 					.v,
+          .vh,
 					.verse,
 					.vp,
 					sup[class^="v"] {
@@ -611,7 +612,7 @@
                   .s3,
                   .s4 {
                   text-align: center;
-                  color: #ffcc99;
+                  color: #db7d1f;
                   font-size: 18px;
                   font-weight: bold;
                   font-style: italic;
@@ -660,12 +661,12 @@
 
                   .scr {
                   color: #7d0606;
-                  font-weight: bold; 
+                  font-weight: bold;
                   font-style: normal;}
 
                   .ver {
                   font-family: "Courier";
-                  font-weight: bold; 
+                  font-weight: bold;
                   font-style: normal;}
 
                   .v {
@@ -675,15 +676,19 @@
                   font-size:6px;
                   font-style: normal;}
 
+                  .vh {
+                  background-color:#ffaaff;
+                  }
+
                   .res {
-                  font-weight: bold; 
+                  font-weight: bold;
                   font-style: normal;}
 
-                  .teu { 
+                  .teu {
                   font-style: normal;
                   text-decoration: underline;}
 
-                  .tec { 
+                  .tec {
                   font-weight: bold;
                   font-style: normal;}
 
@@ -749,6 +754,21 @@
 
 		    <xsl:value-of select="@number" />
 	    </sup>
+    </xsl:template>
+
+    <xsl:template match="verse[@style='vh']">
+      <sup class="vh">
+        <xsl:attribute name="id">
+          <!--put your logic in variable-->
+          <xsl:variable name="str">
+            <xsl:value-of select="@sid" />
+          </xsl:variable>
+          <!--normalize space will prevent spaces from left and right of string, then all spaces inside will be replaced by '-' -->
+          <xsl:value-of select="translate(normalize-space($str), ' ', '-')"/>
+        </xsl:attribute>
+
+        <xsl:value-of select="@number" />
+      </sup>
     </xsl:template>
 
     <xsl:template match="book">

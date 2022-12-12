@@ -453,14 +453,35 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         {
                                             endMarkerFound = false;
 
-                                            if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
-                                            {
-                                                startMarkerFound = true;
-                                            }
-                                            else if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                            if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                             {
                                                 startMarkerFound = false;
                                                 endMarkerFound = true;
+
+                                                
+                                                try
+                                                {
+                                                    
+                                                    if (node.ChildNodes != null)
+                                                    {
+                                                        foreach (XmlNode child in node.ChildNodes)
+                                                        {
+                                                            if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                            {
+                                                                child.Attributes["style"].Value="vh";
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    var two = 1 + 1;
+                                                }
+                                               
+                                            }
+                                            else if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                                            {
+                                                startMarkerFound = true;
                                             }
                                             else if(node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") || 
                                                     node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
