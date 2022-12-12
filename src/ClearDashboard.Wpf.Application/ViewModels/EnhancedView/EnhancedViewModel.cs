@@ -32,7 +32,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -47,6 +46,8 @@ using FontFamily = System.Windows.Media.FontFamily;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
+using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -765,7 +766,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     foreach (var textRow in tokensTextRowsRange)
                     {
-                        verses.Add(await CreateCorpusViewModel(textRow, currentTokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, message.IsRTL.Value));
+                        verses.Add(await CreateCorpusViewModelAsync(textRow, currentTokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, message.IsRTL.Value));
                     }
 
                     //if (verses.Any())
@@ -835,7 +836,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }, cancellationToken);
         }
 
-        private async Task<VerseDisplayViewModel> CreateCorpusViewModel(TokensTextRow textRow, EngineStringDetokenizer detokenizer, bool isRtl)
+        private async Task<VerseDisplayViewModel> CreateCorpusViewModelAsync(TokensTextRow textRow, EngineStringDetokenizer detokenizer, bool isRtl)
         {
             try
             {
@@ -849,7 +850,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             catch (Exception ex)
             {
-                Logger?.LogCritical($"Could not create CorpusViewModel: {ex.Message}");
+                Logger?.LogCritical($"Could not create CorpusDisplayViewModel: {ex.Message}");
+                throw;
+            }
+        }        
+        
+        private async Task<VerseDisplayViewModel> CreateInterlinearViewModelAsync(EngineParallelTextRow parallelTextRow, EngineStringDetokenizer detokenizer, bool isRtl, TranslationSet translationSet)
+        {
+            try
+            {
+                var verseDisplayViewModel = LifetimeScope!.Resolve<InterlinearDisplayViewModel>(
+                    new NamedParameter("parallelTextRow", parallelTextRow),
+                    new NamedParameter("sourceDetokenizer", detokenizer),
+                    new NamedParameter("isSourceRtl", isRtl),
+                    new NamedParameter("translationSet", translationSet)
+                    );
+                await verseDisplayViewModel.InitializeAsync();
+                return verseDisplayViewModel;
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogCritical($"Could not create InterlinearDisplayViewModel: {ex.Message}");
+                throw;
+            }
+        }
+
+        private async Task<VerseDisplayViewModel> CreateAlignmentViewModelAsync(EngineParallelTextRow parallelTextRow, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl, AlignmentSet alignmentSet)
+        {
+            try
+            {
+                var verseDisplayViewModel = LifetimeScope!.Resolve<AlignmentDisplayViewModel>(
+                    new NamedParameter("parallelTextRow", parallelTextRow),
+                    new NamedParameter("sourceDetokenizer", sourceDetokenizer),
+                    new NamedParameter("isSourceRtl", isSourceRtl),
+                    new NamedParameter("targetDetokenizer", targetDetokenizer),
+                    new NamedParameter("isTargetRtl", isTargetRtl),
+                    new NamedParameter("alignmentSet", alignmentSet)
+                    );
+                await verseDisplayViewModel.InitializeAsync();
+                return verseDisplayViewModel;
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogCritical($"Could not create AlignmentDisplayViewModel: {ex.Message}");
                 throw;
             }
         }
@@ -862,24 +905,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             ProgressBarVisibility = Visibility.Collapsed;
         }
 
-        public async Task<DAL.Alignment.Translation.TranslationSet> GetTranslationSet(string translationSetId)
+        public async Task<TranslationSet> GetTranslationSet(string translationSetId)
         {
-            return await DAL.Alignment.Translation.TranslationSet.Get(new TranslationSetId(Guid.Parse(translationSetId)), Mediator);
+            return await TranslationSet.Get(new TranslationSetId(Guid.Parse(translationSetId)), Mediator);
         }
-        public static async Task<DAL.Alignment.Translation.AlignmentSet> GetAlignmentSet(string alignmentSetId, IMediator mediator)
+        public static async Task<AlignmentSet> GetAlignmentSet(string alignmentSetId, IMediator mediator)
         {
             return await DAL.Alignment.Translation.AlignmentSet.Get(new AlignmentSetId(Guid.Parse(alignmentSetId)), mediator);
-        }
-        private IEnumerable<(EngineToken token, string paddingBefore, string paddingAfter)>? GetTokens(List<TokensTextRow> corpus, int bbbcccvvv)
-        {
-            var textRow = corpus.FirstOrDefault(row => ((VerseRef)row.Ref).BBBCCCVVV == bbbcccvvv);
-            if (textRow != null)
-            {
-                var detokenizer = new EngineStringDetokenizer(new LatinWordDetokenizer());
-                return detokenizer.Detokenize(textRow.Tokens);
-            }
-
-            return null;
         }
 
         private void UpdateVersesDisplay(ShowTokenizationWindowMessage message, ObservableCollection<VerseDisplayViewModel> verses, string title, bool showTranslations)
@@ -1081,40 +1113,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
             else
             {
-                //NotesDictionary = await Note.GetAllDomainEntityIdNotes(Mediator ?? throw new InvalidDataEngineException(name: "Mediator", value: "null"));
                 foreach (var row in rows)
                 {
-                    var verseDisplayViewModel = _serviceProvider!.GetService<VerseDisplayViewModel>();
                     if (message.AlignmentSetId != null)
-
-                        // ALIGNMENTS
-                        await verseDisplayViewModel!.ShowAlignmentsAsync(
-                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
-                            await GetAlignmentSet(message.AlignmentSetId!, Mediator!),
-                            //FIXME:surface serialization message.SourceDetokenizer, 
-                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            message.IsRTL,
-                            //FIXME:surface serialization message.TargetDetokenizer ?? throw new InvalidParameterEngineException(name: "message.TargetDetokenizer", value: "null", message: "message.TargetDetokenizer must not be null when message.AlignmentSetId is not null."),
-                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            message.IsTargetRTL ?? throw new InvalidDataEngineException(name: "IsTargetRTL", value: "null"));
+                    {
+                        versesOut.Add(await CreateAlignmentViewModelAsync(row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
+                                                            Detokenizer,
+                                                                 message.IsRTL,
+                                                                          TargetDetokenizer,
+                                                                          message.IsTargetRTL ?? false,
+                                                                          await GetAlignmentSet(message.AlignmentSetId!, Mediator!)));
+                    }
                     else
-
-                        // INTERLINEARS
-                        await verseDisplayViewModel!.ShowTranslationAsync(
-                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
-                            await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null")),
-                            //FIXME:surface serialization message.SourceDetokenizer, 
-                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            message.IsRTL);
-                    versesOut.Add(verseDisplayViewModel);
+                    {
+                        versesOut.Add(await CreateInterlinearViewModelAsync(row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
+                                                                            Detokenizer,
+                                                                            message.IsRTL,
+                                                                            await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null"))));
+                    }
                 }
-
-                //if (versesOut.Any())
-                //{
-                //    // Label suggestions are the same for each VerseDisplayViewModel
-                //    LabelSuggestions = versesOut.First().LabelSuggestions;
-                //}
-
 
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
                 if (message.AlignmentSetId != null)
