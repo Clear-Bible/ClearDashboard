@@ -69,15 +69,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             var fullUpdateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();
 
-            var isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);
-
-            if (isNewer)
+            if (fullUpdateDataList != null)
             {
-                ShowUpdateLink = Visibility.Visible;
-                UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
+                var isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);
 
-                Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
-                //UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(fullUpdateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
+                if (isNewer)
+                {
+                    ShowUpdateLink = Visibility.Visible;
+                    UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
+
+                    Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
+                    //UpdateNotes = await ReleaseNotesManager.GetUpdateNotes(fullUpdateDataList);//could replace with ReleaseManager.UpdateNotes to speed up
+                }
             }
         }
 
