@@ -137,7 +137,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             var command = connection.CreateCommand();
             var columns = new string[] { "Id", "BookChapterVerse", "OriginalText", "TokenizedCorpusId", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "UserId", "Created" };
 
-            DataUtil.ApplyColumnsToCommand(command, typeof(Models.VerseRow), columns);
+            DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.VerseRow), columns);
 
             command.Prepare();
 
@@ -167,7 +167,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             var command = connection.CreateCommand();
             var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "TokenCompositeId" };
 
-            DataUtil.ApplyColumnsToCommand(command, typeof(Models.TokenComponent), columns);
+            DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenComponent), columns);
 
             command.Prepare();
 
@@ -240,7 +240,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             var command = connection.CreateCommand();
             var columns = new string[] { "Id", "CorpusId", "DisplayName", "TokenizationFunction", "ScrVersType", "CustomVersData", "Metadata", "UserId", "Created" };
 
-            DataUtil.ApplyColumnsToCommand(command, typeof(Models.TokenizedCorpus), columns);
+            DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenizedCorpus), columns);
 
             command.Prepare();
 
@@ -260,6 +260,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             command.Parameters["@Metadata"].Value = JsonSerializer.Serialize(tokenizedCorpus.Metadata);
             command.Parameters["@UserId"].Value = Guid.Empty != tokenizedCorpus.UserId ? tokenizedCorpus.UserId : userProvider!.CurrentUser!.Id;
             command.Parameters["@Created"].Value = converter.ConvertToProvider(tokenizedCorpus.Created);
+
+            _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
+
+        public static DbCommand CreateTokenCompositeIdUpdateCommand(DbConnection connection)
+        {
+            var command = connection.CreateCommand();
+            var columns = new string[] { "TokenCompositeId" };
+            var whereColumns = new string[] { "Id" };
+
+            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.TokenComponent), columns, whereColumns);
+
+            command.Prepare();
+
+            return command;
+        }
+
+        public static async Task SetTokenCompositeIdAsync(Guid? tokenCompositeId, Guid tokenComponentId, DbCommand command, CancellationToken cancellationToken)
+        {
+            command.Parameters["@TokenCompositeId"].Value = (tokenCompositeId is null) ? DBNull.Value : tokenCompositeId;
+            command.Parameters["@Id"].Value = tokenComponentId;
 
             _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }

@@ -4,11 +4,10 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.EventsAndDelegates;
 using System.Diagnostics;
-using System.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -180,6 +179,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
+                    .Include(tc => ((TokenComposite)tc).Tokens)
                     .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                     .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
                     .Where(tc => tc.TrainingText != null)
@@ -227,6 +227,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     cancellationToken.ThrowIfCancellationRequested();
 
                     var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
+                        .Include(tc => ((TokenComposite)tc).Tokens)
                         .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                         .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
                         .Where(tc => tc.TrainingText != null)

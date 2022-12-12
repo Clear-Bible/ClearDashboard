@@ -26,7 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
         }
 
-        public async void UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, CancellationToken token = default)
+        public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, CancellationToken token = default)
         {
             try
             {

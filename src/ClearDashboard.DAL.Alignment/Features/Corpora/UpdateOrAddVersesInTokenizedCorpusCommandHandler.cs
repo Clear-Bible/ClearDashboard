@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Data.Common;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -82,6 +83,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     var utcNow = DateTimeOffset.UtcNow;
                     var deletedDateTime = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond)); // Remove any fractions of a millisecond
 
+                    using var tokenSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenComponent));
+                    using var transSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Translation));
+                    using var alignSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Alignment));
+                    using var tvaSD   = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenVerseAssociation));
+                    using var tcIdUpdate = TokenizedCorpusDataUtil.CreateTokenCompositeIdUpdateCommand(connection);
+
+                    async Task del(Guid id, DbCommand cmd) => await DataUtil.SoftDeleteByIdAsync(deletedDateTime, id, cmd, cancellationToken);
+                    async Task tokenCompositeIdNull(Guid id) => await TokenizedCorpusDataUtil.SetTokenCompositeIdAsync(null, id, tcIdUpdate, cancellationToken);
+
                     foreach (var bookId in bookIdsToUpdate)
                     {
                         var bookNumberAsPaddedString = $"{ModelHelper.GetBookNumberForSILAbbreviation(bookId):000}";
@@ -112,17 +122,36 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         .Where(tc => tc.Deleted == null)
                                         .Where(tc => tc.VerseRowId == verseRowDb.Id);
 
+                                    var referencedTokenCompositeIds = new List<Guid>();
                                     foreach (var tc in tokensToSoftDelete)
                                     {
-                                        tc.Deleted = deletedDateTime;
-                                        foreach (var e in tc.TokenVerseAssociations) { e.Deleted = deletedDateTime; }
-                                        foreach (var e in tc.Translations) { e.Deleted = deletedDateTime; }
-                                        foreach (var e in tc.SourceAlignments) { e.Deleted = deletedDateTime; }
-                                        foreach (var e in tc.TargetAlignments) { e.Deleted = deletedDateTime; }
+                                        await del(tc.Id, tokenSD); ;
+                                        foreach (var e in tc.TokenVerseAssociations) { await del(e.Id, tvaSD); }
+                                        foreach (var e in tc.Translations) { await del(e.Id, transSD); }
+                                        foreach (var e in tc.SourceAlignments) { await del(e.Id, alignSD); }
+                                        foreach (var e in tc.TargetAlignments) { await del(e.Id, alignSD); }
 
                                         alignmentsRemoving.AddRange(tc.SourceAlignments);
                                         alignmentsRemoving.AddRange(tc.TargetAlignments);
+
+                                        if (tc.GetType() == typeof(Models.Token) && ((Models.Token)tc).TokenCompositeId is not null)
+                                        {
+                                            referencedTokenCompositeIds.Add((Guid)((Models.Token)tc).TokenCompositeId!);
+                                        }
                                     }
+
+                                    // TokenComposites that were referenced by the TokenComponents soft deleted above,
+                                    // but themselves weren't soft deleted (because they weren't associated with the
+                                    // VerseRowId...i.e. they were ParallelCorpusId TokenComposites:
+                                    ProjectDbContext.TokenComposites
+                                        .Include(tc => tc.Tokens)
+                                        .Where(tc => tc.Deleted == null)
+                                        .Where(tc => referencedTokenCompositeIds.Contains(tc.Id))
+                                        .ToList()
+                                        .ForEach(async e => {
+                                            e.Tokens.Where(t => t.Deleted == null).ToList().ForEach(async et => await tokenCompositeIdNull(et.Id));
+                                            await del(e.Id, tokenSD);
+                                        });
 
                                     // add the new Tokens
                                     await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);

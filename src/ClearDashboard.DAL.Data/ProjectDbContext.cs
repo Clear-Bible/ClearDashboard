@@ -245,6 +245,8 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<Token>().ToTable("TokenComponent");
             modelBuilder.Entity<TokenComposite>().ToTable("TokenComponent");
+            //modelBuilder.Entity<TokenComposite>().Navigation(e => e.Tokens).AutoInclude();
+
 
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 

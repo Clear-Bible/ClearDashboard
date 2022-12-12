@@ -15,6 +15,10 @@ using System.Text;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearBible.Engine.Persistence;
+using System.Collections;
+using ClearDashboard.DAL.Alignment.Translation;
+using SIL.Machine.Translation;
+using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -507,6 +511,139 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handler")]
+    public async void TokenizedCorpus__PartialImports()
+    {
+        try
+        {
+            var initialBookIds = new List<string>() { "EZR", "LUK", "GEN" };
+
+            // Create the corpus in the database:
+            var textCorpus = new TextCorpusDecorator(TestDataHelpers.GetManuscript(), initialBookIds);
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", "func", default);
+
+            Assert.NotNull(tokenizedTextCorpus);
+            Assert.All(tokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
+
+            var bookIds = tokenizedTextCorpus.Texts.Select(t => t.Id).ToList();
+            Assert.Equal(initialBookIds.Count, bookIds.Count);
+            Assert.Equal(initialBookIds.Count, bookIds.Intersect(initialBookIds).Count());
+
+            var targetTextCorpus = new TextCorpusDecorator(TestDataHelpers.GetZZSurCorpus(), initialBookIds);
+            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "Standard", Guid.NewGuid().ToString());
+            var targetTokenizedTextCorpus = await targetTextCorpus.Create(Mediator!, targetCorpus.CorpusId, "Unit Test", "func", default);
+
+            var engineParallelTextCorpus = tokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+            var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
+
+            var translationCommandable = new TranslationCommands();
+            using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
+                SmtModelType.FastAlign,
+                engineParallelTextCorpus,
+                null,
+                SymmetrizationHeuristic.GrowDiagFinalAnd);
+            var alignmentModel = translationCommandable.PredictAllAlignedTokenIdPairs(smtWordAlignmentModel, engineParallelTextCorpus).ToList();
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(),
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+
+            var sourceTokens = ProjectDbContext.Tokens.Include(t => t.VerseRow)
+                .Where(t => t.VerseRow.BookChapterVerse == "001001001")
+                .Where(t => t.TokenizedCorpusId == tokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Take(3)
+                .Select(t => ModelHelper.BuildToken(t)).ToArray();
+            var targetTokens = ProjectDbContext.Tokens.Include(t => t.VerseRow)
+                .Where(t => t.VerseRow.BookChapterVerse == "001001001")
+                .Where(t => t.TokenizedCorpusId == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Take(3)
+                .Select(t => ModelHelper.BuildToken(t)).ToArray();
+            var sourceVerses = ProjectDbContext.Verses.Include(v => v.VerseMapping)
+                .Where(v => v.BookNumber == 1 && v.ChapterNumber == 1)
+                .Where(v => v.VerseMapping.ParallelCorpusId == parallelCorpus.ParallelCorpusId.Id)
+                .Where(v => v.CorpusId == corpus.CorpusId.Id);
+            var targetVerses = ProjectDbContext.Verses.Include(v => v.VerseMapping)
+                .Where(v => v.BookNumber == 1 && v.ChapterNumber == 1)
+                .Where(v => v.VerseMapping.ParallelCorpusId == parallelCorpus.ParallelCorpusId.Id)
+                .Where(v => v.CorpusId == targetCorpus.CorpusId.Id);
+            var verseMapping1And3 = ProjectDbContext.VerseMappings
+                .Include(vm => vm.Verses)
+                .Where(vm => vm.ParallelCorpusId == parallelCorpus.ParallelCorpusId.Id)
+                .Where(vm => vm.Verses.Any(v => v.BookNumber == 1 && v.ChapterNumber == 1 && v.VerseNumber == 1))
+                .First();
+            verseMapping1And3.Verses.Add(sourceVerses.Where(v => v.VerseNumber == 3).First());
+            await ProjectDbContext.SaveChangesAsync();
+            var tokenFromVerse3 = ProjectDbContext.Tokens.Include(t => t.VerseRow)
+                .Where(t => t.VerseRow.BookChapterVerse == "001001003")
+                .Where(t => t.TokenizedCorpusId == tokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Select(t => ModelHelper.BuildToken(t))
+                .First();
+
+            // Add Translations and Alignments for tokens in VerseRow 001001001,
+            // so that they have to get soft deleted during UpdateOrAddVerses: 
+            await translationSet.PutTranslation(new Alignment.Translation.Translation(sourceTokens[0], "duh", "Assigned"), "PutNoPropagate");
+            await translationSet.PutTranslation(new Alignment.Translation.Translation(sourceTokens[1], "doh", "Assigned"), "PutNoPropagate");
+            alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(sourceTokens[1], targetTokens[0], 42), "Verified"));
+            alignmentSet.PutAlignment(new Alignment.Translation.Alignment(new AlignedTokenPairs(sourceTokens[2], targetTokens[1], 1), "Verified"));
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, new CompositeToken(new List<Token>() { sourceTokens[0], sourceTokens[1] }), null);
+
+            // Composite using tokens from source Verse 1 and 3 (won't get soft deleted by VerseRow)
+            // to make sure UpdateOrAddVerses deletes it (since it is connected to one of the VerseRow's
+            // tokens:
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, new CompositeToken(new List<Token>() { sourceTokens[2], tokenFromVerse3 }), parallelCorpus.ParallelCorpusId);
+
+            // TokenVerseAssociation connected to one of the VerseRow's source tokens:
+            ProjectDbContext.Add(new Models.TokenVerseAssociation() 
+            { 
+                Id = Guid.NewGuid(), 
+                TokenComponentId = sourceTokens[1].TokenId.Id, 
+                VerseId = sourceVerses.Where(v => v.VerseNumber == 1).First().Id 
+            });
+            await ProjectDbContext.SaveChangesAsync();
+
+            var updateBookIds = new List<string>() { "GEN", "MRK", "ROM" };
+            textCorpus.AddToBookIdFilter(updateBookIds);
+            textCorpus.AddOriginalTextAlteration("GEN", 1, 1, "bubba was here");
+            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus);
+
+            var updatedBookIds = tokenizedTextCorpus.Texts.Select(t => t.Id).ToList();
+            var combinedBookIds = initialBookIds.Union(updateBookIds);
+            Assert.Equal(combinedBookIds.Count(), updatedBookIds.Count);
+            Assert.Equal(combinedBookIds.Count(), updatedBookIds.Intersect(combinedBookIds).Count());
+
+            var verseRow1 = ProjectDbContext.VerseRows
+                .Include(t => t.TokenComponents)
+                    .ThenInclude(tc => tc.SourceAlignments)
+                .Include(t => t.TokenComponents)
+                    .ThenInclude(tc => tc.Translations)
+                .Include(t => t.TokenComponents)
+                    .ThenInclude(tc => tc.TokenVerseAssociations)
+                .Where(vr => vr.BookChapterVerse == "001001001")
+                .Where(vr => vr.TokenizedCorpusId == tokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .First();
+            var vr1TokenCount = verseRow1.Tokens.Count();
+            var vr1SourceAlignmentCount = verseRow1.Tokens.SelectMany(t => t.SourceAlignments).Count();
+            var vr1TranslationCount = verseRow1.Tokens.SelectMany(t => t.Translations).Count();
+            var vr1TvaCount = verseRow1.Tokens.SelectMany(t => t.TokenVerseAssociations).Count();
+
+            Assert.Equal(vr1TokenCount, ProjectDbContext.Tokens.Where(t => t.Deleted != null).Count());
+            Assert.Equal(vr1SourceAlignmentCount, ProjectDbContext.Alignments.Where(a => a.Deleted != null).Count());
+            Assert.Equal(vr1TranslationCount, ProjectDbContext.Translations.Where(t => t.Deleted != null).Count());
+            Assert.Equal(vr1TvaCount, ProjectDbContext.Set<Models.TokenVerseAssociation>().Where(a => a.Deleted != null).Count());
+            Assert.Equal(2, ProjectDbContext.Set<Models.TokenComposite>().Where(a => a.Deleted != null).Count());
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handler")]
     public async void TokenizedCorpus__InvalidCorpusId()
     {
         try
@@ -575,5 +712,98 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
         tr.Tokens = tokensWithComposite;
         return tr;
+    }
+
+    private class TextCorpusDecorator : ITextCorpus
+    {
+        private readonly ITextCorpus _innerTextCorpus;
+        private readonly HashSet<string> _bookIdFilter;
+        private readonly Dictionary<string, string> _originalTextAlterations;
+        private readonly HashSet<string> _bookIdsInOriginalTextAlterations;
+
+        public TextCorpusDecorator(ITextCorpus innerTextCorpus, IEnumerable<string> bookIdFilter)
+        {
+            _innerTextCorpus = innerTextCorpus;
+            _bookIdFilter = new (bookIdFilter);
+            _originalTextAlterations = new();
+            _bookIdsInOriginalTextAlterations = new();
+        }
+
+        public void AddToBookIdFilter(IEnumerable<string> bookIds)
+        {
+            _bookIdFilter.UnionWith(bookIds);
+        }
+
+        public void AddOriginalTextAlteration(string bookId, int chapterNumber, int verseNumber, string originalText)
+        {
+            var bookNumber = int.Parse(FileGetBookIds.BookIds
+                .Where(bi => bi.silCannonBookAbbrev == bookId)
+                .Select(bi => bi.silCannonBookNum).First());
+            
+            var bookChapterVerse = $"{bookNumber:000}{chapterNumber:000}{verseNumber:000}";
+
+            _originalTextAlterations.Add(bookChapterVerse, originalText);
+            _bookIdsInOriginalTextAlterations.Add(bookId);
+        }
+
+        public IEnumerable<TextRow> GetRows(IEnumerable<string> textIds = null)
+        {
+            if (_bookIdFilter.Any())
+            {
+                if (textIds is not null)
+                {
+                    textIds = textIds.Intersect(_bookIdFilter);
+                    if (!textIds.Any())
+                    {
+                        return Enumerable.Empty<TextRow>();
+                    }
+                }
+                else
+                {
+                    textIds = _bookIdFilter;
+                }
+            }
+
+            var rows = _innerTextCorpus.GetRows(textIds);
+
+            if (_bookIdsInOriginalTextAlterations.Any() && 
+                (textIds is null || _bookIdsInOriginalTextAlterations.Intersect(textIds).Any()))
+            {
+                rows = rows.ToList();
+                ((List<TextRow>)rows).ForEach(row =>
+                {
+                    var bookChapterVerse = $"{((VerseRef)row.Ref).BookNum:000}{((VerseRef)row.Ref).ChapterNum:000}{((VerseRef)row.Ref).VerseNum:000}";
+
+                    if (_originalTextAlterations.TryGetValue(bookChapterVerse, out var originalText))
+                    {
+                        row.OriginalText = originalText;
+                    }
+                });
+            }
+
+            return rows;
+        }
+
+        public IEnumerable<IText> Texts
+        {
+            get
+            {
+                if (_bookIdFilter.Any())
+                {
+                    return _innerTextCorpus.Texts.Where(tx => _bookIdFilter.Contains(tx.Id));
+                }
+                return _innerTextCorpus.Texts;
+            }
+        }
+
+        public IEnumerator<TextRow> GetEnumerator()
+        {
+            return _innerTextCorpus.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _innerTextCorpus.GetEnumerator();
+        }
     }
 }
