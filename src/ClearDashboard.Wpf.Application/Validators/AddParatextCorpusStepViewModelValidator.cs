@@ -10,25 +10,14 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
-    
 
-        public class ParatextCorpusStepViewModelValidator : AbstractValidator<ParatextCorpusStepViewModel>
+    public class AddParatextCorpusStepViewModelValidator : AbstractValidator<AddParatextCorpusStepViewModel>
+    {
+        public AddParatextCorpusStepViewModelValidator(ILogger<AddParatextCorpusStepViewModelValidator> logger)
         {
-            public ParatextCorpusStepViewModelValidator(ILogger<ParatextCorpusStepViewModelValidator> logger)
-            {
-                //RuleFor(x => x.SelectedProject).NotNull();
-            }
-
+            RuleFor(x => x.SelectedProject).NotNull();
         }
 
-
-        public class AddParatextCorpusStepViewModelValidator : AbstractValidator<AddParatextCorpusStepViewModel>
-        {
-            public AddParatextCorpusStepViewModelValidator(ILogger<AddParatextCorpusStepViewModelValidator> logger)
-            {
-                //RuleFor(x => x.SelectedProject).NotNull();
-            }
-
-        }
+    }
 
 }

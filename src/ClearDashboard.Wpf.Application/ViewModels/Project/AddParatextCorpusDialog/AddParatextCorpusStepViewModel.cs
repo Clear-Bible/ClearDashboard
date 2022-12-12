@@ -93,8 +93,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
                 CheckUsfm();
 
-                //ValidationResult = Validator?.Validate(this);
-                //CanOk = ValidationResult.IsValid;
+                ValidationResult = Validator?.Validate(this);
+                CanOk = ValidationResult.IsValid;
             }
         }
 

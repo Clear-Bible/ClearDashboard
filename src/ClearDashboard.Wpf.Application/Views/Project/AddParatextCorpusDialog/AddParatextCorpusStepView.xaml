@@ -318,14 +318,14 @@
                 Orientation="Horizontal">
                 <Button
                     x:Name="Ok"
-                    Content="{helpers:Localization Ok}"
+                    Content="Next"
                     Style="{StaticResource TransparentStyle}" />
 
-                <Button
+                <!--<Button
                     x:Name="Cancel"
                     Margin="5"
                     Content="{helpers:Localization Cancel}"
-                    Style="{StaticResource TransparentStyle}" />
+                    Style="{StaticResource TransparentStyle}" />-->
             </StackPanel>
         </Grid>
     </Border>

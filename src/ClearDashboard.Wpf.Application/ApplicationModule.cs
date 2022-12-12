@@ -83,12 +83,6 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterParatextDialogDependencies(this ContainerBuilder builder)
         {
-
-            //builder.RegisterType<ParatextCorpusStepViewModel>().As<IWorkflowStepViewModel>()
-            //    .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
-            //    .WithMetadata("Order", 1);
-
-            
             builder.RegisterType<AddParatextCorpusStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
                 .WithMetadata("Order", 1);
