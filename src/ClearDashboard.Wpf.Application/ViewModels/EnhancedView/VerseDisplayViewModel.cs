@@ -37,7 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private IEventAggregator? EventAggregator { get; }
         private ILogger<VerseDisplayViewModel>? Logger { get; }
 
-        protected TokenMap SourceTokenMap { get; set; }
+        protected TokenMap? SourceTokenMap { private get; set; }
         protected TokenCollection? SourceTokens { get; set; }
         protected EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
         public bool IsSourceRtl { get; set; }
