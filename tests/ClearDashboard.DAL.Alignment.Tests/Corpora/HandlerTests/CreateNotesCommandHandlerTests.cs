@@ -730,7 +730,7 @@ public class CreateNotesCommandHandlerTests : TestBase
 
     [Fact]
     [Trait("Category", "Handlers")]
-    public async void Notes__ParatextManuscriptGuid()
+    public async void Notes__ParatextGreekManuscriptGuid()
     {
         try
         {
@@ -739,6 +739,38 @@ public class CreateNotesCommandHandlerTests : TestBase
                 "grc",
                 "Resource",
                 ManuscriptIds.GreekManuscriptId);
+            var sourceTokenizedTextCorpusGreekManuscript = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpusGreekManuscript.CorpusId, "test", "tokenization");
+
+            var tokenGreekManuscript = ProjectDbContext!.TokenComponents
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpusGreekManuscript.TokenizedTextCorpusId.Id)
+                .Take(1)
+                .Select(t => ModelHelper.BuildToken(t))
+                .First();
+
+            var noteManuscript = await new Note { Text = "a manuscript note", AbbreviatedText = "not sure", NoteStatus = "Open" }.CreateOrUpdate(Mediator!);
+            await noteManuscript.AssociateDomainEntity(Mediator!, tokenGreekManuscript.TokenId);
+
+            var nullResultManuscript = await Note.GetParatextIdIfAssociatedContiguousTokensOnly(Mediator!, noteManuscript.NoteId!);
+            Assert.Null(nullResultManuscript);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void Notes__ParatextHebrewManuscriptGuid()
+    {
+        try
+        {
+            var sourceCorpusGreekManuscript = await Corpus.Create(Mediator!, false,
+                "New Testament 1",
+                "grc",
+                "Resource",
+                ManuscriptIds.HebrewManuscriptId);
             var sourceTokenizedTextCorpusGreekManuscript = await TestDataHelpers.GetSampleTextCorpus()
                 .Create(Mediator!, sourceCorpusGreekManuscript.CorpusId, "test", "tokenization");
 

@@ -54,6 +54,7 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         }
 
         var bookNumbers = ProjectDbContext.Tokens
+             .Where(tc => tc.Deleted == null)
              .Where(tc => tc.TokenizedCorpusId == request.TokenizedTextCorpusId.Id)
              .Select(tc => tc.BookNumber).Distinct();
 

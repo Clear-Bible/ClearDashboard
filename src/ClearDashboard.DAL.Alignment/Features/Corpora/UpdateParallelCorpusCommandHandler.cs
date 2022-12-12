@@ -17,7 +17,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     {
         private readonly IMediator _mediator;
 
-        public UpdateParallelCorpusCommandHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<CreateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
+        public UpdateParallelCorpusCommandHandler(IMediator mediator, ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<UpdateParallelCorpusCommandHandler> logger) : base(projectNameDbContextFactory,projectProvider,  logger)
         {
             _mediator = mediator;
         }

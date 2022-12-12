@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Text.Json.Serialization;
+using Caliburn.Micro;
 
 namespace ClearDashboard.DAL.ViewModels;
 
@@ -10,5 +11,6 @@ public abstract class ViewModelBase<T> : PropertyChangedBase where T: class, new
     {
         Entity = entity;
     }
+    [JsonIgnore]
     public T Entity { get; private set; }
 }

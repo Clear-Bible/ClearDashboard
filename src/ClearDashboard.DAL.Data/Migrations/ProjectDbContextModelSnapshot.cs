@@ -72,6 +72,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long?>("Deleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<double>("Score")
                         .HasColumnType("REAL");
 
@@ -546,6 +549,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<long?>("Deleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Discriminator")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -632,6 +638,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<long?>("Deleted")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("Position")
                         .HasColumnType("INTEGER");
 
@@ -662,6 +671,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("Deleted")
                         .HasColumnType("INTEGER");
 
                     b.Property<Guid>("SourceTokenComponentId")
