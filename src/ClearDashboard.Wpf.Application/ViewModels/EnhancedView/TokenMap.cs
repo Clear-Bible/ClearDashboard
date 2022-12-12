@@ -29,10 +29,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// The <see cref="PaddedTokens"/> collection contains a sequence of flattened tokens suitable for
         /// display, with padding values determined by the associated detokenizer.
         /// </remarks>
-        private TokenCollection Tokens
+        public TokenCollection Tokens
         {
             get => _tokens;
-            set
+            private set
             {
                 Set(ref _tokens, value);
                 FlattenedTokens = new TokenCollection(Tokens.GetPositionalSortedBaseTokens());
@@ -70,6 +70,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         /// <summary>
+        /// Gets or sets whether these tokens should be displayed left-to-right (LTR) or right-to-left (RTL).
+        /// </summary>
+        /// <remarks>
+        /// True if the tokens should be displayed RTL; false otherwise.
+        /// </remarks>
+        public bool IsRtl { get; set; }
+
+        /// <summary>
         /// Gets the <see cref="CompositeToken"/> that a token is a constituent of, if any.
         /// </summary>
         /// <param name="token">The <see cref="Token"/> to search for.</param>
@@ -79,9 +87,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
         }
 
-        public TokenMap(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer)
+        public TokenMap(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl)
         {
             Detokenizer = detokenizer;
+            IsRtl = isRtl;
             Tokens = new TokenCollection(tokens);
         }
     }
