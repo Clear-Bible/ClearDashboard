@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.Logging;
 using ClearBible.Engine.Corpora;
@@ -7,10 +8,12 @@ using ClearDashboard.DAL.Alignment.Translation;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Autofac;
+using Autofac.Core.Lifetime;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    internal class AlignmentDisplayViewModel : VerseDisplayViewModel
+    public class AlignmentDisplayViewModel : VerseDisplayViewModel
     {
         private readonly EngineParallelTextRow _parallelTextRow;
         private readonly AlignmentSet _alignmentSet;
@@ -44,6 +47,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             _alignmentSet = alignmentSet;
+        }
+
+        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, EngineParallelTextRow parallelTextRow, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl, AlignmentSet alignmentSet)
+        {
+            var verseDisplayViewModel = componentContext.Resolve<AlignmentDisplayViewModel>(
+                new NamedParameter("parallelTextRow", parallelTextRow),
+                new NamedParameter("sourceDetokenizer", sourceDetokenizer),
+                new NamedParameter("isSourceRtl", isSourceRtl),
+                new NamedParameter("targetDetokenizer", targetDetokenizer),
+                new NamedParameter("isTargetRtl", isTargetRtl),
+                new NamedParameter("alignmentSet", alignmentSet)
+            );
+            await verseDisplayViewModel.InitializeAsync();
+            return verseDisplayViewModel;
         }
     }
 }

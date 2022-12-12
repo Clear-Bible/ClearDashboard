@@ -22,7 +22,6 @@ using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
@@ -72,7 +71,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region Member Variables
         private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
-        private readonly IServiceProvider _serviceProvider;
 
         private CancellationTokenSource? _cancellationTokenSource;
         private bool? _handleAsyncRunning;
@@ -343,7 +341,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 #pragma warning disable CS8618
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, NoteManager noteManager, IEventAggregator? eventAggregator, IMediator mediator,
-            ILifetimeScope? lifetimeScope, IServiceProvider serviceProvider) :
+            ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
 #pragma warning restore CS8618
@@ -352,7 +350,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _logger = logger;
             _projectManager = projectManager;
             NoteManager = noteManager;
-            _serviceProvider = serviceProvider;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
             ContentId = "ENHANCEDVIEW";
@@ -766,7 +763,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     foreach (var textRow in tokensTextRowsRange)
                     {
-                        verses.Add(await CreateCorpusViewModelAsync(textRow, currentTokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, message.IsRTL.Value));
+                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow, currentTokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, message.IsRTL.Value));
                     }
 
                     //if (verses.Any())
@@ -836,67 +833,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }, cancellationToken);
         }
 
-        private async Task<VerseDisplayViewModel> CreateCorpusViewModelAsync(TokensTextRow textRow, EngineStringDetokenizer detokenizer, bool isRtl)
-        {
-            try
-            {
-                var verseDisplayViewModel = LifetimeScope!.Resolve<CorpusDisplayViewModel>(
-                    new NamedParameter("textRow", textRow),
-                    new NamedParameter("detokenizer", detokenizer),
-                    new NamedParameter("isRtl", isRtl)
-                    );
-                await verseDisplayViewModel.InitializeAsync();
-                return verseDisplayViewModel;
-            }
-            catch (Exception ex)
-            {
-                Logger?.LogCritical($"Could not create CorpusDisplayViewModel: {ex.Message}");
-                throw;
-            }
-        }        
-        
-        private async Task<VerseDisplayViewModel> CreateInterlinearViewModelAsync(EngineParallelTextRow parallelTextRow, EngineStringDetokenizer detokenizer, bool isRtl, TranslationSet translationSet)
-        {
-            try
-            {
-                var verseDisplayViewModel = LifetimeScope!.Resolve<InterlinearDisplayViewModel>(
-                    new NamedParameter("parallelTextRow", parallelTextRow),
-                    new NamedParameter("sourceDetokenizer", detokenizer),
-                    new NamedParameter("isSourceRtl", isRtl),
-                    new NamedParameter("translationSet", translationSet)
-                    );
-                await verseDisplayViewModel.InitializeAsync();
-                return verseDisplayViewModel;
-            }
-            catch (Exception ex)
-            {
-                Logger?.LogCritical($"Could not create InterlinearDisplayViewModel: {ex.Message}");
-                throw;
-            }
-        }
-
-        private async Task<VerseDisplayViewModel> CreateAlignmentViewModelAsync(EngineParallelTextRow parallelTextRow, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl, AlignmentSet alignmentSet)
-        {
-            try
-            {
-                var verseDisplayViewModel = LifetimeScope!.Resolve<AlignmentDisplayViewModel>(
-                    new NamedParameter("parallelTextRow", parallelTextRow),
-                    new NamedParameter("sourceDetokenizer", sourceDetokenizer),
-                    new NamedParameter("isSourceRtl", isSourceRtl),
-                    new NamedParameter("targetDetokenizer", targetDetokenizer),
-                    new NamedParameter("isTargetRtl", isTargetRtl),
-                    new NamedParameter("alignmentSet", alignmentSet)
-                    );
-                await verseDisplayViewModel.InitializeAsync();
-                return verseDisplayViewModel;
-            }
-            catch (Exception ex)
-            {
-                Logger?.LogCritical($"Could not create AlignmentDisplayViewModel: {ex.Message}");
-                throw;
-            }
-        }
-
         private void UpdateVerseDisplayWhenBookOutOfRange(ShowTokenizationWindowMessage message)
         {
             UpdateVersesDisplay(message, new ObservableCollection<VerseDisplayViewModel>(),
@@ -909,6 +845,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             return await TranslationSet.Get(new TranslationSetId(Guid.Parse(translationSetId)), Mediator);
         }
+
         public static async Task<AlignmentSet> GetAlignmentSet(string alignmentSetId, IMediator mediator)
         {
             return await DAL.Alignment.Translation.AlignmentSet.Get(new AlignmentSetId(Guid.Parse(alignmentSetId)), mediator);
@@ -1115,22 +1052,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 foreach (var row in rows)
                 {
-                    if (message.AlignmentSetId != null)
-                    {
-                        versesOut.Add(await CreateAlignmentViewModelAsync(row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
-                                                            Detokenizer,
-                                                                 message.IsRTL,
-                                                                          TargetDetokenizer,
-                                                                          message.IsTargetRTL ?? false,
-                                                                          await GetAlignmentSet(message.AlignmentSetId!, Mediator!)));
-                    }
-                    else
-                    {
-                        versesOut.Add(await CreateInterlinearViewModelAsync(row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
-                                                                            Detokenizer,
-                                                                            message.IsRTL,
-                                                                            await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null"))));
-                    }
+                    versesOut.Add(message.AlignmentSetId != null 
+                        ? await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, row ?? throw new InvalidDataEngineException(name: "row", value: "null"), Detokenizer, message.IsRTL, TargetDetokenizer, message.IsTargetRTL ?? false,
+                                                                        await GetAlignmentSet(message.AlignmentSetId!, Mediator!))
+                        : await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row ?? throw new InvalidDataEngineException(name: "row", value: "null"), Detokenizer, message.IsRTL,
+                                                                        await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null"))));
                 }
 
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
