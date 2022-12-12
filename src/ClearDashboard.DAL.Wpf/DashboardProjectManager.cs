@@ -59,15 +59,11 @@ public record ApplicationWindowSettings(WindowSettings WindowSettings);
 //    string? SourceParatextId,
 //    string? TargetParatextId);
 
-public record CloseDockingPane(Guid guid);
 public record UiLanguageChangedMessage(string LanguageCode);
 
 public record VerseChangedMessage(string Verse);
-public record BCVLoadedMessage();
-
 public record ProjectLoadCompleteMessage(bool Loaded);
 
-public record ActiveDocumentMessage(Guid Guid);
 
 public record ProjectChangedMessage(ParatextProject Project);
 
@@ -77,7 +73,6 @@ public record ParatextConnectedMessage(bool Connected);
 
 public record UserMessage(User User);
 
-public record LogActivityMessage(string Message);
 
 public record FilterPinsMessage(string Message);
 
