@@ -19,6 +19,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public Token Token { get; }
 
         /// <summary>
+        /// Gets or sets whether this is a source token.
+        /// </summary>
+        /// <remarks>
+        /// If true, this is a source token; if false, this is a target token (alignment).
+        /// </remarks>
+        public bool IsSource { get; set; } = true;
+
+        /// <summary>
         /// Gets or sets the parent <see cref="CompositeToken"/> of this token, if any.
         /// </summary>
         public CompositeToken? CompositeToken { get; set; }
@@ -27,14 +35,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Gets whether this is token is part of a composite token.
         /// </summary>
         public bool IsCompositeToken => CompositeToken != null;
-
-        /// <summary>
-        /// Gets or sets whether this is a source token.
-        /// </summary>
-        /// <remarks>
-        /// If true, this is a source token.  If false, this is a target token (alignment).
-        /// </remarks>
-        public bool IsSource { get; set; } = true;
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> to use when displaying a composite token indicator.
@@ -125,15 +125,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool HasNote => NoteIds.Any();
 
-        public void NoteAdded(NoteViewModel? note)
+        public void NoteAdded(NoteViewModel note)
         {
-            NoteIds.AddDistinct(note!.NoteId!);
+            NoteIds.AddDistinct(note.NoteId!);
             NotifyOfPropertyChange(nameof(HasNote));
         }
 
-        public void NoteDeleted(NoteViewModel? note)
+        public void NoteDeleted(NoteViewModel note)
         {
-            NoteIds.RemoveIfExists(note!.NoteId!);
+            NoteIds.RemoveIfExists(note.NoteId!);
             NotifyOfPropertyChange(nameof(HasNote));
         }
 
