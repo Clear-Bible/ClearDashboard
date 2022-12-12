@@ -65,9 +65,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var translations = ProjectDbContext!.Translations
                 .Include(tr => tr.SourceTokenComponent)
+                .Where(tr => tr.Deleted == null)
                 .Where(tr => tr.TranslationSetId == translationSet.Id)
                 .Where(tr => tr.SourceTokenComponent!.TrainingText == requestTranslation.SourceToken.TrainingText);
             var tokenComponents = ProjectDbContext!.TokenComponents
+                .Where(t => t.Deleted == null)
                 .Where(t => t.TokenizedCorpusId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                 .Where(t => t.TrainingText == requestTranslation.SourceToken.TrainingText);
 
@@ -124,6 +126,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var rTokenId = requestTranslation.SourceToken.TokenId;
 
             var translation = ProjectDbContext!.Translations
+                .Where(tr => tr.Deleted == null)
                 .Where(tr => tr.TranslationSetId == translationSet.Id)
                 .Where(tr => tr.SourceTokenComponentId == rTokenId.Id)
                 .FirstOrDefault();
@@ -136,6 +139,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             else
             {
                 var tokenComponent = ProjectDbContext!.TokenComponents
+                    .Where(t => t.Deleted == null)
                     .Where(t => t.TokenizedCorpusId == translationSet.ParallelCorpus!.SourceTokenizedCorpusId)
                     .Where(t => t.Id == rTokenId.Id)
                     //.Where(t => t.TokenizedCorpus!.SourceParallelCorpora

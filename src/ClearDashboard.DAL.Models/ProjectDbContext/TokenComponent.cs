@@ -30,5 +30,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual ICollection<Alignment> SourceAlignments { get; set; }
         public virtual ICollection<Alignment> TargetAlignments { get; set; }
         public virtual ICollection<Translation> Translations { get; set; }
+
+        public DateTimeOffset? Deleted { get; set; }
     }
 }
