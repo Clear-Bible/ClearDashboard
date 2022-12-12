@@ -1,17 +1,4 @@
-﻿using Autofac;
-using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.Wpf.Application.Helpers;
-using FluentValidation;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,12 +6,23 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ValidationResult = FluentValidation.Results.ValidationResult;
+using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
-
-namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
+namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
-    public class AddParatextCorpusStepViewModel : ValidatingApplicationScreen<AddParatextCorpusStepViewModel>
+    public class AddParatextCorpusStepViewModel : DashboardApplicationWorkflowStepViewModel<IParatextCorpusDialogViewModel>
     {
         #region Member Variables
 
@@ -94,8 +92,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 
                 CheckUsfm();
 
-                ValidationResult = Validator?.Validate(this);
-                CanOk = ValidationResult.IsValid;
+                //ValidationResult = Validator?.Validate(this);
+                //CanOk = ValidationResult.IsValid;
             }
         }
 
@@ -128,6 +126,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
             set => Set(ref _canOk, value);
         }
 
+        private DialogMode _dialogMode;
+        public DialogMode DialogMode
+        {
+            get => _dialogMode;
+            set => Set(ref _dialogMode, value);
+        }
+
+
         public bool CanCancel => true /* can always cancel */;
 
         #endregion //Observable Properties
@@ -139,19 +145,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
             // used by Caliburn Micro for design time    
         }
 
-        public AddParatextCorpusStepViewModel(INavigationService? navigationService,
-            ILogger<AddParatextCorpusStepViewModel>? logger,
-            DashboardProjectManager? projectManager,
-            IEventAggregator? eventAggregator,
-            IValidator<AddParatextCorpusStepViewModel> validator,
-            IMediator? mediator,
-            ILifetimeScope? lifetimeScope)
-            : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
+        public AddParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
+            INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
+            IMediator mediator, ILifetimeScope? lifetimeScope)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
-            _logger = logger;
-            _projectManager = projectManager;
-
-            ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+            DialogMode = dialogMode;
+            CanMoveForwards = true;
+            CanMoveBackwards = true;
+            EnableControls = true;
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -240,10 +242,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
             ShowSpinner = Visibility.Collapsed;
         }
 
-        protected override ValidationResult Validate()
-        {
-            return (SelectedProject != null) ? Validator?.Validate(this) : null;
-        }
 
         private bool _canOk;
 

@@ -1,37 +1,29 @@
-﻿using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Features.Denormalization;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using SIL.Scripture;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using System.Threading;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.Windows;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using Newtonsoft.Json;
-using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
+using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
+namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
-    public class ParatextCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParatextCorpusDialogViewModel //, ValidatingApplicationScreen<ParatextCorpusDialogViewModel>
+    public class ParatextCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParatextCorpusDialogViewModel
     {
         internal class TaskNames
         {
@@ -43,6 +35,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 
         private readonly ILogger<ParatextCorpusDialogViewModel>? _logger;
         private readonly DashboardProjectManager? _projectManager;
+        private readonly ILifetimeScope _lifetimeScope;
         private CorpusSourceType _corpusSourceType;
         private List<ParatextProjectMetadata>? _projects;
         private ParatextProjectMetadata? _selectedProject;
@@ -105,12 +98,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
             set
             {
                 Set(ref _selectedProject, value);
-
-                _ = CheckUsfm();
-
-                // TODO
-                //ValidationResult = Validator?.Validate(this);
-                //CanOk = ValidationResult.IsValid;
             }
         }
 
@@ -162,14 +149,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
             ILogger<ParatextCorpusDialogViewModel> logger,
             DashboardProjectManager? projectManager,
             IEventAggregator eventAggregator,
-            IValidator<ParatextCorpusDialogViewModel> validator,
+//            IValidator<ParatextCorpusDialogViewModel> validator,
             ILifetimeScope lifetimeScope,
             INavigationService navigationService,
             IMediator mediator,
             LongRunningTaskManager longRunningTaskManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
-            // TODO
-        //: base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             CanOk = true;
 
@@ -180,6 +165,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 
             _logger = logger;
             _projectManager = projectManager;
+            _lifetimeScope = lifetimeScope;
 
             ErrorTitle = Helpers.LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
 
@@ -189,12 +175,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
         {
 
             var parameters = new List<Autofac.Core.Parameter> { new NamedParameter("dialogMode", DialogMode) };
-            var views = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("ParallelCorpusDialog", parameters, "Order").ToArray();
+            var views = _lifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("AddParatextCorpusDialog", parameters, "Order").ToArray();
 
             if (views == null || !views.Any())
             {
                 throw new DependencyRegistrationMissingException(
-                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'ParallelCorpusDialog'.  Please check the dependency registration in your bootstrapper implementation.");
+                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'ParatextCorpusDialog'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
             foreach (var view in views)
@@ -229,72 +215,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            CorpusSourceType = CorpusSourceType.Paratext;
-            var result = await _projectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
-            if (result.Success)
-            {
-                Projects = result.Data.OrderBy(p => p.Name).ToList();
-            }
-
-            await base.OnActivateAsync(cancellationToken);
-        }
 
         #endregion //Constructor
 
 
         #region Methods
 
-        public void CopyToClipboard()
-        {
-            Clipboard.Clear();
-            StringBuilder sb = new StringBuilder();
-            foreach (var error in UsfmErrors)
-            {
-                sb.AppendLine($"{error.Reference}\t{error.Error}");
-            }
 
-            Clipboard.SetText(sb.ToString());
-        }
-
-
-
-        private async Task CheckUsfm()
-        {
-            if (SelectedProject is null)
-            {
-                return;
-            }
-
-            ShowSpinner = Visibility.Visible;
-
-            var result = await _projectManager.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
-            if (result.Success)
-            {
-                var errors = result.Data;
-
-                if (errors.NumberOfErrors == 0)
-                {
-                    UsfmErrors = new();
-                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
-                }
-                else
-                {
-                    UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
-                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", _logger);
-                }
-
-            }
-
-            ShowSpinner = Visibility.Collapsed;
-        }
-
-        // TODO
-        //protected override ValidationResult Validate()
-        //{
-        //    return (SelectedProject != null) ? Validator?.Validate(this) : null;
-        //}
 
 
         public async void Ok()
@@ -307,6 +234,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
         public async void Cancel()
         {
             await TryCloseAsync(false);
+        }
+
+        public Task<object> AddParatextCorpus(string paratextCorpusDisplayName)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion // Methods

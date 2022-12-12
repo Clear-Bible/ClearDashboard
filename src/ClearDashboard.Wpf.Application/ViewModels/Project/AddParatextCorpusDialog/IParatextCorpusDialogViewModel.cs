@@ -1,11 +1,8 @@
-﻿using ClearApplicationFoundation.ViewModels.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
+namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
     public interface IParatextCorpusDialogViewModel
     {
@@ -19,5 +16,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
 
         void Ok();
         void Cancel();
+        Task<object> AddParatextCorpus(string paratextCorpusDisplayName);
     }
 }

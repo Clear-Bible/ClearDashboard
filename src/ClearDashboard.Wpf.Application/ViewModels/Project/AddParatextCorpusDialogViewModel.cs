@@ -11,7 +11,6 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -1,4 +1,7 @@
-﻿using Autofac;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
@@ -7,11 +10,8 @@ using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus
+namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
     public class SelectBooksStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParatextCorpusDialogViewModel, SelectBooksStepViewModel>
     {

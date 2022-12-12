@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog.ParatextCorpusDialogView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:addParatextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,10 +10,9 @@
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:paratextCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpus"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     cm:Message.Attach="[Event Closing] = [Action OnClose($eventArgs)]"
-    d:DataContext="{d:DesignInstance Type=paratextCorpusDialog:ParatextCorpusDialogViewModel,
+    d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:ParatextCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
