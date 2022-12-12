@@ -5,5 +5,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
     public record PutLexicalItemSurfaceTextCommand(
         LexicalItemId LexicalItemId,
-        LexicalItemSurfaceText LexicalItemSurfaceText) : ProjectRequestCommand<LexicalItemSurfaceTextId>;
+        LexicalItemSurfaceText LexicalItemSurfaceText) : LexiconRequestCommand<LexicalItemSurfaceTextId>;
 }

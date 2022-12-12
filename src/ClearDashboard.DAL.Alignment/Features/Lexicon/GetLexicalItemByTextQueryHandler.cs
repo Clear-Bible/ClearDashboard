@@ -9,23 +9,19 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-     public class GetLexicalItemByTextQueryHandler : ProjectDbContextQueryHandler<GetLexicalItemByTextQuery,
+     public class GetLexicalItemByTextQueryHandler : LexiconDbContextQueryHandler<GetLexicalItemByTextQuery,
         RequestResult<LexicalItem?>, LexicalItem?>
     {
-        private readonly IMediator _mediator;
-
-        public GetLexicalItemByTextQueryHandler(IMediator mediator, 
-            ProjectDbContextFactory? projectNameDbContextFactory, 
-            IProjectProvider projectProvider, 
+        public GetLexicalItemByTextQueryHandler(
+            LexiconDbContextFactory? lexiconDbContextFactory, 
             ILogger<GetLexicalItemByTextQueryHandler> logger) 
-            : base(projectNameDbContextFactory, projectProvider, logger)
+            : base(lexiconDbContextFactory, logger)
         {
-            _mediator = mediator;
         }
 
         protected override async Task<RequestResult<LexicalItem?>> GetDataAsync(GetLexicalItemByTextQuery request, CancellationToken cancellationToken)
         {
-            var lexicalItem = ProjectDbContext.LexicalItems
+            var lexicalItem = LexiconDbContext.LexicalItems
                 .Include(li => li.LexicalItemDefinitions.Where(lid => string.IsNullOrEmpty(request.DefinitionLanguage) || lid.Language == request.DefinitionLanguage))
                     .ThenInclude(lid => lid.User)
                 .Include(li => li.LexicalItemDefinitions.Where(lid => string.IsNullOrEmpty(request.DefinitionLanguage) || lid.Language == request.DefinitionLanguage))

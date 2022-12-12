@@ -5,5 +5,5 @@ using MediatR;
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
     public record DeleteSemanticDomainAndAssociationsCommand(
-        SemanticDomainId SemanticDomainId) : ProjectRequestCommand<Unit>;
+        SemanticDomainId SemanticDomainId) : LexiconRequestCommand<Unit>;
 }

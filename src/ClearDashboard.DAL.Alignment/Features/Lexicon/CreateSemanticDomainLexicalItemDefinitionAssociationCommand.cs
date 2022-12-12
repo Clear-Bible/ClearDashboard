@@ -6,5 +6,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
     public record CreateSemanticDomainLexicalItemDefinitionAssociationCommand(
         SemanticDomainId SemanticDomainId,
-        LexicalItemDefinitionId LexicalItemDefinitionId) : ProjectRequestCommand<Unit>;
+        LexicalItemDefinitionId LexicalItemDefinitionId) : LexiconRequestCommand<Unit>;
 }

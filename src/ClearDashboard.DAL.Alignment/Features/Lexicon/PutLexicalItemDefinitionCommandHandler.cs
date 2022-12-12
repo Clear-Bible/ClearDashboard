@@ -1,5 +1,4 @@
 ﻿using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -14,12 +13,12 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class PutLexicalItemDefinitionCommandHandler : ProjectDbContextCommandHandler<PutLexicalItemDefinitionCommand,
+    public class PutLexicalItemDefinitionCommandHandler : LexiconDbContextCommandHandler<PutLexicalItemDefinitionCommand,
         RequestResult<LexicalItemDefinitionId>, LexicalItemDefinitionId>
     {
         public PutLexicalItemDefinitionCommandHandler(
-            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
-            ILogger<PutLexicalItemDefinitionCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            LexiconDbContextFactory? lexiconDbContextFactory,
+            ILogger<PutLexicalItemDefinitionCommandHandler> logger) : base(lexiconDbContextFactory,
             logger)
         {
         }
@@ -30,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             Models.LexicalItemDefinition? lexicalItemDefinition = null;
             if (request.LexicalItemDefinition.LexicalItemDefinitionId != null)
             {
-                lexicalItemDefinition = ProjectDbContext!.LexicalItemDefinitions.Include(n => n.User).FirstOrDefault(lid => lid.Id == request.LexicalItemDefinition.LexicalItemDefinitionId.Id);
+                lexicalItemDefinition = LexiconDbContext!.LexicalItemDefinitions.Include(n => n.User).FirstOrDefault(lid => lid.Id == request.LexicalItemDefinition.LexicalItemDefinitionId.Id);
                 if (lexicalItemDefinition == null)
                 {
                     return new RequestResult<LexicalItemDefinitionId>
@@ -53,11 +52,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     LexicalItemId = request.LexicalItemId.Id
                 };
 
-                ProjectDbContext.LexicalItemDefinitions.Add(lexicalItemDefinition);
+                LexiconDbContext.LexicalItemDefinitions.Add(lexicalItemDefinition);
             }
 
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-            lexicalItemDefinition = ProjectDbContext.LexicalItemDefinitions
+            _ = await LexiconDbContext!.SaveChangesAsync(cancellationToken);
+            lexicalItemDefinition = LexiconDbContext.LexicalItemDefinitions
                 .Include(n => n.User)
                 .First(lid => lid.Id == lexicalItemDefinition.Id);
 

@@ -1,5 +1,4 @@
 ﻿using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -14,12 +13,12 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class PutLexicalItemSurfaceTextCommandHandler : ProjectDbContextCommandHandler<PutLexicalItemSurfaceTextCommand,
+    public class PutLexicalItemSurfaceTextCommandHandler : LexiconDbContextCommandHandler<PutLexicalItemSurfaceTextCommand,
         RequestResult<LexicalItemSurfaceTextId>, LexicalItemSurfaceTextId>
     {
         public PutLexicalItemSurfaceTextCommandHandler(
-            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
-            ILogger<PutLexicalItemSurfaceTextCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            LexiconDbContextFactory? lexiconDbContextFactory, 
+            ILogger<PutLexicalItemSurfaceTextCommandHandler> logger) : base(lexiconDbContextFactory,
             logger)
         {
         }
@@ -30,7 +29,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             Models.LexicalItemSurfaceText? lexicalItemSurfaceText = null;
             if (request.LexicalItemSurfaceText.LexicalItemSurfaceTextId != null)
             {
-                lexicalItemSurfaceText = ProjectDbContext!.LexicalItemSurfaceTexts.FirstOrDefault(lid => lid.Id == request.LexicalItemSurfaceText.LexicalItemSurfaceTextId.Id);
+                lexicalItemSurfaceText = LexiconDbContext!.LexicalItemSurfaceTexts.FirstOrDefault(lid => lid.Id == request.LexicalItemSurfaceText.LexicalItemSurfaceTextId.Id);
                 if (lexicalItemSurfaceText == null)
                 {
                     return new RequestResult<LexicalItemSurfaceTextId>
@@ -51,10 +50,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     LexicalItemId = request.LexicalItemId.Id
                 };
 
-                ProjectDbContext.LexicalItemSurfaceTexts.Add(lexicalItemSurfaceText);
+                LexiconDbContext.LexicalItemSurfaceTexts.Add(lexicalItemSurfaceText);
             }
 
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            _ = await LexiconDbContext!.SaveChangesAsync(cancellationToken);
             return new RequestResult<LexicalItemSurfaceTextId>(new LexicalItemSurfaceTextId(lexicalItemSurfaceText.Id));
         }
     }

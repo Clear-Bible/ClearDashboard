@@ -19,6 +19,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         RequestResult<IEnumerable<Alignment.Translation.Translation>>,
         IEnumerable<Alignment.Translation.Translation>>
     {
+        protected LexiconDbContext? LexiconDbContext { get; set; } = null;
 
         public GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
@@ -168,7 +169,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             // 2.  Try Lexicon
-            if (tokenGuidsNotFound.Any() && ProjectDbContext.LexicalItems.Any())
+            if (tokenGuidsNotFound.Any() && LexiconDbContext is not null && LexiconDbContext.LexicalItems.Any())
             {
 #if DEBUG
                 Stopwatch sw = new Stopwatch();
@@ -189,7 +190,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                combined.AddRange(ProjectDbContext.LexicalItems
+                combined.AddRange(LexiconDbContext.LexicalItems
                     .Include(li => li.LexicalItemDefinitions
                         .Where(lid => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(lid.Language) || lid.Language == targetLanguage))
                     .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)

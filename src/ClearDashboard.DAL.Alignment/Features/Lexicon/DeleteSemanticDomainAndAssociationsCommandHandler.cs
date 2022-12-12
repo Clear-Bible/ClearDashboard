@@ -1,6 +1,4 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
@@ -13,13 +11,13 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class DeleteSemanticDomainAndAssociationsCommandHandler : ProjectDbContextCommandHandler<
+    public class DeleteSemanticDomainAndAssociationsCommandHandler : LexiconDbContextCommandHandler<
         DeleteSemanticDomainAndAssociationsCommand,
         RequestResult<Unit>, Unit>
     {
         public DeleteSemanticDomainAndAssociationsCommandHandler(
-            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
-            ILogger<DeleteSemanticDomainAndAssociationsCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            LexiconDbContextFactory? lexiconDbContextFactory, 
+            ILogger<DeleteSemanticDomainAndAssociationsCommandHandler> logger) : base(lexiconDbContextFactory,
             logger)
         {
         }
@@ -27,7 +25,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
         protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteSemanticDomainAndAssociationsCommand request,
             CancellationToken cancellationToken)
         {
-            var semanticDomain = ProjectDbContext!.SemanticDomains.FirstOrDefault(sd => sd.Id == request.SemanticDomainId.Id);
+            var semanticDomain = LexiconDbContext!.SemanticDomains.FirstOrDefault(sd => sd.Id == request.SemanticDomainId.Id);
             if (semanticDomain == null)
             {
                 return new RequestResult<Unit>
@@ -40,8 +38,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             // The data model should be set up to do a cascade delete of
             // any SemanticDomainLexicalItemDefinitionAssociations when
             // the following executes:
-            ProjectDbContext.Remove(semanticDomain);
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            LexiconDbContext.Remove(semanticDomain);
+            _ = await LexiconDbContext!.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);
         }

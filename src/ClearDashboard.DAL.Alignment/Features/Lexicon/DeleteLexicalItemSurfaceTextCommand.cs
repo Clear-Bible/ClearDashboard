@@ -5,5 +5,5 @@ using MediatR;
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
     public record DeleteLexicalItemSurfaceTextCommand(
-        LexicalItemSurfaceTextId LexicalItemSurfaceTextId) : ProjectRequestCommand<Unit>;
+        LexicalItemSurfaceTextId LexicalItemSurfaceTextId) : LexiconRequestCommand<Unit>;
 }

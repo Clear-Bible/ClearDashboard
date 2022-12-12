@@ -6,5 +6,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
     public record CreateOrUpdateLexicalItemCommand(
         LexicalItemId? LexicalItemId,
         string TrainingText,
-        string? Language) : ProjectRequestCommand<LexicalItemId>;
+        string? Language) : LexiconRequestCommand<LexicalItemId>;
 }

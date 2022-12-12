@@ -9,23 +9,22 @@ using System.Data.Entity;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-     public class GetSemanticDomainsByPartialTextQueryHandler : ProjectDbContextQueryHandler<GetSemanticDomainsByPartialTextQuery,
+     public class GetSemanticDomainsByPartialTextQueryHandler : LexiconDbContextQueryHandler<GetSemanticDomainsByPartialTextQuery,
         RequestResult<IEnumerable<SemanticDomain>>, IEnumerable<SemanticDomain>>
     {
         private readonly IMediator _mediator;
 
         public GetSemanticDomainsByPartialTextQueryHandler(IMediator mediator, 
-            ProjectDbContextFactory? projectNameDbContextFactory, 
-            IProjectProvider projectProvider, 
+            LexiconDbContextFactory? lexiconDbContextFactory, 
             ILogger<GetSemanticDomainsByPartialTextQueryHandler> logger) 
-            : base(projectNameDbContextFactory, projectProvider, logger)
+            : base(lexiconDbContextFactory, logger)
         {
             _mediator = mediator;
         }
 
         protected override async Task<RequestResult<IEnumerable<SemanticDomain>>> GetDataAsync(GetSemanticDomainsByPartialTextQuery request, CancellationToken cancellationToken)
         {
-            var semanticDomains = ProjectDbContext.SemanticDomains
+            var semanticDomains = LexiconDbContext.SemanticDomains
                 .Include(sd => sd.User)
                 .Where(sd => sd.Text != null && sd.Text.StartsWith(request.PartialText))
                 .Select(sd => new SemanticDomain(

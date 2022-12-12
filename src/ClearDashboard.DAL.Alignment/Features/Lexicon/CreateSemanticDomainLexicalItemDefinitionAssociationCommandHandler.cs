@@ -1,7 +1,4 @@
-﻿using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
@@ -16,13 +13,12 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class CreateSemanticDomainLexicalItemDefinitionAssociationCommandHandler : ProjectDbContextCommandHandler<CreateSemanticDomainLexicalItemDefinitionAssociationCommand,
+    public class CreateSemanticDomainLexicalItemDefinitionAssociationCommandHandler : LexiconDbContextCommandHandler<CreateSemanticDomainLexicalItemDefinitionAssociationCommand,
         RequestResult<Unit>, Unit>
     {
         public CreateSemanticDomainLexicalItemDefinitionAssociationCommandHandler(
-            ProjectDbContextFactory? projectNameDbContextFactory, 
-            IProjectProvider projectProvider,
-            ILogger<CreateSemanticDomainLexicalItemDefinitionAssociationCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            LexiconDbContextFactory? lexiconDbContextFactory, 
+            ILogger<CreateSemanticDomainLexicalItemDefinitionAssociationCommandHandler> logger) : base(lexiconDbContextFactory,
             logger)
         {
         }
@@ -30,7 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
         protected override async Task<RequestResult<Unit>> SaveDataAsync(CreateSemanticDomainLexicalItemDefinitionAssociationCommand request,
             CancellationToken cancellationToken)
         {
-            var semanticDomain = ProjectDbContext.SemanticDomains
+            var semanticDomain = LexiconDbContext.SemanticDomains
                 .Where(sd => sd.Id == request.SemanticDomainId.Id)
                 .FirstOrDefault();
 
@@ -43,7 +39,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 );
             }
 
-            var lexicalItemDefinition = ProjectDbContext.LexicalItemDefinitions
+            var lexicalItemDefinition = LexiconDbContext.LexicalItemDefinitions
                 .Where(lxd => lxd.Id == request.LexicalItemDefinitionId.Id)
                 .FirstOrDefault();
 
@@ -62,8 +58,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 LexicalItemDefinitionId = lexicalItemDefinition.Id
             };
 
-            ProjectDbContext.SemanticDomainLexicalItemDefinitionAssociations.Add(semanticDomainLexicalItemDefinitionAssociation);
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            LexiconDbContext.SemanticDomainLexicalItemDefinitionAssociations.Add(semanticDomainLexicalItemDefinitionAssociation);
+            _ = await LexiconDbContext!.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);
         }

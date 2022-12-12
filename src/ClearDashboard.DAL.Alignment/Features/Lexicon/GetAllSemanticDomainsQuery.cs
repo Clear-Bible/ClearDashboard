@@ -1,8 +1,7 @@
 ﻿using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public record GetAllSemanticDomainsQuery() : ProjectRequestQuery<IEnumerable<SemanticDomain>>;
+    public record GetAllSemanticDomainsQuery() : LexiconRequestQuery<IEnumerable<SemanticDomain>>;
 }

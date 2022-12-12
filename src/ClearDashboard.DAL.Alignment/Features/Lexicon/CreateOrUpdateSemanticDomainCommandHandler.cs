@@ -1,5 +1,4 @@
 ﻿using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.DAL.Alignment.Notes;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -14,11 +13,11 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class CreateOrUpdateSemanticDomainCommandHandler : ProjectDbContextCommandHandler<CreateOrUpdateSemanticDomainCommand,
+    public class CreateOrUpdateSemanticDomainCommandHandler : LexiconDbContextCommandHandler<CreateOrUpdateSemanticDomainCommand,
         RequestResult<SemanticDomainId>, SemanticDomainId>
     {
-        public CreateOrUpdateSemanticDomainCommandHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
-            ILogger<CreateOrUpdateSemanticDomainCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+        public CreateOrUpdateSemanticDomainCommandHandler(LexiconDbContextFactory? lexiconDbContextFactory, 
+            ILogger<CreateOrUpdateSemanticDomainCommandHandler> logger) : base(lexiconDbContextFactory,
             logger)
         {
         }
@@ -29,7 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             Models.SemanticDomain? semanticDomain = null;
             if (request.SemanticDomainId != null)
             {
-                semanticDomain = ProjectDbContext!.SemanticDomains.FirstOrDefault(sd => sd.Id == request.SemanticDomainId.Id);
+                semanticDomain = LexiconDbContext!.SemanticDomains.FirstOrDefault(sd => sd.Id == request.SemanticDomainId.Id);
                 if (semanticDomain == null)
                 {
                     return new RequestResult<SemanticDomainId>
@@ -50,10 +49,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 };
             }
 
-            ProjectDbContext.SemanticDomains.Add(semanticDomain);
+            LexiconDbContext.SemanticDomains.Add(semanticDomain);
 
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
-            semanticDomain = ProjectDbContext.SemanticDomains.Include(n => n.User).First(sd => sd.Id == semanticDomain.Id);
+            _ = await LexiconDbContext!.SaveChangesAsync(cancellationToken);
+            semanticDomain = LexiconDbContext.SemanticDomains.Include(n => n.User).First(sd => sd.Id == semanticDomain.Id);
 
             return new RequestResult<SemanticDomainId>(ModelHelper.BuildSemanticDomainId(semanticDomain));
         }

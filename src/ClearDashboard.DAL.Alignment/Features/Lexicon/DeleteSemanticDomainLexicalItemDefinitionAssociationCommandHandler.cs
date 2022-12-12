@@ -1,7 +1,4 @@
-﻿using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
@@ -13,13 +10,13 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class DeleteSemanticDomainLexicalItemDefinitionAssociationCommandHandler : ProjectDbContextCommandHandler<
+    public class DeleteSemanticDomainLexicalItemDefinitionAssociationCommandHandler : LexiconDbContextCommandHandler<
         DeleteSemanticDomainLexicalItemDefinitionAssociationCommand,
         RequestResult<Unit>, Unit>
     {
         public DeleteSemanticDomainLexicalItemDefinitionAssociationCommandHandler(
-            ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
-            ILogger<DeleteSemanticDomainLexicalItemDefinitionAssociationCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
+            LexiconDbContextFactory? lexiconDbContextFactory, 
+            ILogger<DeleteSemanticDomainLexicalItemDefinitionAssociationCommandHandler> logger) : base(lexiconDbContextFactory,
             logger)
         {
         }
@@ -27,7 +24,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
         protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteSemanticDomainLexicalItemDefinitionAssociationCommand request,
             CancellationToken cancellationToken)
         {
-            var association = ProjectDbContext!.SemanticDomainLexicalItemDefinitionAssociations.FirstOrDefault(sl => 
+            var association = LexiconDbContext!.SemanticDomainLexicalItemDefinitionAssociations.FirstOrDefault(sl => 
                 sl.SemanticDomainId == request.SemanticDomainId.Id && sl.LexicalItemDefinitionId == request.LexicalItemDefinitionId.Id);
 
             if (association == null)
@@ -39,8 +36,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 );
             }
 
-            ProjectDbContext.Remove(association);
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            LexiconDbContext.Remove(association);
+            _ = await LexiconDbContext!.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);
         }
