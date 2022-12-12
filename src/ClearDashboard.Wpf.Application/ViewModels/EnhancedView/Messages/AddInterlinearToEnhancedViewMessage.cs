@@ -1,0 +1,5 @@
+﻿using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+
+namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+
+public record AddInterlinearToEnhancedViewMessage(InterlinearEnhancedViewItemMetadatum Metadatum);
