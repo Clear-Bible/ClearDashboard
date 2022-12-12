@@ -37,19 +37,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private IEventAggregator? EventAggregator { get; }
         private ILogger<VerseDisplayViewModel>? Logger { get; }
 
-        protected TokenMap? SourceTokenMap { private get; set; }
+        private TokenMap? _sourceTokenMap;
+        protected TokenMap? SourceTokenMap
+        {
+            get => _sourceTokenMap;
+            set
+            {
+                _sourceTokenMap = value;
+                NotifyOfPropertyChange(nameof(IsSourceRtl));
+            }
+        }
+
         protected TokenCollection? SourceTokens { get; set; }
         protected EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        public bool IsSourceRtl { get; set; }
-        private TokenCollection? TargetTokens { get; set; }
-        private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        public bool IsTargetRtl { get; set; }
 
-        private TranslationSet? TranslationSet { get; set; }
-        private IEnumerable<Translation>? Translations { get; set; }
+        private TokenMap? _targetTokenMap;
+        protected TokenMap? TargetTokenMap
+        {
+            private get { return _targetTokenMap; }
+            set
+            {
+                _targetTokenMap = value;
+                NotifyOfPropertyChange(nameof(IsTargetRtl));
+            }
+        }
 
-        private AlignmentSet? AlignmentSet { get; set; }
-        public IEnumerable<Alignment>? Alignments { get; set; }
+        // private TokenCollection? TargetTokens { get; set; }
+        // private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
+
+        protected TranslationSet? TranslationSet { get; set; }
+        protected IEnumerable<Translation>? Translations { get; set; }
+
+        protected AlignmentSet? AlignmentSet { get; set; }
+        public IEnumerable<Alignment>? Alignments { get; protected set; }
 
         #region Public Properties
 
@@ -62,6 +82,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Gets a collection of target <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
         public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
+
+        public bool IsSourceRtl => SourceTokenMap?.IsRtl ?? false;
+        public bool IsTargetRtl => TargetTokenMap?.IsRtl ?? false;
+
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -103,23 +127,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             }
 
-            if (SourceTokens != null)
+            //if (SourceTokens != null)
+            //{
+            //    SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens!, SourceDetokenizer, IsSourceRtl, true);
+            //    NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
+            //}
+
+            if (TargetTokenMap != null)
             {
-                SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens!, SourceDetokenizer, IsSourceRtl, true);
+                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokenMap.PaddedTokens, IsTargetRtl, false);
                 NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             }
 
-            if (TargetTokens != null)
-            {
-                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer!, IsTargetRtl, false);
-                NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
-            }
+            //if (TargetTokens != null)
+            //{
+            //    TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer!, IsTargetRtl, false);
+            //    NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
+            //}
         }
 
-        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
-        {
-            return await BuildTokenDisplayViewModelsAsync(new PaddedTokenCollection(GetPaddedTokens(tokens, detokenizer)), isRtl, isSource);
-        }        
+        //private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
+        //{
+        //    return await BuildTokenDisplayViewModelsAsync(new PaddedTokenCollection(GetPaddedTokens(tokens, detokenizer)), isRtl, isSource);
+        //}        
         
         private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(PaddedTokenCollection paddedTokens, bool isRtl, bool isSource)
         {
@@ -140,7 +170,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return result;
         }
 
-        private async Task<IEnumerable<Translation>> GetTranslations(TranslationSet translationSet, IEnumerable<TokenId> tokens)
+        protected async Task<IEnumerable<Translation>> GetTranslations(TranslationSet translationSet, IEnumerable<TokenId> tokens)
         {
             try
             {
@@ -286,17 +316,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private void UpdateTokenTranslation(TokenDisplayViewModelCollection tokens, Translation translation)
-        {
-            if (tokens != null)
-            {
-                var token = tokens.FirstOrDefault(t => t.Token.TokenId.Id == translation.SourceToken.TokenId.Id);
-                if (token != null)
-                {
-                    token.Translation = translation;
-                }
-            }
-        }
+        //private void UpdateTokenTranslation(TokenDisplayViewModelCollection tokens, Translation translation)
+        //{
+        //    if (tokens != null)
+        //    {
+        //        var token = tokens.FirstOrDefault(t => t.Token.TokenId.Id == translation.SourceToken.TokenId.Id);
+        //        if (token != null)
+        //        {
+        //            token.Translation = translation;
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// Saves a selected translation for a token to the database.
@@ -340,22 +370,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await BuildTokenDisplayViewModelsAsync();
         }
 
-        public async Task ShowCorpusAsync(
-            TokensTextRow textRow, 
-            EngineStringDetokenizer sourceDetokenizer, 
-            bool isRtl)
-        {
-            SourceTokens = new TokenCollection(textRow.Tokens.GetPositionalSortedBaseTokens().ToList());
-            SourceDetokenizer = sourceDetokenizer;
-            IsSourceRtl = isRtl;
-            IsTargetRtl = false;
+        //public async Task ShowCorpusAsync(
+        //    TokensTextRow textRow, 
+        //    EngineStringDetokenizer sourceDetokenizer, 
+        //    bool isRtl)
+        //{
+        //    SourceTokens = new TokenCollection(textRow.Tokens.GetPositionalSortedBaseTokens().ToList());
+        //    SourceDetokenizer = sourceDetokenizer;
+        //    IsSourceRtl = isRtl;
+        //    IsTargetRtl = false;
 
-            TranslationSet = null;
+        //    TranslationSet = null;
             
-            AlignmentSet = null;
+        //    AlignmentSet = null;
 
-            await BuildTokenDisplayViewModelsAsync();
-        }
+        //    await BuildTokenDisplayViewModelsAsync();
+        //}
 
         public async Task ShowTranslationAsync(
             EngineParallelTextRow engineParallelTextRow,
@@ -365,8 +395,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             SourceTokens = new TokenCollection(engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens"));
             SourceDetokenizer = sourceDetokenizer;
-            IsSourceRtl = isSourceRtl;
-            IsTargetRtl = false;
 
             TranslationSet = translationSet;
             Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
@@ -376,44 +404,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await BuildTokenDisplayViewModelsAsync();
         }
 
-        public async Task ShowAlignmentsAsync(
-            EngineParallelTextRow engineParallelTextRow,
-            AlignmentSet alignmentSet,
-            EngineStringDetokenizer sourceDetokenizer,
-            bool isSourceRtl,
-            EngineStringDetokenizer targetDetokenizer,
-            bool isTargetRtl)
-        {
-            SourceTokens = new TokenCollection(engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens"));
-            SourceDetokenizer = sourceDetokenizer;
-            IsSourceRtl = isSourceRtl;
+        //public async Task ShowAlignmentsAsync(
+        //    EngineParallelTextRow engineParallelTextRow,
+        //    AlignmentSet alignmentSet,
+        //    EngineStringDetokenizer sourceDetokenizer,
+        //    bool isSourceRtl,
+        //    EngineStringDetokenizer targetDetokenizer,
+        //    bool isTargetRtl)
+        //{
+        //    SourceTokens = new TokenCollection(engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens"));
+        //    SourceDetokenizer = sourceDetokenizer;
 
-            TargetTokens = new TokenCollection(engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no target tokens"));
-            TargetDetokenizer = targetDetokenizer;
-            IsTargetRtl = isTargetRtl;
+        //    TargetTokens = new TokenCollection(engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no target tokens"));
+        //    TargetDetokenizer = targetDetokenizer;
 
-            TranslationSet = null;
+        //    TranslationSet = null;
 
-            AlignmentSet = alignmentSet;
-            Alignments = await alignmentSet.GetAlignments(new List<EngineParallelTextRow>() { engineParallelTextRow });
+        //    AlignmentSet = alignmentSet;
+        //    Alignments = await alignmentSet.GetAlignments(new List<EngineParallelTextRow>() { engineParallelTextRow });
 
-            await BuildTokenDisplayViewModelsAsync();
-        }
+        //    await BuildTokenDisplayViewModelsAsync();
+        //}
 
         #endregion
 
-        public VerseDisplayViewModel()
-        {
-            
-        }
-
-        /// <summary>
-        /// Constructor used via dependency injection.
-        /// </summary>
-        /// <param name="noteManager"></param>
-        /// <param name="eventAggregator"></param>
-        /// <param name="logger"></param>
-        // ReSharper disable once UnusedMember.Global
         public VerseDisplayViewModel(NoteManager noteManager, IEventAggregator eventAggregator, ILogger<VerseDisplayViewModel>? logger)
         {
             NoteManager = noteManager;
