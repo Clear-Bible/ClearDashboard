@@ -12,6 +12,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Tokenization;
 
@@ -35,9 +36,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseLeaveMessage>
     {
         protected NoteManager NoteManager { get; }
+        protected IMediator Mediator { get; }
         protected IEventAggregator EventAggregator { get; }
         protected ILifetimeScope LifetimeScope { get; }
-        protected ILogger<VerseDisplayViewModel> Logger { get; }
+        protected ILogger Logger { get; }
 
         private TokenMap? _sourceTokenMap;
         protected TokenMap? SourceTokenMap
@@ -70,8 +72,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected TranslationSet? TranslationSet { get; set; }
         protected IEnumerable<Translation>? Translations { get; set; }
 
-        protected AlignmentSet? AlignmentSet { get; set; }
-        public IEnumerable<Alignment>? Alignments { get; protected set; }
+        //protected AlignmentSet? AlignmentSet { get; set; }
+        public virtual AlignmentCollection? Alignments { get; }
 
         #region Public Properties
 
@@ -414,9 +416,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #endregion
 
-        public VerseDisplayViewModel(NoteManager noteManager, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger<VerseDisplayViewModel> logger)
+        public VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
         {
             NoteManager = noteManager;
+            Mediator = mediator;
             EventAggregator = eventAggregator;
             LifetimeScope = lifetimeScope;
             Logger = logger;
