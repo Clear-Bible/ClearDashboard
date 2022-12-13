@@ -53,7 +53,7 @@
             TextAlignment="Right" />
 
         <ContentControl Grid.Row="1" cm:View.Model="{Binding ActiveItem}" />
-        <StatusBar
+        <!--<StatusBar
             Grid.Row="2"
             Background="{DynamicResource MaterialDesignPaper}"
             Foreground="{DynamicResource MaterialDesignDarkForeground}">
@@ -68,7 +68,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <!--<Button
+                --><!--<Button
                     x:Name="BackgroundTasks"
                     Margin="0"
                     Padding="0"
@@ -92,7 +92,7 @@
                             Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Value="60" />
                     </Grid>
-                </Button>-->
+                </Button>--><!--
             </StatusBarItem>
             <StatusBarItem Grid.Column="1">
                 <Label
@@ -101,6 +101,6 @@
                     FontSize="14" />
             </StatusBarItem>
 
-        </StatusBar>
+        </StatusBar>-->
     </Grid>
 </controls:DialogWindow>
