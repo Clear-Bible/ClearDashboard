@@ -105,16 +105,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
-                VerseDisplayViewModel = ServiceProvider.GetService<VerseDisplayViewModel>()!;
+                //VerseDisplayViewModel = ServiceProvider.GetService<VerseDisplayViewModel>()!;
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager!.LoadProject("EnhancedViewDemo2");
+                await ProjectManager!.LoadProject("EnhancedViewDemo4");
                 //var row = await GetVerseTextRow(40001001);
                 var row = await GetVerseTextRow(001001001);
                 var translationSet = await GetFirstTranslationSet();
 
-                VerseDisplayViewModel = await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row ?? throw new InvalidDataEngineException(name: "row", value: "null"), Detokenizer, false, translationSet);
+                VerseDisplayViewModel = await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, Detokenizer, true, translationSet);
 
                 //await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
