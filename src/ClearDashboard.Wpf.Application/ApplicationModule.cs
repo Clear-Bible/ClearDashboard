@@ -41,6 +41,7 @@ namespace ClearDashboard.Wpf.Application
 
         public static void RegisterManagerDependencies(this ContainerBuilder builder)
         {
+            builder.RegisterType<AlignmentManager>().AsSelf();
             builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
             builder.RegisterType<TranslationManager>().AsSelf().SingleInstance();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
