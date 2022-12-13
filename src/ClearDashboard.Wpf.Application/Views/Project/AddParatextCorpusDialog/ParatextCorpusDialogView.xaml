@@ -11,7 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    cm:Message.Attach="[Event Closing] = [Action OnClose($eventArgs)]"
+    
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:ParatextCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -34,6 +34,9 @@
     TitleCharacterCasing="Normal"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
+
+    <!--cm:Message.Attach="[Event Closing] = [Action OnClose($eventArgs)]"-->
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />

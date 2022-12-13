@@ -732,7 +732,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             var textCorpus = dialogViewModel.SelectedTokenizer switch
                             {
                                 Tokenizers.LatinWordTokenizer =>
-                                   (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                   (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
                                    .Tokenize<LatinWordTokenizer>()
                                    .Transform<IntoTokensTextRowProcessor>()
                                    .Transform<SetTrainingBySurfaceLowercase>(),
