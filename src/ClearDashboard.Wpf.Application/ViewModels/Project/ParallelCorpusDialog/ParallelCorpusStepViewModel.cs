@@ -20,7 +20,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
     public class ParallelCorpusStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, ParallelCorpusStepViewModel>
     {
 
+        #region Member Variables   
 
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
+        private string _parallelCorpusDisplayName;
+        public string ParallelCorpusDisplayName
+        {
+            get => _parallelCorpusDisplayName;
+            set
+            {
+                Set(ref _parallelCorpusDisplayName, value);
+                ValidationResult = Validator.Validate(this);
+                CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+
+                ParentViewModel.CurrentProject = value;
+            }
+        }
+
+        private DialogMode _dialogMode;
+        public DialogMode DialogMode
+        {
+            get => _dialogMode;
+            set => Set(ref _dialogMode, value);
+        }
+
+        private bool _canOk;
+        public bool CanOk
+        {
+            get => _canOk;
+            set => Set(ref _canOk, value);
+        }
+
+
+
+
+        private bool _canCreate;
+        public bool CanCreate
+        {
+            get => _canCreate;
+            set => Set(ref _canCreate, value);
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
 
         public ParallelCorpusStepViewModel()
         {
@@ -42,43 +95,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         }
 
-        private string _parallelCorpusDisplayName;
-        public string ParallelCorpusDisplayName
-        {
-            get => _parallelCorpusDisplayName;
-            set
-            {
-                Set(ref _parallelCorpusDisplayName, value);
-                ValidationResult = Validator.Validate(this);
-                CanCreate = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
-
-                ParentViewModel.CurrentProject = value;
-            }
-        }
-
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             ParentViewModel.CurrentStepTitle =
                 LocalizationStrings.Get("ParallelCorpusDialog_AddParallelRelationship", Logger);
-            
+
             ParallelCorpusDisplayName =
                 $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name}";
             return base.OnActivateAsync(cancellationToken);
         }
 
-        private DialogMode _dialogMode;
-        public DialogMode DialogMode
-        {
-            get => _dialogMode;
-            set => Set(ref _dialogMode, value);
-        }
+        #endregion //Constructor
 
-        private bool _canOk;
-        public bool CanOk
-        {
-            get => _canOk;
-            set => Set(ref _canOk, value);
-        }
+
+        #region Methods
 
         public void Ok()
         {
@@ -86,20 +116,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
 
-        private bool _canCreate;
-        public bool CanCreate
-        {
-            get => _canCreate;
-            set => Set(ref _canCreate, value);
-        }
-
         public async void UseDefaults()
         {
             if (ParentViewModel is not null)
             {
                 ParentViewModel.UseDefaults = true;
             }
-            
+
             await Create(true);
         }
 
@@ -108,7 +131,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         {
             await Create(true);
         }
-        
+
 
         public async Task Create(object nothing)
         {
@@ -147,5 +170,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         {
             return (!string.IsNullOrEmpty(ParallelCorpusDisplayName)) ? Validator.Validate(this) : null;
         }
+
+        #endregion // Methods
+
+
     }
 }

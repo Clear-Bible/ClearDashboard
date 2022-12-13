@@ -6,14 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
-    public class AddParatextCorpusDialogViewModelValidator : AbstractValidator<AddParatextCorpusDialogViewModel>
-    {
-        public AddParatextCorpusDialogViewModelValidator(ILogger<AddParatextCorpusDialogViewModelValidator> logger)
-        {
-            RuleFor(x => x.SelectedProject).NotNull();
-        }
+    //public class AddParatextCorpusDialogViewModelValidator : AbstractValidator<AddParatextCorpusDialogViewModel>
+    //{
+    //    public AddParatextCorpusDialogViewModelValidator(ILogger<AddParatextCorpusDialogViewModelValidator> logger)
+    //    {
+    //        RuleFor(x => x.SelectedProject).NotNull();
+    //    }
 
-    }
+    //}
 
     public class InterlinearDialogViewModelValidator : AbstractValidator<InterlinearDialogViewModel>
     {
