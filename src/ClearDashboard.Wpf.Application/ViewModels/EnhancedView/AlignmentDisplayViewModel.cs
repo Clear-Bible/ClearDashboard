@@ -5,19 +5,33 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Autofac;
+using MediatR;
+using ClearDashboard.Wpf.Application.Collections;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+    /// <summary>
+    /// A specialization of <see cref="VerseDisplayViewModel"/> for displaying alignments.
+    /// </summary>
     public class AlignmentDisplayViewModel : VerseDisplayViewModel
     {
-        private readonly EngineParallelTextRow _parallelTextRow;
-        private readonly AlignmentSet _alignmentSet;
+        private EngineParallelTextRow ParallelTextRow { get; }
+        private AlignmentSetId AlignmentSetId { get; }
+        private AlignmentManager? AlignmentManager { get; set; }
 
+        /// <summary>
+        /// Gets the collection of alignments for the verse.
+        /// </summary>
+        public override AlignmentCollection? Alignments => AlignmentManager?.Alignments;
+
+        /// <summary>
+        /// Initializes the view model with the alignments for the verse.
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
         public override async Task InitializeAsync()
         {
-            Alignments = await _alignmentSet.GetAlignments(new List<EngineParallelTextRow>() { _parallelTextRow });
+            AlignmentManager = await AlignmentManager.CreateAsync(LifetimeScope, ParallelTextRow, AlignmentSetId);
 
             await base.InitializeAsync();
         }
@@ -27,14 +41,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                       bool isSourceRtl,
                                       EngineStringDetokenizer targetDetokenizer,
                                       bool isTargetRtl,
-                                      AlignmentSet alignmentSet,
+                                      AlignmentSetId alignmentSetId,
                                       NoteManager noteManager, 
+                                      IMediator mediator,
                                       IEventAggregator eventAggregator, 
                                       ILifetimeScope lifetimeScope,
                                       ILogger<VerseDisplayViewModel> logger)
-            : base(noteManager, eventAggregator, lifetimeScope, logger)
+            : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
-            _parallelTextRow = parallelTextRow;
+            ParallelTextRow = parallelTextRow;
             if (parallelTextRow.SourceTokens != null)
             {
                 SourceTokenMap = new TokenMap(parallelTextRow.SourceTokens, sourceDetokenizer, isSourceRtl);
@@ -44,21 +59,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 TargetTokenMap = new TokenMap(parallelTextRow.TargetTokens, targetDetokenizer, isTargetRtl);
             }
 
-            _alignmentSet = alignmentSet;
+            AlignmentSetId = alignmentSetId;
         }
 
-        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, EngineParallelTextRow parallelTextRow, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl, AlignmentSet alignmentSet)
+        /// <summary>
+        /// Creates an <see cref="AlignmentDisplayViewModel"/> instance using the specified DI container.
+        /// </summary>
+        /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
+        /// <param name="parallelTextRow">The <see cref="EngineParallelTextRow"/> containing the tokens to align.</param>
+        /// <param name="sourceDetokenizer">The detokenizer to use for the source tokens.</param>
+        /// <param name="isSourceRtl">True if the source tokens should be displayed right-to-left (RTL); false otherwise.</param>
+        /// <param name="targetDetokenizer">The detokenizer to use for the target tokens.</param>
+        /// <param name="isTargetRtl">True if the source tokens should be displayed right-to-left (RTL); false otherwise.</param>
+        /// <param name="alignmentSetId">The ID of the alignment set to use for aligning the tokens.</param>
+        /// <returns></returns>
+        public static async Task<AlignmentDisplayViewModel> CreateAsync(IComponentContext componentContext, EngineParallelTextRow parallelTextRow, EngineStringDetokenizer sourceDetokenizer, bool isSourceRtl, EngineStringDetokenizer targetDetokenizer, bool isTargetRtl, AlignmentSetId alignmentSetId)
         {
-            var verseDisplayViewModel = componentContext.Resolve<AlignmentDisplayViewModel>(
+            var viewModel = componentContext.Resolve<AlignmentDisplayViewModel>(
                 new NamedParameter("parallelTextRow", parallelTextRow),
                 new NamedParameter("sourceDetokenizer", sourceDetokenizer),
                 new NamedParameter("isSourceRtl", isSourceRtl),
                 new NamedParameter("targetDetokenizer", targetDetokenizer),
                 new NamedParameter("isTargetRtl", isTargetRtl),
-                new NamedParameter("alignmentSet", alignmentSet)
+                new NamedParameter("alignmentSetId", alignmentSetId)
             );
-            await verseDisplayViewModel.InitializeAsync();
-            return verseDisplayViewModel;
+            await viewModel.InitializeAsync();
+            return viewModel;
         }
     }
 }

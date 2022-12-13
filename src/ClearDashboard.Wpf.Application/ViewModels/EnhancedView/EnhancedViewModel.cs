@@ -1053,8 +1053,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 foreach (var row in rows)
                 {
                     versesOut.Add(message.AlignmentSetId != null 
-                        ? await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, row ?? throw new InvalidDataEngineException(name: "row", value: "null"), Detokenizer, message.IsRTL, TargetDetokenizer, message.IsTargetRTL ?? false,
-                                                                        await GetAlignmentSet(message.AlignmentSetId!, Mediator!))
+                        ? await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
+                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
+                            Detokenizer, 
+                            message.IsRTL, 
+                            TargetDetokenizer, 
+                            message.IsTargetRTL ?? false,
+                            new AlignmentSetId(Guid.Parse(message.AlignmentSetId)))
                         : await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row ?? throw new InvalidDataEngineException(name: "row", value: "null"), Detokenizer, message.IsRTL,
                                                                         await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null"))));
                 }
