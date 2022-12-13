@@ -43,6 +43,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         #region Public Properties
 
+        public List<string> BookIds { get; set; } = new();
+
         public enum CorpusType
         {
             Manuscript,
@@ -102,6 +104,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 Set(ref _selectedProject, value);
             }
         }
+
+        
 
 
         private ObservableCollection<UsfmError> _usfmErrors = new();

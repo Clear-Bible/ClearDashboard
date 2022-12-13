@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using ClearDashboard.Wpf.Application.Helpers;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -21,7 +20,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
     {
         private readonly DashboardProjectManager _projectManager;
 
-        #region Member Variables   
+        #region Member Variables
+
+        public RelayCommand NtCommand { get; }
+        public RelayCommand OtCommand { get; }
+        public RelayCommand NoneCommand { get; }
+        public RelayCommand AllCommand { get; }
+        public RelayCommand OkCommand { get; }
 
         #endregion //Member Variables
 
@@ -36,7 +41,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         private ObservableCollection<SelectedBook> _selectedBooks = new();
         public ObservableCollection<SelectedBook> SelectedBooks
         {
-            get => _selectedBooks; 
+            get
+            {
+                var somethingSelected = _selectedBooks.FirstOrDefault(t => t.IsEnabled && t.IsSelected);
+                if (somethingSelected is null)
+                {
+                    ContinueEnabled = false;
+                }
+                else
+                {
+                    ContinueEnabled = true;
+                }
+
+                return _selectedBooks;
+            }
             set
             {
                 _selectedBooks = value;
@@ -103,6 +121,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             CanAdd = false;
 
             ContinueEnabled = false;
+            
+            // wire up the relay commands
+            NtCommand = new RelayCommand(NT);
+            OtCommand = new RelayCommand(OT);
+            NoneCommand = new RelayCommand(UnselectAll);
+            AllCommand = new RelayCommand(SelectAll);
+            OkCommand = new RelayCommand(Ok);
+
+            // initialize the Bible books 
             var books = SelectedBook.Init();
             foreach (var book in books)
             {
@@ -114,12 +141,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         protected async override Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            // get those books which actually have text in them from Paratext
             CancellationToken cancellationTokenProject = new();
-
-            //ParentViewModel.CurrentStepTitle = LocalizationStrings.Get("ParatextCorpusDialog_SelectBooks", Logger);
-
-            //var alignment = LocalizationStrings.Get("AddParatextCorpusDialog_Alignment", Logger);
-
             var request = await _projectManager?.ExecuteRequest(new GetVersificationAndBookIdByParatextProjectIdQuery(ParentViewModel.SelectedProject.Id), cancellationTokenProject);
 
             if (request.Success && request.HasData)
@@ -128,11 +151,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 {
                     var books = request.Data;
 
+                    // iterate through and enable those books which have text
+                    foreach (var book in SelectedBooks)
+                    {
+                        var found = books.BookAbbreviations.FirstOrDefault(x => x == book.Abbreviation);
+                        if(found != null)
+                        {
+                            book.IsEnabled = true;
+                            book.IsSelected = true;
+                        }
+                        else
+                        {
+                            book.IsEnabled =false;
+                            book.IsSelected = false;
+                        }
+                    }
 
+                    NotifyOfPropertyChange(() => SelectedBooks);
                 }
             }
 
-            
             base.OnActivateAsync(cancellationToken);
         }
 
@@ -142,30 +180,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         #region Methods
         protected override ValidationResult? Validate()
         {
-            // TODO
             return null;
         }
 
-        public void Ok()
+        public void Ok(object obj)
         {
+            foreach (var book in SelectedBooks)
+            {
+                if (book.IsEnabled && book.IsSelected)
+                {
+                    ParentViewModel.BookIds.Add(book.Abbreviation);
+                }
+            }
+
             ParentViewModel?.Ok();
         }
 
-        public async void Add()
-        {
-            await Add(true);
-        }
+        //public async void Add()
+        //{
+        //    await Add(true);
+        //}
 
-        public async Task Add(object nothing)
-        {
-            CanAdd = false;
-            _ = await Task.Factory.StartNew(async () =>
-            {
+        //public async Task Add(object nothing)
+        //{
+        //    CanAdd = false;
+        //    _ = await Task.Factory.StartNew(async () =>
+        //    {
  
-            }, CancellationToken.None);
-        }
+        //    }, CancellationToken.None);
+        //}
 
-        private void PerformUnselectAll()
+        private void UnselectAll(object obj)
         {
             for (int i = 0; i < _selectedBooks.Count; i++)
             {
@@ -174,33 +219,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             NotifyOfPropertyChange(() => SelectedBooks);
         }
 
-        private void PerformSelectAll()
+        private void SelectAll(object obj)
         {
             for (int i = 0; i < _selectedBooks.Count; i++)
             {
-                _selectedBooks[i].IsSelected = true;
+                if (_selectedBooks[i].IsEnabled)
+                {
+                    _selectedBooks[i].IsSelected = true;
+                }
+                
             }
             NotifyOfPropertyChange(() => SelectedBooks);
         }
 
-        private void PerformNT()
+        private void NT(object obj)
         {
             bool toggle = !_selectedBooks[39].IsSelected;
 
             for (int i = 39; i < _selectedBooks.Count; i++)
             {
-                _selectedBooks[i].IsSelected = toggle;
+                if (_selectedBooks[i].IsEnabled)
+                {
+                    _selectedBooks[i].IsSelected = true;
+                }
             }
             NotifyOfPropertyChange(() => SelectedBooks);
-            }
+        }
 
-        private void PerformOT()
+        private void OT(object obj)
         {
             bool toggle = !_selectedBooks[0].IsSelected;
 
             for (int i = 0; i < 39; i++)
             {
-                _selectedBooks[i].IsSelected = toggle;
+                if (_selectedBooks[i].IsEnabled)
+                {
+                    _selectedBooks[i].IsSelected = true;
+                }
             }
             NotifyOfPropertyChange(() => SelectedBooks);
         }

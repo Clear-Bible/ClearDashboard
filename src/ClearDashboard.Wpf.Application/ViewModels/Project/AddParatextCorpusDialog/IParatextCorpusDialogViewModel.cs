@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
@@ -14,6 +15,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         List<IWorkflowStepViewModel>? Steps { get; }
         ParatextProjectMetadata SelectedProject { get; set; }
+        List<string>? BookIds { get; set; }
 
 
         void Ok();
