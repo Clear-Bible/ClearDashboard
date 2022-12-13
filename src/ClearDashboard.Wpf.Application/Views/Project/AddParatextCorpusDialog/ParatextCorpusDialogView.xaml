@@ -7,8 +7,6 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
-    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     Title="{helpers:Localization AddParatextCorpusDialog_Title}"
@@ -33,7 +31,6 @@
     TextOptions.TextRenderingMode="Auto"
     TitleCharacterCasing="Normal"
     WindowStartupLocation="CenterOwner"
-    Title="Import Corpus from Paratext"
     Width="800"
     Height="550"
     mc:Ignorable="d">
