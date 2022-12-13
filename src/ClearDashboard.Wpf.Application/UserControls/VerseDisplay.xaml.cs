@@ -723,7 +723,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplay = control?.TokenDisplayViewModel,
-                VerseDisplay = VerseDisplayViewModel,
+                InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
                 Translation = control?.TokenDisplayViewModel?.Translation,
             }) ;
         }

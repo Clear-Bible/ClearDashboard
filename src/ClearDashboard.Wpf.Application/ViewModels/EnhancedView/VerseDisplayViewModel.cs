@@ -1,34 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Tokenization;
 
 // These need to be specified explicitly to resolve ambiguity with ClearDashboard.DataAccessLayer.Models.
-using Alignment = ClearDashboard.DAL.Alignment.Translation.Alignment;
-using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using Token = ClearBible.Engine.Corpora.Token;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
-using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     /// <summary>
-    /// A class containing the needed information to render a verse of <see cref="Token"/>s in the UI.
+    /// A abstract view model class containing the needed information to render a verse of <see cref="Token"/>s in the UI.
     /// </summary>
-    public class VerseDisplayViewModel : PropertyChangedBase, 
+    /// <remarks>
+    /// Instantiate a concrete <see cref="CorpusDisplayViewModel"/>, <see cref="InterlinearDisplayViewModel"/>,
+    /// or <see cref="AlignmentDisplayViewModel"/> depending on the functionality desired.
+    /// </remarks>
+    public abstract class VerseDisplayViewModel : PropertyChangedBase, 
         IHandle<SelectionUpdatedMessage>,
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
@@ -52,9 +48,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        protected TokenCollection? SourceTokens { get; set; }
-        protected EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-
         private TokenMap? _targetTokenMap;
         protected TokenMap? TargetTokenMap
         {
@@ -66,17 +59,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        // private TokenCollection? TargetTokens { get; set; }
-        // private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-
-        protected TranslationSet? TranslationSet { get; set; }
-        protected IEnumerable<Translation>? Translations { get; set; }
-
-        //protected AlignmentSet? AlignmentSet { get; set; }
-        public virtual AlignmentCollection? Alignments { get; }
-
-        #region Public Properties
-
         /// <summary>
         /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
         /// </summary>
@@ -87,43 +69,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
 
+        /// <summary>
+        /// Gets a collection of alignments to be rendered.
+        /// </summary>
+        /// <remarks>
+        /// Alignment information is only available when this is a <see cref="AlignmentDisplayViewModel"/> derived type.
+        /// </remarks>
+        public virtual AlignmentCollection? Alignments => null;
+
         public bool IsSourceRtl => SourceTokenMap?.IsRtl ?? false;
         public bool IsTargetRtl => TargetTokenMap?.IsRtl ?? false;
 
-
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        #endregion Public Properties
-
-        #region Private methods
-//        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer)
-//        {
-//            try
-//            {
-//#if DEBUG
-//                var stopwatch = new Stopwatch();
-//                stopwatch.Start();
-//#endif
-//                var result = detokenizer.Detokenize(tokens);
-//#if DEBUG
-//                stopwatch.Stop();
-//                Logger?.LogInformation($"Retrieved padded tokens from {detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
-//#endif
-//                return result;
-//            }
-//            catch (Exception e)
-//            {
-//                Logger?.LogCritical(e.ToString());
-//                throw;
-//            }
-//        }
-
-        private Translation? GetTranslationForToken(Token token)
+        protected virtual Translation? GetTranslationForToken(Token token)
         {
-            return TranslationSet != null ? Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? new Translation(token) : null;
+            return null;
         }
 
-        private async Task BuildTokenDisplayViewModelsAsync()
+        protected async Task BuildTokenDisplayViewModelsAsync()
         {
             if (SourceTokenMap != null)
             {
@@ -131,74 +95,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             }
 
-            //if (SourceTokens != null)
-            //{
-            //    SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokens!, SourceDetokenizer, IsSourceRtl, true);
-            //    NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
-            //}
-
             if (TargetTokenMap != null)
             {
                 TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokenMap.PaddedTokens, IsTargetRtl, false);
                 NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             }
-
-            //if (TargetTokens != null)
-            //{
-            //    TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokens, TargetDetokenizer!, IsTargetRtl, false);
-            //    NotifyOfPropertyChange(nameof(TargetTokenDisplayViewModels));
-            //}
         }
-
-        //private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
-        //{
-        //    return await BuildTokenDisplayViewModelsAsync(new PaddedTokenCollection(GetPaddedTokens(tokens, detokenizer)), isRtl, isSource);
-        //}        
         
         private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(PaddedTokenCollection paddedTokens, bool isRtl, bool isSource)
         {
             var result = new TokenDisplayViewModelCollection();
             
-            foreach (var paddedToken in paddedTokens)
+            foreach (var (token, paddingBefore, paddingAfter) in paddedTokens)
             {
-                result.Add(new TokenDisplayViewModel(paddedToken.token)
+                result.Add(new TokenDisplayViewModel(token)
                 {
-                    PaddingBefore = paddedToken.paddingBefore,
-                    PaddingAfter = paddedToken.paddingAfter,
-                    Translation = GetTranslationForToken(paddedToken.token),
-                    NoteIds = await NoteManager!.GetNoteIdsAsync(paddedToken.token.TokenId),
+                    PaddingBefore = paddingBefore,
+                    PaddingAfter = paddingAfter,
+                    Translation = GetTranslationForToken(token),
+                    NoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
                     IsSource = isSource,
-                    
                 });
             }
             return result;
         }
-
-        protected async Task<IEnumerable<Translation>> GetTranslations(TranslationSet translationSet, IEnumerable<TokenId> tokens)
-        {
-            try
-            {
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                var result = await translationSet.GetTranslations(tokens);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved translations in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                return result;
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
-
-        #endregion
-
-        #region Event Handlers
 
         private static void UnselectTokens(TokenDisplayViewModelCollection collection, TokenDisplayViewModelCollection selectedTokens)
         {
@@ -273,150 +193,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        #endregion
-
-        #region Public API
-
-        /// <summary>
-        /// Gets a collection of <see cref="TranslationOption"/>s for a given translation.
-        /// </summary>
-        /// <param name="token">The <see cref="Token"/> for which to provide options.</param>
-        /// <returns>An awaitable <see cref="Task{T}"/> containing a <see cref="IEnumerable{T}"/> of <see cref="TranslationOption"/>s.</returns>
-        public async Task<IEnumerable<TranslationOption>> GetTranslationOptionsAsync(Token token)
-        {
-            try
-            {
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                if (TranslationSet == null)
-                {
-                    throw new InvalidOperationException("Cannot retrieve translation options because the translation set is null.  Ensure that you have called ShowTranslationAsync() with the current translation set.");
-                }
-
-                var translationModelEntry = await TranslationSet.GetTranslationModelEntryForToken(token);
-                if (translationModelEntry == null)
-                {
-                    Logger?.LogCritical($"Cannot find translation options for {token.SurfaceText}");
-                    return new List<TranslationOption>();
-                }
-
-                var translationOptions = translationModelEntry.OrderByDescending(option => option.Value)
-                    .Select(option => new TranslationOption { Word = option.Key, Count = option.Value })
-                    .Take(4)        // For now, we'll just return the top four options; may be configurable in the future
-                    .ToList();
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved translation options for {token.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                return translationOptions;
-
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
-
-        //private void UpdateTokenTranslation(TokenDisplayViewModelCollection tokens, Translation translation)
-        //{
-        //    if (tokens != null)
-        //    {
-        //        var token = tokens.FirstOrDefault(t => t.Token.TokenId.Id == translation.SourceToken.TokenId.Id);
-        //        if (token != null)
-        //        {
-        //            token.Translation = translation;
-        //        }
-        //    }
-        //}
-
-        /// <summary>
-        /// Saves a selected translation for a token to the database.
-        /// </summary>
-        /// <param name="translation">The <see cref="Translation"/> to save to the database.</param>
-        /// <param name="translationActionType"></param>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task PutTranslationAsync(Translation translation, string translationActionType)
-        {
-            try
-            {
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                if (TranslationSet == null)
-                {
-                    throw new InvalidOperationException("Cannot save translation because the translation set is null.  Ensure that you have called ShowTranslationAsync() with the current translation set.");
-                }
-
-                await TranslationSet.PutTranslation(translation, translationActionType);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Saved translation for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                // If translation propagates to other translations, then we need a fresh call to PopulateTranslations() and to rebuild the token displays.
-                Translations = await GetTranslations(TranslationSet, SourceTokens!.Select(t => t.TokenId));
-                await BuildTokenDisplayViewModelsAsync();
-
-                await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
-
-        public virtual async Task InitializeAsync()
+        protected virtual async Task InitializeAsync()
         {
             await BuildTokenDisplayViewModelsAsync();
         }
 
-        //public async Task ShowCorpusAsync(
-        //    TokensTextRow textRow, 
-        //    EngineStringDetokenizer sourceDetokenizer, 
-        //    bool isRtl)
-        //{
-        //    SourceTokens = new TokenCollection(textRow.Tokens.GetPositionalSortedBaseTokens().ToList());
-        //    SourceDetokenizer = sourceDetokenizer;
-        //    IsSourceRtl = isRtl;
-        //    IsTargetRtl = false;
-
-        //    TranslationSet = null;
-            
-        //    AlignmentSet = null;
-
-        //    await BuildTokenDisplayViewModelsAsync();
-        //}
-
-
-        //public async Task ShowAlignmentsAsync(
-        //    EngineParallelTextRow engineParallelTextRow,
-        //    AlignmentSet alignmentSet,
-        //    EngineStringDetokenizer sourceDetokenizer,
-        //    bool isSourceRtl,
-        //    EngineStringDetokenizer targetDetokenizer,
-        //    bool isTargetRtl)
-        //{
-        //    SourceTokens = new TokenCollection(engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens"));
-        //    SourceDetokenizer = sourceDetokenizer;
-
-        //    TargetTokens = new TokenCollection(engineParallelTextRow.TargetTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no target tokens"));
-        //    TargetDetokenizer = targetDetokenizer;
-
-        //    TranslationSet = null;
-
-        //    AlignmentSet = alignmentSet;
-        //    Alignments = await alignmentSet.GetAlignments(new List<EngineParallelTextRow>() { engineParallelTextRow });
-
-        //    await BuildTokenDisplayViewModelsAsync();
-        //}
-
-        #endregion
-
-        public VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
+        protected VerseDisplayViewModel(NoteManager noteManager, IMediator mediator, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger logger)
         {
             NoteManager = noteManager;
             Mediator = mediator;

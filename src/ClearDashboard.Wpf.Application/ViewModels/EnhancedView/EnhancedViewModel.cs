@@ -1060,8 +1060,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                             TargetDetokenizer, 
                             message.IsTargetRTL ?? false,
                             new AlignmentSetId(Guid.Parse(message.AlignmentSetId)))
-                        : await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row ?? throw new InvalidDataEngineException(name: "row", value: "null"), Detokenizer, message.IsRTL,
-                                                                        await GetTranslationSet(message.TranslationSetId ?? throw new InvalidDataEngineException(name: "message.TranslationSetId", value: "null"))));
+                        : await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, 
+                            row ?? throw new InvalidDataEngineException(name: "row", value: "null"), 
+                            Detokenizer, 
+                            message.IsRTL,
+                            new TranslationSetId(Guid.Parse(message.TranslationSetId))));
                 }
 
                 string title = message.ParallelCorpusDisplayName ?? string.Empty;
