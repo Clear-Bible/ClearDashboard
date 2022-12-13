@@ -318,19 +318,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        private IEnumerable<TranslationOption> _translationOptions;
-        public IEnumerable<TranslationOption> TranslationOptions
-        {
-            get => _translationOptions;
-            set => Set(ref _translationOptions, value);
-        }
+        //private IEnumerable<TranslationOption> _translationOptions;
+        //public IEnumerable<TranslationOption> TranslationOptions
+        //{
+        //    get => _translationOptions;
+        //    set => Set(ref _translationOptions, value);
+        //}
 
-        private TranslationOption? _currentTranslationOption;
-        public TranslationOption? CurrentTranslationOption
-        {
-            get => _currentTranslationOption;
-            set => Set(ref _currentTranslationOption, value);
-        }
+        //private TranslationOption? _currentTranslationOption;
+        //public TranslationOption? CurrentTranslationOption
+        //{
+        //    get => _currentTranslationOption;
+        //    set => Set(ref _currentTranslationOption, value);
+        //}
 
         #endregion //Observable Properties
 

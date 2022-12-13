@@ -12,6 +12,7 @@ using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -113,7 +114,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 var row = await GetVerseTextRow(001001001);
                 var translationSet = await GetFirstTranslationSet();
 
-                await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
+                VerseDisplayViewModel = await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row ?? throw new InvalidDataEngineException(name: "row", value: "null"), Detokenizer, false, translationSet);
+
+                //await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
             }

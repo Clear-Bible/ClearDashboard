@@ -15,9 +15,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                       EngineStringDetokenizer detokenizer,
                                       bool isRtl,
                                       NoteManager noteManager, 
-                                      IEventAggregator eventAggregator, 
-                                      ILogger<VerseDisplayViewModel>? logger)
-            : base(noteManager, eventAggregator, logger)
+                                      IEventAggregator eventAggregator,
+                                      ILifetimeScope lifetimeScope,
+                                      ILogger<VerseDisplayViewModel> logger)
+            : base(noteManager, eventAggregator, lifetimeScope, logger)
         {
             SourceTokenMap = new TokenMap(textRow.Tokens, detokenizer, isRtl);
         }

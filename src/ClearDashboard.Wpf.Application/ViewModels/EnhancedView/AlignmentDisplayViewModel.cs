@@ -1,15 +1,12 @@
-﻿using System;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.Logging;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Autofac;
-using Autofac.Core.Lifetime;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -33,8 +30,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                       AlignmentSet alignmentSet,
                                       NoteManager noteManager, 
                                       IEventAggregator eventAggregator, 
-                                      ILogger<VerseDisplayViewModel>? logger)
-            : base(noteManager, eventAggregator, logger)
+                                      ILifetimeScope lifetimeScope,
+                                      ILogger<VerseDisplayViewModel> logger)
+            : base(noteManager, eventAggregator, lifetimeScope, logger)
         {
             _parallelTextRow = parallelTextRow;
             if (parallelTextRow.SourceTokens != null)

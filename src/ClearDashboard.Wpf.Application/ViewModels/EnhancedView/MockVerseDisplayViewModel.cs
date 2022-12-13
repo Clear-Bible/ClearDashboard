@@ -204,7 +204,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             //await BindAsync(row);
         }
 
-        public MockVerseDisplayViewModel() : base(null, null, null)
+        public MockVerseDisplayViewModel() : base(null, null, null, null)
         {
             
         }

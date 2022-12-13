@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
@@ -33,9 +34,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>
     {
-        private NoteManager? NoteManager { get; }
-        private IEventAggregator? EventAggregator { get; }
-        private ILogger<VerseDisplayViewModel>? Logger { get; }
+        protected NoteManager NoteManager { get; }
+        protected IEventAggregator EventAggregator { get; }
+        protected ILifetimeScope LifetimeScope { get; }
+        protected ILogger<VerseDisplayViewModel> Logger { get; }
 
         private TokenMap? _sourceTokenMap;
         protected TokenMap? SourceTokenMap
@@ -92,27 +94,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion Public Properties
 
         #region Private methods
-        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer)
-        {
-            try
-            {
-#if DEBUG
-                var stopwatch = new Stopwatch();
-                stopwatch.Start();
-#endif
-                var result = detokenizer.Detokenize(tokens);
-#if DEBUG
-                stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved padded tokens from {detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
-#endif
-                return result;
-            }
-            catch (Exception e)
-            {
-                Logger?.LogCritical(e.ToString());
-                throw;
-            }
-        }
+//        private IEnumerable<(Token token, string paddingBefore, string paddingAfter)> GetPaddedTokens(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer)
+//        {
+//            try
+//            {
+//#if DEBUG
+//                var stopwatch = new Stopwatch();
+//                stopwatch.Start();
+//#endif
+//                var result = detokenizer.Detokenize(tokens);
+//#if DEBUG
+//                stopwatch.Stop();
+//                Logger?.LogInformation($"Retrieved padded tokens from {detokenizer.GetType().Name} detokenizer in {stopwatch.ElapsedMilliseconds} ms");
+//#endif
+//                return result;
+//            }
+//            catch (Exception e)
+//            {
+//                Logger?.LogCritical(e.ToString());
+//                throw;
+//            }
+//        }
 
         private Translation? GetTranslationForToken(Token token)
         {
@@ -387,22 +389,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         //    await BuildTokenDisplayViewModelsAsync();
         //}
 
-        public async Task ShowTranslationAsync(
-            EngineParallelTextRow engineParallelTextRow,
-            TranslationSet translationSet,
-            EngineStringDetokenizer sourceDetokenizer,
-            bool isSourceRtl)
-        {
-            SourceTokens = new TokenCollection(engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens"));
-            SourceDetokenizer = sourceDetokenizer;
-
-            TranslationSet = translationSet;
-            Translations = await GetTranslations(TranslationSet, SourceTokens.Select(t => t.TokenId));
-            
-            AlignmentSet = null;
-
-            await BuildTokenDisplayViewModelsAsync();
-        }
 
         //public async Task ShowAlignmentsAsync(
         //    EngineParallelTextRow engineParallelTextRow,
@@ -428,10 +414,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #endregion
 
-        public VerseDisplayViewModel(NoteManager noteManager, IEventAggregator eventAggregator, ILogger<VerseDisplayViewModel>? logger)
+        public VerseDisplayViewModel(NoteManager noteManager, IEventAggregator eventAggregator, ILifetimeScope lifetimeScope, ILogger<VerseDisplayViewModel> logger)
         {
             NoteManager = noteManager;
             EventAggregator = eventAggregator;
+            LifetimeScope = lifetimeScope;
             Logger = logger;
 
             EventAggregator.SubscribeOnUIThread(this);
