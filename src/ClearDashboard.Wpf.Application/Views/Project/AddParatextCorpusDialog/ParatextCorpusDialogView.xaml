@@ -11,6 +11,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    Title="{helpers:Localization AddParatextCorpusDialog_Title}"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:ParatextCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
