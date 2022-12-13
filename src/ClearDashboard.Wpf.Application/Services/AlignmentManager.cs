@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 AlignmentSet = await AlignmentSet.Get(AlignmentSetId, Mediator);
 
                 stopwatch.Stop();
-                Logger.LogInformation($"Retrieved alignment set {AlignmentSetId} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger.LogInformation($"Retrieved alignment set {AlignmentSetId.DisplayName} ({AlignmentSetId.Id}) in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
@@ -56,7 +56,7 @@ namespace ClearDashboard.Wpf.Application.Services
                     Alignments = new AlignmentCollection(await AlignmentSet.GetAlignments(new List<EngineParallelTextRow> { ParallelTextRow }));
                     
                     stopwatch.Stop();
-                    Logger.LogInformation($"Retrieved alignments in {stopwatch.ElapsedMilliseconds} ms");
+                    Logger.LogInformation($"Retrieved {Alignments.Count} alignments from alignment set {AlignmentSetId.DisplayName} ({AlignmentSetId.Id}) in {stopwatch.ElapsedMilliseconds} ms");
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public AlignmentCollection? Alignments { get; private set; }
 
         /// <summary>
-        /// Initializes the view model with the alignments for the row.
+        /// Initializes the manager with the alignments for the row.
         /// </summary>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public async Task InitializeAsync()
