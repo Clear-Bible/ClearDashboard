@@ -7,6 +7,7 @@ using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
 using System.Linq;
 using Autofac;
+using MediatR;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -25,11 +26,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                       EngineStringDetokenizer sourceDetokenizer,
                                       bool isSourceRtl,
                                       TranslationSet translationSet,
-                                      NoteManager noteManager, 
+                                      NoteManager noteManager,
+                                      IMediator mediator,
                                       IEventAggregator eventAggregator, 
                                       ILifetimeScope lifetimeScope,
                                       ILogger<VerseDisplayViewModel> logger)
-            : base(noteManager, eventAggregator, lifetimeScope, logger)
+            : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
             _parallelTextRow = parallelTextRow;
             if (parallelTextRow.SourceTokens != null)

@@ -6,6 +6,7 @@ using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.Logging;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using MediatR;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -15,10 +16,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                       EngineStringDetokenizer detokenizer,
                                       bool isRtl,
                                       NoteManager noteManager, 
+                                      IMediator mediator,
                                       IEventAggregator eventAggregator,
                                       ILifetimeScope lifetimeScope,
                                       ILogger<VerseDisplayViewModel> logger)
-            : base(noteManager, eventAggregator, lifetimeScope, logger)
+            : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
             SourceTokenMap = new TokenMap(textRow.Tokens, detokenizer, isRtl);
         }
