@@ -123,8 +123,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             ContinueEnabled = false;
             
             // wire up the relay commands
-            NtCommand = new RelayCommand(NT);
-            OtCommand = new RelayCommand(OT);
+            NtCommand = new RelayCommand(Nt);
+            OtCommand = new RelayCommand(Ot);
             NoneCommand = new RelayCommand(UnselectAll);
             AllCommand = new RelayCommand(SelectAll);
             OkCommand = new RelayCommand(Ok);
@@ -196,20 +196,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             ParentViewModel?.Ok();
         }
 
-        //public async void Add()
-        //{
-        //    await Add(true);
-        //}
-
-        //public async Task Add(object nothing)
-        //{
-        //    CanAdd = false;
-        //    _ = await Task.Factory.StartNew(async () =>
-        //    {
- 
-        //    }, CancellationToken.None);
-        //}
-
         private void UnselectAll(object obj)
         {
             for (int i = 0; i < _selectedBooks.Count; i++)
@@ -232,10 +218,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             NotifyOfPropertyChange(() => SelectedBooks);
         }
 
-        private void NT(object obj)
+        private void Nt(object obj)
         {
-            bool toggle = !_selectedBooks[39].IsSelected;
-
             for (int i = 39; i < _selectedBooks.Count; i++)
             {
                 if (_selectedBooks[i].IsEnabled)
@@ -246,10 +230,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             NotifyOfPropertyChange(() => SelectedBooks);
         }
 
-        private void OT(object obj)
+        private void Ot(object obj)
         {
-            bool toggle = !_selectedBooks[0].IsSelected;
-
             for (int i = 0; i < 39; i++)
             {
                 if (_selectedBooks[i].IsEnabled)

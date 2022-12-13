@@ -128,7 +128,7 @@ public class DashboardProjectManager : ProjectManager
         await base.Initialize();
         CurrentUser = GetLicensedUser();
         await ConfigureSignalRClient();
-        
+
     }
 
     protected async Task ConfigureSignalRClient()
@@ -216,7 +216,7 @@ public class DashboardProjectManager : ProjectManager
 
     protected async Task HookSignalREvents()
     {
-        List<string> requestedVerses= new();
+        List<string> requestedVerses = new();
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
 
@@ -229,7 +229,7 @@ public class DashboardProjectManager : ProjectManager
                 await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
                 IncomingChangesStarted = false;
 
-                if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))
+                if (requestedVerses.Last().PadLeft(9, '0') != CurrentVerse.PadLeft(9, '0'))
                 {
                     CurrentVerse = requestedVerses.Last();
                     await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentVerse));
@@ -286,9 +286,11 @@ public class DashboardProjectManager : ProjectManager
 
         return project;
     }
-    
+
     public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
-  public void CheckLicense<TViewModel>(TViewModel viewModel)
+    public static dynamic AddParatextCorpusDialogSettings => CreateAddParatextCorpusDialogSettings();
+    
+    public void CheckLicense<TViewModel>(TViewModel viewModel)
     {
         if (!_licenseCleared)
         {
@@ -346,7 +348,7 @@ public class DashboardProjectManager : ProjectManager
         var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
         _licenseCleared = true;
     }
-    
+
 
     private static dynamic CreateNewProjectDialogSettings()
     {
@@ -355,6 +357,18 @@ public class DashboardProjectManager : ProjectManager
         settings.ShowInTaskbar = false;
         settings.WindowState = WindowState.Normal;
         settings.ResizeMode = ResizeMode.NoResize;
+        return settings;
+    }
+
+    private static dynamic CreateAddParatextCorpusDialogSettings()
+    {
+        dynamic settings = new ExpandoObject();
+        settings.WindowStyle = WindowStyle.None;
+        settings.ShowInTaskbar = false;
+        settings.WindowState = WindowState.Normal;
+        settings.ResizeMode = ResizeMode.NoResize;
+        settings.Width = 850;
+        settings.Height = 600;
         return settings;
     }
 

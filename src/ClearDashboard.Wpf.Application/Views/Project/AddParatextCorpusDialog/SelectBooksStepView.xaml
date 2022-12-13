@@ -36,7 +36,7 @@
             Grid.Row="0"
             Margin="5,3,0,0"
             HorizontalAlignment="Center"
-            Content="SELECT BOOKS TO PROCESS"
+            Content="{helpers:Localization AddParatextCorpusDialog_SelectBooks}"
             FontSize="24"
             FontWeight="Bold"
             Foreground="{StaticResource PrimaryHueMidBrush}" />
@@ -45,6 +45,7 @@
             Grid.Row="1"
             Grid.RowSpan="2"
             Grid.Column="0"
+            Margin="3,0,3,0"
             BorderBrush="{StaticResource MaterialDesignBody}"
             BorderThickness="2"
             CornerRadius="4" />
@@ -52,6 +53,7 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="0"
+            Margin="3,0,3,0"
             BorderBrush="{StaticResource MaterialDesignBody}"
             BorderThickness="0"
             CornerRadius="4" />-->
@@ -175,7 +177,7 @@
                 <Border
                 Grid.Row="6"
                 Grid.Column="4"
-                Background="Turquoise"
+                Background="Bisque"
                 BorderBrush="{StaticResource MaterialDesignBody}"
                 BorderThickness="2"
                 CornerRadius="4"
@@ -827,14 +829,14 @@
                     Width="120"
                     Margin="10,0,0,0"
                     Command="{Binding AllCommand}"
-                    Content="SELECT ALL"
+                    Content="{helpers:Localization AddParatextCorpusDialog_SelectAll}"
                     FontSize="12" />
 
             <Button
                     Width="120"
                     Margin="5,0,0,0"
                     Command="{Binding NoneCommand}"
-                    Content="UNSELECT ALL"
+                    Content="{helpers:Localization AddParatextCorpusDialog_UnSelectAll}"
                     FontSize="12" />
 
             <Button
@@ -853,7 +855,7 @@
                 Margin="60,0,0,0"
                 HorizontalAlignment="Right"
                 Command="{Binding OkCommand}"
-                Content="OK"
+                  Content="{helpers:Localization Ok}"
                 FontSize="12"
                 IsEnabled="{Binding ContinueEnabled}" />
         </StackPanel>
