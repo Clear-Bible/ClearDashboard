@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -224,7 +225,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         #region Methods
 
-
+        public void OnClose(CancelEventArgs args)
+        {
+            if (args.Cancel)
+            {
+                Logger!.LogInformation("OnClose() called with 'Cancel' set to true");
+                //CancelCurrentTask();
+            }
+        }
 
 
         public async void Ok()

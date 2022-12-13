@@ -33,6 +33,9 @@
     TextOptions.TextRenderingMode="Auto"
     TitleCharacterCasing="Normal"
     WindowStartupLocation="CenterOwner"
+    Title="Import Corpus from Paratext"
+    Width="800"
+    Height="550"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>

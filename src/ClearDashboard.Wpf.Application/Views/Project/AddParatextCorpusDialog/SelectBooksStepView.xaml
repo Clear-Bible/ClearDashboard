@@ -7,6 +7,7 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:SelectBooksStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -40,7 +41,7 @@
             FontWeight="Bold"
             Foreground="{StaticResource PrimaryHueMidBrush}" />
 
-        <Border
+        <!--<Border
             Grid.Row="1"
             Grid.RowSpan="2"
             Grid.Column="0"
@@ -52,62 +53,64 @@
             Grid.RowSpan="2"
             Grid.Column="0"
             BorderBrush="{StaticResource MaterialDesignBody}"
-            BorderThickness="2"
-            CornerRadius="4" />
+            BorderThickness="0"
+            CornerRadius="4" />-->
+
+        <materialDesign:Card Grid.Row="1" Margin="8" Padding="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="20" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-
-            <!--  Backcolors for book groupings  -->
-            <Border
+                <!--  Backcolors for book groupings  -->
+                <Border
                 Grid.Row="0"
                 Grid.RowSpan="5"
                 Grid.Column="0"
+                Padding="2"
                 Background="Cyan"
                 BorderBrush="{StaticResource MaterialDesignBody}"
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="5"
                 Grid.RowSpan="12"
                 Grid.Column="0"
                 Background="Coral"
                 BorderBrush="{StaticResource MaterialDesignBody}"
                 BorderThickness="2"
-                CornerRadius="4"
-                Opacity="0.1" />
-            <Border
+                CornerRadius="2"
+                Opacity="0.1" 
+                VerticalAlignment="Stretch"/>
+                <Border
                 Grid.Row="17"
                 Grid.RowSpan="3"
                 Grid.Column="0"
@@ -116,7 +119,7 @@
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Grid.Column="1"
@@ -125,7 +128,7 @@
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="2"
                 Grid.RowSpan="17"
                 Grid.Column="1"
@@ -134,7 +137,7 @@
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="0"
                 Grid.RowSpan="4"
                 Grid.Column="3"
@@ -143,7 +146,7 @@
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="4"
                 Grid.Column="3"
                 Background="Gold"
@@ -151,7 +154,7 @@
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="5"
                 Grid.RowSpan="15"
                 Grid.Column="3"
@@ -160,7 +163,7 @@
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="0"
                 Grid.RowSpan="6"
                 Grid.Column="4"
@@ -169,7 +172,7 @@
                 BorderThickness="2"
                 CornerRadius="4"
                 Opacity="0.1" />
-            <Border
+                <Border
                 Grid.Row="6"
                 Grid.Column="4"
                 Background="Turquoise"
@@ -179,7 +182,7 @@
                 Opacity="0.1" />
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk01"
                 Grid.Row="0"
                 Grid.Column="0"
@@ -189,7 +192,7 @@
                 IsChecked="{Binding SelectedBooks[0].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[0].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk02"
                 Grid.Row="1"
                 Grid.Column="0"
@@ -198,7 +201,7 @@
                 Foreground="{Binding SelectedBooks[1].BookColor}"
                 IsChecked="{Binding SelectedBooks[1].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[1].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk03"
                 Grid.Row="2"
                 Grid.Column="0"
@@ -208,7 +211,7 @@
                 IsChecked="{Binding SelectedBooks[2].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[2].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk04"
                 Grid.Row="3"
                 Grid.Column="0"
@@ -218,7 +221,7 @@
                 IsChecked="{Binding SelectedBooks[3].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[3].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk05"
                 Grid.Row="4"
                 Grid.Column="0"
@@ -228,7 +231,7 @@
                 IsChecked="{Binding SelectedBooks[4].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[4].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk06"
                 Grid.Row="5"
                 Grid.Column="0"
@@ -239,7 +242,7 @@
                 IsEnabled="{Binding SelectedBooks[5].IsEnabled}" />
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk07"
                 Grid.Row="6"
                 Grid.Column="0"
@@ -249,7 +252,7 @@
                 IsChecked="{Binding SelectedBooks[6].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[6].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk08"
                 Grid.Row="7"
                 Grid.Column="0"
@@ -259,7 +262,7 @@
                 IsChecked="{Binding SelectedBooks[7].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[7].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk09"
                 Grid.Row="8"
                 Grid.Column="0"
@@ -269,7 +272,7 @@
                 IsChecked="{Binding SelectedBooks[8].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[8].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk10"
                 Grid.Row="9"
                 Grid.Column="0"
@@ -279,7 +282,7 @@
                 IsChecked="{Binding SelectedBooks[9].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[9].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk11"
                 Grid.Row="10"
                 Grid.Column="0"
@@ -289,7 +292,7 @@
                 IsChecked="{Binding SelectedBooks[10].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[10].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk12"
                 Grid.Row="11"
                 Grid.Column="0"
@@ -299,7 +302,7 @@
                 IsChecked="{Binding SelectedBooks[11].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[11].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk13"
                 Grid.Row="12"
                 Grid.Column="0"
@@ -309,7 +312,7 @@
                 IsChecked="{Binding SelectedBooks[12].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[12].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk14"
                 Grid.Row="13"
                 Grid.Column="0"
@@ -319,7 +322,7 @@
                 IsChecked="{Binding SelectedBooks[13].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[13].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk15"
                 Grid.Row="14"
                 Grid.Column="0"
@@ -330,7 +333,7 @@
                 IsEnabled="{Binding SelectedBooks[14].IsEnabled}" />
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk16"
                 Grid.Row="15"
                 Grid.Column="0"
@@ -341,7 +344,7 @@
                 IsEnabled="{Binding SelectedBooks[15].IsEnabled}" />
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk17"
                 Grid.Row="16"
                 Grid.Column="0"
@@ -352,7 +355,7 @@
                 IsEnabled="{Binding SelectedBooks[16].IsEnabled}" />
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk18"
                 Grid.Row="17"
                 Grid.Column="0"
@@ -361,7 +364,7 @@
                 Foreground="{Binding SelectedBooks[17].BookColor}"
                 IsChecked="{Binding SelectedBooks[17].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[17].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk19"
                 Grid.Row="18"
                 Grid.Column="0"
@@ -370,7 +373,7 @@
                 Foreground="{Binding SelectedBooks[18].BookColor}"
                 IsChecked="{Binding SelectedBooks[18].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[18].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk20"
                 Grid.Row="19"
                 Grid.Column="0"
@@ -381,7 +384,7 @@
                 IsEnabled="{Binding SelectedBooks[19].IsEnabled}" />
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk21"
                 Grid.Row="0"
                 Grid.Column="1"
@@ -390,7 +393,7 @@
                 Foreground="{Binding SelectedBooks[20].BookColor}"
                 IsChecked="{Binding SelectedBooks[20].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[20].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk22"
                 Grid.Row="1"
                 Grid.Column="1"
@@ -399,7 +402,7 @@
                 Foreground="{Binding SelectedBooks[21].BookColor}"
                 IsChecked="{Binding SelectedBooks[21].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[21].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk23"
                 Grid.Row="2"
                 Grid.Column="1"
@@ -408,7 +411,7 @@
                 Foreground="{Binding SelectedBooks[22].BookColor}"
                 IsChecked="{Binding SelectedBooks[22].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[22].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk24"
                 Grid.Row="3"
                 Grid.Column="1"
@@ -417,7 +420,7 @@
                 Foreground="{Binding SelectedBooks[23].BookColor}"
                 IsChecked="{Binding SelectedBooks[23].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[23].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk25"
                 Grid.Row="4"
                 Grid.Column="1"
@@ -426,7 +429,7 @@
                 Foreground="{Binding SelectedBooks[24].BookColor}"
                 IsChecked="{Binding SelectedBooks[24].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[24].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk26"
                 Grid.Row="5"
                 Grid.Column="1"
@@ -435,7 +438,7 @@
                 Foreground="{Binding SelectedBooks[25].BookColor}"
                 IsChecked="{Binding SelectedBooks[25].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[25].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk27"
                 Grid.Row="6"
                 Grid.Column="1"
@@ -444,7 +447,7 @@
                 Foreground="{Binding SelectedBooks[26].BookColor}"
                 IsChecked="{Binding SelectedBooks[26].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[26].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk28"
                 Grid.Row="7"
                 Grid.Column="1"
@@ -453,7 +456,7 @@
                 Foreground="{Binding SelectedBooks[27].BookColor}"
                 IsChecked="{Binding SelectedBooks[27].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[27].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk29"
                 Grid.Row="8"
                 Grid.Column="1"
@@ -462,7 +465,7 @@
                 Foreground="{Binding SelectedBooks[28].BookColor}"
                 IsChecked="{Binding SelectedBooks[28].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[28].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk30"
                 Grid.Row="9"
                 Grid.Column="1"
@@ -472,7 +475,7 @@
                 IsChecked="{Binding SelectedBooks[29].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[29].IsEnabled}" />
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk31"
                 Grid.Row="10"
                 Grid.Column="1"
@@ -481,7 +484,7 @@
                 Foreground="{Binding SelectedBooks[30].BookColor}"
                 IsChecked="{Binding SelectedBooks[30].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[30].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk32"
                 Grid.Row="11"
                 Grid.Column="1"
@@ -490,7 +493,7 @@
                 Foreground="{Binding SelectedBooks[31].BookColor}"
                 IsChecked="{Binding SelectedBooks[31].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[31].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk33"
                 Grid.Row="12"
                 Grid.Column="1"
@@ -499,7 +502,7 @@
                 Foreground="{Binding SelectedBooks[32].BookColor}"
                 IsChecked="{Binding SelectedBooks[32].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[32].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk34"
                 Grid.Row="13"
                 Grid.Column="1"
@@ -508,7 +511,7 @@
                 Foreground="{Binding SelectedBooks[33].BookColor}"
                 IsChecked="{Binding SelectedBooks[33].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[33].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk35"
                 Grid.Row="14"
                 Grid.Column="1"
@@ -517,7 +520,7 @@
                 Foreground="{Binding SelectedBooks[34].BookColor}"
                 IsChecked="{Binding SelectedBooks[34].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[34].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk36"
                 Grid.Row="15"
                 Grid.Column="1"
@@ -526,7 +529,7 @@
                 Foreground="{Binding SelectedBooks[35].BookColor}"
                 IsChecked="{Binding SelectedBooks[35].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[35].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk37"
                 Grid.Row="16"
                 Grid.Column="1"
@@ -535,7 +538,7 @@
                 Foreground="{Binding SelectedBooks[36].BookColor}"
                 IsChecked="{Binding SelectedBooks[36].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[36].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk38"
                 Grid.Row="17"
                 Grid.Column="1"
@@ -544,7 +547,7 @@
                 Foreground="{Binding SelectedBooks[37].BookColor}"
                 IsChecked="{Binding SelectedBooks[37].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[37].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk39"
                 Grid.Row="18"
                 Grid.Column="1"
@@ -554,9 +557,9 @@
                 IsChecked="{Binding SelectedBooks[38].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[38].IsEnabled}" />
 
-            <!--  New Testament  -->
+                <!--  New Testament  -->
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk40"
                 Grid.Row="0"
                 Grid.Column="3"
@@ -565,7 +568,7 @@
                 Foreground="{Binding SelectedBooks[39].BookColor}"
                 IsChecked="{Binding SelectedBooks[39].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[39].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk41"
                 Grid.Row="1"
                 Grid.Column="3"
@@ -574,7 +577,7 @@
                 Foreground="{Binding SelectedBooks[40].BookColor}"
                 IsChecked="{Binding SelectedBooks[40].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[40].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk42"
                 Grid.Row="2"
                 Grid.Column="3"
@@ -583,7 +586,7 @@
                 Foreground="{Binding SelectedBooks[41].BookColor}"
                 IsChecked="{Binding SelectedBooks[41].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[41].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk43"
                 Grid.Row="3"
                 Grid.Column="3"
@@ -592,7 +595,7 @@
                 Foreground="{Binding SelectedBooks[42].BookColor}"
                 IsChecked="{Binding SelectedBooks[42].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[42].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk44"
                 Grid.Row="4"
                 Grid.Column="3"
@@ -601,7 +604,7 @@
                 Foreground="{Binding SelectedBooks[43].BookColor}"
                 IsChecked="{Binding SelectedBooks[43].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[43].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk45"
                 Grid.Row="5"
                 Grid.Column="3"
@@ -610,7 +613,7 @@
                 Foreground="{Binding SelectedBooks[44].BookColor}"
                 IsChecked="{Binding SelectedBooks[44].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[44].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk46"
                 Grid.Row="6"
                 Grid.Column="3"
@@ -619,7 +622,7 @@
                 Foreground="{Binding SelectedBooks[45].BookColor}"
                 IsChecked="{Binding SelectedBooks[45].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[45].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk47"
                 Grid.Row="7"
                 Grid.Column="3"
@@ -628,7 +631,7 @@
                 Foreground="{Binding SelectedBooks[46].BookColor}"
                 IsChecked="{Binding SelectedBooks[46].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[46].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk48"
                 Grid.Row="8"
                 Grid.Column="3"
@@ -637,7 +640,7 @@
                 Foreground="{Binding SelectedBooks[47].BookColor}"
                 IsChecked="{Binding SelectedBooks[47].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[47].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk49"
                 Grid.Row="9"
                 Grid.Column="3"
@@ -646,7 +649,7 @@
                 Foreground="{Binding SelectedBooks[48].BookColor}"
                 IsChecked="{Binding SelectedBooks[48].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[48].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk50"
                 Grid.Row="10"
                 Grid.Column="3"
@@ -658,7 +661,7 @@
 
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk51"
                 Grid.Row="11"
                 Grid.Column="3"
@@ -667,7 +670,7 @@
                 Foreground="{Binding SelectedBooks[50].BookColor}"
                 IsChecked="{Binding SelectedBooks[50].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[50].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk52"
                 Grid.Row="12"
                 Grid.Column="3"
@@ -676,7 +679,7 @@
                 Foreground="{Binding SelectedBooks[51].BookColor}"
                 IsChecked="{Binding SelectedBooks[51].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[51].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk53"
                 Grid.Row="13"
                 Grid.Column="3"
@@ -685,7 +688,7 @@
                 Foreground="{Binding SelectedBooks[52].BookColor}"
                 IsChecked="{Binding SelectedBooks[52].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[52].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk54"
                 Grid.Row="14"
                 Grid.Column="3"
@@ -694,7 +697,7 @@
                 Foreground="{Binding SelectedBooks[53].BookColor}"
                 IsChecked="{Binding SelectedBooks[53].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[53].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk55"
                 Grid.Row="15"
                 Grid.Column="3"
@@ -703,7 +706,7 @@
                 Foreground="{Binding SelectedBooks[54].BookColor}"
                 IsChecked="{Binding SelectedBooks[54].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[54].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk56"
                 Grid.Row="16"
                 Grid.Column="3"
@@ -712,7 +715,7 @@
                 Foreground="{Binding SelectedBooks[55].BookColor}"
                 IsChecked="{Binding SelectedBooks[55].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[55].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk57"
                 Grid.Row="17"
                 Grid.Column="3"
@@ -721,7 +724,7 @@
                 Foreground="{Binding SelectedBooks[56].BookColor}"
                 IsChecked="{Binding SelectedBooks[56].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[56].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk58"
                 Grid.Row="18"
                 Grid.Column="3"
@@ -730,7 +733,7 @@
                 Foreground="{Binding SelectedBooks[57].BookColor}"
                 IsChecked="{Binding SelectedBooks[57].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[57].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk59"
                 Grid.Row="19"
                 Grid.Column="3"
@@ -741,7 +744,7 @@
                 IsEnabled="{Binding SelectedBooks[58].IsEnabled}" />
 
 
-            <CheckBox
+                <CheckBox
                 x:Name="Chk60"
                 Grid.Row="0"
                 Grid.Column="4"
@@ -750,7 +753,7 @@
                 Foreground="{Binding SelectedBooks[59].BookColor}"
                 IsChecked="{Binding SelectedBooks[59].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[59].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk61"
                 Grid.Row="1"
                 Grid.Column="4"
@@ -759,7 +762,7 @@
                 Foreground="{Binding SelectedBooks[60].BookColor}"
                 IsChecked="{Binding SelectedBooks[60].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[60].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk62"
                 Grid.Row="2"
                 Grid.Column="4"
@@ -768,7 +771,7 @@
                 Foreground="{Binding SelectedBooks[61].BookColor}"
                 IsChecked="{Binding SelectedBooks[61].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[61].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk63"
                 Grid.Row="3"
                 Grid.Column="4"
@@ -777,7 +780,7 @@
                 Foreground="{Binding SelectedBooks[62].BookColor}"
                 IsChecked="{Binding SelectedBooks[62].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[62].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk64"
                 Grid.Row="4"
                 Grid.Column="4"
@@ -786,7 +789,7 @@
                 Foreground="{Binding SelectedBooks[63].BookColor}"
                 IsChecked="{Binding SelectedBooks[63].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[63].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk65"
                 Grid.Row="5"
                 Grid.Column="4"
@@ -795,7 +798,7 @@
                 Foreground="{Binding SelectedBooks[64].BookColor}"
                 IsChecked="{Binding SelectedBooks[64].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[64].IsEnabled}" />
-            <CheckBox
+                <CheckBox
                 x:Name="Chk66"
                 Grid.Row="6"
                 Grid.Column="4"
@@ -804,54 +807,55 @@
                 Foreground="{Binding SelectedBooks[65].BookColor}"
                 IsChecked="{Binding SelectedBooks[65].IsSelected, Mode=TwoWay}"
                 IsEnabled="{Binding SelectedBooks[65].IsEnabled}" />
-        </Grid>
-
+            </Grid>
+        </materialDesign:Card>
         <!--  Bottom row of buttons  -->
-        <DockPanel
-            Grid.Row="2"
-            Grid.Column="0"
-            Margin="5">
+        <StackPanel  Orientation="Horizontal"
+                     Grid.Row="2"
+                     Grid.Column="0"
+                     Margin="5">
 
-            <DockPanel DockPanel.Dock="Left">
-                <Button
-                    Width="50"
-                    Margin="40,0,0,0"
+
+            <Button
+                   
+                    Margin="10,0,0,0"
                     Command="{Binding OtCommand}"
-                    Content="OT"
+                    Content="OLD TESTAMENT"
                     FontSize="12" />
 
-                <Button
+            <Button
                     Width="120"
-                    Margin="150,0,0,0"
+                    Margin="10,0,0,0"
                     Command="{Binding AllCommand}"
                     Content="SELECT ALL"
                     FontSize="12" />
 
-                <Button
+            <Button
                     Width="120"
                     Margin="5,0,0,0"
                     Command="{Binding NoneCommand}"
                     Content="UNSELECT ALL"
                     FontSize="12" />
 
-                <Button
-                    Width="50"
-                    Margin="275,0,0,0"
+            <Button
+                   
+                    Margin="10,0,0,0"
                     Command="{Binding NtCommand}"
-                    Content="NT"
+                    Content="NEW TESTAMENT"
                     FontSize="12" />
-            </DockPanel>
+        </StackPanel>
 
-            <DockPanel DockPanel.Dock="Right">
-                <Button
-                    Width="90"
-                    Margin="0,0,15,0"
-                    HorizontalAlignment="Right"
-                    Command="{Binding OkCommand}"
-                    Content="OK"
-                    FontSize="12"
-                    IsEnabled="{Binding ContinueEnabled}" />
-            </DockPanel>
-        </DockPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+            Grid.Row="2"
+            Margin="10,0">
+            <Button
+                Width="90"
+                Margin="60,0,0,0"
+                HorizontalAlignment="Right"
+                Command="{Binding OkCommand}"
+                Content="OK"
+                FontSize="12"
+                IsEnabled="{Binding ContinueEnabled}" />
+        </StackPanel>
     </Grid>
 </UserControl>
