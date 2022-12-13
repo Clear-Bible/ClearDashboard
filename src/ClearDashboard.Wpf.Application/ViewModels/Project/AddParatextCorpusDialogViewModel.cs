@@ -94,7 +94,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 CheckUsfm();
                 
                 ValidationResult = Validator?.Validate(this);
-                CanOk = ValidationResult.IsValid;
+                CanOk = ValidationResult!.IsValid;
             }
         }
 
@@ -133,6 +133,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         #region Constructor
+#pragma warning disable CS8618
         public AddParatextCorpusDialogViewModel()
         {
             // used by Caliburn Micro for design time    
@@ -152,6 +153,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
         }
+#pragma warning restore CS8618
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -173,16 +175,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
             
             return base.OnInitializeAsync(cancellationToken);
-
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             CorpusSourceType = CorpusSourceType.Paratext;
-            var result = await _projectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+            var result = await _projectManager?.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success)
             {
-                Projects = result.Data.OrderBy(p => p.Name).ToList();
+                Projects = result.Data?.OrderBy(p => p.Name).ToList();
             }
 
             await base.OnActivateAsync(cancellationToken);
@@ -218,22 +219,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             ShowSpinner = Visibility.Visible;
 
-            var result = await _projectManager.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
+            var result = await _projectManager?.ExecuteRequest(new GetCheckUsfmQuery(SelectedProject!.Id), CancellationToken.None);
             if (result.Success)
             {
                 var errors = result.Data;
 
-                if (errors.NumberOfErrors == 0)
+                if (errors is not null)
                 {
-                    UsfmErrors = new();
-                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+                    if (errors.NumberOfErrors == 0)
+                    {
+                        UsfmErrors = new();
+                        ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+                    }
+                    else
+                    {
+                        UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
+                        ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", _logger);
+                    }
                 }
-                else
-                {
-                    UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
-                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", _logger);
-                }
-                
             }
 
             ShowSpinner = Visibility.Collapsed;

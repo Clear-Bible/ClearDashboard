@@ -24,12 +24,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 {
     public class ParatextCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParatextCorpusDialogViewModel
     {
-        internal class TaskNames
-        {
-            public const string PickCorpus = "PickCorpus";
-            public const string PickBooks = "PickBooks";
-        }
-
         #region Member Variables   
 
         private readonly ILogger<ParatextCorpusDialogViewModel>? _logger;
@@ -245,9 +239,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         }
 
         #endregion // Methods
-
-        
     }
-
-    
 }
