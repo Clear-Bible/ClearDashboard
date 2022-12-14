@@ -1528,6 +1528,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void TokenJoin(object sender, TokenEventArgs e)
         {
             var args = e;
+        }        
+        
+        public void TokenUnJoin(object sender, TokenEventArgs e)
+        {
+            var args = e;
         }
 
         public void FilterPins(object sender, NoteEventArgs e)

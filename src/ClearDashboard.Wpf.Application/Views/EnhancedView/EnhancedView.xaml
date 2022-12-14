@@ -539,6 +539,9 @@
                                                         <i:EventTrigger EventName="TokenJoin">
                                                             <i:CallMethodAction MethodName="TokenJoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>
+                                                        <i:EventTrigger EventName="TokenUnjoin">
+                                                            <i:CallMethodAction MethodName="TokenUnjoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
+                                                        </i:EventTrigger>
                                                         <i:EventTrigger EventName="FilterPins">
                                                             <i:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
                                                         </i:EventTrigger>

@@ -350,6 +350,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TokenUnjoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
+            ("TokenUnjoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationClickedEvent = EventManager.RegisterRoutedEvent
@@ -555,6 +561,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenJoinEvent, value);
             remove => RemoveHandler(TokenJoinEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to unjoin a composite token.
+        /// </summary>
+        public event RoutedEventHandler TokenUnjoin
+        {
+            add => AddHandler(TokenUnjoinEvent, value);
+            remove => RemoveHandler(TokenUnjoinEvent, value);
         }
 
         /// <summary>
@@ -779,10 +794,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            if (! AllSelectedTokens.CanJoin)
-            {
-                JoinTokensMenuItem.Visibility = Visibility.Collapsed;
-            }
+            JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+            UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
@@ -942,6 +955,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         private void OnTokenJoin(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenJoinEvent, e);
+        }
+
+        private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenJoinEvent, e);
         }

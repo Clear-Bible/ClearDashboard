@@ -104,6 +104,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenUnjoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
+            ("TokenUnjoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationClickedEvent = EventManager.RegisterRoutedEvent
@@ -537,7 +543,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenJoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenJoinEvent, e);
-        }
+        }        
+        
+
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
@@ -713,6 +721,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenMouseWheel(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenMouseWheelEvent, e);
+        }
+
+        private void OnTokenUnJoin(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenUnjoinEvent, e);
         }
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
@@ -922,6 +935,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenJoinEvent, value);
             remove => RemoveHandler(TokenJoinEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to unjoin a composite token.
+        /// </summary>
+        public event RoutedEventHandler TokenUnjoin
+        {
+            add => AddHandler(TokenUnjoinEvent, value);
+            remove => RemoveHandler(TokenUnjoinEvent, value);
         }
 
         /// <summary>
