@@ -19,6 +19,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public Token Token { get; }
 
         /// <summary>
+        /// The <see cref="VerseDisplayViewModel"/> that this token is part of.
+        /// </summary>
+        public VerseDisplayViewModel VerseDisplay { get; set; }
+
+        /// <summary>
         /// Gets or sets whether this is a source token.
         /// </summary>
         /// <remarks>

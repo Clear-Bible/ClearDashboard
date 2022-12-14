@@ -99,25 +99,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (SourceTokenMap != null)
             {
-                SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokenMap.PaddedTokens, IsSourceRtl, true);
+                SourceTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(SourceTokenMap, true);
                 NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             }
 
             if (TargetTokenMap != null)
             {
-                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokenMap.PaddedTokens, IsTargetRtl, false);
+                TargetTokenDisplayViewModels = await BuildTokenDisplayViewModelsAsync(TargetTokenMap, false);
                 NotifyOfPropertyChange(nameof(SourceTokenDisplayViewModels));
             }
         }
         
-        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(PaddedTokenCollection paddedTokens, bool isRtl, bool isSource)
+        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(TokenMap tokenMap, bool isSource)
         {
             var result = new TokenDisplayViewModelCollection();
             
-            foreach (var (token, paddingBefore, paddingAfter) in paddedTokens)
+            foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
                 result.Add(new TokenDisplayViewModel(token)
                 {
+                    VerseDisplay = this,
+                    CompositeToken = tokenMap.GetCompositeToken(token),
                     PaddingBefore = paddingBefore,
                     PaddingAfter = paddingAfter,
                     Translation = GetTranslationForToken(token),
