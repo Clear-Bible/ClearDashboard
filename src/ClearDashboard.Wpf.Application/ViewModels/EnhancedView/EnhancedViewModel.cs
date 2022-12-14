@@ -102,6 +102,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public List<string> WorkingJobs { get; set; } = new();
 
         public NoteManager NoteManager { get; set; }
+        public VerseManager VerseManager { get; }
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
         public VerseDisplayViewModel SelectedVerseDisplayViewModel
@@ -340,7 +341,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
-            DashboardProjectManager? projectManager, NoteManager noteManager, IEventAggregator? eventAggregator, IMediator mediator,
+            DashboardProjectManager? projectManager, NoteManager noteManager, VerseManager verseManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
@@ -350,6 +351,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _logger = logger;
             _projectManager = projectManager;
             NoteManager = noteManager;
+            VerseManager = verseManager;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
             ContentId = "ENHANCEDVIEW";
@@ -1529,17 +1531,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         
         public void TokenJoin(object sender, TokenEventArgs e)
         {
-            var args = e;
-        }        
-        
-        public void TokenUnJoin(object sender, TokenEventArgs e)
+            Task.Run(() => TokenJoinAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenJoinAsync(TokenEventArgs e)
         {
-            var args = e;
+            await VerseManager.JoinTokensAsync(e.SelectedTokens.TokenCollection, e.SelectedTokens.First()?.VerseDisplay.ParallelCorpusId);
+        }
+
+        public void TokenUnjoin(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenUnjoinAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenUnjoinAsync(TokenEventArgs e)
+        {
+            if (e.SelectedTokens.First()?.Token is CompositeToken compositeTokenDisplayViewModel)
+            {
+                await VerseManager.UnjoinTokenAsync(compositeTokenDisplayViewModel, e.SelectedTokens.First()?.VerseDisplay.ParallelCorpusId);
+            }
+            else
+            {
+                Logger?.LogError(!e.SelectedTokens.Any() ? $"Could not unjoin token: no tokens are selected."
+                                                         : $"Could not unjoin token ID {e.SelectedTokens.First().Token.TokenId.Id}");
+            }
         }
 
         public void FilterPins(object sender, NoteEventArgs e)
         {
-            //WORKS
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
