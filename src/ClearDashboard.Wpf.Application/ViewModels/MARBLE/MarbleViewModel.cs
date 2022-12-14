@@ -338,7 +338,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             Title = "◕ " + "MARBLE";
             ContentId = "MARBLE";
-            DockSide = EDockSide.Bottom;
+            DockSide = DockSide.Bottom;
 
             // wire up the commands
             LaunchLogosCommand = new RelayCommand(LaunchLogos);
@@ -535,7 +535,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                     SourceTextFontFamily = "SBL Greek";
                 }
 
-                var project = ProjectManager.ProjectsMetadata.FirstOrDefault(x => x.Id == ProjectManager.CurrentParatextProject.Guid);
+                var project = ProjectManager!.ProjectMetadata.FirstOrDefault(x => x.Id == ProjectManager.CurrentParatextProject.Guid);
 
                 VerseText = verseText;
                 VerseTextFontFamily = project.FontFamily;

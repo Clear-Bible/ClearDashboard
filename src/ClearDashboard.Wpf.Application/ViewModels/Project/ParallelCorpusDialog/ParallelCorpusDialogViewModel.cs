@@ -32,7 +32,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
     public class ParallelCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParallelCorpusDialogViewModel
     {
-
         internal class TaskNames
         {
             public const string AlignmentSet = "AlignmentSet";
@@ -42,43 +41,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         }
 
 
-
-
-        public ParallelCorpusDialogViewModel()
-        {
-            // used by Caliburn Micro for design time 
-        }
-
-
-        public ParallelCorpusDialogViewModel(DialogMode dialogMode,
-                                ParallelCorpusConnectionViewModel parallelCorpusConnectionViewModel,
-                                CorpusNodeViewModel sourceCorpusNodeViewModel,
-                                CorpusNodeViewModel targetCorpusNodeViewModel,
-                                IEnumerable<TokenizedTextCorpusId> tokenizedCorpora,
-                                DashboardProjectManager? projectManager,
-                                INavigationService navigationService,
-                                ILogger<ParallelCorpusDialogViewModel> logger,
-                                IEventAggregator eventAggregator,
-                                IMediator mediator,
-                                ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
-        {
-            _tokenizedCorpora = tokenizedCorpora;
-            _longRunningTaskManager = longRunningTaskManager;
-            CanOk = true;
-
-            DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger!);
-
-            DialogMode = dialogMode;
-            ParallelCorpusConnectionViewModel = parallelCorpusConnectionViewModel;
-            SourceCorpusNodeViewModel = sourceCorpusNodeViewModel;
-            TargetCorpusNodeViewModel = targetCorpusNodeViewModel;
-            SelectedSmtAlgorithm = SmtModelType.FastAlign;
-        }
+        #region Member Variables   
 
         private readonly IEnumerable<TokenizedTextCorpusId> _tokenizedCorpora;
         private readonly LongRunningTaskManager _longRunningTaskManager;
+        private CorpusNodeViewModel _sourceCorpusNodeViewModel;
+        private CorpusNodeViewModel _targetCorpusNodeViewModel;
+        private ParallelCorpusConnectionViewModel _parallelCorpusConnectionViewModel;
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
+
         public LongRunningTask CurrentLongRunningTask { get; set; }
+        public IWordAlignmentModel WordAlignmentModel { get; set; }
+        public ParallelCorpus ParallelTokenizedCorpus { get; set; }
+
+        public bool CanCancel => (CurrentTask != null && CurrentTask.Status != LongRunningTaskStatus.Running) /* can always cancel */;
+        public object? ExtraData { get; set; }
+        public EngineParallelTextCorpus ParallelTextCorpus { get; set; }
+        public LongRunningTask? CurrentTask { get; set; }
+        public TranslationCommands TranslationCommandable { get; set; }
+
+
+        public bool UseDefaults { get; set; } = false;
 
         public CorpusNodeViewModel SourceCorpusNodeViewModel
         {
@@ -98,6 +85,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             set => Set(ref _parallelCorpusConnectionViewModel, value);
         }
 
+        public TranslationSet? TranslationSet { get; set; }
+        public IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
+        public AlignmentSet? AlignmentSet { get; set; }
+
+        #endregion //Public Properties
+
+
+        #region Observable Properties
+
         private SmtModelType _selectedSmtAlgorithm;
         public SmtModelType SelectedSmtAlgorithm
         {
@@ -105,8 +101,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             set => Set(ref _selectedSmtAlgorithm, value);
         }
 
-        public IWordAlignmentModel WordAlignmentModel { get; set; }
-        public ParallelCorpus ParallelTokenizedCorpus { get; set; }
+        private bool _canOk;
+        public bool CanOk
+        {
+            get => _canOk;
+            set => Set(ref _canOk, value);
+        }
+
+        #endregion //Observable Properties
+
+
+        #region Constructor
+
+        public ParallelCorpusDialogViewModel()
+        {
+            // used by Caliburn Micro for design time 
+        }
+
+
+        public ParallelCorpusDialogViewModel(DialogMode dialogMode,
+            ParallelCorpusConnectionViewModel parallelCorpusConnectionViewModel,
+            CorpusNodeViewModel sourceCorpusNodeViewModel,
+            CorpusNodeViewModel targetCorpusNodeViewModel,
+            IEnumerable<TokenizedTextCorpusId> tokenizedCorpora,
+            DashboardProjectManager? projectManager,
+            INavigationService navigationService,
+            ILogger<ParallelCorpusDialogViewModel> logger,
+            IEventAggregator eventAggregator,
+            IMediator mediator,
+            ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        {
+            _tokenizedCorpora = tokenizedCorpora;
+            _longRunningTaskManager = longRunningTaskManager;
+            CanOk = true;
+
+            DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger!);
+
+            DialogMode = dialogMode;
+            ParallelCorpusConnectionViewModel = parallelCorpusConnectionViewModel;
+            SourceCorpusNodeViewModel = sourceCorpusNodeViewModel;
+            TargetCorpusNodeViewModel = targetCorpusNodeViewModel;
+            SelectedSmtAlgorithm = SmtModelType.FastAlign;
+        }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
@@ -135,8 +172,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         }
 
+        #endregion //Constructor
 
-        public bool CanCancel => (CurrentTask != null && CurrentTask.Status != LongRunningTaskStatus.Running) /* can always cancel */;
+
+        #region Methods
+
         public async void Cancel()
         {
             CancelCurrentTask();
@@ -162,33 +202,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 CancelCurrentTask();
             }
         }
-
-
-        private bool _canOk;
-        private CorpusNodeViewModel _sourceCorpusNodeViewModel;
-        private CorpusNodeViewModel _targetCorpusNodeViewModel;
-
-        public bool CanOk
-        {
-            get => _canOk;
-            set => Set(ref _canOk, value);
-        }
-
         public async void Ok()
         {
             await TryCloseAsync(true);
         }
-
-        public object? ExtraData { get; set; }
-
-        public EngineParallelTextCorpus ParallelTextCorpus { get; set; }
-
-        private ParallelCorpusConnectionViewModel _parallelCorpusConnectionViewModel;
-
-        public LongRunningTask? CurrentTask { get; set; }
-
-
-        public bool UseDefaults { get; set; } = false;
 
         public async Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName)
         {
@@ -315,106 +332,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             return CurrentTask.Status;
         }
 
-
-        public TranslationCommands TranslationCommandable { get; set; }
-        public async Task<LongRunningTaskStatus> TrainSmtModel()
-        {
-            IsBusy = true;
-            var taskName = TaskNames.TrainingSmtModel;
-            CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
-            var cancellationToken = CurrentTask.CancellationTokenSource.Token;
-            try
-            {
-                CurrentTask.Status = LongRunningTaskStatus.Running;
-                await SendBackgroundStatus(taskName,
-                    LongRunningTaskStatus.Running,
-                    cancellationToken,
-                    $"Training SMT Model '{SelectedSmtAlgorithm}'.");
-
-                Logger!.LogInformation($"Training SMT Model '{SelectedSmtAlgorithm}'.");
-
-                CurrentTask.Status = LongRunningTaskStatus.Completed;
-
-                TranslationCommandable = new TranslationCommands();
-
-                WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
-                    SelectedSmtAlgorithm,
-                    ParallelTextCorpus,
-                    new DelegateProgress(async status =>
-                        {
-                            var message =
-                                $"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}";
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
-                                message);
-                            Logger!.LogInformation(message);
-
-                        }
-                    ), SymmetrizationHeuristic.GrowDiagFinalAnd);
-
-                await SendBackgroundStatus(taskName,
-                    LongRunningTaskStatus.Completed,
-                    cancellationToken,
-                    $"Completed SMT Model '{SelectedSmtAlgorithm}'.");
-
-                Logger!.LogInformation($"Completed SMT Model '{SelectedSmtAlgorithm}'.");
-
-
-            }
-            catch (OperationCanceledException ex)
-            {
-                Logger!.LogInformation($"TrainSmtModel - operation canceled.");
-            }
-            catch (MediatorErrorEngineException ex)
-            {
-                if (ex.Message.Contains("The operation was canceled."))
-                {
-                    Logger!.LogInformation($"TrainSmtModel - operation canceled.");
-                }
-                else
-                {
-                    Logger!.LogError(ex, "An unexpected Engine exception was thrown.");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Logger!.LogError(ex, $"An unexpected error occurred while training the SMT model.");
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    await SendBackgroundStatus(taskName,
-                        LongRunningTaskStatus.Failed,
-                        cancellationToken,
-                        exception: ex);
-                }
-
-                CurrentTask.Status = LongRunningTaskStatus.Failed;
-            }
-            finally
-            {
-                _longRunningTaskManager.TaskComplete(taskName);
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    CurrentTask.Status = LongRunningTaskStatus.Cancelled;
-                    await SendBackgroundStatus(taskName,
-                        LongRunningTaskStatus.Completed,
-                        cancellationToken,
-                        $"Training the SMT Model was canceled.'{SelectedSmtAlgorithm}'.");
-                }
-                IsBusy = false;
-                Message = string.Empty;
-            }
-
-            if (UseDefaults == false)
-            {
-                PlaySound.PlaySoundFromResource();
-            }
-
-
-            return CurrentTask.Status;
-        }
-
-
-        public TranslationSet? TranslationSet { get; set; }
         public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
         {
             IsBusy = true;
@@ -498,10 +415,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         }
 
-
-        public IEnumerable<AlignedTokenPairs> AlignedTokenPairs { get; set; }
-
-        public AlignmentSet? AlignmentSet { get; set; }
         public async Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName)
         {
             IsBusy = true;
@@ -587,6 +500,102 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             return CurrentTask.Status;
         }
 
+        public async Task<LongRunningTaskStatus> TrainSmtModel()
+        {
+            IsBusy = true;
+            var taskName = TaskNames.TrainingSmtModel;
+            CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
+            var cancellationToken = CurrentTask.CancellationTokenSource.Token;
+            try
+            {
+                CurrentTask.Status = LongRunningTaskStatus.Running;
+                await SendBackgroundStatus(taskName,
+                    LongRunningTaskStatus.Running,
+                    cancellationToken,
+                    $"Training SMT Model '{SelectedSmtAlgorithm}'.");
+
+                Logger!.LogInformation($"Training SMT Model '{SelectedSmtAlgorithm}'.");
+
+                CurrentTask.Status = LongRunningTaskStatus.Completed;
+
+                TranslationCommandable = new TranslationCommands();
+
+                WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
+                    SelectedSmtAlgorithm,
+                    ParallelTextCorpus,
+                    new DelegateProgress(async status =>
+                    {
+                        var message =
+                            $"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}";
+                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
+                            message);
+                        Logger!.LogInformation(message);
+
+                    }
+                    ), SymmetrizationHeuristic.GrowDiagFinalAnd);
+
+                await SendBackgroundStatus(taskName,
+                    LongRunningTaskStatus.Completed,
+                    cancellationToken,
+                    $"Completed SMT Model '{SelectedSmtAlgorithm}'.");
+
+                Logger!.LogInformation($"Completed SMT Model '{SelectedSmtAlgorithm}'.");
+
+
+            }
+            catch (OperationCanceledException ex)
+            {
+                Logger!.LogInformation($"TrainSmtModel - operation canceled.");
+            }
+            catch (MediatorErrorEngineException ex)
+            {
+                if (ex.Message.Contains("The operation was canceled."))
+                {
+                    Logger!.LogInformation($"TrainSmtModel - operation canceled.");
+                }
+                else
+                {
+                    Logger!.LogError(ex, "An unexpected Engine exception was thrown.");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger!.LogError(ex, $"An unexpected error occurred while training the SMT model.");
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    await SendBackgroundStatus(taskName,
+                        LongRunningTaskStatus.Failed,
+                        cancellationToken,
+                        exception: ex);
+                }
+
+                CurrentTask.Status = LongRunningTaskStatus.Failed;
+            }
+            finally
+            {
+                _longRunningTaskManager.TaskComplete(taskName);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    CurrentTask.Status = LongRunningTaskStatus.Cancelled;
+                    await SendBackgroundStatus(taskName,
+                        LongRunningTaskStatus.Completed,
+                        cancellationToken,
+                        $"Training the SMT Model was canceled.'{SelectedSmtAlgorithm}'.");
+                }
+                IsBusy = false;
+                Message = string.Empty;
+            }
+
+            if (UseDefaults == false)
+            {
+                PlaySound.PlaySoundFromResource();
+            }
+
+
+            return CurrentTask.Status;
+        }
+
         /// <summary>
         /// Button click for the background tasks on the status bar
         /// </summary>
@@ -594,5 +603,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         {
             await EventAggregator!.PublishOnUIThreadAsync(new ToggleBackgroundTasksVisibilityMessage());
         }
+
+        #endregion // Methods
     }
 }

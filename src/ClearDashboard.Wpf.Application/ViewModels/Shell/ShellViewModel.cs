@@ -338,7 +338,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var mainViewModel = IoC.Get<MainViewModel>();
             await mainViewModel!.DeactivateAsync(true);
 
-            // deactivate the BackgroiundTaskViewModel
+            // deactivate the BackgroundTaskViewModel
             await BackgroundTasksViewModel.DeactivateAsync(true);
 
             await base.OnDeactivateAsync(close, cancellationToken);

@@ -41,10 +41,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private IReadOnlyList<Token>? SourceTokens { get; set; }
         private EngineStringDetokenizer SourceDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        public bool IsSourceRtl { get; set; }
+        public bool? IsSourceRtl { get; set; }
         private IReadOnlyList<Token>? TargetTokens { get; set; }
         private EngineStringDetokenizer? TargetDetokenizer { get; set; } = new(new LatinWordDetokenizer());
-        public bool IsTargetRtl { get; set; }
+        public bool? IsTargetRtl { get; set; }
 
         private TranslationSet? TranslationSet { get; set; }
         private IEnumerable<Translation>? Translations { get; set; }
@@ -108,7 +108,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl, bool isSource)
+        private async Task<TokenDisplayViewModelCollection> BuildTokenDisplayViewModelsAsync(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool? isRtl, bool isSource)
         {
             var result = new TokenDisplayViewModelCollection();
             
@@ -344,7 +344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EngineParallelTextRow engineParallelTextRow,
             TranslationSet translationSet,
             EngineStringDetokenizer sourceDetokenizer,
-            bool isSourceRtl)
+            bool? isSourceRtl)
         {
             SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;
@@ -363,9 +363,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EngineParallelTextRow engineParallelTextRow,
             AlignmentSet alignmentSet,
             EngineStringDetokenizer sourceDetokenizer,
-            bool isSourceRtl,
+            bool? isSourceRtl,
             EngineStringDetokenizer targetDetokenizer,
-            bool isTargetRtl)
+            bool? isTargetRtl)
         {
             SourceTokens = engineParallelTextRow.SourceTokens?.GetPositionalSortedBaseTokens().ToList() ?? throw new InvalidOperationException("Text row has no source tokens");
             SourceDetokenizer = sourceDetokenizer;

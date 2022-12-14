@@ -253,7 +253,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             Title = "⌺ " + LocalizationStrings.Get("Windows_WordMeanings", Logger);
             ContentId = "WORDMEANINGS";
-            DockSide = EDockSide.Bottom;
+            DockSide = DockSide.Bottom;
 
             _projectManager = projectManager;
             _translationSource = translationSource;

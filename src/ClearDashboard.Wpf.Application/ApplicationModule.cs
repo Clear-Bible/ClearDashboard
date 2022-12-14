@@ -17,6 +17,8 @@ using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
+using ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -78,6 +80,19 @@ namespace ClearDashboard.Wpf.Application
         //        .WithMetadata("Order", 1);
         //}
 
+
+        public static void RegisterParatextDialogDependencies(this ContainerBuilder builder)
+        {
+            builder.RegisterType<AddParatextCorpusStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
+                .WithMetadata("Order", 1);
+
+            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
+                .WithMetadata("Order", 2);
+        }
+
+
         public static void RegisterParallelCorpusDialogDependencies(this ContainerBuilder builder)
         {
 
@@ -134,6 +149,8 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
             builder.RegisterParallelCorpusDialogDependencies();
+            builder.RegisterParatextDialogDependencies();  
+
             //builder.RegisterSmtModelDialogDependencies();
         }
 
