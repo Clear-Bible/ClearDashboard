@@ -469,60 +469,57 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CalculateItemsPanelTemplate(Wrap);
         }
 
-        private void RaiseTokenEvent(RoutedEvent routedEvent, TokenDisplayViewModel tokenDisplay)
+        private void RaiseTokenEvent(RoutedEvent routedEvent, TokenEventArgs args)
         {
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay,
-                SelectedTokens = SelectedTokens,
-                ModifierKeys = Keyboard.Modifiers,
+                TokenDisplay = args.TokenDisplay,
+                SelectedTokens = VerseSelectedTokens,
+                ModifierKeys = args.ModifierKeys,
             });
         }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            RaiseTokenEvent(routedEvent, tokenDisplay!);
+            RaiseTokenEvent(routedEvent, e as TokenEventArgs);
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            var ctrlPressed = (Keyboard.Modifiers & ModifierKeys.Control) > 0;
-            UpdateSelection(tokenDisplay!, ctrlPressed);
+            var args = e as TokenEventArgs;
+            UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
 
-            RaiseTokenEvent(TokenClickedEvent, e);
+            RaiseTokenEvent(TokenClickedEvent, args);
         }
 
-        private void UpdateSelection(TokenDisplayViewModel token, bool addToSelection)
+        private void UpdateVerseSelection(TokenDisplayViewModel token, bool addToSelection)
         {
             var tokenIsSelected = token.IsTokenSelected;
             if (!addToSelection)
             {
-                foreach (var selectedToken in SelectedTokens)
+                foreach (var selectedToken in VerseSelectedTokens)
                 {
                     selectedToken.IsTokenSelected = false;
                 }
-                SelectedTokens.Clear();
+                VerseSelectedTokens.Clear();
             }
 
             token.IsTokenSelected = !tokenIsSelected;
             if (token.IsTokenSelected)
             {
-                SelectedTokens.Add(token);
+                VerseSelectedTokens.Add(token);
             }
             else
             {
-                SelectedTokens.Remove(token);
+                VerseSelectedTokens.Remove(token);
             }
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            SelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
+            AllSelectedTokens = message.SelectedTokens;
+            VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
             await Task.CompletedTask;
         }
 
@@ -558,7 +555,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
             if (tokenDisplay is { IsTokenSelected: false })
             {
-                UpdateSelection(tokenDisplay, false);
+                UpdateVerseSelection(tokenDisplay, false);
             }
 
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
@@ -571,12 +568,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
+            //var control = e.Source as FrameworkElement;
+            //var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
+            var args = e as TokenEventArgs;
+            var tokenDisplayViewModel = args.TokenDisplay;
 
             if (DataContext is VerseDisplayViewModel verseDisplayViewModel)
             {
-                if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+                if (args.IsShiftPressed)
                 {
                     if (tokenDisplayViewModel != null && verseDisplayViewModel.Alignments != null)
                     {
@@ -683,7 +682,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             .ToList();
                     }
                 }
-                else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+                else if (args.IsAltPressed)
                 {
                     verseDisplayViewModel.SourceTokenDisplayViewModels
                         .Select(tdm =>
@@ -779,7 +778,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
-                SelectedTokens = SelectedTokens,
+                SelectedTokens = VerseSelectedTokens,
             });
         }
 
@@ -1099,6 +1098,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public properties
 
+        /// <summary>
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected across all displays.
+        /// </summary>
+        public TokenDisplayViewModelCollection AllSelectedTokens { get; set; } = new();
+
+
         public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
@@ -1151,11 +1156,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (Orientation)GetValue(OrientationProperty);
             set => SetValue(OrientationProperty, value);
         }
-
-        /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI for this verse.
-        /// </summary>
-        public TokenDisplayViewModelCollection SelectedTokens { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the background of selected tokens.
@@ -1457,6 +1457,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (Thickness) GetValue(VerseMarginProperty);
             set => SetValue(VerseMarginProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI for this verse.
+        /// </summary>
+        public TokenDisplayViewModelCollection VerseSelectedTokens { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the padding for the tokens list.
