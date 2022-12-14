@@ -90,6 +90,8 @@ namespace ClearDashboard.Wpf.Application.Collections
         private IEnumerable<TokenDisplayViewModel> SelectedTokens => Items.Where(i => i.IsTokenSelected);
         private IEnumerable<TokenDisplayViewModel> SelectedTranslations => Items.Where(i => i.IsTranslationSelected);
         
+        private int SelectedTokenVersesCount => SelectedTokens.Select(t => t.VerseDisplay).Distinct(ReferenceEqualityComparer.Instance).Count();
+
         private IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<IId> entityIds)
         {
             return Items.Where(t => entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()));
@@ -129,6 +131,6 @@ namespace ClearDashboard.Wpf.Application.Collections
             }
         }
 
-        public bool CanJoin => SelectedTokens.Count() > 1 && !SelectedTranslations.Any();
+        public bool CanJoin => SelectedTokens.Count() > 1 && SelectedTokenVersesCount == 1 && !SelectedTranslations.Any();
     }
 }
