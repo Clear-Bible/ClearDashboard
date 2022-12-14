@@ -657,22 +657,72 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             // lexicalItem2:
             var lexicalItem2 = await new LexicalItem { Lemma = tokensToQuery[1].TrainingText /* no language */  }.Create(Mediator!);
             await lexicalItem2.PutDefinition(Mediator!, new Definition { Text = "li2_def1" /* no language */ });
-            await lexicalItem2.PutDefinition(Mediator!, new Definition { 
+            var lexicalItem2Def2 = new Definition
+            {
                 Text = "li2_def2",
                 Language = "bogus"
-            });
-            await lexicalItem2.PutDefinition(Mediator!, new Definition { 
+            };
+            await lexicalItem2.PutDefinition(Mediator!, lexicalItem2Def2);
+            var lexicalItem2Def3 = new Definition
+            {
                 Text = "li2_def3",
                 Language = parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language
-            });
-            await lexicalItem2.Definitions.Skip(1).First().CreateAssociateSenanticDomain(Mediator!, "sem1");
-            await lexicalItem2.Definitions.Skip(2).First().CreateAssociateSenanticDomain(Mediator!, "sem2");
+            };
+            await lexicalItem2.PutDefinition(Mediator!, lexicalItem2Def3);
+            var s1 = await lexicalItem2Def2.CreateAssociateSenanticDomain(Mediator!, "sem1");
+            var s2 = await lexicalItem2Def3.CreateAssociateSenanticDomain(Mediator!, "sem2");
 
             // lexicalItem3:
             var lexicalItem3 = await new LexicalItem { Lemma = tokensToQuery[3].TrainingText, Language = "bogus"  }.Create(Mediator!);
             await lexicalItem3.PutDefinition(Mediator!, new Definition { Text = "li3_def1" /* no language */ });
+            await lexicalItem3.Definitions.First().AssociateSemanticDomain(Mediator!, s2);
 
             ProjectDbContext!.ChangeTracker.Clear();
+
+            Assert.Null(await LexicalItem.Get(Mediator!, "bogusLemma", null, null));
+
+            var li1Db1 = await LexicalItem.Get(Mediator!, lexicalItem1.Lemma!, lexicalItem1.Language!, null);
+            Assert.NotNull(li1Db1);
+            Assert.Equal(2, li1Db1.Forms.Count);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var li1Db2 = await LexicalItem.Get(
+                Mediator!,
+                lexicalItem1.Lemma!,
+                lexicalItem1.Language!,
+                parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language);
+            Assert.NotNull(li1Db2);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var li2Db1 = await LexicalItem.Get(Mediator!, lexicalItem2.Lemma!, null, null);
+
+            Assert.NotNull(li2Db1);
+            Assert.Equal(3, li2Db1.Definitions.Count);
+            Assert.Contains(lexicalItem2Def2.Text, li2Db1.Definitions.Select(d => d.Text));
+            Assert.Contains(lexicalItem2Def3.Text, li2Db1.Definitions.Select(d => d.Text));
+            Assert.Single(li2Db1.Definitions.Where(d => d.Text == lexicalItem2Def2.Text).First().SemanticDomains);
+            Assert.Equal(s1.Text, li2Db1.Definitions.Where(d => d.Text == lexicalItem2Def2.Text).First().SemanticDomains.First().Text);
+            Assert.Single(li2Db1.Definitions.Where(d => d.Text == lexicalItem2Def3.Text).First().SemanticDomains);
+            Assert.Equal(s2.Text, li2Db1.Definitions.Where(d => d.Text == lexicalItem2Def3.Text).First().SemanticDomains.First().Text);
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => new LexicalItem
+            {
+                Lemma = li1Db1!.Lemma,
+                Language = li1Db1!.Language
+            }.Create(Mediator!));
+
+            var li3Db1 = await LexicalItem.Get(
+                Mediator!,
+                lexicalItem3.Lemma!,
+                null,
+                null);
+
+            Assert.NotNull(li3Db1);
+            Assert.Single(li3Db1.Definitions);
+            Assert.Single(li3Db1.Definitions.First().SemanticDomains);
+            Assert.Equal(s2.Text, li3Db1.Definitions.First().SemanticDomains.First().Text);
 
             // Test GetTranslations:
             var tokenIds = tokensToQuery.Where(t => t.TrainingText != ",").Select(t => ModelHelper.BuildTokenId(t));
@@ -697,35 +747,11 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
 
             ProjectDbContext!.ChangeTracker.Clear();
 
-            var li1Db1 = await LexicalItem.Get(
-                Mediator!,
-                lexicalItem1.Lemma!,
-                lexicalItem1.Language!, 
-                null);
+            await li2Db1!.Delete(Mediator!);
+            Assert.Null(await LexicalItem.Get(Mediator!, lexicalItem2.Lemma!, null, null));
 
-            ProjectDbContext!.ChangeTracker.Clear();
-
-            var li1Db2 = await LexicalItem.Get(
-                Mediator!,
-                lexicalItem1.Lemma!,
-                lexicalItem1.Language!,
-                parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language);
-
-            ProjectDbContext!.ChangeTracker.Clear();
-
-            var li2Db1 = await LexicalItem.Get(
-                Mediator!,
-                lexicalItem2.Lemma!,
-                null,
-                null);
-
-            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => new LexicalItem
-            {
-                Lemma = li1Db1!.Lemma,
-                Language = li1Db1!.Language
-            }.Create(Mediator!));
-
-            await li2Db1.Delete(Mediator!);
+            await lexicalItem3.Definitions.First().DetachSemanticDomain(Mediator!, s2);
+            Assert.Empty(lexicalItem3.Definitions.First().SemanticDomains);
         }
         finally
         {

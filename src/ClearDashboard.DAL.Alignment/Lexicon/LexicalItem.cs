@@ -145,14 +145,14 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         public static async Task<LexicalItem?> Get(
             IMediator mediator,
             string lemma,
-            string language,
+            string? language,
             string? definitionLanguage,
             CancellationToken token = default)
         {
             var command = new GetLexicalItemByTextQuery(lemma, language, definitionLanguage);
 
             var result = await mediator.Send(command, token);
-            result.ThrowIfCanceledOrFailed(true);
+            result.ThrowIfCanceledOrFailed();
 
             return result.Data!;
         }
