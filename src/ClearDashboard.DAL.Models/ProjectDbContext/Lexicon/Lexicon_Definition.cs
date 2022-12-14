@@ -17,9 +17,9 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? Language { get; set; }
         public string? Text { get; set; }
 
-        [ForeignKey(nameof(LexicalItemId))]
-        public Guid LexicalItemId { get; set; }
-        public virtual Lexicon_LexicalItem? LexicalItem { get; set; }
+        [ForeignKey(nameof(LexemeId))]
+        public Guid LexemeId { get; set; }
+        public virtual Lexicon_Lexeme? Lexeme { get; set; }
         public ICollection<Lexicon_Translation> Translations { get; set; }
         public ICollection<Lexicon_SemanticDomain> SemanticDomains { get; set; }
         public ICollection<Lexicon_SemanticDomainDefinitionAssociation> SemanticDomainDefinitionAssociations { get; set; }

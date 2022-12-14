@@ -13,8 +13,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? Text { get; set; }
 
-        [ForeignKey(nameof(LexicalItemId))]
-        public Guid LexicalItemId { get; set; }
-        public virtual Lexicon_LexicalItem? LexicalItem { get; set; }
+        [ForeignKey(nameof(LexemeId))]
+        public Guid LexemeId { get; set; }
+        public virtual Lexicon_Lexeme? Lexeme { get; set; }
     }
 }

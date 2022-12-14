@@ -49,7 +49,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     Id = request.Definition.DefinitionId?.Id ?? Guid.NewGuid(),
                     Text = request.Definition.Text,
                     Language = request.Definition.Language,
-                    LexicalItemId = request.LexicalItemId.Id
+                    LexemeId = request.LexemeId.Id
                 };
 
                 ProjectDbContext.Lexicon_Definitions.Add(definition);

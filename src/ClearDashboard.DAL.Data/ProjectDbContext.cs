@@ -75,7 +75,7 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         // =============
         // LEXICON (calling the namespace Vocabulary because there is already a class named "Lexicon"):
-        public virtual DbSet<Lexicon_LexicalItem> Lexicon_LexicalItems => Set<Lexicon_LexicalItem>();
+        public virtual DbSet<Lexicon_Lexeme> Lexicon_Lexemes => Set<Lexicon_Lexeme>();
         public virtual DbSet<Lexicon_Definition> Lexicon_Definitions => Set<Lexicon_Definition>();
         public virtual DbSet<Lexicon_Form> Lexicon_Forms => Set<Lexicon_Form>();
         public virtual DbSet<Lexicon_Translation> Lexicon_Translations => Set<Lexicon_Translation>();
@@ -296,7 +296,7 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .WithMany(p => p.SemanticDomains)
                 .UsingEntity<Lexicon_SemanticDomainDefinitionAssociation>();
 
-            modelBuilder.Entity<Lexicon_LexicalItem>()
+            modelBuilder.Entity<Lexicon_Lexeme>()
                 .HasIndex(p => new { p.Lemma, p.Language })
                 .IsUnique();
             // =============

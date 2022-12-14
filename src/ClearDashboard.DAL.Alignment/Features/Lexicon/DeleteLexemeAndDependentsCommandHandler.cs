@@ -8,36 +8,36 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class DeleteLexicalItemAndDependentsCommandHandler : ProjectDbContextCommandHandler<
-        DeleteLexicalItemAndDependentsCommand,
+    public class DeleteLexemeAndDependentsCommandHandler : ProjectDbContextCommandHandler<
+        DeleteLexemeAndDependentsCommand,
         RequestResult<Unit>, Unit>
     {
-        public DeleteLexicalItemAndDependentsCommandHandler(
+        public DeleteLexemeAndDependentsCommandHandler(
             ProjectDbContextFactory? projectDbContextFactory,
             IProjectProvider projectProvider,
-            ILogger<DeleteLexicalItemAndDependentsCommandHandler> logger) : base(
+            ILogger<DeleteLexemeAndDependentsCommandHandler> logger) : base(
                 projectDbContextFactory,
                 projectProvider,
                 logger)
         {
         }
 
-        protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteLexicalItemAndDependentsCommand request,
+        protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteLexemeAndDependentsCommand request,
             CancellationToken cancellationToken)
         {
-            var lexicalItem = ProjectDbContext.Lexicon_LexicalItems
-                .FirstOrDefault(li => li.Id == request.LexicalItemId.Id);
+            var lexeme = ProjectDbContext.Lexicon_Lexemes
+                .FirstOrDefault(l => l.Id == request.LexemeId.Id);
 
-            if (lexicalItem == null)
+            if (lexeme == null)
             {
                 return new RequestResult<Unit>
                 (
                     success: false,
-                    message: $"Invalid LexicalItemId '{request.LexicalItemId.Id}' found in request"
+                    message: $"Invalid LexemeId '{request.LexemeId.Id}' found in request"
                 );
             }
 
-            ProjectDbContext.Remove(lexicalItem);
+            ProjectDbContext.Remove(lexeme);
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);

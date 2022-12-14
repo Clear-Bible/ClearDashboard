@@ -5,7 +5,7 @@ using ClearDashboard.DAL.Alignment.Notes;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class LexicalItemId : SimpleSynchronizableTimestampedEntityId<LexicalItemId>
+    public class LexemeId : SimpleSynchronizableTimestampedEntityId<LexemeId>
     {
     }
 }

@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Lexicon_LexicalItem : SynchronizableTimestampedEntity
+    public class Lexicon_Lexeme : SynchronizableTimestampedEntity
     {
-        public Lexicon_LexicalItem()
+        public Lexicon_Lexeme()
         {
             // ReSharper disable VirtualMemberCallInConstructor
             Definitions = new HashSet<Lexicon_Definition>();

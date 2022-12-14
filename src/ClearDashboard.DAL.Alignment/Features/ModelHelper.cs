@@ -461,9 +461,9 @@ namespace ClearDashboard.DAL.Alignment.Features
             );
         }
 
-        public static Alignment.Lexicon.LexicalItemId BuildLexicalItemId(Models.Lexicon_LexicalItem lexicalItem)
+        public static Alignment.Lexicon.LexemeId BuildLexemeId(Models.Lexicon_Lexeme lexeme)
         {
-            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_LexicalItem, Alignment.Lexicon.LexicalItemId>(lexicalItem);
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Lexeme, Alignment.Lexicon.LexemeId>(lexeme);
         }
 
         public static Alignment.Lexicon.DefinitionId BuildDefinitionId(Models.Lexicon_Definition definition)

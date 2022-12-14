@@ -9,35 +9,35 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class GetLexicalItemByTextQueryHandler : ProjectDbContextQueryHandler<GetLexicalItemByTextQuery,
-        RequestResult<LexicalItem?>, LexicalItem?>
+    public class GetLexemeByTextQueryHandler : ProjectDbContextQueryHandler<GetLexemeByTextQuery,
+        RequestResult<Lexeme?>, Lexeme?>
     {
-        public GetLexicalItemByTextQueryHandler(
+        public GetLexemeByTextQueryHandler(
             ProjectDbContextFactory? projectDbContextFactory,
             IProjectProvider projectProvider,
-            ILogger<GetLexicalItemByTextQueryHandler> logger) : base(projectDbContextFactory, projectProvider, logger)
+            ILogger<GetLexemeByTextQueryHandler> logger) : base(projectDbContextFactory, projectProvider, logger)
         {
         }
 
-        protected override async Task<RequestResult<LexicalItem?>> GetDataAsync(GetLexicalItemByTextQuery request, CancellationToken cancellationToken)
+        protected override async Task<RequestResult<Lexeme?>> GetDataAsync(GetLexemeByTextQuery request, CancellationToken cancellationToken)
         {
-            var lexicalItem = ProjectDbContext.Lexicon_LexicalItems
-                .Include(li => li.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
+            var lexeme = ProjectDbContext.Lexicon_Lexemes
+                .Include(l => l.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
                     .ThenInclude(d => d.User)
-                .Include(li => li.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
+                .Include(l => l.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
                     .ThenInclude(d => d.Translations)
-                .Include(li => li.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
+                .Include(l => l.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
                     .ThenInclude(d => d.SemanticDomainDefinitionAssociations)
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
-                .Include(li => li.Forms)
-                .Include(li => li.User)
-                .Where(li => li.Lemma == request.Lemma && (string.IsNullOrEmpty(request.Language) || li.Language == request.Language))
-                .Select(li => new LexicalItem(
-                    ModelHelper.BuildLexicalItemId(li),
-                    li.Lemma!,
-                    li.Language,
-                    li.Definitions
+                .Include(l => l.Forms)
+                .Include(l => l.User)
+                .Where(l => l.Lemma == request.Lemma && (string.IsNullOrEmpty(request.Language) || l.Language == request.Language))
+                .Select(l => new Lexeme(
+                    ModelHelper.BuildLexemeId(l),
+                    l.Lemma!,
+                    l.Language,
+                    l.Definitions
                         .Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage)
                         .Select(d => new Definition(
                             ModelHelper.BuildDefinitionId(d),
@@ -52,16 +52,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                                 sd.Text!
                             )).ToList()
                     )).ToList(),
-                    li.Forms.Select(lis => new Form(
-                        new FormId(lis.Id),
-                        lis.Text!
+                    l.Forms.Select(f => new Form(
+                        new FormId(f.Id),
+                        f.Text!
                     )).ToList()
                 )).FirstOrDefault();
 
             // need an await to get the compiler to be 'quiet'
             await Task.CompletedTask;
 
-            return new RequestResult<LexicalItem?>(lexicalItem);
+            return new RequestResult<Lexeme?>(lexeme);
         }
     }
 }

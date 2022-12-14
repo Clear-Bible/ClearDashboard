@@ -38,7 +38,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 return new RequestResult<Unit>
                 (
                     success: false,
-                    message: $"SemanticDomain not found for Id '{request.SemanticDomainId.Id}' - unable to create SemanticDomainLexicalItemDefinitionAssociation"
+                    message: $"SemanticDomain not found for Id '{request.SemanticDomainId.Id}' - unable to create SemanticDomainDefinitionAssociation"
                 );
             }
 

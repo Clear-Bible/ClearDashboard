@@ -4,6 +4,6 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
     public record PutFormCommand(
-        LexicalItemId LexicalItemId,
+        LexemeId LexemeId,
         Form Form) : ProjectRequestCommand<FormId>;
 }

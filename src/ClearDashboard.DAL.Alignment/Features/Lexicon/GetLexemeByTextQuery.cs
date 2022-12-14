@@ -3,8 +3,8 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public record CreateOrUpdateLexicalItemCommand(
-        LexicalItemId? LexicalItemId,
+    public record GetLexemeByTextQuery(
         string Lemma,
-        string? Language) : ProjectRequestCommand<LexicalItemId>;
+        string? Language,
+        string? DefinitionLanguage) : ProjectRequestQuery<Lexeme?>;
 }

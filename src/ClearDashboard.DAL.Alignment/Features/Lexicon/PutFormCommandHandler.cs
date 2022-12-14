@@ -47,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 {
                     Id = request.Form.FormId?.Id ?? Guid.NewGuid(),
                     Text = request.Form.Text,
-                    LexicalItemId = request.LexicalItemId.Id
+                    LexemeId = request.LexemeId.Id
                 };
 
                 ProjectDbContext.Lexicon_Forms.Add(form);

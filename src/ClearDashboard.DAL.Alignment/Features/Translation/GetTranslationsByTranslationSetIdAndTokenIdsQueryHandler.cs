@@ -172,7 +172,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             // 2.  Try Lexicon
-            if (tokenGuidsNotFound.Any() && ProjectDbContext.Lexicon_LexicalItems.Any())
+            if (tokenGuidsNotFound.Any() && ProjectDbContext.Lexicon_Lexemes.Any())
             {
 #if DEBUG
                 Stopwatch sw = new Stopwatch();
@@ -193,7 +193,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                combined.AddRange(ProjectDbContext.Lexicon_LexicalItems
+                combined.AddRange(ProjectDbContext.Lexicon_Lexemes
                     .Include(li => li.Definitions
                         .Where(d => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(d.Language) || d.Language == targetLanguage))
                     .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)

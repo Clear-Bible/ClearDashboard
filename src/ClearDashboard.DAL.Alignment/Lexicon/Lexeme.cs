@@ -6,9 +6,9 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class LexicalItem
+    public class Lexeme
     {
-        public LexicalItemId? LexicalItemId
+        public LexemeId? LexemeId
         {
             get;
 #if DEBUG
@@ -62,28 +62,28 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 #endif
         }
 
-        public LexicalItem()
+        public Lexeme()
         {
             definitions_ = new ObservableCollection<Definition>();
             forms_ = new ObservableCollection<Form>();
         }
-        internal LexicalItem(LexicalItemId lexicalItemId, string lemma, string? language, ICollection<Definition> definitions, ICollection<Form> forms)
+        internal Lexeme(LexemeId lexemeId, string lemma, string? language, ICollection<Definition> definitions, ICollection<Form> forms)
         {
-            LexicalItemId = lexicalItemId;
+            LexemeId = lexemeId;
             Lemma = lemma;
             Language = language;
             definitions_ = new ObservableCollection<Definition>(definitions.DistinctBy(l => l.DefinitionId)); ;
             forms_ = new ObservableCollection<Form>(forms.DistinctBy(l => l.FormId)); ;
         }
 
-        public async Task<LexicalItem> Create(IMediator mediator, CancellationToken token = default)
+        public async Task<Lexeme> Create(IMediator mediator, CancellationToken token = default)
         {
-            var command = new CreateOrUpdateLexicalItemCommand(null, Lemma ?? string.Empty, Language);
+            var command = new CreateOrUpdateLexemeCommand(null, Lemma ?? string.Empty, Language);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
 
-            LexicalItemId = result.Data!;
+            LexemeId = result.Data!;
             return this;
         }
 
@@ -95,12 +95,12 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 return;
             }
 
-            if (LexicalItemId is null)
+            if (LexemeId is null)
             {
-                throw new MediatorErrorEngineException("Create LexicalItem before associating with given Definition");
+                throw new MediatorErrorEngineException("Create Lexeme before associating with given Definition");
             }
 
-            var result = await mediator.Send(new PutDefinitionCommand(LexicalItemId, definition), token);
+            var result = await mediator.Send(new PutDefinitionCommand(LexemeId, definition), token);
             result.ThrowIfCanceledOrFailed();
 
             definition.DefinitionId = result.Data!;
@@ -116,12 +116,12 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 return;
             }
 
-            if (LexicalItemId is null)
+            if (LexemeId is null)
             {
-                throw new MediatorErrorEngineException("Create LexicalItem before associating with given Form");
+                throw new MediatorErrorEngineException("Create Lexeme before associating with given Form");
             }
 
-            var result = await mediator.Send(new PutFormCommand(LexicalItemId, form), token);
+            var result = await mediator.Send(new PutFormCommand(LexemeId, form), token);
             result.ThrowIfCanceledOrFailed();
 
             form.FormId = result.Data!;
@@ -131,25 +131,25 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         public async Task Delete(IMediator mediator, CancellationToken token = default)
         {
-            if (LexicalItemId == null)
+            if (LexemeId == null)
             {
                 return;
             }
 
-            var command = new DeleteLexicalItemAndDependentsCommand(LexicalItemId);
+            var command = new DeleteLexemeAndDependentsCommand(LexemeId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
         }
 
-        public static async Task<LexicalItem?> Get(
+        public static async Task<Lexeme?> Get(
             IMediator mediator,
             string lemma,
             string? language,
             string? definitionLanguage,
             CancellationToken token = default)
         {
-            var command = new GetLexicalItemByTextQuery(lemma, language, definitionLanguage);
+            var command = new GetLexemeByTextQuery(lemma, language, definitionLanguage);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();

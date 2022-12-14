@@ -112,10 +112,10 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         }
 
         /// <summary>
-        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the LexicalItemDefinition 
+        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the Definition 
         /// constructor.  For each UI thread that is going to access this method (really,the Labels ObservableCollection in general), 
         /// a WPF-layer caller should establish a “lock” object, tell WPF about it 
-        /// (using EnableCollectionSynchronization(lexicalItemDefinition.SemanticDomains, theLockObject)), and use it in a “lock” 
+        /// (using EnableCollectionSynchronization(definition.SemanticDomains, theLockObject)), and use it in a “lock” 
         /// statement every time those methods are called.  Summarized from:
         /// https://learn.microsoft.com/en-us/dotnet/api/system.windows.data.bindingoperations.enablecollectionsynchronization
         /// </summary>
@@ -149,10 +149,10 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         }
 
         /// <summary>
-        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the LexicalItemDefinition 
+        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the Definition 
         /// constructor.  For each UI thread that is going to access this method (really,the Labels ObservableCollection in general), 
         /// a WPF-layer caller should establish a “lock” object, tell WPF about it 
-        /// (using EnableCollectionSynchronization(lexicalItemDefinition.SemanticDomains, theLockObject)), and use it in a “lock” 
+        /// (using EnableCollectionSynchronization(definition.SemanticDomains, theLockObject)), and use it in a “lock” 
         /// statement every time those methods are called.  Summarized from:
         /// https://learn.microsoft.com/en-us/dotnet/api/system.windows.data.bindingoperations.enablecollectionsynchronization
         /// </summary>

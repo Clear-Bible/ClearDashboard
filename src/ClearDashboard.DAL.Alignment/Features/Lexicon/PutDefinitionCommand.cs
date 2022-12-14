@@ -4,6 +4,6 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
     public record PutDefinitionCommand(
-        LexicalItemId LexicalItemId,
+        LexemeId LexemeId,
         Definition Definition) : ProjectRequestCommand<DefinitionId>;
 }
