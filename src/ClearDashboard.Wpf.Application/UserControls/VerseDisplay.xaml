@@ -115,7 +115,7 @@
                 TokenMouseWheel="OnTokenMouseWheel"
                 TokenRightButtonDown="OnTokenRightButtonDown"
                 TokenRightButtonUp="OnTokenRightButtonUp"
-                TokenUnjoin="OnTokenUnjoin"
+                TokenUnjoin="OnTokenUnJoin"
                 TranslationClicked="OnTranslationClicked"
                 TranslationDoubleClicked="OnTranslationDoubleClicked"
                 TranslationLeftButtonDown="OnTranslationLeftButtonDown"
