@@ -310,11 +310,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _currentToken, value);
         }
 
-        private TokenDisplayViewModelCollection _selectedTokens = new();
-        public TokenDisplayViewModelCollection SelectedTokens
+        private TokenDisplayViewModelCollection _allSelectedTokens = new();
+        public TokenDisplayViewModelCollection AllSelectedTokens
         {
-            get => _selectedTokens;
-            set => Set(ref _selectedTokens, value);
+            get => _allSelectedTokens;
+            set => Set(ref _allSelectedTokens, value);
         }
 
 
@@ -1451,22 +1451,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 foreach (var selectedToken in selectedTokens)
                 {
-                    if (!SelectedTokens.Contains(selectedToken))
+                    if (!AllSelectedTokens.Contains(selectedToken))
                     {
-                        SelectedTokens.Add(selectedToken);
+                        AllSelectedTokens.Add(selectedToken);
                     }
                 }
 
                 if (!token.IsTokenSelected)
                 {
-                    SelectedTokens.Remove(token);
+                    AllSelectedTokens.Remove(token);
                 }
             }
             else
             {
-                SelectedTokens = selectedTokens;
+                AllSelectedTokens = selectedTokens;
             }
-            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
+            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(AllSelectedTokens));
         }
 
         public void TokenClicked(object sender, TokenEventArgs e)
@@ -1476,9 +1476,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplay, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
-            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
-            NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
+            UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            await NoteManager.SetCurrentNoteIds(AllSelectedTokens.NoteIds);
+            NoteControlVisibility = AllSelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId})";
         }
 
@@ -1489,9 +1489,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         
         public async Task TokenRightButtonDownAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
-            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
-            NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
+            //UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            if (!AllSelectedTokens.Contains(e.TokenDisplay))
+            {
+                AllSelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplay);
+                await EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(AllSelectedTokens));
+            }
+            await NoteManager.SetCurrentNoteIds(AllSelectedTokens.NoteIds);
+            NoteControlVisibility = AllSelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
         }
 
