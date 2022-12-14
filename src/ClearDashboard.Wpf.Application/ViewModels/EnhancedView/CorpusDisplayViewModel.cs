@@ -6,13 +6,40 @@ using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.Logging;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
+using SIL.Machine.Corpora;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    internal class CorpusDisplayViewModel : VerseDisplayViewModel
+    public class CorpusDisplayViewModel : VerseDisplayViewModel
     {
-        public CorpusDisplayViewModel(TokensTextRow textRow,
+        /// <summary>
+        /// Creates an <see cref="InterlinearDisplayViewModel"/> instance using the specified DI container.
+        /// </summary>
+        /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
+        /// <param name="textRow">The <see cref="TextRow"/> containing the tokens to display.</param>
+        /// <param name="detokenizer">The detokenizer to use for the source tokens.</param>
+        /// <param name="translationSetId">The ID of the translation set to use.</param>
+        /// <returns>A constructed <see cref="CorpusDisplayViewModel"/>.</returns>
+        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, TokensTextRow textRow, EngineStringDetokenizer detokenizer, bool isRtl)
+        {
+            var verseDisplayViewModel = componentContext!.Resolve<CorpusDisplayViewModel>(
+                new NamedParameter("textRow", textRow),
+                new NamedParameter("detokenizer", detokenizer),
+                new NamedParameter("isRtl", isRtl)
+            );
+            await verseDisplayViewModel.InitializeAsync();
+            return verseDisplayViewModel;
+        }
+
+        /// <summary>
+        /// Protected constructor.
+        /// </summary>
+        /// <remarks>
+        /// This is for use by the DI container; use <see cref="CreateAsync"/> instead to create and initialize an instance of this view model.
+        /// </remarks>
+        protected CorpusDisplayViewModel(TokensTextRow textRow,
                                       EngineStringDetokenizer detokenizer,
                                       bool isRtl,
                                       NoteManager noteManager, 
@@ -23,17 +50,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
             SourceTokenMap = new TokenMap(textRow.Tokens, detokenizer, isRtl);
-        }
-
-        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, TokensTextRow textRow, EngineStringDetokenizer detokenizer, bool isRtl)
-        {
-            var verseDisplayViewModel = componentContext!.Resolve<CorpusDisplayViewModel>(
-                new NamedParameter("textRow", textRow),
-                new NamedParameter("detokenizer", detokenizer),
-                new NamedParameter("isRtl", isRtl)
-            );
-            await verseDisplayViewModel.InitializeAsync();
-            return verseDisplayViewModel;
         }
     }
 }

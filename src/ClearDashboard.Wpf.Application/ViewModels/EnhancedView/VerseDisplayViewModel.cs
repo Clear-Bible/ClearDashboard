@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Services;
@@ -58,6 +59,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 NotifyOfPropertyChange(nameof(IsTargetRtl));
             }
         }
+
+        /// <summary>
+        /// Gets the <see cref="ParallelCorpusId"/> for the verse.
+        /// </summary>
+        public ParallelCorpusId? ParallelCorpusId { get; protected set; }
+
 
         /// <summary>
         /// Gets a collection of source <see cref="TokenDisplayViewModel"/>s to be rendered.
@@ -170,7 +177,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        public virtual async Task InitializeAsync()
+        protected virtual async Task InitializeAsync()
         {
             await BuildTokenDisplayViewModelsAsync();
         }

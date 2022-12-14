@@ -5,13 +5,12 @@ using Microsoft.Extensions.Logging;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Translation;
-using System.Linq;
 using Autofac;
 using MediatR;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -57,44 +56,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
         }
 
-        public override async Task InitializeAsync()
+        /// <summary>
+        /// Initializes the view model with the translations for the verse.
+        /// </summary>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        protected override async Task InitializeAsync()
         {
             TranslationManager = await TranslationManager.CreateAsync(LifetimeScope, ParallelTextRow, TranslationSetId);
 
             await base.InitializeAsync();
         }
 
-        public InterlinearDisplayViewModel(EngineParallelTextRow parallelTextRow,
-                                      EngineStringDetokenizer sourceDetokenizer,
-                                      bool isSourceRtl,
-                                      TranslationSetId translationSetId,
-                                      NoteManager noteManager,
-                                      IMediator mediator,
-                                      IEventAggregator eventAggregator, 
-                                      ILifetimeScope lifetimeScope,
-                                      ILogger<VerseDisplayViewModel> logger)
-            : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
-        {
-            ParallelTextRow = parallelTextRow;
-            if (parallelTextRow.SourceTokens != null)
-            {
-                SourceTokenMap = new TokenMap(parallelTextRow.SourceTokens!, sourceDetokenizer, isSourceRtl);
-            }
-
-            TranslationSetId = translationSetId;
-        }
-
-
-        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, EngineParallelTextRow parallelTextRow, EngineStringDetokenizer detokenizer, bool isRtl, TranslationSetId translationSetId)
+        /// <summary>
+        /// Creates an <see cref="InterlinearDisplayViewModel"/> instance using the specified DI container.
+        /// </summary>
+        /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
+        /// <param name="parallelTextRow">The <see cref="EngineParallelTextRow"/> containing the tokens to align.</param>
+        /// <param name="parallelCorpusId">The <see cref="ParallelCorpusId"/> of the parallel corpus.</param>
+        /// <param name="detokenizer">The detokenizer to use for the source tokens.</param>
+        /// <param name="isRtl">True if the source tokens should be displayed right-to-left (RTL); false otherwise.</param>
+        /// <param name="translationSetId">The ID of the translation set to use.</param>
+        /// <returns>A constructed <see cref="InterlinearDisplayViewModel"/>.</returns>
+        public static async Task<VerseDisplayViewModel> CreateAsync(IComponentContext componentContext, EngineParallelTextRow parallelTextRow, ParallelCorpusId parallelCorpusId, EngineStringDetokenizer detokenizer, bool isRtl, TranslationSetId translationSetId)
         {
             var verseDisplayViewModel = componentContext.Resolve<InterlinearDisplayViewModel>(
                 new NamedParameter("parallelTextRow", parallelTextRow),
+                new NamedParameter("parallelCorpusId", parallelCorpusId),
                 new NamedParameter("sourceDetokenizer", detokenizer),
                 new NamedParameter("isSourceRtl", isRtl),
                 new NamedParameter("translationSetId", translationSetId)
             );
             await verseDisplayViewModel.InitializeAsync();
             return verseDisplayViewModel;
+        }
+
+        /// <summary>
+        /// Protected constructor.
+        /// </summary>
+        /// <remarks>
+        /// This is for use by the DI container; use <see cref="CreateAsync"/> instead to create and initialize an instance of this view model.
+        /// </remarks>
+        protected InterlinearDisplayViewModel(EngineParallelTextRow parallelTextRow,
+            ParallelCorpusId parallelCorpusId,
+            EngineStringDetokenizer sourceDetokenizer,
+            bool isSourceRtl,
+            TranslationSetId translationSetId,
+            NoteManager noteManager,
+            IMediator mediator,
+            IEventAggregator eventAggregator,
+            ILifetimeScope lifetimeScope,
+            ILogger<InterlinearDisplayViewModel> logger)
+            : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
+        {
+            ParallelTextRow = parallelTextRow;
+            ParallelCorpusId = parallelCorpusId;
+            if (parallelTextRow.SourceTokens != null)
+            {
+                SourceTokenMap = new TokenMap(parallelTextRow.SourceTokens!, sourceDetokenizer, isSourceRtl);
+            }
+
+            TranslationSetId = translationSetId;
         }
     }
 }
