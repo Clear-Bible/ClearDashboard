@@ -34,12 +34,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         /// <summary>
-        /// Protected constructor.
+        /// Public constructor.
         /// </summary>
         /// <remarks>
         /// This is for use by the DI container; use <see cref="CreateAsync"/> instead to create and initialize an instance of this view model.
         /// </remarks>
-        protected CorpusDisplayViewModel(TokensTextRow textRow,
+        public CorpusDisplayViewModel(TokensTextRow textRow,
                                       EngineStringDetokenizer detokenizer,
                                       bool isRtl,
                                       NoteManager noteManager, 
