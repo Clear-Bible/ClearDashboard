@@ -72,6 +72,17 @@ namespace ClearDashboard.DataAccessLayer.Data
 
         public virtual DbSet<AlignmentSetDenormalizationTask> AlignmentSetDenormalizationTasks => Set<AlignmentSetDenormalizationTask>();
         public virtual DbSet<AlignmentTopTargetTrainingText> AlignmentTopTargetTrainingTexts => Set<AlignmentTopTargetTrainingText>();
+
+        // =============
+        // LEXICON (calling the namespace Vocabulary because there is already a class named "Lexicon"):
+        public virtual DbSet<Lexicon_LexicalItem> Lexicon_LexicalItems => Set<Lexicon_LexicalItem>();
+        public virtual DbSet<Lexicon_Definition> Lexicon_Definitions => Set<Lexicon_Definition>();
+        public virtual DbSet<Lexicon_Form> Lexicon_Forms => Set<Lexicon_Form>();
+        public virtual DbSet<Lexicon_Translation> Lexicon_Translations => Set<Lexicon_Translation>();
+        public virtual DbSet<Lexicon_SemanticDomain> Lexicon_SemanticDomains => Set<Lexicon_SemanticDomain>();
+        public virtual DbSet<Lexicon_SemanticDomainDefinitionAssociation> Lexicon_SemanticDomainDefinitionAssociations => Set<Lexicon_SemanticDomainDefinitionAssociation>();
+        // =============
+
         public async Task Migrate()
         {
             try
@@ -276,6 +287,19 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Translation>().HasIndex(e => e.SourceTokenComponentId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.SourceTokenComponentId);
+
+            // =============
+            // LEXICON:
+            modelBuilder
+                .Entity<Lexicon_SemanticDomain>()
+                .HasMany(p => p.Definitions)
+                .WithMany(p => p.SemanticDomains)
+                .UsingEntity<Lexicon_SemanticDomainDefinitionAssociation>();
+
+            modelBuilder.Entity<Lexicon_LexicalItem>()
+                .HasIndex(p => new { p.Lemma, p.Language })
+                .IsUnique();
+            // =============
         }
 
         //public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()

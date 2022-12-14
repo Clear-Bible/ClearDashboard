@@ -53,7 +53,7 @@ namespace ClearDashboard.Wpf.Application
 
             // Intended to be resolved/disposed at a 'request' level:
             builder.RegisterType<ProjectDbContext>().InstancePerRequest();
-            builder.RegisterType<SqliteProjectDbContextOptionsBuilder>().As<DbContextOptionsBuilder<ProjectDbContext>>().InstancePerRequest();
+            builder.RegisterType<SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>().As<DbContextOptionsBuilder<ProjectDbContext>>().InstancePerRequest();
         }
 
         public static void RegisterStartupDialogDependencies(this ContainerBuilder builder)

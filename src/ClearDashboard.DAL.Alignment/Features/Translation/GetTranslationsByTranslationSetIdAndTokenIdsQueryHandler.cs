@@ -19,8 +19,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         RequestResult<IEnumerable<Alignment.Translation.Translation>>,
         IEnumerable<Alignment.Translation.Translation>>
     {
-        public GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler> logger) 
-            : base(projectNameDbContextFactory, projectProvider, logger)
+        public GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler(
+            ProjectDbContextFactory? projectNameDbContextFactory, 
+            IProjectProvider projectProvider, 
+            ILogger<GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler> logger) : base(
+                projectNameDbContextFactory, 
+                projectProvider, 
+                logger)
         {
         }
 
@@ -167,7 +172,50 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             // 2.  Try Lexicon
-            // [Lexicon code goes here!]
+            if (tokenGuidsNotFound.Any() && ProjectDbContext.Lexicon_LexicalItems.Any())
+            {
+#if DEBUG
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Add lexicon translations (start)");
+#endif
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
+                    .Include(tc => ((TokenComposite)tc).Tokens)
+                    .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
+                    .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
+                    .Where(tc => tc.TrainingText != null)
+                    .ToList()
+                    .GroupBy(tc => tc.TrainingText!)
+                    .ToDictionary(g => g.Key, g => g.Select(i => i));
+
+                cancellationToken.ThrowIfCancellationRequested();
+
+                combined.AddRange(ProjectDbContext.Lexicon_LexicalItems
+                    .Include(li => li.Definitions
+                        .Where(d => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(d.Language) || d.Language == targetLanguage))
+                    .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
+                    .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.Lemma))
+                    .ToList()
+                    .SelectMany(li => sourceTokenTrainingTexts[li.Lemma!]
+                        .Select(t => new Alignment.Translation.Translation(
+                            ModelHelper.BuildToken(t),
+                            string.Join("/", li.Definitions.Select(lid => lid.Text)),
+                            "FromLexicon")
+                        )
+                    ));
+
+                tokenGuidsNotFound = tokenGuidsNotFound
+                    .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid))
+                    .ToList();
+
+#if DEBUG
+                sw.Stop();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve Translations from Lexicon '{translationSet.DisplayName}' (end)");
+#endif
+            }
 
             // 3.  For any leftovers, try the Alignments:
             if (tokenGuidsNotFound.Any())
@@ -178,7 +226,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Add alignment translations (start)");
 #endif
 
-                if (ProjectDbContext.AlignmentSetDenormalizationTasks.Any(a => a.AlignmentSetId == translationSet.AlignmentSetId))
+                if (ProjectDbContext!.AlignmentSetDenormalizationTasks.Any(a => a.AlignmentSetId == translationSet.AlignmentSetId))
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
