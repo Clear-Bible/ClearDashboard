@@ -779,7 +779,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            if (SelectedTokens.SelectedTokens.Count < 2 || SelectedTokens.SelectedTranslations.Any())
+            if (! AllSelectedTokens.CanJoin)
             {
                 JoinTokensMenuItem.Visibility = Visibility.Collapsed;
             }
@@ -959,7 +959,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            SelectedTokens = message.SelectedTokens;
+            AllSelectedTokens = message.SelectedTokens;
             await Task.CompletedTask;
         }
 
@@ -975,7 +975,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets the collection of tokens selected across all displays.
         /// </summary>
-        private TokenDisplayViewModelCollection SelectedTokens { get; set; }
+        private TokenDisplayViewModelCollection AllSelectedTokens { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the composite token indicator.
