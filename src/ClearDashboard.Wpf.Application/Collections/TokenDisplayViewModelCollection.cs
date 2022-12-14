@@ -45,6 +45,8 @@ namespace ClearDashboard.Wpf.Application.Collections
         {
         }
 
+        public TokenCollection TokenCollection => new(Items.Select(t => t.Token));
+
         public bool Contains(TokenId tokenId)
         {
             return Items.Any(i => i.Token.TokenId.IdEquals(tokenId.Id));
