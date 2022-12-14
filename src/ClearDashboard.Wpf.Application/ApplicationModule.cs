@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application
         {
             builder.RegisterType<AlignmentManager>().AsSelf();
             builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
-            builder.RegisterType<TranslationManager>().AsSelf().SingleInstance();
+            builder.RegisterType<TranslationManager>().AsSelf();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
         }        
         
