@@ -57,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
         }
 
-        protected override async Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
             TranslationManager = await TranslationManager.CreateAsync(LifetimeScope, ParallelTextRow, TranslationSetId);
 
