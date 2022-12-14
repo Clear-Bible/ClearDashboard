@@ -74,13 +74,13 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<AlignmentTopTargetTrainingText> AlignmentTopTargetTrainingTexts => Set<AlignmentTopTargetTrainingText>();
 
         // =============
-        // LEXICON (calling the namespace Vocabulary because there is already a class named "Lexicon"):
+        // LEXICON:
         public virtual DbSet<Lexicon_Lexeme> Lexicon_Lexemes => Set<Lexicon_Lexeme>();
-        public virtual DbSet<Lexicon_Definition> Lexicon_Definitions => Set<Lexicon_Definition>();
+        public virtual DbSet<Lexicon_Sense> Lexicon_Senses => Set<Lexicon_Sense>();
         public virtual DbSet<Lexicon_Form> Lexicon_Forms => Set<Lexicon_Form>();
         public virtual DbSet<Lexicon_Translation> Lexicon_Translations => Set<Lexicon_Translation>();
         public virtual DbSet<Lexicon_SemanticDomain> Lexicon_SemanticDomains => Set<Lexicon_SemanticDomain>();
-        public virtual DbSet<Lexicon_SemanticDomainDefinitionAssociation> Lexicon_SemanticDomainDefinitionAssociations => Set<Lexicon_SemanticDomainDefinitionAssociation>();
+        public virtual DbSet<Lexicon_SemanticDomainSenseAssociation> Lexicon_SemanticDomainSenseAssociations => Set<Lexicon_SemanticDomainSenseAssociation>();
         // =============
 
         public async Task Migrate()
@@ -292,9 +292,9 @@ namespace ClearDashboard.DataAccessLayer.Data
             // LEXICON:
             modelBuilder
                 .Entity<Lexicon_SemanticDomain>()
-                .HasMany(p => p.Definitions)
+                .HasMany(p => p.Senses)
                 .WithMany(p => p.SemanticDomains)
-                .UsingEntity<Lexicon_SemanticDomainDefinitionAssociation>();
+                .UsingEntity<Lexicon_SemanticDomainSenseAssociation>();
 
             modelBuilder.Entity<Lexicon_Lexeme>()
                 .HasIndex(p => new { p.Lemma, p.Language })

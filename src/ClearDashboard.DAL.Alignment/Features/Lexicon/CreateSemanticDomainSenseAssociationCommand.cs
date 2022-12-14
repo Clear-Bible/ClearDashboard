@@ -4,6 +4,7 @@ using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public record DeleteDefinitionCommand(
-        DefinitionId DefinitionId) : ProjectRequestCommand<Unit>;
+    public record CreateSemanticDomainSenseAssociationCommand(
+        SemanticDomainId SemanticDomainId,
+        SenseId SenseId) : ProjectRequestCommand<Unit>;
 }

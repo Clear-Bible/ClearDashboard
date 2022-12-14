@@ -466,9 +466,9 @@ namespace ClearDashboard.DAL.Alignment.Features
             return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Lexeme, Alignment.Lexicon.LexemeId>(lexeme);
         }
 
-        public static Alignment.Lexicon.DefinitionId BuildDefinitionId(Models.Lexicon_Definition definition)
+        public static Alignment.Lexicon.SenseId BuildSenseId(Models.Lexicon_Sense sense)
         {
-            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Definition, Alignment.Lexicon.DefinitionId>(definition);
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Sense, Alignment.Lexicon.SenseId>(sense);
         }
 
         public static Alignment.Lexicon.TranslationId BuildTranslationId(Models.Lexicon_Translation translation)

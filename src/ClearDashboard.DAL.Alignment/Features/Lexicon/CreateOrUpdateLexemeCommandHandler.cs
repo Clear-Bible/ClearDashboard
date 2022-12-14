@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 
-//USE TO ACCESS Vocabulary
+//USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
@@ -43,6 +43,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 
                     lexeme.Lemma = request.Lemma;
                     lexeme.Language = request.Language;
+                    lexeme.Type = request.Type;
                 }
                 else
                 {
@@ -50,7 +51,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     {
                         Id = Guid.NewGuid(),
                         Lemma = request.Lemma,
-                        Language = request.Language
+                        Language = request.Language,
+                        Type = request.Type
                     };
                 }
 

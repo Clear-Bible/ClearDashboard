@@ -21,24 +21,25 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         }
         public string? Lemma { get; set; }
         public string? Language { get; set; }
+        public string? Type { get; set; }
 
 #if DEBUG
-        private ObservableCollection<Definition> definitions_;
+        private ObservableCollection<Sense> senses_;
 #else
         // RELEASE MODIFIED
-        //private readonly ObservableCollection<Definition> definitions_;
-        private ObservableCollection<Definition> definitions_;
+        //private readonly ObservableCollection<Sense> senses_;
+        private ObservableCollection<Sense> senses_;
 #endif
 
-        public ObservableCollection<Definition> Definitions
+        public ObservableCollection<Sense> Senses
         {
-            get { return definitions_; }
+            get { return senses_; }
 #if DEBUG
-            set { definitions_ = value; }
+            set { senses_ = value; }
 #else
             // RELEASE MODIFIED
-            //set { definitions_ = value; }
-            set { definitions_ = value; }
+            //set { senses_ = value; }
+            set { senses_ = value; }
 #endif
         }
 
@@ -64,21 +65,22 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         public Lexeme()
         {
-            definitions_ = new ObservableCollection<Definition>();
+            senses_ = new ObservableCollection<Sense>();
             forms_ = new ObservableCollection<Form>();
         }
-        internal Lexeme(LexemeId lexemeId, string lemma, string? language, ICollection<Definition> definitions, ICollection<Form> forms)
+        internal Lexeme(LexemeId lexemeId, string lemma, string? language, string? type, ICollection<Sense> senses, ICollection<Form> forms)
         {
             LexemeId = lexemeId;
             Lemma = lemma;
             Language = language;
-            definitions_ = new ObservableCollection<Definition>(definitions.DistinctBy(l => l.DefinitionId)); ;
-            forms_ = new ObservableCollection<Form>(forms.DistinctBy(l => l.FormId)); ;
+            Type = type;
+            senses_ = new ObservableCollection<Sense>(senses.DistinctBy(s => s.SenseId)); ;
+            forms_ = new ObservableCollection<Form>(forms.DistinctBy(f => f.FormId)); ;
         }
 
         public async Task<Lexeme> Create(IMediator mediator, CancellationToken token = default)
         {
-            var command = new CreateOrUpdateLexemeCommand(null, Lemma ?? string.Empty, Language);
+            var command = new CreateOrUpdateLexemeCommand(null, Lemma ?? string.Empty, Language, Type);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
@@ -87,25 +89,25 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             return this;
         }
 
-        public async Task PutDefinition(IMediator mediator, Definition definition, CancellationToken token = default)
+        public async Task PutSense(IMediator mediator, Sense sense, CancellationToken token = default)
         {
-            if (definition.DefinitionId is not null && 
-                definitions_.Any(l => l.DefinitionId == definition.DefinitionId))
+            if (sense.SenseId is not null && 
+                senses_.Any(s => s.SenseId == sense.SenseId))
             {
                 return;
             }
 
             if (LexemeId is null)
             {
-                throw new MediatorErrorEngineException("Create Lexeme before associating with given Definition");
+                throw new MediatorErrorEngineException("Create Lexeme before associating with given Sense");
             }
 
-            var result = await mediator.Send(new PutDefinitionCommand(LexemeId, definition), token);
+            var result = await mediator.Send(new PutSenseCommand(LexemeId, sense), token);
             result.ThrowIfCanceledOrFailed();
 
-            definition.DefinitionId = result.Data!;
+            sense.SenseId = result.Data!;
 
-            definitions_.Add(definition);
+            senses_.Add(sense);
         }
 
         public async Task PutForm(IMediator mediator, Form form, CancellationToken token = default)
@@ -146,10 +148,10 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             IMediator mediator,
             string lemma,
             string? language,
-            string? definitionLanguage,
+            string? senseLanguage,
             CancellationToken token = default)
         {
-            var command = new GetLexemeByTextQuery(lemma, language, definitionLanguage);
+            var command = new GetLexemeByTextQuery(lemma, language, senseLanguage);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();

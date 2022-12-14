@@ -8,13 +8,13 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Lexicon_SemanticDomain()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            Definitions = new HashSet<Lexicon_Definition>();
-            SemanticDomainDefinitionAssociations = new HashSet<Lexicon_SemanticDomainDefinitionAssociation>();
+            Senses = new HashSet<Lexicon_Sense>();
+            SemanticDomainSenseAssociations = new HashSet<Lexicon_SemanticDomainSenseAssociation>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
         public string? Text { get; set; }
-        public ICollection<Lexicon_Definition> Definitions { get; set; }
-        public ICollection<Lexicon_SemanticDomainDefinitionAssociation> SemanticDomainDefinitionAssociations { get; set; }
+        public ICollection<Lexicon_Sense> Senses { get; set; }
+        public ICollection<Lexicon_SemanticDomainSenseAssociation> SemanticDomainSenseAssociations { get; set; }
     }
 }

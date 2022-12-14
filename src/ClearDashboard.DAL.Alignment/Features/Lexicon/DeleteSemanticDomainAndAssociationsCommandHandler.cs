@@ -36,7 +36,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
             }
 
             // The data model should be set up to do a cascade delete of
-            // any SemanticDomainDefinitionAssociations when
+            // any SemanticDomainSenseAssociations when
             // the following executes:
             ProjectDbContext.Remove(semanticDomain);
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);

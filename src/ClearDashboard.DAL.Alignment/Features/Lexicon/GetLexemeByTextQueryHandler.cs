@@ -22,12 +22,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
         protected override async Task<RequestResult<Lexeme?>> GetDataAsync(GetLexemeByTextQuery request, CancellationToken cancellationToken)
         {
             var lexeme = ProjectDbContext.Lexicon_Lexemes
-                .Include(l => l.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
+                .Include(l => l.Senses.Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage))
                     .ThenInclude(d => d.User)
-                .Include(l => l.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
+                .Include(l => l.Senses.Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage))
                     .ThenInclude(d => d.Translations)
-                .Include(l => l.Definitions.Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage))
-                    .ThenInclude(d => d.SemanticDomainDefinitionAssociations)
+                .Include(l => l.Senses.Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage))
+                    .ThenInclude(d => d.SemanticDomainSenseAssociations)
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
                 .Include(l => l.Forms)
@@ -37,17 +37,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     ModelHelper.BuildLexemeId(l),
                     l.Lemma!,
                     l.Language,
-                    l.Definitions
-                        .Where(d => string.IsNullOrEmpty(request.DefinitionLanguage) || d.Language == request.DefinitionLanguage)
-                        .Select(d => new Definition(
-                            ModelHelper.BuildDefinitionId(d),
-                            d.Text!,
-                            d.Language,
-                            d.Translations.Select(t => new Alignment.Lexicon.Translation(
+                    l.Type,
+                    l.Senses
+                        .Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage)
+                        .Select(s => new Sense(
+                            ModelHelper.BuildSenseId(s),
+                            s.Text!,
+                            s.Language,
+                            s.Translations.Select(t => new Alignment.Lexicon.Translation(
                                 ModelHelper.BuildTranslationId(t),
                                 t.Text ?? string.Empty
                             )).ToList(),
-                            d.SemanticDomains.Select(sd => new SemanticDomain(
+                            s.SemanticDomains.Select(sd => new SemanticDomain(
                                 ModelHelper.BuildSemanticDomainId(sd),
                                 sd.Text!
                             )).ToList()

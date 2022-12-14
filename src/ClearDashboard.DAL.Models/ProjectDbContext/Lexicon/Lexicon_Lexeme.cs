@@ -8,14 +8,15 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Lexicon_Lexeme()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            Definitions = new HashSet<Lexicon_Definition>();
+            Senses = new HashSet<Lexicon_Sense>();
             Forms = new HashSet<Lexicon_Form>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
         public string? Language { get; set; }
         public string? Lemma { get; set; }
-        public ICollection<Lexicon_Definition> Definitions { get; set; }
+        public string? Type { get; set; }
+        public ICollection<Lexicon_Sense> Senses { get; set; }
         public ICollection<Lexicon_Form> Forms { get; set; }
     }
 }

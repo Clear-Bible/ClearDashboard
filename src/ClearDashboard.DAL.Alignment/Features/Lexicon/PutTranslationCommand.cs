@@ -4,6 +4,6 @@ using ClearDashboard.DAL.CQRS.Features;
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
     public record PutTranslationCommand(
-        DefinitionId DefinitionId,
+        SenseId SenseId,
         Alignment.Lexicon.Translation Translation) : ProjectRequestCommand<TranslationId>;
 }

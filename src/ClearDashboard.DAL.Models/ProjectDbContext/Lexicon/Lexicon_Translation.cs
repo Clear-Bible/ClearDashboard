@@ -13,8 +13,8 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string? Text { get; set; }
 
-        [ForeignKey(nameof(DefinitionId))]
-        public Guid DefinitionId { get; set; }
-        public virtual Lexicon_Definition? Definition { get; set; }
+        [ForeignKey(nameof(SenseId))]
+        public Guid SenseId { get; set; }
+        public virtual Lexicon_Sense? Sense { get; set; }
     }
 }
