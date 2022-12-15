@@ -12,6 +12,8 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
     /// </summary>
     public partial class EnhancedView : UserControl
     {
+
+        // TODO:  this needs to be moved into VerseAwareEnhancedViewItemViewModel.
         public void TranslationClicked(object sender, RoutedEventArgs routedEventArgs)
         {
             Task.Run(() => TranslationClickedAsync(routedEventArgs as TranslationEventArgs ?? throw new InvalidOperationException()).GetAwaiter());

@@ -4,11 +4,10 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SIL.EventsAndDelegates;
 using System.Diagnostics;
-using System.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -20,7 +19,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         RequestResult<IEnumerable<Alignment.Translation.Translation>>,
         IEnumerable<Alignment.Translation.Translation>>
     {
-
         public GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler(ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider, ILogger<GetTranslationsByTranslationSetIdAndTokenIdsQueryHandler> logger) 
             : base(projectNameDbContextFactory, projectProvider, logger)
         {
@@ -64,6 +62,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             var tokenIdGuids = request.TokenIds.Select(t => t.Id).ToList();
 
             var translations = ModelHelper.AddIdIncludesTranslationsQuery(ProjectDbContext!)
+                .Where(tr => tr.Deleted == null)
                 .Where(tr => tr.TranslationSetId == request.TranslationSetId.Id)
                 .Where(tr => tokenIdGuids.Contains(tr.SourceTokenComponentId))
                 .Select(t => new Alignment.Translation.Translation(
@@ -86,6 +85,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     translations, 
                     tokenGuidsNotFound, 
                     translationSet, 
+                    request.TranslationSetId.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language,
+                    request.TranslationSetId.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language,
                     cancellationToken);
 
                 var tokensIdsNotFound = request.TokenIds
@@ -122,18 +123,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             IEnumerable<Alignment.Translation.Translation> translations, 
             IEnumerable<Guid> tokenGuidsNotFound, 
             Models.TranslationSet translationSet,
+            string? sourceLanguage,
+            string? targetLanguage,
             CancellationToken cancellationToken)
         {
-#if DEBUG
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            Logger.LogInformation($"Elapsed={sw.Elapsed} - Add model translations (start)");
-#endif
             var combined = translations.ToList();
 
+            // 1. Try TranslationModel if it exists:
             if (ProjectDbContext!.TranslationModelEntries
                 .Where(tme => tme.TranslationSetId == translationSet.Id).Count() > 0)
             {
+#if DEBUG
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Add model translations (start)");
+#endif
+
                 var translationModelEntries = ProjectDbContext!.TranslationModelEntries
                     .Include(tm => tm.TargetTextScores)
                     .Join(
@@ -151,18 +156,34 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                 combined.AddRange(translationModelEntries);
 
+                tokenGuidsNotFound = tokenGuidsNotFound
+                    .Where(tid => !combined.Select(t => t.SourceToken.TokenId.Id).Contains(tid))
+                    .ToList();
+
 #if DEBUG
                 sw.Stop();
                 Logger.LogInformation($"Elapsed={sw.Elapsed} - Retrieve TranslationModel '{translationSet.DisplayName}' (end)");
 #endif
             }
-            else
+
+            // 2.  Try Lexicon
+            // [Lexicon code goes here!]
+
+            // 3.  For any leftovers, try the Alignments:
+            if (tokenGuidsNotFound.Any())
             {
+#if DEBUG
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                Logger.LogInformation($"Elapsed={sw.Elapsed} - Add alignment translations (start)");
+#endif
+
                 if (ProjectDbContext.AlignmentSetDenormalizationTasks.Any(a => a.AlignmentSetId == translationSet.AlignmentSetId))
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
                     var sourceTokenTrainingTexts = ProjectDbContext!.TokenComponents
+                        .Include(tc => ((TokenComposite)tc).Tokens)
                         .Where(tc => tc.TokenizedCorpusId == translationSet.AlignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                         .Where(tc => tokenGuidsNotFound.Contains(tc.Id))
                         .Where(tc => tc.TrainingText != null)
@@ -175,6 +196,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     var sourceTextToTopTargetTrainingText = ProjectDbContext!.Alignments
                         .Include(a => a.SourceTokenComponent)
                         .Include(a => a.TargetTokenComponent)
+                        .Where(a => a.Deleted == null)
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
                         .Where(a => sourceTokenTrainingTexts.Keys.Contains(a.SourceTokenComponent!.TrainingText))
                         .ToList()
@@ -203,6 +225,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 else
                 {
                     var translationsFromAlignmentModel = ProjectDbContext.AlignmentTopTargetTrainingTexts
+                        .Include(a => a.SourceTokenComponent!)
+                            .ThenInclude(tc => ((TokenComposite)tc).Tokens)
                         .Where(a => a.AlignmentSetId == translationSet.AlignmentSetId)
                         .Where(a => tokenGuidsNotFound.Contains(a.SourceTokenComponentId))
                         .Select(a => new Alignment.Translation.Translation(

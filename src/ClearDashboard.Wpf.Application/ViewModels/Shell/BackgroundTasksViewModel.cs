@@ -7,6 +7,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 {
@@ -16,6 +18,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     {
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly IEventAggregator? _eventAggregator;
+        private readonly ILogger<BackgroundTasksViewModel> _logger;
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
         private readonly TimeSpan _periodTimeSpan = TimeSpan.FromSeconds(5);
         private readonly int _completedRemovalSeconds = 45;
@@ -29,10 +32,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             // required for design-time
         }
 
-        public BackgroundTasksViewModel(LongRunningTaskManager? longRunningTaskManager, IEventAggregator? eventAggregator)
+        public BackgroundTasksViewModel(LongRunningTaskManager? longRunningTaskManager, IEventAggregator? eventAggregator, ILogger<BackgroundTasksViewModel> logger)
         {
             _longRunningTaskManager = longRunningTaskManager;
             _eventAggregator = eventAggregator;
+            _logger = logger;
 
             // setup timer to clean up old background tasks
             _timer = new Timer(TimerElapsed, null, _startTimeSpan, _periodTimeSpan);
@@ -59,14 +63,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private void TimerElapsed(object? state)
         {
-            if (_cleanUpOldBackgroundTasks)
+            try
             {
-                CleanUpOldBackgroundTasks();
+                if (_cleanUpOldBackgroundTasks)
+                {
+                    CleanUpOldBackgroundTasks();
+                }
+                else
+                {
+                    _cleanUpOldBackgroundTasks = true;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _cleanUpOldBackgroundTasks = true;
+                _logger.LogError(ex, "An unexpected error occurred while cleaning up background tasks.");
+                //swallow for now
             }
+          
         }
 
         public void CancelTask(BackgroundTaskStatus status)
@@ -80,8 +93,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
                 backgroundTaskStatus.EndTime = DateTime.Now;
                 backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                //TODO:  Localize
-                backgroundTaskStatus.Description = "Task was cancelled";
+                backgroundTaskStatus.Description = LocalizationStrings.Get("BackgroundTasks_TaskCancelled", _logger!);
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
 
                 ToggleSpinner();

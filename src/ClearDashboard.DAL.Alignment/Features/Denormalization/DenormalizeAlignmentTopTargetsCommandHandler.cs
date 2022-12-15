@@ -196,6 +196,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             var alignments = ProjectDbContext!.Alignments
                 .Include(a => a.SourceTokenComponent)
                         .Include(a => a.TargetTokenComponent)
+                .Where(a => a.Deleted == null)
                 .Where(a => a.AlignmentSetId == alignmentSetId);
 
             List<Models.Alignment>? alignmentResults = null;

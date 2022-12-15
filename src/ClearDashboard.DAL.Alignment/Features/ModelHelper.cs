@@ -1,4 +1,5 @@
 ﻿using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Persistence;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
@@ -20,18 +21,21 @@ namespace ClearDashboard.DAL.Alignment.Features
 
             return ct;
         }
+        public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite)
+        {
+            if (!tokenComposite.Tokens.Any())
+            {
+                throw new MediatorErrorEngineException("DB TokenComposite passed to BuildCompositeToken does not contain child tokens.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
+
+            return BuildCompositeToken(tokenComposite, tokenComposite.Tokens);
+        }
 
         public static Token BuildToken(Models.TokenComponent tokenComponent)
         {
             if (tokenComponent is Models.TokenComposite)
             {
-                var tokenComposite = (tokenComponent as Models.TokenComposite)!;
-
-                var ct = new CompositeToken(tokenComposite.Tokens.Select(t => BuildToken(t)));
-                ct.TokenId.Id = tokenComponent.Id;
-                ct.ExtendedProperties = tokenComponent.ExtendedProperties;
-
-                return ct;
+                return BuildCompositeToken((Models.TokenComposite)tokenComponent);
             }
             else
             {
@@ -76,6 +80,29 @@ namespace ClearDashboard.DAL.Alignment.Features
                     dbToken.VerseNumber == tokenId.VerseNumber &&
                     dbToken.WordNumber == tokenId.WordNumber &&
                     dbToken.SubwordNumber == tokenId.SubWordNumber);
+        }
+        public static int GetBookNumberForSILAbbreviation(string silBookAbbreviation)
+        {
+            var bookMappingDatum = FileGetBookIds.BookIds
+                .FirstOrDefault(bookDatum => bookDatum.silCannonBookAbbrev == silBookAbbreviation);
+
+            if (bookMappingDatum == null)
+            {
+                throw new MediatorErrorEngineException(
+                    $"Unable to map book abbreviation: {silBookAbbreviation} to book number."
+                );
+            }
+
+            if (Int32.TryParse(bookMappingDatum.silCannonBookNum, out int intifiedBookNumber))
+            {
+                return intifiedBookNumber;
+            }
+            else
+            {
+                throw new MediatorErrorEngineException(
+                    $"Unable to parse book number {bookMappingDatum.silCannonBookNum} for SIL Book abbreviation {silBookAbbreviation}"
+                );
+            }
         }
 
         public static string BuildTokenLocationRef(Models.Token token)
@@ -355,7 +382,8 @@ namespace ClearDashboard.DAL.Alignment.Features
         public static IQueryable<Models.Translation> AddIdIncludesTranslationsQuery(ProjectDbContext projectDbContext)
         {
             return projectDbContext.Translations
-                .Include(e => e.SourceTokenComponent)
+                .Include(e => e.SourceTokenComponent!)
+                    .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
                 .Include(e => e.TranslationSet)
                     .ThenInclude(e => e!.ParallelCorpus)
                         .ThenInclude(e => e!.SourceTokenizedCorpus)

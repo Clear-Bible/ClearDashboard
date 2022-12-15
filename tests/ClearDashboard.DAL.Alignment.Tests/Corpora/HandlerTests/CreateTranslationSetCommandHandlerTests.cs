@@ -579,14 +579,18 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             ProjectDbContext!.TokenComponents.Add(newModelToken);
             await ProjectDbContext!.SaveChangesAsync();
 
-            var newTokenId = ModelHelper.BuildTokenId(newModelToken);
+            var newToken = ModelHelper.BuildToken(newModelToken);
 
-            var translationsForNewToken = await translationSet.GetTranslations(new List<TokenId>() { newTokenId });
+            var translationsForNewToken = await translationSet.GetTranslations(new List<TokenId>() { newToken.TokenId });
             Assert.Single(translationsForNewToken);
-            Assert.Equal(newTokenId, translationsForNewToken.First().SourceToken.TokenId);
+            Assert.Equal(newToken.TokenId, translationsForNewToken.First().SourceToken.TokenId);
             Assert.Equal("FromAlignmentModel", translationsForNewToken.First().OriginatedFrom);
             Assert.Empty(translationsForNewToken.First().TargetTranslationText);
             Assert.Null(translationsForNewToken.First().TranslationId);  // The Translation returned should be a default 'empty' translation - not from the DB
+
+            var tme = await translationSet.GetTranslationModelEntryForToken(newToken);
+            Assert.NotNull(tme);
+            Assert.Empty(tme);
         }
         finally
         {

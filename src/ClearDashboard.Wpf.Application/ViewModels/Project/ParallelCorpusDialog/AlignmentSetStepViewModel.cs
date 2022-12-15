@@ -17,7 +17,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
 public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IParallelCorpusDialogViewModel, AlignmentSetStepViewModel>
 {
-   
+
+    #region Member Variables
+
+
+
+    #endregion //Member Variables
+
+
+    #region Public Properties
+
+    #endregion //Public Properties
+
+
+    #region Observable Properties
+
+    private DialogMode _dialogMode;
+    public DialogMode DialogMode
+    {
+        get => _dialogMode;
+        set => Set(ref _dialogMode, value);
+    }
+
+    private bool _canOk;
+    public bool CanOk
+    {
+        get => _canOk;
+        set => Set(ref _canOk, value);
+    }
+
+    
+    private bool _canAdd;
+    public bool CanAdd
+    {
+        get => _canAdd;
+        set => Set(ref _canAdd, value);
+    }
+
+    
+    private string _alignmentSetDisplayName;
+    public string AlignmentSetDisplayName
+    {
+        get => _alignmentSetDisplayName;
+        set
+        {
+            Set(ref _alignmentSetDisplayName, value);
+            ValidationResult = Validator.Validate(this);
+            CanAdd = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
+        }
+    }
+
+    #endregion //Observable Properties
+
+
+    #region Constructor
 
     public AlignmentSetStepViewModel()
     {
@@ -38,32 +91,6 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
 
         CanAdd = false;
 
-    }
-
-    private DialogMode _dialogMode;
-    public DialogMode DialogMode
-    {
-        get => _dialogMode;
-        set => Set(ref _dialogMode, value);
-    }
-
-    private bool _canAdd;
-    public bool CanAdd
-    {
-        get => _canAdd;
-        set => Set(ref _canAdd, value);
-    }
-
-    private string _alignmentSetDisplayName;
-    public string AlignmentSetDisplayName
-    {
-        get => _alignmentSetDisplayName;
-        set
-        {
-            Set(ref _alignmentSetDisplayName, value);
-            ValidationResult = Validator.Validate(this);
-            CanAdd = !string.IsNullOrEmpty(value) && ValidationResult.IsValid;
-        }
     }
 
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -90,14 +117,10 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
         base.OnActivateAsync(cancellationToken);
     }
 
-    private bool _canOk;
-    
+    #endregion //Constructor
 
-    public bool CanOk
-    {
-        get => _canOk;
-        set => Set(ref _canOk, value);
-    }
+
+    #region Methods
 
     public void Ok()
     {
@@ -155,4 +178,6 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
     {
         return (!string.IsNullOrEmpty(AlignmentSetDisplayName)) ? Validator.Validate(this) : null;
     }
+
+    #endregion // Methods
 }
