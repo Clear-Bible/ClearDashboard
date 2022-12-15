@@ -470,6 +470,14 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                             {
                                                                 child.Attributes["style"].Value="vh";
                                                             }
+
+                                                            if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                            {
+                                                                XmlAttribute attr = xDoc.CreateAttribute("style");
+                                                                attr.Value = "vh";
+
+                                                                child.Attributes.Append(attr);
+                                                            }
                                                         }
                                                     }
                                                 }
