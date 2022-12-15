@@ -19,7 +19,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? ExtendedProperties { get; set; }
 
         [ForeignKey("VerseRowId")]
-        public Guid VerseRowId { get; set; }
+        public Guid? VerseRowId { get; set; }
         public virtual VerseRow? VerseRow { get; set; }
 
         [ForeignKey("TokenizedCorpusId")]
@@ -30,5 +30,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual ICollection<Alignment> SourceAlignments { get; set; }
         public virtual ICollection<Alignment> TargetAlignments { get; set; }
         public virtual ICollection<Translation> Translations { get; set; }
+
+        public DateTimeOffset? Deleted { get; set; }
     }
 }

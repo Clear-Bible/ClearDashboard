@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.Marble;
@@ -14,10 +15,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+#pragma warning disable CS8618
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 {
@@ -26,7 +30,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         #region Commands
 
         public ICommand LaunchLogosCommand { get; set; }
+        public ICommand LaunchLogosStrongNumberCommand { get; set; }
         public ICommand SearchSenseCommand { get; set; }
+        public ICommand SetContextCommand { get; set; }
+        public ICommand GetVerseDetailCommand { get; set; }
 
         #endregion Commands
 
@@ -40,15 +47,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         private readonly IEventAggregator? _eventAggregator;
         private readonly TranslationSource _translationSource;
 
+        private enum FiterReference
+        {
+            All,
+            Book,
+            Chapter,
+        }
+
+        private FiterReference _currentFilter = FiterReference.All;
+
 
         #region BCV
-        private bool _paratextSync = false;
+        private bool _paratextSync;
         public bool ParatextSync
         {
             get => _paratextSync;
             set
             {
-                if (value == true)
+                if (value)
                 {
                     // TODO do we return back the control to what Paratext is showing
                     // or do we change Paratext to this new verse?  currently set to 
@@ -84,7 +100,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private int _verseOffsetRange = 0;
+        private int _verseOffsetRange;
         public int VerseOffsetRange
         {
             get => _verseOffsetRange;
@@ -132,12 +148,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         #region Public Properties
 
+
+
+
         #endregion //Public Properties
 
 
         #region Observable Properties
 
         #endregion //Observable Properties
+
+        private bool _isTargetRtl;
+        public bool IsTargetRtl
+        {
+            get => _isTargetRtl;
+            set
+            {
+                _isTargetRtl = value;
+                NotifyOfPropertyChange(() => IsTargetRtl);
+            }
+        }
+
 
         private ObservableCollection<Senses> _senses = new();
         public ObservableCollection<Senses> Senses
@@ -146,6 +177,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             set
             {
                 _senses = value;
+
+                VerseText = "";
+                SourceText = "";
+                VerseTextId = "";
+
                 NotifyOfPropertyChange(() => Senses);
             }
         }
@@ -157,12 +193,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             set
             {
                 _selectedSense = value;
+                FilterSenses();
                 NotifyOfPropertyChange(() => SelectedSense);
             }
         }
 
-
-
+        private List<CoupleOfStrings> _verses;
+        public List<CoupleOfStrings> Verses
+        {
+            get => _verses;
+            set
+            {
+                _verses = value;
+                NotifyOfPropertyChange(() => Verses);
+            }
+        }
 
         private string _selectedHebrew = "";
         public string SelectedHebrew
@@ -197,23 +242,81 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 if (_selectedLexicalLink is not null)
                 {
                     SelectedHebrew = _selectedLexicalLink.Word;
-                    GetWord();
+                    _ = GetWord();
                 }
 
                 NotifyOfPropertyChange(() => SelectedLexicalLink);
             }
         }
 
-        private bool _isOT;
-        public bool IsOT
+        private bool _isOt;
+        public bool IsOt
         {
-            get => _isOT;
+            get => _isOt;
             set
             {
-                _isOT = value;
-                NotifyOfPropertyChange(() => IsOT);
+                _isOt = value;
+                NotifyOfPropertyChange(() => IsOt);
             }
         }
+
+        private string _verseTextFontFamily;
+        public string VerseTextFontFamily
+        {
+            get => _verseTextFontFamily;
+            set
+            {
+                _verseTextFontFamily = value;
+                NotifyOfPropertyChange(() => VerseTextFontFamily);
+            }
+        }
+
+        private string _sourceTextFontFamily = "SBL Hebrew";
+        public string SourceTextFontFamily
+        {
+            get => _sourceTextFontFamily;
+            set
+            {
+                _sourceTextFontFamily = value;
+                NotifyOfPropertyChange(() => SourceTextFontFamily);
+            }
+        }
+
+        private string _verseText;
+        public string VerseText
+        {
+            get => _verseText;
+            set
+            {
+                _verseText = value;
+                NotifyOfPropertyChange(() => VerseText);
+            }
+        }
+
+        private string _verseTextId;
+        public string VerseTextId
+        {
+            get => _verseTextId;
+            set
+            {
+                _verseTextId = value;
+                NotifyOfPropertyChange(() => VerseTextId);
+            }
+        }
+
+
+
+        private string _sourceText;
+        public string SourceText
+        {
+            get => _sourceText;
+            set
+            {
+                _sourceText = value;
+                NotifyOfPropertyChange(() => SourceText);
+            }
+        }
+
 
         #region Constructor
 
@@ -235,15 +338,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             Title = "◕ " + "MARBLE";
             ContentId = "MARBLE";
-            DockSide = EDockSide.Bottom;
+            DockSide = DockSide.Bottom;
 
             // wire up the commands
-            LaunchLogosCommand = new RelayCommand(LaunchLogosStrongNumber);
+            LaunchLogosCommand = new RelayCommand(LaunchLogos);
+            LaunchLogosStrongNumberCommand = new RelayCommand(LaunchLogosStrongNumber);
             SearchSenseCommand = new RelayCommandAsync(SearchSense);
+            SetContextCommand = new RelayCommandAsync(SetContext);
+            GetVerseDetailCommand = new RelayCommandAsync(GetVerseDetail);
         }
-
-
-
 
         protected override void OnViewAttached(object view, object context)
         {
@@ -264,12 +367,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
                     CurrentBcv.BibleBookList?.Add(bookName);
                 }
+
+                IsTargetRtl = ProjectManager.CurrentParatextProject.IsRTL;
             }
             else
             {
                 BcvDictionary = new Dictionary<string, string>();
             }
-            
+
             CurrentBcv.SetVerseFromId(_projectManager.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = _projectManager.CurrentVerse;
@@ -278,22 +383,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         }
 
         protected override async void OnViewReady(object view)
-        { 
+        {
             // load in all the word search lookups
-            await LoadSearchCSV();
-            
-            if (ProjectManager.CurrentVerse != String.Empty)
+            await LoadSearchCsv();
+
+            if (ProjectManager?.CurrentVerse != string.Empty)
             {
-                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                CurrentBcv.SetVerseFromId(ProjectManager?.CurrentVerse);
                 _currentVerse = CurrentBcv.BBBCCCVVV;
 
                 await LoadUpVerse().ConfigureAwait(false);
             }
 
+            // start collecting the gloss to Heb/Greek words
+            _ = Task.Run(async () =>
+            {
+                await ObtainGlosses().ConfigureAwait(false);
+            });
+
+
             base.OnViewReady(view);
         }
 
-        private async Task LoadSearchCSV()
+
+        /// <summary>
+        /// Load up the CSV file with results of which Heb/Greek word are in which Semantic Dictionary File
+        /// </summary>
+        /// <returns></returns>
+        private async Task LoadSearchCsv()
         {
             var queryResult = await ExecuteRequest(new LoadSemanticDictionaryLookupSlice.LoadSemanticDictionaryLookupQuery(), CancellationToken.None).ConfigureAwait(false);
             if (queryResult.Success == false)
@@ -305,17 +422,128 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             if (queryResult.Data == null)
             {
-               
+
                 return;
             }
 
             _lookup = queryResult.Data;
         }
 
+
+        /// <summary>
+        /// Iterate through the glosses and obtain the Heb/Greek words
+        /// </summary>
+        /// <returns></returns>
+        private async Task ObtainGlosses()
+        {
+            //var queryResult =
+            //    await ExecuteRequest(new LoadSemanticDictionaryGlosses.LoadSemanticDictionaryGlossesQuery(),
+            //        CancellationToken.None).ConfigureAwait(false);
+            //if (queryResult.Success == false)
+            //{
+            //    Logger!.LogError(queryResult.Message);
+            //    return;
+            //}
+        }
+
         #endregion //Constructor
 
 
         #region Methods
+
+        private void FilterSenses()
+        {
+            var tempSense = Senses.FirstOrDefault(x => x == SelectedSense);
+            if (tempSense is null)
+            {
+                return;
+            }
+
+            if (tempSense.Verses.Count == 0)
+            {
+                return;
+            }
+
+            switch (_currentFilter)
+            {
+                case FiterReference.All:
+                    Verses = tempSense.Verses;
+                    break;
+                case FiterReference.Book:
+                    string bbb = CurrentBcv.BBBCCCVVV.Substring(0, 3);
+
+                    Verses = tempSense.Verses.Where(x =>
+                    {
+                        return x.stringA.StartsWith(bbb);
+                    }).ToList();
+                    break;
+                case FiterReference.Chapter:
+                    string bbbccc = CurrentBcv.BBBCCCVVV;
+                    bbbccc = bbbccc.Substring(0, 6);
+
+                    Verses = tempSense.Verses.Where(x => x.stringA.StartsWith(bbbccc)).ToList();
+                    break;
+            }
+        }
+
+        private async Task GetVerseDetail(object arg)
+        {
+            if (arg is CoupleOfStrings coupleOfStrings)
+            {
+                var verseId = coupleOfStrings.stringA;
+
+                // create a list for doing versification processing
+                var verseList = new List<VersificationList>();
+
+                verseList.Add(new VersificationList
+                {
+                    SourceBBBCCCVV = verseId.Substring(0, 9),
+                    TargetBBBCCCVV = "",
+                });
+
+                // this data from the BiblicalTerms & AllBiblicalTerms XML files has versification from the org.vrs
+                // convert it over to the current project versification format.
+                verseList = Helpers.Versification.GetVersificationFromOriginal(verseList, _projectManager.CurrentParatextProject);
+
+                // create the list to display
+                var verse = verseList[0];
+
+                var bookNum = int.Parse(verse.TargetBBBCCCVV.Substring(0, 3));
+                var chapterNum = int.Parse(verse.TargetBBBCCCVV.Substring(3, 3));
+                var verseNum = int.Parse(verse.TargetBBBCCCVV.Substring(6, 3));
+
+                // call paratext to get this verse
+                var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum), CancellationToken.None);
+                var verseText = "";
+                if (verseTextResult.Success)
+                    verseText = verseTextResult.Data.Name;
+                else
+                {
+                    verseText = "There was an issue getting the text for this verse.";
+                    Logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                }
+
+                // get the Heb/Greek text
+                var sourceWords = LexicalLinks.Select(x => x.Word + " ").ToList();
+                var sourceText = string.Join("", sourceWords);
+                if (LexicalLinks[0].IsRtl)
+                {
+                    SourceTextFontFamily = "SBL Hebrew";
+                }
+                else
+                {
+                    SourceTextFontFamily = "SBL Greek";
+                }
+
+                var project = ProjectManager!.ProjectMetadata.FirstOrDefault(x => x.Id == ProjectManager.CurrentParatextProject.Guid);
+
+                VerseText = verseText;
+                VerseTextFontFamily = project.FontFamily;
+                SourceText = sourceText;
+                VerseTextId = coupleOfStrings.stringB;
+            }
+        }
+
 
         private async Task LoadUpVerse()
         {
@@ -337,6 +565,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             if (_lexicalLinks.Count > 0)
             {
+                SelectedLexicalLink = _lexicalLinks[0];
                 SelectedHebrew = _lexicalLinks[0].Word;
                 await GetWord().ConfigureAwait(false);
             }
@@ -380,6 +609,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);
+                Senses.Clear();
                 return;
             }
 
@@ -396,7 +626,44 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             {
                 SelectedSense = Senses[0];
             }
+
+            // get ot/nt
+            var bookNum = int.Parse(CurrentBcv.BBBCCCVVV.Substring(0, 3));
+            if (bookNum < 40)
+            {
+                IsOt = true;
+            }
+            else
+            {
+                IsOt = false;
+            }
+
         }
+
+        private Task SetContext(object arg)
+        {
+            if (arg.ToString() == "All")
+            {
+                _currentFilter = FiterReference.All;
+            }
+            else if (arg.ToString() == "Book")
+            {
+                _currentFilter = FiterReference.Book;
+            }
+            else
+            {
+                _currentFilter = FiterReference.Chapter;
+            }
+
+            VerseText = "";
+            SourceText = "";
+            VerseTextId = "";
+
+            FilterSenses();
+            return Task.CompletedTask;
+        }
+
+
 
         private async Task SearchSense(object obj)
         {
@@ -407,38 +674,61 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private void LaunchLogosStrongNumber(object obj)
+
+        private void LaunchLogos(object obj)
         {
             if (obj is null)
             {
                 return;
             }
 
-            var StrongNum = (string)obj;
 
-            var LogosRef = Convert.ToInt32(StrongNum.Substring(1));
+            var safeUrl = Uri.EscapeDataString(SelectedHebrew).Replace('%', '$');
 
-            //var LogosRef = Uri.EscapeDataString(chopped).Replace('%', '$');
+            // OT or NT?
+            if (CurrentBcv.BookNum < 40)
+            {
+                // Hebrew link
+                var hebrewPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fhe$2F";
+                LaunchWebPage.TryOpenUrl(hebrewPrefix + safeUrl);
+            }
+            else
+            {
+                // Greek link
+                var greekPrefix = "logos4:Guide;t=My_Bible_Word_Study;lemma=lbs$2Fel$2F";
+                LaunchWebPage.TryOpenUrl(greekPrefix + safeUrl);
+            }
+        }
 
+        private void LaunchLogosStrongNumber(object obj)
+        {
+            if (SelectedHebrew == "")
+            {
+                return;
+            }
+
+            var strongNum = (string)obj;
+            // remove all the alphabetic characters
+            var logosRef = Regex.Replace(strongNum, "[^0-9.]", "");
 
             //// OT or NT?
-            if (StrongNum.StartsWith("H"))
+            if (strongNum.StartsWith("H"))
             {
                 // Hebrew link
                 var hebrewPrefix = "logosres:strongs;ref=HebrewStrongs.";
-                LaunchWebPage.TryOpenUrl(hebrewPrefix + LogosRef);
+                LaunchWebPage.TryOpenUrl(hebrewPrefix + logosRef);
             }
-            else if (StrongNum.StartsWith("G"))
+            else if (strongNum.StartsWith("G"))
             {
                 // Greek link
                 var greekPrefix = "logosres:strongs;ref=GreekStrongs.";
-                LaunchWebPage.TryOpenUrl(greekPrefix + LogosRef);
+                LaunchWebPage.TryOpenUrl(greekPrefix + logosRef);
             }
-            else if (StrongNum.StartsWith("A"))
+            else if (strongNum.StartsWith("A"))
             {
                 // Aramaic link
                 var greekPrefix = "logosres:strongs;ref=HebrewStrongs.";
-                LaunchWebPage.TryOpenUrl(greekPrefix + LogosRef);
+                LaunchWebPage.TryOpenUrl(greekPrefix + logosRef);
             }
         }
 
@@ -464,7 +754,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             {
 
                 // TODO
-                
+
                 // a zero based verse
                 //TargetInlinesText.Clear();
                 //NotifyOfPropertyChange(() => TargetInlinesText);
@@ -475,37 +765,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             else
             {
                 // a normal verse
-                var verse = new Verse
+                _ = new Verse
                 {
                     VerseBBBCCCVVV = _currentVerse
                 };
 
-                int BookNum;
+                int bookNum;
                 try
                 {
                     _currentBcv.SetVerseFromId(message.Verse);
-                    BookNum = _currentBcv.BookNum;
+                    bookNum = _currentBcv.BookNum;
                 }
                 catch (Exception)
                 {
-                    Logger.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
-                    BookNum = 01;
+                    Logger?.LogError($"Error converting [{message.Verse}] to book integer in WordMeanings");
+                    bookNum = 01;
                 }
 
 
-                if (BookNum < 40)
+                if (bookNum < 40)
                 {
-                    _isOT = true;
+                    _isOt = true;
                 }
                 else
                 {
-                    _isOT = false;
+                    _isOt = false;
                 }
 
                 _ = LoadUpVerse();
-                
+
                 //_ = GetWord();
-                
+
             }
 
             return Task.CompletedTask;

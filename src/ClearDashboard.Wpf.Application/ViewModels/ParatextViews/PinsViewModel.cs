@@ -976,7 +976,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     VerseIdShort = verseIdShort,
                     VerseText = verseText
                 });
-                FontFamily = ProjectManager.CurrentParatextProject.DefaultFont;
             }
 
             NotifyOfPropertyChange(() => SelectedItemVerses);

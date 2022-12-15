@@ -1,20 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
+using CefSharp;
+using CefSharp.Wpf;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
+using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
@@ -23,7 +30,7 @@ using Microsoft.Extensions.Logging;
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class TextCollectionsViewModel : ToolViewModel, IHandle<TextCollectionChangedMessage>,
+    public class TextCollectionsViewModel : ToolViewModel,
         IHandle<VerseChangedMessage>
     {
         private readonly DashboardProjectManager? _projectManager;
@@ -53,6 +60,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        private string _myHtml;
+
+        public string MyHtml
+        {
+            get { return _myHtml; }
+            set
+            {
+                _myHtml = value;
+                NotifyOfPropertyChange(() => MyHtml);
+            }
+        }
+
+        private bool _textCollectionCallInProgress = false;
 
         #region BCV
         private bool _paratextSync = false;
@@ -198,53 +218,71 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         private async Task CallGetTextCollections()
         {
-            try
+            if (!_textCollectionCallInProgress)
             {
-                var result = await ExecuteRequest(new GetTextCollectionsQuery(), CancellationToken.None)
-                    .ConfigureAwait(false);
-                await EventAggregator.PublishOnUIThreadAsync(
-                    new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
+                _textCollectionCallInProgress = true;
 
-
-                if (result.Success)
+                var workWithUsx = true;
+                try
                 {
-                    OnUIThread(() =>
+                    var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx), CancellationToken.None).ConfigureAwait(false);
+                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
+
+                    if (result.Success)
                     {
-                        TextCollectionLists.Clear();
-                        var data = result.Data;
-
-                        foreach (var textCollection in data)
+                        OnUIThread(async () =>
                         {
-                            TextCollectionList tc = new();
+                            TextCollectionLists.Clear();
+                            var data = result.Data;
 
-                            var endPart = textCollection.Data;
-                            var startPart = textCollection.ReferenceShort;
+                            foreach (var textCollection in data)
+                            {
+                                TextCollectionList tc = new();
 
-                            tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                            SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
+                                var endPart = textCollection.Data;
+                                var startPart = textCollection.ReferenceShort;
 
-                            tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
+                                if (workWithUsx)
+                                {
+                                    try
+                                    {
+                                        string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
+                                        var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
+                                        tc.MyHtml = html;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine(e);
+                                        tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                                    }
+                                }
+                                else
+                                {
+                                    tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                                }
 
-                            TextCollectionLists.Add(tc);
-                        }
-                    });
+                                SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
+                                tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
+
+                                TextCollectionLists.Add(tc);
+                            }
+                        });
+                    }
                 }
+                catch (Exception e)
+                {
+                    Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
+                }
+
+                _textCollectionCallInProgress = false;
             }
-            catch (Exception e)
-            {
-                Logger.LogError($"BiblicalTermsViewModel Deserialize BiblicalTerms: {e.Message}");
-            }
+
+            
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<TextCollectionsView>.Show(this, actualWidth, actualHeight);
-        }
-
-        public Task HandleAsync(TextCollectionChangedMessage message, CancellationToken cancellationToken)
-        {
-            // TODO
-            return Task.CompletedTask;
         }
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
@@ -263,7 +301,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         #endregion // Methods
+    }
 
+    public class ChromiumWebBrowserHelper
+    {
+        public static readonly DependencyProperty BodyProperty =
+            DependencyProperty.RegisterAttached("Body", typeof(string), typeof(ChromiumWebBrowserHelper), new PropertyMetadata(OnBodyChanged));
 
+        public static string GetBody(DependencyObject dependencyObject)
+        {
+            return (string)dependencyObject.GetValue(BodyProperty);
+        }
+
+        public static void SetBody(DependencyObject dependencyObject, string body)
+        {
+            dependencyObject.SetValue(BodyProperty, body);
+        }
+
+        private static void OnBodyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var chromiumWebBrowser = (ChromiumWebBrowser)d;
+            chromiumWebBrowser.LoadHtml((string)e.NewValue, "http://ClearDashboard.Wpf.Application.TextCollection/"); //.NavigateToString((string)e.NewValue);
+        }
     }
 }

@@ -67,6 +67,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             if (!ProjectDbContext!.TokenComponents
+                .Where(tc => tc.Deleted == null)
                 .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id))
             {
@@ -78,6 +79,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             }
 
             if (!ProjectDbContext!.TokenComponents
+                .Where(tc => tc.Deleted == null)
                 .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.TargetTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id))
             {

@@ -1,7 +1,6 @@
-﻿using System.Data.SQLite;
-using ClearDashboard.DataAccessLayer.Data.Sqlite;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using SqliteConnection = Microsoft.Data.Sqlite.SqliteConnection;
 
 namespace ClearDashboard.DAL.CQRS.Features;
 
@@ -14,7 +13,7 @@ namespace ClearDashboard.DAL.CQRS.Features;
 public abstract class SqliteDatabaseRequestHandler<TRequest, TResponse, TData> : ResourceRequestHandler<TRequest, TResponse, TData>
     where TRequest : IRequest<TResponse>
 {
-    protected SQLiteDataReader? DataReader { get; private set; }
+    protected Microsoft.Data.Sqlite.SqliteDataReader? DataReader { get; private set; }
 
     protected SqliteDatabaseRequestHandler(ILogger logger) : base(logger)
     {
@@ -23,11 +22,15 @@ public abstract class SqliteDatabaseRequestHandler<TRequest, TResponse, TData> :
 
     protected TData ExecuteSqliteCommandAndProcessData(string commandText)
     {
-        var connectionManager = new SqliteConnectionManager(ResourcePath, Logger);
+        var connection = new SqliteConnection($"Data Source={ResourcePath};Cache=Shared");
+        connection.CreateCollation("NOCASE", (s1, s2) => string.Compare(s1, s2, StringComparison.InvariantCultureIgnoreCase));
         try
         {
-            var sqliteCmd = connectionManager.CreateCommand(commandText);
-            DataReader = sqliteCmd.ExecuteReader();
+            connection.Open();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = commandText;
+            DataReader = cmd.ExecuteReader();
+
             return ProcessData();
         }
         catch (Exception ex)
@@ -37,7 +40,7 @@ public abstract class SqliteDatabaseRequestHandler<TRequest, TResponse, TData> :
         }
         finally
         {
-            connectionManager.CloseConnection();
+            connection.Close();
         }
     }
 }

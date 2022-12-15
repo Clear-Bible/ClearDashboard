@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\DashboardProjects\DashboardProjectSlice.cs" />
     <Compile Remove="Features\MarbleDataRequests\GetWhatIsThisWordSlice.cs" />
   </ItemGroup>
 
@@ -26,6 +27,7 @@
     <None Remove="Resources\marble-concordances\GNTAnalysis.xml" />
     <None Remove="Resources\marble-concordances\GNTLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\GNTSelectedLemmaConcordance.xml" />
+    <None Remove="Resources\marble-concordances\SemanticDomainsLookup.sqlite" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1CH.XML" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1CO.XML" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1JN.XML" />
@@ -160,6 +162,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\marble-concordances\GNTSelectedLemmaConcordance.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\marble-concordances\SemanticDomainsLookup.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\marble-indexes-full\MARBLELinks-1CH.XML">
@@ -560,6 +565,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_bhs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_gnt_long.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_gnt_simple.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_translations_bhs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_translations_gnt.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -567,6 +587,10 @@
     <None Update="Resources\ManuscriptVerses.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MarbleHelpers\DataFiles\" />
   </ItemGroup>
 
 </Project>

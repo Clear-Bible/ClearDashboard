@@ -24,5 +24,11 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Guid TokenizedCorpusId { get; set; }
         public virtual TokenizedCorpus? TokenizedCorpus { get; set; }
         public virtual ICollection<TokenComponent> TokenComponents { get; set; }
+
+        [NotMapped]
+        public IEnumerable<Token> Tokens => TokenComponents.Where(tc => tc.GetType() == typeof(Token)).Cast<Token>();
+
+        [NotMapped]
+        public IEnumerable<TokenComposite> TokenComposites => TokenComponents.Where(tc => tc.GetType() == typeof(TokenComposite)).Cast<TokenComposite>();
     }
 }

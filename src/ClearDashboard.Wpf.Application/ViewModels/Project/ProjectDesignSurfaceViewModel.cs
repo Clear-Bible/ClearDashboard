@@ -38,6 +38,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -52,7 +54,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         #region Member Variables
 
         //public record CorporaLoadedMessage(IEnumerable<DAL.Alignment.Corpora.Corpus> Copora);
-        public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
+        //public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly IWindowManager? _windowManager;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
@@ -64,12 +66,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public bool DesignSurfaceLoaded { get; set; }
 
+        public MainViewModel MainViewModel => (MainViewModel)Parent;
+
         /// <summary>
         /// This is the design surface that is displayed in the window.
         /// It is the main part of the view-model.
         /// </summary>
-        private DesignSurfaceViewModel _designSurfaceViewModel;
-        public DesignSurfaceViewModel DesignSurfaceViewModel
+        private DesignSurfaceViewModel? _designSurfaceViewModel;
+        public DesignSurfaceViewModel? DesignSurfaceViewModel
         {
             get => _designSurfaceViewModel;
             private set => Set(ref _designSurfaceViewModel, value);
@@ -112,7 +116,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             set => Set(ref _selectedDesignSurfaceComponent, value);
         }
 
-       private string? _projectName;
+        private string? _projectName;
         public string? ProjectName
         {
             get => _projectName;
@@ -138,16 +142,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             _longRunningTaskManager = longRunningTaskManager;
 
             EventAggregator.SubscribeOnUIThread(this);
-            _busyState.CollectionChanged += BusyStateOnCollectionChanged;
+
         }
 
-        protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+        protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            // NB:  This is currently not getting called, so we're doing the wire up in the 
-            //       constructor and cleaning up in Dispose
-            EventAggregator.SubscribeOnUIThread(this);
-            _busyState.CollectionChanged += BusyStateOnCollectionChanged;
-            return base.OnInitializeAsync(cancellationToken);
+            // NB:  This gets called after all of the AvalonDock tabs have been rendered so
+            //      I have added the Initialize method below which gets called in 
+            //      MainViewModel.OnActivate.ActivateDockedWindowViewModels
+            await base.OnInitializeAsync(cancellationToken);
         }
 
         public void Dispose()
@@ -163,16 +166,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
+            // NB:  This gets called after all of the AvalonDock tabs have been rendered so
+            //      I have added the Initialize method below which gets called in 
+            //      MainViewModel.OnActivate.ActivateDockedWindowViewModels
+            await base.OnActivateAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Activates the DesignSurfaceViewModel and draws the design surface based on data from Project table in the specific
+        /// project database
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <remarks>NB:  This method is called explicitly from MainViewModel.OnActivate.ActivateDockedWindowViewModels</remarks>
+        /// <returns></returns>
+        public async Task Initialize(CancellationToken cancellationToken)
+        {
             Items.Clear();
-
-            DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
-
             EventAggregator.SubscribeOnUIThread(this);
-
+            DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
             await DrawDesignSurface();
 
             _busyState.CollectionChanged += BusyStateOnCollectionChanged;
-            await base.OnActivateAsync(cancellationToken);
         }
 
         private void BusyStateOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -188,7 +202,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        private async Task<TViewModel?> ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
+        private new async Task<TViewModel?> ActivateItemAsync<TViewModel>(CancellationToken cancellationToken = default)
             where TViewModel : Screen
         {
 
@@ -196,9 +210,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //   OnViewLoaded is not called.
 
             var viewModel = LifetimeScope!.Resolve<TViewModel>();
-          
+
             viewModel.Parent = this;
             viewModel.ConductWith(this);
+
+            // Binding ProjectDesignView to the the view model.  Note this is different
+            // from other conductors where we bind to view/viewmodel pair.
             var view = ViewLocator.LocateForModel(this, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync(viewModel, cancellationToken);
@@ -213,26 +230,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task SaveDesignSurfaceData()
         {
-            _ = Task.Run(async () =>
-         // _ = await Task.Factory.StartNew(async () =>
-            {
-                var json = SerializeDesignSurface();
+            _ = await Task.Factory.StartNew(async () =>
+            //_ = await Task.Run(async () =>
 
-                ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
+       {
+           var json = SerializeDesignSurface();
 
-                Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
+           ProjectManager!.CurrentProject.DesignSurfaceLayout = json;
 
-                try
-                {
-                    await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
-                    await Task.Delay(250);
-                }
-                catch (Exception ex)
-                {
-                    Logger?.LogError(ex,
-                        $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
-                }
-            });
+           Logger!.LogInformation($"DesignSurfaceLayout : {ProjectManager.CurrentProject.DesignSurfaceLayout}");
+
+           try
+           {
+               await ProjectManager.UpdateProject(ProjectManager.CurrentProject).ConfigureAwait(false);
+               await Task.Delay(250);
+           }
+           catch (Exception ex)
+           {
+               Logger?.LogError(ex,
+                   $"An unexpected error occurred while saving the project layout to the '{ProjectManager.CurrentProject.ProjectName} database.");
+           }
+       });
 
         }
 
@@ -270,11 +288,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             LoadingDesignSurface = true;
             DesignSurfaceLoaded = false;
 
-            Stopwatch sw = new();
-            sw.Start();
+            var sw = Stopwatch.StartNew();
 
             try
             {
+                //_ = await Task.Factory.StartNew(async () =>
+                //{
                 var designSurfaceData = LoadDesignSurfaceData();
                 var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
@@ -293,10 +312,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
 
                         var corpus = new Corpus(corpusId);
-                        var corpusNodeLocation = designSurfaceData.CorpusNodeLocations.FirstOrDefault(cn => cn.CorpusId == corpusId.Id);
-                        var point = corpusNodeLocation != null ? new Point(corpusNodeLocation.X, corpusNodeLocation.Y) : new Point();
+                        var corpusNodeLocation =
+                            designSurfaceData.CorpusNodeLocations.FirstOrDefault(cn => cn.CorpusId == corpusId.Id);
+                        var point = corpusNodeLocation != null
+                            ? new Point(corpusNodeLocation.X, corpusNodeLocation.Y)
+                            : new Point();
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
-                        var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
+                        var tokenizedCorpora =
+                            topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
                         DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
@@ -308,9 +331,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
 
                         var sourceNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(p =>
-                            p.ParatextProjectId == parallelCorpusId.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
+                            p.ParatextProjectId ==
+                            parallelCorpusId.SourceTokenizedCorpusId?.CorpusId?.ParatextGuid);
                         var targetNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(p =>
-                            p.ParatextProjectId == parallelCorpusId.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
+                            p.ParatextProjectId ==
+                            parallelCorpusId.TargetTokenizedCorpusId?.CorpusId?.ParatextGuid);
 
 
                         if (sourceNode is not null && targetNode is not null)
@@ -326,12 +351,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             };
                             DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
                             // add in the context menu
-                            DesignSurfaceViewModel!.CreateConnectionMenu(connection, topLevelProjectIds);
+                            DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connection, topLevelProjectIds);
                         }
                     }
                 }
 
-
+                //});
             }
             finally
             {
@@ -402,8 +427,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 .Transform<SetTrainingByTrainingLowercase>()
                 .Transform<AddPronominalReferencesToTokens>();
 
-            var bookInfo = new BookInfo();
-            var books = bookInfo.GenerateScriptureBookList()
+            var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
                     .Select(t => t.Id)
                     .Contains(bi.Code))
@@ -418,7 +442,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             };
 
             _ = Task.Run(async () =>
-         // _ = await Task.Factory.StartNew(async () =>
+            // _ = await Task.Factory.StartNew(async () =>
             {
                 _busyState.Add(taskName, true);
                 CorpusNodeViewModel corpusNode = new();
@@ -528,8 +552,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 .Transform<SetTrainingByTrainingLowercase>()
                 .Transform<AddPronominalReferencesToTokens>();
 
-            var bookInfo = new BookInfo();
-            var books = bookInfo.GenerateScriptureBookList()
+            var books = BookInfo.GenerateScriptureBookList()
                 .Where(bi => sourceCorpus.Texts
                     .Select(t => t.Id)
                     .Contains(bi.Code))
@@ -544,7 +567,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             };
 
             _ = Task.Run(async () =>
-          //_ = await Task.Factory.StartNew(async () =>
+            //_ = await Task.Factory.StartNew(async () =>
             {
                 _busyState.Add(taskName, true);
 
@@ -574,10 +597,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         "Macula Greek",
                         Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken);
-                   
+
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
-                     await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
+                    await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
 
                 }
                 catch (OperationCanceledException)
@@ -637,145 +660,163 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             Logger!.LogInformation("AddParatextCorpus called.");
 
-            var dialogViewModel = LifetimeScope!.Resolve<AddParatextCorpusDialogViewModel>();
-            var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
-
-            if (result)
+            var parameters = new List<Autofac.Core.Parameter>
             {
-                var selectedProject = dialogViewModel.SelectedProject;
-                var taskName = $"{selectedProject!.Name}";
-                _busyState.Add(taskName, true);
+                new NamedParameter("dialogMode", DialogMode.Add),
+            };
 
-                var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
-                var cancellationToken = task.CancellationTokenSource!.Token;
+            var dialogViewModel = LifetimeScope?.Resolve<ParatextCorpusDialogViewModel>(parameters);
 
-                _ = Task.Run(async () =>
-              //_ = await Task.Factory.StartNew(async () =>
+            try
+            {
+                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
+                    DashboardProjectManager.AddParatextCorpusDialogSettings);
+
+                if (result)
                 {
-                    CorpusNodeViewModel node = new()
-                    {
-                        TranslationFontFamily = selectedProject.FontFamily
-                    };
+                    var selectedProject = dialogViewModel.SelectedProject;
+                    var bookIds = dialogViewModel.BookIds;
+                    var taskName = $"{selectedProject!.Name}";
+                    _busyState.Add(taskName, true);
 
-                    if (DesignSurfaceViewModel!.CorpusNodes.Any(cn => cn.ParatextProjectId == selectedProject.Id))
-                    {
-                        node = DesignSurfaceViewModel!.CorpusNodes.Single(cn => cn.ParatextProjectId == selectedProject.Id);
-                    }
+                    var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                    var cancellationToken = task.CancellationTokenSource!.Token;
 
-                    try
+                    _ = Task.Run(async () =>
+                    //_ = await Task.Factory.StartNew(async () =>
                     {
-                        var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                        var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.ParatextGuid == selectedProject.Id);
-                        var corpus = corpusId != null ? await Corpus.Get(Mediator!, corpusId) : null;
-
-                        // first time for this corpus
-                        if (corpus is null)
+                        CorpusNodeViewModel node = new()
                         {
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                               description: $"Creating corpus '{selectedProject.Name}'...", cancellationToken: cancellationToken);
-#pragma warning disable CS8604
-                            corpus = await Corpus.Create(
-                                  mediator: Mediator,
-                                  IsRtl: selectedProject.IsRtl,
-
-                                  Name: selectedProject.Name,
-
-                                  Language: selectedProject.LanguageName,
-                                  CorpusType: selectedProject.CorpusTypeDisplay,
-                                  ParatextId: selectedProject.Id,
-                                  token: cancellationToken);
-
-                            corpus.CorpusId.FontFamily = selectedProject.FontFamily;
-
-                            node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
-#pragma warning restore CS8604
-                        }
-                       
-
-
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                           description: $"Tokenizing and transforming '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
-
-                        var textCorpus = dialogViewModel.SelectedTokenizer switch
-                        {
-                            Tokenizers.LatinWordTokenizer =>
-                               (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
-                               .Tokenize<LatinWordTokenizer>()
-                               .Transform<IntoTokensTextRowProcessor>()
-                               .Transform<SetTrainingBySurfaceLowercase>(),
-                            Tokenizers.WhitespaceTokenizer =>
-                               (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
-                               .Tokenize<WhitespaceTokenizer>()
-                               .Transform<IntoTokensTextRowProcessor>()
-                               .Transform<SetTrainingBySurfaceLowercase>(),
-                            Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
-                               .Tokenize<ZwspWordTokenizer>()
-                               .Transform<IntoTokensTextRowProcessor>()
-                               .Transform<SetTrainingBySurfaceLowercase>(),
-                            _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, cancellationToken))
-                               .Tokenize<WhitespaceTokenizer>()
-                               .Transform<IntoTokensTextRowProcessor>()
-                               .Transform<SetTrainingBySurfaceLowercase>()
+                            TranslationFontFamily = selectedProject.FontFamily
                         };
 
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                           description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
+                        if (DesignSurfaceViewModel!.CorpusNodes.Any(cn => cn.ParatextProjectId == selectedProject.Id))
+                        {
+                            node = DesignSurfaceViewModel!.CorpusNodes.Single(cn => cn.ParatextProjectId == selectedProject.Id);
+                        }
+
+                        try
+                        {
+                            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                            var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.ParatextGuid == selectedProject.Id);
+                            var corpus = corpusId != null ? await Corpus.Get(Mediator!, corpusId) : null;
+
+                            // first time for this corpus
+                            if (corpus is null)
+                            {
+                                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                                   description: $"Creating corpus '{selectedProject.Name}'...", cancellationToken: cancellationToken);
+#pragma warning disable CS8604
+                                corpus = await Corpus.Create(
+                                      mediator: Mediator,
+                                      IsRtl: selectedProject.IsRtl,
+
+                                      Name: selectedProject.Name,
+
+                                      Language: selectedProject.LanguageName,
+                                      CorpusType: selectedProject.CorpusTypeDisplay,
+                                      ParatextId: selectedProject.Id,
+                                      token: cancellationToken);
+
+                                corpus.CorpusId.FontFamily = selectedProject.FontFamily;
+
+                                node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
+#pragma warning restore CS8604
+                            }
+
+
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                               description: $"Tokenizing and transforming '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
+
+                            var textCorpus = dialogViewModel.SelectedTokenizer switch
+                            {
+                                Tokenizers.LatinWordTokenizer =>
+                                   (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                   .Tokenize<LatinWordTokenizer>()
+                                   .Transform<IntoTokensTextRowProcessor>()
+                                   .Transform<SetTrainingBySurfaceLowercase>(),
+                                Tokenizers.WhitespaceTokenizer =>
+                                   (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                   .Tokenize<WhitespaceTokenizer>()
+                                   .Transform<IntoTokensTextRowProcessor>()
+                                   .Transform<SetTrainingBySurfaceLowercase>(),
+                                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                   .Tokenize<ZwspWordTokenizer>()
+                                   .Transform<IntoTokensTextRowProcessor>()
+                                   .Transform<SetTrainingBySurfaceLowercase>(),
+                                _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
+                                   .Tokenize<WhitespaceTokenizer>()
+                                   .Transform<IntoTokensTextRowProcessor>()
+                                   .Transform<SetTrainingBySurfaceLowercase>()
+                            };
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                               description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
 
 #pragma warning disable CS8604
-                        // ReSharper disable once UnusedVariable
-                        var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                           selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
+                            // ReSharper disable once UnusedVariable
+                            var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
+                               selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
 #pragma warning restore CS8604
 
-                       
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                           description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
-                        await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                               description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
 
-                        _longRunningTaskManager.TaskComplete(taskName);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        Logger!.LogInformation("AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
-                    }
-                    catch (MediatorErrorEngineException ex)
-                    {
-                        if (ex.Message.Contains("The operation was canceled"))
-                        {
-                            Logger!.LogInformation($"AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
-                        }
-                        else
-                        {
-                            Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
-                        }
+                            await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
-                        if (!cancellationToken.IsCancellationRequested)
-                        {
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
-                               exception: ex, cancellationToken: cancellationToken);
+                            _longRunningTaskManager.TaskComplete(taskName);
                         }
-                    }
-                    finally
-                    {
+                        catch (OperationCanceledException)
+                        {
+                            Logger!.LogInformation("AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                        }
+                        catch (MediatorErrorEngineException ex)
+                        {
+                            if (ex.Message.Contains("The operation was canceled"))
+                            {
+                                Logger!.LogInformation($"AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                            }
+                            else
+                            {
+                                Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                            }
 
-                        _longRunningTaskManager.TaskComplete(taskName);
-                        _busyState.Remove(taskName);
-                        if (cancellationToken.IsCancellationRequested)
-                        {
-                            DesignSurfaceViewModel!.DeleteCorpusNode(node);
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            PlaySound.PlaySoundFromResource();
+                            Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
+                            if (!cancellationToken.IsCancellationRequested)
+                            {
+                                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
+                                   exception: ex, cancellationToken: cancellationToken);
+                            }
                         }
+                        finally
+                        {
+                            _longRunningTaskManager.TaskComplete(taskName);
+                            _busyState.Remove(taskName);
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                            }
+                            else
+                            {
+                                PlaySound.PlaySoundFromResource();
+                            }
 
-                    }
-                }, cancellationToken);
+                        }
+                    }, cancellationToken);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+            finally
+            {
+                await SaveDesignSurfaceData();
             }
         }
 
@@ -792,12 +833,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
 
+
+
+
+
         public async Task ExecuteConnectionMenuCommand(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
             switch (connectionMenuItem.Id)
             {
-                case "AddTranslationSetId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTranslationSet:
                     // find the right connection to send
                     var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
 
@@ -811,52 +856,59 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         Logger!.LogError("Could not find connection with id {0}", connectionMenuItem.ConnectionId);
                     }
                     break;
-                case "SeparatorId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.Separator:
                     // no-op
                     break;
-                case "PropertiesId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowParallelCorpusProperties:
                     // node properties
                     SelectedDesignSurfaceComponent = connectionViewModel;
                     break;
-                case "CreateNewInterlinearId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.CreateNewInterlinear:
                     await AddNewInterlinear(connectionMenuItem);
                     break;
-                case "AddAlignmentToEnhancedViewId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView:
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
-                            new ShowParallelTranslationWindowMessage(
-                                null,
-                                connectionMenuItem.AlignmentSetId,
-                                connectionMenuItem.DisplayName,
-                                connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
-                                connectionMenuItem.ParallelCorpusDisplayName,
+                            new AddAlignmentSetToEnhancedViewMessage(new AlignmentEnhancedViewItemMetadatum
+                            {
+                                AlignmentSetId = connectionMenuItem.AlignmentSetId,
+                                DisplayName = connectionMenuItem.DisplayName,
+                                ParallelCorpusId = connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
+                                ParallelCorpusDisplayName = connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRtl,
+                                IsRtl = connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsTargetRTL,
-                                IsNewWindow: false,
-                                connectionMenuItem.SourceParatextId,
-                                connectionMenuItem.TargetParatextId));
+                                IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                                IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
+                                SourceParatextId = connectionMenuItem.SourceParatextId,
+                                TargetParatextId = connectionMenuItem.TargetParatextId
+                            }
+                        ));
                     }
                     break;
-                case "AddTranslationToEnhancedViewId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView:
                     if (connectionMenuItem.IsEnabled)
                     {
                         await EventAggregator.PublishOnUIThreadAsync(
-                            new ShowParallelTranslationWindowMessage(
-                                connectionMenuItem.TranslationSetId,
-                                null,
-                                connectionMenuItem.DisplayName,
-                                connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
-                                connectionMenuItem.ParallelCorpusDisplayName,
+                            new AddInterlinearToEnhancedViewMessage(new InterlinearEnhancedViewItemMetadatum
+                            {
+
+                                TranslationSetId = connectionMenuItem.TranslationSetId,
+                                DisplayName = connectionMenuItem.DisplayName,
+                                ParallelCorpusId = connectionMenuItem.ParallelCorpusId ?? throw new InvalidDataEngineException(name: "ParallelCorpusId", value: "null"),
+                                ParallelCorpusDisplayName = connectionMenuItem.ParallelCorpusDisplayName,
                                 //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                                connectionMenuItem.IsRtl,
+                                IsRtl = connectionMenuItem.IsRtl,
                                 //FIXME:surface serialization null,
-                                null,
-                                IsNewWindow: false,
-                                connectionMenuItem.SourceParatextId,
-                                connectionMenuItem.TargetParatextId));
+                                IsNewWindow = connectionMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddInterlinearToNewEnhancedView,
+                                IsTargetRtl = connectionMenuItem.IsTargetRTL,
+                                SourceParatextId = connectionMenuItem.SourceParatextId,
+                                TargetParatextId = connectionMenuItem.TargetParatextId
+                            }
+                        ));
                     }
                     break;
                 default:
@@ -864,6 +916,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
             }
         }
+
+
 
         public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel? corpusNodeMenuItem)
         {
@@ -883,16 +937,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             switch (corpusNodeMenuItem.Id)
             {
-                case "AddTokenizationId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddParatextCorpus:
                     // kick off the add new tokenization dialog
                     await AddParatextCorpus(corpusNodeViewModel.ParatextProjectId);
                     break;
-                case "SeparatorId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.Separator:
                     // no-op
                     break;
 
-                case "AddToEnhancedViewId":
-                case "ShowVerseId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToCurrentEnhancedView:
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView:
 
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
                     var tokenizedCorpus =
@@ -905,25 +959,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         return;
                     }
 
-                    var showInNewWindow = corpusNodeMenuItem.Id == "ShowVerseId";
+
 
                     await EventAggregator.PublishOnUIThreadAsync(
-                        new ShowTokenizationWindowMessage(
-                            corpusNodeViewModel.ParatextProjectId,
-                            ProjectName: corpusNodeViewModel.Name,
-                            TokenizationType: corpusNodeMenuItem.Tokenizer!,
-                            CorpusId: tokenizedCorpus.CorpusId!.Id,
-                            TokenizedTextCorpusId: tokenizedCorpus.Id,
-                            corpusNodeViewModel.CorpusType,
+                        new AddTokenizedCorpusToEnhancedViewMessage(new TokenizedCorpusEnhancedViewItemMetadatum
+                        {
+                            ParatextProjectId = corpusNodeViewModel.ParatextProjectId,
+                            ProjectName = corpusNodeViewModel.Name,
+                            TokenizationType = corpusNodeMenuItem.Tokenizer!,
+                            CorpusId = tokenizedCorpus.CorpusId!.Id,
+                            TokenizedTextCorpusId = tokenizedCorpus.Id,
+                            CorpusType = corpusNodeViewModel.CorpusType,
                             //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            corpusNodeViewModel.IsRtl,
-                            IsNewWindow: showInNewWindow));
+                            IsRtl = corpusNodeViewModel.IsRtl,
+                            IsNewWindow = corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView
+                        }));
                     break;
-                case "PropertiesId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowCorpusNodeProperties:
                     // node properties
                     SelectedDesignSurfaceComponent = corpusNodeViewModel;
                     break;
-                case "TokenizerPropertiesId":
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowTokenizationProperties:
                     //TODO:  Fix this
 
                     // get the selected tokenizer
@@ -936,12 +992,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     break;
             }
         }
-        
-
-
-
-       
-
 
         private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
@@ -962,7 +1012,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         dialogViewModel.SelectedAlignmentSet!.ParallelCorpusId!, Mediator!);
 
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                    DesignSurfaceViewModel!.CreateConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
+                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
                     await SaveDesignSurfaceData();
 
                 }
@@ -1012,14 +1062,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     // get TranslationSet , etc from the dialogViewModel
                     var translationSet = dialogViewModel!.TranslationSet;
-                    
+
 
                     newParallelCorpusConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
                     newParallelCorpusConnection.ParallelCorpusDisplayName =
                         dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
 
                     topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                    DesignSurfaceViewModel!.CreateConnectionMenu(newParallelCorpusConnection, topLevelProjectIds);
+                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(newParallelCorpusConnection, topLevelProjectIds);
 
                 }
                 else
@@ -1031,8 +1081,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 await SaveDesignSurfaceData();
             }
-
-
         }
 
 
@@ -1063,9 +1111,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 foreach (var parallelCorpus in corpusNode.AttachedConnections)
                 {
-                    DesignSurfaceViewModel!.CreateConnectionMenu(parallelCorpus, topLevelProjectIds);
+                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(parallelCorpus, topLevelProjectIds);
                 }
-               
+
             }
 
 

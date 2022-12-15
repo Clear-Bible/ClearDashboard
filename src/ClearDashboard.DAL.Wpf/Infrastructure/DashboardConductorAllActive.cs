@@ -22,4 +22,6 @@ public abstract class DashboardConductorAllActive<T> : ApplicationConductorAllAc
 
     public DashboardProjectManager? ProjectManager { get; private set; }
 
+    protected BindableCollection<T> MoveableItems => (BindableCollection<T>)Items;
+
 }

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -240,6 +241,8 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<Token>().ToTable("TokenComponent");
             modelBuilder.Entity<TokenComposite>().ToTable("TokenComponent");
+            //modelBuilder.Entity<TokenComposite>().Navigation(e => e.Tokens).AutoInclude();
+
 
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
@@ -273,7 +276,6 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Translation>().HasIndex(e => e.SourceTokenComponentId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.SourceTokenComponentId);
-
         }
 
         //public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()

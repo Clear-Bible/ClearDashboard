@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Autofac.Core.Lifetime;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Core.Lifetime;
-using ClearDashboard.DAL.CQRS;
-using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Features.Projects;
-using ClearDashboard.DataAccessLayer.Models;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
 {
@@ -57,22 +56,24 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                 //no projects here yet
                 return projectList;
             }
-            else
-            {
-                foreach (var directoryName in directories)
-                {
-                    // find the Alignment JSONs
-                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName), "*.sqlite");
-                    foreach (var file in files)
-                    {
-                        var fileInfo = new FileInfo(file);
-                        var directoryInfo = new DirectoryInfo(directoryName);
 
-                        string version = "unavailable";
-                        using (var requestScope = ProjectNameDbContextFactory!.ServiceScope.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
+            foreach (var directoryName in directories)
+            {
+                // find the Alignment JSONs
+                var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName), "*.sqlite");
+                foreach (var file in files)
+                {
+                    var fileInfo = new FileInfo(file);
+                    var directoryInfo = new DirectoryInfo(directoryName);
+
+                    string version = "unavailable";
+                    using (var requestScope = ProjectNameDbContextFactory!.ServiceScope.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
+                    {
+                        //var requestScope = ProjectNameDbContextFactory!.ServiceScope.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+                        using (var ProjectDbContext =
+                               ProjectNameDbContextFactory!.GetDatabaseContext(directoryInfo.Name ?? string.Empty,
+                                   false, requestScope))
                         {
-                            //var requestScope = ProjectNameDbContextFactory!.ServiceScope.BeginLifetimeScope(MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
-                            ProjectDbContext = ProjectNameDbContextFactory!.GetDatabaseContext(directoryInfo.Name ?? string.Empty, false, requestScope);
 
                             try
                             {
@@ -80,39 +81,39 @@ namespace ClearDashboard.DataAccessLayer.Features.DashboardProjects
                             }
                             catch (Exception ex)
                             {
-                                Logger.LogError(ex,"Unable to obtain project version number.");
+                                Logger.LogError(ex, "Unable to obtain project version number.");
                             }
                         }
-
-                        // add as ListItem
-                        var dashboardProject = new DashboardProject
-                        {
-                            Modified = fileInfo.LastWriteTime,
-                            ProjectName = directoryInfo.Name,
-                            ShortFilePath = fileInfo.Name,
-                            FullFilePath = fileInfo.FullName,
-                            Version = version
-                        };
-
-                        // check for user prefs file
-                        if (File.Exists(Path.Combine(directoryName, "prefs.jsn")))
-                        {
-                            // load in the user prefs
-                            var userPreferences = UserPreferences.LoadUserPreferencesFile(dashboardProject);
-
-                            // add this to the ProjectViewModel
-                            dashboardProject.LastContentWordLevel = userPreferences.LastContentWordLevel;
-                            dashboardProject.UserValidationLevel = userPreferences.ValidationLevel;
-                        }
-
-                        //dashboardProject.JsonProjectName = GetJsonProjectName(file);
-                        //if (dashboardProject.JsonProjectName != "")
-                        //{
-                        //    dashboardProject.HasJsonProjectName = true;
-                        //}
-
-                        projectList.Add(dashboardProject);
                     }
+
+                    // add as ListItem
+                    var dashboardProject = new DashboardProject
+                    {
+                        Modified = fileInfo.LastWriteTime,
+                        ProjectName = directoryInfo.Name,
+                        ShortFilePath = fileInfo.Name,
+                        FullFilePath = fileInfo.FullName,
+                        Version = version
+                    };
+
+                    // check for user prefs file
+                    if (File.Exists(Path.Combine(directoryName, "prefs.jsn")))
+                    {
+                        // load in the user prefs
+                        var userPreferences = UserPreferences.LoadUserPreferencesFile(dashboardProject);
+
+                        // add this to the ProjectViewModel
+                        dashboardProject.LastContentWordLevel = userPreferences.LastContentWordLevel;
+                        dashboardProject.UserValidationLevel = userPreferences.ValidationLevel;
+                    }
+
+                    //dashboardProject.JsonProjectName = GetJsonProjectName(file);
+                    //if (dashboardProject.JsonProjectName != "")
+                    //{
+                    //    dashboardProject.HasJsonProjectName = true;
+                    //}
+
+                    projectList.Add(dashboardProject);
                 }
             }
 

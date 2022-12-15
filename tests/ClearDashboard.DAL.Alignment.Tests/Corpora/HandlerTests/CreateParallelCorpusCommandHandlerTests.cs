@@ -19,6 +19,8 @@ using Verse = ClearBible.Engine.Corpora.Verse;
 using SIL.Extensions;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
+using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Exceptions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -401,6 +403,108 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
             Assert.Null(result.Data);
             Assert.Contains("targettokenizedcorpus not found", result.Message.ToLower());
             Output.WriteLine(result.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void ParallelCorpus__CreateCompositeTokensApi()
+    {
+        // The primary testing of the PutCompositeToken API is in 
+        // CreateTokenizedCorpusFromTextCorpusHandlerTests.TokenizedCorpus__CreateCompositeTokensApi.
+        // This test adds in non-null ParallelCorpusId testing, most of which involves testing
+        // the validation rules around ALL composite token children being in every VerseMapping
+        // that ANY of the child tokens match (because of either a direct Verse+TokenVerseAssociation
+        // relationship or an implied Verse book/chapter/verse relationship).
+        try
+        {
+            var sourceCorpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+            var sourceTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, sourceCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var targetCorpus = await Corpus.Create(Mediator!, true, "NameY", "LanguageY", "StudyBible", Guid.NewGuid().ToString());
+            var targetTokenizedTextCorpus = await TestDataHelpers.GetSampleTextCorpus()
+                .Create(Mediator!, targetCorpus.CorpusId, "Sample Latin", ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()");
+
+            var sourceTokensByGuid = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .ToDictionary(t => t.Id, t => ModelHelper.BuildToken(t));
+            var targetTokensByGuid = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizedCorpusId == targetTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .ToDictionary(t => t.Id, t => ModelHelper.BuildToken(t));
+
+            Assert.True(sourceTokensByGuid.Keys.Count > 50);
+            Assert.True(targetTokensByGuid.Keys.Count > 50);
+            Assert.Empty(sourceTokensByGuid.Keys.Intersect(targetTokensByGuid.Keys));
+
+            var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
+
+            Assert.NotNull(parallelTextCorpus.VerseMappingList);
+            Assert.True(parallelTextCorpus.VerseMappingList!.Count >= 5);
+
+            var sourceVerses = parallelTextCorpus.VerseMappingList[0].SourceVerses.ToList();
+            var targetVerses = parallelTextCorpus.VerseMappingList[0].TargetVerses.ToList();
+            sourceVerses[0] = new Verse(
+                sourceVerses[0].Book, 
+                sourceVerses[0].ChapterNum, 
+                sourceVerses[0].VerseNum, 
+                sourceTokensByGuid.Values.Take(2).Select(t => t.TokenId));
+            parallelTextCorpus.VerseMappingList[0] = new VerseMapping(sourceVerses, targetVerses);
+
+            var parallelTokenizedCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            // Two tokens in TokenVerseAssociations, and two additional ones:
+            var composite1 = new CompositeToken(sourceTokensByGuid.Values.Take(4));
+            composite1.TokenId.Id = Guid.NewGuid();
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, parallelTokenizedCorpus.ParallelCorpusId);
+
+            sw.Stop();
+            Output.WriteLine($"Elapsed={sw.Elapsed} - ParallelCorpus PutCompositeToken (good)");
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var tokenComposite1 = ProjectDbContext.TokenComposites.Include(tc => tc.Tokens)
+                .Where(tc => tc.Id == composite1.TokenId.Id)
+                .FirstOrDefault();
+
+            Assert.NotNull(tokenComposite1);
+            Assert.Equal(composite1.Tokens.Count(), tokenComposite1.Tokens.Count);
+            Assert.Empty(composite1.Tokens.Select(t => t.TokenId.Id).Except(tokenComposite1.Tokens.Select(tc => tc.Id)));
+
+            // Can't mix tokens from multiple tokenized corpora
+            var composite2 = new CompositeToken(sourceTokensByGuid.Values.Skip(1).Take(3).Union(targetTokensByGuid.Values.Take(2)));
+            composite2.TokenId.Id = Guid.NewGuid();
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, parallelTokenizedCorpus.ParallelCorpusId));
+
+            // Can't use group of tokens of which only some are in a given VerseMapping:
+            var otherVerse = parallelTextCorpus.VerseMappingList[7].SourceVerses.First();
+            var otherVerseBcv = $"{otherVerse.BookNum:000}{otherVerse.ChapterNum:000}{otherVerse.VerseNum:000}";
+            var otherVerseMappingTokens = ProjectDbContext.Tokens.Include(t => t.VerseRow)
+                .Where(t => t.TokenizedCorpusId == sourceTokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Where(t => t.VerseRow!.BookChapterVerse == otherVerseBcv)
+                .Take(3)
+                .Select(t => ModelHelper.BuildToken(t));
+
+            var composite3TestTokens = sourceTokensByGuid.Values.Skip(1).Take(3).ToList();
+            composite3TestTokens.AddRange(otherVerseMappingTokens);
+            var composite3 = new CompositeToken(composite3TestTokens);
+            composite3.TokenId.Id = Guid.NewGuid();
+
+            sw.Restart();
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus.ParallelCorpusId));
+
+            sw.Stop();
+            Output.WriteLine($"Elapsed={sw.Elapsed} - ParallelCorpus PutCompositeToken with multiple VerseMapping candidates (error)");
         }
         finally
         {

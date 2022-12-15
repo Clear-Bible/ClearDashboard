@@ -14,6 +14,7 @@
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
+    xmlns:cm="http://caliburnmicro.com"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -352,7 +353,7 @@
                 x:Name="OuterListView"
                 Grid.ColumnSpan="2"
                 Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                ItemsSource="{Binding VersesDisplay}"
+                ItemsSource="{Binding Items}"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.IsDeferredScrollingEnabled="True"
                 VirtualizingStackPanel.IsVirtualizing="True"
@@ -447,112 +448,11 @@
                                             VerticalAlignment="Center"
                                             FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                             FontWeight="Bold"
-                                            Text="{Binding RowTitle}" />
+                                            Text="{Binding Title}" />
 
                                     </StackPanel>
-
-                                    <!--  INNER LISTVIEW  -->
-
-                                    <ListView
-                                        x:Name="InnerListView"
-                                        Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
-                                        HorizontalAlignment="Stretch"
-                                        HorizontalContentAlignment="Stretch"
-                                        ItemsSource="{Binding Verses}"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                        ScrollViewer.IsDeferredScrollingEnabled="True"
-                                        VirtualizingStackPanel.IsVirtualizing="True"
-                                        VirtualizingStackPanel.VirtualizationMode="Recycling">
-
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="SelectionChanged">
-                                                <i:CallMethodAction MethodName="InnerListView_SelectionChanged" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-
-                                        <ListView.ItemContainerStyle>
-                                            <Style TargetType="{x:Type ListViewItem}">
-                                                <Setter Property="Height" Value="Auto" />
-
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="true">
-                                                        <Setter Property="Background" Value="LightGreen" />
-                                                        <Setter Property="IsSelected" Value="True" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsSelected" Value="true">
-                                                        <Setter Property="Background" Value="LightCoral" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-
-                                                <userControls:VerseDisplay
-                                                    x:Name="VerseDisplay"
-                                                    Title=""
-                                                    Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
-                                                    HorizontalSpacing="{Binding ElementName=HorizontalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    IsEnabled="True"
-                                                    NoteIndicatorHeight="{Binding ElementName=NoteIndicatorHeightSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Orientation="{Binding ElementName=VerticalCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolOrientationConverter}}"
-                                                    ShowNoteIndicators="{Binding ElementName=ShowNoteIndicatorsCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
-                                                    ShowTranslations="{Binding DataContext.ShowTranslation, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                    SourceFontFamily="{Binding ElementName=InnerListView, Path=DataContext.SourceFontFamily}"
-                                                    SourceFontSize="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TargetFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TargetFontFamily}"
-                                                    TitleFontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TitleVisibility="Collapsed"
-                                                    TokenVerticalSpacing="{Binding ElementName=TokenVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TranslationAlignment="{Binding ElementName=CenteredCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolHorizontalAlignmentConverter}}"
-                                                    TranslationClicked="TranslationClicked"
-                                                    TranslationFontFamily="{Binding ElementName=InnerListView, Path=DataContext.TranslationFontFamily}"
-                                                    TranslationFontSize="{Binding ElementName=TranslationFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    TranslationVerticalSpacing="{Binding ElementName=TranslationVerticalSpacingSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                    Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="TokenClicked">
-                                                            <i:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TokenRightButtonDown">
-                                                            <i:CallMethodAction MethodName="TokenRightButtonDown" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TokenMouseEnter">
-                                                            <i:CallMethodAction MethodName="TokenMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TokenMouseLeave">
-                                                            <i:CallMethodAction MethodName="TokenMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslationMouseEnter">
-                                                            <i:CallMethodAction MethodName="TranslationMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslationMouseLeave">
-                                                            <i:CallMethodAction MethodName="TranslationMouseLeave" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="NoteIndicatorMouseEnter">
-                                                            <i:CallMethodAction MethodName="NoteIndicatorMouseEnter" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="NoteCreate">
-                                                            <i:CallMethodAction MethodName="NoteCreate" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>                                                        
-                                                        <i:EventTrigger EventName="TokenJoin">
-                                                            <i:CallMethodAction MethodName="TokenJoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TokenUnjoin">
-                                                            <i:CallMethodAction MethodName="TokenUnjoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="FilterPins">
-                                                            <i:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                        <i:EventTrigger EventName="TranslateQuick">
-                                                            <i:CallMethodAction MethodName="TranslateQuick" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type enhancedViews:EnhancedView}}, Path=DataContext}" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                </userControls:VerseDisplay>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
+                                    <ContentControl cm:View.Model="{Binding .}" HorizontalAlignment="Left" />
+                                   
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -562,18 +462,7 @@
             </ListView>
 
 
-            <ProgressBar
-                Grid.Column="1"
-                Width="76"
-                Height="75"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="{DynamicResource SecondaryHueMidBrush}"
-                IsIndeterminate="True"
-                Style="{StaticResource MaterialDesignCircularProgressBar}"
-                Visibility="{Binding ProgressBarVisibility}"
-                Value="0" />
-
+            
             <controls:SidebarExpander
                 Grid.Row="0"
                 Grid.Column="2"
