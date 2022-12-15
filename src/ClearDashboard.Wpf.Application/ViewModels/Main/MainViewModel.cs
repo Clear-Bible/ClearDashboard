@@ -669,28 +669,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             if (ProjectManager.CurrentProject?.WindowTabLayout is null)
             {
-                var newLayouts = new List<EnhancedViewLayout>();
-                //if (Items.Count == 1)
-                //{
-                    newLayouts.Add(
-                        new EnhancedViewLayout
-                        {
-                            ParatextSync = false,
-                            Title = "⳼ ENHANCED VIEW",
-                            VerseOffset = 0
+                var newLayouts = new List<EnhancedViewLayout>
+                {
+                    new EnhancedViewLayout
+                    {
+                        ParatextSync = false,
+                        Title = "⳼ ENHANCED VIEW",
+                        VerseOffset = 0
+                    }
+                };
 
-                        });
-                //}
                 return newLayouts;
             }
             var json = ProjectManager.CurrentProject.WindowTabLayout;
             var options = CreateDiscriminatedJsonSerializerOptions();
             var layouts = JsonSerializer.Deserialize<List<EnhancedViewLayout>>(json, options);
-
-            //if (layouts == null)
-            //{
-            //    layouts = new List<EnhancedViewLayout>();
-            //}
 
             return layouts;
         }

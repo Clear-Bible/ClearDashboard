@@ -28,12 +28,8 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using FontFamily = System.Windows.Media.FontFamily;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using Uri = System.Uri;
 
@@ -479,8 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task VerseChangeRerender()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            var sw =Stopwatch.StartNew();
 
             await ReloadData();
 
