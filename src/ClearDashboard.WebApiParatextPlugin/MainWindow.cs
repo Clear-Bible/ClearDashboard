@@ -29,6 +29,7 @@ using System.Xml;
 using SIL.Extensions;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 using System.Security.Cryptography;
+using SIL.Reporting;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -461,7 +462,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 
                                                 try
                                                 {
-                                                    
                                                     if (node.ChildNodes != null)
                                                     {
                                                         foreach (XmlNode child in node.ChildNodes)
@@ -483,7 +483,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 }
                                                 catch (Exception ex)
                                                 {
-                                                    var two = 1 + 1;
+                                                    Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
                                                 }
                                                
                                             }
