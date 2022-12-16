@@ -420,7 +420,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddMenuSeparator(connectionMenuItems);
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
-            AddPropertiesMenu(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems, DesignSurfaceMenuIds.ShowParallelCorpusProperties);
+            //AddPropertiesMenu(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems, DesignSurfaceMenuIds.ShowParallelCorpusProperties);
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
         }
