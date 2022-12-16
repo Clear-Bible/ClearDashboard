@@ -346,12 +346,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     {
                         biblicalTermsSpelling = biblicalTermsSense = sourceWord;
                     }
-
+                    
                     // CHECK AGAINST SPELLING
-                    var spellingRecords =
-                        _spellingStatus.Status.FindAll(s => string.Equals(s.Word,
+                    List<Status> spellingRecords = new();
+                    try
+                    {
+                       spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
                             biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
-                    if (spellingRecords.Count == 0)
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+
+                    if (spellingRecords is null || spellingRecords.Count == 0)
                     {
                         biblicalTermsSpelling = "";
                     }
