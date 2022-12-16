@@ -41,6 +41,7 @@ public abstract class SqliteDatabaseRequestHandler<TRequest, TResponse, TData> :
         finally
         {
             connection.Close();
+            SqliteConnection.ClearPool(connection);
         }
     }
 }
