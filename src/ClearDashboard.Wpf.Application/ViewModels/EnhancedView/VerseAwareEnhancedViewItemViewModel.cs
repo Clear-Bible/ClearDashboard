@@ -302,7 +302,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     verseRange =
                         metadatum.TokenizedTextCorpus.GetByVerseRange(
                             new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
-                    tokensTextRowsRange = verseRange.textRows.Select(v => new TokensTextRow(v)).ToArray();
+                    tokensTextRowsRange = verseRange.textRows.Cast<TokensTextRow>().ToArray();
                 }
                 catch (KeyNotFoundException)
                 {
