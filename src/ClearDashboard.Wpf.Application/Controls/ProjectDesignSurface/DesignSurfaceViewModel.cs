@@ -683,15 +683,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 IsSeparator = true
             });
 
-            nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
-            {
-                // Properties
-                Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger!),
-                Id = DesignSurfaceMenuIds.ShowCorpusNodeProperties,
-                IconKind = PackIconPicolIconsKind.Settings.ToString(),
-                CorpusNodeViewModel = corpusNode,
-                ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel
-            });
+            //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+            //{
+            //    // Properties
+            //    Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger!),
+            //    Id = DesignSurfaceMenuIds.ShowCorpusNodeProperties,
+            //    IconKind = PackIconPicolIconsKind.Settings.ToString(),
+            //    CorpusNodeViewModel = corpusNode,
+            //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel
+            //});
 
             corpusNode.MenuItems = nodeMenuItems;
         }

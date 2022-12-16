@@ -744,11 +744,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // lookup 0:2 to get bb from Dictionary and append 0:2
             // take 4: ':' and pad 0's to get ccc
             // take ':' to end and pad 0's to get vvv
-            list = refs
-                .Select(s => BibleBookDict[s[..3]] + s[..3]                // changed from dictbk to BibleBooksDict
-                + s[4..s.IndexOf(':')].PadLeft(3, '0')
-                + s[(s.IndexOf(':') + 1)..].PadLeft(3, '0'))
-                .ToList();
+            try
+            {
+                list = refs
+                    .Select(s =>
+                    {
+                        try
+                        {
+                            if (BibleBookDict.ContainsKey(s[..3]))
+                            {
+                                return BibleBookDict[s[..3]] + s[..3] // changed from dictbk to BibleBooksDict
+                                                             + s[4..s.IndexOf(':')].PadLeft(3, '0')
+                                                             + s[(s.IndexOf(':') + 1)..].PadLeft(3, '0');
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e.Message);
+                        }
+                        return s;
+                    }).ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
             // formerly s.Substring(0, 3)   s.Substring(4, s.IndexOf(':') - 4)  s.Substring(s.IndexOf(':') + 1)
             list.Sort();
             list = list.Distinct().ToList();
