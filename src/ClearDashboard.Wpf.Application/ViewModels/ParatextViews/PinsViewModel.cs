@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -728,89 +729,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        // sort the references in the list to their Biblical order
         private void SortRefs(ref List<string> refs)
         {
-            refs = refs
-                .Select(s => s.Trim()) //.ToList();    // trim leading and trailing to ensure valid BBB CCC:VVV
-                .Where(s => s.Length > 0).ToList();    // remove references = "" 
-            var list = new List<string>();
-            var listOut = new List<string>();
-            //            string[] book = { "01GEN", "02EXO", "03LEV", "04NUM", "05DEU", "06JOS", "07JDG", "08RUT", "091SA", "102SA", "111KI", "122KI", "131CH", "142CH", "15EZR", "16NEH", "17EST", "18JOB", "19PSA", "20PRO", "21ECC", "22SNG", "23ISA", "24JER", "25LAM", "26EZK", "27DAN", "28HOS", "29JOL", "30AMO", "31OBA", "32JON", "33MIC", "34NAM", "35HAB", "36ZEP", "37HAG", "38ZEC", "39MAL", "41MAT", "42MRK", "43LUK", "44JHN", "45ACT", "46ROM", "471CO", "482COR", "49GAL", "50EPH", "51PHP", "52COL", "531TH", "542TH", "551TI", "562TI", "57TIT", "58PHM", "59HEB", "60JAS", "611PE", "622PE", "631JN", "642JN", "653JN", "66JUD", "67REV", "70TOB", "71JDT", "72ESG", "73WIS", "74SIR", "75BAR", "76LJE", "77S3Y", "78SUS", "79BEL", "80MAN", "81PS2" };
-
-            //            var dictbk = book.ToDictionary(item => item[2..5], item => item[..2]);
-            // formerly book.ToDictionary(item => item.Substring(2, 3), item => item.Substring(0, 2));
-
-            // convert back to sortable form (bbBBBcccvvv)  
-            // lookup 0:2 to get bb from Dictionary and append 0:2
-            // take 4: ':' and pad 0's to get ccc
-            // take ':' to end and pad 0's to get vvv
-            try
+            List<CoupleOfStrings> references = new();
+            foreach (var r in refs)
             {
-                list = refs
-                    .Select(s =>
+                var tmp = r.Trim();
+                var book = tmp.Substring(0, 3);
+                var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
+                if (bookNum.Length > 0)
+                {
+                    tmp = tmp.Substring(3).Trim();
+                    var parts = tmp.Split(':');
+                    if (parts.Length > 1)
                     {
-                        try
+                        string chapter = parts[0].Trim();
+                        string verse = parts[1].Trim();
+                        if (verse.IndexOf("-") > 0)
                         {
-                            if (BibleBookDict.ContainsKey(s[..3]))
-                            {
-                                return BibleBookDict[s[..3]] + s[..3] // changed from dictbk to BibleBooksDict
-                                                             + s[4..s.IndexOf(':')].PadLeft(3, '0')
-                                                             + s[(s.IndexOf(':') + 1)..].PadLeft(3, '0');
-                            }
+                            verse = verse.Substring(0, verse.IndexOf("-"));
                         }
-                        catch (Exception e)
-                        {
-                            _logger.LogError(e.Message);
-                        }
-                        return s;
-                    }).ToList();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-            }
-            // formerly s.Substring(0, 3)   s.Substring(4, s.IndexOf(':') - 4)  s.Substring(s.IndexOf(':') + 1)
-            list.Sort();
-            list = list.Distinct().ToList();
 
-            // convert back to standard form (BBB ccc:vvv)  
-            // skip 0:1 because don't need book number anymore, leaving BBB in 3:4
-            // take 5:7 convert to number to lose leading zeros, then convert back to string for CCC
-            // take 8:10 convert to number to lose leading zeros, then convert back to string for VVV
-            try
-            {
-                listOut = list
-                    .Select(s =>
-                    {
-                        string tmp = string.Empty;
-                        try
+                        if (verse.IndexOf(".") > 0)
                         {
-                            string v = s[8..11];
-                            if (v.IndexOf("-") > 0)
-                            {
-                                v = v.Substring(0, v.IndexOf("-"));
-                            }
-
-                            if (v.IndexOf(".") > 0)
-                            {
-                                v = v.Substring(0, v.IndexOf("."));
-                            }
-
-                            tmp = $"{s[2..5]} {Convert.ToInt32(s[5..8]).ToString()}:{v}";
+                            verse = verse.Substring(0, verse.IndexOf("."));
                         }
-                        catch (Exception e)
+
+                        references.Add(new CoupleOfStrings
                         {
-                            _logger.LogError("SortRefs: " + e.Message);
-                        }
-                        return tmp;
-                    }).ToList();
+                            stringA = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}",
+                            stringB = r
+                        });
+                    }
+                }
             }
-            catch (Exception e)
+
+            var orderedList = references.OrderBy(x => x.stringA).ToList();
+            orderedList = orderedList.DistinctBy(x => x.stringA).ToList();
+
+            refs.Clear();
+            foreach (var reference in orderedList)
             {
-                _logger.LogError("SortRefs: " + e.Message);
+                refs.Add(reference.stringB);
             }
-            // formerly s.Substring(2, 3) s.Substring(5, 3) s.Substing(8, 3)
-            refs = listOut;
         }
 
         private async Task<bool> GetLexicon()
