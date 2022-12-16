@@ -793,7 +793,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                     catch (Exception e)
                     {
-                        AppendText(Color.Orange, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
                         if (_hasFontErrorBeenDisplayed == false)
                         {
                             fontError = true;

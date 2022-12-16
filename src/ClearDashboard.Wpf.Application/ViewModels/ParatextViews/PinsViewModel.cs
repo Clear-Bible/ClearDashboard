@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -52,6 +53,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
       //  private CancellationTokenSource _cancellationTokenSource;
         private string _taskName = "PINS";
 
+        private readonly ILogger<PinsViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly IMediator _mediator;
         private readonly LongRunningTaskManager _longRunningTaskManager;
@@ -151,6 +153,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             Title = "⍒ " + LocalizationStrings.Get("Windows_PINS", Logger);
             this.ContentId = "PINS";
 
+            _logger = logger;
             _projectManager = projectManager;
             _mediator = mediator;
             _longRunningTaskManager = longRunningTaskManager;
@@ -258,7 +261,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
                         }), cancellationToken);
 
-                    Logger!.LogError("Paratext Not Installed in PINS viewmodel");
+                    _logger!.LogError("Paratext Not Installed in PINS viewmodel");
 
                     // turn off the progress bar
                     ProgressBarVisibility = Visibility.Collapsed;
@@ -346,12 +349,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     {
                         biblicalTermsSpelling = biblicalTermsSense = sourceWord;
                     }
-
+                    
                     // CHECK AGAINST SPELLING
-                    var spellingRecords =
-                        _spellingStatus.Status.FindAll(s => string.Equals(s.Word,
+                    List<Status> spellingRecords = new();
+                    try
+                    {
+                       spellingRecords = _spellingStatus.Status?.FindAll(s => string.Equals(s.Word,
                             biblicalTermsSpelling, StringComparison.OrdinalIgnoreCase));
-                    if (spellingRecords.Count == 0)
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+
+                    if (spellingRecords is null || spellingRecords.Count == 0)
                     {
                         biblicalTermsSpelling = "";
                     }
@@ -635,7 +646,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         }
                         catch (Exception ex)
                         {
-                            Logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
+                            _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                         }
                     }
                 }
@@ -661,11 +672,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
             catch (OperationCanceledException ex)
             {
-                Logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
+                _logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
             }
             catch (Exception ex)
             {
-                Logger!.LogError(ex, "An unpected error occurred while generating the PINS data.");
+                _logger!.LogError(ex, "An unpected error occurred while generating the PINS data.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -718,41 +729,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
+        // sort the references in the list to their Biblical order
         private void SortRefs(ref List<string> refs)
         {
-            refs = refs
-                .Select(s => s.Trim()) //.ToList();    // trim leading and trailing to ensure valid BBB CCC:VVV
-                .Where(s => s.Length > 0).ToList();    // remove references = "" 
-            var list = new List<string>();
-            var listOut = new List<string>();
-            //            string[] book = { "01GEN", "02EXO", "03LEV", "04NUM", "05DEU", "06JOS", "07JDG", "08RUT", "091SA", "102SA", "111KI", "122KI", "131CH", "142CH", "15EZR", "16NEH", "17EST", "18JOB", "19PSA", "20PRO", "21ECC", "22SNG", "23ISA", "24JER", "25LAM", "26EZK", "27DAN", "28HOS", "29JOL", "30AMO", "31OBA", "32JON", "33MIC", "34NAM", "35HAB", "36ZEP", "37HAG", "38ZEC", "39MAL", "41MAT", "42MRK", "43LUK", "44JHN", "45ACT", "46ROM", "471CO", "482COR", "49GAL", "50EPH", "51PHP", "52COL", "531TH", "542TH", "551TI", "562TI", "57TIT", "58PHM", "59HEB", "60JAS", "611PE", "622PE", "631JN", "642JN", "653JN", "66JUD", "67REV", "70TOB", "71JDT", "72ESG", "73WIS", "74SIR", "75BAR", "76LJE", "77S3Y", "78SUS", "79BEL", "80MAN", "81PS2" };
+            List<CoupleOfStrings> references = new();
+            foreach (var r in refs)
+            {
+                var tmp = r.Trim();
+                var book = tmp.Substring(0, 3);
+                var bookNum = BookChapterVerseViewModel.GetBookNumFromBookName(book);
+                if (bookNum.Length > 0)
+                {
+                    tmp = tmp.Substring(3).Trim();
+                    var parts = tmp.Split(':');
+                    if (parts.Length > 1)
+                    {
+                        string chapter = parts[0].Trim();
+                        string verse = parts[1].Trim();
+                        if (verse.IndexOf("-") > 0)
+                        {
+                            verse = verse.Substring(0, verse.IndexOf("-"));
+                        }
 
-            //            var dictbk = book.ToDictionary(item => item[2..5], item => item[..2]);
-            // formerly book.ToDictionary(item => item.Substring(2, 3), item => item.Substring(0, 2));
+                        if (verse.IndexOf(".") > 0)
+                        {
+                            verse = verse.Substring(0, verse.IndexOf("."));
+                        }
 
-            // convert back to sortable form (bbBBBcccvvv)  
-            // lookup 0:2 to get bb from Dictionary and append 0:2
-            // take 4: ':' and pad 0's to get ccc
-            // take ':' to end and pad 0's to get vvv
-            list = refs
-                .Select(s => BibleBookDict[s[..3]] + s[..3]                // changed from dictbk to BibleBooksDict
-                + s[4..s.IndexOf(':')].PadLeft(3, '0')
-                + s[(s.IndexOf(':') + 1)..].PadLeft(3, '0'))
-                .ToList();
-            // formerly s.Substring(0, 3)   s.Substring(4, s.IndexOf(':') - 4)  s.Substring(s.IndexOf(':') + 1)
-            list.Sort();
-            list = list.Distinct().ToList();
+                        references.Add(new CoupleOfStrings
+                        {
+                            stringA = $"{bookNum}{chapter.PadLeft(3, '0')}{verse.PadLeft(3, '0')}",
+                            stringB = r
+                        });
+                    }
+                }
+            }
 
-            // convert back to standard form (BBB ccc:vvv)  
-            // skip 0:1 because don't need book number anymore, leaving BBB in 3:4
-            // take 5:7 convert to number to lose leading zeros, then convert back to string for CCC
-            // take 8:10 convert to number to lose leading zeros, then convert back to string for VVV
-            listOut = list
-                .Select(s => s[2..5] + " "
-                + Convert.ToInt32(s[5..8]).ToString() + ":"
-                + Convert.ToInt32(s[8..11]).ToString()).ToList();
-            // formerly s.Substring(2, 3) s.Substring(5, 3) s.Substing(8, 3)
-            refs = listOut;
+            var orderedList = references.OrderBy(x => x.stringA).ToList();
+            orderedList = orderedList.DistinctBy(x => x.stringA).ToList();
+
+            refs.Clear();
+            foreach (var reference in orderedList)
+            {
+                refs.Add(reference.stringB);
+            }
         }
 
         private async Task<bool> GetLexicon()
@@ -761,7 +781,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
             if (queryLexiconResult.Success == false)
             {
-                Logger!.LogError(queryLexiconResult.Message);
+                _logger!.LogError(queryLexiconResult.Message);
                 return true;
             }
 
@@ -781,7 +801,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
             if (querySsResult.Success == false)
             {
-                Logger!.LogError(querySsResult.Message);
+                _logger!.LogError(querySsResult.Message);
                 return true;
             }
 
@@ -803,7 +823,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     CancellationToken.None).ConfigureAwait(false);
             if (queryAbtResult.Success == false)
             {
-                Logger!.LogError(queryAbtResult.Message);
+                _logger!.LogError(queryAbtResult.Message);
                 return true;
             }
 
@@ -825,7 +845,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     CancellationToken.None).ConfigureAwait(false);
             if (queryBtResult.Success == false)
             {
-                Logger!.LogError(queryBtResult.Message);
+                _logger!.LogError(queryBtResult.Message);
                 return true;
             }
 
@@ -845,7 +865,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (queryResult.Success == false)
             {
-                Logger!.LogError(queryResult.Message);
+                _logger!.LogError(queryResult.Message);
                 return true;
             }
 
@@ -967,7 +987,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 else
                 {
                     verseText = "There was an issue getting the text for this verse.";
-                    Logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 SelectedItemVerses.Add(new PinsVerseList
