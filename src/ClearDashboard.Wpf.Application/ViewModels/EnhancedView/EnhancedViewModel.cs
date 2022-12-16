@@ -392,7 +392,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             VerseOffsetRange = enhancedViewLayout.VerseOffset;
             BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
             ParatextSync = enhancedViewLayout.ParatextSync;
-            CurrentBcv.SetVerseFromId(enhancedViewLayout.BBBCCCVVV);
 
             EventAggregator.SubscribeOnPublishedThread(this);
 
