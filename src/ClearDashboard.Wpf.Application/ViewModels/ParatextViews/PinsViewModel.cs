@@ -52,6 +52,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
       //  private CancellationTokenSource _cancellationTokenSource;
         private string _taskName = "PINS";
 
+        private readonly ILogger<PinsViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
         private readonly IMediator _mediator;
         private readonly LongRunningTaskManager _longRunningTaskManager;
@@ -151,6 +152,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             Title = "⍒ " + LocalizationStrings.Get("Windows_PINS", Logger);
             this.ContentId = "PINS";
 
+            _logger = logger;
             _projectManager = projectManager;
             _mediator = mediator;
             _longRunningTaskManager = longRunningTaskManager;
@@ -258,7 +260,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             TaskLongRunningProcessStatus = LongRunningTaskStatus.Failed
                         }), cancellationToken);
 
-                    Logger!.LogError("Paratext Not Installed in PINS viewmodel");
+                    _logger!.LogError("Paratext Not Installed in PINS viewmodel");
 
                     // turn off the progress bar
                     ProgressBarVisibility = Visibility.Collapsed;
@@ -643,7 +645,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         }
                         catch (Exception ex)
                         {
-                            Logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
+                            _logger.LogError(ex, "Adding Verse References from Interlinear_*.xml failed");
                         }
                     }
                 }
@@ -669,11 +671,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
             catch (OperationCanceledException ex)
             {
-                Logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
+                _logger!.LogInformation("PinsViewModel.GenerateData() - an exception was thrown -> cancellation was requested.");
             }
             catch (Exception ex)
             {
-                Logger!.LogError(ex, "An unpected error occurred while generating the PINS data.");
+                _logger!.LogError(ex, "An unpected error occurred while generating the PINS data.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(
@@ -755,10 +757,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // skip 0:1 because don't need book number anymore, leaving BBB in 3:4
             // take 5:7 convert to number to lose leading zeros, then convert back to string for CCC
             // take 8:10 convert to number to lose leading zeros, then convert back to string for VVV
-            listOut = list
-                .Select(s => s[2..5] + " "
-                + Convert.ToInt32(s[5..8]).ToString() + ":"
-                + Convert.ToInt32(s[8..11]).ToString()).ToList();
+            try
+            {
+                listOut = list
+                    .Select(s =>
+                    {
+                        string tmp = string.Empty;
+                        try
+                        {
+                            string v = s[8..11];
+                            if (v.IndexOf("-") > 0)
+                            {
+                                v = v.Substring(0, v.IndexOf("-"));
+                            }
+
+                            if (v.IndexOf(".") > 0)
+                            {
+                                v = v.Substring(0, v.IndexOf("."));
+                            }
+
+                            tmp = $"{s[2..5]} {Convert.ToInt32(s[5..8]).ToString()}:{v}";
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError("SortRefs: " + e.Message);
+                        }
+                        return tmp;
+                    }).ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("SortRefs: " + e.Message);
+            }
             // formerly s.Substring(2, 3) s.Substring(5, 3) s.Substing(8, 3)
             refs = listOut;
         }
@@ -769,7 +799,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             var queryLexiconResult = await ExecuteRequest(new GetLexiconQuery(), CancellationToken.None).ConfigureAwait(false);
             if (queryLexiconResult.Success == false)
             {
-                Logger!.LogError(queryLexiconResult.Message);
+                _logger!.LogError(queryLexiconResult.Message);
                 return true;
             }
 
@@ -789,7 +819,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 await ExecuteRequest(new GetSpellingStatusQuery(), CancellationToken.None).ConfigureAwait(false);
             if (querySsResult.Success == false)
             {
-                Logger!.LogError(querySsResult.Message);
+                _logger!.LogError(querySsResult.Message);
                 return true;
             }
 
@@ -811,7 +841,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     CancellationToken.None).ConfigureAwait(false);
             if (queryAbtResult.Success == false)
             {
-                Logger!.LogError(queryAbtResult.Message);
+                _logger!.LogError(queryAbtResult.Message);
                 return true;
             }
 
@@ -833,7 +863,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     CancellationToken.None).ConfigureAwait(false);
             if (queryBtResult.Success == false)
             {
-                Logger!.LogError(queryBtResult.Message);
+                _logger!.LogError(queryBtResult.Message);
                 return true;
             }
 
@@ -853,7 +883,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             if (queryResult.Success == false)
             {
-                Logger!.LogError(queryResult.Message);
+                _logger!.LogError(queryResult.Message);
                 return true;
             }
 
@@ -975,7 +1005,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 else
                 {
                     verseText = "There was an issue getting the text for this verse.";
-                    Logger.LogInformation("Failure to GetParatextVerseTextQuery");
+                    _logger.LogInformation("Failure to GetParatextVerseTextQuery");
                 }
 
                 SelectedItemVerses.Add(new PinsVerseList
