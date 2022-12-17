@@ -420,7 +420,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddMenuSeparator(connectionMenuItems);
             AddInterlinearMenu(parallelCorpusConnection, topLevelProjectIds, ProjectDesignSurfaceViewModel, connectionMenuItems);
             AddMenuSeparator(connectionMenuItems);
-            AddPropertiesMenu(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems, DesignSurfaceMenuIds.ShowParallelCorpusProperties);
+            //AddPropertiesMenu(parallelCorpusConnection, ProjectDesignSurfaceViewModel, connectionMenuItems, DesignSurfaceMenuIds.ShowParallelCorpusProperties);
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
         }
@@ -697,15 +697,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 IsSeparator = true
             });
 
-            nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
-            {
-                // Properties
-                Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger!),
-                Id = DesignSurfaceMenuIds.ShowCorpusNodeProperties,
-                IconKind = PackIconPicolIconsKind.Settings.ToString(),
-                CorpusNodeViewModel = corpusNode,
-                ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel
-            });
+            //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+            //{
+            //    // Properties
+            //    Header = LocalizationStrings.Get("Pds_PropertiesMenu", Logger!),
+            //    Id = DesignSurfaceMenuIds.ShowCorpusNodeProperties,
+            //    IconKind = PackIconPicolIconsKind.Settings.ToString(),
+            //    CorpusNodeViewModel = corpusNode,
+            //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel
+            //});
 
             corpusNode.MenuItems = nodeMenuItems;
         }
