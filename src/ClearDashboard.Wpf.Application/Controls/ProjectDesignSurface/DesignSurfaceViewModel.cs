@@ -613,7 +613,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
 
             // restrict the ability of Manuscript to add new tokenizers
-            if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew || corpusNode.CorpusType != CorpusType.ManuscriptGreek)
+            if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
             {
                 // Add new tokenization
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
@@ -633,7 +633,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 {
                     var tokenizer = (Tokenizers)Enum.Parse(typeof(Tokenizers),
                         tokenizedCorpus.TokenizationFunction);
-                    nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+                    var corpusNodeMenuViewModel = new CorpusNodeMenuItemViewModel
                     {
                         Header = EnumHelper.GetDescription(tokenizer),
                         Id = tokenizedCorpus.Id.ToString(),
@@ -668,9 +668,23 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             //    IconKind = PackIconPicolIconsKind.Settings.ToString(),
                             //    CorpusNodeViewModel = corpusNode,
                             //    Tokenizer = nodeTokenization.TokenizationName,
-                            //}
+                            //},
                         }
-                    });
+                    };
+                    if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
+                    {
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                        {
+                            // Show Verses in New Windows
+                            Header = LocalizationStrings.Get("Update", Logger!),
+                            Id = DesignSurfaceMenuIds.UpdateParatextCorpus,
+                            ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                            IconKind = PackIconPicolIconsKind.Edit.ToString(),
+                            CorpusNodeViewModel = corpusNode,
+                            Tokenizer = tokenizer.ToString(),
+                        });
+                    }
+                    nodeMenuItems.Add(corpusNodeMenuViewModel);
                     corpusNode.TokenizationCount++;
                 }
             }

@@ -18,5 +18,6 @@ public partial class DesignSurfaceViewModel
         public const string ShowCorpusNodeProperties = "ShowCorpusNodeProperties";  // was PropertiesId
         public const string ShowParallelCorpusProperties = "ShowParallelCoprusProperties"; // was PropertiesId
         public const string ShowTokenizationProperties = "ShowTokenizationProperties"; // was TokenizerPropertiesId
+        public const string UpdateParatextCorpus = "UpdateParatextCorpus";
     }
 }
