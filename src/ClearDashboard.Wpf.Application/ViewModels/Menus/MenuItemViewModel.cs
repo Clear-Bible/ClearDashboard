@@ -51,7 +51,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
             }
         }
 
-
+        private bool _isEnabled = true;
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                _isEnabled = value;
+                NotifyOfPropertyChange(() => IsEnabled);
+            }
+        }
+        
         private Icon _icon;
         public Icon Icon
         {
@@ -108,8 +118,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
                 return _command;
             }
         }
-        
 
+        
         private async void Execute()
         {
             if (Id is "NewID" or "OpenID")
