@@ -29,6 +29,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         private readonly ILogger<ParatextCorpusDialogViewModel>? _logger;
         private readonly DashboardProjectManager? _projectManager;
+        private readonly string _initialParatextProjectId;
         private readonly ILifetimeScope _lifetimeScope;
         
         private string? _corpusNameToSelect;
@@ -89,7 +90,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             set => Set(ref _selectedTokenizer, value);
         }
 
-        
         private ParatextProjectMetadata? _selectedProject;
         public ParatextProjectMetadata? SelectedProject
         {
@@ -146,6 +146,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public ParatextCorpusDialogViewModel(DialogMode dialogMode,
             ILogger<ParatextCorpusDialogViewModel> logger,
             DashboardProjectManager? projectManager,
+            string initialParatextProjectId,
             IEventAggregator eventAggregator,
 //            IValidator<ParatextCorpusDialogViewModel> validator,
             ILifetimeScope lifetimeScope,
@@ -163,6 +164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
             _logger = logger;
             _projectManager = projectManager;
+            _initialParatextProjectId = initialParatextProjectId;
             _lifetimeScope = lifetimeScope;
 
             ErrorTitle = Helpers.LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
@@ -172,7 +174,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
 
-            var parameters = new List<Autofac.Core.Parameter> { new NamedParameter("dialogMode", DialogMode) };
+            var parameters = new List<Autofac.Core.Parameter> 
+            { 
+                new NamedParameter("dialogMode", DialogMode),
+                new NamedParameter("initialParatextProjectId", _initialParatextProjectId)
+            };
             var views = _lifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("AddParatextCorpusDialog", parameters, "Order").ToArray();
 
             if (views == null || !views.Any())
@@ -239,11 +245,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public async void Cancel()
         {
             await TryCloseAsync(false);
-        }
-
-        public Task<object> AddParatextCorpus(string paratextCorpusDisplayName)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion // Methods

@@ -55,6 +55,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 NotifyOfPropertyChange(() => ShowSpinner);
             }
         }
+
+        // Child dialog view model never sets this property;
+        // it is only here to implement IParatextCorpusDialogViewModel 
+        private Tokenizers _selectedTokenizer = Tokenizers.LatinWordTokenizer;
+        public Tokenizers SelectedTokenizer
+        {
+            get => _selectedTokenizer;
+            set => Set(ref _selectedTokenizer, value);
+        }
+
         
         private ParatextProjectMetadata? _selectedProject;
         public ParatextProjectMetadata? SelectedProject
@@ -189,11 +199,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public async void Cancel()
         {
             await TryCloseAsync(false);
-        }
-
-        public Task<object> AddParatextCorpus(string paratextCorpusDisplayName)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion // Methods

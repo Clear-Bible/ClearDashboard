@@ -28,6 +28,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
     {
         #region Member Variables
 
+        private readonly string _initialParatextProjectId;
 
         private CorpusSourceType _corpusSourceType;
         private List<ParatextProjectMetadata>? _projects;
@@ -64,6 +65,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             }
         }
 
+        private bool _isEnabledSelectedProject = true;
+        public bool IsEnabledSelectedProject
+        {
+            get => _isEnabledSelectedProject;
+            set
+            {
+                _isEnabledSelectedProject = value;
+                NotifyOfPropertyChange(() => IsEnabledSelectedProject);
+            }
+        }
 
         public CorpusSourceType CorpusSourceType
         {
@@ -146,7 +157,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             // used by Caliburn Micro for design time    
         }
 
-        public AddParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
+        public AddParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager, string initialParatextProjectId,
             INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope,
             IValidator<AddParatextCorpusStepViewModel> validator)
@@ -156,6 +167,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             CanMoveForwards = true;
             CanMoveBackwards = true;
             EnableControls = true;
+
+            _initialParatextProjectId = initialParatextProjectId;
         }
 
         protected override Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -188,6 +201,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             if (result.Success)
             {
                 Projects = result.Data.OrderBy(p => p.Name).ToList();
+
+                if (!string.IsNullOrEmpty(_initialParatextProjectId))
+                {
+                    SelectedProject = Projects.Where(p => p.Id == _initialParatextProjectId).FirstOrDefault();
+                    if (SelectedProject != null)
+                    {
+                        IsEnabledSelectedProject = false;
+                    }
+                }
             }
 
             await base.OnActivateAsync(cancellationToken);
@@ -251,6 +273,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         {
 
             ParentViewModel.SelectedProject = SelectedProject;
+            ParentViewModel.SelectedTokenizer = SelectedTokenizer;
             await MoveForwards();
         }
 

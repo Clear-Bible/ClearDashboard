@@ -39,7 +39,6 @@ using System.Windows;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using System.Reflection;
 
 
 // ReSharper disable once CheckNamespace
@@ -725,13 +724,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         }
                         catch (OperationCanceledException)
                         {
-                            Logger!.LogInformation("AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                            Logger!.LogInformation("UpdateParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
                         }
                         catch (MediatorErrorEngineException ex)
                         {
                             if (ex.Message.Contains("The operation was canceled"))
                             {
-                                Logger!.LogInformation($"AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                                Logger!.LogInformation($"UpdateParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
                             }
                             else
                             {
@@ -813,6 +812,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode.Add),
+                new NamedParameter("initialParatextProjectId", selectedParatextProjectId)
             };
 
             var dialogViewModel = LifetimeScope?.Resolve<ParatextCorpusDialogViewModel>(parameters);
