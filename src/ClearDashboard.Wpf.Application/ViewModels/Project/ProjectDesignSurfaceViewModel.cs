@@ -653,7 +653,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await AddParatextCorpus("");
         }
 
-        public async Task UpdateParatextCorpus(string selectedParatextProjectId)
+        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer)
         {
             Logger!.LogInformation("UpdateParatextCorpus called.");
 
@@ -662,6 +662,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 new NamedParameter("dialogMode", DialogMode.Edit),
                 new NamedParameter("paratextProjectId", selectedParatextProjectId)
             };
+
+            if (!Enum.TryParse(selectedTokenizer, out Tokenizers tokenizer))
+            {
+                Logger!.LogError($"UpdateParatextCorups received an invalid selectedTokenizer value '{selectedTokenizer}'");
+                throw new ArgumentException($"Unable to parse value as Enum '{selectedTokenizer}'", nameof(selectedTokenizer));
+            }
 
             var dialogViewModel = LifetimeScope?.Resolve<UpdateParatextCorpusDialogViewModel>(parameters);
 
@@ -674,7 +680,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     var selectedProject = dialogViewModel!.SelectedProject;
                     var bookIds = dialogViewModel.BookIds;
-                    var tokenizer = dialogViewModel.SelectedTokenizer;
 
                     var taskName = $"{selectedProject!.Name}";
                     _busyState.Add(taskName, true);
@@ -695,7 +700,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             var textCorpus = await GetTokenizedTransformedParatextProjectTextCorpus(
                                 selectedProject.Id!,
                                 bookIds,
-                                dialogViewModel.SelectedTokenizer,
+                                tokenizer,
                                 cancellationToken
                             );
 
@@ -1136,7 +1141,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //#pragma warning restore CS8601
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
-                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId);
+                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
                     break;
             }
         }

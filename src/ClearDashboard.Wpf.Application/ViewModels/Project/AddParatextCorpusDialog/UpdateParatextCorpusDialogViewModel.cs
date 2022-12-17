@@ -55,15 +55,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 NotifyOfPropertyChange(() => ShowSpinner);
             }
         }
-
-        
-        private Tokenizers _selectedTokenizer = Tokenizers.LatinWordTokenizer;
-        public Tokenizers SelectedTokenizer
-        {
-            get => _selectedTokenizer;
-            set => Set(ref _selectedTokenizer, value);
-        }
-
         
         private ParatextProjectMetadata? _selectedProject;
         public ParatextProjectMetadata? SelectedProject
