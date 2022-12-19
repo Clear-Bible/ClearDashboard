@@ -503,7 +503,7 @@
     <value>WORD MEANINGS</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>SELECT BOOKS TO PROCESS</value>
+    <value>Select Books To Process</value>
   </data>
   <data name="BiblicalTermsDomains_ConstructionsAnimalHusbandry" xml:space="preserve">
     <value>constructions; animal husbandry</value>
@@ -713,7 +713,7 @@
     <value>James</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>SELECT ALL</value>
+    <value>Select All</value>
   </data>
   <data name="Pds_TransliterationWithEncoder" xml:space="preserve">
     <value>TransliterationWithEncoder</value>
@@ -1187,6 +1187,6 @@
     <value>Copy to Clipboard</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>UNSELECT ALL</value>
+    <value>Unselect All</value>
   </data>
 </root>

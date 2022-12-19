@@ -123,11 +123,7 @@
     </UserControl.Resources>
 
     <Border
-        Padding="6"
-        Background="{DynamicResource MaterialDesignLightBackground}"
-        BorderBrush="{DynamicResource MaterialDesignDarkBackground}"
-        BorderThickness="0"
-        CornerRadius="0">
+        Background="{DynamicResource MaterialDesignLightBackground}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -137,11 +133,11 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical">
-                <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
+                <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}"/>
                 <controls1:AutoCompleteComboBox
                     IsEnabled="{Binding IsEnabledSelectedProject}"
                     Height="Auto"
-                    Margin="30,0,0,0"
+                    Margin="15"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding Projects}"
                     SelectedItem="{Binding SelectedProject}"
@@ -162,7 +158,6 @@
 
             <StackPanel
                 Grid.Row="1"
-                Margin="25,0,0,0"
                 Orientation="Vertical">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -215,7 +210,7 @@
                         Grid.Column="3"
                         Width="30"
                         Height="30"
-                        Margin="0,0,5,0"
+                        Margin="0,0,15,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
                         ToolTip="{helpers:Localization AddParatextCorpusDialog_CopyToClipboard}">
@@ -234,7 +229,7 @@
 
                 <ListView
                     Height="135"
-                    Margin="18,0,5,5"
+                    Margin="15,0,15,5"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding UsfmErrors}">
                     <ListView.Style>
@@ -297,7 +292,7 @@
             <StackPanel Grid.Row="2" Orientation="Vertical">
                 <Label Content="{helpers:Localization AddCorpusDialog_SelectEngine}" />
                 <ComboBox
-                    Margin="30,0,0,0"
+                    Margin="15"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type project:Tokenizers}}}"
                     SelectedItem="{Binding SelectedTokenizer}">
@@ -314,7 +309,7 @@
             <StackPanel
                 Grid.Row="3"
                 Grid.Column="0"
-                Margin="10,10"
+                Margin="15"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
                 <Button

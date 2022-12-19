@@ -27,6 +27,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public RelayCommand NoneCommand { get; }
         public RelayCommand AllCommand { get; }
         public RelayCommand OkCommand { get; }
+        public RelayCommand BackCommand { get; }
 
         #endregion //Member Variables
 
@@ -128,6 +129,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             NoneCommand = new RelayCommand(UnselectAll);
             AllCommand = new RelayCommand(SelectAll);
             OkCommand = new RelayCommand(Ok);
+            BackCommand = new RelayCommand(BackAsync);
 
             // initialize the Bible books 
             var books = SelectedBook.Init();
@@ -194,6 +196,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             }
 
             ParentViewModel?.Ok();
+        }
+
+        public void BackAsync(object obj)
+        {
+            MoveBackwards();
         }
 
         private void UnselectAll(object obj)
