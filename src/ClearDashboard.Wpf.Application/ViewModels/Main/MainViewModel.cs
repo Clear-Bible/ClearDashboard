@@ -1046,8 +1046,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // New
-                        new() { Header = LocalizationStrings.Get("MainView_FileNew", Logger), Id = "NewID", ViewModel = this, },
-                        new() { Header = LocalizationStrings.Get("MainView_FileOpen", Logger), Id = "OpenID", ViewModel = this, }
+                        new() { Header = LocalizationStrings.Get("MainView_FileNew", Logger), Id = "NewID", ViewModel = this, IsEnabled = false },
+                        new() { Header = LocalizationStrings.Get("MainView_FileOpen", Logger), Id = "OpenID", ViewModel = this, IsEnabled = false }
                     }
                 },
                 new()

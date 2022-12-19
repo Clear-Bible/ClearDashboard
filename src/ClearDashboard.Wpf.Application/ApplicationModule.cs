@@ -90,6 +90,10 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
                 .WithMetadata("Order", 2);
+
+            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("UpdateParatextCorpusDialog")
+                .WithMetadata("Order", 1);
         }
 
 

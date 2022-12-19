@@ -15,13 +15,12 @@ using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using ClearDashboard.Wpf.Application.Views.Project;
-using ClearDashboard.Wpf.Controls;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Corpora;
@@ -37,9 +36,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -656,6 +652,159 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await AddParatextCorpus("");
         }
 
+        public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer)
+        {
+            Logger!.LogInformation("UpdateParatextCorpus called.");
+
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("dialogMode", DialogMode.Edit),
+                new NamedParameter("paratextProjectId", selectedParatextProjectId)
+            };
+
+            if (!Enum.TryParse(selectedTokenizer, out Tokenizers tokenizer))
+            {
+                Logger!.LogError($"UpdateParatextCorups received an invalid selectedTokenizer value '{selectedTokenizer}'");
+                throw new ArgumentException($"Unable to parse value as Enum '{selectedTokenizer}'", nameof(selectedTokenizer));
+            }
+
+            var dialogViewModel = LifetimeScope?.Resolve<UpdateParatextCorpusDialogViewModel>(parameters);
+
+            try
+            {
+                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
+                    DashboardProjectManager.AddParatextCorpusDialogSettings);
+
+                if (result)
+                {
+                    var selectedProject = dialogViewModel!.SelectedProject;
+                    var bookIds = dialogViewModel.BookIds;
+
+                    var taskName = $"{selectedProject!.Name}";
+                    _busyState.Add(taskName, true);
+
+                    var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                    var cancellationToken = task.CancellationTokenSource!.Token;
+
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            var node = DesignSurfaceViewModel!.CorpusNodes
+                                .Single(cn => cn.ParatextProjectId == selectedProject.Id);
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                               description: $"Tokenizing and transforming '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
+
+                            var textCorpus = await GetTokenizedTransformedParatextProjectTextCorpus(
+                                selectedProject.Id!,
+                                bookIds,
+                                tokenizer,
+                                cancellationToken
+                            );
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                               description: $"Updating verses in tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
+
+                            var tokenizedTextCorpusId = (await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
+                                    Mediator!,
+                                    new CorpusId(node.CorpusId)))
+                                .Where(tc => tc.TokenizationFunction == tokenizer.ToString())
+                                .FirstOrDefault();
+                            
+                            if (tokenizedTextCorpusId is null)
+                            {
+                                throw new ArgumentException($"No TokenizedTextCorpusId found for corpus '{node.CorpusId}' and tokenization '{tokenizer.ToString()}'");
+                            }
+
+                            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
+                            await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, cancellationToken);
+
+                            _longRunningTaskManager.TaskComplete(taskName);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            Logger!.LogInformation("UpdateParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                        }
+                        catch (MediatorErrorEngineException ex)
+                        {
+                            if (ex.Message.Contains("The operation was canceled"))
+                            {
+                                Logger!.LogInformation($"UpdateParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                            }
+                            else
+                            {
+                                Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
+                            if (!cancellationToken.IsCancellationRequested)
+                            {
+                                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
+                                   exception: ex, cancellationToken: cancellationToken);
+                            }
+                        }
+                        finally
+                        {
+                            _longRunningTaskManager.TaskComplete(taskName);
+                            _busyState.Remove(taskName);
+                                
+                            PlaySound.PlaySoundFromResource();
+                        }
+                    }, cancellationToken);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+            finally
+            {
+                await SaveDesignSurfaceData();
+            }
+
+        }
+
+        private static ITokenizer<string, int, string> InstantiateTokenizer(Tokenizers tokenizerEnum)
+        {
+            var assemblyTokenizerType = typeof(LatinWordTokenizer);
+            var assembly = assemblyTokenizerType!.Assembly;
+            var tokenizerType = assembly.GetType($"{assemblyTokenizerType.Namespace}.{tokenizerEnum}");
+
+            if (tokenizerType is null)
+            {
+                throw new ArgumentException($"Tokenizer '{tokenizerEnum}' not a valid class in the '{assemblyTokenizerType.Namespace}' namespace");
+            }
+
+            var tokenizer = (ITokenizer<string, int, string>)Activator.CreateInstance(tokenizerType)!;
+            return tokenizer;
+        }
+
+        private async Task<ITextCorpus> GetTokenizedTransformedParatextProjectTextCorpus(
+            string paratextProjectId, 
+            IEnumerable<string>? bookIds,
+            Tokenizers tokenizerEnum,
+            CancellationToken cancellationToken)
+        {
+            var paratextProjectTextCorpus = await ParatextProjectTextCorpus.Get(
+                Mediator!, 
+                paratextProjectId, 
+                bookIds, 
+                cancellationToken);
+
+            var tokenizer = InstantiateTokenizer(tokenizerEnum);
+
+            var textCorpus = paratextProjectTextCorpus
+               .Tokenize(tokenizer)
+               .Transform<IntoTokensTextRowProcessor>()
+               .Transform<SetTrainingBySurfaceLowercase>();
+
+            return textCorpus;
+        }
+
         public async Task AddParatextCorpus(string selectedParatextProjectId)
         {
             Logger!.LogInformation("AddParatextCorpus called.");
@@ -663,6 +812,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode.Add),
+                new NamedParameter("initialParatextProjectId", selectedParatextProjectId)
             };
 
             var dialogViewModel = LifetimeScope?.Resolve<ParatextCorpusDialogViewModel>(parameters);
@@ -989,6 +1139,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     //#pragma warning disable CS8601
                     //SelectedDesignSurfaceComponent = nodeTokenization;
                     //#pragma warning restore CS8601
+                    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.UpdateParatextCorpus:
+                    await UpdateParatextCorpus(corpusNodeViewModel.ParatextProjectId, corpusNodeMenuItem.Tokenizer);
                     break;
             }
         }
