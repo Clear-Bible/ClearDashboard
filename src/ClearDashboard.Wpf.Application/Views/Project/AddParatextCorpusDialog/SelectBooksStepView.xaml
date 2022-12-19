@@ -820,7 +820,7 @@
             Orientation="Horizontal">
 
             <Button
-                Margin="10,0,0,0"
+                Margin="10,0,0,15"
                 Command="{Binding OtCommand}"
                 Content="Old Testament"
                 FontSize="12"
@@ -828,7 +828,7 @@
 
             <Button
                 Width="120"
-                Margin="10,0,0,0"
+                Margin="10,0,0,15"
                 Command="{Binding AllCommand}"
                 Content="{helpers:Localization AddParatextCorpusDialog_SelectAll}"
                 FontSize="12"
@@ -836,14 +836,14 @@
 
             <Button
                 Width="120"
-                Margin="5,0,0,0"
+                Margin="10,0,0,15"
                 Command="{Binding NoneCommand}"
                 Content="{helpers:Localization AddParatextCorpusDialog_UnSelectAll}"
                 FontSize="12"
                 Style="{StaticResource TransparentStyle}" />
 
             <Button
-                Margin="10,0,0,0"
+                Margin="10,0,0,15"
                 Command="{Binding NtCommand}"
                 Content="New Testament"
                 FontSize="12"
