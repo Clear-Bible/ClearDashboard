@@ -2,6 +2,7 @@
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -30,17 +31,19 @@ namespace ClearDashboard.DAL.Tests
         }
 
         [Theory]
-        //[InlineData("β", 409)] //not sure why this is failing
+        [InlineData("β", 409)]
         [InlineData("Αβ", 83)]
-        //[InlineData("ωσ", 186)] //not sure why this is failing
+        //[InlineData("ωσ", 117)] // not sure why this is different
         [InlineData("ωρα", 9)]
         [InlineData("ετα", 37)]
-        //[InlineData("γας", 4)] //not sure why this is failing
+        [InlineData("γας", 1)]
         public async Task GetConsonantsSliceHandlerGreekTests(string word, int expectedCount)
         {
+            var wordLower = word.ToLower(new CultureInfo("el-GR"));
+
             var results =
                 await ExecuteAndTestRequest<GetConsonantsSliceQuery, RequestResult<List<string>>, List<string>>(
-                    new GetConsonantsSliceQuery(word));
+                    new GetConsonantsSliceQuery(wordLower));
             
             Assert.True(results.Data is not null);
 

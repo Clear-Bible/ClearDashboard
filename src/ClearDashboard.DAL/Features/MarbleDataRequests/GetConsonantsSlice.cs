@@ -39,10 +39,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     var lower = ExecuteSqliteCommandAndProcessData(
                         $"SELECT DISTINCT ORIGINAL FROM WORDLOOKUP WHERE CONSONANTS LIKE '%{request.Word.ToLowerInvariant()}%' ");
 
-                    var regular = queryResult.Data = ExecuteSqliteCommandAndProcessData(
-                        $"SELECT DISTINCT ORIGINAL FROM WORDLOOKUP WHERE CONSONANTS LIKE '%{request.Word}%' ");
-
-                    queryResult.Data = lower.Union(regular).ToList();
+                    queryResult.Data = lower;
                 }
                 catch (Exception ex)
                 {
