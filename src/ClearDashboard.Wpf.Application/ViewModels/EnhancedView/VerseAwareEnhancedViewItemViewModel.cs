@@ -306,7 +306,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 TokensTextRow[] tokensTextRowsRange;
                 try
                 {
-                    verseRange =
+                    var verseRange =
                         metadatum.TokenizedTextCorpus.GetByVerseRange(
                             new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
                     tokensTextRowsRange = verseRange.textRows.Cast<TokensTextRow>().ToArray();
