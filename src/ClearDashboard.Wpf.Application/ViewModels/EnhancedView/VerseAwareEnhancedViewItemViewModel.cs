@@ -183,17 +183,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
-
             EnhancedViewItemMetadatum = metadatum;
-            await GetData(cancellationToken);
+            await GetData(ReloadType.Refresh, cancellationToken);
         }
 
-        public async Task RefreshData(CancellationToken cancellationToken)
+        public async Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
-            await GetData(cancellationToken);
+            await GetData(reloadType, cancellationToken);
         }
 
-        private async Task GetData(CancellationToken cancellationToken)
+        private async Task GetData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -240,7 +239,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                
                                 break;
                             case TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusEnhancedViewItemMetadatum:
-                                await GetTokenizedCorpusData(tokenizedCorpusEnhancedViewItemMetadatum, cancellationToken);
+                                await GetTokenizedCorpusData(tokenizedCorpusEnhancedViewItemMetadatum, cancellationToken, reloadType);
                                 OnUIThread(() =>
                                 {
                                     BorderColor = GetCorpusBrushColor(tokenizedCorpusEnhancedViewItemMetadatum.CorpusType);
@@ -260,7 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private async Task GetTokenizedCorpusData(TokenizedCorpusEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        private async Task GetTokenizedCorpusData(TokenizedCorpusEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken, ReloadType reloadType = ReloadType.Refresh)
         {
             try
             {
@@ -292,16 +291,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 var currentBcv = ParentViewModel.CurrentBcv;
 
-                metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!, new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value));
+                if (reloadType == ReloadType.Force)
+                {
+                    metadatum.TokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value));
+                }
+                else
+                {
+                    metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!,
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value));
+                }
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
-                (IEnumerable<TextRow> textRows, int indexOfVerse) verseRange;
                 TokensTextRow[] tokensTextRowsRange;
                 try
                 {
-                    verseRange =
-                        metadatum.TokenizedTextCorpus.GetByVerseRange(
-                            new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
+                    var verseRange = metadatum.TokenizedTextCorpus.GetByVerseRange(
+                        new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
                     tokensTextRowsRange = verseRange.textRows.Select(v => new TokensTextRow(v)).ToArray();
                 }
                 catch (KeyNotFoundException)
@@ -479,7 +485,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            await GetData(cancellationToken);
+            await GetData(ReloadType.Refresh, cancellationToken);
             await Task.CompletedTask;
         }
 

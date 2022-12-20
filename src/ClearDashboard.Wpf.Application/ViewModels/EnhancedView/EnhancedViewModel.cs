@@ -39,11 +39,23 @@ using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+    public enum ReloadType
+    {
+        // Reload the data from the project database
+        Force,
+        // Just refresh the screen with the existing data
+        Refresh
+    }
+    public record ReloadDataMessage(ReloadType ReloadType = ReloadType.Refresh)
+    {
+    };
+
     public class EnhancedViewModel : DashboardConductorAllActive<EnhancedViewItemViewModel>, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
-        IHandle<BCVLoadedMessage>
+        IHandle<BCVLoadedMessage>,
+        IHandle<ReloadDataMessage>
     {
 
         #region Commands
@@ -487,13 +499,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
 
-        private async Task ReloadData()
+        private async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
         {
             await Parallel.ForEachAsync(VerseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, cancellationToken) =>
             {
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    await viewModel.RefreshData(cancellationToken);
+                    await viewModel.RefreshData(reloadType, cancellationToken);
                 });
 
             });
@@ -587,7 +599,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Verse Change"), cancellationToken);
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
         }
@@ -625,6 +637,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             SelectedVerseDisplayViewModel = message.SelectedVerseDisplayViewModel;
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ReloadDataMessage message, CancellationToken cancellationToken)
+        {
+            await ReloadData(message.ReloadType);
         }
 
         #endregion
@@ -903,6 +920,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion
 
 
-    
+       
     }
 }
