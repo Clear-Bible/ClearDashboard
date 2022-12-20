@@ -139,6 +139,7 @@
             <StackPanel Grid.Row="0" Orientation="Vertical">
                 <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
                 <controls1:AutoCompleteComboBox
+                    IsEnabled="{Binding IsEnabledSelectedProject}"
                     Height="Auto"
                     Margin="30,0,0,0"
                     VerticalAlignment="Top"

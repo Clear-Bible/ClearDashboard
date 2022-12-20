@@ -54,10 +54,16 @@
         <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
             <Menu.ItemContainerStyle>
                 <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
-                    <Setter Property="Icon" Value="{Binding Icon}" />
                     <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
                     <Setter Property="Icon" Value="{Binding IconSource}" />
                     <Setter Property="Command" Value="{Binding Command}" />
+                    <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </Menu.ItemContainerStyle>
 

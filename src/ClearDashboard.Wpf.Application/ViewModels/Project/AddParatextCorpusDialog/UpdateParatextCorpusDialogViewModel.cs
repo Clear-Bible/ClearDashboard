@@ -9,6 +9,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -23,32 +24,21 @@ using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
-    public class ParatextCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParatextCorpusDialogViewModel
+    public class UpdateParatextCorpusDialogViewModel : DashboardApplicationWorkflowShellViewModel, IParatextCorpusDialogViewModel
     {
         #region Member Variables   
 
-        private readonly ILogger<ParatextCorpusDialogViewModel>? _logger;
-        private readonly DashboardProjectManager? _projectManager;
-        private readonly string _initialParatextProjectId;
+        private readonly ILogger<ParatextCorpusDialogViewModel> _logger;
+        private readonly DashboardProjectManager _projectManager;
+        private readonly string _paratextProjectId;
         private readonly ILifetimeScope _lifetimeScope;
-        
-        private string? _corpusNameToSelect;
 
         #endregion //Member Variables
 
 
         #region Public Properties
 
-        public List<string> BookIds { get; set; } = new();
-
-        public enum CorpusType
-        {
-            Manuscript,
-            Other
-        }
-
-        public string? Parameter { get; set; }
-
+        public List<string>? BookIds { get; set; } = new();
 
         #endregion //Public Properties
 
@@ -66,23 +56,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             }
         }
 
-        
-        private CorpusSourceType _corpusSourceType;
-        public CorpusSourceType CorpusSourceType
-        {
-            get => _corpusSourceType;
-            set => Set(ref _corpusSourceType, value);
-        }
-
-        
-        private List<ParatextProjectMetadata>? _projects;
-        public List<ParatextProjectMetadata>? Projects
-        {
-            get => _projects;
-            set => Set(ref _projects, value);
-        }
-
-        
+        // Child dialog view model never sets this property;
+        // it is only here to implement IParatextCorpusDialogViewModel 
         private Tokenizers _selectedTokenizer = Tokenizers.LatinWordTokenizer;
         public Tokenizers SelectedTokenizer
         {
@@ -90,6 +65,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             set => Set(ref _selectedTokenizer, value);
         }
 
+        
         private ParatextProjectMetadata? _selectedProject;
         public ParatextProjectMetadata? SelectedProject
         {
@@ -101,19 +77,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         }
 
         
-
-
-        private ObservableCollection<UsfmError> _usfmErrors = new();
-        public ObservableCollection<UsfmError> UsfmErrors
-        {
-            get => _usfmErrors;
-            set
-            {
-                _usfmErrors = value;
-                NotifyOfPropertyChange(() => UsfmErrors);
-            }
-        }
-
         private bool _canOk;
         public bool CanOk
         {
@@ -138,17 +101,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         #region Constructor
 
-        public ParatextCorpusDialogViewModel()
+        public UpdateParatextCorpusDialogViewModel()
         {
             // no-op
         }
 
-        public ParatextCorpusDialogViewModel(DialogMode dialogMode,
+        public UpdateParatextCorpusDialogViewModel(DialogMode dialogMode,
             ILogger<ParatextCorpusDialogViewModel> logger,
-            DashboardProjectManager? projectManager,
-            string initialParatextProjectId,
+            DashboardProjectManager projectManager,
+            string paratextProjectId,
             IEventAggregator eventAggregator,
-//            IValidator<ParatextCorpusDialogViewModel> validator,
+//            IValidator<UpdateParatextCorpusDialogViewModel> validator,
             ILifetimeScope lifetimeScope,
             INavigationService navigationService,
             IMediator mediator,
@@ -156,35 +119,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             CanOk = true;
-
-            // TODO
-            DisplayName = LocalizationStrings.Get("ParatextCorpusDialog_ParatextCorpus", Logger!);
-
             DialogMode = dialogMode;
 
             _logger = logger;
             _projectManager = projectManager;
-            _initialParatextProjectId = initialParatextProjectId;
+            _paratextProjectId = paratextProjectId;
             _lifetimeScope = lifetimeScope;
+            _errorTitle = string.Empty;
 
+            DisplayName = LocalizationStrings.Get("ParatextCorpusDialog_ParatextCorpus", Logger!);
             ErrorTitle = Helpers.LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
-
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            await RetrieveParatextProjectMetadata(cancellationToken);
 
-            var parameters = new List<Autofac.Core.Parameter> 
-            { 
-                new NamedParameter("dialogMode", DialogMode),
-                new NamedParameter("initialParatextProjectId", _initialParatextProjectId)
-            };
-            var views = _lifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("AddParatextCorpusDialog", parameters, "Order").ToArray();
+            var parameters = new List<Autofac.Core.Parameter> { new NamedParameter("dialogMode", DialogMode) };
+            var views = _lifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("UpdateParatextCorpusDialog", parameters, "Order").ToArray();
 
             if (views == null || !views.Any())
             {
                 throw new DependencyRegistrationMissingException(
-                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'ParatextCorpusDialog'.  Please check the dependency registration in your bootstrapper implementation.");
+                    "There are no dependency injection registrations of 'IWorkflowStepViewModel' with the key of 'UpdateParatextCorpusDialog'.  Please check the dependency registration in your bootstrapper implementation.");
             }
 
             foreach (var view in views)
@@ -199,24 +156,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             await ActivateItemAsync(Steps[0], cancellationToken);
 
             await base.OnInitializeAsync(cancellationToken);
+        }
 
-            if (!string.IsNullOrEmpty(Parameter))
+        private async Task RetrieveParatextProjectMetadata(CancellationToken cancellationToken)
+        {
+            var result = await _projectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
+            if (result.Success && result.HasData)
             {
-                try
-                {
-                    var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(Parameter);
-                    foreach (var value in values)
-                    {
-                        _corpusNameToSelect = value.Key;
-                        break;
-                    }
-                }
-                catch (Exception)
-                {
-                    //no-op.
-                }
+                SelectedProject = result.Data!.FirstOrDefault(b =>
+                               b.Id == _paratextProjectId!.Replace("-", "")) ??
+                           throw new InvalidOperationException();
             }
-
+            else
+            {
+                throw new InvalidOperationException(result.Message);
+            }
         }
 
 

@@ -29,6 +29,7 @@ using System.Xml;
 using SIL.Extensions;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
 using System.Security.Cryptography;
+using SIL.Reporting;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
@@ -453,14 +454,42 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         {
                                             endMarkerFound = false;
 
-                                            if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
-                                            {
-                                                startMarkerFound = true;
-                                            }
-                                            else if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                            if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                             {
                                                 startMarkerFound = false;
                                                 endMarkerFound = true;
+
+                                                
+                                                try
+                                                {
+                                                    if (node.ChildNodes != null)
+                                                    {
+                                                        foreach (XmlNode child in node.ChildNodes)
+                                                        {
+                                                            if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                            {
+                                                                child.Attributes["style"].Value="vh";
+                                                            }
+
+                                                            if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                            {
+                                                                XmlAttribute attr = xDoc.CreateAttribute("style");
+                                                                attr.Value = "vh";
+
+                                                                child.Attributes.Append(attr);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
+                                                }
+                                               
+                                            }
+                                            else if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                                            {
+                                                startMarkerFound = true;
                                             }
                                             else if(node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") || 
                                                     node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
@@ -764,7 +793,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                     }
                     catch (Exception e)
                     {
-                        AppendText(Color.Orange, $"Project: {project.ShortName} FontFamily Error: {e.Message} on this computer");
                         if (_hasFontErrorBeenDisplayed == false)
                         {
                             fontError = true;
