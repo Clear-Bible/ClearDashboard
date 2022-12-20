@@ -137,7 +137,7 @@
                                                 <TextBlock
                                                     Margin="5,5,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                                     Text="{Binding Header}" />
                                             </StackPanel>
                                         </HierarchicalDataTemplate>
@@ -579,6 +579,7 @@
                     Grid.Column="1"
                     Padding="0"
                     Command="{StaticResource Commands.FitContent}"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Fit all nodes to the viewport">
                     <materialDesign:PackIcon Kind="FitToScreenOutline" />
                 </Button>
@@ -590,6 +591,7 @@
                     Grid.Column="3"
                     Padding="0"
                     Command="{StaticResource Commands.Fill}"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Fit the entire content area to the viewport">
                     <materialDesign:PackIcon Kind="FitToPageOutline" />
                 </Button>
@@ -601,6 +603,7 @@
                     Grid.Column="5"
                     Padding="0"
                     Command="{StaticResource Commands.OneHundredPercent}"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Scale the content to 100%">
                     100%
                 </Button>
@@ -628,6 +631,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.ZoomOut}"
                     FontSize="25"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Zoom out from the content">
                     -
                 </Button>
@@ -652,6 +656,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.ZoomIn}"
                     FontSize="20"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Zoom in on the content">
                     +
                 </Button>

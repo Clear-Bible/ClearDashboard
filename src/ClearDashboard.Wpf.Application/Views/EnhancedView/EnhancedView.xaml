@@ -291,7 +291,9 @@
                 </Grid.RowDefinitions>
 
                 <Button
+                    Style="{StaticResource SmallTransparentStyle}"
                     Grid.Row="0"
+                    Width="50"
                     Grid.Column="0"
                     Margin="4,4,4,4"
                     Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
