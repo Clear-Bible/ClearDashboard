@@ -28,17 +28,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.DAL.Alignment.Corpora;
-using Brush = System.Windows.Media.Brush;
-using Brushes = System.Windows.Media.Brushes;
-using FontFamily = System.Windows.Media.FontFamily;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
-using ClearDashboard.Wpf.Application.ViewModels.Project;
-using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
-using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -47,7 +39,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
-        IHandle<BCVLoadedMessage>
+        IHandle<BCVLoadedMessage>,
+        IHandle<ReloadDataMessage>,
+        IHandle<TokenizedCorpusUpdatedMessage>
     {
 
         #region Commands
@@ -62,10 +56,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
 
-        private CancellationTokenSource? _cancellationTokenSource;
-        private bool? _handleAsyncRunning;
-        private string? _tokenizationType;
-        private TokenizedTextCorpus? _currentTokenizedTextCorpus;
         private string? _message;
       
 
@@ -486,8 +476,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task VerseChangeRerender()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            var sw =Stopwatch.StartNew();
 
             await ReloadData();
 
@@ -495,13 +484,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
 
-        private async Task ReloadData()
+        private async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
         {
             await Parallel.ForEachAsync(VerseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, cancellationToken) =>
             {
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    await viewModel.RefreshData(cancellationToken);
+                    await viewModel.RefreshData(reloadType, cancellationToken);
                 });
 
             });
@@ -595,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Verse Change"), cancellationToken);
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
         }
@@ -633,6 +622,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             SelectedVerseDisplayViewModel = message.SelectedVerseDisplayViewModel;
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ReloadDataMessage message, CancellationToken cancellationToken)
+        {
+            await ReloadData(message.ReloadType);
+        }
+
+
+        public async  Task HandleAsync(TokenizedCorpusUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            var verseAwareEnhancedViewItemViewModels =
+                VerseAwareEnhancedViewItemViewModels.Where(vm =>
+                    vm.CorpusId == message.TokenizedTextCorpusId.CorpusId?.Id);
+
+            await Task.Factory.StartNew(async () =>
+            {
+                await Parallel.ForEachAsync(verseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, token) =>
+                {
+                    await Execute.OnUIThreadAsync(async () =>
+                    {
+                        await viewModel.RefreshData(ReloadType.Force, token);
+                    });
+
+                });
+            }, cancellationToken);
+          
         }
 
         #endregion
@@ -677,7 +692,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
             await NoteManager.SetCurrentNoteIds(AllSelectedTokens.NoteIds);
             NoteControlVisibility = AllSelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId})";
+            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId})";
         }
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
@@ -916,6 +931,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion
 
 
-    
     }
 }
