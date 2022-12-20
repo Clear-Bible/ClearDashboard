@@ -16,11 +16,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 #pragma warning disable CS8618
 
@@ -159,6 +161,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         #region Observable Properties
 
         #endregion //Observable Properties
+
+        private List<string> _searchResults = new();
+        public List<string> SearchResults
+        {
+            get => _searchResults;
+            set
+            {
+                _searchResults = value;
+                NotifyOfPropertyChange(() => SearchResults);
+            }
+        }
+
+        private string _searchEnglish = string.Empty;
+        public string SearchEnglish
+        {
+            get => _searchEnglish;
+            set
+            {
+                _searchEnglish = value;
+                NotifyOfPropertyChange(() => SearchEnglish);
+
+                if (_searchEnglish.Length > 2)
+                {
+                    SearchEnglishDatabase(_searchEnglish);
+                }
+                else
+                {
+                    SearchResults = new List<string>();
+                }
+            }
+        }
+        
 
         private Visibility _drawerVisibility;
         public Visibility DrawerVisibility
@@ -465,6 +499,33 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
 
         #region Methods
+
+        private async Task SearchEnglishDatabase(string searchEnglish)
+        {
+            var queryResult = await ExecuteRequest(new GetEnglishGlossSliceQuery(searchEnglish), CancellationToken.None).ConfigureAwait(false);
+            if (queryResult.Success == false)
+            {
+                Logger!.LogError(queryResult.Message);
+                return;
+            }
+
+
+            if (queryResult.Data == null)
+            {
+                return;
+            }
+
+            List<string> list = new();
+            foreach (var row in queryResult.Data)
+            {
+                list.Add($"[{row.stringB}] {row.stringA}");
+            }
+
+            list.Sort();
+
+            SearchResults = list;
+        }
+
 
         private void ShowDrawer(object obj)
         {

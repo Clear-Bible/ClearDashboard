@@ -139,7 +139,7 @@
                     <Label
                         Margin="15,0,0,0"
                         VerticalAlignment="Bottom"
-                        Content="Search Hebrew/Greek" />
+                        Content="Search by Hebrew/Greek" />
                     <wpfKeyBoard:VkbTextBox
                         Grid.Row="1"
                         Grid.Column="0"
@@ -157,7 +157,7 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         Margin="15,0,0,0"
-                        Content="Search English Gloss" />
+                        Content="Search by English Gloss" />
                     <TextBox
                         Grid.Row="3"
                         Grid.Column="0"
@@ -168,7 +168,9 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         AcceptsReturn="True"
-                        Style="{StaticResource MaterialDesignOutlinedTextBox}" />
+                        Text="{Binding SearchEnglish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    <!--  cm:Message.Attach="[Event TextChanged] = [Action SearchEnglishChanged]"  -->
 
                     <ListBox
                         Grid.Row="0"
@@ -177,29 +179,13 @@
                         Margin="0,3,10,3"
                         Background="{StaticResource TealLightBrush}"
                         FontFamily="SBH Hebrew Regular"
-                        FontSize="16">
+                        FontSize="16"
+                        ItemsSource="{Binding SearchResults}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="Height" Value="25" />
                             </Style>
                         </ListBox.ItemContainerStyle>
-
-                        <TextBlock Text="Plain" />
-                        <TextBlock Text="Old" />
-                        <TextBlock Text="ListBox" />
-                        <TextBlock Text="Full of junk" />
-                        <TextBlock Text="Plain" />
-                        <TextBlock Text="Old" />
-                        <TextBlock Text="ListBox" />
-                        <TextBlock Text="Full of junk" />
-                        <TextBlock Text="Plain" />
-                        <TextBlock Text="Old" />
-                        <TextBlock Text="ListBox" />
-                        <TextBlock Text="Full of junk" />
-                        <TextBlock Text="Plain" />
-                        <TextBlock Text="Old" />
-                        <TextBlock Text="ListBox" />
-                        <TextBlock Text="Full of junk" />
                     </ListBox>
 
                     <Border
