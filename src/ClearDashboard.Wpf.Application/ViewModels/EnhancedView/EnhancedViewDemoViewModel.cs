@@ -132,6 +132,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private IServiceProvider ServiceProvider { get; }
 
         public NoteManager NoteManager { get; }
+        public SelectionManager SelectionManager { get; }
         public VerseDisplayViewModel VerseDisplayViewModel { get; set; }
 
         private string _message = string.Empty;
@@ -204,10 +205,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplay, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
-            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
-            NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
-            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
+            SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+
+            //UpdateSelection(e.TokenDisplay, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
+            //await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
+            //NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
+            NotePaneVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+
+            //Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) {GetModifierKeysText(e.ModifierKeys)}clicked";
         }
 
         public void TokenRightButtonDown(TokenEventArgs e)
@@ -217,8 +222,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task TokenRightButtonDownAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
-            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
+            SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
+            //UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
+            //await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
             NotePaneVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
         }
@@ -385,10 +391,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
         }
 
-        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, SelectionManager selectionManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             NoteManager = noteManager;
+            SelectionManager = selectionManager;
             ServiceProvider = serviceProvider;
         }
 #pragma warning restore CS8618
