@@ -1389,7 +1389,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
             var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
 
-            CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, 0);
+            CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, -3);
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeToken ? Visibility.Visible : Visibility.Hidden;
             CompositeIndicatorComputedColor = TokenDisplayViewModel.CompositeIndicatorColor;
             
