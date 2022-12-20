@@ -20,6 +20,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 #pragma warning disable CS8618
 
@@ -34,6 +35,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         public ICommand SearchSenseCommand { get; set; }
         public ICommand SetContextCommand { get; set; }
         public ICommand GetVerseDetailCommand { get; set; }
+        public ICommand ShowDrawerCommand { get; set; }
 
         #endregion Commands
 
@@ -157,6 +159,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         #region Observable Properties
 
         #endregion //Observable Properties
+
+        private Visibility _drawerVisibility;
+        public Visibility DrawerVisibility
+        {
+            get => _drawerVisibility;
+            set
+            {
+                _drawerVisibility = value;
+                NotifyOfPropertyChange(() => DrawerVisibility);
+            }
+        }
+
 
         private bool _isTargetRtl;
         public bool IsTargetRtl
@@ -346,6 +360,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             SearchSenseCommand = new RelayCommandAsync(SearchSense);
             SetContextCommand = new RelayCommandAsync(SetContext);
             GetVerseDetailCommand = new RelayCommandAsync(GetVerseDetail);
+            ShowDrawerCommand = new RelayCommand(ShowDrawer);
         }
 
         protected override void OnViewAttached(object view, object context)
@@ -450,6 +465,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
 
         #region Methods
+
+        private void ShowDrawer(object obj)
+        {
+            DrawerVisibility = Visibility.Visible;
+        }
 
         private void FilterSenses()
         {
