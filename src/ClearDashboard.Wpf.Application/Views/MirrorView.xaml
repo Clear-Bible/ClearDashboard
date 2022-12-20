@@ -24,11 +24,12 @@
         <Slider
             Name="ZoomSlider"
             Grid.Column="0"
+            AutoToolTipPlacement="BottomRight"
+            AutoToolTipPrecision="2"
             Maximum="2.25"
             Minimum="0.75"
             Orientation="Vertical"
-            ValueChanged="ZoomSlider_OnValueChanged"
-            Value="1" />
+            ValueChanged="ZoomSlider_OnValueChanged" />
     </Grid>
 
 </Window>

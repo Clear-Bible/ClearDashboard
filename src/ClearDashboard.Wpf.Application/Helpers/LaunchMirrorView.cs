@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography.Xml;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CefSharp.DevTools.Database;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.Views;
 using MahApps.Metro.IconPacks.Converter;
@@ -80,10 +82,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
             }
         }
 
-        public static void Scale(MirrorView mirror, double widthZoom, double heightZoom)
+        public static void Scale(MirrorView mirror, double widthZoom, double heightZoom, bool initialization=false)
         {
             var transform = new ScaleTransform(widthZoom, heightZoom);
             mirror.MirrorViewRoot.LayoutTransform = transform;
+
+            Settings.Default.MirrorViewScaleValue = widthZoom;
         }
     }
 }
