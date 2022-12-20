@@ -14,7 +14,7 @@ namespace ClearDashboard.Wpf.Application.Events
         /// </summary>
         public TokenDisplayViewModel? TokenDisplay { get; set; }
 
-        public VerseDisplayViewModel? VerseDisplay { get; set; }
+        public InterlinearDisplayViewModel? InterlinearDisplay { get; set; }
 
         /// <summary>
         /// The <see cref="Translation"/> to which this event pertains.

@@ -12,6 +12,7 @@ using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -104,16 +105,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
-                VerseDisplayViewModel = ServiceProvider.GetService<VerseDisplayViewModel>()!;
+                //VerseDisplayViewModel = ServiceProvider.GetService<VerseDisplayViewModel>()!;
 #if MOCK
                 await VerseDisplayViewModel.BindMockVerseAsync();
 #else
-                await ProjectManager!.LoadProject("EnhancedViewDemo2");
+                await ProjectManager!.LoadProject("EnhancedViewDemo4");
                 //var row = await GetVerseTextRow(40001001);
                 var row = await GetVerseTextRow(001001001);
                 var translationSet = await GetFirstTranslationSet();
 
-                await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
+                VerseDisplayViewModel = await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, new ParallelCorpusId(Guid.Empty), Detokenizer, true, translationSet.TranslationSetId);
+
+                //await VerseDisplayViewModel!.ShowTranslationAsync(row, translationSet, Detokenizer, false);
 #endif
                 NotifyOfPropertyChange(nameof(VerseDisplayViewModel));
             }
@@ -180,7 +183,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         SelectedTokens.Add(selectedToken);
                     }
                 }
-                if (!token.IsSelected)
+                if (!token.IsTokenSelected)
                 {
                     SelectedTokens.Remove(token);
                 }
@@ -242,7 +245,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void NoteLeftButtonDown(NoteEventArgs e)
         {
-            e.TokenDisplayViewModel.IsSelected = true;
+            e.TokenDisplayViewModel.IsTokenSelected = true;
             SelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplayViewModel);
             NotePaneVisibility = Visibility.Visible;
         }

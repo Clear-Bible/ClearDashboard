@@ -16,6 +16,13 @@
         Width="Auto"
         HorizontalAlignment="Left"
         Orientation="Vertical">
+        <Rectangle
+            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorHeight}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorMargin}"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorComputedColor}"
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorVisibility}" />
         <Button
             x:Name="TokenButton"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
@@ -43,10 +50,13 @@
             MouseRightButtonDown="OnTokenRightButtonDown"
             MouseRightButtonUp="OnTokenRightButtonUp"
             MouseWheel="OnTokenMouseWheel"
-            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
+            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"
+            ToolTipOpening="OnToolTipOpening">
             <Button.ContextMenu>
-                <ContextMenu>
+                <ContextMenu FlowDirection="LeftToRight">
                     <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
+                    <MenuItem x:Name="JoinTokensMenuItem" Click="OnTokenJoin" Header="Join Tokens" />
+                    <MenuItem x:Name="UnjoinTokenMenuItem" Click="OnTokenUnjoin" Header="Unjoin Composite Token" />
                     <MenuItem Click="OnFilterPins" Header="Filter Pins" />
                 </ContextMenu>
             </Button.ContextMenu>
@@ -61,9 +71,8 @@
                     HorizontalOffset="10"
                     Placement="Left"
                     PlacementRectangle="50,0,0,0"
-                    VerticalOffset="20"
-                    Visibility="{Binding ElementName=ExtendedPropertiesTreeViewName, Path=Visibility}">
-                    <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
+                    VerticalOffset="20">
+                        <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
                 </ToolTip>
             </Button.ToolTip>
         </Button>
@@ -82,7 +91,7 @@
             MouseWheel="OnNoteMouseWheel"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorVisibility}" />
         <Button
-            Background="Transparent"
+            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationBackground}"
             BorderThickness="0"
             FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
             FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
