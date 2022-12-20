@@ -104,7 +104,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="107.1.120" />
+	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="108.4.130" />
 	  <PackageReference Include="ClearApplicationFoundation" Version="1.0.41" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
@@ -115,7 +115,7 @@
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.4.0" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
@@ -486,4 +486,16 @@
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
   </Target>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="108.4.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="108.4.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="108.4.13" />
+  </ItemGroup>
 </Project>
