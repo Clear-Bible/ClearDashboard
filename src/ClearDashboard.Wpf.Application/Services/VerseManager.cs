@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 
                 var compositeToken = new CompositeToken(tokens);
-                //await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
+                await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Joined {tokens.Count} tokens into composite token {compositeToken.TokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");

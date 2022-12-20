@@ -708,6 +708,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Message = string.Empty;
         }
 
+        public void TokenJoin(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenJoinAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenJoinAsync(TokenEventArgs e)
+        {
+            await VerseManager.JoinTokensAsync(e.SelectedTokens.TokenCollection, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
+        }
+
+        public void TokenUnjoin(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenUnjoinAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenUnjoinAsync(TokenEventArgs e)
+        {
+            await VerseManager.UnjoinTokenAsync(e.TokenDisplay.CompositeToken, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
+        }
+
         public void TranslationMouseEnter(object sender, TranslationEventArgs e)
         {
             Message = $"'{e.Translation.TargetTranslationText}' translation for token {e.Translation.SourceToken.TokenId} hovered";
@@ -722,7 +742,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             NoteControlVisibility = Visibility.Visible;
         }
-
     
         public void FilterPins(object sender, NoteEventArgs e)
         {

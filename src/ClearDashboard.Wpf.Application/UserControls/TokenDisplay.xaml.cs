@@ -36,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty CompositeIndicatorHeightProperty = DependencyProperty.Register(
             nameof(CompositeIndicatorHeight), typeof(double), typeof(TokenDisplay),
-            new PropertyMetadata(1d, OnLayoutChanged));
+            new PropertyMetadata(2d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the CompositeIndicatorMargin dependency property.
@@ -1389,7 +1389,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
             var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
 
-            CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, TokenVerticalSpacing);
+            CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, 0);
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeToken ? Visibility.Visible : Visibility.Hidden;
             CompositeIndicatorComputedColor = TokenDisplayViewModel.CompositeIndicatorColor;
             
