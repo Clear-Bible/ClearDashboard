@@ -2,5 +2,5 @@
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages
 {
-    public record NoteAddedMessage(NoteViewModel Note, EntityIdCollection Entities);
+    public record NoteAddedMessage(NoteViewModel Note, EntityIdCollection EntityIds);
 }

@@ -98,6 +98,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenJoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenJoinEvent = EventManager.RegisterRoutedEvent
+            ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the TokenUnjoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
+            ("TokenUnjoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TokenClickedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationClickedEvent = EventManager.RegisterRoutedEvent
@@ -463,60 +475,57 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CalculateItemsPanelTemplate(Wrap);
         }
 
-        private void RaiseTokenEvent(RoutedEvent routedEvent, TokenDisplayViewModel tokenDisplay)
+        private void RaiseTokenEvent(RoutedEvent routedEvent, TokenEventArgs args)
         {
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = tokenDisplay,
-                SelectedTokens = SelectedTokens,
-                ModifierKeys = Keyboard.Modifiers,
+                TokenDisplay = args.TokenDisplay,
+                SelectedTokens = VerseSelectedTokens,
+                ModifierKeys = args.ModifierKeys,
             });
         }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            RaiseTokenEvent(routedEvent, tokenDisplay!);
+            RaiseTokenEvent(routedEvent, e as TokenEventArgs);
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            var ctrlPressed = (Keyboard.Modifiers & ModifierKeys.Control) > 0;
-            UpdateSelection(tokenDisplay!, ctrlPressed);
+            var args = e as TokenEventArgs;
+            UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
 
-            RaiseTokenEvent(TokenClickedEvent, e);
+            RaiseTokenEvent(TokenClickedEvent, args);
         }
 
-        private void UpdateSelection(TokenDisplayViewModel token, bool addToSelection)
+        private void UpdateVerseSelection(TokenDisplayViewModel token, bool addToSelection)
         {
-            var tokenIsSelected = token.IsSelected;
+            var tokenIsSelected = token.IsTokenSelected;
             if (!addToSelection)
             {
-                foreach (var selectedToken in SelectedTokens)
+                foreach (var selectedToken in VerseSelectedTokens)
                 {
-                    selectedToken.IsSelected = false;
+                    selectedToken.IsTokenSelected = false;
                 }
-                SelectedTokens.Clear();
+                VerseSelectedTokens.Clear();
             }
 
-            token.IsSelected = !tokenIsSelected;
-            if (token.IsSelected)
+            token.IsTokenSelected = !tokenIsSelected;
+            if (token.IsTokenSelected)
             {
-                SelectedTokens.Add(token);
+                VerseSelectedTokens.Add(token);
             }
             else
             {
-                SelectedTokens.Remove(token);
+                VerseSelectedTokens.Remove(token);
             }
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            SelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
+            AllSelectedTokens = message.SelectedTokens;
+            VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
             await Task.CompletedTask;
         }
 
@@ -531,6 +540,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenDoubleClickedEvent, e);
         }
 
+        private void OnTokenJoin(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenJoinEvent, e);
+        }        
+        
+
+        
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
@@ -540,13 +556,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }
+
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
             var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            if (tokenDisplay is { IsSelected: false })
+            if (tokenDisplay is { IsTokenSelected: false })
             {
-                UpdateSelection(tokenDisplay, false);
+                UpdateVerseSelection(tokenDisplay, false);
             }
 
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
@@ -559,12 +576,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
+            //var control = e.Source as FrameworkElement;
+            //var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
+            var args = e as TokenEventArgs;
+            var tokenDisplayViewModel = args.TokenDisplay;
 
             if (DataContext is VerseDisplayViewModel verseDisplayViewModel)
             {
-                if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+                if (args.IsShiftPressed)
                 {
                     if (tokenDisplayViewModel != null && verseDisplayViewModel.Alignments != null)
                     {
@@ -671,7 +690,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             .ToList();
                     }
                 }
-                else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+                else if (args.IsAltPressed)
                 {
                     verseDisplayViewModel.SourceTokenDisplayViewModels
                         .Select(tdm =>
@@ -704,6 +723,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
 
+        private void OnTokenUnJoin(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenUnjoinEvent, e);
+        }
+
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as TokenDisplay;
@@ -711,7 +735,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplay = control?.TokenDisplayViewModel,
-                VerseDisplay = VerseDisplayViewModel,
+                InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
                 Translation = control?.TokenDisplayViewModel?.Translation,
             }) ;
         }
@@ -767,7 +791,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
-                SelectedTokens = SelectedTokens,
+                SelectedTokens = VerseSelectedTokens,
             });
         }
 
@@ -902,6 +926,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenMouseWheelEvent, value);
             remove => RemoveHandler(TokenMouseWheelEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to join multiple tokens into a composite token.
+        /// </summary>
+        public event RoutedEventHandler TokenJoin
+        {
+            add => AddHandler(TokenJoinEvent, value);
+            remove => RemoveHandler(TokenJoinEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to unjoin a composite token.
+        /// </summary>
+        public event RoutedEventHandler TokenUnjoin
+        {
+            add => AddHandler(TokenUnjoinEvent, value);
+            remove => RemoveHandler(TokenUnjoinEvent, value);
         }
 
         /// <summary>
@@ -1078,6 +1120,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion
         #region Public properties
 
+        /// <summary>
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected across all displays.
+        /// </summary>
+        public TokenDisplayViewModelCollection AllSelectedTokens { get; set; } = new();
+
+
         public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
@@ -1130,11 +1178,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (Orientation)GetValue(OrientationProperty);
             set => SetValue(OrientationProperty, value);
         }
-
-        /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI for this verse.
-        /// </summary>
-        public TokenDisplayViewModelCollection SelectedTokens { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the background of selected tokens.
@@ -1436,6 +1479,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (Thickness) GetValue(VerseMarginProperty);
             set => SetValue(VerseMarginProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI for this verse.
+        /// </summary>
+        public TokenDisplayViewModelCollection VerseSelectedTokens { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the padding for the tokens list.

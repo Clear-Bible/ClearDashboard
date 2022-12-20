@@ -169,7 +169,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async  void TranslationClicked(object sender, TranslationEventArgs args)
         {
            var s = await WindowManager.ShowDialogAsync(new TranslationSelectionDialog(args.TokenDisplay!,
-                args.VerseDisplay!));
+                args.InterlinearDisplay!));
         }
 
     
@@ -306,9 +306,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 TokensTextRow[] tokensTextRowsRange;
                 try
                 {
-                    var verseRange = metadatum.TokenizedTextCorpus.GetByVerseRange(
-                        new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
-                    tokensTextRowsRange = verseRange.textRows.Select(v => new TokensTextRow(v)).ToArray();
+                    verseRange =
+                        metadatum.TokenizedTextCorpus.GetByVerseRange(
+                            new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV()), offset, offset);
+                    tokensTextRowsRange = verseRange.textRows.Cast<TokensTextRow>().ToArray();
                 }
                 catch (KeyNotFoundException)
                 {
@@ -327,15 +328,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     foreach (var textRow in tokensTextRowsRange)
                     {
-                        var verseDisplayViewModel = IoC.Get<VerseDisplayViewModel>();
-                        //FIXME: detokenizer should come from message.Detokenizer.
-                        await verseDisplayViewModel!.ShowCorpusAsync(
-                            textRow,
-                            //FIXME:surface serialization message.detokenizer,
-                            new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                            metadatum.IsRtl!.Value);
-
-                        verses.Add(verseDisplayViewModel);
+                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope, textRow, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
                     }
                     OnUIThread(() =>
                     {
@@ -424,17 +417,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 foreach (var row in rows)
                 {
-                    var verseDisplayViewModel = IoC.Get<VerseDisplayViewModel>();
-                    await verseDisplayViewModel!.ShowTranslationAsync(
-                        row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
-                        await GetTranslationSet(metadatum.TranslationSetId ??
-                                                throw new InvalidDataEngineException(name: "message.TranslationSetId",
-                                                    value: "null")),
-                        //FIXME:surface serialization message.SourceDetokenizer, 
-                        new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                        metadatum.IsRtl);
-
-                    Verses.Add(verseDisplayViewModel);
+                    Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
                 }
 
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Interlinear", rows.Count);
@@ -458,20 +441,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
                 foreach (var row in rows)
                 {
-                    var verseDisplayViewModel = IoC.Get<VerseDisplayViewModel>();
-
-                    await verseDisplayViewModel!.ShowAlignmentsAsync(
-                        row ?? throw new InvalidDataEngineException(name: "row", value: "null"),
-                        await GetAlignmentSet(metadatum.AlignmentSetId!),
-                        //FIXME:surface serialization message.SourceDetokenizer, 
-                        new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                        metadatum.IsRtl,
-                        //FIXME:surface serialization message.TargetDetokenizer ?? throw new InvalidParameterEngineException(name: "message.TargetDetokenizer", value: "null", message: "message.TargetDetokenizer must not be null when message.AlignmentSetId is not null."),
-                        new EngineStringDetokenizer(new LatinWordDetokenizer()),
-                        metadatum.IsTargetRtl ?? throw new InvalidDataEngineException(name: "IsTargetRTL", value: "null"));
-
-
-                    Verses.Add(verseDisplayViewModel);
+                    Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
+                        row, 
+                        metadatum.ParallelCorpus.ParallelCorpusId, 
+                        metadatum.ParallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId.Detokenizer,
+                        metadatum.IsRtl ?? false,
+                        metadatum.ParallelCorpus.ParallelCorpusId.TargetTokenizedCorpusId.Detokenizer,
+                        metadatum.IsTargetRtl ?? false,
+                        new AlignmentSetId(Guid.Parse(metadatum.AlignmentSetId))
+                        ));
                 }
 
                 Title = CreateParallelCorpusItemTitle(metadatum, "EnhancedView_Alignment", rows.Count);
