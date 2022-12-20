@@ -122,8 +122,7 @@
         <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
     </UserControl.Resources>
 
-    <Border
-        Background="{DynamicResource MaterialDesignLightBackground}">
+    <Border Background="{StaticResource MaterialDesignLightBackground}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -133,12 +132,12 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Vertical">
-                <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}"/>
+                <Label Content="{helpers:Localization AddParatextCorpusDialog_Title}" />
                 <controls1:AutoCompleteComboBox
-                    IsEnabled="{Binding IsEnabledSelectedProject}"
                     Height="Auto"
                     Margin="15"
                     VerticalAlignment="Top"
+                    IsEnabled="{Binding IsEnabledSelectedProject}"
                     ItemsSource="{Binding Projects}"
                     SelectedItem="{Binding SelectedProject}"
                     Style="{StaticResource MaterialDesignComboBox}"
@@ -156,9 +155,7 @@
                 </controls1:AutoCompleteComboBox>
             </StackPanel>
 
-            <StackPanel
-                Grid.Row="1"
-                Orientation="Vertical">
+            <StackPanel Grid.Row="1" Orientation="Vertical">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />

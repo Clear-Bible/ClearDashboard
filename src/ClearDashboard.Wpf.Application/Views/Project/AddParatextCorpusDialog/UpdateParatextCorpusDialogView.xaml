@@ -10,6 +10,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     Title="{helpers:Localization AddParatextCorpusDialog_Title}"
+    Width="800"
+    Height="550"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:UpdateParatextCorpusDialogViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -31,8 +33,6 @@
     TextOptions.TextRenderingMode="Auto"
     TitleCharacterCasing="Normal"
     WindowStartupLocation="CenterOwner"
-    Width="800"
-    Height="550"
     mc:Ignorable="d">
 
     <!--  cm:Message.Attach="[Event Closing] = [Action OnClose($eventArgs)]"  -->
@@ -68,7 +68,8 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                --><!--<Button
+        -->
+        <!--<Button
                     x:Name="BackgroundTasks"
                     Margin="0"
                     Padding="0"
@@ -92,7 +93,8 @@
                             Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Value="60" />
                     </Grid>
-                </Button>--><!--
+                </Button>-->
+        <!--
             </StatusBarItem>
             <StatusBarItem Grid.Column="1">
                 <Label

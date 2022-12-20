@@ -4,8 +4,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CefSharp.DevTools.Database;
 using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.Views;
+using MahApps.Metro.IconPacks.Converter;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -42,9 +45,10 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 throw new NullReferenceException($"mirroredView.Content' is not a Grid - cannot display the MirrorView of {typeof(TView)}.");
             }
 
-
             // add this UserControl to the root element
+            Grid.SetColumn(mirroredView, 1);
             mirror.MirrorViewRoot.Children.Add(mirroredView);
+
             // set the view's datacontext to whatever we are passing in to mirror
             mirroredView.DataContext = datacontext;
             // force the MirrorView to show
@@ -70,15 +74,16 @@ namespace ClearDashboard.Wpf.Application.Helpers
             switch (datacontext)
             {
                 case MarbleViewModel:
-                    Uri iconUri = new Uri("pack://application:,,,/Resources/donut_icon.ico", UriKind.RelativeOrAbsolute);
+                    Uri iconUri = new Uri("pack://application:,,,/Resources/donut_icon.ico", UriKind.RelativeOrAbsolute); 
                     mirror.Icon = BitmapFrame.Create(iconUri);
                     break;
             }
-            
+        }
 
-            // scale the view accordingly
-            mirror.MirrorViewRoot.LayoutTransform = new ScaleTransform(widthZoom, heightZoom);
-
+        public static void Scale(MirrorView mirror, double widthZoom, double heightZoom)
+        {
+            var transform = new ScaleTransform(widthZoom, heightZoom);
+            mirror.MirrorViewRoot.LayoutTransform = transform;
         }
     }
 }
