@@ -1,8 +1,12 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Utils;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Collections
@@ -37,6 +41,12 @@ namespace ClearDashboard.Wpf.Application.Collections
             Add(token);
         }
 
+        public TokenDisplayViewModelCollection(IEnumerable<TokenDisplayViewModel> tokens) : base(tokens)
+        {
+        }
+
+        public TokenCollection TokenCollection => new(Items.Select(t => t.Token));
+
         public bool Contains(TokenId tokenId)
         {
             return Items.Any(i => i.Token.TokenId.IdEquals(tokenId.Id));
@@ -45,7 +55,7 @@ namespace ClearDashboard.Wpf.Application.Collections
         public bool Contains(Token token)
         {
             return Contains(token.TokenId);
-        }
+        }        
 
         public void Remove(TokenId tokenId)
         {
@@ -78,5 +88,52 @@ namespace ClearDashboard.Wpf.Application.Collections
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(EntityIds)));
             OnPropertyChanged(new PropertyChangedEventArgs(nameof(NoteIds)));
         }
+
+        private IEnumerable<TokenDisplayViewModel> SelectedTokens => Items.Where(i => i.IsTokenSelected);
+        private IEnumerable<TokenDisplayViewModel> SelectedTranslations => Items.Where(i => i.IsTranslationSelected);
+        
+        private int SelectedTokenVersesCount => SelectedTokens.Select(t => t.VerseDisplay).Distinct(ReferenceEqualityComparer.Instance).Count();
+
+        private IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<IId> entityIds)
+        {
+            return Items.Where(t => entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()));
+        }
+
+        private IEnumerable<TokenDisplayViewModel> MatchingTokens(Func<TokenDisplayViewModel, bool> conditional)
+        {
+            return Items.Where(conditional);
+        }
+
+        private IEnumerable<TokenDisplayViewModel> NonMatchingTokens(IEnumerable<IId> entityIds)
+        {
+            return Items.Where(t => ! entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()));
+        }
+
+        public void MatchingTokenAction(IEnumerable<IId> entityIds, Action<TokenDisplayViewModel> action)
+        {
+            foreach (var token in MatchingTokens(entityIds))
+            {
+                action(token);
+            }
+        }
+
+        public void MatchingTokenAction(Func<TokenDisplayViewModel, bool> conditional, Action<TokenDisplayViewModel> action)
+        {
+            foreach (var token in MatchingTokens(conditional))
+            {
+                action(token);
+            }
+        }
+
+        public void NonMatchingTokenAction(IEnumerable<IId> entityIds, Action<TokenDisplayViewModel> action)
+        {
+            foreach (var token in NonMatchingTokens(entityIds))
+            {
+                action(token);
+            }
+        }
+
+        public bool CanJoinTokens => SelectedTokens.Count() > 1 && SelectedTokenVersesCount == 1 && !SelectedTranslations.Any();
+        public bool CanUnjoinToken => SelectedTokens.Count() == 1 && SelectedTokens.First().Token is CompositeToken;
     }
 }

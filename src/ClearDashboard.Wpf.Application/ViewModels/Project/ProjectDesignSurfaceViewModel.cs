@@ -36,6 +36,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -709,8 +710,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             var tokenizedTextCorpusId = (await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
                                     Mediator!,
                                     new CorpusId(node.CorpusId)))
-                                .Where(tc => tc.TokenizationFunction == tokenizer.ToString())
-                                .FirstOrDefault();
+                                .FirstOrDefault(tc => tc.TokenizationFunction == tokenizer.ToString());
                             
                             if (tokenizedTextCorpusId is null)
                             {
@@ -719,6 +719,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
                             await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, cancellationToken);
+
+                            await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
 
                             _longRunningTaskManager.TaskComplete(taskName);
                         }

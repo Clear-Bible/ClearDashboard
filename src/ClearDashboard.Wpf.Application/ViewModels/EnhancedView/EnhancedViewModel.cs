@@ -31,15 +31,30 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
+using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
+    public enum ReloadType
+    {
+        // Reload the data from the project database
+        Force,
+        // Just refresh the screen with the existing data
+        Refresh
+    }
+    public record ReloadDataMessage(ReloadType ReloadType = ReloadType.Refresh)
+    {
+    };
+
     public class EnhancedViewModel : DashboardConductorAllActive<EnhancedViewItemViewModel>, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
-        IHandle<BCVLoadedMessage>
+        IHandle<BCVLoadedMessage>,
+        IHandle<ReloadDataMessage>
     {
 
         #region Commands
@@ -53,9 +68,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region Member Variables
         private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
-       
-     
-      
+
+        private CancellationTokenSource? _cancellationTokenSource;
+        private bool? _handleAsyncRunning;
+        private string? _tokenizationType;
+        private TokenizedTextCorpus? _currentTokenizedTextCorpus;
         private string? _message;
       
 
@@ -78,6 +95,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
    
         public NoteManager NoteManager { get; set; }
+        public VerseManager VerseManager { get; }
 
         public MainViewModel MainViewModel => (MainViewModel)Parent;
 
@@ -272,27 +290,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _currentToken, value);
         }
 
-        private TokenDisplayViewModelCollection _selectedTokens = new();
-        public TokenDisplayViewModelCollection SelectedTokens
+        private TokenDisplayViewModelCollection _allSelectedTokens = new();
+        public TokenDisplayViewModelCollection AllSelectedTokens
         {
-            get => _selectedTokens;
-            set => Set(ref _selectedTokens, value);
+            get => _allSelectedTokens;
+            set => Set(ref _allSelectedTokens, value);
         }
 
 
-        private IEnumerable<TranslationOption> _translationOptions;
-        public IEnumerable<TranslationOption> TranslationOptions
-        {
-            get => _translationOptions;
-            set => Set(ref _translationOptions, value);
-        }
+        //private IEnumerable<TranslationOption> _translationOptions;
+        //public IEnumerable<TranslationOption> TranslationOptions
+        //{
+        //    get => _translationOptions;
+        //    set => Set(ref _translationOptions, value);
+        //}
 
-        private TranslationOption? _currentTranslationOption;
-        public TranslationOption? CurrentTranslationOption
-        {
-            get => _currentTranslationOption;
-            set => Set(ref _currentTranslationOption, value);
-        }
+        //private TranslationOption? _currentTranslationOption;
+        //public TranslationOption? CurrentTranslationOption
+        //{
+        //    get => _currentTranslationOption;
+        //    set => Set(ref _currentTranslationOption, value);
+        //}
 
         #endregion //Observable Properties
 
@@ -355,7 +373,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
         public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
-            DashboardProjectManager? projectManager, NoteManager noteManager, IEventAggregator? eventAggregator, IMediator mediator,
+            DashboardProjectManager? projectManager, NoteManager noteManager, VerseManager verseManager, IEventAggregator? eventAggregator, IMediator mediator,
             ILifetimeScope? lifetimeScope) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
@@ -365,7 +383,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _logger = logger;
             _projectManager = projectManager;
             NoteManager = noteManager;
-          
+            VerseManager = verseManager;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
 
@@ -376,6 +394,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DeleteCorpusRowCommand = new RelayCommand(DeleteCorpusRow);
             RequestCloseCommand = new RelayCommandAsync(RequestClose);
 
+            TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             PaneId = Guid.NewGuid();
         }
@@ -482,13 +501,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
 
-        private async Task ReloadData()
+        private async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
         {
             await Parallel.ForEachAsync(VerseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, cancellationToken) =>
             {
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    await viewModel.RefreshData(cancellationToken);
+                    await viewModel.RefreshData(reloadType, cancellationToken);
                 });
 
             });
@@ -582,7 +601,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Verse Change"), cancellationToken);
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
         }
@@ -622,6 +641,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return Task.CompletedTask;
         }
 
+        public async Task HandleAsync(ReloadDataMessage message, CancellationToken cancellationToken)
+        {
+            await ReloadData(message.ReloadType);
+        }
+
         #endregion
 
         #endregion // Methods
@@ -636,22 +660,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 foreach (var selectedToken in selectedTokens)
                 {
-                    if (!SelectedTokens.Contains(selectedToken))
+                    if (!AllSelectedTokens.Contains(selectedToken))
                     {
-                        SelectedTokens.Add(selectedToken);
+                        AllSelectedTokens.Add(selectedToken);
                     }
                 }
 
-                if (!token.IsSelected)
+                if (!token.IsTokenSelected)
                 {
-                    SelectedTokens.Remove(token);
+                    AllSelectedTokens.Remove(token);
                 }
             }
             else
             {
-                SelectedTokens = selectedTokens;
+                AllSelectedTokens = selectedTokens;
             }
-            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(SelectedTokens));
+            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(AllSelectedTokens));
         }
 
         public void TokenClicked(object sender, TokenEventArgs e)
@@ -661,9 +685,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task TokenClickedAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplay, e.SelectedTokens, (e.ModifierKeys & ModifierKeys.Control) > 0);
-            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
-            NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
+            UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            await NoteManager.SetCurrentNoteIds(AllSelectedTokens.NoteIds);
+            NoteControlVisibility = AllSelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId})";
         }
 
@@ -674,9 +698,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task TokenRightButtonDownAsync(TokenEventArgs e)
         {
-            UpdateSelection(e.TokenDisplay, e.SelectedTokens, false);
-            await NoteManager.SetCurrentNoteIds(SelectedTokens.NoteIds);
-            NoteControlVisibility = SelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
+            //UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            if (!AllSelectedTokens.Contains(e.TokenDisplay))
+            {
+                AllSelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplay);
+                await EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(AllSelectedTokens));
+            }
+            await NoteManager.SetCurrentNoteIds(AllSelectedTokens.NoteIds);
+            NoteControlVisibility = AllSelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
             Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
         }
 
@@ -898,6 +927,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion
 
 
-    
+       
     }
 }

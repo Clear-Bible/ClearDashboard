@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         {
             void ShowTranslationSelectionDialog()
             {
-                var dialog = new TranslationSelectionDialog(args.TokenDisplay!, args.VerseDisplay!)
+                var dialog = new TranslationSelectionDialog(args.TokenDisplay!, args.InterlinearDisplay!)
                 {
                     Owner = Window.GetWindow(this),
                 };
