@@ -98,11 +98,12 @@ namespace ClearDashboard.Wpf.Application.Services
         /// 1) All of the associated entities need to be tokens;
         /// 2) All of the tokens must originate from the same Paratext corpus;
         /// 3) All of the tokens must be contiguous in the corpus.
-        ///
+        /// 
         /// If any of these three conditions are false, then <see cref="NoteViewModel.ParatextSendNoteInformation"/> will be null.
         /// </remarks>
         /// <param name="mediator">The <see cref="Mediator"/> to use to populate the project information.</param>
         /// <param name="note">The note for which to populate the Paratext project ID.</param>
+        /// <param name="userProvider">User provider for obtaining user details.</param>
         /// <param name="logger">A <see cref="ILogger"/> for logging the operation.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
         public static async Task PopulateParatextDetailsAsync(IMediator mediator, NoteViewModel note, IUserProvider userProvider, ILogger? logger = null)
