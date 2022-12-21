@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -86,6 +87,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
+
+        /// <summary>
+        /// The surface text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken.Tokens.Select(t => t.SurfaceText))
+                                                                       : Token.SurfaceText;
 
         /// <summary>
         /// The extended properties of the token to be displayed.
