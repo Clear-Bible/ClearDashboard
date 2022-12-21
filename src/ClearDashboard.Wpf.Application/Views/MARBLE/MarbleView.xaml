@@ -6,6 +6,7 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:DotNetKit.Windows.Controls;assembly=DotNetKit.Wpf.AutoCompleteComboBox"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Marble"
@@ -15,7 +16,6 @@
     xmlns:pieChart="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart;assembly=ClearDashboard.Wpf.Controls"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:wpfKeyBoard="clr-namespace:wpfKeyBoard;assembly=wpfKeyBoard"
-    xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     x:Name="MarbleViewControl"
     d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -162,7 +162,7 @@
                                     HorizontalAlignment="Left"
                                     Background="{StaticResource MahApps.Brushes.Gray1}"
                                     BorderBrush="{StaticResource SecondaryHueMidBrush}"
-                                    BorderThickness="2" >
+                                    BorderThickness="2">
                                     <b:Interaction.Triggers>
                                         <b:EventTrigger EventName="VirtualKeyPressed">
                                             <b:CallMethodAction MethodName="VirtualKeyPressed" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type wpfKeyBoard:VirtualKeyboardControl}}, Path=DataContext}" />
