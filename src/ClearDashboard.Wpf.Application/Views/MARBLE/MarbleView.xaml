@@ -39,6 +39,14 @@
             <SolidColorBrush Color="#000033" />
         </x:ArrayExtension>
 
+        <ResourceDictionary x:Key="virtualKeyboard">
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/WpfKeyboard.Resources;component/styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WpfKeyboard.Resources;component/styles/Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WpfKeyboard.Resources;component/styles/ToggleButton.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+
         <Style x:Key="ExpanderStyle" TargetType="{x:Type Expander}">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
             <Setter Property="Background" Value="{StaticResource PrimaryHueMidBrush}" />
@@ -112,96 +120,133 @@
             BottomDrawerCornerRadius="20 20 0 0"
             Visibility="{Binding DrawerVisibility}">
 
-            <!--<materialDesign:DrawerHost.Style>
-                <Style BasedOn="{StaticResource {x:Type materialDesign:DrawerHost}}" TargetType="materialDesign:DrawerHost">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsChecked, ElementName=BackgroundToggle}" Value="True">
-                            <Setter Property="OverlayBackground" Value="{DynamicResource PrimaryHueMidBrush}" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </materialDesign:DrawerHost.Style>-->
             <materialDesign:DrawerHost.TopDrawerContent>
-                <Grid ShowGridLines="False">
+                <Grid ShowGridLines="True">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="20" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-
-                    <Label
+                    <Border
                         Margin="15,0,0,0"
-                        VerticalAlignment="Bottom"
-                        Content="Search by Hebrew/Greek" />
-                    <wpfKeyBoard:VkbTextBox
+                        BorderBrush="Black"
+                        BorderThickness="1">
+                        <StackPanel Orientation="Vertical">
+                            <Label
+                                Margin="15,0,0,0"
+                                VerticalAlignment="Top"
+                                Content="Search by Hebrew/Greek"
+                                Foreground="{StaticResource PrimaryHueMidBrush}" />
+
+                            <TextBox
+                                x:Name="SearchTextBox"
+                                Margin="5,0,5,0"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource MaterialDesignFilledTextBox}"
+                                Text="{Binding Path=SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Border
+                                Margin="0,3,0,0"
+                                Background="{StaticResource MahApps.Brushes.Gray9}"
+                                BorderBrush="Black"
+                                BorderThickness="1">
+                                <wpfKeyBoard:VirtualKeyboardControl
+                                    x:Name="KeyboardControl"
+                                    Width="325"
+                                    Height="200"
+                                    HorizontalAlignment="Left"
+                                    Background="{StaticResource MahApps.Brushes.Gray1}"
+                                    BorderBrush="{StaticResource SecondaryHueMidBrush}"
+                                    BorderThickness="2" />
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border
                         Grid.Row="1"
                         Grid.Column="0"
-                        MinWidth="350"
-                        MaxWidth="350"
-                        MaxHeight="35"
-                        Margin="15,0,5,5"
-                        HorizontalAlignment="Left"
-                        VerticalContentAlignment="Top"
-                        EnterClosesKeyboard="True"
-                        FontFamily="SBH Hebrew Regular" />
-
-
-                    <Label
-                        Grid.Row="2"
-                        Grid.Column="0"
                         Margin="15,0,0,0"
-                        Content="Search by English Gloss" />
-                    <TextBox
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        MinWidth="310"
-                        MaxWidth="350"
-                        MaxHeight="35"
-                        Margin="15,0,5,5"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        AcceptsReturn="True"
-                        Text="{Binding SearchEnglish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
+                        BorderBrush="Black"
+                        BorderThickness="1">
+                        <StackPanel Orientation="Vertical">
+                            <Label
+                                Margin="15,0,0,0"
+                                Content="Search by English Gloss"
+                                Foreground="{StaticResource PrimaryHueMidBrush}" />
+                            <TextBox
+                                MinWidth="310"
+                                MaxWidth="350"
+                                Margin="15,0,5,5"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                AcceptsReturn="True"
+                                Style="{StaticResource MaterialDesignFilledTextBox}"
+                                Text="{Binding SearchEnglish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </Border>
                     <!--  cm:Message.Attach="[Event TextChanged] = [Action SearchEnglishChanged]"  -->
 
-                    <ListBox
+                    <ListView
+                        x:Name="SearchListView"
                         Grid.Row="0"
-                        Grid.RowSpan="4"
-                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        Grid.Column="2"
                         Margin="0,3,10,3"
-                        Background="{StaticResource TealLightBrush}"
                         FontFamily="SBH Hebrew Regular"
                         FontSize="16"
                         ItemsSource="{Binding SearchResults}">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
                                 <Setter Property="Height" Value="25" />
                             </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
+                        </ListView.ItemContainerStyle>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Width="400">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=stringB}" TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Width="300">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button
+                                                x:Name="btn"
+                                                MinWidth="150"
+                                                Command="{Binding DataContext.GotoSourceWordCommand, ElementName=SearchListView}"
+                                                CommandParameter="{Binding ElementName=btn, Path=Content}"
+                                                Content="{Binding stringA}"
+                                                Cursor="Hand" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
 
                     <Border
                         Grid.Row="0"
-                        Grid.RowSpan="4"
+                        Grid.RowSpan="2"
                         Grid.Column="0"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="3"
                         BorderBrush="{StaticResource SecondaryHueMidBrush}"
                         BorderThickness="2"
                         CornerRadius="5" />
 
 
                     <Button
-                        Grid.Row="4"
+                        Grid.Row="2"
                         Grid.Column="0"
-                        Grid.ColumnSpan="2"
+                        Grid.ColumnSpan="3"
                         Width="200"
                         Margin="5"
                         VerticalAlignment="Center"

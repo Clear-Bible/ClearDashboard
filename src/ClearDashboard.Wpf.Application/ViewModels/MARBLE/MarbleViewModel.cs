@@ -16,13 +16,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 #pragma warning disable CS8618
 
@@ -38,6 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         public ICommand SetContextCommand { get; set; }
         public ICommand GetVerseDetailCommand { get; set; }
         public ICommand ShowDrawerCommand { get; set; }
+        public ICommand GotoSourceWordCommand { get; set; }
 
         #endregion Commands
 
@@ -162,8 +161,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         #endregion //Observable Properties
 
-        private List<string> _searchResults = new();
-        public List<string> SearchResults
+        private List<CoupleOfStrings> _searchResults = new();
+        public List<CoupleOfStrings> SearchResults
         {
             get => _searchResults;
             set
@@ -188,7 +187,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 }
                 else
                 {
-                    SearchResults = new List<string>();
+                    SearchResults = new List<CoupleOfStrings>();
                 }
             }
         }
@@ -395,7 +394,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             SetContextCommand = new RelayCommandAsync(SetContext);
             GetVerseDetailCommand = new RelayCommandAsync(GetVerseDetail);
             ShowDrawerCommand = new RelayCommand(ShowDrawer);
+            GotoSourceWordCommand = new RelayCommand(GotoSourceWord);
         }
+
 
         protected override void OnViewAttached(object view, object context)
         {
@@ -500,6 +501,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         #region Methods
 
+        private void GotoSourceWord(object obj)
+        {
+            if (obj is string word)
+            {
+                SelectedHebrew = word;
+                _ = GetWord();
+            }
+        }
+
         private async Task SearchEnglishDatabase(string searchEnglish)
         {
             var queryResult = await ExecuteRequest(new GetEnglishGlossSliceQuery(searchEnglish), CancellationToken.None).ConfigureAwait(false);
@@ -515,15 +525,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 return;
             }
 
-            List<string> list = new();
-            foreach (var row in queryResult.Data)
-            {
-                list.Add($"[{row.stringB}] {row.stringA}");
-            }
+            //List<string> list = new();
+            //foreach (var row in queryResult.Data)
+            //{
+            //    list.Add($"[{row.stringB}] {row.stringA}");
+            //}
 
-            list.Sort();
+            //list.Sort();
 
-            SearchResults = list;
+            SearchResults = queryResult.Data;
         }
 
 
