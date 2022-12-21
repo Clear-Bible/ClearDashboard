@@ -83,9 +83,28 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="token">The <see cref="Token"/> for which to obtain a translation.</param>
         /// <param name="returnPlaceholder">If true, then if a translation is not found then return a default placeholder; otherwise, return null.</param>
         /// <returns>The translation for the token if found; otherwise, a default placeholder or null, depending on the value of the <paramref name="returnPlaceholder"/> parameter.</returns>
-        public Translation? GetTranslationForToken(Token token, bool returnPlaceholder = true)
+        private Translation? GetTranslationForToken(Token token, bool returnPlaceholder = true)
         {
             return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? (returnPlaceholder ? new Translation(token) : null);
+        }
+
+        /// <summary>
+        /// Retrieves the translation for a specified token, optionally within a parent <see cref="CompositeToken"/>.
+        /// </summary>
+        /// <remarks>
+        /// If the token is part of a composite token, then this return the parent's translation for the first child token and null for other tokens.
+        ///
+        /// If <see paramref="returnPlaceholder"/> is true, then if a token is not found in the translation collection, a default translation is returned with a placeholder text.
+        /// </remarks>
+        /// <param name="token">The <see cref="Token"/> for which to obtain a translation.</param>
+        /// <param name="compositeToken">An optional parent <see cref="CompositeToken"/> that the token is part of.</param>
+        /// <param name="returnPlaceholder">If true, then if a translation is not found then return a default placeholder; otherwise, return null.</param>
+        /// <returns>The translation for the token if found; otherwise, a default placeholder or null, depending on whether the token is part of a CompositeToken.</returns>
+        public Translation? GetTranslationForToken(Token token, CompositeToken? compositeToken, bool returnPlaceholder = true)
+        {
+            return compositeToken != null
+                ? new TokenCollection(compositeToken.Tokens).IsFirst(token) ? GetTranslationForToken(compositeToken) : null
+                : GetTranslationForToken(token, returnPlaceholder);
         }
 
         /// <summary>

@@ -111,6 +111,9 @@
                             <b:EventTrigger EventName="TokenJoin">
                                 <b:CallMethodAction MethodName="TokenJoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
+                            <b:EventTrigger EventName="TokenUnjoin">
+                                <b:CallMethodAction MethodName="TokenUnjoin" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
                         </b:Interaction.Triggers>
                     </userControls:VerseDisplay>
                 </DataTemplate>

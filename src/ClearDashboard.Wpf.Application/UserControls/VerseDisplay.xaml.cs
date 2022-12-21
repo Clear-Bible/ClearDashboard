@@ -27,8 +27,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         IHandle<SelectionUpdatedMessage>,
         IHandle<TokensUpdatedMessage>
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -41,6 +39,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             OnPropertyChanged(propertyName);
             return true;
         }
+
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -563,8 +562,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenJoinEvent, e);
         }        
         
-
-        
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
@@ -741,7 +738,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
 
-        private void OnTokenUnJoin(object sender, RoutedEventArgs e)
+        private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenUnjoinEvent, e);
         }
@@ -862,8 +859,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(TranslateQuickEvent, e);
         }
 
+        // ReSharper restore UnusedMember.Global
+
         #endregion
         #region Public events
+
+        // ReSharper disable UnusedMember.Global
+
+        /// <summary>
+        /// Occurs when a property is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when an individual token is clicked.

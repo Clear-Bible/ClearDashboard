@@ -61,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 var tokens = new TokenCollection(compositeToken.Tokens);
                 compositeToken.Tokens = new List<Token>();
-                //await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
+                await TokenizedTextCorpus.PutCompositeToken(Mediator, compositeToken, parallelCorpusId);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Unjoined composite token {compositeToken.TokenId.Id} into {tokens.Count} in {stopwatch.ElapsedMilliseconds} ms");

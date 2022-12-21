@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
@@ -36,7 +35,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty CompositeIndicatorHeightProperty = DependencyProperty.Register(
             nameof(CompositeIndicatorHeight), typeof(double), typeof(TokenDisplay),
-            new PropertyMetadata(2d, OnLayoutChanged));
+            new PropertyMetadata(3d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the CompositeIndicatorMargin dependency property.
@@ -91,7 +90,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly DependencyProperty NoteIndicatorHeightProperty = DependencyProperty.Register(
             nameof(NoteIndicatorHeight), typeof(double), typeof(TokenDisplay),
-            new PropertyMetadata(3d, OnLayoutChanged));
+            new PropertyMetadata(5d, OnLayoutChanged));
 
         /// <summary>
         /// Identifies the NoteIndicatorMargin dependency property.
@@ -961,7 +960,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
-            RaiseTokenEvent(TokenJoinEvent, e);
+            RaiseTokenEvent(TokenUnjoinEvent, e);
         }
 
         private void OnFilterPins(object sender, RoutedEventArgs e)
@@ -972,7 +971,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTranslateQuick(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(TranslateQuickEvent, e); //Rename RaiseNoteEvent
-
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
@@ -999,7 +997,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the <see cref="Brush"/> used to draw the composite token indicator.
         /// </summary>
         /// <remarks>
-        /// This should normally not be set explicitly; it is computed based on whether the token is part of a composite token.
+        /// This should not be set explicitly; it is computed based on whether the token is part of a composite token.
         /// </remarks>
         public Brush CompositeIndicatorComputedColor
         {
@@ -1020,23 +1018,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the margin around the composite indicator.
         /// </summary>
         /// <remarks>
-        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// This property should not be set explicitly; it is computed from the token horizontal and vertical spacing.
         /// </remarks>
         public Thickness CompositeIndicatorMargin
         {
             get => (Thickness)GetValue(CompositeIndicatorMarginProperty);
-            set => SetValue(CompositeIndicatorMarginProperty, value);
+            private set => SetValue(CompositeIndicatorMarginProperty, value);
         }
-
 
         /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the composite indicator.
         /// </summary>
-        /// This should normally not be set explicitly; it is computed based on whether the token is part of a composite token.
+        /// <remarks>
+        /// This should  not be set explicitly; it is computed based on whether the token is part of a composite token.
+        /// </remarks>
         public Visibility CompositeIndicatorVisibility
         {
             get => (Visibility)GetValue(CompositeIndicatorVisibilityProperty);
-            set => SetValue(CompositeIndicatorVisibilityProperty, value);
+            private set => SetValue(CompositeIndicatorVisibilityProperty, value);
         }
 
         /// <summary>
@@ -1082,7 +1081,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the <see cref="Brush"/> used to draw the note indicator, depending on the note's hover status.
         /// </summary>
         /// <remarks>
-        /// This should normally not be set explicitly; it is computed from the note's hover status.
+        /// This should not be set explicitly; it is computed from the note's hover status.
         /// </remarks>
         public Brush NoteIndicatorComputedColor
         {
@@ -1103,23 +1102,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the margin around the note indicator.
         /// </summary>
         /// <remarks>
-        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// This property should not be set explicitly; it is computed from the token horizontal and vertical spacing.
         /// </remarks>
         public Thickness NoteIndicatorMargin
         {
             get => (Thickness)GetValue(NoteIndicatorMarginProperty);
-            set => SetValue(NoteIndicatorMarginProperty, value);
+            private set => SetValue(NoteIndicatorMarginProperty, value);
         }
-
 
         /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the note indicator.
         /// </summary>
-        /// <remarks>This should normally not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
+        /// <remarks>This should not be set explicitly; it is computed based on the <see cref="ShowNoteIndicator"/> value.</remarks>
         public Visibility NoteIndicatorVisibility
         {
             get => (Visibility)GetValue(NoteIndicatorVisibilityProperty);
-            set => SetValue(NoteIndicatorVisibilityProperty, value);
+            private set => SetValue(NoteIndicatorVisibilityProperty, value);
         }
 
         /// <summary>
@@ -1166,28 +1164,28 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the surface text to be displayed.
         /// </summary>
         /// <remarks>
-        /// This should normally not be called directly; it is computed based on the orientation of the display.
+        /// This should not be set directly; it is computed based on the orientation of the display.
         /// </remarks>
         public string SurfaceText
         {
             get => (string)GetValue(SurfaceTextProperty);
-            set => SetValue(SurfaceTextProperty, value);
+            private set => SetValue(SurfaceTextProperty, value);
         }
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the token background.
         /// </summary>
         /// <remarks>
-        /// This property should normally not be set explicitly; it is computed from the token's selection status.
+        /// This property should not be set explicitly; it is computed from the token's selection status.
         /// </remarks>
         public Brush TokenBackground
         {
             get => (Brush)GetValue(TokenBackgroundProperty);
-            set => SetValue(TokenBackgroundProperty, value);
+            private set => SetValue(TokenBackgroundProperty, value);
         }
 
         /// <summary>
-        /// Gets the <see cref="TokenDisplayViewModel"/> data source for this control.
+        /// Gets the strongly-typed <see cref="TokenDisplayViewModel"/> data source for this control.
         /// </summary>
         public TokenDisplayViewModel TokenDisplayViewModel => (TokenDisplayViewModel)DataContext;
 
@@ -1240,12 +1238,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the margin around each token for display.
         /// </summary>
         /// <remarks>
-        /// This property should normally not be set explicitly; it is computed from the token horizontal and vertical spacing.
+        /// This property should not be set explicitly; it is computed from the token horizontal and vertical spacing.
         /// </remarks>
         public Thickness TokenMargin
         {
             get => (Thickness) GetValue(TokenMarginProperty);
-            set => SetValue(TokenMarginProperty, value);
+            private set => SetValue(TokenMarginProperty, value);
         }
 
         /// <summary>
@@ -1342,12 +1340,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
-        /// This property should normally not be set explicitly; it is computed from the translation horizontal and vertical spacing.
+        /// This property should not be set explicitly; it is computed from the translation horizontal and vertical spacing.
         /// </remarks>
         public Thickness TranslationMargin
         {
             get => (Thickness) GetValue(TranslationMarginProperty);
-            set => SetValue(TranslationMarginProperty, value);
+            private set => SetValue(TranslationMarginProperty, value);
         }
 
         /// <summary>
@@ -1362,11 +1360,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets or sets the <see cref="Visibility"/> of the translation.
         /// </summary>
-        /// <remarks>This should normally not be set explicitly; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
+        /// <remarks>This should not be set explicitly; it is computed based on the <see cref="ShowTranslation"/> value.</remarks>
         public Visibility TranslationVisibility
         {
             get => (Visibility) GetValue(TranslationVisibilityProperty);
-            set => SetValue(TranslationVisibilityProperty, value);
+            private set => SetValue(TranslationVisibilityProperty, value);
         }
 
         /// <summary>
@@ -1389,7 +1387,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             var translationLeftMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenLeftMargin, HorizontalSpacing / 2) : 0;
             var translationRightMargin = Orientation == Orientation.Horizontal ? Math.Max(tokenRightMargin, HorizontalSpacing / 2) : 0;
 
-            CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, -3);
+            CompositeIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, 1);
             CompositeIndicatorVisibility = TokenDisplayViewModel.IsCompositeTokenMember ? Visibility.Visible : Visibility.Hidden;
             CompositeIndicatorComputedColor = TokenDisplayViewModel.CompositeIndicatorColor;
             
@@ -1400,7 +1398,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             SurfaceText = Orientation == Orientation.Horizontal ? TokenDisplayViewModel.SurfaceText : TokenDisplayViewModel.SurfaceText.Trim();
             ExtendedProperties = TokenDisplayViewModel.ExtendedProperties;
 
-            NoteIndicatorMargin = new Thickness(tokenLeftMargin, 0, 0, TokenVerticalSpacing);
+            NoteIndicatorMargin = new Thickness(tokenLeftMargin, 1, 0, TokenVerticalSpacing);
             NoteIndicatorVisibility = (ShowNoteIndicator && TokenDisplayViewModel.HasNote) ? Visibility.Visible : Visibility.Hidden;
             NoteIndicatorComputedColor = TokenDisplayViewModel.IsNoteHovered ? Brushes.BlueViolet : NoteIndicatorColor;
 
@@ -1430,6 +1428,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             Unloaded += OnUnloaded;
 
             EventAggregator?.SubscribeOnUIThread(this);
+        }
+
+        ~TokenDisplay()
+        {
+            Loaded -= OnLoaded;
+            Unloaded -= OnUnloaded;
+
+            EventAggregator?.Unsubscribe(this);
         }
 
         private void OnHorizontalAlignmentChanged(object? sender, EventArgs args)

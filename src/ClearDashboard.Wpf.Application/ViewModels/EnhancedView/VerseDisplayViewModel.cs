@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -32,7 +33,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteAddedMessage>,
         IHandle<NoteDeletedMessage>,
         IHandle<NoteMouseEnterMessage>,
-        IHandle<NoteMouseLeaveMessage>
+        IHandle<NoteMouseLeaveMessage>,
+        IHandle<TokensJoinedMessage>,
+        IHandle<TokenUnjoinedMessage>
     {
         protected NoteManager NoteManager { get; }
         protected IMediator Mediator { get; }
@@ -98,8 +101,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// This will be null unless called from an <see cref="InterlinearDisplayViewModel"/> containing a valid <see cref="TranslationSet"/>.
         /// </remarks>
         /// <param name="token">The <see cref="Token"/> for which to obtain a translation.</param>
+        /// <param name="compositeToken">An optional <see cref="CompositeToken"/> that <paramref name="token"/> is a constituent of.</param>
         /// <returns>A <see cref="Translation"/> for the token if a valid <see cref="TranslationSet"/> is known; null otherwise.</returns>
-        protected virtual Translation? GetTranslationForToken(Token token)
+        protected virtual Translation? GetTranslationForToken(Token token, CompositeToken? compositeToken)
         {
             return null;
         }
@@ -125,13 +129,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             
             foreach (var (token, paddingBefore, paddingAfter) in tokenMap.PaddedTokens)
             {
+                var compositeToken = tokenMap.GetCompositeToken(token);
                 result.Add(new TokenDisplayViewModel(token)
                 {
                     VerseDisplay = this,
-                    CompositeToken = tokenMap.GetCompositeToken(token),
+                    CompositeToken = compositeToken,
                     PaddingBefore = paddingBefore,
                     PaddingAfter = paddingAfter,
-                    Translation = GetTranslationForToken(token),
+                    Translation = GetTranslationForToken(token, compositeToken),
                     NoteIds = await NoteManager.GetNoteIdsAsync(token.TokenId),
                     IsSource = isSource,
                 });
@@ -203,6 +208,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Logger = logger;
 
             EventAggregator.SubscribeOnUIThread(this);
+        }
+
+        public Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
+        {
+            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        {
+            MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
+            return Task.CompletedTask;
         }
     }
 }
