@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {
@@ -9,6 +10,11 @@ namespace ClearDashboard.Wpf.Application.Collections
     /// </summary>
     public class TokenCollection : BindableCollection<Token>
     {
+        /// <summary>
+        /// Gets a <see cref="IEnumerable{TokenId}"/> of the tokens in this collection.
+        /// </summary>
+        public IEnumerable<TokenId> TokenIds => this.Select(t => t.TokenId);
+
         /// <summary>
         /// Initializes a new instance of the collection.
         /// </summary>
