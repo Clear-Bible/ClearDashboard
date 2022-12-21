@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -514,17 +513,36 @@ namespace ClearDashboard.Wpf.Application.UserControls
             token.IsTokenSelected = !tokenIsSelected;
             if (token.IsTokenSelected)
             {
-                VerseSelectedTokens.Add(token);
+                if (token.IsCompositeTokenMember)
+                {
+                    VerseDisplayViewModel.MatchingTokenAction(token.CompositeTokenMembers.TokenIds, t => t.IsTokenSelected = true);
+                    VerseSelectedTokens.AddRange(VerseDisplayViewModel.SourceTokenDisplayViewModels.MatchingTokens(token.CompositeTokenMembers.TokenIds));
+                }
+                else
+                {
+                    VerseSelectedTokens.Add(token);
+                }
             }
             else
             {
-                VerseSelectedTokens.Remove(token);
+                if (token.IsCompositeTokenMember)
+                {
+                    var selectedCompositeTokenMembers = VerseSelectedTokens.MatchingTokens(token.CompositeTokenMembers.TokenIds);
+                    foreach (var selectedToken in selectedCompositeTokenMembers)
+                    {
+                        VerseSelectedTokens.Remove(selectedToken);
+                    }
+                }
+                else
+                {
+                    VerseSelectedTokens.Remove(token);
+                }
             }
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            AllSelectedTokens = message.SelectedTokens;
+            //AllSelectedTokens = message.SelectedTokens;
             VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
             await Task.CompletedTask;
         }

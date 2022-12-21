@@ -45,6 +45,8 @@ namespace ClearDashboard.Wpf.Application.Collections
         {
         }
 
+        public IEnumerable<TokenId> TokenIds => Items.Select(t => t.Token.TokenId);
+
         public TokenCollection TokenCollection => new(Items.Select(t => t.Token));
 
         public bool Contains(TokenId tokenId)
@@ -94,7 +96,7 @@ namespace ClearDashboard.Wpf.Application.Collections
         
         private int SelectedTokenVersesCount => SelectedTokens.Select(t => t.VerseDisplay).Distinct(ReferenceEqualityComparer.Instance).Count();
 
-        private IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<IId> entityIds)
+        public IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<IId> entityIds)
         {
             return Items.Where(t => entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()));
         }
