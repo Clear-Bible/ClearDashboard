@@ -74,7 +74,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
             UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
 
-            if (isNewer)
+            bool isPrerelease=false;
+            if (fullUpdateDataList.FirstOrDefault().VersionType == VersionType.Prerelease)
+            {
+                isPrerelease = true;
+            }
+
+            if (isNewer && !isPrerelease)
             {
                 UpdateLink.Visibility = Visibility.Visible;
 
