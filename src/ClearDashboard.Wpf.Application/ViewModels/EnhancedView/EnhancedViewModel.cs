@@ -296,7 +296,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager selectionManager, 
             IEventAggregator? eventAggregator, 
             IMediator mediator,
-            ILifetimeScope? lifetimeScope, CancellationTokenSource? cancellationTokenSource
+            ILifetimeScope? lifetimeScope
             ) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
