@@ -15,6 +15,7 @@
     xmlns:pieChart="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart;assembly=ClearDashboard.Wpf.Controls"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:wpfKeyBoard="clr-namespace:wpfKeyBoard;assembly=wpfKeyBoard"
+    xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     x:Name="MarbleViewControl"
     d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -121,25 +122,24 @@
             Visibility="{Binding DrawerVisibility}">
 
             <materialDesign:DrawerHost.TopDrawerContent>
-                <Grid ShowGridLines="True">
+                <Grid ShowGridLines="False">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="260" />
+                        <RowDefinition Height="45" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Border
-                        Margin="15,0,0,0"
+                        Margin="5,3,0,0"
                         BorderBrush="Black"
                         BorderThickness="1">
                         <StackPanel Orientation="Vertical">
                             <Label
-                                Margin="15,0,0,0"
+                                Margin="5,0,0,0"
                                 VerticalAlignment="Top"
                                 Content="Search by Hebrew/Greek"
                                 Foreground="{StaticResource PrimaryHueMidBrush}" />
@@ -149,39 +149,45 @@
                                 Margin="5,0,5,0"
                                 VerticalAlignment="Center"
                                 Style="{StaticResource MaterialDesignFilledTextBox}"
-                                Text="{Binding Path=SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                Text="{Binding Path=SearchSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <Border
-                                Margin="0,3,0,0"
-                                Background="{StaticResource MahApps.Brushes.Gray9}"
+                                Margin="3"
+                                Background="{StaticResource MahApps.Brushes.Gray5}"
                                 BorderBrush="Black"
                                 BorderThickness="1">
                                 <wpfKeyBoard:VirtualKeyboardControl
                                     x:Name="KeyboardControl"
                                     Width="325"
-                                    Height="200"
+                                    Height="175"
                                     HorizontalAlignment="Left"
                                     Background="{StaticResource MahApps.Brushes.Gray1}"
                                     BorderBrush="{StaticResource SecondaryHueMidBrush}"
-                                    BorderThickness="2" />
+                                    BorderThickness="2" >
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="VirtualKeyPressed">
+                                            <b:CallMethodAction MethodName="VirtualKeyPressed" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type wpfKeyBoard:VirtualKeyboardControl}}, Path=DataContext}" />
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                </wpfKeyBoard:VirtualKeyboardControl>
                             </Border>
                         </StackPanel>
                     </Border>
 
                     <Border
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="15,0,0,0"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="5,3,10,0"
                         BorderBrush="Black"
                         BorderThickness="1">
                         <StackPanel Orientation="Vertical">
                             <Label
-                                Margin="15,0,0,0"
+                                Margin="5,0,0,0"
                                 Content="Search by English Gloss"
                                 Foreground="{StaticResource PrimaryHueMidBrush}" />
                             <TextBox
                                 MinWidth="310"
                                 MaxWidth="350"
-                                Margin="15,0,5,5"
+                                Margin="5,0,5,5"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 AcceptsReturn="True"
@@ -194,17 +200,16 @@
                     <ListView
                         x:Name="SearchListView"
                         Grid.Row="0"
-                        Grid.RowSpan="2"
                         Grid.Column="2"
-                        Margin="0,3,10,3"
+                        Margin="10,3,10,3"
                         FontFamily="SBH Hebrew Regular"
                         FontSize="16"
                         ItemsSource="{Binding SearchResults}">
-                        <ListView.ItemContainerStyle>
+                        <!--<ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
-                                <Setter Property="Height" Value="25" />
+                                <Setter Property="Height" Value="30" />
                             </Style>
-                        </ListView.ItemContainerStyle>
+                        </ListView.ItemContainerStyle>-->
 
                         <ListView.View>
                             <GridView>
@@ -244,7 +249,7 @@
 
 
                     <Button
-                        Grid.Row="2"
+                        Grid.Row="1"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
                         Width="200"

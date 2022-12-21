@@ -16,12 +16,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using wpfKeyBoard;
 #pragma warning disable CS8618
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Marble
@@ -183,7 +185,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
                 if (_searchEnglish.Length > 2)
                 {
-                    SearchEnglishDatabase(_searchEnglish);
+                    _ = SearchEnglishDatabase(_searchEnglish);
                 }
                 else
                 {
@@ -191,7 +193,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 }
             }
         }
-        
+
+        private string _searchSource = string.Empty;
+        public string SearchSource
+        {
+            get => _searchSource;
+            set
+            {
+                _searchSource = value;
+                NotifyOfPropertyChange(() => SearchSource);
+
+                if (_searchSource.Length > 1)
+                {
+                    _ = SearchSourceDatabase(_searchSource);
+                }
+                else
+                {
+                    SearchResults = new List<CoupleOfStrings>();
+                }
+            }
+        }
+
+
+
 
         private Visibility _drawerVisibility;
         public Visibility DrawerVisibility
@@ -445,11 +469,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 await LoadUpVerse().ConfigureAwait(false);
             }
 
-            // start collecting the gloss to Heb/Greek words
-            _ = Task.Run(async () =>
-            {
-                await ObtainGlosses().ConfigureAwait(false);
-            });
+            //// start collecting the gloss to Heb/Greek words
+            //_ = Task.Run(async () =>
+            //{
+            //    await ObtainGlosses().ConfigureAwait(false);
+            //});
 
 
             base.OnViewReady(view);
@@ -484,22 +508,57 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         /// Iterate through the glosses and obtain the Heb/Greek words
         /// </summary>
         /// <returns></returns>
-        private async Task ObtainGlosses()
-        {
-            //var queryResult =
-            //    await ExecuteRequest(new LoadSemanticDictionaryGlosses.LoadSemanticDictionaryGlossesQuery(),
-            //        CancellationToken.None).ConfigureAwait(false);
-            //if (queryResult.Success == false)
-            //{
-            //    Logger!.LogError(queryResult.Message);
-            //    return;
-            //}
-        }
+        //private async Task ObtainGlosses()
+        //{
+        //    //var queryResult =
+        //    //    await ExecuteRequest(new LoadSemanticDictionaryGlosses.LoadSemanticDictionaryGlossesQuery(),
+        //    //        CancellationToken.None).ConfigureAwait(false);
+        //    //if (queryResult.Success == false)
+        //    //{
+        //    //    Logger!.LogError(queryResult.Message);
+        //    //    return;
+        //    //}
+        //}
 
         #endregion //Constructor
 
 
         #region Methods
+
+        public void VirtualKeyPressed(object sender, RoutedEventArgs e)
+        {
+            var args = (VirtualKeyPressedEventArgs)e;
+            //Console.WriteLine(args.VKey.Value);
+
+            var unicodeChar = CharToUnicodeFormat(args.VKey.Value[0]);
+
+            switch (unicodeChar)
+            {
+                case "U+f177": // backspace
+                    if (SearchSource.Length > 0)
+                    {
+                        SearchSource = SearchSource.Remove(SearchSource.Length - 1, 1);
+                    }
+                    break;
+                case "U+f149": // enter key
+                case "U+f062": // left shift key
+                case "U+0308": // empty key
+                case "U+0026": // number key
+                case "U+0020": // space key
+                case "U+f11c": // keyboard select key
+                    break;
+                default: // regular characters
+                    SearchSource += args.VKey.Value;
+                    break;
+            }
+
+        }
+
+
+        private string CharToUnicodeFormat(char c)
+        {
+            return string.Format(@"U+{0:x4}", (int)c);
+        }
 
         private void GotoSourceWord(object obj)
         {
@@ -509,6 +568,36 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 _ = GetWord();
             }
         }
+        
+        private async Task SearchSourceDatabase(string searchSource)
+        {
+            var queryResult = await ExecuteRequest(new GetConsonantsSliceQuery(searchSource), CancellationToken.None).ConfigureAwait(false);
+            if (queryResult.Success == false)
+            {
+                Logger!.LogError(queryResult.Message);
+                return;
+            }
+
+
+            if (queryResult.Data == null)
+            {
+                return;
+            }
+
+            var list = new List<CoupleOfStrings>();
+
+            foreach (var item in queryResult.Data)
+            {
+                list.Add(new CoupleOfStrings
+                {
+                     stringA = item,
+                     stringB = ""
+                });
+            }
+
+            SearchResults = list;
+        }
+
 
         private async Task SearchEnglishDatabase(string searchEnglish)
         {
@@ -524,15 +613,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             {
                 return;
             }
-
-            //List<string> list = new();
-            //foreach (var row in queryResult.Data)
-            //{
-            //    list.Add($"[{row.stringB}] {row.stringA}");
-            //}
-
-            //list.Sort();
-
+            
             SearchResults = queryResult.Data;
         }
 
