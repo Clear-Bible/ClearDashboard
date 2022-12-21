@@ -87,9 +87,9 @@
                             </Style>
                         </Border.Style>
                         <Grid
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent">
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="Transparent">
                             <ContentPresenter x:Name="ButtonContent" />
                         </Grid>
                     </Border>

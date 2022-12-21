@@ -100,8 +100,8 @@
                 VerticalAlignment="Center"
                 FontSize="12"
                 Foreground="OrangeRed"
-                Text="Work in Progress"/>
-            
+                Text="Work in Progress" />
+
         </StackPanel>
 
         <!--  ROW 1  -->

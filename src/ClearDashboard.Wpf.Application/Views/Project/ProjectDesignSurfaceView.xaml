@@ -704,7 +704,10 @@
                             This grid specifies the size of the ZoomAndPanControl's content.
                             It wraps up both the ProjectDesignSurfaceView and drag-zooming Canvas.
                         -->
-                        <Grid Width="{Binding DesignSurfaceViewModel.ContentWidth}" Height="{Binding DesignSurfaceViewModel.ContentHeight}">
+                        <Grid
+                            Width="{Binding DesignSurfaceViewModel.ContentWidth}"
+                            Height="{Binding DesignSurfaceViewModel.ContentHeight}"
+                            Background="Azure">
 
                             <!--  In this sample the ProjectDesignSurfaceView is the content displayed by the ZoomAndPanControl.  -->
 
