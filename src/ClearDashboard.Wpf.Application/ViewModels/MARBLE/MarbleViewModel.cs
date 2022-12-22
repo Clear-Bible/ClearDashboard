@@ -22,7 +22,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.DAL.CQRS;
 using wpfKeyBoard;
 #pragma warning disable CS8618
 
@@ -562,10 +564,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         private void GotoSourceWord(object obj)
         {
-            if (obj is string word)
+            if (obj is Button button)
             {
-                SelectedHebrew = word;
-                _ = GetWord();
+                SelectedHebrew = button.Content.ToString();
+                if (button.Tag.ToString() == "1")
+                {
+                    _ = GetWord(true, true);
+                }
+                else
+                {
+                    _ = GetWord(true, false);
+                }
+                
             }
         }
         
@@ -588,11 +598,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             foreach (var item in queryResult.Data)
             {
-                list.Add(new CoupleOfStrings
+                if (item.stringB == "1")
                 {
-                     stringA = item,
-                     stringB = ""
-                });
+                    list.Add(new CoupleOfStrings
+                    {
+                        stringA = item.stringA,
+                        stringB = "1"
+                    });
+                }
+                else
+                {
+                    list.Add(new CoupleOfStrings
+                    {
+                        stringA = item.stringA,
+                        stringB = ""
+                    });
+                }
+
+
             }
 
             SearchResults = list;
@@ -750,7 +773,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         /// Get the Biblical Words from 
         /// </summary>
         /// <returns></returns>
-        private async Task GetWord()
+        private async Task GetWord(bool defineTestament = false, bool isHebrew = false)
         {
             // SDBH & SDBG support the following language codes:
             // en, fr, sp, pt, sw, zht, zhs
@@ -777,7 +800,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                     break;
             }
 
-            var queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
+            RequestResult<ObservableCollection<Senses>> queryResult;
+
+            if (defineTestament)
+            {
+                BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
+                
+                // send with the knowledge that we know which testament it is
+                if (isHebrew)
+                {
+                    bcv.SetVerseFromId("001001001"); // set to OT
+                }
+                else
+                {
+                    bcv.SetVerseFromId("001001001"); // set to OT
+                }
+
+                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(bcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
+            }
+            else
+            {
+                // send with the actual current verse
+                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
+            }
+            
             if (queryResult.Success == false)
             {
                 Logger!.LogError(queryResult.Message);

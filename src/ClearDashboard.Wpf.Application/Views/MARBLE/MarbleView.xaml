@@ -228,8 +228,9 @@
                                                 x:Name="btn"
                                                 MinWidth="150"
                                                 Command="{Binding DataContext.GotoSourceWordCommand, ElementName=SearchListView}"
-                                                CommandParameter="{Binding ElementName=btn, Path=Content}"
+                                                CommandParameter="{Binding ElementName=btn}"
                                                 Content="{Binding stringA}"
+                                                Tag="{Binding stringB}"
                                                 Cursor="Hand" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>

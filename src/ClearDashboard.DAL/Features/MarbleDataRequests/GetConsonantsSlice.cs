@@ -10,13 +10,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
-    public record GetConsonantsSliceQuery(string Word) : IRequest<RequestResult<List<string>>>;
+    public record GetConsonantsSliceQuery(string Word) : IRequest<RequestResult<List<CoupleOfStrings>>>;
 
     public class GetConsonantsSliceQueryHandler : SqliteDatabaseRequestHandler<GetConsonantsSliceQuery,
-        RequestResult<List<string>>, List<string>>
+        RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
     {
         public GetConsonantsSliceQueryHandler(ILogger<GetConsonantsSliceQueryHandler> logger) : base(logger)
         {
@@ -26,18 +27,18 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
         protected override string ResourceName { get; set; } = "SemanticDomainsLookup.sqlite";
 
-        public override Task<RequestResult<List<string>>> Handle(GetConsonantsSliceQuery request,
+        public override Task<RequestResult<List<CoupleOfStrings>>> Handle(GetConsonantsSliceQuery request,
             CancellationToken cancellationToken)
         {
             ResourceDirectory = Path.Combine(Environment.CurrentDirectory, @"Resources\marble-concordances");
 
-            var queryResult = ValidateResourcePath(new List<string>());
+            var queryResult = ValidateResourcePath(new List<CoupleOfStrings>());
             if (queryResult.Success)
             {
                 try
                 {
                     var lower = ExecuteSqliteCommandAndProcessData(
-                        $"SELECT DISTINCT ORIGINAL FROM WORDLOOKUP WHERE CONSONANTS LIKE '%{request.Word.ToLowerInvariant()}%' ");
+                        $"SELECT DISTINCT ORIGINAL,ISHEBREW FROM WORDLOOKUP WHERE CONSONANTS LIKE '%{request.Word.ToLowerInvariant()}%' ");
 
                     queryResult.Data = lower;
                 }
@@ -52,14 +53,19 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
             return Task.FromResult(queryResult);
         }
 
-        protected override List<string> ProcessData()
+        protected override List<CoupleOfStrings> ProcessData()
         {
-            List<string> results = new List<string>();
+            List<CoupleOfStrings> results = new();
 
             while (DataReader != null && DataReader.Read())
             {
-                results.Add(DataReader.GetString(0));
+                results.Add( new CoupleOfStrings
+                {
+                    stringA = DataReader.GetString(0),
+                    stringB = DataReader.GetString(1)
+                });
             }
+            
 
             return results;
         }
