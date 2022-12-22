@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
+using ClearDashboard.DataAccessLayer.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -24,7 +25,7 @@ namespace ClearDashboard.DAL.Tests
         public async Task GetConsonantsSliceHandlerHebrewTests(string word, int expectedCount)
         {
             var results =
-                await ExecuteAndTestRequest<GetConsonantsSliceQuery, RequestResult<List<string>>, List<string>>(
+                await ExecuteAndTestRequest<GetConsonantsSliceQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>(
                     new GetConsonantsSliceQuery(word));
             Assert.True(results.Data is not null);
             Assert.True(results.Data.Count == expectedCount);
@@ -42,7 +43,7 @@ namespace ClearDashboard.DAL.Tests
             var wordLower = word.ToLower(new CultureInfo("el-GR"));
 
             var results =
-                await ExecuteAndTestRequest<GetConsonantsSliceQuery, RequestResult<List<string>>, List<string>>(
+                await ExecuteAndTestRequest<GetConsonantsSliceQuery, RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>(
                     new GetConsonantsSliceQuery(wordLower));
             
             Assert.True(results.Data is not null);
