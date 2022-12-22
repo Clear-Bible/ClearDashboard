@@ -4,13 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearEngine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Clear-Bible/ClearEngine</RepositoryUrl>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Clear.SIL.Machine" Version="2.5.12" />
 	<PackageReference Include="ClearBible.Engine" Version="1.0.26" />
 	<PackageReference Include="Caliburn.Micro.Core" Version="4.0.212" />
     <PackageReference Include="MediatR" Version="9.0.0" />

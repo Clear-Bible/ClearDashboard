@@ -18,18 +18,15 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
-using SIL.Extensions;
 using ProjectType = Paratext.PluginInterfaces.ProjectType;
-using System.Security.Cryptography;
-using SIL.Reporting;
 
 namespace ClearDashboard.WebApiParatextPlugin
 {
