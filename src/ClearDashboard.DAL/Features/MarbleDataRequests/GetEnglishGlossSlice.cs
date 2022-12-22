@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,12 +13,12 @@ using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
-    public record GetConsonantsSliceQuery(string Word) : IRequest<RequestResult<List<CoupleOfStrings>>>;
+    public record GetEnglishGlossSliceQuery(string Word) : IRequest<RequestResult<List<CoupleOfStrings>>>;
 
-    public class GetConsonantsSliceQueryHandler : SqliteDatabaseRequestHandler<GetConsonantsSliceQuery,
+    public class GetEnglishGlossSliceQueryHandler : SqliteDatabaseRequestHandler<GetEnglishGlossSliceQuery,
         RequestResult<List<CoupleOfStrings>>, List<CoupleOfStrings>>
     {
-        public GetConsonantsSliceQueryHandler(ILogger<GetConsonantsSliceQueryHandler> logger) : base(logger)
+        public GetEnglishGlossSliceQueryHandler(ILogger<GetEnglishGlossSliceQueryHandler> logger) : base(logger)
         {
             //no-op
         }
@@ -27,7 +26,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
         protected override string ResourceName { get; set; } = "SemanticDomainsLookup.sqlite";
 
-        public override Task<RequestResult<List<CoupleOfStrings>>> Handle(GetConsonantsSliceQuery request,
+        public override Task<RequestResult<List<CoupleOfStrings>>> Handle(GetEnglishGlossSliceQuery request,
             CancellationToken cancellationToken)
         {
             ResourceDirectory = Path.Combine(Environment.CurrentDirectory, @"Resources\marble-concordances");
@@ -38,7 +37,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 try
                 {
                     var lower = ExecuteSqliteCommandAndProcessData(
-                        $"SELECT DISTINCT ORIGINAL,ISHEBREW FROM WORDLOOKUP WHERE CONSONANTS LIKE '%{request.Word.ToLowerInvariant()}%' ");
+                        $"SELECT DISTINCT ORIGINAL, GLOSS FROM WORDLOOKUP WHERE GLOSS LIKE '%{request.Word.ToLowerInvariant()}%' ");
 
                     queryResult.Data = lower;
                 }
@@ -59,13 +58,12 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
             while (DataReader != null && DataReader.Read())
             {
-                results.Add( new CoupleOfStrings
+                results.Add(new CoupleOfStrings
                 {
                     stringA = DataReader.GetString(0),
                     stringB = DataReader.GetString(1)
                 });
             }
-            
 
             return results;
         }
