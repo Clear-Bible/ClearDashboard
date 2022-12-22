@@ -810,10 +810,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 if (isHebrew)
                 {
                     bcv.SetVerseFromId("001001001"); // set to OT
+                    IsOt = true;
                 }
                 else
                 {
-                    bcv.SetVerseFromId("001001001"); // set to OT
+                    bcv.SetVerseFromId("040001001"); // set to NT
+                    IsOt = false;
                 }
 
                 queryResult = await ExecuteRequest(new GetWordMeaningsQuery(bcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
@@ -845,17 +847,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 SelectedSense = Senses[0];
             }
 
-            // get ot/nt
-            var bookNum = int.Parse(CurrentBcv.BBBCCCVVV.Substring(0, 3));
-            if (bookNum < 40)
+            if (defineTestament == false)
             {
-                IsOt = true;
+                // get ot/nt
+                var bookNum = int.Parse(CurrentBcv.BBBCCCVVV.Substring(0, 3));
+                if (bookNum < 40)
+                {
+                    IsOt = true;
+                }
+                else
+                {
+                    IsOt = false;
+                }
             }
-            else
-            {
-                IsOt = false;
-            }
-
         }
 
         private Task SetContext(object arg)
