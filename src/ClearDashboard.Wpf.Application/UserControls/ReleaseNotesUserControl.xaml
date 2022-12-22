@@ -14,7 +14,17 @@
     mc:Ignorable="d">
     <Grid>
         <StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">
-
+            <StackPanel Margin="0,0,5,0" Orientation="Vertical">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Foreground="Black"
+                    Text="{helpers:Localization ShellView_ShowPreReleases}" />
+                <ToggleButton
+                    Name="PrereleaseToggle"
+                    Checked="PrereleaseToggle_OnChecked"
+                    IsChecked="False"
+                    Unchecked="PrereleaseToggle_OnChecked" />
+            </StackPanel>
             <Button
                 x:Name="ClickUpdateLink"
                 Margin="10,0,10,0"
