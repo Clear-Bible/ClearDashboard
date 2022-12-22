@@ -26,6 +26,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClearDashboard.DAL.CQRS;
 using wpfKeyBoard;
+using ClearDashboard.Wpf.Application.Views.Main;
+using MaterialDesignThemes.Wpf;
 #pragma warning disable CS8618
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Marble
@@ -62,6 +64,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         }
 
         private FiterReference _currentFilter = FiterReference.All;
+
+        private DrawerHost _drawerHost;
+
 
 
         #region BCV
@@ -426,6 +431,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         protected override void OnViewAttached(object view, object context)
         {
+            // hook up a reference to the windows drawer host so we can close
+            // it after a search
+            if (view is MarbleView currentView)
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute
+                _drawerHost = (DrawerHost)currentView.FindName("DrawerHost");
+            }
+            
+            
+            
             // grab the dictionary of all the verse lookups
             if (ProjectManager?.CurrentParatextProject is not null)
             {
@@ -575,7 +590,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                 {
                     _ = GetWord(true, false);
                 }
-                
+
+                //if (_drawerHost is not null)
+                //{
+                //    // CODE NOT WORKING - WHY??
+                //    _drawerHost.IsTopDrawerOpen = false;
+                //}
             }
         }
         
@@ -802,8 +822,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             RequestResult<ObservableCollection<Senses>> queryResult;
 
-            if (defineTestament)
+            if (defineTestament)  
             {
+                // call coming in from the search window so we don't want the current BCV
                 BookChapterVerseViewModel bcv = new BookChapterVerseViewModel();
                 
                 // send with the knowledge that we know which testament it is
@@ -822,7 +843,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
             else
             {
-                // send with the actual current verse
+                // send with the actual current BCV verse
                 queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
             }
             
