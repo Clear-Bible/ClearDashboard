@@ -49,9 +49,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             .ThenInclude(v => v.TokenVerseAssociations.Where(tva => tva.Deleted == null))
                                 .ThenInclude(tva => tva.TokenComponent)
                     .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
-                        .ThenInclude(tc => tc.VerseRow)
+                        .ThenInclude(tc => tc.Tokens)
+                            .ThenInclude(t => t.VerseRow)
                     .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
                         .ThenInclude(tc => tc.Tokens)
+                            .ThenInclude(t => t.VerseRow)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
             var invalidArgMsg = "";
@@ -123,9 +125,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
 
                             sourceVerseMappingComposites.AddRange(parallelCorpus.TokenComposites
-                                    .Where(tc => tc.TokenizedCorpusId == parallelCorpus.SourceTokenizedCorpusId)
-                                    .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
-                                    .Select(tc => ModelHelper.BuildCompositeToken(tc)));
+                                .Where(tc => tc.TokenizedCorpusId == parallelCorpus.SourceTokenizedCorpusId)
+                                .Where(tc => tc.Tokens.Any(t => t.VerseRow!.BookChapterVerse == currentBCV))
+                                .Select(tc => ModelHelper.BuildCompositeToken(tc)));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
@@ -150,9 +152,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
 
                             targetVerseMappingComposites.AddRange(parallelCorpus.TokenComposites
-                                    .Where(tc => tc.TokenizedCorpusId == parallelCorpus.TargetTokenizedCorpusId)
-                                    .Where(tc => tc.VerseRow!.BookChapterVerse == currentBCV)
-                                    .Select(tc => ModelHelper.BuildCompositeToken(tc)));
+                                .Where(tc => tc.TokenizedCorpusId == parallelCorpus.TargetTokenizedCorpusId)
+                                .Where(tc => tc.Tokens.Any(t => t.VerseRow!.BookChapterVerse == currentBCV))
+                                .Select(tc => ModelHelper.BuildCompositeToken(tc)));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
