@@ -163,7 +163,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 targetTokenIds);
                         });
 
-                    return new VerseMapping(sourceVerses, targetVerses /*, sourceVerseMappingComposites, targetVerseMappingComposites */);
+                    return new VerseMapping(sourceVerses, targetVerses, sourceVerseMappingComposites, targetVerseMappingComposites);
                 });
 
             return verseMappings;
