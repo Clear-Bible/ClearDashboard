@@ -56,10 +56,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Stop();
                 logger?.LogInformation($"Retrieved Paratext information for note {noteId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
-                string paratextUserName = userProvider.CurrentUser?.ParatextUserName ?? throw new Exception("IUserProvider CurrentUser is null");
-
-                bool canAddNoteForProjectAndUerQuery = false;
-                if (result != null)
+                var paratextUserName = userProvider.CurrentUser?.ParatextUserName;
+                var canAddNoteForProjectAndUerQuery = false;
+                if (result != null && !string.IsNullOrWhiteSpace(paratextUserName))
                 {
                     stopwatch.Restart();
                     var r = await mediator.Send(new CanAddNoteForProjectAndUserQuery(paratextUserName, result.Value.paratextId));
