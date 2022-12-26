@@ -5,7 +5,7 @@
 	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-	<Version>0.4.5.1</Version>
+	<Version>0.4.6.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -28,6 +28,7 @@
 
   <ItemGroup>
 	<!--<PackageReference Include="Microsoft.AspNet.SignalR.SelfHost" Version="2.4.3" />-->
+	<PackageReference Include="Clear.SIL.Machine" Version="2.5.12" />
 	<PackageReference Include="MediatR" Version="9.0.0" />
 	<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
 	<PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.3" />
@@ -39,13 +40,12 @@
     <PackageReference Include="Microsoft.Owin.Cors" Version="4.2.2" />
     <!--<PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.1" />
     <PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.1" />-->
-    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.3.44" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="17.4.27" />
 	<PackageReference Include="ParatextEmbeddedUiPluginInterfaces" Version="2.0.23" />
 	<PackageReference Include="ParatextPluginInterfaces" Version="2.0.23" />
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SIL.Machine" Version="2.5.11" />
     <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
     <PackageReference Include="System.Text.Json" Version="6.0.6" />
   </ItemGroup>

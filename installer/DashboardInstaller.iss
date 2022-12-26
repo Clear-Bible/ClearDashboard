@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Clear Dashboard"
-#define MyAppVersion "0.4.3.0"
+#define MyAppVersion "0.4.6.0"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"

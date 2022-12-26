@@ -3,6 +3,8 @@
     public class CorpusNodeMenuItemViewModel : MenuItemViewModel<CorpusNodeMenuItemViewModel>
     {
         private CorpusNodeViewModel? _corpusNodeViewModel;
+        private string _tokenizer1;
+
         public CorpusNodeViewModel? CorpusNodeViewModel
         {
             get => _corpusNodeViewModel;

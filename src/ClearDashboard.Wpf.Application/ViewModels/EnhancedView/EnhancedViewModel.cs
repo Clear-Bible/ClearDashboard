@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -35,7 +36,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
-        IHandle<BCVLoadedMessage>
+        IHandle<BCVLoadedMessage>,
+        IHandle<ReloadDataMessage>,
+        IHandle<TokenizedCorpusUpdatedMessage>
     {
         #region Commands
 
@@ -407,8 +410,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task VerseChangeRerender()
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
+            var sw =Stopwatch.StartNew();
 
             await ReloadData();
 
@@ -416,13 +418,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
 
-        private async Task ReloadData()
+        private async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
         {
             await Parallel.ForEachAsync(VerseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, cancellationToken) =>
             {
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    await viewModel.RefreshData(cancellationToken);
+                    await viewModel.RefreshData(reloadType, cancellationToken);
                 });
 
             });
@@ -499,7 +501,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
+                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Verse Change"), cancellationToken);
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
         }
@@ -537,6 +539,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             SelectedVerseDisplayViewModel = message.SelectedVerseDisplayViewModel;
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(ReloadDataMessage message, CancellationToken cancellationToken)
+        {
+            await ReloadData(message.ReloadType);
+        }
+
+
+        public async  Task HandleAsync(TokenizedCorpusUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            var verseAwareEnhancedViewItemViewModels =
+                VerseAwareEnhancedViewItemViewModels.Where(vm =>
+                    vm.CorpusId == message.TokenizedTextCorpusId.CorpusId?.Id);
+
+            await Task.Factory.StartNew(async () =>
+            {
+                await Parallel.ForEachAsync(verseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, token) =>
+                {
+                    await Execute.OnUIThreadAsync(async () =>
+                    {
+                        await viewModel.RefreshData(ReloadType.Force, token);
+                    });
+
+                });
+            }, cancellationToken);
+          
         }
 
         #endregion
@@ -796,6 +824,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion
 
 
-    
     }
 }

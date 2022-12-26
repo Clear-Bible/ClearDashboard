@@ -1,24 +1,16 @@
-﻿using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Exceptions;
-using ClearDashboard.DAL.Alignment.Corpora;
+﻿using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Common;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
-using Microsoft.AspNet.SignalR.Client.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
-using SIL.EventsAndDelegates;
 using SIL.Machine.Corpora;
 using SIL.Scripture;
-using System;
 using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
-using System.Text.Json;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -87,7 +79,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             if (request.Versification.IsCustomized)
             {
                 var writer = new StringWriter();
-                request.Versification.Save(writer);
+                request.Versification.Save(writer.ToString());
 
                 tokenizedCorpus.CustomVersData = writer.ToString();
             }
