@@ -85,7 +85,13 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <returns>The translation for the token if found; otherwise, a default placeholder or null, depending on the value of the <paramref name="returnPlaceholder"/> parameter.</returns>
         private Translation? GetTranslationForToken(Token token, bool returnPlaceholder = true)
         {
-            return Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id) ?? (returnPlaceholder ? new Translation(token) : null);
+            var translation = Translations?.FirstOrDefault(t => t.SourceToken.TokenId.Id == token.TokenId.Id);
+            if (translation != null && !String.IsNullOrWhiteSpace(translation.TargetTranslationText))
+            {
+                return translation;
+            }
+
+            return (returnPlaceholder ? new Translation(token) : null);
         }
 
         /// <summary>
