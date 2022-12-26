@@ -489,7 +489,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <userControls:NoteCollectionDisplay
                         Margin="0,0"
-                        EntityIds="{Binding Path=AllSelectedTokens.EntityIds}"
+                        EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
                         LabelBackground="BlanchedAlmond"
                         LabelCornerRadius="{Binding ElementName=LabelCornerRadiusSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                         LabelFontSize="{Binding ElementName=LabelFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"

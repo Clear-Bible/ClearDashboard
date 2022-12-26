@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -42,7 +43,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 if (Set(ref _compositeToken, value))
                 {
-                    NotifyOfPropertyChange(nameof(IsCompositeToken));
+                    CompositeTokenMembers = _compositeToken != null
+                        ? new TokenCollection(_compositeToken.Tokens)
+                        : new TokenCollection();
+                    NotifyOfPropertyChange(nameof(CompositeTokenMembers));
+                    NotifyOfPropertyChange(nameof(IsCompositeTokenMember));
                     NotifyOfPropertyChange(nameof(CompositeIndicatorColor));
                 }
             }
@@ -51,7 +56,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// Gets whether this is token is part of a composite token.
         /// </summary>
-        public bool IsCompositeToken => CompositeToken != null;
+        public bool IsCompositeTokenMember => CompositeToken != null;
+
+        /// <summary>
+        /// Gets a collection of the composite token members.
+        /// </summary>
+        public TokenCollection CompositeTokenMembers { get; private set; }
 
         /// <summary>
         /// Gets or sets the <see cref="Brush"/> to use when displaying a composite token indicator.
@@ -77,6 +87,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
+
+        /// <summary>
+        /// The surface text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken.Tokens.Select(t => t.SurfaceText))
+                                                                       : Token.SurfaceText;
 
         /// <summary>
         /// The extended properties of the token to be displayed.

@@ -16,7 +16,7 @@ using ClearDashboard.Wpf.Application.Collections;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     /// <summary>
-    /// A specialization of <see cref="VerseDisplayViewModel"/> for displaying tokens and their translations.
+    /// A specialization of <see cref="VerseDisplayViewModel"/> for displaying tokens along with their translations.
     /// </summary>
     public class InterlinearDisplayViewModel : VerseDisplayViewModel
     {
@@ -24,9 +24,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private TranslationSetId TranslationSetId { get; }
         private TranslationManager? TranslationManager { get; set; }
 
-        protected override Translation? GetTranslationForToken(Token token)
+        /// <summary>
+        /// Get the <see cref="Translation"/> for a specified token.
+        /// </summary>
+        /// <remarks>
+        /// This overrides the base class implementation to determine the translation from the current <see cref="TranslationSet"/>.
+        /// </remarks>
+        /// <param name="token">The <see cref="Token"/> for which to obtain a translation.</param>
+        /// <param name="compositeToken">An optional <see cref="CompositeToken"/> that <paramref name="token"/> is a constituent of.</param>
+        /// <returns>A <see cref="Translation"/> for the token if a valid <see cref="TranslationSet"/> is known; null otherwise.</returns>
+
+        protected override Translation? GetTranslationForToken(Token token, CompositeToken? compositeToken)
         {
-            return TranslationManager?.GetTranslationForToken(token);
+            return TranslationManager?.GetTranslationForToken(token, compositeToken);
         }
 
         /// <summary>

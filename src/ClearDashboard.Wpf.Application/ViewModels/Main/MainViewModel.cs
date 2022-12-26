@@ -380,6 +380,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(ProjectManager.CurrentUser.ParatextUserName))
+            {
+                await ProjectManager.UpdateCurrentUserWithParatextUserInformation();
+            }
             await LoadParatextProjectMetadata(cancellationToken);
             await LoadProject();
             await NoteManager!.InitializeAsync();

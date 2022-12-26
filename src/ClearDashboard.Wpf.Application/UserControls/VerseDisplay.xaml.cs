@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
@@ -28,8 +27,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         IHandle<SelectionUpdatedMessage>,
         IHandle<TokensUpdatedMessage>
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -42,6 +39,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             OnPropertyChanged(propertyName);
             return true;
         }
+
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -514,17 +512,36 @@ namespace ClearDashboard.Wpf.Application.UserControls
             token.IsTokenSelected = !tokenIsSelected;
             if (token.IsTokenSelected)
             {
-                VerseSelectedTokens.Add(token);
+                if (token.IsCompositeTokenMember)
+                {
+                    VerseDisplayViewModel.MatchingTokenAction(token.CompositeTokenMembers.TokenIds, t => t.IsTokenSelected = true);
+                    VerseSelectedTokens.AddRange(VerseDisplayViewModel.SourceTokenDisplayViewModels.MatchingTokens(token.CompositeTokenMembers.TokenIds));
+                }
+                else
+                {
+                    VerseSelectedTokens.Add(token);
+                }
             }
             else
             {
-                VerseSelectedTokens.Remove(token);
+                if (token.IsCompositeTokenMember)
+                {
+                    var selectedCompositeTokenMembers = VerseSelectedTokens.MatchingTokens(token.CompositeTokenMembers.TokenIds);
+                    foreach (var selectedToken in selectedCompositeTokenMembers)
+                    {
+                        VerseSelectedTokens.Remove(selectedToken);
+                    }
+                }
+                else
+                {
+                    VerseSelectedTokens.Remove(token);
+                }
             }
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            AllSelectedTokens = message.SelectedTokens;
+            //AllSelectedTokens = message.SelectedTokens;
             VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
             await Task.CompletedTask;
         }
@@ -544,8 +561,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseTokenEvent(TokenJoinEvent, e);
         }        
-        
-
         
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
@@ -723,7 +738,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
 
-        private void OnTokenUnJoin(object sender, RoutedEventArgs e)
+        private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenUnjoinEvent, e);
         }
@@ -844,8 +859,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(TranslateQuickEvent, e);
         }
 
+        // ReSharper restore UnusedMember.Global
+
         #endregion
         #region Public events
+
+        // ReSharper disable UnusedMember.Global
+
+        /// <summary>
+        /// Occurs when a property is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when an individual token is clicked.

@@ -8,6 +8,7 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {
@@ -44,6 +45,8 @@ namespace ClearDashboard.Wpf.Application.Collections
         public TokenDisplayViewModelCollection(IEnumerable<TokenDisplayViewModel> tokens) : base(tokens)
         {
         }
+
+        public IEnumerable<TokenId> TokenIds => Items.Select(t => t.Token.TokenId);
 
         public TokenCollection TokenCollection => new(Items.Select(t => t.Token));
 
@@ -93,8 +96,9 @@ namespace ClearDashboard.Wpf.Application.Collections
         private IEnumerable<TokenDisplayViewModel> SelectedTranslations => Items.Where(i => i.IsTranslationSelected);
         
         private int SelectedTokenVersesCount => SelectedTokens.Select(t => t.VerseDisplay).Distinct(ReferenceEqualityComparer.Instance).Count();
+        private int SelectedTokenCompositeTokenCount => SelectedTokens.Select(t => t.CompositeToken).Distinct(ReferenceEqualityComparer.Instance).Count();
 
-        private IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<IId> entityIds)
+        public IEnumerable<TokenDisplayViewModel> MatchingTokens(IEnumerable<IId> entityIds)
         {
             return Items.Where(t => entityIds.Contains(t.Token.TokenId, new IIdEqualityComparer()));
         }
@@ -133,7 +137,7 @@ namespace ClearDashboard.Wpf.Application.Collections
             }
         }
 
-        public bool CanJoinTokens => SelectedTokens.Count() > 1 && SelectedTokenVersesCount == 1 && !SelectedTranslations.Any();
-        public bool CanUnjoinToken => SelectedTokens.Count() == 1 && SelectedTokens.First().Token is CompositeToken;
+        public bool CanJoinTokens => SelectedTokens.Count() > 1 && SelectedTokens.All(t => ! t.IsCompositeTokenMember) && SelectedTokenVersesCount == 1 && !SelectedTranslations.Any();
+        public bool CanUnjoinToken => SelectedTokens.All(t => t.IsCompositeTokenMember) && SelectedTokenCompositeTokenCount == 1;
     }
 }

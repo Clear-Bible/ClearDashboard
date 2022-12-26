@@ -1,14 +1,12 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
-using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
@@ -19,7 +17,6 @@ using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Tokenization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,7 +40,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ReloadDataMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>
     {
-
         #region Commands
 
         public ICommand MoveCorpusDownRowCommand { get; set; }
@@ -56,13 +52,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private readonly ILogger<EnhancedViewModel> _logger;
         private readonly DashboardProjectManager? _projectManager;
 
-        private string? _message;
-      
+        public NoteManager NoteManager { get; }
+        private VerseManager VerseManager { get; }
+        public SelectionManager SelectionManager { get; }
 
         private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
-
-
 
         #endregion //Member Variables
 
@@ -74,16 +69,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _enhancedViewLayout, value);
         }
 
-        public bool IsRtl { get; set; }
-
-   
-        public NoteManager NoteManager { get; set; }
-        public VerseManager VerseManager { get; }
-
         public MainViewModel MainViewModel => (MainViewModel)Parent;
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
-
         public VerseDisplayViewModel SelectedVerseDisplayViewModel
         {
             get => _selectedVerseDisplayViewModel;
@@ -224,21 +212,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Observable Properties
 
-
-
-
         private string _currentCorpusName = string.Empty;
-
         public string CurrentCorpusName
         {
             get => _currentCorpusName;
             set => Set(ref _currentCorpusName, value);
         }
 
-       
-      
-
-
+        private string? _message;
         public string? Message
         {
             get => _message;
@@ -252,60 +233,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _verses, value);
         }
 
-
-        public EngineStringDetokenizer Detokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
-
-        public EngineStringDetokenizer TargetDetokenizer { get; set; } = new EngineStringDetokenizer(new LatinWordDetokenizer());
-
-        public IEnumerable<Translation> CurrentTranslations { get; set; }
-
-        //private IEnumerable<Label> _labelSuggestions;
-        //public IEnumerable<Label> LabelSuggestions
-        //{
-        //    get => _labelSuggestions;
-        //    set => Set(ref _labelSuggestions, value);
-        //}
-
-        private TokenDisplayViewModel _currentToken;
-        public TokenDisplayViewModel TokenForTranslation
-        {
-            get => _currentToken;
-            set => Set(ref _currentToken, value);
-        }
-
-        private TokenDisplayViewModelCollection _allSelectedTokens = new();
-        public TokenDisplayViewModelCollection AllSelectedTokens
-        {
-            get => _allSelectedTokens;
-            set => Set(ref _allSelectedTokens, value);
-        }
-
-
-        //private IEnumerable<TranslationOption> _translationOptions;
-        //public IEnumerable<TranslationOption> TranslationOptions
-        //{
-        //    get => _translationOptions;
-        //    set => Set(ref _translationOptions, value);
-        //}
-
-        //private TranslationOption? _currentTranslationOption;
-        //public TranslationOption? CurrentTranslationOption
-        //{
-        //    get => _currentTranslationOption;
-        //    set => Set(ref _currentTranslationOption, value);
-        //}
-
-        #endregion //Observable Properties
+        #endregion Observable Properties
 
         #region IPaneViewModel
 
         public ICommand RequestCloseCommand { get; set; }
 
-        //private string _title = null;
         private string? _contentId;
         private bool _isSelected;
         private bool _isActive;
-        #endregion //Member Variables
+        #endregion Member Variables
 
         #region Public Properties
 
@@ -320,7 +257,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _contentId;
             set => Set(ref _contentId, value);
         }
-
  
         public bool IsSelected
         {
@@ -355,18 +291,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         // ReSharper disable once UnusedMember.Global
 #pragma warning disable CS8618
-        public EnhancedViewModel(INavigationService navigationService, ILogger<EnhancedViewModel> logger,
-            DashboardProjectManager? projectManager, NoteManager noteManager, VerseManager verseManager, IEventAggregator? eventAggregator, IMediator mediator,
-            ILifetimeScope? lifetimeScope) :
+        public EnhancedViewModel(INavigationService navigationService, 
+            ILogger<EnhancedViewModel> logger,
+            DashboardProjectManager? projectManager, 
+            NoteManager noteManager, 
+            VerseManager verseManager, 
+            SelectionManager selectionManager, 
+            IEventAggregator? eventAggregator, 
+            IMediator mediator,
+            ILifetimeScope? lifetimeScope
+            ) :
             base(navigationService: navigationService, logger: logger, projectManager: projectManager,
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
 #pragma warning restore CS8618
         {
-
             _logger = logger;
             _projectManager = projectManager;
             NoteManager = noteManager;
             VerseManager = verseManager;
+            SelectionManager = selectionManager;
 
             Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
 
@@ -461,18 +404,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             base.OnViewAttached(view, context);
         }
 
-
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
-        {
-            //no-op for now.
-           return base.OnDeactivateAsync(close, cancellationToken);
-        }
-
-
         #endregion //Constructor
 
         #region Methods
-
 
         private async Task VerseChangeRerender()
         {
@@ -537,23 +471,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EnhancedViewLayout!.EnhancedViewItems.RemoveAt(index);
 
         }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //public void VerseSelected(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (e.AddedItems.Count > 0)
-        //    {
-        //        if (e.AddedItems[0] is VerseDisplayViewModel verseDisplayViewModel)
-        //        {
-        //            SelectedVerseDisplayViewModel = verseDisplayViewModel;
-        //        }
-        //    }
-        //}
-
 
         public static ParatextProjectMetadata HebrewManuscriptMetadata => new ParatextProjectMetadata
         {
@@ -658,59 +575,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region VerseDisplayControl
 
-        private void UpdateSelection(TokenDisplayViewModel token, TokenDisplayViewModelCollection selectedTokens, bool addToSelection)
-        {
-            if (addToSelection)
-            {
-                foreach (var selectedToken in selectedTokens)
-                {
-                    if (!AllSelectedTokens.Contains(selectedToken))
-                    {
-                        AllSelectedTokens.Add(selectedToken);
-                    }
-                }
-
-                if (!token.IsTokenSelected)
-                {
-                    AllSelectedTokens.Remove(token);
-                }
-            }
-            else
-            {
-                AllSelectedTokens = selectedTokens;
-            }
-            EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(AllSelectedTokens));
-        }
-
         public void TokenClicked(object sender, TokenEventArgs e)
         {
-            Task.Run(() => TokenClickedAsync(e).GetAwaiter());
-        }
-
-        public async Task TokenClickedAsync(TokenEventArgs e)
-        {
-            UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
-            await NoteManager.SetCurrentNoteIds(AllSelectedTokens.NoteIds);
-            NoteControlVisibility = AllSelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
-            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId})";
+            SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
         {
-            Task.Run(() => TokenRightButtonDownAsync(e).GetAwaiter());
-        }
-
-        public async Task TokenRightButtonDownAsync(TokenEventArgs e)
-        {
-            //UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
-            if (!AllSelectedTokens.Contains(e.TokenDisplay))
-            {
-                AllSelectedTokens = new TokenDisplayViewModelCollection(e.TokenDisplay);
-                await EventAggregator.PublishOnUIThreadAsync(new SelectionUpdatedMessage(AllSelectedTokens));
-            }
-            await NoteManager.SetCurrentNoteIds(AllSelectedTokens.NoteIds);
-            NoteControlVisibility = AllSelectedTokens.Any(t => t.HasNote) ? Visibility.Visible : Visibility.Collapsed;
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) right-clicked";
+            SelectionManager.UpdateRightClickSelection(e.TokenDisplay);
+            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
@@ -721,6 +595,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public void TokenMouseLeave(object sender, TokenEventArgs e)
         {
             Message = string.Empty;
+        }
+
+        public void TokenJoin(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenJoinAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenJoinAsync(TokenEventArgs e)
+        {
+            await VerseManager.JoinTokensAsync(e.SelectedTokens.TokenCollection, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
+        }
+
+        public void TokenUnjoin(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenUnjoinAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenUnjoinAsync(TokenEventArgs e)
+        {
+            await VerseManager.UnjoinTokenAsync(e.TokenDisplay.CompositeToken, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
         }
 
         public void TranslationMouseEnter(object sender, TranslationEventArgs e)
@@ -737,7 +631,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             NoteControlVisibility = Visibility.Visible;
         }
-
     
         public void FilterPins(object sender, NoteEventArgs e)
         {
