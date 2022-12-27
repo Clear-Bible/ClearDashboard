@@ -287,7 +287,10 @@ namespace ClearDashboard.DAL.Alignment.Features
         public static IQueryable<Models.Alignment> AddIdIncludesAlignmentsQuery(ProjectDbContext projectDbContext)
         {
             return projectDbContext.Alignments
-                .Include(e => e.SourceTokenComponent)
+                .Include(e => e.SourceTokenComponent!)
+                    .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
+                .Include(e => e.TargetTokenComponent!)
+                    .ThenInclude(e => ((Models.TokenComposite)e).Tokens)
                 .Include(e => e.AlignmentSet)
                     .ThenInclude(e => e!.ParallelCorpus)
                         .ThenInclude(e => e!.SourceTokenizedCorpus)
