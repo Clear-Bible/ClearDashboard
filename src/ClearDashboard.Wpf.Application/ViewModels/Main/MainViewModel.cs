@@ -46,6 +46,7 @@ using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
+using Paratext.PluginInterfaces;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
@@ -61,7 +62,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<AddInterlinearToEnhancedViewMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
-                IHandle<FilterPinsMessage>
+                IHandle<FilterPinsMessage>,
+                IHandle<ProjectsMetadataChangedMessage>
     {
         #region Member Variables
 
@@ -529,6 +531,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+            // get the project metadata from Paratext
+            var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), CancellationToken.None);
+            if (result.Success)
+            {
+                ProjectMetadata = result.Data.OrderBy(p => p.Name).ToList();
+            }
+
             base.OnViewLoaded(view);
         }
 
@@ -1799,6 +1809,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return sourceProject.FontFamily;
             }
             return "Segoe UI";
+        }
+
+
+        /// <summary>
+        /// update the project metadata coming in from the AddParatextCorpus method
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task HandleAsync(ProjectsMetadataChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.ProjectsMetadata is not null)
+            {
+                ProjectMetadata = message.ProjectsMetadata;
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
