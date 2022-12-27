@@ -210,8 +210,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                         IsEnabledSelectedProject = false;
                     }
                 }
+                
+                // send new metadata results to the Main Window    
+                await EventAggregator.PublishOnUIThreadAsync(new ProjectsMetadataChangedMessage(result.Data), cancellationToken);
             }
-
+            
             await base.OnActivateAsync(cancellationToken);
         }
 
