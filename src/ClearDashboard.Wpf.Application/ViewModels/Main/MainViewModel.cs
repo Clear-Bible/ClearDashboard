@@ -61,7 +61,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<AddInterlinearToEnhancedViewMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
-                IHandle<FilterPinsMessage>
+                IHandle<FilterPinsMessage>,
+                IHandle<AddAquaCorpusAnalysisToEnhancedViewMessage>
     {
         #region Member Variables
 
@@ -507,6 +508,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             registry.RegisterType<InterlinearEnhancedViewItemMetadatum>();
             registry.RegisterType<AlignmentEnhancedViewItemMetadatum>();
             registry.RegisterType<TokenizedCorpusEnhancedViewItemMetadatum>();
+            registry.RegisterType<AquaCorpusAnalysisEnhancedViewItemMetadatum>();
             return options;
         }
 
@@ -1733,7 +1735,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await viewModel.AddItem(message.Metadatum, cancellationToken);
 
         }
+        public async Task HandleAsync(AddAquaCorpusAnalysisToEnhancedViewMessage message, CancellationToken cancellationToken)
+        {
+            
+            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
+            /*
+            await DeactivateDockedWindows();
 
+
+            //TODO:  How should this be refactored?
+            var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+            await viewModel.Initialize(new EnhancedViewLayout
+            {
+                ParatextSync = false,
+                Title = $"{message.Metadatum.DisplayName})",
+                VerseOffset = 0
+            });
+            viewModel.CurrentCorpusName = message!.Metadatum.ProjectName!;
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            await viewModel.AddItem(message.Metadatum, cancellationToken);
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                ContentId = message.Metadatum.ParatextProjectId,
+                Content = viewModel,
+                Title = $"⳼ {message.Metadatum.ProjectName} ({message.Metadatum.TokenizationType})",
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+            */
+
+            /*  FIXME: should use AddnewEnhnacedView()?
+
+            var viewModel = IoC.Get<EnhancedViewModel>();
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // figure out how many enhanced views there are and set the title number for the window
+            var enhancedViews = Items.Where(w => w is EnhancedViewModel).ToList();
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                Title = $"{viewModel.Title}  ({enhancedViews.Count})",
+                Content = viewModel,
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+            */
+
+        }
         /// <summary>
         /// Ensure that there is at least one document tab open at all times
         /// </summary>

@@ -399,14 +399,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
         {
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
-            await ActivateNewVerseAwareViewItem(item, cancellationToken);
+            await ActivateNewVerseAwareViewItem1(item, cancellationToken);
         }
 
         public async Task LoadData(CancellationToken token)
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
             {
-                await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
+                await ActivateNewVerseAwareViewItem1(enhancedViewItemMetadatum, cancellationToken);
 
             });
         }
@@ -421,6 +421,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
+        private async Task ActivateNewVerseAwareViewItem1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
+        {
+            await Execute.OnUIThreadAsync(async () =>
+            {
+                var enhancedViewItemViewModel =
+                    await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+            });
+        }
+
+        //FIXME: should go in ClearApplicationFramework
+        private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
+        {
+            var metadataAssemblyQualifiedName = enhancedViewItemMetadatum.GetEnhancedViewItemMetadatumType().AssemblyQualifiedName 
+                ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName.Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel").Replace("ClearDashboard.Wpf.Application.Models.ProjectSerialization", "ClearDashboard.Wpf.Application.ViewModels.EnhancedView");
+            return Type.GetType(viewModelAssemblyQualifiedName) 
+                ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
+
+        }
+
+        //FIXME: should go in ClearApplicationFramework
+        protected async Task<EnhancedViewItemViewModel> ActivateItemAsync1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            EnhancedViewItemViewModel viewModel = (EnhancedViewItemViewModel) LifetimeScope.Resolve(ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum));
+            viewModel.Parent = this;
+            viewModel.ConductWith(this);
+            UIElement view = ViewLocator.LocateForModel(viewModel, null, null);
+            ViewModelBinder.Bind(viewModel, view, null);
+            await ActivateItemAsync((EnhancedViewItemViewModel)(object)viewModel, cancellationToken);
+            return viewModel;
+        }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";

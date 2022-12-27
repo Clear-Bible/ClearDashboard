@@ -7,7 +7,7 @@ using Dahomey.Json.Attributes;
 namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
 [JsonDiscriminator(nameof(TokenizedCorpusEnhancedViewItemMetadatum))]
-public class TokenizedCorpusEnhancedViewItemMetadatum : EnhancedViewItemMetadatum
+public class TokenizedCorpusEnhancedViewItemMetadatum : VerseAwareEnhancedViewItemMetadatum
 {
     public string? ParatextProjectId { get; set; }
     public string? ProjectName { get; set; }
@@ -15,6 +15,13 @@ public class TokenizedCorpusEnhancedViewItemMetadatum : EnhancedViewItemMetadatu
     public Guid? CorpusId { get; set; }
     public Guid? TokenizedTextCorpusId { get; set; }
     public CorpusType CorpusType { get; set; }
+
+    public bool? IsRtl { get; set; }
+
+    public override Type GetEnhancedViewItemMetadatumType()
+    {
+        return typeof(VerseAwareEnhancedViewItemMetadatum);
+    }
 
     [JsonIgnore]
     public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
