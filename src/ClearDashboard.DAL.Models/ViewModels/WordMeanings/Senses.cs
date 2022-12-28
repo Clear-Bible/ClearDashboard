@@ -7,6 +7,8 @@ namespace ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings
 {
     public class Senses : INotifyPropertyChanged
     {
+        public bool IsCurrentVerseSense { get; set; } = false;
+
         private string _manuscriptWord;
         public string ManuscriptWord
         {

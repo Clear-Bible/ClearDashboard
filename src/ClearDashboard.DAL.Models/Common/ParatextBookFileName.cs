@@ -13,4 +13,15 @@
         public string fileID { get; set; } = "";
         public string BBB { get; set; } = "";
     }
+
+    public class ParatextBookNames
+    {
+        public string code { get; set; } = "";
+        public string abbr { get; set; } = "";
+        public string shortname { get; set; } = "";
+        public string longname { get; set; } = "";
+
+        public string fileID { get; set; } = "";
+        public string BBB { get; set; } = "";
+    }
 }

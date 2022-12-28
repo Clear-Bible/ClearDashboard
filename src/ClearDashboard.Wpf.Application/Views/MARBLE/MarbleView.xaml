@@ -774,6 +774,31 @@
                                             </Style>
                                         </GridView.ColumnHeaderContainerStyle>
 
+                                        <GridViewColumn Width="100">
+                                            <GridViewColumn.Header>
+                                                <TextBlock HorizontalAlignment="Left" Text="Verse Sense" />
+                                            </GridViewColumn.Header>
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <iconPacks:PackIconMaterialDesign >
+                                                        <iconPacks:PackIconMaterialDesign.Style>
+                                                            <Style TargetType="iconPacks:PackIconMaterialDesign">
+                                                                <Setter Property="Kind" Value="StarBorder"/>
+                                                                <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.Gray}"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding Path=IsCurrentVerseSense}" Value="True">
+                                                                        <Setter Property="Kind" Value="Star"/>
+                                                                        <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </iconPacks:PackIconMaterialDesign.Style>
+                                                    </iconPacks:PackIconMaterialDesign>
+                                                    <!--<TextBlock Text="{Binding Path=IsCurrentVerseSense}" TextWrapping="Wrap" />-->
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
                                         <GridViewColumn Width="300">
                                             <GridViewColumn.Header>
                                                 <TextBlock HorizontalAlignment="Left" Text="Sense" />
