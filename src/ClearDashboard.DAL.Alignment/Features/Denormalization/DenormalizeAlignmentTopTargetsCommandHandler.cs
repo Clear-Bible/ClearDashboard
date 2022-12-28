@@ -29,7 +29,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
         private readonly IMediator _mediator;
 
         private struct SourceTokenIdToTopTargetTrainingText { 
-            public Models.Alignment Alignment; 
+            public AlignmentSet AlignmentSet;
+            public TokenComponent SourceTokenComponent;
             public string SourceTrainingText; 
             public string TopTargetTrainingText; 
         }
@@ -173,9 +174,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
             CancellationToken cancellationToken)
         {
             IEnumerable<string>? sourceTrainingTexts = null;
-            IEnumerable<SourceTokenIdToTopTargetTrainingText>? sourceTokenIdToTopTargetTrainingTexts = null;
+            List<SourceTokenIdToTopTargetTrainingText>? sourceTokenIdToTopTargetTrainingTexts = null;
 
             var alignmentSet = ProjectDbContext!.AlignmentSets
+                .Include(ast => ast.ParallelCorpus)
                 .FirstOrDefault(ast => ast.Id == alignmentSetId);
 
             if (alignmentSet is null)
@@ -242,14 +244,32 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                         .First().Key
                 );
 
-            sourceTokenIdToTopTargetTrainingTexts = sourceTrainingTextGroups
-                .SelectMany(sg => sg.Value
-                    .Select(a => new SourceTokenIdToTopTargetTrainingText
-                    {
-                        Alignment = a,
-                        SourceTrainingText = sg.Key,
-                        TopTargetTrainingText = sourceTrainingTextToTopTarget[sg.Key]
-                    })).ToList();
+            var trainingTextKeys = sourceTrainingTextToTopTarget.Keys.ToHashSet();
+
+            sourceTokenIdToTopTargetTrainingTexts = ProjectDbContext.Tokens
+                .Where(tc => tc.TokenizedCorpusId == alignmentSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                .Where(tc => tc.TrainingText != null)
+                .Where(tc => tc.TokenCompositeId == null)
+                .Where(tc => trainingTextKeys.Contains(tc.TrainingText!))
+                .Select(tc => new SourceTokenIdToTopTargetTrainingText
+                {
+                    AlignmentSet = alignmentSet,
+                    SourceTokenComponent = tc,
+                    SourceTrainingText = tc.TrainingText!,
+                    TopTargetTrainingText = sourceTrainingTextToTopTarget[tc.TrainingText!]
+                }).ToList();
+
+            sourceTokenIdToTopTargetTrainingTexts.AddRange(ProjectDbContext.TokenComposites
+                .Where(tc => tc.TokenizedCorpusId == alignmentSet.ParallelCorpus!.SourceTokenizedCorpusId)
+                .Where(tc => tc.TrainingText != null)
+                .Where(tc => trainingTextKeys.Contains(tc.TrainingText!))
+                .Select(tc => new SourceTokenIdToTopTargetTrainingText
+                {
+                    AlignmentSet = alignmentSet,
+                    SourceTokenComponent = tc,
+                    SourceTrainingText = tc.TrainingText!,
+                    TopTargetTrainingText = sourceTrainingTextToTopTarget[tc.TrainingText!]
+                }));
 
             return (sourceTrainingTexts, sourceTokenIdToTopTargetTrainingTexts);
         }
@@ -302,7 +322,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
                     }
 
                     await InsertAlignmentTopTargetTrainingTextAsync(
-                            a.Alignment,
+                            a.AlignmentSet,
+                            a.SourceTokenComponent,
                             a.SourceTrainingText,
                             a.TopTargetTrainingText,
                             insertCommand,
@@ -331,21 +352,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Denormalization
         private static DbCommand CreateAlignmentTopTargetTrainingTextInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "AlignmentSetId", "AlignmentId", "SourceTokenComponentId", "SourceTrainingText", "TopTargetTrainingText" };
+            var columns = new string[] { "Id", "AlignmentSetId", "SourceTokenComponentId", "SourceTrainingText", "TopTargetTrainingText" };
 
             ApplyColumnsToCommand(command, typeof(Models.AlignmentTopTargetTrainingText), columns);
 
             return command;
         }
 
-        private static async Task<Guid> InsertAlignmentTopTargetTrainingTextAsync(Models.Alignment alignment, string SourceTrainingText, string topTargetTrainingText, DbCommand insertCommand, CancellationToken cancellationToken)
+        private static async Task<Guid> InsertAlignmentTopTargetTrainingTextAsync(Models.AlignmentSet alignmentSet, Models.TokenComponent sourceTokenComponent, string SourceTrainingText, string topTargetTrainingText, DbCommand insertCommand, CancellationToken cancellationToken)
         {
             var id = Guid.NewGuid();
 
             insertCommand.Parameters["@Id"].Value = id;
-            insertCommand.Parameters["@AlignmentSetId"].Value = alignment.AlignmentSetId;
-            insertCommand.Parameters["@AlignmentId"].Value = alignment.Id;
-            insertCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
+            insertCommand.Parameters["@AlignmentSetId"].Value = alignmentSet.Id;
+            insertCommand.Parameters["@SourceTokenComponentId"].Value = sourceTokenComponent.Id;
             insertCommand.Parameters["@SourceTrainingText"].Value = SourceTrainingText;
             insertCommand.Parameters["@TopTargetTrainingText"].Value = topTargetTrainingText;
 
