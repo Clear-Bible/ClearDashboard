@@ -864,9 +864,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 corpus = await Corpus.Create(
                                       mediator: Mediator,
                                       IsRtl: selectedProject.IsRtl,
-
+                                      FontFamily: selectedProject.FontFamily,
                                       Name: selectedProject.Name,
-
                                       Language: selectedProject.LanguageName,
                                       CorpusType: selectedProject.CorpusTypeDisplay,
                                       ParatextId: selectedProject.Id,

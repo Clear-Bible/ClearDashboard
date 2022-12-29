@@ -69,6 +69,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _enhancedViewLayout, value);
         }
 
+
+
+
         public MainViewModel MainViewModel => (MainViewModel)Parent;
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
@@ -232,6 +235,105 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => _verses;
             set => Set(ref _verses, value);
         }
+
+        #region DrawerProperties
+
+        private int _targetFontSizeValue = 14;
+        public int TargetFontSizeValue
+        {
+            get => _targetFontSizeValue;
+            set
+            {
+                _targetFontSizeValue = value;
+                NotifyOfPropertyChange(() => TargetFontSizeValue);
+            }
+        }
+
+
+        private int _targetVerticalValue = 5;
+        public int TargetVerticalValue
+        {
+            get => _targetVerticalValue;
+            set
+            {
+                _targetVerticalValue = value;
+                NotifyOfPropertyChange(() => TargetVerticalValue);
+            }
+        }
+
+
+        private int _targetHorizontalValue = 10;
+        public int TargetHorizontalValue
+        {
+            get => _targetHorizontalValue;
+            set
+            {
+                _targetHorizontalValue = value;
+                NotifyOfPropertyChange(() => TargetHorizontalValue);
+            }
+        }
+
+
+        private int _sourceFontSizeValue = 14;
+        public int SourceFontSizeValue
+        {
+            get => _sourceFontSizeValue;
+            set
+            {
+                _sourceFontSizeValue = value;
+                NotifyOfPropertyChange(() => SourceFontSizeValue);
+            }
+        }
+
+
+        private int _sourceVerticalValue = 5;
+        public int SourceVerticalValue
+        {
+            get => _sourceVerticalValue;
+            set
+            {
+                _sourceVerticalValue = value;
+                NotifyOfPropertyChange(() => SourceVerticalValue);
+            }
+        }
+
+
+        private int _sourceHorizontalValue = 10;
+        public int SourceHorizontalValue
+        {
+            get => _sourceHorizontalValue;
+            set
+            {
+                _sourceHorizontalValue = value;
+                NotifyOfPropertyChange(() => SourceHorizontalValue);
+            }
+        }
+
+
+        private int _translationsFontSizeValue = 16;
+        public int TranslationsFontSizeValue
+        {
+            get => _translationsFontSizeValue;
+            set
+            {
+                _translationsFontSizeValue = value;
+                NotifyOfPropertyChange(() => TranslationsFontSizeValue);
+            }
+        }
+
+
+        private int _noteIndicatorsSizeValue = 4;
+        public int NoteIndicatorsSizeValue
+        {
+            get => _noteIndicatorsSizeValue;
+            set
+            {
+                _noteIndicatorsSizeValue = value;
+                NotifyOfPropertyChange(() => NoteIndicatorsSizeValue);
+            }
+        }
+
+        #endregion
 
         #endregion Observable Properties
 

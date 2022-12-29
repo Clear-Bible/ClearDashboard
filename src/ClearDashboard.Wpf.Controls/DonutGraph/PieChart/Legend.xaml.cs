@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Xml.Linq;
 
 namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
 {
@@ -141,8 +144,12 @@ namespace ClearDashboard.Wpf.Controls.DonutGraph.PieChart
             object context = legend.DataContext;
             if (context != null)
             {
-                legend.DataContext = null;
-                legend.DataContext = context;
+                var result = ((IEnumerable)context).Cast<object>().ToList();
+                if (result.Count > 0)
+                {
+                    legend.DataContext = null;
+                    legend.DataContext = context;
+                }
             }
         }
 

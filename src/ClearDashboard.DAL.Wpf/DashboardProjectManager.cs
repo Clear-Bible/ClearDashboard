@@ -78,6 +78,7 @@ public record FilterPinsMessage(string Message);
 
 public record CreateProjectMessage(string Message);
 
+public record ProjectsMetadataChangedMessage(List<ParatextProjectMetadata> ProjectsMetadata);
 
 
 

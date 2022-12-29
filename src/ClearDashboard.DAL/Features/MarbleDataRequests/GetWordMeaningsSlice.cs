@@ -212,12 +212,15 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 
             foreach (var meaning in lexMeanings)
             {
+
+                bool IsCurrentVerseSense = false;
+
                 var totalSenseVerseCount = meaning.Elements("LEXReferences")
                     .Elements("LEXReference")
                     .ToList();
                 Console.WriteLine($"Total Sense Verses: {totalSenseVerseCount.Count}");
                 totalVerses += totalSenseVerseCount.Count;
-
+                
                 List<CoupleOfStrings> verseList = new();
                 List<string> verses = new();
                 foreach (var verse in totalSenseVerseCount)
@@ -230,6 +233,19 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                         stringA = verse.Value,
                         stringB = verseRef,
                     });
+
+                    // check verse to see if it the same as the current verse
+                    try
+                    {
+                        if (verse.Value.Substring(0, 9) == _bcv.BBBCCCVVV)
+                        {
+                            IsCurrentVerseSense = true;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
 
 
@@ -382,6 +398,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     Glosses = glosses,
                     VerseTotal = totalSenseVerseCount.Count,
                     Verses = verseList,
+                    IsCurrentVerseSense = IsCurrentVerseSense,
                     CoreDomains = coreDomains,
                     Domains = domains,
                     SubDomains = subDomains,
