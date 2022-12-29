@@ -1078,15 +1078,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
 
-        public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel? corpusNodeMenuItem)
+        public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
         {
-
-            if (corpusNodeMenuItem == null)
-            {
-                Logger!.LogInformation($"The CorpusNodeMenuItem is null.  Returning...");
-                return;
-            }
-
             var corpusNodeViewModel = corpusNodeMenuItem.CorpusNodeViewModel;
             if (corpusNodeViewModel == null)
             {
@@ -1243,6 +1236,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public async Task ExecuteAquaCorpusAnalysisMenuCommand(AquaCorpusAnalysisMenuItemViewModel aquaCorpusAnalysisMenuItemViewModel)
+        {
+            var corpusNodeViewModel = aquaCorpusAnalysisMenuItemViewModel.CorpusNodeViewModel;
+            if (corpusNodeViewModel == null)
+            {
+                Logger!.LogInformation($"The CorpusNodeViewModel on the CorpusNodeMenuItem: '{aquaCorpusAnalysisMenuItemViewModel.Id}' is null., Returning...");
+                return;
+            }
+
+            switch (aquaCorpusAnalysisMenuItemViewModel.Id)
+            {
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaRequestCorpusAnalysis:  //fixme
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaAddLatestCorpusAnalysisToCurrentEnhancedView:
+                    await EventAggregator.PublishOnUIThreadAsync(new AddAquaCorpusAnalysisToEnhancedViewMessage(new AquaCorpusAnalysisEnhancedViewItemMetadatum()
+                    {
+                        IsNewWindow = false
+                    })); ;
+                    break;
+                //case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaRequestCorpusAnalysis:
+                //    await AquaRequestCorpusAnalysis(corpusNodeViewModel.ParatextProjectId);
+                //    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaGetCorpusAnalysis:
+                    await AquaGetCorpusAnalysis(corpusNodeViewModel.ParatextProjectId);
+                    break;
+            }
+        }
+
+        private async Task AquaRequestCorpusAnalysis(string paratextProjectId)
+        {
+
+        }
+
+        private async Task AquaGetCorpusAnalysis(string paratextProjectId)
+        {
+
+        }
 
 
         public void ShowCorpusProperties(CorpusNodeViewModel corpus)

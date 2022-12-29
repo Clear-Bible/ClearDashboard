@@ -1,8 +1,15 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Notes;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
@@ -13,6 +20,7 @@ using ClearDashboard.Wpf.Controls.Utils;
 using MahApps.Metro.IconPacks;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -602,7 +610,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// <param name="corpusNode"></param>
         /// <param name="tokenizedCorpora"></param>
         /// <exception cref="NotImplementedException"></exception>
-        public void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
+        public async Task CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
         {
             // initiate the menu system
             corpusNode.MenuItems.Clear();
@@ -612,6 +620,33 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems = new();
 
+            bool isResource = false;
+            if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
+            {
+                var r = await Mediator.Send(new GetAllProjectsQuery());
+
+                if (r.Success)
+                {
+                    var projects = r.Data
+                        ?? throw new InvalidDataEngineException(name: "return", value: "null", message: "Could not obtain a list of projects from paratext");
+                    var project = projects.Find(p => p.Guid.Equals(corpusNode.ParatextProjectId))
+                        ?? throw new InvalidDataEngineException(name: "paratextprojectid", value: corpusNode.ParatextProjectId, message: "not found in list of projects reported by paratext");
+                    isResource = project.IsResource
+                        ?? throw new InvalidDataEngineException(name: "IsResource", value: "null", message: $"BUG: IsResource is not set when obtaining project information from paratext for project {corpusNode.ParatextProjectId}");
+                }
+                else
+                {
+                    Logger?.LogCritical($"Error checking whether project is resource or not: {r.Message}");
+                    throw new MediatorErrorEngineException(r.Message);
+                }
+            }
+            else
+            {
+                isResource = true;
+            }
+
+
+            bool addSeparator = false;
             // restrict the ability of Manuscript to add new tokenizers
             if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
             {
@@ -624,13 +659,19 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                     CorpusNodeViewModel = corpusNode,
                 });
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
+                addSeparator = true;
             }
+
 
             foreach (var tokenizedCorpus in tokenizedCorpora)
             {
                 if (!string.IsNullOrEmpty(tokenizedCorpus.TokenizationFunction))
                 {
+                    if (addSeparator)
+                    {
+                        nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
+                        addSeparator = false;
+                    }
                     var tokenizer = (Tokenizers)Enum.Parse(typeof(Tokenizers),
                         tokenizedCorpus.TokenizationFunction);
                     var corpusNodeMenuViewModel = new CorpusNodeMenuItemViewModel
@@ -654,7 +695,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             {
                                 // Show Verses in New Windows
                                 Header = LocalizationStrings.Get("Pds_AddToNewEnhancedViewMenu", Logger!),
-                                Id = DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView, ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                                Id = DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView, 
+                                ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentText.ToString(),
                                 CorpusNodeViewModel = corpusNode,
                                 Tokenizer = tokenizer.ToString(),
@@ -671,8 +713,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             //},
                         }
                     };
-                    if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
+
+                    if (!isResource)
                     {
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
+
                         corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                         {
                             // Show Verses in New Windows
@@ -689,13 +734,30 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 }
             }
 
-            nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+            if (!isResource)
             {
-                Header = "",
-                Id = DesignSurfaceMenuIds.Separator,
-                ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                IsSeparator = true
-            });
+                /*
+                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
+
+                nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel
+                {
+                    // Show Verses in New Windows
+                    Header = LocalizationStrings.Get("Pds_AquaRequestCorpusAnalysisMenu", Logger!),
+                    Id = DesignSurfaceMenuIds.AquaRequestCorpusAnalysis,
+                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                    IconKind = PackIconPicolIconsKind.Api.ToString(),
+                    CorpusNodeViewModel = corpusNode,
+                });
+                */
+            }
+
+            //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+            //{
+            //    Header = "",
+            //    Id = DesignSurfaceMenuIds.Separator,
+            //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+            //    IsSeparator = true
+            //});
 
             //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
             //{

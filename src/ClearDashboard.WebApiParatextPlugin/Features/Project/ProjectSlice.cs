@@ -42,7 +42,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
                 Guid = _project.ID,
                 LanguageName = _project.LanguageName,
                 ShortName = _project.ShortName,
-                LongName = _project.LongName
+                LongName = _project.LongName,
+                IsResource = _project.IsResource,
             };
             foreach (var users in _project.NonObserverUsers)
             {
