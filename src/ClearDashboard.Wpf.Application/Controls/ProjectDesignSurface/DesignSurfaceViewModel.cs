@@ -736,6 +736,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             if (!isResource)
             {
+                /*
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
 
                 nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel
@@ -747,6 +748,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     IconKind = PackIconPicolIconsKind.Api.ToString(),
                     CorpusNodeViewModel = corpusNode,
                 });
+                */
             }
 
             //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
