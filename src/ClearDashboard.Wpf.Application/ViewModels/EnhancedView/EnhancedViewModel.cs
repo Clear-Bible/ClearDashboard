@@ -481,13 +481,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             var metadataAssemblyQualifiedName = enhancedViewItemMetadatum.GetEnhancedViewItemMetadatumType().AssemblyQualifiedName 
                 ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
-            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName.Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel").Replace("ClearDashboard.Wpf.Application.Models.ProjectSerialization", "ClearDashboard.Wpf.Application.ViewModels.EnhancedView");
+            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName
+                .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
+                .Replace("Models.ProjectSerialization", "ViewModels.EnhancedView");
             return Type.GetType(viewModelAssemblyQualifiedName) 
                 ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
 
         }
 
         //FIXME: should go in ClearApplicationFramework
+        /// <summary>
+        /// Expects Metadatum to be in a 'Models.ProjectSerialization' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
+        /// EnhancedViewItemMetadatum suffix with EnhancedViewItemViewModel suffix.
+        /// </summary>
+        /// <param name="enhancedViewItemMetadatum"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         protected async Task<EnhancedViewItemViewModel> ActivateItemAsync1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
         {
             EnhancedViewItemViewModel viewModel = (EnhancedViewItemViewModel) LifetimeScope.Resolve(ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum));

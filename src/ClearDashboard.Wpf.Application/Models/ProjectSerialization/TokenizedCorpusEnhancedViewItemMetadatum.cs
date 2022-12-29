@@ -18,11 +18,6 @@ public class TokenizedCorpusEnhancedViewItemMetadatum : VerseAwareEnhancedViewIt
 
     public bool? IsRtl { get; set; }
 
-    public override Type GetEnhancedViewItemMetadatumType()
-    {
-        return typeof(VerseAwareEnhancedViewItemMetadatum);
-    }
-
     [JsonIgnore]
     public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 }

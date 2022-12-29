@@ -15,11 +15,6 @@ public abstract class ParallelCorpusEnhancedViewItemMetadatum : VerseAwareEnhanc
     public string? SourceParatextId { get; set; }
     public string? TargetParatextId { get; set; }
 
-    public override Type GetEnhancedViewItemMetadatumType()
-    {
-        return typeof(VerseAwareEnhancedViewItemMetadatum);
-    }
-
     [JsonIgnore]
     public ParallelCorpus? ParallelCorpus { get; set; }
 }
