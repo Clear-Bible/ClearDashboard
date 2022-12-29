@@ -958,6 +958,7 @@ namespace ClearDashboard.WebApiParatextPlugin
             paratextProject.Name = project.ShortName;
             paratextProject.Guid = project.ID;
             paratextProject.LongName = project.LongName;
+            paratextProject.IsResource = project.IsResource;
 
             foreach (var book in project.AvailableBooks)
             {

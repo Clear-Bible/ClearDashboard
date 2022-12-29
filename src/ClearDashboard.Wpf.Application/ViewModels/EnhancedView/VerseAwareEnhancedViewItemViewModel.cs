@@ -181,7 +181,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _progressBarVisibility, value);
         }
 
-        public async Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        public override async Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
             EnhancedViewItemMetadatum = metadatum;
             await GetData(ReloadType.Refresh, cancellationToken);
