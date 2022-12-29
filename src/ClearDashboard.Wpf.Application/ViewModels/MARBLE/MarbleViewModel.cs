@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
@@ -10,13 +11,13 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.Marble;
+using MaterialDesignThemes.Wpf;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -24,10 +25,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ClearDashboard.DAL.CQRS;
 using wpfKeyBoard;
-using ClearDashboard.Wpf.Application.Views.Main;
-using MaterialDesignThemes.Wpf;
 #pragma warning disable CS8618
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Marble
@@ -863,9 +861,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
 
             Senses = queryResult.Data;
-            if (Senses.Count > 0)
+            if (Senses.Count == 0)
             {
                 SelectedSense = Senses[0];
+            }
+            else
+            {
+                for (int i = 0; i < Senses.Count; i++)
+                {
+                    if (Senses[i].IsCurrentVerseSense)
+                    {
+                        SelectedSense = Senses[i];
+                        break;
+                    }
+                }
             }
 
             if (defineTestament == false)
