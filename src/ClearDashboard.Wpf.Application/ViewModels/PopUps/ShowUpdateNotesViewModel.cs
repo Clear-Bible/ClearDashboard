@@ -18,15 +18,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         private readonly INavigationService _navigationService;
         private readonly ILogger<ShowUpdateNotesViewModel> _logger;
 
-        
-        private ObservableCollection<ReleaseNote> _releaseNotes = new();
-        public ObservableCollection<ReleaseNote> ReleaseNotes
+        private ObservableCollection<UpdateFormat> _updates = new();
+        public ObservableCollection<UpdateFormat> Updates
         {
-            get => _releaseNotes;
+            get => _updates;
             set
             {
-                _releaseNotes = value;
-                NotifyOfPropertyChange(() => ReleaseNotes);
+                _updates = value;
+                NotifyOfPropertyChange(() => Updates);
             }
         }
 
@@ -42,6 +41,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             _navigationService = navigationService;
             _logger = logger;
             //ReleaseNotes = releaseNotes;
+        }
+
+        public void Close()
+        {
+            TryCloseAsync();
         }
     }
 }

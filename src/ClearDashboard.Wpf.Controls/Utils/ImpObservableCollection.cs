@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Controls.Utils
 {
@@ -36,7 +37,7 @@ namespace ClearDashboard.Wpf.Controls.Utils
     /// This is so that observers can undo events, etc on the list after it has been cleared and
     /// raised a CollectionChanged event with a Reset action.
     /// </summary>
-    public class ImpObservableCollection<T> : ObservableCollection<T>, ICloneable
+    public class ImpObservableCollection<T> : BindableCollection<T>, ICloneable
     {
         /// <summary>
         /// Inner list.

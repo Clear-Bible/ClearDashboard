@@ -29,14 +29,26 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
 
         public async Task Handle(AlignmentAddingRemovingEvent notification, CancellationToken cancellationToken)
         {
-            var sourceTexts = notification.AlignmentsRemoving.Select(a => a.SourceTokenComponent!.TrainingText!);
-            sourceTexts = sourceTexts.Append(notification.AlignmentAdding.SourceTokenComponent!.TrainingText!).Distinct();
+            if (notification.AlignmentAdding is null && !notification.AlignmentsRemoving.Any())
+            {
+                return;
+            }
 
-            notification.ProjectDbContext.AlignmentSetDenormalizationTasks.AddRange(sourceTexts.Select(st =>
-                new AlignmentSetDenormalizationTask()
+            var alignments = notification.AlignmentsRemoving.ToList();
+            if (notification.AlignmentAdding is not null)
+            {
+                alignments.Add(notification.AlignmentAdding);
+            }
+
+            notification.ProjectDbContext.AlignmentSetDenormalizationTasks.AddRange(alignments
+                .Where(a => a.Deleted == null)
+                .Where(a => a.AlignmentSet != null)
+                .Where(a => a.SourceTokenComponent?.TrainingText != null)
+                .GroupBy(a => new { a.AlignmentSetId, SourceText = a.SourceTokenComponent!.TrainingText! })
+                .Select(g => new AlignmentSetDenormalizationTask()
                 {
-                    AlignmentSetId = notification.AlignmentAdding.AlignmentSetId,
-                    SourceText = st
+                    AlignmentSetId = g.Key.AlignmentSetId,
+                    SourceText = g.Key.SourceText
                 }));
 
             await notification.ProjectDbContext.SaveChangesAsync(cancellationToken);

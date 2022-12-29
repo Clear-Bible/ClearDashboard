@@ -234,10 +234,10 @@
             MinWidth="60"
             Margin="5,0,5,3"
             ItemsSource="{Binding CurrentBcv.BibleBookList, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
-            SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"
+            SelectedItem="{Binding CurrentBcv.BookAbbr}"
             SelectionChanged="CboBook_SelectionChanged" />
+        <!--  SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor}, UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"  -->
 
-        <!--  SelectedIndex="{Binding CurrentBcv.BookNum, Converter={StaticResource BcvBookNumConvertor} , UpdateSourceTrigger=PropertyChanged, TargetNullValue='\0'}"  -->
         <ComboBox
             x:Name="CboChapter"
             Grid.Row="1"

@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Display"
+    xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DataContext="{d:DesignInstance Type=display:TokenDisplayViewModel}"
@@ -16,12 +16,13 @@
         Width="Auto"
         HorizontalAlignment="Left"
         Orientation="Vertical">
-        <StackPanel.ContextMenu>
-            <ContextMenu>
-                <MenuItem Click="OnCreateNote" Header="Create Note" />
-                <MenuItem Click="OnFilterPins" Header="Filter Pins" />
-            </ContextMenu>
-        </StackPanel.ContextMenu>
+        <Rectangle
+            Width="{Binding Path=ActualWidth, ElementName=TokenButton}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorHeight}"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorMargin}"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            Fill="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorComputedColor}"
+            Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorVisibility}" />
         <Button
             x:Name="TokenButton"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
@@ -41,6 +42,7 @@
             Width="{Binding ElementName=SurfaceTextBlock, Path=ActualWidth}"
             materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Click="OnTokenClicked"
+            ContextMenuOpening="OnTokenContextMenuOpening"
             MouseDoubleClick="OnTokenDoubleClicked"
             MouseEnter="OnTokenMouseEnter"
             MouseLeave="OnTokenMouseLeave"
@@ -48,8 +50,16 @@
             MouseRightButtonDown="OnTokenRightButtonDown"
             MouseRightButtonUp="OnTokenRightButtonUp"
             MouseWheel="OnTokenMouseWheel"
-            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown">
-
+            PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"
+            ToolTipOpening="OnToolTipOpening">
+            <Button.ContextMenu>
+                <ContextMenu FlowDirection="LeftToRight">
+                    <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
+                    <MenuItem x:Name="JoinTokensMenuItem" Click="OnTokenJoin" Header="Join Tokens" />
+                    <MenuItem x:Name="UnjoinTokenMenuItem" Click="OnTokenUnjoin" Header="Unjoin Composite Token" />
+                    <MenuItem Click="OnFilterPins" Header="Filter Pins" />
+                </ContextMenu>
+            </Button.ContextMenu>
             <TextBlock
                 x:Name="SurfaceTextBlock"
                 Margin="0"
@@ -61,9 +71,8 @@
                     HorizontalOffset="10"
                     Placement="Left"
                     PlacementRectangle="50,0,0,0"
-                    VerticalOffset="20"
-                    Visibility="{Binding ElementName=ExtendedPropertiesTreeViewName, Path=Visibility}">
-                    <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
+                    VerticalOffset="20">
+                        <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
                 </ToolTip>
             </Button.ToolTip>
         </Button>
@@ -82,7 +91,7 @@
             MouseWheel="OnNoteMouseWheel"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorVisibility}" />
         <Button
-            Background="Transparent"
+            Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationBackground}"
             BorderThickness="0"
             FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
             FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"

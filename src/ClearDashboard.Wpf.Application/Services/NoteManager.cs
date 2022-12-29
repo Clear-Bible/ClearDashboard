@@ -4,31 +4,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 using ClearBible.Engine.Corpora;
 using MediatR;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 using Caliburn.Micro;
 using Microsoft.Extensions.Logging;
 using SIL.Extensions;
 using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    public sealed class NoteManager : PropertyChangedBase
+    public sealed class NoteManager : PropertyChangedBase,
+        IHandle<SelectionUpdatedMessage>
     {
-        private NoteIdCollection _currentNoteIds = new();
         private NoteViewModelCollection _currentNotes = new();
         private IEventAggregator EventAggregator { get; }
         private ILogger<NoteManager>? Logger { get; }
         private IMediator Mediator { get; }
+        private IUserProvider UserProvider { get; }
+
 
         // TODO: localize
         private static string GetNoteAssociationDescription(IId associatedEntityId, IReadOnlyDictionary<string, string> entityContext)
         {
-            if (associatedEntityId is TokenId tokenId)
+            if (associatedEntityId is TokenId)
             {
                 var sb = new StringBuilder();
                 sb.Append($"Tokenized Corpus {entityContext[EntityContextKeys.TokenizedCorpus.DisplayName]}");
@@ -44,15 +48,14 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#endif
+
                 var labels = await Label.GetAll(Mediator);
-#if DEBUG
+
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved label suggestions in {stopwatch.ElapsedMilliseconds}ms");
-#endif
+
                 return new LabelCollection(labels.OrderBy(l => l.Text));
             }
             catch (Exception e)
@@ -67,30 +70,13 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </summary>
         public LabelCollection LabelSuggestions { get; private set; } = new();
 
-        public NoteIdCollection CurrentNoteIds
-        {
-            get => _currentNoteIds;
-            private set => Set(ref _currentNoteIds, value);
-        }
-
+        /// <summary>
+        /// Gets the collection of notes associated with the current selection.
+        /// </summary>
         public NoteViewModelCollection CurrentNotes
         {
             get => _currentNotes;
             private set => Set(ref _currentNotes, value);
-        }
-
-        /// <summary>
-        /// Determines whether the specified entity ID has at least one note associated to it.
-        /// </summary>
-        /// <remarks>
-        /// To get the list of notes associated with the entity, call <see cref="GetNoteIdsAsync(IId)"/>.
-        /// To get the detailed notes associated with the entity, call <see cref="GetNoteDetailsAsync(NoteId)"/>.
-        /// </remarks>
-        /// <param name="entityId">The entity ID to query.</param>
-        /// <returns>True if the entity has at least one note associated to it; false otherwise.</returns>
-        public async Task<bool> HasNote(IId entityId)
-        {
-            return (await GetNoteIdsAsync(entityId)).Any();
         }
 
         /// <summary>
@@ -106,15 +92,14 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#endif
+
                 var notes = await Note.GetDomainEntityNoteIds(Mediator, entityIds);
-#if DEBUG
+
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved domain entity note IDs in {stopwatch.ElapsedMilliseconds}ms");
-#endif
+
                 return new EntityNoteIdDictionary(notes);
             }
             catch (Exception e)
@@ -148,15 +133,15 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#endif
+
                 var note = await Note.Get(Mediator, noteId);
                 var noteViewModel = new NoteViewModel(note);
 
                 var associatedEntityIds = await note.GetFullDomainEntityIds(Mediator);
                 var domainEntityContexts = new EntityContextDictionary(await note.GetDomainEntityContexts(Mediator));
+                
                 foreach (var associatedEntityId in associatedEntityIds)
                 {
                     var association = new NoteAssociationViewModel
@@ -171,10 +156,11 @@ namespace ClearDashboard.Wpf.Application.Services
                 }
                 noteViewModel.Replies = new NoteViewModelCollection((await note.GetReplyNotes(Mediator)).Select(n => new NoteViewModel(n)));
 
-#if DEBUG
+                await ParatextNoteManager.PopulateParatextDetailsAsync(Mediator, noteViewModel, UserProvider, Logger);
+
                 stopwatch.Stop();
-                Logger?.LogInformation($"Retrieved details for note {noteId} in {stopwatch.ElapsedMilliseconds}ms");
-#endif
+                Logger?.LogInformation($"Retrieved details for note \"{note.Text}\" ({noteId.Id}) in {stopwatch.ElapsedMilliseconds}ms");
+
                 return noteViewModel;
             }
             catch (Exception e)
@@ -192,7 +178,6 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </remarks>
         /// <param name="noteIds">A collection of note IDs for which to retrieve the notes details.</param>
         /// <returns>A <see cref="NoteViewModelCollection"/> containing the notes details.</returns>
-
         public async Task<NoteViewModelCollection> GetNoteDetailsAsync(IEnumerable<IId> noteIds)
         {
             var result = new NoteViewModelCollection();
@@ -204,7 +189,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 {
                     if (!result.Any(n => n.NoteId != null && n.NoteId.Id == noteId.Id))
                     {
-                        result.Add(await GetNoteDetailsAsync(noteId as NoteId));
+                        result.Add(await GetNoteDetailsAsync(noteId));
                     }
                 }
                 else
@@ -216,12 +201,10 @@ namespace ClearDashboard.Wpf.Application.Services
             return result;
         }
 
-
-        public async Task SetCurrentNoteIds(NoteIdCollection noteIds)
-        {
-            CurrentNoteIds = noteIds;
-            CurrentNotes = await GetNoteDetailsAsync(noteIds);
-        }
+        //public async Task SetCurrentNoteIds(NoteIdCollection noteIds)
+        //{
+        //    CurrentNotes = await GetNoteDetailsAsync(noteIds);
+        //}
 
         /// <summary>
         /// Adds a note to a collection of entities.
@@ -233,31 +216,28 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#endif
+
                 await note.Entity.CreateOrUpdate(Mediator);
-#if DEBUG
+
                 stopwatch.Stop();
-                Logger?.LogInformation($"Added note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
+                Logger?.LogInformation($"Added note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+
                 foreach (var entityId in entityIds)
                 {
-#if DEBUG
                     stopwatch.Restart();
-#endif
+
                     await note.Entity.AssociateDomainEntity(Mediator, entityId);
-#if DEBUG
+
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated note {note.NoteId?.Id} with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
+                    Logger?.LogInformation($"Associated note \"{note.Text}\" ({note.NoteId?.Id}) with entity {entityId} in {stopwatch.ElapsedMilliseconds} ms");
                 }
+
                 if (note.Labels.Any())
                 {
-#if DEBUG
                     stopwatch.Restart();
-#endif
+
                     foreach (var label in note.Labels)
                     {
                         if (label.LabelId == null)
@@ -267,12 +247,14 @@ namespace ClearDashboard.Wpf.Application.Services
 
                         await note.Entity.AssociateLabel(Mediator, label);
                     }
-#if DEBUG
+
                     stopwatch.Stop();
-                    Logger?.LogInformation($"Associated labels with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
+                    Logger?.LogInformation($"Associated labels with note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
                 }
 
+                var newNoteDetail = await GetNoteDetailsAsync(note.NoteId!);
+                CurrentNotes.Add(newNoteDetail);
+                NotifyOfPropertyChange(nameof(CurrentNotes));
                 await EventAggregator.PublishOnUIThreadAsync(new NoteAddedMessage(note, entityIds));
             }
             catch (Exception e)
@@ -291,15 +273,13 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#endif
+
                 await note.Entity.CreateOrUpdate(Mediator);
-#if DEBUG
+
                 stopwatch.Stop();
-                Logger?.LogInformation($"Updated note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
+                Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
@@ -318,15 +298,14 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             try
             {
-#if DEBUG
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#endif
+
                 await note.Entity.Delete(Mediator);
-#if DEBUG
+
                 stopwatch.Stop();
-                Logger?.LogInformation($"Deleted note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
-#endif
+                Logger?.LogInformation($"Deleted note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+
                 await EventAggregator.PublishOnUIThreadAsync(new NoteDeletedMessage(note, entityIds));
             }
             catch (Exception e)
@@ -334,6 +313,16 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Sends a note to Paratext.
+        /// </summary>
+        /// <param name="note">The note to send to Paratext.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task SendToParatextAsync(NoteViewModel note)
+        {
+            await ParatextNoteManager.SendToParatextAsync(Mediator, note, Logger);
         }
 
         /// <summary>
@@ -462,11 +451,20 @@ namespace ClearDashboard.Wpf.Application.Services
             LabelSuggestions = await GetLabelSuggestionsAsync();
         }
 
-        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator)
+        public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            CurrentNotes = await GetNoteDetailsAsync(message.SelectedTokens.NoteIds);
+        }
+
+        public NoteManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider)
         {
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
+            UserProvider = userProvider;
+
+            EventAggregator.SubscribeOnUIThread(this);
         }
+
     }
 }

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Events
 {
@@ -11,7 +11,7 @@ namespace ClearDashboard.Wpf.Application.Events
         /// <summary>
         /// The <see cref="TokenDisplayViewModel"/> that triggered this event.
         /// </summary>
-        public TokenDisplayViewModel TokenDisplayViewModel { get; set; }
+        public TokenDisplayViewModel TokenDisplay { get; set; }
 
         /// <summary>
         /// The collection of selected <see cref="TokenDisplayViewModel"/>s.
@@ -22,6 +22,21 @@ namespace ClearDashboard.Wpf.Application.Events
         /// The keyboard <see cref="ModifierKeys"/> at the time of the event.
         /// </summary>
         public ModifierKeys ModifierKeys { get; set; }
+
+        /// <summary>
+        /// Gets whether the Ctrl key is pressed at the time of the event.
+        /// </summary>
+        public bool IsControlPressed => (ModifierKeys & ModifierKeys.Control) > 0;
+
+        /// <summary>
+        /// Gets whether the Shift key is pressed at the time of the event.
+        /// </summary>
+        public bool IsShiftPressed => (ModifierKeys & ModifierKeys.Shift) > 0;
+
+        /// <summary>
+        /// Gets whether the Alt key is pressed at the time of the event.
+        /// </summary>
+        public bool IsAltPressed => (ModifierKeys & ModifierKeys.Alt) > 0;
 
         public Guid VerseDisplayId { get; set; }
     }

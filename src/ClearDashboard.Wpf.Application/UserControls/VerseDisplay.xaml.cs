@@ -1,28 +1,45 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
 using SIL.Extensions;
-using ClearDashboard.Wpf.Application.ViewModels.Display.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
     /// A control for displaying a verse, as represented by an IEnumerable of <see cref="TokenDisplayViewModel" /> instances.
     /// </summary>
-    public partial class VerseDisplay : IHandle<SelectionUpdatedMessage>
+    public partial class VerseDisplay : INotifyPropertyChanged,
+        IHandle<SelectionUpdatedMessage>,
+        IHandle<TokensUpdatedMessage>
     {
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -77,6 +94,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// </summary>
         public static readonly RoutedEvent TokenMouseWheelEvent = EventManager.RegisterRoutedEvent
             ("TokenMouseWheel", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the TokenJoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenJoinEvent = EventManager.RegisterRoutedEvent
+            ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
+        /// Identifies the TokenUnjoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
+            ("TokenUnjoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -195,15 +224,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Static DependencyProperties
 
         /// <summary>
+        /// Identifies the HighlightedTokenBackground dependency property.
+        /// </summary>
+        public static readonly DependencyProperty HighlightedTokenBackgroundProperty = DependencyProperty.Register(nameof(HighlightedTokenBackground), typeof(Brush), typeof(VerseDisplay),
+            new PropertyMetadata(Brushes.Aquamarine));
+
+        /// <summary>
         /// Identifies the HorizontalSpacing dependency property.
         /// </summary>
         public static readonly DependencyProperty HorizontalSpacingProperty = DependencyProperty.Register(nameof(HorizontalSpacing), typeof(double), typeof(VerseDisplay),
             new PropertyMetadata(10d));
-
-        /// <summary>
-        /// Identifies the ItemsPanelTemplate dependency property.
-        /// </summary>
-        public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register(nameof(ItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the NoteIndicatorColor dependency property.
@@ -241,10 +271,33 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(true));
 
         /// <summary>
-        /// Identifies the TargetFlowDirection dependency property.
+        /// Identifies the SourceFontFamily dependency property.
         /// </summary>
-        public static readonly DependencyProperty TargetFlowDirectionProperty = DependencyProperty.Register(nameof(TargetFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
+        public static readonly DependencyProperty SourceFontFamilyProperty = DependencyProperty.Register(nameof(SourceFontFamily), typeof(FontFamily), typeof(VerseDisplay),
+            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+
+        /// <summary>
+        /// Identifies the SourceFontSize dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFontSizeProperty = DependencyProperty.Register(nameof(SourceFontSize), typeof(double), typeof(VerseDisplay),
+            new PropertyMetadata(18d));
+
+        /// <summary>
+        /// Identifies the SourceFontStyle dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFontStyleProperty = DependencyProperty.Register(nameof(SourceFontStyle), typeof(FontStyle), typeof(VerseDisplay),
+            new PropertyMetadata(FontStyles.Normal));
+
+        /// <summary>
+        /// Identifies the SourceFontWeight dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceFontWeightProperty = DependencyProperty.Register(nameof(SourceFontWeight), typeof(FontWeight), typeof(VerseDisplay),
+            new PropertyMetadata(FontWeights.SemiBold));
+
+        /// <summary>
+        /// Identifies the SourceItemsPanelTemplate dependency property.
+        /// </summary>
+        public static readonly DependencyProperty SourceItemsPanelTemplateProperty = DependencyProperty.Register(nameof(SourceItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TargetFontFamily dependency property.
@@ -271,16 +324,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             new PropertyMetadata(FontWeights.Normal));
 
         /// <summary>
-        /// Identifies the TargetTokens dependency property.
+        /// Identifies the TargetItemsPanelTemplate dependency property.
         /// </summary>
-        public static readonly DependencyProperty TargetTokensProperty = DependencyProperty.Register(nameof(TargetTokens), typeof(IEnumerable), typeof(VerseDisplay),
-            new PropertyMetadata(null, OnTargetTokensChanged));
-
-        /// <summary>
-        /// Identifies the TargetVisibility dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TargetVisibilityProperty = DependencyProperty.Register(nameof(TargetVisibility), typeof(Visibility), typeof(VerseDisplay),
-            new PropertyMetadata(Visibility.Collapsed));
+        public static readonly DependencyProperty TargetItemsPanelTemplateProperty = DependencyProperty.Register(nameof(TargetItemsPanelTemplate), typeof(ItemsPanelTemplate), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TitleFontSize dependency property.
@@ -315,48 +361,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// Identifies the Title Visibility dependency property.
         /// </summary>
         public static readonly DependencyProperty TitleVisibilityProperty = DependencyProperty.Register(nameof(TitleVisibility), typeof(Visibility), typeof(VerseDisplay), new PropertyMetadata(Visibility.Visible));
-
-        /// <summary>
-        /// Identifies the TokenFlowDirection dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFlowDirectionProperty = DependencyProperty.Register(nameof(TokenFlowDirection), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
-
-        /// <summary>
-        /// Identifies the TokenFontFamily dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontFamilyProperty = DependencyProperty.Register(nameof(TokenFontFamily), typeof(FontFamily), typeof(VerseDisplay),
-            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
-
-        /// <summary>
-        /// Identifies the TokenFontSize dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontSizeProperty = DependencyProperty.Register(nameof(TokenFontSize), typeof(double), typeof(VerseDisplay),
-            new PropertyMetadata(18d));
-
-        /// <summary>
-        /// Identifies the TokenFontStyle dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontStyleProperty = DependencyProperty.Register(nameof(TokenFontStyle), typeof(FontStyle), typeof(VerseDisplay),
-            new PropertyMetadata(FontStyles.Normal));
-
-        /// <summary>
-        /// Identifies the TokenFontWeight dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokenFontWeightProperty = DependencyProperty.Register(nameof(TokenFontWeight), typeof(FontWeight), typeof(VerseDisplay),
-            new PropertyMetadata(FontWeights.SemiBold));
-
-        public static readonly DependencyProperty IsRtlProperty = DependencyProperty.Register(nameof(IsRtl), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
-
-        public static readonly DependencyProperty IsTargetRtlProperty = DependencyProperty.Register(nameof(IsTargetRtl), typeof(FlowDirection), typeof(VerseDisplay),
-            new PropertyMetadata(FlowDirection.LeftToRight));
-
-
-        /// <summary>
-        /// Identifies the Tokens dependency property.
-        /// </summary>
-        public static readonly DependencyProperty TokensProperty = DependencyProperty.Register(nameof(Tokens), typeof(IEnumerable), typeof(VerseDisplay));
 
         /// <summary>
         /// Identifies the TokenVerticalSpacing dependency property.
@@ -442,11 +446,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty WrapProperty = DependencyProperty.Register(nameof(Wrap), typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true, OnWrapChanged));
 
+        private static IEventAggregator _eventAggregator;
+
         #endregion Static DependencyProperties
         #region Private event handlers
 
         /// <summary>
-        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="ItemsPanelTemplate"/>.
+        /// Callback handler for the Wrap dependency property: when the Wrap value changes, update the <see cref="SourceItemsPanelTemplate"/>.
         /// </summary>
         /// <param name="obj">The object whose TranslationVerticalSpacing has changed.</param>
         /// <param name="args">Event args containing the new value.</param>
@@ -458,22 +464,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void CalculateItemsPanelTemplate(bool wrap)
         {
-            ItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "WrapPanelTemplate" : "StackPanelTemplate");
-        }
-
-        public static void OnTargetTokensChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var verseDisplay = (VerseDisplay)d;
-
-            if (verseDisplay.TargetTokens != null)
-            {
-                var tokenDisplayViewModelCollection = (TokenDisplayViewModelCollection)verseDisplay.TargetTokens!;
-                verseDisplay.TargetVisibility = tokenDisplayViewModelCollection.Any() ? Visibility.Visible : Visibility.Collapsed;
-            }
-            else
-            {
-                verseDisplay.TargetVisibility = Visibility.Collapsed;
-            }
+            SourceItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "SourceWrapPanelTemplate" : "SourceStackPanelTemplate");
+            TargetItemsPanelTemplate = (ItemsPanelTemplate)FindResource(wrap ? "TargetWrapPanelTemplate" : "TargetStackPanelTemplate");
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -481,60 +473,82 @@ namespace ClearDashboard.Wpf.Application.UserControls
             CalculateItemsPanelTemplate(Wrap);
         }
 
-        private void RaiseTokenEvent(RoutedEvent routedEvent, TokenDisplayViewModel tokenDisplay)
+        private void RaiseTokenEvent(RoutedEvent routedEvent, TokenEventArgs args)
         {
             RaiseEvent(new TokenEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = tokenDisplay,
-                SelectedTokens = SelectedTokens,
-                ModifierKeys = Keyboard.Modifiers,
+                TokenDisplay = args.TokenDisplay,
+                SelectedTokens = VerseSelectedTokens,
+                ModifierKeys = args.ModifierKeys,
             });
         }
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            RaiseTokenEvent(routedEvent, tokenDisplay!);
+            RaiseTokenEvent(routedEvent, e as TokenEventArgs);
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            var ctrlPressed = (Keyboard.Modifiers & ModifierKeys.Control) > 0;
-            UpdateSelection(tokenDisplay!, ctrlPressed);
+            var args = e as TokenEventArgs;
+            UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
 
-            RaiseTokenEvent(TokenClickedEvent, e);
+            RaiseTokenEvent(TokenClickedEvent, args);
         }
 
-        private void UpdateSelection(TokenDisplayViewModel token, bool addToSelection)
+        private void UpdateVerseSelection(TokenDisplayViewModel token, bool addToSelection)
         {
-            var tokenIsSelected = token.IsSelected;
+            var tokenIsSelected = token.IsTokenSelected;
             if (!addToSelection)
             {
-                foreach (var selectedToken in SelectedTokens)
+                foreach (var selectedToken in VerseSelectedTokens)
                 {
-                    selectedToken.IsSelected = false;
+                    selectedToken.IsTokenSelected = false;
                 }
-                SelectedTokens.Clear();
+                VerseSelectedTokens.Clear();
             }
 
-            token.IsSelected = !tokenIsSelected;
-            if (token.IsSelected)
+            token.IsTokenSelected = !tokenIsSelected;
+            if (token.IsTokenSelected)
             {
-                SelectedTokens.Add(token);
+                if (token.IsCompositeTokenMember)
+                {
+                    VerseDisplayViewModel.MatchingTokenAction(token.CompositeTokenMembers.TokenIds, t => t.IsTokenSelected = true);
+                    VerseSelectedTokens.AddRange(VerseDisplayViewModel.SourceTokenDisplayViewModels.MatchingTokens(token.CompositeTokenMembers.TokenIds));
+                }
+                else
+                {
+                    VerseSelectedTokens.Add(token);
+                }
             }
             else
             {
-                SelectedTokens.Remove(token);
+                if (token.IsCompositeTokenMember)
+                {
+                    var selectedCompositeTokenMembers = VerseSelectedTokens.MatchingTokens(token.CompositeTokenMembers.TokenIds);
+                    foreach (var selectedToken in selectedCompositeTokenMembers)
+                    {
+                        VerseSelectedTokens.Remove(selectedToken);
+                    }
+                }
+                else
+                {
+                    VerseSelectedTokens.Remove(token);
+                }
             }
         }
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            SelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
+            //AllSelectedTokens = message.SelectedTokens;
+            VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(TokensUpdatedMessage message, CancellationToken cancellationToken)
+        {
+            OnPropertyChanged(nameof(SourceTokens));
             await Task.CompletedTask;
         }
 
@@ -543,6 +557,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenDoubleClickedEvent, e);
         }
 
+        private void OnTokenJoin(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenJoinEvent, e);
+        }        
+        
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
@@ -552,14 +571,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }
+
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
-            if (!SelectedTokens.Any())
+            var control = e.Source as FrameworkElement;
+            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
+            if (tokenDisplay is { IsTokenSelected: false })
             {
-                var control = e.Source as FrameworkElement;
-                var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-                UpdateSelection(tokenDisplay!, false);
+                UpdateVerseSelection(tokenDisplay, false);
             }
+
             RaiseTokenEvent(TokenRightButtonDownEvent, e);
         }
 
@@ -570,12 +591,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
-            var control = e.Source as FrameworkElement;
-            var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
+            //var control = e.Source as FrameworkElement;
+            //var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
+            var args = e as TokenEventArgs;
+            var tokenDisplayViewModel = args.TokenDisplay;
 
             if (DataContext is VerseDisplayViewModel verseDisplayViewModel)
             {
-                if ((Keyboard.Modifiers & ModifierKeys.Shift) > 0)
+                if (args.IsShiftPressed)
                 {
                     if (tokenDisplayViewModel != null && verseDisplayViewModel.Alignments != null)
                     {
@@ -584,7 +607,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         if (tokenDisplayViewModel.IsSource)
                         {
                             targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -599,7 +622,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 });
                             ;
                             sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -616,7 +639,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                         else
                         {
                             sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -631,7 +654,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                                 });
                             ;
                             targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.Equals(tokenDisplayViewModel.Token
+                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
                                     .TokenId))
                                 .SelectMany(a =>
                                 {
@@ -651,13 +674,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             {
                                 if (sourceTokens
                                     .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId))
+                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -668,13 +691,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             {
                                 if (targetTokens
                                     .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId))
+                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
                                 {
-                                    tdm.IsSelected = true;
+                                    tdm.IsHighlighted = true;
                                 }
                                 else
                                 {
-                                    tdm.IsSelected = false;
+                                    tdm.IsHighlighted = false;
                                 }
 
                                 return tdm;
@@ -682,19 +705,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
                             .ToList();
                     }
                 }
-                else if ((Keyboard.Modifiers & ModifierKeys.Alt) > 0)
+                else if (args.IsAltPressed)
                 {
                     verseDisplayViewModel.SourceTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
                     verseDisplayViewModel.TargetTokenDisplayViewModels
                         .Select(tdm =>
                         {
-                            tdm.IsSelected = false;
+                            tdm.IsHighlighted = false;
                             return tdm;
                         })
                         .ToList();
@@ -715,13 +738,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenMouseWheelEvent, e);
         }
 
+        private void OnTokenUnjoin(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenUnjoinEvent, e);
+        }
+
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
             var control = e.Source as TokenDisplay;
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = control?.TokenDisplayViewModel,
+                TokenDisplay = control?.TokenDisplayViewModel,
+                InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
                 Translation = control?.TokenDisplayViewModel?.Translation,
             }) ;
         }
@@ -777,7 +806,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 RoutedEvent = routedEvent,
                 TokenDisplayViewModel = control?.TokenDisplayViewModel,
-                SelectedTokens = SelectedTokens,
+                SelectedTokens = VerseSelectedTokens,
             });
         }
 
@@ -830,8 +859,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseNoteEvent(TranslateQuickEvent, e);
         }
 
+        // ReSharper restore UnusedMember.Global
+
         #endregion
         #region Public events
+
+        // ReSharper disable UnusedMember.Global
+
+        /// <summary>
+        /// Occurs when a property is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Occurs when an individual token is clicked.
@@ -912,6 +950,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenMouseWheelEvent, value);
             remove => RemoveHandler(TokenMouseWheelEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to join multiple tokens into a composite token.
+        /// </summary>
+        public event RoutedEventHandler TokenJoin
+        {
+            add => AddHandler(TokenJoinEvent, value);
+            remove => RemoveHandler(TokenJoinEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to unjoin a composite token.
+        /// </summary>
+        public event RoutedEventHandler TokenUnjoin
+        {
+            add => AddHandler(TokenUnjoinEvent, value);
+            remove => RemoveHandler(TokenUnjoinEvent, value);
         }
 
         /// <summary>
@@ -1089,6 +1145,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Public properties
 
         /// <summary>
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected across all displays.
+        /// </summary>
+        public TokenDisplayViewModelCollection AllSelectedTokens { get; set; } = new();
+
+
+        public static IEventAggregator? EventAggregator { get; set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> used to draw the background of highlighted tokens.
+        /// </summary>
+        public Brush HighlightedTokenBackground
+        {
+            get => (Brush)GetValue(HighlightedTokenBackgroundProperty);
+            set => SetValue(HighlightedTokenBackgroundProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the horizontal spacing between translations.
         /// </summary>
         /// <remarks>
@@ -1098,16 +1171,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (double)GetValue(HorizontalSpacingProperty);
             set => SetValue(HorizontalSpacingProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets whether the <see cref="ItemsPanelTemplate"/> to use when rendering the control.
-        /// </summary>
-        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
-        private ItemsPanelTemplate ItemsPanelTemplate
-        {
-            get => (ItemsPanelTemplate)GetValue(ItemsPanelTemplateProperty);
-            set => SetValue(ItemsPanelTemplateProperty, value);
         }
 
         /// <summary>
@@ -1141,11 +1204,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI for this verse.
-        /// </summary>
-        public TokenDisplayViewModelCollection SelectedTokens { get; set; } = new();
-
-        /// <summary>
         /// Gets or sets the <see cref="Brush"/> used to draw the background of selected tokens.
         /// </summary>
         public Brush SelectedTokenBackground
@@ -1173,16 +1231,58 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the translations.
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
         /// </summary>
-        public FlowDirection TargetFlowDirection
+        public FontFamily SourceFontFamily
         {
-            get => (FlowDirection)GetValue(TargetFlowDirectionProperty);
-            set => SetValue(TargetFlowDirectionProperty, value);
+            get => (FontFamily)GetValue(SourceFontFamilyProperty);
+            set => SetValue(SourceFontFamilyProperty, value);
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the translations.
+        /// Gets or sets the font size for the token.
+        /// </summary>
+        public double SourceFontSize
+        {
+            get => (double)GetValue(SourceFontSizeProperty);
+            set => SetValue(SourceFontSizeProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font style for the token.
+        /// </summary>
+        public FontStyle SourceFontStyle
+        {
+            get => (FontStyle)GetValue(SourceFontStyleProperty);
+            set => SetValue(SourceFontStyleProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the font weight for the token.
+        /// </summary>
+        public FontWeight SourceFontWeight
+        {
+            get => (FontWeight)GetValue(SourceFontWeightProperty);
+            set => SetValue(SourceFontWeightProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="SourceItemsPanelTemplate"/> to use when rendering the control.
+        /// </summary>
+        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
+        private ItemsPanelTemplate SourceItemsPanelTemplate
+        {
+            get => (ItemsPanelTemplate)GetValue(SourceItemsPanelTemplateProperty);
+            set => SetValue(SourceItemsPanelTemplateProperty, value);
+        }
+
+        /// <summary>
+        /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
+        /// </summary>
+        public IEnumerable SourceTokens => VerseDisplayViewModel?.SourceTokenDisplayViewModels;
+
+        /// <summary>
+        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.
         /// </summary>
         public FontFamily TargetFontFamily
         {
@@ -1191,7 +1291,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font size for the translation.
+        /// Gets or sets the font size for the target tokens.
         /// </summary>
         public double TargetFontSize
         {
@@ -1200,7 +1300,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font style for the translation.
+        /// Gets or sets the font style for the target tokens.
         /// </summary>
         public FontStyle TargetFontStyle
         {
@@ -1209,7 +1309,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the font weight for the translation.
+        /// Gets or sets the font weight for the target.
         /// </summary>
         public FontWeight TargetFontWeight
         {
@@ -1218,22 +1318,24 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
-        /// Gets or sets the collection of target (alignment) tokens to be displayed for the verse.
+        /// Gets or sets the <see cref="TargetItemsPanelTemplate"/> to use when rendering the target tokens.
         /// </summary>
-        public IEnumerable? TargetTokens
+        /// <remarks>This should normally not be set directly, as it is determined by the value of the <see cref="Wrap"/> property.</remarks>
+        private ItemsPanelTemplate TargetItemsPanelTemplate
         {
-            get => (IEnumerable)GetValue(TargetTokensProperty);
-            set => SetValue(TargetTokensProperty, value);
+            get => (ItemsPanelTemplate)GetValue(TargetItemsPanelTemplateProperty);
+            set => SetValue(TargetItemsPanelTemplateProperty, value);
         }
+
+        /// <summary>
+        /// Gets the collection of <see cref="TokenDisplayViewModel"/> target objects to display in the control.
+        /// </summary>
+        public TokenDisplayViewModelCollection TargetTokens => VerseDisplayViewModel.TargetTokenDisplayViewModels;
 
         /// <summary>
         /// Gets or sets the visibility of the target (alignment) verse.
         /// </summary>
-        public Visibility TargetVisibility
-        {
-            get => (Visibility)GetValue(TargetVisibilityProperty);
-            set => SetValue(TargetVisibilityProperty, value);
-        }
+        public Visibility TargetVisibility => TargetTokens.Any() ? Visibility.Visible : Visibility.Collapsed;
 
         /// <summary>
         /// Gets or sets the title to be displayed for the verse.
@@ -1287,71 +1389,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             get => (Visibility)GetValue(TitleVisibilityProperty);
             set => SetValue(TitleVisibilityProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="FlowDirection"/> to use for displaying the tokens.
-        /// </summary>
-        public FlowDirection TokenFlowDirection
-        {
-            get => (FlowDirection)GetValue(TokenFlowDirectionProperty);
-            set => SetValue(TokenFlowDirectionProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="FontFamily"/> to use for displaying the token.
-        /// </summary>
-        public FontFamily TokenFontFamily
-        {
-            get => (FontFamily)GetValue(TokenFontFamilyProperty);
-            set => SetValue(TokenFontFamilyProperty, value);
-        }
-
-        public FlowDirection IsRtl
-        {
-            get => (FlowDirection)GetValue(IsRtlProperty);
-            set => SetValue(IsRtlProperty, value);
-        }
-        public FlowDirection IsTargetRtl
-        {
-            get => (FlowDirection)GetValue(IsTargetRtlProperty);
-            set => SetValue(IsTargetRtlProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font size for the token.
-        /// </summary>
-        public double TokenFontSize
-        {
-            get => (double)GetValue(TokenFontSizeProperty);
-            set => SetValue(TokenFontSizeProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font style for the token.
-        /// </summary>
-        public FontStyle TokenFontStyle
-        {
-            get => (FontStyle)GetValue(TokenFontStyleProperty);
-            set => SetValue(TokenFontStyleProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets the font weight for the token.
-        /// </summary>
-        public FontWeight TokenFontWeight
-        {
-            get => (FontWeight)GetValue(TokenFontWeightProperty);
-            set => SetValue(TokenFontWeightProperty, value);
-        }
-
-        /// <summary>
-        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects to display in the control.
-        /// </summary>
-        public IEnumerable Tokens
-        {
-            get => (IEnumerable)GetValue(TokensProperty);
-            set => SetValue(TokensProperty, value);
         }
 
         /// <summary>
@@ -1454,6 +1491,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Gets the strongly-typed VerseDisplayViewModel bound to this control.
+        /// </summary>
+        public VerseDisplayViewModel VerseDisplayViewModel => DataContext.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null;
+
+        /// <summary>
         /// Gets or sets the margin for the tokens list.
         /// </summary>
         public Thickness VerseMargin
@@ -1461,6 +1503,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             get => (Thickness) GetValue(VerseMarginProperty);
             set => SetValue(VerseMarginProperty, value);
         }
+
+        /// <summary>
+        /// Gets or sets a collection of <see cref="TokenDisplayViewModel"/> objects that are selected in the UI for this verse.
+        /// </summary>
+        public TokenDisplayViewModelCollection VerseSelectedTokens { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the padding for the tokens list.
@@ -1486,13 +1533,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             InitializeComponent();
             Loaded += OnLoaded;
-        }
 
-        public IEventAggregator EventAggregator { get; set; }
-
-        public VerseDisplay(IEventAggregator eventAggregator)
-        {
-            EventAggregator = eventAggregator;
+            if (EventAggregator != null)
+            {
+                EventAggregator.SubscribeOnUIThread(this);
+            }
         }
     }
 }

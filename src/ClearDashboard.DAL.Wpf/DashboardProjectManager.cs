@@ -20,49 +20,50 @@ using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
+using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
-
-
 
 public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
 
 public record GetApplicationWindowSettings();
 public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
-public record ShowTokenizationWindowMessage(
-    string ParatextProjectId, 
-    string ProjectName,
-    string TokenizationType,
-    Guid CorpusId, 
-    Guid TokenizedTextCorpusId, 
-    CorpusType CorpusType,
-    //FIXME:surface serializationEngineStringDetokenizer Detokenizer,
-    bool IsRTL, bool IsNewWindow);
+//public record AddTokenizedCorpusToEnhancedViewMessage(
+//    string? ParatextProjectId, 
+//    string? ProjectName,
+//    string? TokenizationType,
+//    Guid? CorpusId, 
+//    Guid? TokenizedTextCorpusId, 
+//    CorpusType CorpusType,
+//    //FIXME:surface serializationEngineStringDetokenizer Detokenizer,
+//    bool? IsRTL, 
+//    bool? IsNewWindow);
 
-public record ShowParallelTranslationWindowMessage(
-    string? TranslationSetId, 
-    string? AlignmentSetId, 
-    string DisplayName, 
-    string ParallelCorpusId,
-    string? ParallelCorpusDisplayName,
-    //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
-    bool IsRTL,
-    //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
-    bool? IsTargetRTL, 
-    bool IsNewWindow,
-    string SourceParatextId,
-    string TargetParatextId);
+//public record AddTokenizedCorpusToEnhancedViewMessage(TokenizedCorpusEnhancedViewItemMetadatum Metadatum);
 
-public record CloseDockingPane(Guid guid);
+
+//public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
+
+//public record AddAlignmentToEnhancedViewMessage(
+//    string? TranslationSetId, 
+//    string? AlignmentSetId, 
+//    string? DisplayName, 
+//    string? ParallelCorpusId,
+//    string? ParallelCorpusDisplayName,
+//    //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
+//    bool? IsRTL,
+//    //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
+//    bool? IsTargetRTL, 
+//    bool? IsNewWindow,
+//    string? SourceParatextId,
+//    string? TargetParatextId);
+
 public record UiLanguageChangedMessage(string LanguageCode);
 
 public record VerseChangedMessage(string Verse);
-public record BCVLoadedMessage();
-
 public record ProjectLoadCompleteMessage(bool Loaded);
 
-public record ActiveDocumentMessage(Guid Guid);
 
 public record ProjectChangedMessage(ParatextProject Project);
 
@@ -72,16 +73,17 @@ public record ParatextConnectedMessage(bool Connected);
 
 public record UserMessage(User User);
 
-public record LogActivityMessage(string Message);
 
 public record FilterPinsMessage(string Message);
 
 public record CreateProjectMessage(string Message);
 
+public record ProjectsMetadataChangedMessage(List<ParatextProjectMetadata> ProjectsMetadata);
+
 
 
 #region ProjectDesignSurfaceMessages
-public record NodeSelectedChangedMessage(object Node);
+public record NodeSelectedChangedMessage(object? Node);
 public record ConnectionSelectedChangedMessage(Guid ConnectorId);
 public record CorpusAddedMessage(string ParatextId);
 public record CorpusDeletedMessage(string ParatextId);
@@ -110,7 +112,9 @@ public class DashboardProjectManager : ProjectManager
     private readonly INavigationService _navigationService;
 
     private bool _licenseCleared = false;
-    public static bool InComingChangesStarted { get; set; }
+    public static bool IncomingChangesStarted { get; set; }
+
+    public List<ParatextProjectMetadata> ProjectMetadata = new();
 
     public DashboardProjectManager(IEventAggregator eventAggregator, ParatextProxy paratextProxy, ILogger<ProjectManager> logger, IWindowManager windowManager, INavigationService navigationService, ILifetimeScope lifetimeScope) : base(paratextProxy, logger, lifetimeScope)
     {
@@ -125,7 +129,7 @@ public class DashboardProjectManager : ProjectManager
         await base.Initialize();
         CurrentUser = GetLicensedUser();
         await ConfigureSignalRClient();
-        
+
     }
 
     protected async Task ConfigureSignalRClient()
@@ -213,20 +217,20 @@ public class DashboardProjectManager : ProjectManager
 
     protected async Task HookSignalREvents()
     {
-        List<string> requestedVerses= new();
+        List<string> requestedVerses = new();
         // ReSharper disable AsyncVoidLambda
         HubProxy.On<string>("sendVerse", async (verse) =>
 
         {
             requestedVerses.Add(verse);
-            if (!InComingChangesStarted)
+            if (!IncomingChangesStarted)
             {
-                InComingChangesStarted = true;
+                IncomingChangesStarted = true;
                 CurrentVerse = verse;
                 await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
-                InComingChangesStarted = false;
+                IncomingChangesStarted = false;
 
-                if (requestedVerses.Last().PadLeft(9,'0')!= CurrentVerse.PadLeft(9, '0'))
+                if (requestedVerses.Last().PadLeft(9, '0') != CurrentVerse.PadLeft(9, '0'))
                 {
                     CurrentVerse = requestedVerses.Last();
                     await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(CurrentVerse));
@@ -283,10 +287,10 @@ public class DashboardProjectManager : ProjectManager
 
         return project;
     }
-    
-    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
-    public List<ParatextProjectMetadata> ProjectsMetadata { get; set; } = new();
 
+    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
+    public static dynamic AddParatextCorpusDialogSettings => CreateAddParatextCorpusDialogSettings();
+    
     public void CheckLicense<TViewModel>(TViewModel viewModel)
     {
         if (!_licenseCleared)
@@ -345,7 +349,7 @@ public class DashboardProjectManager : ProjectManager
         var created = _windowManager.ShowDialogAsync(viewModel, null, settings);
         _licenseCleared = true;
     }
-    
+
 
     private static dynamic CreateNewProjectDialogSettings()
     {
@@ -354,6 +358,18 @@ public class DashboardProjectManager : ProjectManager
         settings.ShowInTaskbar = false;
         settings.WindowState = WindowState.Normal;
         settings.ResizeMode = ResizeMode.NoResize;
+        return settings;
+    }
+
+    private static dynamic CreateAddParatextCorpusDialogSettings()
+    {
+        dynamic settings = new ExpandoObject();
+        settings.WindowStyle = WindowStyle.None;
+        settings.ShowInTaskbar = false;
+        settings.WindowState = WindowState.Normal;
+        settings.ResizeMode = ResizeMode.NoResize;
+        settings.Width = 850;
+        settings.Height = 600;
         return settings;
     }
 

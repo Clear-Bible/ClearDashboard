@@ -1,13 +1,15 @@
 ﻿using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Notes;
+using ClearDashboard.DAL.Alignment.Notes;
 using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
     public class Corpus
     {
-        public const string DefaultTranslationFontFamily = "Segoe UI";
+        public const string DefaultFontFamily = "Segoe UI";
 
         public CorpusId CorpusId { get; set; }
 
@@ -20,6 +22,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         {
             // call the update handler
             // update 'this' instance with the metadata from the handler (the ones with setters only)
+        }
+
+        public async Task Delete(IMediator mediator, CancellationToken token = default)
+        {
+            if (CorpusId == null)
+            {
+                return;
+            }
+
+            await Delete(mediator, CorpusId, token);
         }
 
         public static async Task<IEnumerable<CorpusId>> GetAllCorpusIds(IMediator mediator)
@@ -37,10 +49,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             string Language,
             string CorpusType,
             string ParatextId,
-            string TranslationFontFamily = DefaultTranslationFontFamily,
+            string FontFamily = DefaultFontFamily,
             CancellationToken token = default)
         {
-            var command = new CreateCorpusCommand(IsRtl, TranslationFontFamily, Name, Language, CorpusType, ParatextId);
+            var command = new CreateCorpusCommand(IsRtl, FontFamily, Name, Language, CorpusType, ParatextId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
@@ -67,6 +79,16 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
+        }
+        public static async Task Delete(
+            IMediator mediator,
+            CorpusId corpusId,
+            CancellationToken token = default)
+        {
+            var command = new DeleteCorpusByCorpusIdCommand(corpusId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed(true);
         }
     }
 }

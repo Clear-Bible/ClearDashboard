@@ -39,7 +39,6 @@
 
     <Window.Resources>
         <system:Boolean x:Key="True">True</system:Boolean>
-        <system:Boolean x:Key="False">False</system:Boolean>
         <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <Style
             x:Key="CustomLightMetroWindowButtonStyle"
@@ -320,7 +319,7 @@
             <StatusBarItem Grid.Column="2" />
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
-                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">
+                <!--<StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">
 
                     <Button
                         x:Name="ClickUpdateLink"
@@ -347,7 +346,8 @@
                             Foreground="{StaticResource BlueMidBrush}"
                             Kind="Notes" />
                     </Button>
-                </StackPanel>
+                </StackPanel>-->
+                <userControls:ReleaseNotesUserControl></userControls:ReleaseNotesUserControl>
             </StatusBarItem>
         </StatusBar>
 

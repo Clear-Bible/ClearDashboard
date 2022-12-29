@@ -5,23 +5,30 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <Platforms>AnyCPU</Platforms>
+    <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2022</Copyright>
-    <AssemblyVersion>0.4.3.0</AssemblyVersion>
-    <FileVersion>0.4.3.0</FileVersion>
-    <Version>0.4.3.0</Version>
+    <AssemblyVersion>0.4.6.1</AssemblyVersion>
+    <FileVersion>0.4.6.1</FileVersion>
+    <Version>0.4.6.1</Version>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\About\**" />
     <Compile Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="ViewModels\About\**" />
     <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <None Remove="ViewModels\About\**" />
     <None Remove="Views\DesignSurface\**" />
+    <Page Remove="ViewModels\About\**" />
     <Page Remove="Views\DesignSurface\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="ViewModels\Panes\WorkSpaceViewModel.cs" />
+    <Compile Remove="ViewModels\ParatextViews\WordMeaningsViewModel.cs" />
+    <Compile Remove="Views\ParatextViews\WordMeaningsView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +44,7 @@
     <None Remove="Resources\block_16.png" />
     <None Remove="Resources\ClearDashboard_logo_128.png" />
     <None Remove="Resources\Crystal Click 2.wav" />
+    <None Remove="Resources\donut_icon.ico" />
     <None Remove="Resources\GalSILB.ttf" />
     <None Remove="Resources\GalSILR.ttf" />
     <None Remove="Resources\GentiumPlus-Bold.ttf" />
@@ -44,12 +52,12 @@
     <None Remove="Resources\GentiumPlus-Italic.ttf" />
     <None Remove="Resources\GentiumPlus-Regular.ttf" />
     <None Remove="Resources\KadmosU.ttf" />
-    <None Remove="Resources\Layouts\Dashboard.Layout.config2" />
     <None Remove="Resources\logos_icon.png" />
     <None Remove="Resources\NewProject_Icon_128.png" />
     <None Remove="Resources\NewProject_Icon_96.png" />
     <None Remove="Resources\Paratext_Connected32.png" />
     <None Remove="Resources\Paratext_Disconnected32.png" />
+    <None Remove="Resources\Paratext_Send32.png" />
     <None Remove="Resources\Paratext_white_Icon48.png" />
     <None Remove="Resources\SBL_grk.ttf" />
     <None Remove="Resources\SBL_Hbrw.ttf" />
@@ -58,6 +66,10 @@
     <None Remove="Resources\settings_logo_96.png" />
     <None Remove="Resources\SILEOTSR.ttf" />
     <None Remove="Resources\tick_16.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\ParatextViews\WordMeaningsView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,9 +97,6 @@
     <Content Include="Assets\newproject.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Layouts\Dashboard.Layout.config2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -95,7 +104,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClearApplicationFoundation" Version="2.0.2-alpha" />
+	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="108.4.130" />
+	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.0" />
+    <PackageReference Include="Dahomey.Json" Version="1.12.2" />
+    <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Aero" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.Expression" Version="4.70.5" />
@@ -103,18 +115,18 @@
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2010" Version="4.70.5" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.5" />
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.4.0" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.4.0" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" /><PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" /><PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
+    <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
   </ItemGroup>
@@ -125,6 +137,9 @@
     </Resource>
     <Resource Include="Resources\block_16.png" />
     <Resource Include="Resources\ClearDashboard_logo_128.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\donut_icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\GalSILB.ttf">
@@ -163,6 +178,9 @@
     <Resource Include="Resources\Paratext_Disconnected32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Paratext_Send32.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\Paratext_white_Icon48.png" />
     <Resource Include="Resources\SBL_grk.ttf" />
     <Resource Include="Resources\SBL_Hbrw.ttf" />
@@ -182,6 +200,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -201,6 +224,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Strings\Resources.am.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -275,6 +302,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
     </None>
     <None Update="Resources\Layouts\Dashboard.Layout.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Layouts\Dashboard.Layout_OLD.config">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Paratext_Send32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\TailBlazor\Dragablz.dll">
@@ -433,6 +466,36 @@
   <ItemGroup>
     <Folder Include="Interfaces\" />
     <Folder Include="Resources\TailBlazor\" />
-    <Folder Include="ViewModels\About\" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(PlatformTarget)' == 'x86'">
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x86</RuntimeIdentifier>
+    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PlatformTarget)' == 'x64'">
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PlatformTarget)' == 'arm64'">
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-arm64</RuntimeIdentifier>
+    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+  </PropertyGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="powershell -Command &quot;((Get-Date).ToUniversalTime()).ToString(\&quot;s\&quot;) | Out-File '$(ProjectDir)Resources\BuildDate.txt'&quot;" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-arm64" Version="108.4.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x64" Version="108.4.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="chromiumembeddedframework.runtime.win-x86" Version="108.4.13" />
   </ItemGroup>
 </Project>

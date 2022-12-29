@@ -15,13 +15,13 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
 
         public CorpusId(
-            Guid id, bool isRtl, string? translationFontFamily, string? name, string? displayName, 
-            string? language, string? paratextGuid, string corpusType, Dictionary<string, object> metadata,
+            Guid id, bool isRtl, string? fontFamily, string? name, string? displayName, 
+            string? language, string? paratextGuid, string? corpusType, Dictionary<string, object> metadata,
             DateTimeOffset created, UserId userId)
         {
             Id = id;
             IsRtl = isRtl;
-            TranslationFontFamily = translationFontFamily;
+            FontFamily = fontFamily;
             Name = name;
             DisplayName = displayName;
             Language = language;
@@ -32,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             UserId = userId;
         }
         public bool IsRtl { get; set; } = false;
-        public string? TranslationFontFamily { get; set; }
+        public string? FontFamily { get; set; }
         public string? Name { get; set; }
         public string? DisplayName { get; set; }
         public string? Language { get; set; }
@@ -48,7 +48,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             if (other is null) return false;
             if (!IdEquals(other)) return false;
             if (IsRtl != other.IsRtl ||
-                TranslationFontFamily!= other.TranslationFontFamily ||
+                FontFamily!= other.FontFamily ||
                 Name != other.Name ||
                 DisplayName != other.DisplayName ||
                 Language != other.Language ||
@@ -73,7 +73,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             HashCode hash = new();
             hash.Add(Id);
             hash.Add(IsRtl);
-            hash.Add(TranslationFontFamily);
+            hash.Add(FontFamily);
             hash.Add(Name);
             hash.Add(DisplayName);
             hash.Add(Language);

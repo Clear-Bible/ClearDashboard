@@ -504,6 +504,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("WindowTabLayout")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AppVersion")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");

@@ -7,7 +7,7 @@ using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using SIL.Machine.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -18,7 +18,7 @@ public interface IParallelCorpusDialogViewModel
 {
     CorpusNodeViewModel SourceCorpusNodeViewModel { get; set; }
     CorpusNodeViewModel TargetCorpusNodeViewModel { get; set; }
-    ConnectionViewModel ConnectionViewModel { get; set; }
+    ParallelCorpusConnectionViewModel ParallelCorpusConnectionViewModel { get; set; }
     SmtModelType SelectedSmtAlgorithm { get; set; }
     IWordAlignmentModel WordAlignmentModel { get; set; }
     DAL.Alignment.Corpora.ParallelCorpus ParallelTokenizedCorpus { get; set; }
@@ -29,7 +29,7 @@ public interface IParallelCorpusDialogViewModel
     string? CurrentStepTitle { get; set; }
     string? CurrentProject { get; set; }
     bool UseDefaults { get; set; }
-Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
+    Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
     Task<LongRunningTaskStatus> TrainSmtModel();
     Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName);
     Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName);

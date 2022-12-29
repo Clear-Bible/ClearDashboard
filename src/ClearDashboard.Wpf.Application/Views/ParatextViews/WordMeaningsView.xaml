@@ -125,6 +125,13 @@
                 ShowOffsetControl="False"
                 VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock
+                Margin="50,0,0,0"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Foreground="OrangeRed"
+                Text="DEPRECATED" />
         </StackPanel>
 
 

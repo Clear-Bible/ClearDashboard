@@ -6,10 +6,12 @@
     xmlns:controls="clr-namespace:ClearApplicationFoundation.Controls;assembly=ClearApplicationFoundation"
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
+    xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.Views.Marble"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Menus"
@@ -52,10 +54,16 @@
         <Menu Grid.Row="0" ItemsSource="{Binding MenuItems}">
             <Menu.ItemContainerStyle>
                 <Style BasedOn="{StaticResource MaterialDesignMenuItem}" TargetType="{x:Type MenuItem}">
-                    <Setter Property="Icon" Value="{Binding Icon}" />
                     <Setter Property="Foreground" Value="{DynamicResource MaterialDesignDarkForeground}" />
                     <Setter Property="Icon" Value="{Binding IconSource}" />
                     <Setter Property="Command" Value="{Binding Command}" />
+                    <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="White" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </Menu.ItemContainerStyle>
 
@@ -99,7 +107,7 @@
                     </TextBlock>
                 </controls:SidebarExpander.Header>
 
-                <local:ProjectDesignSurfaceView x:Name="ProjectDesignSurfaceControl" />
+                <local:ProjectDesignSurfaceView x:Name="ProjectDesignSurfaceControl" DataContext="{Binding ProjectDesignSurfaceViewModel}" />
             </controls:SidebarExpander>
 
             <DockingManager
@@ -123,7 +131,7 @@
 
                         <panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
                             <DataTemplate>
-                                <local:EnhancedView />
+                                <enhancedView:EnhancedView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.EnhancedCorpusViewTemplate>
 
@@ -135,11 +143,17 @@
                             </DataTemplate>
                         </panes:PanesTemplateSelector.BiblicalTermsViewTemplate>
 
-                        <panes:PanesTemplateSelector.WordMeaningsViewTemplate>
+                        <!--<panes:PanesTemplateSelector.WordMeaningsViewTemplate>
                             <DataTemplate>
                                 <paratextViews:WordMeaningsView />
                             </DataTemplate>
-                        </panes:PanesTemplateSelector.WordMeaningsViewTemplate>
+                        </panes:PanesTemplateSelector.WordMeaningsViewTemplate>-->
+
+                        <panes:PanesTemplateSelector.MarbleViewTemplate>
+                            <DataTemplate>
+                                <marble:MarbleView />
+                            </DataTemplate>
+                        </panes:PanesTemplateSelector.MarbleViewTemplate>
 
                         <panes:PanesTemplateSelector.PinsViewTemplate>
                             <DataTemplate>

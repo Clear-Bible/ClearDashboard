@@ -25,6 +25,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Point = System.Windows.Point;
 
 // ReSharper disable InconsistentNaming
@@ -506,7 +507,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _longRunningTaskManager = longRunningTaskManager;
             Title = "🕮 " + LocalizationStrings.Get("Windows_BiblicalTerms", Logger);
             ContentId = "BIBLICALTERMS";
-            DockSide = EDockSide.Bottom;
+            DockSide = DockSide.Bottom;
            ClearFilterCommand = new RelayCommand(ClearFilter);
         }
 

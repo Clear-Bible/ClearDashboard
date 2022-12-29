@@ -30,6 +30,19 @@ namespace ClearDashboard.DAL.ViewModels
             }
         }
 
+        public string BookAbbr
+        {
+            get => Entity?.BookAbbr;
+            set
+            {
+                if (Entity != null)
+                {
+                    Entity.BookAbbr = value;
+                }
+                NotifyOfPropertyChange();
+            }
+        }
+
         public List<int> ChapterNumbers
         {
             get => Entity?.ChapterNumbers;
@@ -145,6 +158,7 @@ namespace ClearDashboard.DAL.ViewModels
                 NotifyOfPropertyChange(nameof(VerseNum));
                 NotifyOfPropertyChange(nameof(VerseIdText));
                 NotifyOfPropertyChange(nameof(BBBCCCVVV));
+                NotifyOfPropertyChange(nameof(BBBCCCVVVasInteger));
             }
         }
 
@@ -162,12 +176,25 @@ namespace ClearDashboard.DAL.ViewModels
         // ReSharper disable once InconsistentNaming
         public string BBBCCCVVV => Concat(Book, ChapterIdText, VerseIdText);
 
+        public int BBBCCCVVVasInteger => Convert.ToInt32(BBBCCCVVV);
+
+        public int GetBBBCCCVVV()
+        {
+            return Convert.ToInt32(BBBCCCVVV);
+        }
+
         /// <summary>
         /// Based on the properties of this object, it returns the complete verse location ID. Modified function for compatibility.
         /// </summary>
         /// <returns>A string with the Clear.Bible format of verse location ID.</returns>
         public string GetVerseId()
         {
+            if (BookAbbr != "")
+            {
+                var bbb = GetBookNumFromBookName(BookAbbr);
+                SetVerseFromId(bbb + ChapterIdText + VerseIdText);
+            }
+
             return BBBCCCVVV;
         }
 
@@ -191,6 +218,7 @@ namespace ClearDashboard.DAL.ViewModels
                 // The book number for use in the array used in the pull down list.
                 BookNum = bookNum;
                 BookName = GetShortBookNameFromBookNum(bookNumStr);
+                BookAbbr = BookName;
             }
             else
             {

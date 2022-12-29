@@ -40,7 +40,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var modelCorpus = new ModelCorpus
             {
                 IsRtl = request.IsRtl,
-                TranslationFontFamily = request.TranslationFontFamily,
+                FontFamily = request.FontFamily,
                 Name = request.Name,
                 Language = request.Language,
                 ParatextGuid = request.ParatextId

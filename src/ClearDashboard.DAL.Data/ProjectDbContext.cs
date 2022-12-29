@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -204,10 +205,24 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .HasOne(e => e.SourceTokenizedCorpus)
                 .WithMany(e => e.SourceParallelCorpora);
 
-
             modelBuilder.Entity<ParallelCorpus>()
                 .HasOne(e => e.TargetTokenizedCorpus)
                 .WithMany(e => e.TargetParallelCorpora);
+
+            modelBuilder.Entity<ParallelCorpus>()
+                .HasMany(pc => pc.VerseMappings)
+                .WithOne(vm => vm.ParallelCorpus)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<VerseMapping>()
+                .HasMany(vm => vm.Verses)
+                .WithOne(v => v.VerseMapping)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Verse>()
+                .HasMany(v => v.TokenVerseAssociations)
+                .WithOne(tva => tva.Verse)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // NB:  Add any new entities which inherit from RawContent
             //      to the ConfigureRawContentEntities extension method
@@ -226,6 +241,8 @@ namespace ClearDashboard.DataAccessLayer.Data
 
             modelBuilder.Entity<Token>().ToTable("TokenComponent");
             modelBuilder.Entity<TokenComposite>().ToTable("TokenComponent");
+            //modelBuilder.Entity<TokenComposite>().Navigation(e => e.Tokens).AutoInclude();
+
 
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
@@ -259,7 +276,6 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Translation>().HasIndex(e => e.SourceTokenComponentId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.AlignmentSetId);
             modelBuilder.Entity<AlignmentTopTargetTrainingText>().HasIndex(e => e.SourceTokenComponentId);
-
         }
 
         //public EntityEntry<TEntity> AddCopy<TEntity>(TEntity entity) where TEntity : class, new()

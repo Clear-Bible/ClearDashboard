@@ -9,11 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Clear.SIL.Machine" Version="2.5.12" />
 	  <PackageReference Include="MediatR" Version="9.0.0" />
-	  <PackageReference Include="SIL.Scripture" Version="10.1.0" />
 	  <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 	  <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
 	  <PackageReference Include="System.Text.Json" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="PresentationFramework">
+	    <HintPath>..\..\..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\PresentationFramework\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 </Project>

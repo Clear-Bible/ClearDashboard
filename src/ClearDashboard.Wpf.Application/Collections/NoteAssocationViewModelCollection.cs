@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+﻿using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using System.Collections.Generic;
+using Caliburn.Micro;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {
-    public class NoteAssociationViewModelCollection : ObservableCollection<NoteAssociationViewModel>
+    public class NoteAssociationViewModelCollection : BindableCollection<NoteAssociationViewModel>
     {
         public NoteAssociationViewModelCollection()
         {

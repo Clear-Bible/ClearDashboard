@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Events
 {
@@ -10,16 +10,18 @@ namespace ClearDashboard.Wpf.Application.Events
     {
 
         /// <summary>
-        /// The <see cref="TokenDisplayViewModel"/> that triggered this event.
+        /// The <see cref="TokenDisplay"/> that triggered this event.
         /// </summary>
-        public TokenDisplayViewModel TokenDisplayViewModel { get; set; }
+        public TokenDisplayViewModel? TokenDisplay { get; set; }
+
+        public InterlinearDisplayViewModel? InterlinearDisplay { get; set; }
 
         /// <summary>
         /// The <see cref="Translation"/> to which this event pertains.
         /// </summary>
         public Translation Translation { get; set; }
 
-        public string TranslationActionType { get; set; }
+        public string TranslationActionType { get; set; } = string.Empty;
 
         /// <summary>
         /// The keyboard <see cref="ModifierKeys"/> at the time of the event.

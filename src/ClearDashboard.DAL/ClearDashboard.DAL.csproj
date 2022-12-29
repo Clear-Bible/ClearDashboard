@@ -16,12 +16,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\DashboardProjects\DashboardProjectSlice.cs" />
+    <Compile Remove="Features\MarbleDataRequests\GetWhatIsThisWordSlice.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Resources\marble-concordances\BHSAnalysis.xml" />
     <None Remove="Resources\marble-concordances\BHSLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\BHSSelectedLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\GNTAnalysis.xml" />
     <None Remove="Resources\marble-concordances\GNTLemmaConcordance.xml" />
     <None Remove="Resources\marble-concordances\GNTSelectedLemmaConcordance.xml" />
+    <None Remove="Resources\marble-concordances\SemanticDomainsLookup.sqlite" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1CH.XML" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1CO.XML" />
     <None Remove="Resources\marble-indexes-full\MARBLELinks-1JN.XML" />
@@ -156,6 +162,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\marble-concordances\GNTSelectedLemmaConcordance.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\marble-concordances\SemanticDomainsLookup.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\marble-indexes-full\MARBLELinks-1CH.XML">
@@ -506,7 +515,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+	  <PackageReference Include="Clear.SIL.Machine" Version="2.5.12" />
+	  <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
@@ -519,8 +529,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-    <PackageReference Include="SIL.Machine" Version="2.5.11" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
     <PackageReference Include="TinyMapper" Version="3.0.3" />
     <PackageReference Include="Unidecode.NET" Version="2.1.0" />
   </ItemGroup>
@@ -556,6 +565,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_bhs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_gnt_long.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_structure_gnt_simple.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_translations_bhs.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="MarbleHelpers\DataFiles\tag_translations_gnt.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -563,6 +587,10 @@
     <None Update="Resources\ManuscriptVerses.sqlite">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MarbleHelpers\DataFiles\" />
   </ItemGroup>
 
 </Project>

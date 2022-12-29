@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
@@ -18,32 +17,34 @@
     <Border
         Padding="10"
         BorderBrush="{DynamicResource MaterialDesignToolForeground}"
-        BorderThickness="1"
+        BorderThickness="0"
         CornerRadius="3">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25" />
-                <RowDefinition Height="30" />
+                <RowDefinition Height="40" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="50" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="30" />
-                <RowDefinition Height="60" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="100" />
             </Grid.RowDefinitions>
             <Label
                 Grid.Row="0"
                 HorizontalContentAlignment="Center"
-                Content="Select a translation for" />
+                Content="Set a translation for" />
             <Label
                 Grid.Row="1"
                 HorizontalContentAlignment="Center"
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplayViewModel.SurfaceText}"
+                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenDisplayViewModel.TranslationSurfaceText}"
                 FontSize="20"
                 FontWeight="Bold" />
             <DataGrid
                 Name="TranslationOptionsDataGrid"
                 Grid.Row="2"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationOptionsVisibility}"
                 Padding="10,0"
+                Background="Transparent"
                 AutoGenerateColumns="False"
                 IsReadOnly="True"
                 ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationOptions}"
@@ -72,15 +73,24 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Label Grid.Row="3" Margin="0,20,0,0">Your Translation:</Label>
+            <Label 
+                Grid.Row="3" 
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationControlsVisibility}"
+                Margin="0,00,0,0" 
+                HorizontalAlignment="Center">Your Translation:</Label>
             <TextBox
                 x:Name="TranslationValue"
                 Grid.Row="4"
                 Margin="10,0"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Width="150"
+                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationControlsVisibility}"
                 Text="{Binding SelectedItem.Word, ElementName=TranslationOptionsDataGrid}" />
-            <StackPanel Grid.Row="5" Orientation="Horizontal">
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
                 <CheckBox
                     x:Name="ApplyAllCheckbox"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationControlsVisibility}"
                     Margin="10,10,0,0"
                     FontSize="13"
                     IsChecked="True">
@@ -92,7 +102,9 @@
                 Grid.Row="6"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
-                <Button Margin="10" Click="ApplyTranslation">Apply</Button>
+                <Button Margin="10" 
+                        Click="ApplyTranslation"
+                        Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationControlsVisibility}">Apply</Button>
                 <Button Margin="10" Click="Cancel">Cancel</Button>
             </StackPanel>
         </Grid>

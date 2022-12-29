@@ -1,12 +1,6 @@
-﻿using System.Collections;
+﻿using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using ClearBible.Engine.Utils;
-using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.ViewModels.Display;
-using NotesLabel = ClearDashboard.DAL.Alignment.Notes.Label;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {

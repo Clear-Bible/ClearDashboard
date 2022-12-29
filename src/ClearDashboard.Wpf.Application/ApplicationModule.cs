@@ -8,7 +8,6 @@ using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using System.Reflection;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
-using ClearDashboard.Wpf.Application.ViewModels.ProjectDesignSurface;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +15,10 @@ using System.Threading;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
+using ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -38,6 +41,15 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterValidators(Assembly.GetExecutingAssembly());
         }
 
+        public static void RegisterManagerDependencies(this ContainerBuilder builder)
+        {
+            builder.RegisterType<AlignmentManager>().AsSelf();
+            builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
+            builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
+            builder.RegisterType<TranslationManager>().AsSelf();
+            builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
+        }        
+        
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
         {
             builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();
@@ -77,6 +89,23 @@ namespace ClearDashboard.Wpf.Application
         //        .WithMetadata("Order", 1);
         //}
 
+
+        public static void RegisterParatextDialogDependencies(this ContainerBuilder builder)
+        {
+            builder.RegisterType<AddParatextCorpusStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
+                .WithMetadata("Order", 1);
+
+            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
+                .WithMetadata("Order", 2);
+
+            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("UpdateParatextCorpusDialog")
+                .WithMetadata("Order", 1);
+        }
+
+
         public static void RegisterParallelCorpusDialogDependencies(this ContainerBuilder builder)
         {
 
@@ -100,31 +129,35 @@ namespace ClearDashboard.Wpf.Application
         }
     }
 
+    internal class ProjectDesignSurfaceModule : Module
+    {
+        protected override void Load(ContainerBuilder builder)
+        {
+            //builder.RegisterType<CorpusNodeViewModel>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectDesignSurfaceDataProvider>()
+                .As<IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>>()
+                .InstancePerLifetimeScope();
+            base.Load(builder);
+        }
+    }
 
     internal class ApplicationModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //builder.RegisterType<CancellationTokenSource>().Named<CancellationTokenSource>("root_application_token_source").SingleInstance();
-            //builder
-            //    .Register(c => CancellationTokenSource.CreateLinkedTokenSource(
-            //        c.ResolveNamed<CancellationTokenSource>("root_application_token_source").Token))
-            //    .Named<CancellationTokenSource>("linked_application_token_source")
-            //    .InstancePerDependency();
-
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
-
-            builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
+            builder.RegisterManagerDependencies();
             builder.RegisterValidationDependencies();
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
             builder.RegisterParallelCorpusDialogDependencies();
+            builder.RegisterParatextDialogDependencies();  
+
             //builder.RegisterSmtModelDialogDependencies();
         }
-
     }
 }
 

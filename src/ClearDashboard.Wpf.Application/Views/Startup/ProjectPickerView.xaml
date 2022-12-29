@@ -76,8 +76,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="575" MinWidth="550" />
@@ -333,8 +333,9 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <Image
@@ -369,6 +370,23 @@
                                         Grid.ColumnSpan="2">
                                         <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Database}" />
                                         <Run FontSize="11" Text="{Binding CompactFilePath, Mode=OneTime}" />
+                                    </TextBlock>
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCompatibleVersion}" Value="False">
+                                                        <Setter Property="Foreground" Value="Red" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                        <Run FontSize="11" Text="Version: " />
+                                        <Run FontSize="11" Text="{Binding Version}" />
                                     </TextBlock>
                                 </Grid>
 
@@ -470,11 +488,29 @@
 
         </StackPanel>
 
-
-        <StackPanel
+        <StatusBar
+            x:Name="StatusBar"
             Grid.Row="3"
             Grid.Column="0"
-            Margin="10,0,0,0"
-            Orientation="Vertical" />
+            Grid.ColumnSpan="2"
+            Height="40"
+            Foreground="{DynamicResource MaterialDesignDarkForeground}">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="4">
+                <userControls:ReleaseNotesUserControl />
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </UserControl>

@@ -161,8 +161,9 @@
                     Cancel
                 </Button>
             </StackPanel>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="2" Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelSelectorVisibility}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -184,7 +185,7 @@
                     Grid.Column="1"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Orientation="Horizontal">
+                    Orientation="Vertical">
                     <userControls:LabelsDisplay
                         FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelFontSize}"
                         LabelBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelBackground}"
@@ -193,7 +194,8 @@
                         LabelPadding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelPadding}"
                         LabelRemoved="OnLabelRemoved"
                         Labels="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Labels}"
-                        Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}" />
+                        Note="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note}"
+                        Orientation="Vertical" />
                     <userControls:LabelSelector
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -261,6 +263,48 @@
                     NoteAssociationRightButtonDown="OnNoteAssociationRightButtonDown"
                     NoteAssociationRightButtonUp="OnNoteAssociationRightButtonUp"
                     Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AssociationsVisibility}" />
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Orientation="Vertical"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ParatextSendVisibility}">
+                    <Button
+                        Name="SendToParatextButton"
+                        Margin="10,-5,10,0"
+                        Padding="0,0,0,0"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Click="ConfirmParatextSend"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        ToolTip="Send this note to Paratext">
+                        <Image Height="18" Source="/Resources/Paratext_Send32.png" />
+                    </Button>
+                    <Popup
+                        Name="ConfirmParatextSendPopup"
+                        Width="225"
+                        HorizontalOffset="100"
+                        Placement="Left"
+                        PlacementTarget="{Binding ElementName=SendToParatextButton}"
+                        StaysOpen="False"
+                        VerticalOffset="30">
+                        <Border BorderThickness="2">
+                            <StackPanel Background="LightGreen" Orientation="Vertical">
+                                <TextBlock
+                                    Padding="10"
+                                    HorizontalAlignment="Center"
+                                    FontWeight="Bold">
+                                    Send this note to Paratext?
+                                </TextBlock>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                    <Button Margin="5" Click="ParatextSendConfirmed">Yes</Button>
+                                    <Button Margin="5" Click="ParatextSendCancelled">No</Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                </StackPanel>
             </Grid>
         </Grid>
 

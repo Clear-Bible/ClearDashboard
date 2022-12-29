@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
@@ -357,6 +358,39 @@ namespace ClearDashboard.DAL.Alignment.Notes
             result.ThrowIfCanceledOrFailed(true);
 
             return result.Data!;
+        }
+
+        /// <summary>
+        /// If Note (per the given NoteId) is associated with:
+        ///   domain entity ids representing one or more tokens (no other domain entity id type(s)),
+        ///   the associated tokens are all part of the same TokenizedCorpus + Book + Chapter + Verse,
+        ///   the associated tokens are contiguous within the verse,
+        /// returns the Corpus ParatextGuid value.  
+        /// Otherwise, returns null.
+        /// </summary>
+        /// <param name="mediator"></param>
+        /// <param name="noteId"></param>
+        /// <param name="token"></param>
+        /// <returns>(string paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?</returns>
+        /// <exception cref="OperationCanceledException"></exception>
+        public static async Task<(string paratextId, TokenizedTextCorpusId tokenizedTextCorpusId, IEnumerable<Token> verseTokens)?> GetParatextIdIfAssociatedContiguousTokensOnly(
+            IMediator mediator,
+            NoteId noteId,
+            CancellationToken token = default)
+        {
+            var command = new GetParatextProjectIdForNoteIdQuery(noteId);
+
+            var result = await mediator.Send(command, token);
+            if (result.Canceled)
+            {
+                throw new OperationCanceledException();
+            }
+            else if (result.Success)
+            {
+                return result.Data!;
+            }
+
+            return null;
         }
 
         public static async Task<IEnumerable<IId>> GetFullDomainEntityIds(

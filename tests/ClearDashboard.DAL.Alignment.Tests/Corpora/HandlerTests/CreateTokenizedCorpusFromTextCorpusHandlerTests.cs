@@ -12,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Xunit.Abstractions;
 using System.Text;
+using ClearDashboard.DAL.Alignment.Features;
+using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearBible.Engine.Persistence;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -165,6 +168,108 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         catch (Exception ex)
         {
             Output.WriteLine(ex.Message);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void TokenizedCorpus__CreateCompositeTokensApi()
+    {
+        try
+        {
+            var textCorpus = CreateFakeTextCorpusWithComposite(false);
+
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizationFunction = ".Tokenize<LatinWordTokenizer>().Transform<IntoTokensTextRowProcessor>()";
+            var tokenizedTextCorpus = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction);
+
+            Assert.NotNull(tokenizedTextCorpus);
+            Assert.All(tokenizedTextCorpus, tc => Assert.IsType<TokensTextRow>(tc));
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var verseRows = ProjectDbContext!.VerseRows
+                .Include(vr => vr.TokenComponents)
+                .Take(2)
+                .ToArray();
+
+            var tokensForComposite1 = verseRows[0].Tokens.Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            var composite1 = new CompositeToken(tokensForComposite1);
+            composite1.TokenId.Id = Guid.NewGuid();
+
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, null);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var tokenComposite1 = ProjectDbContext.TokenComposites.Include(tc => tc.Tokens)
+                .Where(tc => tc.Id == composite1.TokenId.Id)
+                .FirstOrDefault();
+
+            Assert.NotNull(tokenComposite1);
+            Assert.Equal(composite1.Tokens.Count(), tokenComposite1.Tokens.Count);
+            Assert.Empty(composite1.Tokens.Select(t => t.TokenId.Id).Except(tokenComposite1.Tokens.Select(tc => tc.Id)));
+
+            var tokensForComposite2 = verseRows[0].Tokens.Skip(1).Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            var composite2 = new CompositeToken(tokensForComposite2);
+            composite2.TokenId.Id = composite1.TokenId.Id;
+
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, null);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var tokenComposite2 = ProjectDbContext.TokenComposites.Include(tc => tc.Tokens)
+                .Where(tc => tc.Id == composite2.TokenId.Id)
+                .FirstOrDefault();
+
+            Assert.NotNull(tokenComposite2);
+            Assert.Equal(composite2.Tokens.Count(), tokenComposite2.Tokens.Count);
+            Assert.Empty(composite2.Tokens.Select(t => t.TokenId.Id).Except(tokenComposite2.Tokens.Select(tc => tc.Id)));
+
+            // Exception case:  multiple VerseRow tokens in non-ParallelCorpus Composite
+            var tokensForComposite3 = verseRows[0].Tokens.Skip(2).Take(3).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            tokensForComposite3.AddRange(verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)));
+            var composite3 = new CompositeToken(tokensForComposite3);
+            composite3.TokenId.Id = composite1.TokenId.Id;
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, null));
+
+            // Full round trip.  Use the API to retrieve the CompositeToken:
+            var ttc = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpus.TokenizedTextCorpusId);
+            var bookNumber = int.Parse(verseRows[0].BookChapterVerse[..3]);
+            var bookId = FileGetBookIds.BookIds.Where(b => int.Parse(b.silCannonBookNum) == bookNumber).Select(b => b.silCannonBookAbbrev).First();
+            var ttrs = ttc.GetRows(new List<string>() { bookId }).Cast<TokensTextRow>().ToList();
+
+            foreach (var ttr in ttrs)
+            {
+                var (b, c, v) = (((VerseRef)ttr.Ref).BookNum, ((VerseRef)ttr.Ref).ChapterNum, ((VerseRef)ttr.Ref).VerseNum);
+                var bookChapterVerse = $"{b:000}{c:000}{v:000}";
+
+                if (bookChapterVerse == verseRows[0].BookChapterVerse)
+                {
+                    var t2 = ttr.Tokens.Where(t => t.TokenId.Id == composite2.TokenId.Id).FirstOrDefault();
+                    Assert.NotNull(t2);
+                    Assert.IsType<CompositeToken>(t2);
+                    var c2 = (CompositeToken)t2;
+                    Assert.Equal(composite2.Tokens.Count(), c2.Tokens.Count());
+                    Assert.Empty(composite2.Tokens.Select(t => t.TokenId.Id).Except(c2.Tokens.Select(tc => tc.TokenId.Id)));
+                }
+            }
+
+            // This should delete composite1, but leave its child tokens:
+            composite1.Tokens = new List<Token>();
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, null);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            Assert.Null(ProjectDbContext.TokenComposites.Where(tc => tc.Id == composite1.TokenId.Id).FirstOrDefault());
+            Assert.Equal(4, ProjectDbContext.Tokens.Where(t => tokensForComposite1.Select(t => t.TokenId.Id).Contains(t.Id)).Count());
         }
         finally
         {

@@ -1,4 +1,6 @@
-﻿namespace ClearDashboard.DataAccessLayer.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace ClearDashboard.DataAccessLayer.Models;
 
 public class VerseMapping : SynchronizableTimestampedEntity
 {
@@ -11,7 +13,8 @@ public class VerseMapping : SynchronizableTimestampedEntity
         // ReSharper restore VirtualMemberCallInConstructor
     }
 
-    public virtual Guid? ParallelCorpusId { get; set; }
+    [ForeignKey(nameof(ParallelCorpusId))]
+    public virtual Guid ParallelCorpusId { get; set; }
     public virtual ParallelCorpus? ParallelCorpus { get; set; }
 
     public virtual ICollection<Verse> Verses { get; set; }
