@@ -122,7 +122,8 @@
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="System.Management" Version="7.0.0" /><PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" /><PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
+    <PackageReference Include="System.Management" Version="7.0.0" /><PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
+	  <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>
