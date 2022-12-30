@@ -317,7 +317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
                         var tokenizedCorpora =
                             topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
-                        DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
+                        await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
