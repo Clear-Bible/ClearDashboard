@@ -3,6 +3,7 @@ using System;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221230043904_lexicon")]
+    partial class lexicon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -167,6 +170,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("AlignmentId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("AlignmentSetId")
                         .HasColumnType("TEXT");
 
@@ -182,6 +188,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AlignmentId");
 
                     b.HasIndex("AlignmentSetId");
 
@@ -1279,6 +1287,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentTopTargetTrainingText", b =>
                 {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Alignment", "Alignment")
+                        .WithMany()
+                        .HasForeignKey("AlignmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", "AlignmentSet")
                         .WithMany()
                         .HasForeignKey("AlignmentSetId")
@@ -1290,6 +1304,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasForeignKey("SourceTokenComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Alignment");
 
                     b.Navigation("AlignmentSet");
 

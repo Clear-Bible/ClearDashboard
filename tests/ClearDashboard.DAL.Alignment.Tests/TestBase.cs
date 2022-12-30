@@ -48,7 +48,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             var services = new ServiceCollection();
             services.AddScoped<ProjectDbContext>();
             services.AddScoped<ProjectDbContextFactory>();
-            services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder>();
+            services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
             services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
             services.AddLogging();
             services.AddSingleton<IUserProvider, UserProvider>();
