@@ -35,7 +35,7 @@ namespace ClearDashboard.Wpf.Application.Dialogs
 
         public TokenDisplayViewModel TokenDisplay { get; }
 
-        public VerseDisplayViewModel VerseDisplay { get; }
+        public InterlinearDisplayViewModel InterlinearDisplay { get; }
 
         private IEnumerable<TranslationOption> _translationOptions = new List<TranslationOption>();
         public IEnumerable<TranslationOption> TranslationOptions
@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.Dialogs
         {
             if (TokenDisplay.Translation != null && !TokenDisplay.Translation.IsDefault)
             {
-                TranslationOptions = await VerseDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
+                TranslationOptions = await InterlinearDisplay.GetTranslationOptionsAsync(TokenDisplay.Token);
                 CurrentTranslationOption = TranslationOptions.FirstOrDefault(to => to.Word == TokenDisplay.TargetTranslationText);
 
                 OnUIThread(() =>
@@ -113,7 +113,7 @@ namespace ClearDashboard.Wpf.Application.Dialogs
 
                     async Task ApplyTranslation()
                     {
-                        await VerseDisplay.PutTranslationAsync(e.Translation, e.TranslationActionType);
+                        await InterlinearDisplay.PutTranslationAsync(e.Translation, e.TranslationActionType);
                     }
 
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(ApplyTranslation);
@@ -136,11 +136,11 @@ namespace ClearDashboard.Wpf.Application.Dialogs
             System.Windows.Application.Current.Dispatcher.Invoke(() => DialogResult = false);
         }
 
-        public TranslationSelectionDialog(TokenDisplayViewModel tokenDisplay, VerseDisplayViewModel verseDisplay)
+        public TranslationSelectionDialog(TokenDisplayViewModel tokenDisplay, InterlinearDisplayViewModel interlinearDisplay)
         {
             InitializeComponent();
             TokenDisplay = tokenDisplay;
-            VerseDisplay = verseDisplay;
+            InterlinearDisplay = interlinearDisplay;
 
             Loaded += OnLoaded;
             Unloaded += OnUnloaded;

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Width="300"
     Height="300"
     d:DesignHeight="450"
@@ -87,13 +88,30 @@
                         </Grid.Background>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="200" />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
+                        <iconPacks:PackIconMaterialDesign  VerticalAlignment="Center">
+                            <iconPacks:PackIconMaterialDesign.Style>
+                                <Style TargetType="iconPacks:PackIconMaterialDesign">
+                                    <Setter Property="Kind" Value="StarBorder"/>
+                                    <Setter Property="Foreground" Value="{StaticResource MahApps.Brushes.Gray}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=IsCurrentVerseSense}" Value="True">
+                                            <Setter Property="Kind" Value="Star"/>
+                                            <Setter Property="Foreground" Value="{StaticResource YellowDarkBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </iconPacks:PackIconMaterialDesign.Style>
+                        </iconPacks:PackIconMaterialDesign>
+
+
                         <!--  the colour key  -->
                         <Rectangle
-                            Grid.Column="0"
+                            Grid.Column="1"
                             Width="13"
                             Height="13"
                             Fill="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource colourConverter}}"
@@ -101,14 +119,14 @@
 
                         <!--  the name of this item  -->
                         <TextBlock
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="3"
                             Text="{Binding Path=Sense}"
                             TextWrapping="Wrap" />
 
                         <!--  the value of the item's property which this pie chart represents  -->
                         <TextBlock
-                            Grid.Column="2"
+                            Grid.Column="3"
                             Margin="3"
                             Tag="{Binding}"
                             Text="{Binding RelativeSource={RelativeSource Self}, Converter={StaticResource legendConverter}}" />

@@ -72,6 +72,16 @@ namespace ClearDashboard.DAL.Tests
             Services.AddSingleton<IProjectProvider, ProjectProvider>();
 
             var builder = new ContainerBuilder();
+
+            // Mediator resolves this from the container, and generally 
+            // as a thick client app, there isn't any notion of 'requests',
+            // so most likely this will be resolved on the 'root' scope:
+            builder.RegisterType<ProjectDbContextFactory>().InstancePerLifetimeScope();
+
+            // Intended to be resolved/disposed at a 'request' level:
+            builder.RegisterType<ProjectDbContext>().InstancePerRequest();
+            builder.RegisterType<SqliteProjectDbContextOptionsBuilder>().As<DbContextOptionsBuilder<ProjectDbContext>>().InstancePerRequest();
+
             builder.Populate(Services);
 
             Container = builder.Build();

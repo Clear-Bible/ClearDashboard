@@ -41,6 +41,15 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterValidators(Assembly.GetExecutingAssembly());
         }
 
+        public static void RegisterManagerDependencies(this ContainerBuilder builder)
+        {
+            builder.RegisterType<AlignmentManager>().AsSelf();
+            builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
+            builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
+            builder.RegisterType<TranslationManager>().AsSelf();
+            builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
+        }        
+        
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
         {
             builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();
@@ -90,6 +99,10 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AddParatextCorpusDialog")
                 .WithMetadata("Order", 2);
+
+            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("UpdateParatextCorpusDialog")
+                .WithMetadata("Order", 1);
         }
 
 
@@ -132,19 +145,11 @@ namespace ClearDashboard.Wpf.Application
     {
         protected override void Load(ContainerBuilder builder)
         {
-            //builder.RegisterType<CancellationTokenSource>().Named<CancellationTokenSource>("root_application_token_source").SingleInstance();
-            //builder
-            //    .Register(c => CancellationTokenSource.CreateLinkedTokenSource(
-            //        c.ResolveNamed<CancellationTokenSource>("root_application_token_source").Token))
-            //    .Named<CancellationTokenSource>("linked_application_token_source")
-            //    .InstancePerDependency();
-
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
-
-            builder.RegisterType<NoteManager>().AsSelf().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
+            builder.RegisterManagerDependencies();
             builder.RegisterValidationDependencies();
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
@@ -153,7 +158,6 @@ namespace ClearDashboard.Wpf.Application
 
             //builder.RegisterSmtModelDialogDependencies();
         }
-
     }
 }
 

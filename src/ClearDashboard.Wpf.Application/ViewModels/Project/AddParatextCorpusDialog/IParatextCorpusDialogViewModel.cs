@@ -15,11 +15,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
         List<IWorkflowStepViewModel>? Steps { get; }
         ParatextProjectMetadata SelectedProject { get; set; }
+        Tokenizers SelectedTokenizer { get; set; }
         List<string>? BookIds { get; set; }
 
 
         void Ok();
         void Cancel();
-        Task<object> AddParatextCorpus(string paratextCorpusDisplayName);
     }
 }

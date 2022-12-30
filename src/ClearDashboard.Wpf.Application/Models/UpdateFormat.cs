@@ -32,9 +32,18 @@ namespace ClearDashboard.Wpf.Application.Models
         BreakingChange
     }
 
+    public enum VersionType
+    {
+        [Description("Release")]
+        Release,
+        [Description("Prerelease")]
+        Prerelease
+    }
+
     public class UpdateFormat
     {
         public string Version { get; set; } = String.Empty;
+        public VersionType VersionType { get; set; } = VersionType.Release;
         public string ReleaseDate { get; set; } = String.Empty;
         public List<ReleaseNote> ReleaseNotes { get; set; } = new();
         public string DownloadLink { get; set; } = String.Empty;
@@ -231,16 +240,19 @@ namespace ClearDashboard.Wpf.Application.Models
 
         public static bool IsBreakingChangePresent(List<UpdateFormat> updateDataList, Version projectVersion)
         {
-            foreach (var update in updateDataList)
+            if (updateDataList != null)
             {
-                var updateVersion = ParseVersionString(update.Version);
-                if (!CheckWebVersion(update.Version) && IsNewerVersion(projectVersion, updateVersion))
+                foreach (var update in updateDataList)
                 {
-                    foreach (var releaseNote in update.ReleaseNotes)
+                    var updateVersion = ParseVersionString(update.Version);
+                    if (!CheckWebVersion(update.Version) && IsNewerVersion(projectVersion, updateVersion))
                     {
-                        if (releaseNote.NoteType == ReleaseNoteType.BreakingChange)
+                        foreach (var releaseNote in update.ReleaseNotes)
                         {
-                            return true;
+                            if (releaseNote.NoteType == ReleaseNoteType.BreakingChange)
+                            {
+                                return true;
+                            }
                         }
                     }
                 }
