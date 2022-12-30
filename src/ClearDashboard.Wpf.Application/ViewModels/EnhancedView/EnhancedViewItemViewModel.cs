@@ -1,9 +1,13 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Threading;
+using System.Windows;
 using System.Windows.Media;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -31,6 +35,11 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
     }
 
     public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
+
+    public virtual Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 
     protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager,
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,

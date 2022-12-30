@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
@@ -105,7 +105,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="108.4.130" />
-	  <PackageReference Include="ClearApplicationFoundation" Version="1.0.41" />
+	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.0" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.5" />
@@ -118,13 +118,12 @@
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
     <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="6.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="System.Management" Version="6.0.0" />
-    <PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
-    <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
+    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" /><PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
+	  <PackageReference Include="WpfKeyboard.Resources" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -444,6 +443,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\WorkflowFooter.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\EnhancedView\AquaCorpusAnalysisEnhancedViewItemView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
     <Page Update="Views\MirrorView.xaml">
