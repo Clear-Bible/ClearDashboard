@@ -102,6 +102,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 if (tokensIdsNotFound.Any())
                 {
                     combined.AddRange(ProjectDbContext.TokenComponents
+                        .Include(tc => ((TokenComposite)tc).Tokens)
                         .Where(tc => tokensIdsNotFound.Contains(tc.Id))
                         .Select(tc => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(tc),
