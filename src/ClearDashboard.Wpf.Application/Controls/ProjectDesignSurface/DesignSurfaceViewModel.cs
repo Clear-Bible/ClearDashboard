@@ -623,22 +623,35 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             bool isResource = false;
             if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
             {
-                var r = await Mediator.Send(new GetAllProjectsQuery());
+                try
+                {
+                    var r = await Mediator.Send(new GetAllProjectsQuery());
 
-                if (r.Success)
-                {
-                    var projects = r.Data
-                        ?? throw new InvalidDataEngineException(name: "return", value: "null", message: "Could not obtain a list of projects from paratext");
-                    var project = projects.Find(p => p.Guid.Equals(corpusNode.ParatextProjectId))
-                        ?? throw new InvalidDataEngineException(name: "paratextprojectid", value: corpusNode.ParatextProjectId, message: "not found in list of projects reported by paratext");
-                    isResource = project.IsResource
-                        ?? throw new InvalidDataEngineException(name: "IsResource", value: "null", message: $"BUG: IsResource is not set when obtaining project information from paratext for project {corpusNode.ParatextProjectId}");
+                    if (r.Success)
+                    {
+                        var projects = r.Data
+                                       ?? throw new InvalidDataEngineException(name: "return", value: "null",
+                                           message: "Could not obtain a list of projects from paratext");
+                        var project = projects.Find(p => p.Guid.Equals(corpusNode.ParatextProjectId))
+                                      ?? throw new InvalidDataEngineException(name: "paratextprojectid",
+                                          value: corpusNode.ParatextProjectId,
+                                          message: "not found in list of projects reported by paratext");
+                        isResource = project.IsResource ?? false;
+                        //?? throw new InvalidDataEngineException(name: "IsResource", value: "null",
+                        //    message:
+                        //    $"BUG: IsResource is not set when obtaining project information from paratext for project {corpusNode.ParatextProjectId}");
+                    }
+                    else
+                    {
+                        Logger?.LogCritical($"Error checking whether project is resource or not: {r.Message}");
+                        throw new MediatorErrorEngineException(r.Message);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Logger?.LogCritical($"Error checking whether project is resource or not: {r.Message}");
-                    throw new MediatorErrorEngineException(r.Message);
+                    isResource = false;
                 }
+              
             }
             else
             {
