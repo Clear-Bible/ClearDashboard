@@ -194,7 +194,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 cancellationToken.ThrowIfCancellationRequested();
 
                 combined.AddRange(ProjectDbContext.Lexicon_Lexemes
-                    .Include(li => li.Senses
+                    .Include(li => li.Meanings
                         .Where(d => string.IsNullOrEmpty(targetLanguage) || string.IsNullOrEmpty(d.Language) || d.Language == targetLanguage))
                     .Where(li => string.IsNullOrEmpty(sourceLanguage) || string.IsNullOrEmpty(li.Language) || li.Language == sourceLanguage)
                     .Where(li => sourceTokenTrainingTexts.Keys.Contains(li.Lemma))
@@ -202,7 +202,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     .SelectMany(li => sourceTokenTrainingTexts[li.Lemma!]
                         .Select(t => new Alignment.Translation.Translation(
                             ModelHelper.BuildToken(t),
-                            string.Join("/", li.Senses.Select(lid => lid.Text)),
+                            string.Join("/", li.Meanings.Select(lid => lid.Text)),
                             "FromLexicon")
                         )
                     ));

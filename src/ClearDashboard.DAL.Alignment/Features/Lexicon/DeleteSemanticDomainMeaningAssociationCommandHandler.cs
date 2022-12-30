@@ -7,32 +7,32 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class DeleteSemanticDomainSenseAssociationCommandHandler : ProjectDbContextCommandHandler<
-        DeleteSemanticDomainSenseAssociationCommand,
+    public class DeleteSemanticDomainMeaningAssociationCommandHandler : ProjectDbContextCommandHandler<
+        DeleteSemanticDomainMeaningAssociationCommand,
         RequestResult<Unit>, Unit>
     {
-        public DeleteSemanticDomainSenseAssociationCommandHandler(
+        public DeleteSemanticDomainMeaningAssociationCommandHandler(
             ProjectDbContextFactory? projectDbContextFactory,
             IProjectProvider projectProvider,
-            ILogger<DeleteSemanticDomainSenseAssociationCommandHandler> logger) : base(
+            ILogger<DeleteSemanticDomainMeaningAssociationCommandHandler> logger) : base(
                 projectDbContextFactory,
                 projectProvider,
                 logger)
         {
         }
 
-        protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteSemanticDomainSenseAssociationCommand request,
+        protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteSemanticDomainMeaningAssociationCommand request,
             CancellationToken cancellationToken)
         {
-            var association = ProjectDbContext!.Lexicon_SemanticDomainSenseAssociations.FirstOrDefault(sd => 
-                sd.SemanticDomainId == request.SemanticDomainId.Id && sd.SenseId == request.SenseId.Id);
+            var association = ProjectDbContext!.Lexicon_SemanticDomainMeaningAssociations.FirstOrDefault(sd => 
+                sd.SemanticDomainId == request.SemanticDomainId.Id && sd.MeaningId == request.MeaningId.Id);
 
             if (association == null)
             {
                 return new RequestResult<Unit>
                 (
                     success: false,
-                    message: $"Invalid SemanticDomainId '{request.SemanticDomainId}' / SenseId '{request.SenseId}' combination found in request"
+                    message: $"Invalid SemanticDomainId '{request.SemanticDomainId}' / MeaningId '{request.MeaningId}' combination found in request"
                 );
             }
 

@@ -3,7 +3,7 @@ using ClearDashboard.DAL.CQRS.Features;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public record PutSenseCommand(
+    public record PutMeaningCommand(
         LexemeId LexemeId,
-        Sense Sense) : ProjectRequestCommand<SenseId>;
+        Meaning Meaning) : ProjectRequestCommand<MeaningId>;
 }

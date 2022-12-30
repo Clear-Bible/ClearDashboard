@@ -4,7 +4,7 @@ using ClearDashboard.DAL.Alignment.Features;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class SenseId : SimpleSynchronizableTimestampedEntityId<SenseId>
+    public class MeaningId : SimpleSynchronizableTimestampedEntityId<MeaningId>
     {
     }
 }

@@ -13,20 +13,20 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class CreateSemanticDomainSenseAssociationCommandHandler : ProjectDbContextCommandHandler<CreateSemanticDomainSenseAssociationCommand,
+    public class CreateSemanticDomainMeaningAssociationCommandHandler : ProjectDbContextCommandHandler<CreateSemanticDomainMeaningAssociationCommand,
         RequestResult<Unit>, Unit>
     {
-        public CreateSemanticDomainSenseAssociationCommandHandler(
+        public CreateSemanticDomainMeaningAssociationCommandHandler(
             ProjectDbContextFactory? projectDbContextFactory, 
             IProjectProvider projectProvider, 
-            ILogger<CreateSemanticDomainSenseAssociationCommandHandler> logger) : base(
+            ILogger<CreateSemanticDomainMeaningAssociationCommandHandler> logger) : base(
                 projectDbContextFactory, 
                 projectProvider,
                 logger)
         {
         }
 
-        protected override async Task<RequestResult<Unit>> SaveDataAsync(CreateSemanticDomainSenseAssociationCommand request,
+        protected override async Task<RequestResult<Unit>> SaveDataAsync(CreateSemanticDomainMeaningAssociationCommand request,
             CancellationToken cancellationToken)
         {
             var semanticDomain = ProjectDbContext.Lexicon_SemanticDomains
@@ -38,30 +38,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 return new RequestResult<Unit>
                 (
                     success: false,
-                    message: $"SemanticDomain not found for Id '{request.SemanticDomainId.Id}' - unable to create SemanticDomainSenseAssociation"
+                    message: $"SemanticDomain not found for Id '{request.SemanticDomainId.Id}' - unable to create SemanticDomainMeaningAssociation"
                 );
             }
 
-            var sense = ProjectDbContext.Lexicon_Senses
-                .Where(s => s.Id == request.SenseId.Id)
+            var meaning = ProjectDbContext.Lexicon_Meanings
+                .Where(s => s.Id == request.MeaningId.Id)
                 .FirstOrDefault();
 
-            if (sense == null)
+            if (meaning == null)
             {
                 return new RequestResult<Unit>
                 (
                     success: false,
-                    message: $"Sense not found for Id '{request.SenseId.Id}' - unable to create SemanticDomainSenseAssociation"
+                    message: $"Meaning not found for Id '{request.MeaningId.Id}' - unable to create SemanticDomainMeaningAssociation"
                 );
             }
 
-            var semanticDomainSenseAssociation = new Models.Lexicon_SemanticDomainSenseAssociation
+            var semanticDomainMeaningAssociation = new Models.Lexicon_SemanticDomainMeaningAssociation
             {
                 SemanticDomainId = semanticDomain.Id,
-                SenseId = sense.Id
+                MeaningId = meaning.Id
             };
 
-            ProjectDbContext.Lexicon_SemanticDomainSenseAssociations.Add(semanticDomainSenseAssociation);
+            ProjectDbContext.Lexicon_SemanticDomainMeaningAssociations.Add(semanticDomainMeaningAssociation);
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);

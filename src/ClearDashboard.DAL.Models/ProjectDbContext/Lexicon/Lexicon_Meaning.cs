@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ClearDashboard.DataAccessLayer.Models
 {
-    public class Lexicon_Sense : SynchronizableTimestampedEntity
+    public class Lexicon_Meaning : SynchronizableTimestampedEntity
     {
-        public Lexicon_Sense()
+        public Lexicon_Meaning()
         {
             // ReSharper disable VirtualMemberCallInConstructor
             Translations = new HashSet<Lexicon_Translation>();
             SemanticDomains = new HashSet<Lexicon_SemanticDomain>();
-            SemanticDomainSenseAssociations = new HashSet<Lexicon_SemanticDomainSenseAssociation>();
+            SemanticDomainMeaningAssociations = new HashSet<Lexicon_SemanticDomainMeaningAssociation>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
 
@@ -22,6 +22,6 @@ namespace ClearDashboard.DataAccessLayer.Models
         public virtual Lexicon_Lexeme? Lexeme { get; set; }
         public ICollection<Lexicon_Translation> Translations { get; set; }
         public ICollection<Lexicon_SemanticDomain> SemanticDomains { get; set; }
-        public ICollection<Lexicon_SemanticDomainSenseAssociation> SemanticDomainSenseAssociations { get; set; }
+        public ICollection<Lexicon_SemanticDomainMeaningAssociation> SemanticDomainMeaningAssociations { get; set; }
     }
 }

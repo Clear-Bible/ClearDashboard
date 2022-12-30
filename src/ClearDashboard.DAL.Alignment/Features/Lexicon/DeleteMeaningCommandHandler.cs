@@ -8,34 +8,34 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DAL.Alignment.Features.Lexicon
 {
-    public class DeleteSenseCommandHandler : ProjectDbContextCommandHandler<
-        DeleteSenseCommand,
+    public class DeleteMeaningCommandHandler : ProjectDbContextCommandHandler<
+        DeleteMeaningCommand,
         RequestResult<Unit>, Unit>
     {
-        public DeleteSenseCommandHandler(
+        public DeleteMeaningCommandHandler(
             ProjectDbContextFactory? projectDbContextFactory,
             IProjectProvider projectProvider,
-            ILogger<DeleteSenseCommandHandler> logger) : base(
+            ILogger<DeleteMeaningCommandHandler> logger) : base(
                 projectDbContextFactory,
                 projectProvider,
                 logger)
         {
         }
 
-        protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteSenseCommand request,
+        protected override async Task<RequestResult<Unit>> SaveDataAsync(DeleteMeaningCommand request,
             CancellationToken cancellationToken)
         {
-            var sense = ProjectDbContext!.Lexicon_Senses.FirstOrDefault(s => s.Id == request.SenseId.Id);
-            if (sense == null)
+            var meaning = ProjectDbContext!.Lexicon_Meanings.FirstOrDefault(s => s.Id == request.MeaningId.Id);
+            if (meaning == null)
             {
                 return new RequestResult<Unit>
                 (
                     success: false,
-                    message: $"Invalid SenseId '{request.SenseId.Id}' found in request"
+                    message: $"Invalid MeaningId '{request.MeaningId.Id}' found in request"
                 );
             }
 
-            ProjectDbContext.Remove(sense);
+            ProjectDbContext.Remove(meaning);
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);

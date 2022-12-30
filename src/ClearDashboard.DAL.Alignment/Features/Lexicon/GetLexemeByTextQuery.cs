@@ -6,5 +6,5 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
     public record GetLexemeByTextQuery(
         string Lemma,
         string? Language,
-        string? SenseLanguage) : ProjectRequestQuery<Lexeme?>;
+        string? MeaningLanguage) : ProjectRequestQuery<Lexeme?>;
 }

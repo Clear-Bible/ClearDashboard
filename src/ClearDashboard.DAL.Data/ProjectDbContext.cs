@@ -76,11 +76,11 @@ namespace ClearDashboard.DataAccessLayer.Data
         // =============
         // LEXICON:
         public virtual DbSet<Lexicon_Lexeme> Lexicon_Lexemes => Set<Lexicon_Lexeme>();
-        public virtual DbSet<Lexicon_Sense> Lexicon_Senses => Set<Lexicon_Sense>();
+        public virtual DbSet<Lexicon_Meaning> Lexicon_Meanings => Set<Lexicon_Meaning>();
         public virtual DbSet<Lexicon_Form> Lexicon_Forms => Set<Lexicon_Form>();
         public virtual DbSet<Lexicon_Translation> Lexicon_Translations => Set<Lexicon_Translation>();
         public virtual DbSet<Lexicon_SemanticDomain> Lexicon_SemanticDomains => Set<Lexicon_SemanticDomain>();
-        public virtual DbSet<Lexicon_SemanticDomainSenseAssociation> Lexicon_SemanticDomainSenseAssociations => Set<Lexicon_SemanticDomainSenseAssociation>();
+        public virtual DbSet<Lexicon_SemanticDomainMeaningAssociation> Lexicon_SemanticDomainMeaningAssociations => Set<Lexicon_SemanticDomainMeaningAssociation>();
         // =============
 
         public async Task Migrate()
@@ -292,9 +292,9 @@ namespace ClearDashboard.DataAccessLayer.Data
             // LEXICON:
             modelBuilder
                 .Entity<Lexicon_SemanticDomain>()
-                .HasMany(p => p.Senses)
+                .HasMany(p => p.Meanings)
                 .WithMany(p => p.SemanticDomains)
-                .UsingEntity<Lexicon_SemanticDomainSenseAssociation>();
+                .UsingEntity<Lexicon_SemanticDomainMeaningAssociation>();
 
             modelBuilder.Entity<Lexicon_Lexeme>()
                 .HasIndex(p => new { p.Lemma, p.Language })

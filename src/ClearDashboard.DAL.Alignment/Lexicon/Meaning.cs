@@ -7,9 +7,9 @@ using Microsoft.SqlServer.Server;
 
 namespace ClearDashboard.DAL.Alignment.Lexicon
 {
-    public class Sense
+    public class Meaning
     {
-        public SenseId? SenseId
+        public MeaningId? MeaningId
         {
             get;
 #if DEBUG
@@ -63,14 +63,14 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 #endif
         }
 
-        public Sense()
+        public Meaning()
         {
             translations_ = new ObservableCollection<Translation>();
             semanticDomains_ = new ObservableCollection<SemanticDomain>();
         }
-        internal Sense(SenseId senseId, string text, string? language, ICollection<Translation> translations, ICollection<SemanticDomain> semanticDomains)
+        internal Meaning(MeaningId meaningId, string text, string? language, ICollection<Translation> translations, ICollection<SemanticDomain> semanticDomains)
         {
-            SenseId = senseId;
+            MeaningId = meaningId;
             Text = text;
             Language = language;
             translations_ = new ObservableCollection<Translation>(translations.DistinctBy(t => t.TranslationId)); ;
@@ -85,12 +85,12 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 return;
             }
 
-            if (SenseId is null)
+            if (MeaningId is null)
             {
-                throw new MediatorErrorEngineException("Create Sense before associating with given Translation");
+                throw new MediatorErrorEngineException("Create Meaning before associating with given Translation");
             }
 
-            var result = await mediator.Send(new PutTranslationCommand(SenseId, translation), token);
+            var result = await mediator.Send(new PutTranslationCommand(MeaningId, translation), token);
             result.ThrowIfCanceledOrFailed();
 
             translation.TranslationId = result.Data!;
@@ -100,9 +100,9 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         public async Task<SemanticDomain> CreateAssociateSenanticDomain(IMediator mediator, string text, CancellationToken token = default)
         {
-            if (SenseId is null)
+            if (MeaningId is null)
             {
-                throw new MediatorErrorEngineException("'CreateOrUpdate Sense before associating with SemanticDomain");
+                throw new MediatorErrorEngineException("'CreateOrUpdate Meaning before associating with SemanticDomain");
             }
 
             var semanticDomain = await new SemanticDomain { Text = text }.Create(mediator, token);
@@ -112,10 +112,10 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         }
 
         /// <summary>
-        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the Sense 
+        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the Meaning 
         /// constructor.  For each UI thread that is going to access this method (really,the Labels ObservableCollection in general), 
         /// a WPF-layer caller should establish a “lock” object, tell WPF about it 
-        /// (using EnableCollectionSynchronization(sense.SemanticDomains, theLockObject)), and use it in a “lock” 
+        /// (using EnableCollectionSynchronization(meaning.SemanticDomains, theLockObject)), and use it in a “lock” 
         /// statement every time those methods are called.  Summarized from:
         /// https://learn.microsoft.com/en-us/dotnet/api/system.windows.data.bindingoperations.enablecollectionsynchronization
         /// </summary>
@@ -131,16 +131,16 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 return;
             }
 
-            if (SenseId is null)
+            if (MeaningId is null)
             {
-                throw new MediatorErrorEngineException("Create Sense before associating with given SemanticDomain");
+                throw new MediatorErrorEngineException("Create Meaning before associating with given SemanticDomain");
             }
             if (semanticDomain.SemanticDomainId is null)
             {
-                throw new MediatorErrorEngineException("Create given SemanticDomain before associating with Sense");
+                throw new MediatorErrorEngineException("Create given SemanticDomain before associating with Meaning");
             }
 
-            var command = new CreateSemanticDomainSenseAssociationCommand(semanticDomain.SemanticDomainId, SenseId);
+            var command = new CreateSemanticDomainMeaningAssociationCommand(semanticDomain.SemanticDomainId, MeaningId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
@@ -149,10 +149,10 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         }
 
         /// <summary>
-        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the Sense 
+        /// NOTE:  this method alters a the "SemanticDomains" ObservableCollection that was created in the Meaning 
         /// constructor.  For each UI thread that is going to access this method (really,the Labels ObservableCollection in general), 
         /// a WPF-layer caller should establish a “lock” object, tell WPF about it 
-        /// (using EnableCollectionSynchronization(sense.SemanticDomains, theLockObject)), and use it in a “lock” 
+        /// (using EnableCollectionSynchronization(meaning.SemanticDomains, theLockObject)), and use it in a “lock” 
         /// statement every time those methods are called.  Summarized from:
         /// https://learn.microsoft.com/en-us/dotnet/api/system.windows.data.bindingoperations.enablecollectionsynchronization
         /// </summary>
@@ -169,16 +169,16 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
                 return;
             }
 
-            if (SenseId is null)
+            if (MeaningId is null)
             {
-                throw new MediatorErrorEngineException("Cannot detach semantic domain before Sense has been created");
+                throw new MediatorErrorEngineException("Cannot detach semantic domain before Meaning has been created");
             }
             if (semanticDomain.SemanticDomainId is null)
             {
                 throw new MediatorErrorEngineException("Cannot detach label before it has been created/attached");
             }
 
-            var command = new DeleteSemanticDomainSenseAssociationCommand(semanticDomain.SemanticDomainId, SenseId);
+            var command = new DeleteSemanticDomainMeaningAssociationCommand(semanticDomain.SemanticDomainId, MeaningId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();
@@ -188,12 +188,12 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         public async Task Delete(IMediator mediator, CancellationToken token = default)
         {
-            if (SenseId == null)
+            if (MeaningId == null)
             {
                 return;
             }
 
-            var command = new DeleteSenseCommand(SenseId);
+            var command = new DeleteMeaningCommand(MeaningId);
 
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed();

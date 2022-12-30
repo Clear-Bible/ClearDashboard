@@ -8,7 +8,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public Lexicon_Lexeme()
         {
             // ReSharper disable VirtualMemberCallInConstructor
-            Senses = new HashSet<Lexicon_Sense>();
+            Meanings = new HashSet<Lexicon_Meaning>();
             Forms = new HashSet<Lexicon_Form>();
             // ReSharper restore VirtualMemberCallInConstructor
         }
@@ -16,7 +16,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? Language { get; set; }
         public string? Lemma { get; set; }
         public string? Type { get; set; }
-        public ICollection<Lexicon_Sense> Senses { get; set; }
+        public ICollection<Lexicon_Meaning> Meanings { get; set; }
         public ICollection<Lexicon_Form> Forms { get; set; }
     }
 }

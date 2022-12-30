@@ -22,12 +22,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
         protected override async Task<RequestResult<Lexeme?>> GetDataAsync(GetLexemeByTextQuery request, CancellationToken cancellationToken)
         {
             var lexeme = ProjectDbContext.Lexicon_Lexemes
-                .Include(l => l.Senses.Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage))
+                .Include(l => l.Meanings.Where(s => string.IsNullOrEmpty(request.MeaningLanguage) || s.Language == request.MeaningLanguage))
                     .ThenInclude(d => d.User)
-                .Include(l => l.Senses.Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage))
+                .Include(l => l.Meanings.Where(s => string.IsNullOrEmpty(request.MeaningLanguage) || s.Language == request.MeaningLanguage))
                     .ThenInclude(d => d.Translations)
-                .Include(l => l.Senses.Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage))
-                    .ThenInclude(d => d.SemanticDomainSenseAssociations)
+                .Include(l => l.Meanings.Where(s => string.IsNullOrEmpty(request.MeaningLanguage) || s.Language == request.MeaningLanguage))
+                    .ThenInclude(d => d.SemanticDomainMeaningAssociations)
                         .ThenInclude(sda => sda.SemanticDomain)
                             .ThenInclude(sd => sd!.User)
                 .Include(l => l.Forms)
@@ -38,10 +38,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                     l.Lemma!,
                     l.Language,
                     l.Type,
-                    l.Senses
-                        .Where(s => string.IsNullOrEmpty(request.SenseLanguage) || s.Language == request.SenseLanguage)
-                        .Select(s => new Sense(
-                            ModelHelper.BuildSenseId(s),
+                    l.Meanings
+                        .Where(s => string.IsNullOrEmpty(request.MeaningLanguage) || s.Language == request.MeaningLanguage)
+                        .Select(s => new Meaning(
+                            ModelHelper.BuildMeaningId(s),
                             s.Text!,
                             s.Language,
                             s.Translations.Select(t => new Alignment.Lexicon.Translation(

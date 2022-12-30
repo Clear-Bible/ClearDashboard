@@ -47,7 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Lexicon
                 {
                     Id = request.Translation.TranslationId?.Id ?? Guid.NewGuid(),
                     Text = request.Translation.Text,
-                    SenseId = request.SenseId.Id
+                    MeaningId = request.MeaningId.Id
                 };
 
                 ProjectDbContext.Lexicon_Translations.Add(translation);
