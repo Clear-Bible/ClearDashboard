@@ -464,6 +464,38 @@ namespace ClearDashboard.DAL.Alignment.Features
             );
         }
 
+        public static Alignment.Lexicon.LexemeId BuildLexemeId(Models.Lexicon_Lexeme lexeme)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Lexeme, Alignment.Lexicon.LexemeId>(lexeme);
+        }
+
+        public static Alignment.Lexicon.MeaningId BuildMeaningId(Models.Lexicon_Meaning meaning)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Meaning, Alignment.Lexicon.MeaningId>(meaning);
+        }
+
+        public static Alignment.Lexicon.TranslationId BuildTranslationId(Models.Lexicon_Translation translation)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_Translation, Alignment.Lexicon.TranslationId>(translation);
+        }
+
+        public static Alignment.Lexicon.SemanticDomainId BuildSemanticDomainId(Models.Lexicon_SemanticDomain semanticDomain)
+        {
+            return BuildSimpleSynchronizableTimestampedEntityId<Models.Lexicon_SemanticDomain, Alignment.Lexicon.SemanticDomainId>(semanticDomain);
+        }
+
+        private static I BuildSimpleSynchronizableTimestampedEntityId<T, I>(T entity) 
+            where T : Models.SynchronizableTimestampedEntity 
+            where I : SimpleSynchronizableTimestampedEntityId<I>, new()
+        {
+            if (entity.User == null)
+            {
+                throw new MediatorErrorEngineException($"DB {typeof(T).Name} passed to Build{typeof(I).Name} does not contain a User.  Please ensure the necessary EFCore/Linq Include() method is called");
+            }
+
+            return SimpleSynchronizableTimestampedEntityId<I>.Create(entity.Id, entity.Created, BuildUserId(entity.User!));
+        }
+
         public static Type? FindEntityIdGenericType(this Type givenType)
         {
             if (givenType.IsGenericType && givenType.GetGenericTypeDefinition() == typeof(EntityId<>))

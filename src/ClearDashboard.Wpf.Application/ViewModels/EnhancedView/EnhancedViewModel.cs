@@ -69,6 +69,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _enhancedViewLayout, value);
         }
 
+
+
+
         public MainViewModel MainViewModel => (MainViewModel)Parent;
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
@@ -233,6 +236,105 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _verses, value);
         }
 
+        #region DrawerProperties
+
+        private int _targetFontSizeValue = 14;
+        public int TargetFontSizeValue
+        {
+            get => _targetFontSizeValue;
+            set
+            {
+                _targetFontSizeValue = value;
+                NotifyOfPropertyChange(() => TargetFontSizeValue);
+            }
+        }
+
+
+        private int _targetVerticalValue = 5;
+        public int TargetVerticalValue
+        {
+            get => _targetVerticalValue;
+            set
+            {
+                _targetVerticalValue = value;
+                NotifyOfPropertyChange(() => TargetVerticalValue);
+            }
+        }
+
+
+        private int _targetHorizontalValue = 10;
+        public int TargetHorizontalValue
+        {
+            get => _targetHorizontalValue;
+            set
+            {
+                _targetHorizontalValue = value;
+                NotifyOfPropertyChange(() => TargetHorizontalValue);
+            }
+        }
+
+
+        private int _sourceFontSizeValue = 14;
+        public int SourceFontSizeValue
+        {
+            get => _sourceFontSizeValue;
+            set
+            {
+                _sourceFontSizeValue = value;
+                NotifyOfPropertyChange(() => SourceFontSizeValue);
+            }
+        }
+
+
+        private int _sourceVerticalValue = 5;
+        public int SourceVerticalValue
+        {
+            get => _sourceVerticalValue;
+            set
+            {
+                _sourceVerticalValue = value;
+                NotifyOfPropertyChange(() => SourceVerticalValue);
+            }
+        }
+
+
+        private int _sourceHorizontalValue = 10;
+        public int SourceHorizontalValue
+        {
+            get => _sourceHorizontalValue;
+            set
+            {
+                _sourceHorizontalValue = value;
+                NotifyOfPropertyChange(() => SourceHorizontalValue);
+            }
+        }
+
+
+        private int _translationsFontSizeValue = 16;
+        public int TranslationsFontSizeValue
+        {
+            get => _translationsFontSizeValue;
+            set
+            {
+                _translationsFontSizeValue = value;
+                NotifyOfPropertyChange(() => TranslationsFontSizeValue);
+            }
+        }
+
+
+        private int _noteIndicatorsSizeValue = 4;
+        public int NoteIndicatorsSizeValue
+        {
+            get => _noteIndicatorsSizeValue;
+            set
+            {
+                _noteIndicatorsSizeValue = value;
+                NotifyOfPropertyChange(() => NoteIndicatorsSizeValue);
+            }
+        }
+
+        #endregion
+
         #endregion Observable Properties
 
         #region IPaneViewModel
@@ -342,14 +444,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
         {
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
-            await ActivateNewVerseAwareViewItem(item, cancellationToken);
+            await ActivateNewVerseAwareViewItem1(item, cancellationToken);
         }
 
         public async Task LoadData(CancellationToken token)
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
             {
-                await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
+                await ActivateNewVerseAwareViewItem1(enhancedViewItemMetadatum, cancellationToken);
 
             });
         }
@@ -364,6 +466,47 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
+        private async Task ActivateNewVerseAwareViewItem1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
+        {
+            await Execute.OnUIThreadAsync(async () =>
+            {
+                var enhancedViewItemViewModel =
+                    await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+            });
+        }
+
+        //FIXME: should go in ClearApplicationFramework
+        private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
+        {
+            var metadataAssemblyQualifiedName = enhancedViewItemMetadatum.GetEnhancedViewItemMetadatumType().AssemblyQualifiedName 
+                ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName
+                .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
+                .Replace("Models.ProjectSerialization", "ViewModels.EnhancedView");
+            return Type.GetType(viewModelAssemblyQualifiedName) 
+                ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
+
+        }
+
+        //FIXME: should go in ClearApplicationFramework
+        /// <summary>
+        /// Expects Metadatum to be in a 'Models.ProjectSerialization' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
+        /// EnhancedViewItemMetadatum suffix with EnhancedViewItemViewModel suffix.
+        /// </summary>
+        /// <param name="enhancedViewItemMetadatum"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        protected async Task<EnhancedViewItemViewModel> ActivateItemAsync1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            EnhancedViewItemViewModel viewModel = (EnhancedViewItemViewModel) LifetimeScope.Resolve(ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum));
+            viewModel.Parent = this;
+            viewModel.ConductWith(this);
+            UIElement view = ViewLocator.LocateForModel(viewModel, null, null);
+            ViewModelBinder.Bind(viewModel, view, null);
+            await ActivateItemAsync((EnhancedViewItemViewModel)(object)viewModel, cancellationToken);
+            return viewModel;
+        }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";

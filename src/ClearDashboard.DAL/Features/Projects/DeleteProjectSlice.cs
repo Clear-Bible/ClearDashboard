@@ -41,9 +41,9 @@ namespace ClearDashboard.DataAccessLayer.Features.Projects
                 await ProjectDbContext!.Database.EnsureDeletedAsync();
                 await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                if (ProjectDbContext.OptionsBuilder.GetType() == typeof(SqliteProjectDbContextOptionsBuilder))
+                if (ProjectDbContext.OptionsBuilder.GetType() == typeof(SqliteProjectDbContextOptionsBuilder<ProjectDbContext>))
                 {
-                    var databaseDirectory = (ProjectDbContext.OptionsBuilder as SqliteProjectDbContextOptionsBuilder)!.DatabaseDirectory;
+                    var databaseDirectory = (ProjectDbContext.OptionsBuilder as SqliteProjectDbContextOptionsBuilder<ProjectDbContext>)!.DatabaseDirectory;
                     if (Directory.Exists(databaseDirectory))
                     {
                         Directory.Delete(databaseDirectory, true);

@@ -21,13 +21,6 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
         set => Set(ref _isChecked, value);
     }
 
-    private string? _tokenizer;
-    public string? Tokenizer
-    {
-        get => _tokenizer;
-        set => Set(ref _tokenizer, value);
-    }
-
     private string? _iconKind;
     public string? IconKind
     {

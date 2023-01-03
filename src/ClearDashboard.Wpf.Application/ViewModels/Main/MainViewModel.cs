@@ -46,6 +46,7 @@ using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
+using Paratext.PluginInterfaces;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
@@ -61,7 +62,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<AddInterlinearToEnhancedViewMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
-                IHandle<FilterPinsMessage>
+                IHandle<FilterPinsMessage>,
+                IHandle<AddAquaCorpusAnalysisToEnhancedViewMessage>,
+                IHandle<ProjectsMetadataChangedMessage>
     {
         #region Member Variables
 
@@ -511,6 +514,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             registry.RegisterType<InterlinearEnhancedViewItemMetadatum>();
             registry.RegisterType<AlignmentEnhancedViewItemMetadatum>();
             registry.RegisterType<TokenizedCorpusEnhancedViewItemMetadatum>();
+            registry.RegisterType<AquaCorpusAnalysisEnhancedViewItemMetadatum>();
             return options;
         }
 
@@ -529,6 +533,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         {
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
+
+            // get the project metadata from Paratext
+            var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), CancellationToken.None);
+            if (result.Success)
+            {
+                ProjectMetadata = result.Data.OrderBy(p => p.Name).ToList();
+            }
+
             base.OnViewLoaded(view);
         }
 
@@ -1737,7 +1749,69 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await viewModel.AddItem(message.Metadatum, cancellationToken);
 
         }
+        public async Task HandleAsync(AddAquaCorpusAnalysisToEnhancedViewMessage message, CancellationToken cancellationToken)
+        {
+            
+            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
+            /*
+            await DeactivateDockedWindows();
 
+
+            //TODO:  How should this be refactored?
+            var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+            await viewModel.Initialize(new EnhancedViewLayout
+            {
+                ParatextSync = false,
+                Title = $"{message.Metadatum.DisplayName})",
+                VerseOffset = 0
+            });
+            viewModel.CurrentCorpusName = message!.Metadatum.ProjectName!;
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+            await viewModel.AddItem(message.Metadatum, cancellationToken);
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                ContentId = message.Metadatum.ParatextProjectId,
+                Content = viewModel,
+                Title = $"⳼ {message.Metadatum.ProjectName} ({message.Metadatum.TokenizationType})",
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+            */
+
+            /*  FIXME: should use AddnewEnhnacedView()?
+
+            var viewModel = IoC.Get<EnhancedViewModel>();
+            viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            viewModel.VerseChange = ProjectManager.CurrentVerse;
+
+
+            // add vm to conductor
+            Items.Add(viewModel);
+
+            // figure out how many enhanced views there are and set the title number for the window
+            var enhancedViews = Items.Where(w => w is EnhancedViewModel).ToList();
+
+            // make a new document for the windows
+            var windowDockable = new LayoutDocument
+            {
+                Title = $"{viewModel.Title}  ({enhancedViews.Count})",
+                Content = viewModel,
+                IsActive = true
+            };
+
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            documentPane?.Children.Add(windowDockable);
+            */
+
+        }
         /// <summary>
         /// Ensure that there is at least one document tab open at all times
         /// </summary>
@@ -1799,6 +1873,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 return sourceProject.FontFamily;
             }
             return "Segoe UI";
+        }
+
+
+        /// <summary>
+        /// update the project metadata coming in from the AddParatextCorpus method
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task HandleAsync(ProjectsMetadataChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.ProjectsMetadata is not null)
+            {
+                ProjectMetadata = message.ProjectsMetadata;
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

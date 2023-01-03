@@ -3,24 +3,24 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.DataAccessLayer.Data
 {
-    public class SqliteProjectDbContextOptionsBuilder : DbContextOptionsBuilder<ProjectDbContext>
+    public class SqliteProjectDbContextOptionsBuilder<T> : DbContextOptionsBuilder<T> where T : DbContext
     {
-        private readonly ILogger<SqliteProjectDbContextOptionsBuilder> _logger;
+        private readonly ILogger<SqliteProjectDbContextOptionsBuilder<T>> _logger;
         public string DatabaseName { get; private set; }
         public string DatabaseDirectory { get; private set; }
 
-        public override DbContextOptions<ProjectDbContext> Options
+        public override DbContextOptions<T> Options
         {
             get 
             {
-                return SqliteDbContextOptionsBuilderExtensions.UseSqlite<ProjectDbContext>(
+                return SqliteDbContextOptionsBuilderExtensions.UseSqlite<T>(
                     new(),
                     $"DataSource={DatabaseDirectory}\\{DatabaseName}.sqlite;Pooling=true;Mode=ReadWriteCreate",
                     options => options.CommandTimeout(600)).Options;
             }
         }
 
-        public SqliteProjectDbContextOptionsBuilder(ILogger<SqliteProjectDbContextOptionsBuilder> logger, string databaseName)
+        public SqliteProjectDbContextOptionsBuilder(ILogger<SqliteProjectDbContextOptionsBuilder<T>> logger, string databaseName)
         {
             _logger = logger;
             DatabaseName = databaseName;

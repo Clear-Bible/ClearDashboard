@@ -1,7 +1,13 @@
-﻿namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+﻿using System;
+
+namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 
 public abstract class EnhancedViewItemMetadatum
 {
-    public bool? IsRtl { get; set; }
     public bool? IsNewWindow { get; set; }
+
+    public virtual Type GetEnhancedViewItemMetadatumType()
+    {
+        return GetType();
+    }
 }

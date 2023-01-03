@@ -237,6 +237,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 ProjectDbContext.TokenComposites.Add(tokenComposite);
             }
 
+            // FIXME!  
+            //  - Be sure to soft delete alignments + translations when moving individual tokens into a composite,
+            //    changing/deleting a composite
+            //  - Trigger denormalization when Composites change (either TrainingText change or new composite)
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
             return new RequestResult<Unit>(Unit.Value);

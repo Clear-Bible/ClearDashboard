@@ -26,6 +26,8 @@ using ClearDashboard.DAL.Alignment.BackgroundServices;
 using System.Threading;
 using Autofac;
 using SIL.Machine.Utils;
+using ClearDashboard.DAL.Alignment.Lexicon;
+using ClearDashboard.DAL.Alignment.Exceptions;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -591,6 +593,164 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var tme = await translationSet.GetTranslationModelEntryForToken(newToken);
             Assert.NotNull(tme);
             Assert.Empty(tme);
+        }
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async Task TranslationSet__Lexicon()
+    {
+        try
+        {
+            // SETUP
+            var parallelTextCorpus = await BuildSampleEngineParallelTextCorpusWithComposite();
+            var parallelCorpus = await parallelTextCorpus.Create("test pc", Mediator!);
+
+            var alignmentModel = await BuildSampleAlignmentModel(parallelTextCorpus);
+            var alignmentSet = await alignmentModel.Create(
+                    "manuscript to zz_sur",
+                    "fastalign",
+                    false,
+                    new Dictionary<string, object>(), //metadata
+                    parallelCorpus.ParallelCorpusId,
+                    Mediator!);
+            var translationSet = await TranslationSet.Create(null, alignmentSet.AlignmentSetId, "display name 1", new(), parallelCorpus.ParallelCorpusId, Mediator!);
+            Assert.NotNull(translationSet);
+
+            Output.WriteLine("Denormalizing alignment set data");
+            await RunAlignmentSetDenormalizationAsync(Guid.Empty);
+
+            var tokensToQuery = ProjectDbContext!.Tokens
+                .Where(t => t.TokenizedCorpusId == parallelCorpus.ParallelCorpusId.SourceTokenizedCorpusId!.Id)
+                .Take(4)
+                .ToArray();
+
+            Assert.NotNull(tokensToQuery);
+            Assert.Equal(4, tokensToQuery.Length);
+
+            // LEXICON
+            // lexeme1:
+            var lexeme1 = await new Lexeme { 
+                Lemma = tokensToQuery[0].TrainingText,
+                Language = parallelCorpus.ParallelCorpusId?.SourceTokenizedCorpusId?.CorpusId?.Language,
+                Type = "some type"
+            }.Create(Mediator!);
+
+            await lexeme1.PutForm(Mediator!, new Form { Text = tokensToQuery[0].TrainingText + "_form1" });
+            await lexeme1.PutForm(Mediator!, new Form { Text = tokensToQuery[0].TrainingText + "_form2" });
+
+            var lexeme1Meaning1 = new Meaning
+            {
+                Text = "l1_meaning1",
+                Language = parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language
+            };
+            var lexeme1Meaning2 = new Meaning { Text = "l1_meaning2" /* no language */ };
+            await lexeme1.PutMeaning(Mediator!, lexeme1Meaning1);
+            await lexeme1.PutMeaning(Mediator!, lexeme1Meaning2);
+
+            await lexeme1Meaning2.PutTranslation(Mediator!, new Lexicon.Translation { Text = "l1_meaning2_t1" });
+            await lexeme1Meaning2.PutTranslation(Mediator!, new Lexicon.Translation { Text = "l1_meaning2_t2" });
+
+            // lexeme2:
+            var lexeme2 = await new Lexeme { Lemma = tokensToQuery[1].TrainingText /* no language */  }.Create(Mediator!);
+            await lexeme2.PutMeaning(Mediator!, new Meaning { Text = "l2_meaning1" /* no language */ });
+            var lexeme2Meaning2 = new Meaning { Text = "l2_meaning2", Language = "bogus" };
+            var lexeme2Meaning3 = new Meaning { Text = "l2_meaning3", Language = parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language };
+            await lexeme2.PutMeaning(Mediator!, lexeme2Meaning2);
+            await lexeme2.PutMeaning(Mediator!, lexeme2Meaning3);
+            var s1 = await lexeme2Meaning2.CreateAssociateSenanticDomain(Mediator!, "sem1");
+            var s2 = await lexeme2Meaning3.CreateAssociateSenanticDomain(Mediator!, "sem2");
+
+            // lexeme3:
+            var lexeme3 = await new Lexeme { Lemma = tokensToQuery[3].TrainingText, Language = "bogus"  }.Create(Mediator!);
+            await lexeme3.PutMeaning(Mediator!, new Meaning { Text = "l3_meaning1" /* no language */ });
+            await lexeme3.Meanings.First().AssociateSemanticDomain(Mediator!, s2);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            Assert.Null(await Lexeme.Get(Mediator!, "bogusLemma", null, null));
+
+            var l1Db1 = await Lexeme.Get(Mediator!, lexeme1.Lemma!, lexeme1.Language!, null);
+            Assert.NotNull(l1Db1);
+            Assert.Equal(2, l1Db1.Forms.Count);
+            Assert.Equal(2, l1Db1.Meanings.Count);
+            Assert.Equal(lexeme1.Lemma, l1Db1.Lemma);
+            Assert.Equal(lexeme1.Language, l1Db1.Language);
+            Assert.Equal(lexeme1.Type, l1Db1.Type);
+            Assert.Empty(l1Db1.Meanings.Where(s => s.Text == "l1_meaning1").First().Translations);
+            Assert.Equal(2, l1Db1.Meanings.Where(s => s.Text == "l1_meaning2").First().Translations.Count);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var l1Db2 = await Lexeme.Get(
+                Mediator!,
+                lexeme1.Lemma!,
+                lexeme1.Language!,
+                parallelCorpus.ParallelCorpusId?.TargetTokenizedCorpusId?.CorpusId?.Language);
+            Assert.NotNull(l1Db2);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            var l2Db1 = await Lexeme.Get(Mediator!, lexeme2.Lemma!, null, null);
+
+            Assert.NotNull(l2Db1);
+            Assert.Equal(3, l2Db1.Meanings.Count);
+            Assert.Contains(lexeme2Meaning2.Text, l2Db1.Meanings.Select(s => s.Text));
+            Assert.Contains(lexeme2Meaning3.Text, l2Db1.Meanings.Select(s => s.Text));
+            Assert.Single(l2Db1.Meanings.Where(s => s.Text == lexeme2Meaning2.Text).First().SemanticDomains);
+            Assert.Equal(s1.Text, l2Db1.Meanings.Where(s => s.Text == lexeme2Meaning2.Text).First().SemanticDomains.First().Text);
+            Assert.Single(l2Db1.Meanings.Where(s => s.Text == lexeme2Meaning3.Text).First().SemanticDomains);
+            Assert.Equal(s2.Text, l2Db1.Meanings.Where(s => s.Text == lexeme2Meaning3.Text).First().SemanticDomains.First().Text);
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => new Lexeme
+            {
+                Lemma = l1Db1!.Lemma,
+                Language = l1Db1!.Language
+            }.Create(Mediator!));
+
+            var l3Db1 = await Lexeme.Get(
+                Mediator!,
+                lexeme3.Lemma!,
+                null,
+                null);
+
+            Assert.NotNull(l3Db1);
+            Assert.Single(l3Db1.Meanings);
+            Assert.Single(l3Db1.Meanings.First().SemanticDomains);
+            Assert.Equal(s2.Text, l3Db1.Meanings.First().SemanticDomains.First().Text);
+
+            // Test GetTranslations:
+            var tokenIds = tokensToQuery.Where(t => t.TrainingText != ",").Select(t => ModelHelper.BuildTokenId(t));
+
+            var translations = await translationSet.GetTranslations(tokenIds);
+            Assert.Equal(3, translations.Count());
+
+            var translationsFromLexicon = translations.Where(t => t.OriginatedFrom == "FromLexicon");
+            Assert.Equal(2, translationsFromLexicon.Count());
+
+            var translation1 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexeme1.Lemma).FirstOrDefault();
+            Assert.NotNull(translation1);
+            Assert.Null(translation1.TranslationId);
+            Assert.Equal(tokensToQuery[0].Id, translation1.SourceToken.TokenId.Id);
+            Assert.Equal("l1_meaning1/l1_meaning2", translation1.TargetTranslationText);
+
+            var translation2 = translationsFromLexicon.Where(t => t.SourceToken.TrainingText == lexeme2.Lemma).FirstOrDefault();
+            Assert.NotNull(translation2);
+            Assert.Null(translation2.TranslationId);
+            Assert.Equal(tokensToQuery[1].Id, translation2.SourceToken.TokenId.Id);
+            Assert.Equal("l2_meaning1/l2_meaning3", translation2.TargetTranslationText);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            await l2Db1!.Delete(Mediator!);
+            Assert.Null(await Lexeme.Get(Mediator!, lexeme2.Lemma!, null, null));
+
+            await lexeme3.Meanings.First().DetachSemanticDomain(Mediator!, s2);
+            Assert.Empty(lexeme3.Meanings.First().SemanticDomains);
         }
         finally
         {
