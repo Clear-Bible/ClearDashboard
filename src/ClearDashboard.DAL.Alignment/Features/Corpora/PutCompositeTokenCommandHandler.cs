@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.Alignment.Features.Events;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
@@ -15,11 +16,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
     public class PutCompositeTokenCommandHandler : ProjectDbContextCommandHandler<PutCompositeTokenCommand,
         RequestResult<Unit>, Unit>
     {
+        private readonly IMediator _mediator;
+
         public PutCompositeTokenCommandHandler(
+            IMediator mediator,
             ProjectDbContextFactory? projectNameDbContextFactory, IProjectProvider projectProvider,
             ILogger<PutCompositeTokenCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider,
             logger)
         {
+            _mediator = mediator;
         }
 
         protected override async Task<RequestResult<Unit>> SaveDataAsync(PutCompositeTokenCommand request,
@@ -36,6 +41,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var existingTokenComposite = ProjectDbContext.TokenComposites
                 .Include(tc => tc.Tokens)
+                .Include(tc => tc.Translations.Where(t => t.Deleted == null))
+                .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
+                .Include(tc => tc.TargetAlignments.Where(a => a.Deleted == null))
                 .Where(tc => tc.Id == request.CompositeToken.TokenId.Id)
                 .FirstOrDefault();
 
@@ -50,7 +58,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                     return new RequestResult<Unit>(Unit.Value);
                 }
-                else if (existingTokenComposite.Tokens.Count == compositeCandiateGuids.Count())
+                
+                if (existingTokenComposite.Tokens.Count == compositeCandiateGuids.Count() &&
+                    existingTokenComposite.ParallelCorpusId == request.ParallelCorpusId?.Id)
                 {
                     if (!compositeCandiateGuids
                         .Except(existingTokenComposite.Tokens.Select(t => t.Id))
@@ -67,6 +77,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(t => t.TokenizedCorpus)
                 .Include(t => t.VerseRow)
                 .Include(t => t.TokenComposite)
+                .Include(t => t.Translations.Where(t => t.Deleted == null))
+                .Include(t => t.SourceAlignments.Where(a => a.Deleted == null))
+                .Include(t => t.TargetAlignments.Where(a => a.Deleted == null))
                 .Where(tc => compositeCandiateGuids.Contains(tc.Id))
                 .ToDictionary(tc => tc.Id, tc => tc);
 
@@ -76,6 +89,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 (
                     success: false,
                     message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request contains tokens not found in database"
+                );
+            }
+
+            if (compositeCandidatesDb.Where(t => t.Value.Deleted != null).Any())
+            {
+                return new RequestResult<Unit>
+                (
+                    success: false,
+                    message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request contains one or more deleted tokens"
                 );
             }
 
@@ -189,6 +211,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 }
             }
 
+            var utcNow = DateTimeOffset.UtcNow;
+            var deletedDateTime = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond)); // Remove any fractions of a millisecond
+
+            var tokensAddedToComposite = new List<Models.Token>();
+            var alignmentsRemoving = new List<Models.Alignment>();
+
             // Add or update, possibly remove remaining empty composite(s)
             if (existingTokenComposite is not null)
             {
@@ -201,6 +229,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     previousTokenComposite?.Tokens.Remove(toAdd);
 
                     existingTokenComposite.Tokens.Add(toAdd);
+                    tokensAddedToComposite.Add(toAdd);
 
                     if (previousTokenComposite is not null && !previousTokenComposite.Tokens.Any())
                     {
@@ -215,33 +244,82 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 {
                      existingTokenComposite.Tokens.Remove(toRemove);
                 }
+
+                // Since we are changing an existing composite, make sure to 
+                // delete related Translations and Alignments.  (FIXME:  should
+                // we soft delete TokenVerseAssociations too?)
+                foreach (var e in existingTokenComposite.Translations) { e.Deleted = deletedDateTime; }
+                foreach (var e in existingTokenComposite.SourceAlignments) { e.Deleted = deletedDateTime; }
+                foreach (var e in existingTokenComposite.TargetAlignments) { e.Deleted = deletedDateTime; }
+
+                alignmentsRemoving.AddRange(existingTokenComposite.SourceAlignments);
+                alignmentsRemoving.AddRange(existingTokenComposite.TargetAlignments);
+
             }
             else
             {
-                var tokenComposite = new Models.TokenComposite
+                existingTokenComposite = new Models.TokenComposite
                 {
                     Id = request.CompositeToken.TokenId.Id,
-                    VerseRowId = (request.ParallelCorpusId == null) ? compositeCandidatesDb.Values.First().VerseRowId : null,
-                    ParallelCorpusId = request.ParallelCorpusId?.Id,
-                    TokenizedCorpusId = compositeCandidatesDb.Values.First().TokenizedCorpusId,
-                    TrainingText = request.CompositeToken.TrainingText,
-                    ExtendedProperties = request.CompositeToken.ExtendedProperties,
-                    EngineTokenId = request.CompositeToken.TokenId.ToString()
                 };
 
                 foreach (var compositeCandidateDb in compositeCandidatesDb.Values)
                 {
-                    tokenComposite.Tokens.Add(compositeCandidateDb);
+                    existingTokenComposite.Tokens.Add(compositeCandidateDb);
+                    tokensAddedToComposite.Add(compositeCandidateDb);
                 }
 
-                ProjectDbContext.TokenComposites.Add(tokenComposite);
+                ProjectDbContext.TokenComposites.Add(existingTokenComposite);
             }
 
-            // FIXME!  
-            //  - Be sure to soft delete alignments + translations when moving individual tokens into a composite,
-            //    changing/deleting a composite
-            //  - Trigger denormalization when Composites change (either TrainingText change or new composite)
-            _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            existingTokenComposite.TokenizedCorpusId = compositeCandidatesDb.Values.First().TokenizedCorpusId;
+            existingTokenComposite.ParallelCorpusId = request.ParallelCorpusId?.Id;
+            existingTokenComposite.TrainingText = request.CompositeToken.TrainingText;
+            existingTokenComposite.ExtendedProperties = request.CompositeToken.ExtendedProperties;
+            existingTokenComposite.EngineTokenId = request.CompositeToken.TokenId.ToString();
+            existingTokenComposite.Deleted = null;
+
+            if (request.ParallelCorpusId == null && compositeCandidatesDb.GroupBy(e => e.Value.VerseRowId).Count() == 1)
+            {
+                existingTokenComposite.VerseRowId = compositeCandidatesDb.Values.First().VerseRowId;
+            }
+            else
+            {
+                existingTokenComposite.VerseRowId = null;
+            }
+            
+            // Adding Tokens to a Composite effectively removes them from
+            // the pool of regular Tokens, so if there are any Translations/Alignments
+            // associated, soft delete them:
+            tokensAddedToComposite.ForEach(tc =>
+            {
+                // Since we are changing an existing composite, make sure to 
+                // delete related Translations and Alignments.  (FIXME:  should
+                // we soft delete TokenVerseAssociations too?)
+                foreach (var e in tc.Translations) { e.Deleted = deletedDateTime; }
+                foreach (var e in tc.SourceAlignments) { e.Deleted = deletedDateTime; }
+                foreach (var e in tc.TargetAlignments) { e.Deleted = deletedDateTime; }
+
+                alignmentsRemoving.AddRange(tc.SourceAlignments);
+                alignmentsRemoving.AddRange(tc.TargetAlignments);
+            });
+
+            if (alignmentsRemoving.Any())
+            {
+                using (var transaction = ProjectDbContext.Database.BeginTransaction())
+                {
+                    await _mediator.Publish(new AlignmentAddingRemovingEvent(alignmentsRemoving, null, ProjectDbContext), cancellationToken);
+                    _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+
+                    transaction.Commit();
+                }
+
+                await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsRemoving, null), cancellationToken);
+            }
+            else
+            {
+                _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
+            }
 
             return new RequestResult<Unit>(Unit.Value);
         }

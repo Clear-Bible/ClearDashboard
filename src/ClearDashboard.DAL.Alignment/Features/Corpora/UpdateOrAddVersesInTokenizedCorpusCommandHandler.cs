@@ -41,6 +41,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var bookIdsToUpdate = targetTextIds.Intersect(request.ExistingBookIds);
             var bookIdsToInsert = targetTextIds.Except(request.ExistingBookIds);
 
+            var alignmentsRemoving = new List<Models.Alignment>();
+
             await ProjectDbContext.Database.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
             try
             {
@@ -51,8 +53,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 using var verseRowInsertCommand = TokenizedCorpusDataUtil.CreateVerseRowInsertCommand(connection);
                 using var tokenComponentInsertCommand = TokenizedCorpusDataUtil.CreateTokenComponentInsertCommand(connection);
-
-                var alignmentsRemoving = new List<Models.Alignment>();
 
                 if (bookIdsToInsert.Any())
                 {
@@ -113,8 +113,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             {
                                 if (verseRowDb.OriginalText != verseRow.OriginalText)
                                 {
-                                    // delete(soft delete so notes references work ?) all tokens and alignments.
-                                    var tokensToSoftDelete = ProjectDbContext.TokenComponents
+                                    // delete(soft delete so notes references work ?) all Tokens and associated Alignments:
+                                    var tokensToSoftDelete = ProjectDbContext.Tokens
                                         .Include(tc => tc.TokenVerseAssociations.Where(tva => tva.Deleted == null))
                                         .Include(tc => tc.Translations.Where(t => t.Deleted == null))
                                         .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
@@ -125,7 +125,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     var referencedTokenCompositeIds = new List<Guid>();
                                     foreach (var tc in tokensToSoftDelete)
                                     {
-                                        await del(tc.Id, tokenSD); ;
+                                        cancellationToken.ThrowIfCancellationRequested();
+
+                                        await del(tc.Id, tokenSD);
+                                        if (tc.TokenCompositeId is not null)
+                                        {
+                                            referencedTokenCompositeIds.Add((Guid)tc.TokenCompositeId!);
+                                        }
+
                                         foreach (var e in tc.TokenVerseAssociations) { await del(e.Id, tvaSD); }
                                         foreach (var e in tc.Translations) { await del(e.Id, transSD); }
                                         foreach (var e in tc.SourceAlignments) { await del(e.Id, alignSD); }
@@ -133,24 +140,35 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                                         alignmentsRemoving.AddRange(tc.SourceAlignments);
                                         alignmentsRemoving.AddRange(tc.TargetAlignments);
-
-                                        if (tc.GetType() == typeof(Models.Token) && ((Models.Token)tc).TokenCompositeId is not null)
-                                        {
-                                            referencedTokenCompositeIds.Add((Guid)((Models.Token)tc).TokenCompositeId!);
-                                        }
                                     }
 
-                                    // TokenComposites that were referenced by the TokenComponents soft deleted above,
-                                    // but themselves weren't soft deleted (because they weren't associated with the
-                                    // VerseRowId...i.e. they were ParallelCorpusId TokenComposites:
+                                    // delete (soft) TokenComposites that were referenced by the Tokens deleted above
+                                    // as well as their associated Alignments:
                                     ProjectDbContext.TokenComposites
                                         .Include(tc => tc.Tokens)
+                                        .Include(tc => tc.TokenVerseAssociations.Where(tva => tva.Deleted == null))
+                                        .Include(tc => tc.Translations.Where(t => t.Deleted == null))
+                                        .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
+                                        .Include(tc => tc.TargetAlignments.Where(a => a.Deleted == null))
                                         .Where(tc => tc.Deleted == null)
                                         .Where(tc => referencedTokenCompositeIds.Contains(tc.Id))
                                         .ToList()
-                                        .ForEach(async e => {
-                                            e.Tokens.Where(t => t.Deleted == null).ToList().ForEach(async et => await tokenCompositeIdNull(et.Id));
-                                            await del(e.Id, tokenSD);
+                                        .ForEach(async tc => {
+                                            // for any Tokens that are a child of this to-be-deleted composite
+                                            // and were not deleted, disassociate them:
+                                            tc.Tokens.Where(t => t.Deleted == null)
+                                                .ToList()
+                                                .ForEach(async et => await tokenCompositeIdNull(et.Id));
+
+                                            await del(tc.Id, tokenSD);
+
+                                            foreach (var e in tc.TokenVerseAssociations) { await del(e.Id, tvaSD); }
+                                            foreach (var e in tc.Translations) { await del(e.Id, transSD); }
+                                            foreach (var e in tc.SourceAlignments) { await del(e.Id, alignSD); }
+                                            foreach (var e in tc.TargetAlignments) { await del(e.Id, alignSD); }
+
+                                            alignmentsRemoving.AddRange(tc.SourceAlignments);
+                                            alignmentsRemoving.AddRange(tc.TargetAlignments);
                                         });
 
                                     // add the new Tokens
@@ -176,18 +194,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     await _mediator.Publish(new AlignmentAddingRemovingEvent(alignmentsRemoving, null, ProjectDbContext), cancellationToken);
                     await transaction.CommitAsync(cancellationToken);
                     ProjectDbContext.Database.UseTransaction(null);
-                } 
+                }
                 else
                 {
                     await transaction.CommitAsync(cancellationToken);
                 }
-
-                return new RequestResult<IEnumerable<string>>(bookIdsToInsert);
             }
             finally
             {
                 await ProjectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
             }
+
+            if (alignmentsRemoving.Any())
+            {
+                await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsRemoving, null), cancellationToken);
+            }
+
+            return new RequestResult<IEnumerable<string>>(bookIdsToInsert);
         }
     }
 }
