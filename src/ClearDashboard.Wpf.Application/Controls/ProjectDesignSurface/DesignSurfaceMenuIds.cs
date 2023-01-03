@@ -19,5 +19,10 @@ public partial class DesignSurfaceViewModel
         public const string ShowParallelCorpusProperties = "ShowParallelCoprusProperties"; // was PropertiesId
         public const string ShowTokenizationProperties = "ShowTokenizationProperties"; // was TokenizerPropertiesId
         public const string UpdateParatextCorpus = "UpdateParatextCorpus";
+
+        //AQuA
+        public const string AquaRequestCorpusAnalysis = "AquaRequestCorpusAnalysis";
+        public const string AquaGetCorpusAnalysis = "AquaGetCorpusAnalysis";
+        public const string AquaAddLatestCorpusAnalysisToCurrentEnhancedView = "AquaAddLatestCorpusAnalysisToCurrentEnhancedView";
     }
 }

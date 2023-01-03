@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Windows.Media;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Tokenization;
@@ -17,7 +19,54 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public Token Token { get; }
 
-        public bool IsSource { get; set; }
+        /// <summary>
+        /// The <see cref="VerseDisplayViewModel"/> that this token is part of.
+        /// </summary>
+        public VerseDisplayViewModel VerseDisplay { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether this is a source token.
+        /// </summary>
+        /// <remarks>
+        /// If true, this is a source token; if false, this is a target token (alignment).
+        /// </remarks>
+        public bool IsSource { get; set; } = true;
+
+        private CompositeToken? _compositeToken;
+        /// <summary>
+        /// Gets or sets the parent <see cref="CompositeToken"/> of this token, if any.
+        /// </summary>
+        public CompositeToken? CompositeToken
+        {
+            get => _compositeToken;
+            set
+            {
+                if (Set(ref _compositeToken, value))
+                {
+                    CompositeTokenMembers = _compositeToken != null
+                        ? new TokenCollection(_compositeToken.Tokens)
+                        : new TokenCollection();
+                    NotifyOfPropertyChange(nameof(CompositeTokenMembers));
+                    NotifyOfPropertyChange(nameof(IsCompositeTokenMember));
+                    NotifyOfPropertyChange(nameof(CompositeIndicatorColor));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets whether this is token is part of a composite token.
+        /// </summary>
+        public bool IsCompositeTokenMember => CompositeToken != null;
+
+        /// <summary>
+        /// Gets a collection of the composite token members.
+        /// </summary>
+        public TokenCollection CompositeTokenMembers { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="Brush"/> to use when displaying a composite token indicator.
+        /// </summary>
+        public Brush CompositeIndicatorColor => CompositeTokenColors.Get(CompositeToken);
 
         /// <summary>
         /// Padding to be rendered before the token, as determined by a <see cref="EngineStringDetokenizer"/>.
@@ -38,6 +87,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// The surface text of the token to be displayed.  
         /// </summary>
         public string SurfaceText => Token.SurfaceText;
+
+        /// <summary>
+        /// The surface text of the token to be displayed for translations.
+        /// </summary>
+        public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken.Tokens.Select(t => t.SurfaceText))
+                                                                       : Token.SurfaceText;
 
         /// <summary>
         /// The extended properties of the token to be displayed.
@@ -61,14 +116,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public NoteIdCollection NoteIds { get; set; } = new();
 
-        private bool _isSelected;
+        private bool _isTokenSelected;
         /// <summary>
         /// Gets or sets whether this token is selected.
         /// </summary>
-        public bool IsSelected
+        public bool IsTokenSelected
         {
-            get => _isSelected;
-            set => Set(ref _isSelected, value);
+            get => _isTokenSelected;
+            set => Set(ref _isTokenSelected, value);
+        }        
+        
+        private bool _isTranslationSelected;
+        /// <summary>
+        /// Gets or sets whether the translation for this token is selected.
+        /// </summary>
+        public bool IsTranslationSelected
+        {
+            get => _isTranslationSelected;
+            set => Set(ref _isTranslationSelected, value);
         }
 
         private bool _isHighlighted;
@@ -93,19 +158,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public bool HasNote => NoteIds.Any();
 
-        public void NoteAdded(NoteViewModel? note)
+        public void NoteAdded(NoteViewModel note)
         {
-            //Notes.Add(note);
-            NoteIds.AddDistinct(note!.NoteId!);
-            //NotifyOfPropertyChange(nameof(Notes));
+            NoteIds.AddDistinct(note.NoteId!);
             NotifyOfPropertyChange(nameof(HasNote));
         }
 
-        public void NoteDeleted(NoteViewModel? note)
+        public void NoteDeleted(NoteViewModel note)
         {
-            //Notes.Remove(note);
-            NoteIds.RemoveIfExists(note!.NoteId!);
-            //NotifyOfPropertyChange(nameof(Notes));
+            NoteIds.RemoveIfExists(note.NoteId!);
             NotifyOfPropertyChange(nameof(HasNote));
         }
 

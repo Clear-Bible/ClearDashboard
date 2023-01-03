@@ -13,6 +13,7 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     x:Name="BiblicalTermsViewWindow"
     d:DataContext="{d:DesignInstance Type=paratextviews:BiblicalTermsViewModel}"
+    d:Height="400"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     Loaded="UserControl_Loaded"
@@ -397,6 +398,7 @@
 
         <ProgressBar
             x:Name="ProgressBarVisibility"
+            Grid.Column="0"
             Width="100"
             Height="100"
             Margin="15,50,5,0"
@@ -410,7 +412,6 @@
         <!--  ROW 3  -->
         <!--  Text="⁞" for vertical splitter  -->
         <GridSplitter
-            Grid.Row="3"
             Grid.Column="2"
             Height="12"
             HorizontalAlignment="Stretch">

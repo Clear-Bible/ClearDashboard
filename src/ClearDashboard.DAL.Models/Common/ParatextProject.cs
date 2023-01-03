@@ -168,6 +168,10 @@ namespace ClearDashboard.DataAccessLayer.Models
         public ProjectType Type { get; set; }
         public DirectoryType DirectoryType { get; set; } = DirectoryType.Project;
         public CorpusType CorpusType { get; set; }
+
+        /// <summary>
+        /// I think this is ParatextProjectId. Dirk?
+        /// </summary>
         public string? Guid { get; set; } = "";
         public ScrLanguageWrapper? Language { get; set; }
         public string? ShortName { get; set; } = "";
@@ -175,6 +179,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? LanguageName { get; set; } = "";
         public string? Encoding { get; set; } = "";
         public string? LanguageIsoCode { get; set; } = "";
+        public bool? IsResource { get; set; } = null;
         public TranslationInfo? TranslationInfo { get; set; }
         public TranslationInfo? BaseTranslation { get; set; }
         public string? DefaultFont { get; set; } = "";

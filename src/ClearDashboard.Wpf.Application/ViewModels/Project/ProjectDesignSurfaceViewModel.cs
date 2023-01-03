@@ -36,6 +36,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -316,7 +317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
                         var tokenizedCorpora =
                             topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
-                        DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
+                        await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
                     DesignSurfaceViewModel.ProjectDesignSurface!.InvalidateArrange();
@@ -709,8 +710,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             var tokenizedTextCorpusId = (await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
                                     Mediator!,
                                     new CorpusId(node.CorpusId)))
-                                .Where(tc => tc.TokenizationFunction == tokenizer.ToString())
-                                .FirstOrDefault();
+                                .FirstOrDefault(tc => tc.TokenizationFunction == tokenizer.ToString());
                             
                             if (tokenizedTextCorpusId is null)
                             {
@@ -719,6 +719,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpusId);
                             await tokenizedTextCorpus.UpdateOrAddVerses(Mediator!, textCorpus, cancellationToken);
+
+                            //await EventAggregator.PublishOnUIThreadAsync(new ReloadDataMessage(ReloadType.Force), cancellationToken);
+
+                            await EventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
 
                             _longRunningTaskManager.TaskComplete(taskName);
                         }
@@ -860,9 +864,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 corpus = await Corpus.Create(
                                       mediator: Mediator,
                                       IsRtl: selectedProject.IsRtl,
-
+                                      FontFamily: selectedProject.FontFamily,
                                       Name: selectedProject.Name,
-
                                       Language: selectedProject.LanguageName,
                                       CorpusType: selectedProject.CorpusTypeDisplay,
                                       ParatextId: selectedProject.Id,
@@ -931,7 +934,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             else
                             {
                                 Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                                if (!cancellationToken.IsCancellationRequested)
+                                {
+                                    await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
+                                        exception: ex, cancellationToken: cancellationToken);
+                                }
                             }
+
 
                         }
                         catch (Exception ex)
@@ -1069,15 +1078,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
 
-        public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel? corpusNodeMenuItem)
+        public async Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem)
         {
-
-            if (corpusNodeMenuItem == null)
-            {
-                Logger!.LogInformation($"The CorpusNodeMenuItem is null.  Returning...");
-                return;
-            }
-
             var corpusNodeViewModel = corpusNodeMenuItem.CorpusNodeViewModel;
             if (corpusNodeViewModel == null)
             {
@@ -1101,15 +1103,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
                     var tokenizedCorpus =
                         topLevelProjectIds.TokenizedTextCorpusIds.FirstOrDefault(tc =>
-                            tc.CorpusId.Id == corpusNodeMenuItem.CorpusNodeViewModel.CorpusId);
+                            tc.CorpusId.Id == corpusNodeViewModel.CorpusId && tc.TokenizationFunction == corpusNodeMenuItem.Tokenizer);
 
                     if (tokenizedCorpus == null)
                     {
                         Logger!.LogDebug($"Could not locate a TokenizedCorpus with a TokenizationFunction: '{corpusNodeMenuItem.Tokenizer}'.");
                         return;
                     }
-
-
 
                     await EventAggregator.PublishOnUIThreadAsync(
                         new AddTokenizedCorpusToEnhancedViewMessage(new TokenizedCorpusEnhancedViewItemMetadatum
@@ -1236,6 +1236,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        public async Task ExecuteAquaCorpusAnalysisMenuCommand(AquaCorpusAnalysisMenuItemViewModel aquaCorpusAnalysisMenuItemViewModel)
+        {
+            var corpusNodeViewModel = aquaCorpusAnalysisMenuItemViewModel.CorpusNodeViewModel;
+            if (corpusNodeViewModel == null)
+            {
+                Logger!.LogInformation($"The CorpusNodeViewModel on the CorpusNodeMenuItem: '{aquaCorpusAnalysisMenuItemViewModel.Id}' is null., Returning...");
+                return;
+            }
+
+            switch (aquaCorpusAnalysisMenuItemViewModel.Id)
+            {
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaRequestCorpusAnalysis:  //fixme
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaAddLatestCorpusAnalysisToCurrentEnhancedView:
+                    await EventAggregator.PublishOnUIThreadAsync(new AddAquaCorpusAnalysisToEnhancedViewMessage(new AquaCorpusAnalysisEnhancedViewItemMetadatum()
+                    {
+                        IsNewWindow = false
+                    })); ;
+                    break;
+                //case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaRequestCorpusAnalysis:
+                //    await AquaRequestCorpusAnalysis(corpusNodeViewModel.ParatextProjectId);
+                //    break;
+                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaGetCorpusAnalysis:
+                    await AquaGetCorpusAnalysis(corpusNodeViewModel.ParatextProjectId);
+                    break;
+            }
+        }
+
+        private async Task AquaRequestCorpusAnalysis(string paratextProjectId)
+        {
+
+        }
+
+        private async Task AquaGetCorpusAnalysis(string paratextProjectId)
+        {
+
+        }
 
 
         public void ShowCorpusProperties(CorpusNodeViewModel corpus)
@@ -1277,18 +1313,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
         {
-            // ****************************************************************************
-            // MICHAEL: not sure what null checking (if any) needs to happen with 
-            // connection.ParallelCorpusId.  Also, this method will accept a third
-            // CancellationToken argument if you have one available here.
-            //
-            // If ParallelCorpusId is invalid/doesn't exist, this will throw an
-            // exception - do you want to catch it here or let it bubble out?
-            // ****************************************************************************
-            if (connection.ParallelCorpusId is not null)
+
+            await Task.Factory.StartNew(async () =>
             {
-                await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
-            }
+                // ****************************************************************************
+                // MICHAEL: not sure what null checking (if any) needs to happen with 
+                // connection.ParallelCorpusId.  Also, this method will accept a third
+                // CancellationToken argument if you have one available here.
+                //
+                // If ParallelCorpusId is invalid/doesn't exist, this will throw an
+                // exception - do you want to catch it here or let it bubble out?
+                // ****************************************************************************
+                if (connection.ParallelCorpusId is not null)
+                {
+                    await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
+                }
+            });
+           
 
             // Removes the connector between corpus nodes:
             DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
@@ -1296,32 +1337,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
-            // Deletes the ParallelCorpora and removes the connector between nodes. 
-            foreach (var connection in node.AttachedConnections)
-            {
-                //connection.ParallelCorpusId
-                DeleteParallelCorpusConnection(connection);
-            }
+           
+                // Deletes the ParallelCorpora and removes the connector between nodes. 
+                foreach (var connection in node.AttachedConnections)
+                {
+                    //connection.ParallelCorpusId
+                    DeleteParallelCorpusConnection(connection);
+                }
 
-            var toplevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
 
-            var corpusId = toplevelProjectIds.CorpusIds.FirstOrDefault(c => c.Id == node.CorpusId);
+                var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.Id == node.CorpusId);
 
-            // ****************************************************************************
-            // MICHAEL: not sure what needs to happen if 'corpusId' is null.  Also,
-            // this method will accept a third CancellationToken argument if you have
-            // one available here
-            //
-            // If corpusId is invalid/doesn't exist, this will throw an exception - do you 
-            // want to catch it here or let it bubble out?
-            // ****************************************************************************
-            if (corpusId is not null)
-            {
-                await Corpus.Delete(Mediator!, corpusId);
-            }
+                await Task.Factory.StartNew(async () =>
+                {
+                    // ****************************************************************************
+                    // MICHAEL: not sure what needs to happen if 'corpusId' is null.  Also,
+                    // this method will accept a third CancellationToken argument if you have
+                    // one available here
+                    //
+                    // If corpusId is invalid/doesn't exist, this will throw an exception - do you 
+                    // want to catch it here or let it bubble out?
+                    // ****************************************************************************
+                    if (corpusId is not null)
+                    {
+                        await Corpus.Delete(Mediator!, corpusId);
+                    }
+                });
+            
 
-            // Removes the CorpusNode form the project design surface:
-            DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                // Removes the CorpusNode form the project design surface:
+                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+         
+        
         }
     }
 }

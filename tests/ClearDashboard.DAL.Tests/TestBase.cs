@@ -64,7 +64,7 @@ namespace ClearDashboard.DAL.Tests
             Services.AddClearDashboardDataAccessLayer();
             Services.AddScoped<ProjectDbContext>();
             Services.AddScoped<ProjectDbContextFactory>();
-            Services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder>();
+            Services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
             Services.AddMediatR(typeof(IMediatorRegistrationMarker), typeof(GetProjectInfoQueryHandler));
             //Services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
             Services.AddLogging();
@@ -72,6 +72,16 @@ namespace ClearDashboard.DAL.Tests
             Services.AddSingleton<IProjectProvider, ProjectProvider>();
 
             var builder = new ContainerBuilder();
+
+            // Mediator resolves this from the container, and generally 
+            // as a thick client app, there isn't any notion of 'requests',
+            // so most likely this will be resolved on the 'root' scope:
+            builder.RegisterType<ProjectDbContextFactory>().InstancePerLifetimeScope();
+
+            // Intended to be resolved/disposed at a 'request' level:
+            builder.RegisterType<ProjectDbContext>().InstancePerRequest();
+            builder.RegisterType<SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>().As<DbContextOptionsBuilder<ProjectDbContext>>().InstancePerRequest();
+
             builder.Populate(Services);
 
             Container = builder.Build();

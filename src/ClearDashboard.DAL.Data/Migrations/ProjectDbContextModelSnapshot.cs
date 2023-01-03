@@ -15,7 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.9");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -167,9 +167,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("AlignmentId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid>("AlignmentSetId")
                         .HasColumnType("TEXT");
 
@@ -185,8 +182,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AlignmentId");
 
                     b.HasIndex("AlignmentSetId");
 
@@ -312,6 +307,156 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("LabelNoteAssociation");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Form", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LexemeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LexemeId");
+
+                    b.ToTable("Lexicon_Form");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Lemma")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Lemma", "Language")
+                        .IsUnique();
+
+                    b.ToTable("Lexicon_Lexeme");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Meaning", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LexemeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LexemeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Lexicon_Meaning");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomain", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Lexicon_SemanticDomain");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomainMeaningAssociation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MeaningId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SemanticDomainId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeaningId");
+
+                    b.HasIndex("SemanticDomainId");
+
+                    b.ToTable("Lexicon_SemanticDomainMeaningAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Translation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("MeaningId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeaningId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Lexicon_Translation");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
                 {
                     b.Property<Guid>("Id")
@@ -364,6 +509,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("NoteAssociation");
 
                     b.HasDiscriminator<string>("AssociationType").HasValue("NoteAssociation");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.NoteDomainEntityAssociation", b =>
@@ -541,6 +688,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("RawContent");
 
                     b.HasDiscriminator<string>("ContentType").HasValue("RawContent");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComponent", b =>
@@ -582,6 +731,43 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("TokenComponent");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("TokenComponent");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("Created")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<long?>("Deleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("TokenComponentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("VerseId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenComponentId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VerseId");
+
+                    b.ToTable("TokenVerseAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
@@ -627,41 +813,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TokenizedCorpus");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long?>("Deleted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Position")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<Guid>("TokenComponentId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("VerseId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TokenComponentId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("VerseId");
-
-                    b.ToTable("TokenVerseAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
@@ -944,13 +1095,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasDiscriminator().HasValue("AlignmentAssociation");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.BinaryContent", b =>
-                {
-                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.RawContent");
-
-                    b.HasDiscriminator().HasValue("BinaryContent");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.BookAssociation", b =>
                 {
                     b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
@@ -963,6 +1107,27 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
 
                     b.HasDiscriminator().HasValue("ChapterAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenAssociation", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
+
+                    b.HasDiscriminator().HasValue("TokenAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseAssociation", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
+
+                    b.HasDiscriminator().HasValue("VerseAssociation");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.BinaryContent", b =>
+                {
+                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.RawContent");
+
+                    b.HasDiscriminator().HasValue("BinaryContent");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.StringContent", b =>
@@ -1012,13 +1177,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasDiscriminator().HasValue("Token");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenAssociation", b =>
-                {
-                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
-
-                    b.HasDiscriminator().HasValue("TokenAssociation");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComposite", b =>
                 {
                     b.HasBaseType("ClearDashboard.DataAccessLayer.Models.TokenComponent");
@@ -1031,13 +1189,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.ToTable("TokenComponent", (string)null);
 
                     b.HasDiscriminator().HasValue("TokenComposite");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.VerseAssociation", b =>
-                {
-                    b.HasBaseType("ClearDashboard.DataAccessLayer.Models.NoteAssociation");
-
-                    b.HasDiscriminator().HasValue("VerseAssociation");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
@@ -1128,12 +1279,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.AlignmentTopTargetTrainingText", b =>
                 {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Alignment", "Alignment")
-                        .WithMany()
-                        .HasForeignKey("AlignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.AlignmentSet", "AlignmentSet")
                         .WithMany()
                         .HasForeignKey("AlignmentSetId")
@@ -1145,8 +1290,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .HasForeignKey("SourceTokenComponentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Alignment");
 
                     b.Navigation("AlignmentSet");
 
@@ -1192,6 +1335,96 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("Label");
 
                     b.Navigation("Note");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Form", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", "Lexeme")
+                        .WithMany("Forms")
+                        .HasForeignKey("LexemeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lexeme");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Meaning", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", "Lexeme")
+                        .WithMany("Meanings")
+                        .HasForeignKey("LexemeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lexeme");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomain", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomainMeaningAssociation", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Lexicon_Meaning", "Meaning")
+                        .WithMany("SemanticDomainMeaningAssociations")
+                        .HasForeignKey("MeaningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomain", "SemanticDomain")
+                        .WithMany("SemanticDomainMeaningAssociations")
+                        .HasForeignKey("SemanticDomainId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meaning");
+
+                    b.Navigation("SemanticDomain");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Translation", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Lexicon_Meaning", "Meaning")
+                        .WithMany("Translations")
+                        .HasForeignKey("MeaningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meaning");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>
@@ -1320,31 +1553,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("VerseRow");
                 });
 
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.CorpusHistory", "CorpusHistory")
-                        .WithMany("TokenizedCorpora")
-                        .HasForeignKey("CorpusHistoryId");
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Corpus", "Corpus")
-                        .WithMany("TokenizedCorpora")
-                        .HasForeignKey("CorpusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Corpus");
-
-                    b.Navigation("CorpusHistory");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "TokenComponent")
@@ -1370,6 +1578,31 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("User");
 
                     b.Navigation("Verse");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenizedCorpus", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.CorpusHistory", "CorpusHistory")
+                        .WithMany("TokenizedCorpora")
+                        .HasForeignKey("CorpusHistoryId");
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Corpus", "Corpus")
+                        .WithMany("TokenizedCorpora")
+                        .HasForeignKey("CorpusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Corpus");
+
+                    b.Navigation("CorpusHistory");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Translation", b =>
@@ -1567,6 +1800,25 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Label", b =>
                 {
                     b.Navigation("LabelNoteAssociations");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Lexeme", b =>
+                {
+                    b.Navigation("Forms");
+
+                    b.Navigation("Meanings");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_Meaning", b =>
+                {
+                    b.Navigation("SemanticDomainMeaningAssociations");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Lexicon_SemanticDomain", b =>
+                {
+                    b.Navigation("SemanticDomainMeaningAssociations");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Note", b =>

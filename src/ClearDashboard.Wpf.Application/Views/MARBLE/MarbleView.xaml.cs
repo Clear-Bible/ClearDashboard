@@ -24,5 +24,6 @@ namespace ClearDashboard.Wpf.Application.Views.Marble
         {
             InitializeComponent();
         }
+        
     }
 }
