@@ -12,6 +12,22 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="TransparentStyleLite" TargetType="{x:Type Button}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="MinWidth" Value="100" />
+
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="1" />
+                    <Setter Property="Foreground" Value="Gray" />
+                    <Setter Property="Background" Value="LightGray" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid
         Height="36"
         Margin="-1"
@@ -65,7 +81,7 @@
                                 VerticalContentAlignment="Center"
                                 Click="AddButton_OnClick"
                                 Content="+"
-                                Style="{StaticResource TransparentStyle}"
+                                Style="{StaticResource TransparentStyleLite}"
                                 Tag="{Binding MenuItems, Mode=TwoWay}"
                                 ToolTip="Add"
                                 Visibility="{Binding AddButtonVisibility}" />
@@ -78,7 +94,7 @@
                                 VerticalAlignment="Center"
                                 VerticalContentAlignment="Center"
                                 Click="DeleteButton_OnClick"
-                                Style="{StaticResource TransparentStyle}"
+                                Style="{StaticResource TransparentStyleLite}"
                                 ToolTip="Delete"
                                 Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}">
                                 <materialDesign:PackIcon Kind="TrashCanOutline" />

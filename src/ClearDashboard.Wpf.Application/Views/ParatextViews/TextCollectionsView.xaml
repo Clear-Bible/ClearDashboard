@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
     xmlns:cm="http://caliburnmicro.com"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -88,17 +89,17 @@
                             </Style>
                         </GridView.ColumnHeaderContainerStyle>
 
-                        <GridViewColumn Width="{Binding ActualWidth, ElementName=TextCollectionListView}">
+                        <GridViewColumn x:Name="TextCollectionItemGridViewColumn" Width="{Binding ActualWidth, ElementName=TextCollectionListView, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="0,0,30,0" Orientation="Vertical">
+                                    <StackPanel Orientation="Vertical">
                                         <helpers:BindableTextBlock
                                             Width="Auto"
                                             InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
                                             TextWrapping="Wrap" />
                                         <cef:ChromiumWebBrowser
                                             x:Name="TextCollectionWebBrowser"
-                                            Width="{Binding ActualWidth, ElementName=TextCollectionListView}"
+                                            Width="{Binding ActualWidth, ElementName=TextCollectionItemGridViewColumn, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
                                             Height="200"
                                             paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}" />
                                     </StackPanel>
