@@ -638,6 +638,7 @@
 
                 <!--  Slider to change the current zoom level.  -->
                 <Slider
+                    VerticalAlignment="Center"
                     Grid.Column="12"
                     LargeChange="20"
                     Maximum="200"
