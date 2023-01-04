@@ -1,4 +1,5 @@
-﻿using ClearDashboard.DAL.Alignment.Features.Events;
+﻿using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Features.Events;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -47,7 +48,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Where(tc => tc.Id == request.CompositeToken.TokenId.Id)
                 .FirstOrDefault();
 
-            var compositeCandiateGuids = request.CompositeToken.Select(t => t.TokenId.Id);
+            var compositeCandiateGuids = request.CompositeToken.Tokens
+                .Union(request.CompositeToken.OtherTokens)
+                .Select(t => t.TokenId.Id);
 
             if (existingTokenComposite is not null)
             {
@@ -116,88 +119,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
             var compositeCorpusId = tokenizedCorpora.First()!.CorpusId;
 
-            if (request.ParallelCorpusId is not null)
-            {
-                // In this section we are trying to find all VerseMappings that relate to any of the
-                // candidate composite child tokens.  Either by Verse+TokenVerseAssociation or Verse Book/Chapter/Verse.
-                // Then, we validate that all these child tokens are relate either these two ways with all
-                // resulting VerseMapping candidates.  
-
-                var bcvGroups = compositeCandidatesDb.Values
-                    .GroupBy(tc => tc.VerseRow!.BookChapterVerse!)
-                    .Select(g => new
-                    {
-                        Ids = g.Select(t => t.Id),
-                        B = int.Parse(g.Key[..3]),
-                        C = int.Parse(g.Key[3..^3]),
-                        V = int.Parse(g.Key[6..^0])
-                    });
-
-                // Find all VerseMappings that relate to any of the composite child tokens by Verse+TokenVerseAssociation
-                var matchingVerseMappingsDb = ProjectDbContext.Verses
-                    .Include(v => v.TokenVerseAssociations)
-                    .Include(v => v.VerseMapping)
-                        .ThenInclude(vm => vm!.Verses)
-                            .ThenInclude(v => v.TokenVerseAssociations)
-                    .Where(v => v.VerseMapping!.ParallelCorpusId == request.ParallelCorpusId.Id)
-                    .Where(v => v.CorpusId == compositeCorpusId)
-                    .Where(v => v.TokenVerseAssociations.Any(tva => compositeCandiateGuids.Contains(tva.TokenComponentId)))
-                    .Select(v => v.VerseMapping!)
-                    .ToList();
-
-                // Find all VerseMappings that relate to any of the composite child tokens by Verse book/chapter/verse
-                foreach (var bcvGroup in bcvGroups)
-                {
-                    matchingVerseMappingsDb.AddRange(ProjectDbContext.Verses
-                        .Include(v => v.VerseMapping)
-                            .ThenInclude(vm => vm!.Verses)
-                                .ThenInclude(v => v.TokenVerseAssociations)
-                        .Where(v => v.VerseMapping!.ParallelCorpusId == request.ParallelCorpusId.Id)
-                        .Where(v => v.CorpusId == compositeCorpusId)
-                        .Where(v => v.BookNumber == bcvGroup.B && v.ChapterNumber == bcvGroup.C && v.VerseNumber == bcvGroup.V)
-                        .Select(v => v.VerseMapping!));
-                }
-
-                var idBcvs = bcvGroups
-                    .SelectMany(g => g.Ids, (g, id) => new { id, g.B, g.C, g.V })
-                    .ToDictionary(i => i.id, i => i);
-
-                foreach (var matchingVerseMappingDb in matchingVerseMappingsDb.DistinctBy(vm => vm.Id))
-                {
-                    var tokensInVerseMappingCount = 0;
-                    foreach (var compositeCandidateDbId in compositeCandidatesDb.Keys)
-                    {
-                        if (matchingVerseMappingDb!.Verses
-                            .Any(v => v.TokenVerseAssociations
-                                .Any(tva => compositeCandidateDbId == tva.TokenComponentId)))
-                        {
-                            tokensInVerseMappingCount++;
-                            continue;
-                        }
-
-                        var bcv = idBcvs[compositeCandidateDbId];
-                        if (matchingVerseMappingDb!.Verses
-                            .Where(v => v.BookNumber == bcv.B && v.ChapterNumber == bcv.C && v.VerseNumber == bcv.V)
-                            .Any())
-                        {
-                            tokensInVerseMappingCount++;
-                            continue;
-                        }
-                    }
-
-                    // If any of the composite child tokens does not relate to this VerseMapping
-                    // using the criteria above, then return an error:
-                    if (tokensInVerseMappingCount != compositeCandidatesDb.Count)
-                    {
-                        return new RequestResult<Unit>
-                        (
-                            success: false,
-                            message: $"CompositeToken '{request.CompositeToken.TokenId}' only has some child tokens present in VerseMapping candidate '{matchingVerseMappingDb.Id}'"
-                        );
-                    }
-                }
-            }
-            else
+            if (request.ParallelCorpusId is null)
             {
                 var verseRowIds = compositeCandidatesDb.Values.GroupBy(t => t.VerseRowId).Select(g => g.Key);
 
@@ -245,9 +167,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                      existingTokenComposite.Tokens.Remove(toRemove);
                 }
 
-                // Since we are changing an existing composite, make sure to 
-                // delete related Translations and Alignments.  (FIXME:  should
-                // we soft delete TokenVerseAssociations too?)
                 foreach (var e in existingTokenComposite.Translations) { e.Deleted = deletedDateTime; }
                 foreach (var e in existingTokenComposite.SourceAlignments) { e.Deleted = deletedDateTime; }
                 foreach (var e in existingTokenComposite.TargetAlignments) { e.Deleted = deletedDateTime; }
@@ -293,9 +212,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // associated, soft delete them:
             tokensAddedToComposite.ForEach(tc =>
             {
-                // Since we are changing an existing composite, make sure to 
-                // delete related Translations and Alignments.  (FIXME:  should
-                // we soft delete TokenVerseAssociations too?)
                 foreach (var e in tc.Translations) { e.Deleted = deletedDateTime; }
                 foreach (var e in tc.SourceAlignments) { e.Deleted = deletedDateTime; }
                 foreach (var e in tc.TargetAlignments) { e.Deleted = deletedDateTime; }

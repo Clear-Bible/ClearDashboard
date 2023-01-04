@@ -485,7 +485,7 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, parallelTokenizedCorpus.ParallelCorpusId));
 
-            // Can't use group of tokens of which only some are in a given VerseMapping:
+            // Can use group of tokens of which only some are in a given VerseMapping:
             var otherVerse = parallelTextCorpus.VerseMappingList[7].SourceVerses.First();
             var otherVerseBcv = $"{otherVerse.BookNum:000}{otherVerse.ChapterNum:000}{otherVerse.VerseNum:000}";
             var otherVerseMappingTokens = ProjectDbContext.Tokens.Include(t => t.VerseRow)
@@ -501,10 +501,10 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             sw.Restart();
 
-            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus.ParallelCorpusId));
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus.ParallelCorpusId);
 
             sw.Stop();
-            Output.WriteLine($"Elapsed={sw.Elapsed} - ParallelCorpus PutCompositeToken with multiple VerseMapping candidates (error)");
+            Output.WriteLine($"Elapsed={sw.Elapsed} - ParallelCorpus PutCompositeToken with multiple VerseMapping candidates (ok)");
         }
         finally
         {

@@ -51,9 +51,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
                         .ThenInclude(tc => tc.Tokens)
                             .ThenInclude(t => t.VerseRow)
-                    .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
-                        .ThenInclude(tc => tc.Tokens)
-                            .ThenInclude(t => t.VerseRow)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
             var invalidArgMsg = "";
@@ -163,7 +160,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 targetTokenIds);
                         });
 
-                    return new VerseMapping(sourceVerses, targetVerses);
+                    return new VerseMapping(sourceVerses, targetVerses, sourceVerseMappingComposites, targetVerseMappingComposites);
                 });
 
             return verseMappings;

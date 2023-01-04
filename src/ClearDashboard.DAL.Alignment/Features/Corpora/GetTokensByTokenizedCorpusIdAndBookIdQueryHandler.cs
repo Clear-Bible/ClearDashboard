@@ -35,8 +35,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // We do a ToList() here to avoid 'cannot create expression tree'
             // errors in the VerseTokens GroupBy below
             var bookNumberAsPaddedString = $"{bookNumberForAbbreviation:000}";
+
             var verseRows = ProjectDbContext.VerseRows
-                .Include(vr => vr.TokenComponents.Where(tc => tc.Deleted == null))
+                .Include(vr => vr.TokenComponents
+                    .Where(tc => tc.GetType() == typeof(Models.Token))
+                    .Where(tc => tc.Deleted == null))
                 .Where(vr => vr.TokenizedCorpusId == request.TokenizedCorpusId.Id)
                 .Where(vr => vr.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
                 .OrderBy(vr => vr.BookChapterVerse)
@@ -47,6 +50,20 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
             }
 
+            var tokenCompositeGuids = ProjectDbContext.Tokens
+                .Where(tc => tc.Deleted == null)
+                .Where(tc => tc.TokenCompositeId != null)
+                .Where(tc => tc.TokenizedCorpusId == request.TokenizedCorpusId.Id)
+                .Where(tc => tc.BookNumber == bookNumberForAbbreviation)
+                .Select(tc => tc.TokenCompositeId)
+                .Distinct();
+
+            var tokenCompositesByGuid = ProjectDbContext.TokenComposites
+                .Include(tc => tc.Tokens)
+                .Where(tc => tc.ParallelCorpusId == null)
+                .Where(tc => tokenCompositeGuids.Contains(tc.Id))
+                .ToDictionary(tc => tc.Id, tc => tc);
+
             var verseTokens = verseRows
                 .Select(vr => {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -54,16 +71,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     var chapter = int.Parse(vr.BookChapterVerse!.Substring(3, 3)).ToString();
                     var verse = int.Parse(vr.BookChapterVerse!.Substring(6, 3)).ToString();
 
-                    var tokenCompositeMap = vr.TokenComponents
-                        .Where(tc => tc is Models.TokenComposite)
-                        .Where(tc => (tc as Models.TokenComposite)!.ParallelCorpusId == null)
-                        .ToDictionary(
-                            tc => (tc as Models.TokenComposite)!.Id,
-                            tc => (tc as Models.TokenComposite)!);
-
-                    var tokens = vr.TokenComponents
-                        .Where(tc => tc is Models.Token)
-                        .GroupBy(tc => (tc as Models.Token)!.TokenCompositeId)
+                    var tokens = vr.Tokens
+                        .GroupBy(tc => tc.TokenCompositeId)
                         .SelectMany(g =>
                         {
                             if (g.Key != null)
@@ -71,11 +80,14 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 // Only TokenComposites with a null ParallelCorpusId 
                                 // are in the dictionary, therefore this should filter
                                 // out non-null ones:
-                                if (tokenCompositeMap.TryGetValue((Guid)g.Key!, out var tokenComposite))
+                                if (tokenCompositesByGuid.TryGetValue((Guid)g.Key!, out var tokenComposite))
                                 {
                                     return new[]
                                     {
-                                        ModelHelper.BuildCompositeToken(tokenComposite, g.Select(t => (t as Models.Token)!))
+                                        ModelHelper.BuildCompositeToken(
+                                            tokenComposite,
+                                            tokenComposite.Tokens.Where(t => t.VerseRowId == vr.Id),
+                                            tokenComposite.Tokens.Where(t => t.VerseRowId != vr.Id))
                                     };
                                 }
                                 else
