@@ -142,7 +142,7 @@
                             Command="{Binding DataContext.ClearFilterCommand, ElementName=BiblicalTermsViewWindow}"
                             CommandParameter="{Binding}"
                             Content="{helpers:Localization Pins_ClearFilter}"
-                            Style="{StaticResource BlueMidButton}" />
+                            Style="{StaticResource SmallTransparentStyle}" />
                         <StackPanel
                             Margin="5,0,0,5"
                             VerticalAlignment="Center"

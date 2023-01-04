@@ -91,12 +91,11 @@
                 Margin="15,0,0,0"
                 Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
             <Button
-                Height="25"
-                Margin="10,0,0,0"
+                Margin="10,5,0,5"
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
                 Content="{helpers:Localization Pins_ClearFilter}"
-                Style="{StaticResource BlueMidButton}" />
+                Style="{StaticResource TransparentStyle}" />
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
 
