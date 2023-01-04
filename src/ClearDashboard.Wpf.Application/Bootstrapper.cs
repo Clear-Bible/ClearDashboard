@@ -210,12 +210,12 @@ namespace ClearDashboard.Wpf.Application
             Logger?.LogInformation("ClearDashboard application is exiting.");
 
             StopParatext();
-            
-            DisposeLifetimeScope();
 
             StopAndDisposeHost();
 
             StopTailBlazer();
+
+            DisposeLifetimeScope();
 
             base.OnExit(sender, e);
         }
