@@ -21,6 +21,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Paratext;
 using DashboardApplication = System.Windows.Application;
 
 namespace ClearDashboard.Wpf.Application
@@ -206,6 +207,13 @@ namespace ClearDashboard.Wpf.Application
         protected override void OnExit(object sender, EventArgs e)
         {
             Logger?.LogInformation("ClearDashboard application is exiting.");
+
+#if DEBUG
+            if (Container!.Resolve<ParatextProxy>() is { } paratextProxy)
+            {
+                paratextProxy.StopParatext();
+            }
+#endif
 
             Logger?.LogInformation("Disposing ILifetimeScope" );
             var lifetimeScope = Container!.Resolve<ILifetimeScope>();
