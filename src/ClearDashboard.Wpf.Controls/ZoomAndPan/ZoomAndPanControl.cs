@@ -412,8 +412,8 @@ namespace ClearDashboard.Wpf.Controls
             AnimationHelper.CancelAnimation(this, ContentOffsetYProperty);
 
             this.ContentScale = newContentScale;
-            this.ContentOffsetX = newContentOffsetX;// > 0 ? newContentOffsetX  : 0;
-            this.ContentOffsetY = newContentOffsetY;// > 0 ? newContentOffsetY  : 0;
+            this.ContentOffsetX = newContentOffsetX;
+            this.ContentOffsetY = newContentOffsetY;
         }
 
         /// <summary>
@@ -729,18 +729,7 @@ namespace ClearDashboard.Wpf.Controls
             var c = (ZoomAndPanControl)d;
             var value = (double)baseValue;
             var minOffsetY = 0.0;
-            //var customHeight = 400.0;//1000
             var maxOffsetY = Math.Max(0.0, c._unScaledExtent.Height - c._constrainedContentViewportHeight);
-            //double heightScalar;
-            //if (c._constrainedContentViewportHeight <=0)
-            //{
-            //    heightScalar = 1;
-            //}
-            //else
-            //{
-            //    heightScalar = c._unScaledExtent.Height / c._constrainedContentViewportHeight;
-            //}
-            //var maxOffsetY = customHeight * heightScalar;
             value = Math.Min(Math.Max(value, minOffsetY), maxOffsetY);
             return value;
         }
