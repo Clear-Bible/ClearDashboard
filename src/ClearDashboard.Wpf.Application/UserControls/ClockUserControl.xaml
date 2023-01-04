@@ -65,7 +65,7 @@
                                 VerticalContentAlignment="Center"
                                 Click="AddButton_OnClick"
                                 Content="+"
-                                Style="{StaticResource TransparentStyleLite}"
+                                Style="{StaticResource SmallTransparentStyle}"
                                 Tag="{Binding MenuItems, Mode=TwoWay}"
                                 ToolTip="Add"
                                 Visibility="{Binding AddButtonVisibility}" />
@@ -78,7 +78,7 @@
                                 VerticalAlignment="Center"
                                 VerticalContentAlignment="Center"
                                 Click="DeleteButton_OnClick"
-                                Style="{StaticResource TransparentStyleLite}"
+                                Style="{StaticResource SmallTransparentStyle}"
                                 ToolTip="Delete"
                                 Visibility="{Binding DeleteButtonVisibility, Mode=TwoWay}">
                                 <materialDesign:PackIcon Kind="TrashCanOutline" />
