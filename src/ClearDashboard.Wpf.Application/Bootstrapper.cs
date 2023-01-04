@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.Wpf.Application.Services;
 using DashboardApplication = System.Windows.Application;
 
 namespace ClearDashboard.Wpf.Application
@@ -208,23 +209,48 @@ namespace ClearDashboard.Wpf.Application
         {
             Logger?.LogInformation("ClearDashboard application is exiting.");
 
-#if DEBUG
+            StopParatext();
+
+            StopAndDisposeHost();
+
+            StopTailBlazer();
+
+            DisposeLifetimeScope();
+
+            base.OnExit(sender, e);
+        }
+
+        private void StopTailBlazer()
+        {
+            if (Container!.Resolve<TailBlazerProxy>() is { } tailBlazerProxy)
+            {
+                tailBlazerProxy.StopTailBlazer();
+            }
+        }
+
+        private void StopParatext()
+        {
+            #if DEBUG
             if (Container!.Resolve<ParatextProxy>() is { } paratextProxy)
             {
                 paratextProxy.StopParatext();
             }
-#endif
+            #endif
+        }
 
-            Logger?.LogInformation("Disposing ILifetimeScope" );
-            var lifetimeScope = Container!.Resolve<ILifetimeScope>();
-            lifetimeScope.Dispose();
-
+        private void StopAndDisposeHost()
+        {
             _host.StopAsync(TimeSpan.FromSeconds(5));
             _host.Dispose();
-
-           
-            base.OnExit(sender, e);
         }
+
+        private void DisposeLifetimeScope()
+        {
+            Logger?.LogInformation("Disposing ILifetimeScope");
+            var lifetimeScope = Container!.Resolve<ILifetimeScope>();
+            lifetimeScope.Dispose();
+        }
+
         #endregion
 
     }

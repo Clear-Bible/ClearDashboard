@@ -760,35 +760,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         #region Methods
 
+        public void StopTailBlazer()
+        {
+
+        }
+
         private void ShowLogs()
         {
-            var dashboardLogPath = IoC.Get<CaptureFilePathHook>();
-
-            if (File.Exists(dashboardLogPath.Path) == false)
-            {
-                return;
-            }
-
-            var tailBlazorPath = Path.Combine(Environment.CurrentDirectory, @"Resources\TailBlazor\TailBlazer.exe");
-
-            var fileInfo = new FileInfo(tailBlazorPath);
-            if (fileInfo.Exists == false)
-            {
-                return;
-            }
-
-            try
-            {
-                var process = new Process();
-                process.StartInfo.WorkingDirectory = fileInfo.Directory!.FullName;
-                process.StartInfo.FileName = fileInfo.FullName;
-                process.StartInfo.Arguments = dashboardLogPath.Path;
-                process.Start();
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e.Message);
-            }
+            var tailBlazerProxy = LifetimeScope.Resolve<TailBlazerProxy>();
+            tailBlazerProxy.StartTailBlazer();
         }
 
         private async void GatherLogs()
