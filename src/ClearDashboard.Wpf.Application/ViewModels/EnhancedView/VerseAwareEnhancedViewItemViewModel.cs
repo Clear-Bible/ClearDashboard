@@ -463,8 +463,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            await GetData(ReloadType.Refresh, cancellationToken);
-            await Task.CompletedTask;
+            //await GetData(ReloadType.Refresh, cancellationToken);
+            //await Task.CompletedTask;
         }
 
         private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
