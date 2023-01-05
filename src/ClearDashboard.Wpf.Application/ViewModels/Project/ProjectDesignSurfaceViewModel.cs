@@ -459,7 +459,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
                         token: cancellationToken);
 
-                    corpus.CorpusId.FontFamily = ManuscriptIds.HebrewFontFamily;
+                    corpus.CorpusId.FontFamily = FontNames.HebrewFontFamily;
                     corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
 
 
@@ -584,7 +584,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         ParatextId: ManuscriptIds.GreekManuscriptId,
                         token: cancellationToken);
 
-                    corpus.CorpusId.FontFamily = ManuscriptIds.GreekFontFamily;
+                    corpus.CorpusId.FontFamily = FontNames.GreekFontFamily;
                     corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);

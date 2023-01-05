@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
-    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -15,7 +14,6 @@
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -71,10 +69,10 @@
                                 <Style TargetType="Rectangle">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.Auxiliary}">
-                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceAuxilary}" />
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceAuxiliary}" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.BackTranslation}">
-                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushBacktranslation}" />
+                                            <Setter Property="Fill" Value="{StaticResource NodeFillBrushBackTranslation}" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding CorpusType}" Value="{x:Static models:CorpusType.ConsultantNotes}">
                                             <Setter Property="Fill" Value="{StaticResource NodeFillBrushReferenceConsultantNotes}" />

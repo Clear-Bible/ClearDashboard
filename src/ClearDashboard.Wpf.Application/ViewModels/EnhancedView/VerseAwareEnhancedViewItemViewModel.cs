@@ -1,18 +1,21 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
@@ -23,15 +26,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Helpers;
-using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
-using ClearDashboard.DAL.Alignment.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using SIL.Machine.Corpora;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using ClearDashboard.Wpf.Application.Dialogs;
-using ClearDashboard.Wpf.Application.Events;
 
 // ReSharper disable InconsistentNaming
 
@@ -205,13 +202,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             case AlignmentEnhancedViewItemMetadatum alignmentEnhancedViewItemMetadatum:
                                 await GetAlignmentData(alignmentEnhancedViewItemMetadatum, cancellationToken);
-                                OnUIThread(() =>
+                                OnUIThread(async () =>
                                 {
                                     AlignmentSetId = Guid.Parse(alignmentEnhancedViewItemMetadatum.AlignmentSetId!);
                                     ParallelCorpusId = Guid.Parse(alignmentEnhancedViewItemMetadatum.ParallelCorpusId!);
                                     BorderColor = Brushes.DarkGreen;
-                                    SourceFontFamily = GetFontFamily(alignmentEnhancedViewItemMetadatum.SourceParatextId!);
-                                    var targetFontFamily = GetFontFamily(alignmentEnhancedViewItemMetadatum.TargetParatextId!);
+                                    SourceFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.SourceParatextId!);
+                                    var targetFontFamily = await GetFontFamily(alignmentEnhancedViewItemMetadatum.TargetParatextId!);
                                     TargetFontFamily = targetFontFamily;
                                     TranslationFontFamily = targetFontFamily;
                                     ShowTranslation = true;
@@ -222,13 +219,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                 break;
                             case InterlinearEnhancedViewItemMetadatum interlinearEnhancedViewItemMetadatum:
                                 await GetInterlinearData(interlinearEnhancedViewItemMetadatum, cancellationToken);
-                                OnUIThread(() =>
+                                OnUIThread(async () =>
                                 {
                                     TranslationSetId = Guid.Parse(interlinearEnhancedViewItemMetadatum.TranslationSetId!);
                                     ParallelCorpusId = Guid.Parse(interlinearEnhancedViewItemMetadatum.ParallelCorpusId!);
                                     BorderColor = Brushes.SaddleBrown;
-                                    SourceFontFamily = GetFontFamily(interlinearEnhancedViewItemMetadatum.SourceParatextId!);
-                                    var targetFontFamily = GetFontFamily(interlinearEnhancedViewItemMetadatum.TargetParatextId!);
+                                    SourceFontFamily = await GetFontFamily(interlinearEnhancedViewItemMetadatum.SourceParatextId!);
+                                    var targetFontFamily = await GetFontFamily(interlinearEnhancedViewItemMetadatum.TargetParatextId!);
                                     TargetFontFamily = targetFontFamily;
                                     TranslationFontFamily = targetFontFamily;
                                     ShowTranslation = true;
@@ -240,11 +237,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                 break;
                             case TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusEnhancedViewItemMetadatum:
                                 await GetTokenizedCorpusData(tokenizedCorpusEnhancedViewItemMetadatum, cancellationToken, reloadType);
-                                OnUIThread(() =>
+                                OnUIThread(async () =>
                                 {
                                     BorderColor = GetCorpusBrushColor(tokenizedCorpusEnhancedViewItemMetadatum.CorpusType);
                                     CorpusId = tokenizedCorpusEnhancedViewItemMetadatum.CorpusId ?? Guid.NewGuid();
-                                    SourceFontFamily = GetFontFamily(tokenizedCorpusEnhancedViewItemMetadatum.ParatextProjectId!);
+                                    SourceFontFamily = await GetFontFamily(tokenizedCorpusEnhancedViewItemMetadatum.ParatextProjectId!);
                                     ShowTranslation = false;
                                     IsRtl = tokenizedCorpusEnhancedViewItemMetadatum.IsRtl ?? false;
                                 });
@@ -328,7 +325,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                     foreach (var textRow in tokensTextRowsRange)
                     {
-                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope, textRow, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
+                        verses.Add(await CorpusDisplayViewModel.CreateAsync(LifetimeScope!, textRow, metadatum.TokenizedTextCorpus.TokenizedTextCorpusId.Detokenizer, metadatum.IsRtl ?? false));
                     }
                     OnUIThread(() =>
                     {
@@ -357,7 +354,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private  string CreateNoVerseDataTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum)
         {
-            // TODO:  localize the message
             var localizedMessage = LocalizationStrings.Get("EnhancedView_NoVerseData", Logger!); ;
             return $"{metadatum.ProjectName} - {metadatum.TokenizationType}    {localizedMessage}";
         }
@@ -609,51 +605,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return brush;
         }
 
-        private (FontFamily sourceFontFamily, FontFamily targetFontFamily) GetSourceAndTargetFontFamilies(string sourceParatextProjectId, string targetParatextProjectId)
+        private async Task<(FontFamily sourceFontFamily, FontFamily targetFontFamily)> GetSourceAndTargetFontFamilies(string sourceParatextProjectId, string targetParatextProjectId)
         {
             // get the font family for this project
-            var sourceFontFamily = ParentViewModel.MainViewModel.GetFontFamilyFromParatextProjectId(sourceParatextProjectId);
-            var targetFontFamily = ParentViewModel.MainViewModel.GetFontFamilyFromParatextProjectId(targetParatextProjectId);
-
-            FontFamily fontFamilySource;
-            try
-            {
-                fontFamilySource = new(sourceFontFamily);
-            }
-            catch (Exception e)
-            {
-                fontFamilySource = new("Segoe UI");
-            }
-
-            FontFamily fontFamilyTarget;
-            try
-            {
-                fontFamilyTarget = new(targetFontFamily);
-            }
-            catch (Exception e)
-            {
-                fontFamilyTarget = new("Segoe UI");
-            }
-
-            return (fontFamilySource, fontFamilyTarget);
+            var sourceFontFamily = await GetFontFamily(sourceParatextProjectId);
+            var targetFontFamily = await GetFontFamily(targetParatextProjectId);
+            return (sourceFontFamily, targetFontFamily);
         }
 
 
-        private FontFamily GetFontFamily(string paratextProjectId)
+        private async Task<FontFamily> GetFontFamily(string paratextProjectId)
         {
-            var fontFamilyName = ParentViewModel.MainViewModel.GetFontFamilyFromParatextProjectId(paratextProjectId);
+            var fontFamilyName = await GetFontFamilyName(paratextProjectId);
 
             FontFamily fontFamily;
             try
             {
                 fontFamily = new(fontFamilyName);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                fontFamily = new("Segoe UI");
+                fontFamily = new(FontNames.DefaultFontFamily);
             }
 
             return fontFamily;
         }
+        private async Task<string?> GetFontFamilyName(string paratextProjectId)
+        {
+            var result = await Mediator!.Send(new GetProjectFontFamilyQuery(paratextProjectId));
+            if (result is { HasData: true })
+            {
+
+                return result.Data;
+            }
+
+            return "Seqoe UI";
+        }
+
+     
     }
 }
