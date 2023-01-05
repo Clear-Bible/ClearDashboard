@@ -6,7 +6,6 @@ using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
@@ -62,7 +61,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>,
                 IHandle<AddAquaCorpusAnalysisToEnhancedViewMessage>
-               // IHandle<ProjectsMetadataChangedMessage>
     {
         #region Member Variables
 
@@ -120,8 +118,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once MemberCanBePrivate.Global
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
-
-        public List<ParatextProjectMetadata> ProjectMetadata = new();
 
         #endregion //Public Properties
 
@@ -532,13 +528,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
 
-            // get the project metadata from Paratext
-            var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), CancellationToken.None);
-            if (result.Success)
-            {
-                ProjectMetadata = result.Data.OrderBy(p => p.Name).ToList();
-            }
-
             base.OnViewLoaded(view);
         }
 
@@ -757,11 +746,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         #endregion //Constructor
 
         #region Methods
-
-        public void StopTailBlazer()
-        {
-
-        }
 
         private void ShowLogs()
         {
