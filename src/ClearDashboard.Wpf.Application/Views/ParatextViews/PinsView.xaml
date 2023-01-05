@@ -224,6 +224,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
+                                TextWrapping="Wrap"
                                 Width="auto"
                                 MinWidth="125"
                                 MaxWidth="250"
