@@ -24,9 +24,9 @@
     mc:Ignorable="d">
 
     <!--  Background="{DynamicResource MaterialDesignPaper}"  -->
-
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -38,6 +38,16 @@
             HorizontalAlignment="Left"
             Content="{helpers:Localization AddParatextCorpusDialog_SelectBooks}"
             FontSize="24" />
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Old Testament" Margin="15,0"/>
+            <Label Grid.Column="1" Content="New Testament" Margin="15,0"/>
+        </Grid>
+
 
         <!--<Border
             Grid.Row="1"
@@ -57,7 +67,7 @@
             CornerRadius="4" />-->
 
         <materialDesign:Card
-            Grid.Row="1"
+            Grid.Row="2"
             Margin="15"
             materialDesign:ShadowAssist.ShadowDepth="Depth0">
             <Grid>
@@ -814,7 +824,7 @@
         </materialDesign:Card>
         <!--  Bottom row of buttons  -->
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             Margin="5"
             Orientation="Horizontal">
@@ -851,7 +861,7 @@
         </StackPanel>
 
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             Margin="10,0"
             HorizontalAlignment="Right"
             Orientation="Horizontal">

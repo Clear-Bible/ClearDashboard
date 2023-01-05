@@ -596,7 +596,7 @@
     <value>PHP</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>Select Books To Process</value>
+    <value>Select books to process</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>Macula Greek</value>
