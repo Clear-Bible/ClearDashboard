@@ -60,7 +60,7 @@
             Name="legend"
             Grid.Row="1"
             Height="170"
-            Margin="0"
+            Margin="14,0,14,0"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch"
             BorderThickness="0"
@@ -87,13 +87,13 @@
                             <SolidColorBrush Color="#EBEBEB" />
                         </Grid.Background>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20" />
-                            <ColumnDefinition Width="20" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="5*" />
+                            <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
-                        <iconPacks:PackIconMaterialDesign VerticalAlignment="Center">
+                        <iconPacks:PackIconMaterialDesign VerticalAlignment="Center" Margin="10,0">
                             <iconPacks:PackIconMaterialDesign.Style>
                                 <Style TargetType="iconPacks:PackIconMaterialDesign">
                                     <Setter Property="Kind" Value="StarBorder" />
