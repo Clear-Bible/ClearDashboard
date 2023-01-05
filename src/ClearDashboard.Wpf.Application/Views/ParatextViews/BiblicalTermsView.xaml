@@ -40,9 +40,9 @@
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
         <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -284,7 +284,7 @@
 
             <DataGrid.Columns>
                 <!--  rendering note button  -->
-                <DataGridTemplateColumn Width="20" Header="">
+                <DataGridTemplateColumn Width="2*" Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -306,7 +306,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="Auto" Header="{helpers:Localization BiblicalTermsForm_Term}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization BiblicalTermsForm_Term}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -320,7 +320,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110" Header="{helpers:Localization BiblicalTermsForm_Category}">
+                <DataGridTemplateColumn Width="11*" Header="{helpers:Localization BiblicalTermsForm_Category}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -333,7 +333,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="150" Header="{helpers:Localization BiblicalTermsForm_GlossLower}">
+                <DataGridTemplateColumn Width="15*" Header="{helpers:Localization BiblicalTermsForm_GlossLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -346,7 +346,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Localization BiblicalTermsForm_Counts}">
+                <DataGridTemplateColumn Width="4*" Header="{helpers:Localization BiblicalTermsForm_Counts}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -357,7 +357,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Localization BiblicalTermsForm_Found}">
+                <DataGridTemplateColumn Width="4*" Header="{helpers:Localization BiblicalTermsForm_Found}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -368,7 +368,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="{helpers:Localization BiblicalTermsForm_RenderingsLower}">
+                <DataGridTemplateColumn Width="20*" Header="{helpers:Localization BiblicalTermsForm_RenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -376,7 +376,7 @@
                                 Margin="-8"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Text="{Binding RenderingString}">
+                                Text="{Binding RenderingString}" TextWrapping="Wrap">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />

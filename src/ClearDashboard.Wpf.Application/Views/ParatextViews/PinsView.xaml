@@ -224,14 +224,14 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                TextWrapping="Wrap"
                                 Width="auto"
                                 MinWidth="125"
                                 MaxWidth="250"
                                 Margin="-13,0"
                                 FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
                                 FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
-                                Text="{Binding Path='Source'}" />
+                                Text="{Binding Path='Source'}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
