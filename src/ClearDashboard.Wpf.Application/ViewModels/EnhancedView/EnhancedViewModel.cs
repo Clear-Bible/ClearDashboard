@@ -27,7 +27,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -383,6 +382,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
         }
+
+   
         public async Task RequestClose(object obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
@@ -499,10 +500,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns></returns>
         protected async Task<EnhancedViewItemViewModel> ActivateItemAsync1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
         {
-            EnhancedViewItemViewModel viewModel = (EnhancedViewItemViewModel) LifetimeScope.Resolve(ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum));
+            var viewModel = (EnhancedViewItemViewModel) LifetimeScope.Resolve(ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum));
             viewModel.Parent = this;
             viewModel.ConductWith(this);
-            UIElement view = ViewLocator.LocateForModel(viewModel, null, null);
+            var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync((EnhancedViewItemViewModel)(object)viewModel, cancellationToken);
             return viewModel;
@@ -510,11 +511,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";
-
-            // await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
             await base.OnInitializeAsync(cancellationToken);
         }
 
+      
         protected override void OnViewAttached(object view, object context)
         {
             // grab the dictionary of all the verse lookups
@@ -683,6 +683,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectedVerseDisplayViewModel = message.SelectedVerseDisplayViewModel;
             return Task.CompletedTask;
         }
+
+
 
         public async Task HandleAsync(ReloadDataMessage message, CancellationToken cancellationToken)
         {
