@@ -159,6 +159,13 @@
                     <!--<Setter Property="Height" Value="{x:Static sys:Double.NaN}" />-->
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="Padding" Value="0" />
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <Trigger Property="AlternationIndex" Value="1">
                             <Setter Property="Background" Value="{DynamicResource GridBrush}" />
