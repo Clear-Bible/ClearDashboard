@@ -6,6 +6,7 @@ namespace ClearDashboard.DAL.ViewModels
 {
     public class BookChapterVerseViewModel : ViewModelBase<BookChapterVerse>
     {
+
         #nullable disable
         public BookChapterVerseViewModel() : base()
         {
@@ -214,6 +215,7 @@ namespace ClearDashboard.DAL.ViewModels
             {
                 return false;
             }
+
 
             // Convert the number into a string we can parse.
             var verseLocationId = verseId.PadLeft(9, '0');

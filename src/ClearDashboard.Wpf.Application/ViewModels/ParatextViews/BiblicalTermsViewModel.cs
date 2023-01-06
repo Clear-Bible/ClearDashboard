@@ -1086,8 +1086,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     {
                         biblicalTermsList = result.Data;
 
-                        await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"), cancellationToken);
-
                         // send to the task started event aggregator for everyone else to hear about a background task starting
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
                         {

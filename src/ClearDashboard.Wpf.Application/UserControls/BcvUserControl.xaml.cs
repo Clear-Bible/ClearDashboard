@@ -70,8 +70,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         #endregion Rtl
-        
-        
+
+
 
 
         #region CurrentBcv
@@ -114,7 +114,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion CurrentBcv
 
 
-        
+
         #region VerseChange
 
         public static readonly DependencyProperty VerseChangeProperty =
@@ -158,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
 
         #region IsControlMinimal
-        
+
         public static readonly DependencyProperty IsControlMinimalProperty =
             DependencyProperty.Register(nameof(IsControlMinimal), typeof(bool), typeof(BcvUserControl),
                 new PropertyMetadata(false));
@@ -237,9 +237,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
             set => SetValue(VerseOffsetRangeProperty, value);
         }
 
-        # endregion VerseRange
+        #endregion VerseRange
 
-        
+
 
         #region BcvDictionary
 
@@ -273,7 +273,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #endregion Observable Properties
 
 
-        
+
         #region Constructor
         public BcvUserControl()
         {
@@ -358,7 +358,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 _chapterChangeInProgress = true;
             }
-            
+
             if (CboChapter.SelectedIndex < CboChapter.Items.Count - 1)
             {
                 CboChapter.SelectedIndex += 1;
@@ -526,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (verseId != "")
                 {
                     CboVerse.SelectedIndex = 0;
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                    CurrentBcv.SetVerseFromId(verseId);
 
                     CalculateVerses();
                     somethingChanged = true;
@@ -534,6 +534,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
                 if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress)
                 {
+
                     VerseChange = CurrentBcv.GetVerseId();
                 }
             }
