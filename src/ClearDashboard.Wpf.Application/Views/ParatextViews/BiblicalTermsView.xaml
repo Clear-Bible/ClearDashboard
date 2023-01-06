@@ -518,18 +518,8 @@
                                     <DataTemplate>
                                         <TextBlock
                                             VerticalAlignment="Center"
-                                            Cursor="Hand"
-                                            FontStyle="Italic"
+                                            Text="{Binding VerseId}"
                                             Foreground="{StaticResource BlueMidBrush}">
-                                            <TextBlock.InputBindings>
-                                                <MouseBinding
-                                                    Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
-                                                    CommandParameter="{Binding VerseBBCCCVVV}"
-                                                    MouseAction="LeftClick" />
-                                            </TextBlock.InputBindings>
-                                            <Underline>
-                                                <Run Text="{Binding VerseId}" />
-                                            </Underline>
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
