@@ -146,6 +146,7 @@ namespace ClearDashboard.Wpf.Application
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
+            builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
