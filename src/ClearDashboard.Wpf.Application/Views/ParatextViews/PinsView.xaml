@@ -450,11 +450,6 @@
                             VerticalAlignment="Stretch"
                             ItemsSource="{Binding SelectedItemVerses}"
                             ScrollViewer.VerticalScrollBarVisibility="Visible">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Height" Value="30" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
                             <ListView.View>
                                 <GridView>
                                     <GridView.ColumnHeaderContainerStyle>
