@@ -964,7 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     if (SelectedWordFilterEnum == FilterWordEnum.Gloss)
                     {
                         // make this case insensitive
-                        if (btFilter.LocalGloss.IndexOf(FilterText, StringComparison.InvariantCultureIgnoreCase) > -1)
+                        if (btFilter.Gloss.IndexOf(FilterText, StringComparison.InvariantCultureIgnoreCase) > -1)
                         {
                             return true;
                         }

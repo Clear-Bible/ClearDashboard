@@ -182,7 +182,8 @@
                     Padding="0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    cm:Message.Attach="CloseTaskBox">
+                    cm:Message.Attach="CloseTaskBox"
+                    Style="{StaticResource SmallTransparentStyle}">
                     X
                 </Button>
             </Grid>

@@ -91,12 +91,11 @@
                 Margin="15,0,0,0"
                 Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
             <Button
-                Height="25"
-                Margin="10,0,0,0"
+                Margin="10,5,0,5"
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
                 Content="{helpers:Localization Pins_ClearFilter}"
-                Style="{StaticResource BlueMidButton}" />
+                Style="{StaticResource TransparentStyle}" />
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
 
@@ -145,13 +144,19 @@
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <!--<Setter Property="Height" Value="{x:Static sys:Double.NaN}" />-->
-                    <Setter Property="Height" Value="40" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="Padding" Value="0" />
                     <Style.Triggers>
@@ -159,16 +164,18 @@
                             <Setter Property="Background" Value="{DynamicResource GridBrush}" />
                         </Trigger>
                     </Style.Triggers>
+
                 </Style>
             </DataGrid.RowStyle>
 
             <DataGrid.Columns>
                 <!--  XmlSource  -->
-                <DataGridTemplateColumn MaxWidth="59">
+                <DataGridTemplateColumn Width="4*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border
                                 Width="26"
+                                Margin="-13,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 BorderBrush="{StaticResource PrimaryHueMidBrush}"
@@ -185,7 +192,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  SimpRefs  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_VerseReferences}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_VerseReferences}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -213,29 +220,24 @@
                 </DataGridTemplateColumn>
 
                 <!--  Lexeme  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="250"
-                    Header="{helpers:Localization Pins_Lexeme}">
+                <DataGridTemplateColumn Width="16*" Header="{helpers:Localization Pins_Lexeme}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
                                 Width="auto"
                                 MinWidth="125"
                                 MaxWidth="250"
-                                Margin="0,0,0,0"
+                                Margin="-13,0"
                                 FontFamily="{Binding ElementName=PinsViewWindow, Path=DataContext.FontFamily}"
                                 FontSize="{Binding ElementName=PinsViewWindow, Path=DataContext.FontSize}"
-                                Text="{Binding Path='Source'}" />
+                                Text="{Binding Path='Source'}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <!--  gloss  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="250"
-                    Header="{helpers:Localization Pins_Gloss}">
+                <DataGridTemplateColumn Width="16*" Header="{helpers:Localization Pins_Gloss}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -250,10 +252,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  origin id  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="250"
-                    Header="{helpers:Localization Pins_Origin}">
+                <DataGridTemplateColumn Width="16*" Header="{helpers:Localization Pins_Origin}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -280,7 +279,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  language  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_Language}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_Language}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -319,7 +318,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Phrase  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Phrase}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Phrase}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -332,7 +331,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Word  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Word}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Word}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -345,7 +344,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Prefix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Prefix}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Prefix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -358,7 +357,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Stem  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Stem}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Stem}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -371,7 +370,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Suffix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Suffix}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Suffix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -384,10 +383,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Notes  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="1000"
-                    Header="{helpers:Localization Pins_Notes}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_Notes}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -454,11 +450,6 @@
                             VerticalAlignment="Stretch"
                             ItemsSource="{Binding SelectedItemVerses}"
                             ScrollViewer.VerticalScrollBarVisibility="Visible">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Height" Value="30" />
-                                </Style>
-                            </ListView.ItemContainerStyle>
                             <ListView.View>
                                 <GridView>
                                     <GridView.ColumnHeaderContainerStyle>
