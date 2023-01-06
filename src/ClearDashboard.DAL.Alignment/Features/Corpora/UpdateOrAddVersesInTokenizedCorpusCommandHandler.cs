@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -53,6 +54,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 using var verseRowInsertCommand = TokenizedCorpusDataUtil.CreateVerseRowInsertCommand(connection);
                 using var tokenComponentInsertCommand = TokenizedCorpusDataUtil.CreateTokenComponentInsertCommand(connection);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataUtil.CreateTokenCompositeTokenAssociationInsertCommand(connection);
 
                 if (bookIdsToInsert.Any())
                 {
@@ -66,7 +68,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             cancellationToken.ThrowIfCancellationRequested();
 
                             await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, cancellationToken);
+                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                         }
                     }
                 }
@@ -84,13 +86,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     var deletedDateTime = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond)); // Remove any fractions of a millisecond
 
                     using var tokenSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenComponent));
+                    using var taSD    = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenCompositeTokenAssociation));
                     using var transSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Translation));
                     using var alignSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Alignment));
                     using var tvaSD   = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenVerseAssociation));
                     using var tcIdUpdate = TokenizedCorpusDataUtil.CreateTokenCompositeIdUpdateCommand(connection);
 
                     async Task del(Guid id, DbCommand cmd) => await DataUtil.SoftDeleteByIdAsync(deletedDateTime, id, cmd, cancellationToken);
-                    async Task tokenCompositeIdNull(Guid id) => await TokenizedCorpusDataUtil.SetTokenCompositeIdAsync(null, id, tcIdUpdate, cancellationToken);
 
                     foreach (var bookId in bookIdsToUpdate)
                     {
@@ -111,10 +113,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             var verseRowDb = bookVerseRowsDb.Where(vr => vr.BookChapterVerse == verseRow.BookChapterVerse).FirstOrDefault();
                             if (verseRowDb is not null)
                             {
-                                if (verseRowDb.OriginalText != verseRow.OriginalText)
+                                if (verseRowDb.OriginalText == verseRow.OriginalText)
                                 {
                                     // delete(soft delete so notes references work ?) all Tokens and associated Alignments:
                                     var tokensToSoftDelete = ProjectDbContext.Tokens
+                                        .Include(tc => tc.TokenCompositeTokenAssociations.Where(ta => ta.Deleted == null))
                                         .Include(tc => tc.TokenVerseAssociations.Where(tva => tva.Deleted == null))
                                         .Include(tc => tc.Translations.Where(t => t.Deleted == null))
                                         .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
@@ -128,11 +131,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         cancellationToken.ThrowIfCancellationRequested();
 
                                         await del(tc.Id, tokenSD);
-                                        if (tc.TokenCompositeId is not null)
-                                        {
-                                            referencedTokenCompositeIds.Add((Guid)tc.TokenCompositeId!);
-                                        }
+                                        referencedTokenCompositeIds.AddRange(tc.TokenCompositeTokenAssociations.Select(ta => ta.TokenCompositeId));
 
+                                        foreach (var e in tc.TokenCompositeTokenAssociations) { await del(e.Id, taSD); }
                                         foreach (var e in tc.TokenVerseAssociations) { await del(e.Id, tvaSD); }
                                         foreach (var e in tc.Translations) { await del(e.Id, transSD); }
                                         foreach (var e in tc.SourceAlignments) { await del(e.Id, alignSD); }
@@ -145,7 +146,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     // delete (soft) TokenComposites that were referenced by the Tokens deleted above
                                     // as well as their associated Alignments:
                                     ProjectDbContext.TokenComposites
-                                        .Include(tc => tc.Tokens)
+                                        .Include(tc => tc.TokenCompositeTokenAssociations.Where(ta => ta.Deleted == null))
                                         .Include(tc => tc.TokenVerseAssociations.Where(tva => tva.Deleted == null))
                                         .Include(tc => tc.Translations.Where(t => t.Deleted == null))
                                         .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
@@ -154,14 +155,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         .Where(tc => referencedTokenCompositeIds.Contains(tc.Id))
                                         .ToList()
                                         .ForEach(async tc => {
-                                            // for any Tokens that are a child of this to-be-deleted composite
-                                            // and were not deleted, disassociate them:
-                                            tc.Tokens.Where(t => t.Deleted == null)
-                                                .ToList()
-                                                .ForEach(async et => await tokenCompositeIdNull(et.Id));
-
-                                            await del(tc.Id, tokenSD);
-
+                                            foreach (var e in tc.TokenCompositeTokenAssociations) { await del(e.Id, taSD); }
                                             foreach (var e in tc.TokenVerseAssociations) { await del(e.Id, tvaSD); }
                                             foreach (var e in tc.Translations) { await del(e.Id, transSD); }
                                             foreach (var e in tc.SourceAlignments) { await del(e.Id, alignSD); }
@@ -173,13 +167,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                                     // add the new Tokens
                                     await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                                    await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, cancellationToken);
+                                    await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                                 }
                             }
                             else
                             {
                                 await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                                await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, cancellationToken);
+                                await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                             }
                         }
                     }

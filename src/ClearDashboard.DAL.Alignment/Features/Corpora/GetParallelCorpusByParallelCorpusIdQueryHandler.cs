@@ -141,7 +141,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 sourceTokenIds);
-                        });
+                        }).OrderBy(v => v.BookNum).ThenBy(v => v.ChapterNum).ThenBy(v => v.VerseNum).ToList();
 
                     var targetVerses = vm.Verses
                         .Where(v => v.CorpusId == targetCorpusId)
@@ -174,7 +174,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 targetTokenIds);
-                        });
+                        }).OrderBy(v => v.BookNum).ThenBy(v => v.ChapterNum).ThenBy(v => v.VerseNum).ToList();
 
                     var sourceVerseMappingTokenGuidsByTVA = sourceVerses.SelectMany(sv => sv.TokenIds.Select(tid => tid.Id));
 
@@ -187,7 +187,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             tc.Tokens.Where(t =>
                                 !sourceVerseMappingTokenGuidsByTVA.Contains(t.Id) &&
                                 !sourceVerseMappingBCVs.Contains(t.VerseRow!.BookChapterVerse!))
-                        ));
+                        )).ToList();
 
                     var targetVerseMappingTokenGuidsByTVA = targetVerses.SelectMany(sv => sv.TokenIds.Select(tid => tid.Id));
 
@@ -200,7 +200,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             tc.Tokens.Where(t =>
                                 !targetVerseMappingTokenGuidsByTVA.Contains(t.Id) &&
                                 !targetVerseMappingBCVs.Contains(t.VerseRow!.BookChapterVerse!))
-                        ));
+                        )).ToList();
 
                     return new VerseMapping(sourceVerses, targetVerses, sourceVerseMappingComposites, targetVerseMappingComposites);
                 });

@@ -124,11 +124,18 @@ public class GetParallelCorpusByParallelCorpusIdQueryHandlerTests : TestBase
 
             foreach (var t in sourceTokensForComposite.Select(t => t).Take(3))
             {
-                t.TokenCompositeId = sourceTokenComposite.Id;
+                t.TokenCompositeTokenAssociations.Add(new Models.TokenCompositeTokenAssociation { 
+                    TokenId = t.Id,
+                    TokenCompositeId = sourceTokenComposite.Id
+                });
             }
             foreach (var t in targetTokensForComposite.Select(t => t).Take(2))
             {
-                t.TokenCompositeId = targetTokenComposite.Id;
+                t.TokenCompositeTokenAssociations.Add(new Models.TokenCompositeTokenAssociation
+                {
+                    TokenId = t.Id,
+                    TokenCompositeId = targetTokenComposite.Id
+                });
             }
 
             _ = await ProjectDbContext.SaveChangesAsync();

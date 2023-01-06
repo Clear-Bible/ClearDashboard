@@ -501,7 +501,12 @@ public class CreateParallelCorpusCommandHandlerTests : TestBase
 
             sw.Restart();
 
-            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus.ParallelCorpusId);
+            // Tokens already in another composite, so error:
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus.ParallelCorpusId));
+
+            // Ok, since different parallel corpus id:
+            var parallelTokenizedCorpus2 = await parallelTextCorpus.Create("test pc", Mediator!);
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, parallelTokenizedCorpus2.ParallelCorpusId);
 
             sw.Stop();
             Output.WriteLine($"Elapsed={sw.Elapsed} - ParallelCorpus PutCompositeToken with multiple VerseMapping candidates (ok)");

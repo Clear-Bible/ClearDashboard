@@ -41,7 +41,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             }
 
             var existingTokenComposite = ProjectDbContext.TokenComposites
-                .Include(tc => tc.Tokens)
+                .Include(tc => tc.TokenCompositeTokenAssociations)
+                    .ThenInclude(ta => ta.Token)
                 .Include(tc => tc.Translations.Where(t => t.Deleted == null))
                 .Include(tc => tc.SourceAlignments.Where(a => a.Deleted == null))
                 .Include(tc => tc.TargetAlignments.Where(a => a.Deleted == null))
@@ -63,7 +64,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 }
                 
                 if (existingTokenComposite.Tokens.Count == compositeCandiateGuids.Count() &&
-                    existingTokenComposite.ParallelCorpusId == request.ParallelCorpusId?.Id)
+                    existingTokenComposite.ParallelCorpusId == request.ParallelCorpusId?.Id &&
+                    existingTokenComposite.ExtendedProperties == request.CompositeToken.ExtendedProperties)
                 {
                     if (!compositeCandiateGuids
                         .Except(existingTokenComposite.Tokens.Select(t => t.Id))
@@ -73,13 +75,28 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         return new RequestResult<Unit>(Unit.Value);
                     }
                 }
+
+                if (existingTokenComposite.ParallelCorpusId != request.ParallelCorpusId?.Id)
+                {
+                    return new RequestResult<Unit>
+                    (
+                        success: false,
+                        message: $"For CompositeToken '{request.CompositeToken.TokenId}' found in request, existing composite ParallelCorpusId '{existingTokenComposite.ParallelCorpusId}' does not match that from request '{request.ParallelCorpusId}'.  Please delete existing composite first."
+                    );
+                }
+            }
+            else
+            {
+                if (!compositeCandiateGuids.Any())
+                {
+                    return new RequestResult<Unit>(Unit.Value);
+                }
             }
 
             // Validate the composite:
             var compositeCandidatesDb = ProjectDbContext.Tokens
-                .Include(t => t.TokenizedCorpus)
-                .Include(t => t.VerseRow)
-                .Include(t => t.TokenComposite)
+                .Include(t => t.TokenCompositeTokenAssociations)
+                    .ThenInclude(ta => ta.TokenComposite)
                 .Include(t => t.Translations.Where(t => t.Deleted == null))
                 .Include(t => t.SourceAlignments.Where(a => a.Deleted == null))
                 .Include(t => t.TargetAlignments.Where(a => a.Deleted == null))
@@ -104,11 +121,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
-            var tokenizedCorpora = compositeCandidatesDb.Values
-                .GroupBy(t => t.TokenizedCorpus)
+            var tokenizedCorporaIds = compositeCandidatesDb.Values
+                .GroupBy(t => t.TokenizedCorpusId)
                 .Select(t => t.Key);
 
-            if (tokenizedCorpora.Count() > 1)
+            if (tokenizedCorporaIds.Count() > 1)
             {
                 return new RequestResult<Unit>
                 (
@@ -117,20 +134,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
-            var compositeCorpusId = tokenizedCorpora.First()!.CorpusId;
-
-            if (request.ParallelCorpusId is null)
+            // If any of the candidate Tokens' TokenComposites (excluding the 'existing' one if not null)
+            // already is using the incoming ParallelCorpusId, return an error:
+            if (compositeCandidatesDb.Values
+                .SelectMany(t => t.TokenCompositeTokenAssociations
+                    .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId }))
+                .Any(tap => tap.TokenCompositeId != existingTokenComposite?.Id && tap.ParallelCorpusId == request.ParallelCorpusId?.Id))
             {
-                var verseRowIds = compositeCandidatesDb.Values.GroupBy(t => t.VerseRowId).Select(g => g.Key);
-
-                if (verseRowIds.Count() > 1)
-                {
-                    return new RequestResult<Unit>
-                    (
-                        success: false,
-                        message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request (non ParallelCorpus composite) contains tokens from more than one VerseRow"
-                    );
-                }
+                return new RequestResult<Unit>
+                (
+                    success: false,
+                    message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches that from the request '{request.ParallelCorpusId}'.  Please remove them from any other matching-ParallelCorpus composites first"
+                );
             }
 
             var utcNow = DateTimeOffset.UtcNow;
@@ -147,16 +162,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 
                 foreach (var toAdd in childrenTokensToAdd)
                 {
-                    var previousTokenComposite = toAdd.TokenComposite;
-                    previousTokenComposite?.Tokens.Remove(toAdd);
-
                     existingTokenComposite.Tokens.Add(toAdd);
                     tokensAddedToComposite.Add(toAdd);
-
-                    if (previousTokenComposite is not null && !previousTokenComposite.Tokens.Any())
-                    {
-                        ProjectDbContext.TokenComposites.Remove(previousTokenComposite);
-                    }
                 }
 
                 var childrenTokensToRemove = existingTokenComposite.Tokens
@@ -173,7 +180,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 alignmentsRemoving.AddRange(existingTokenComposite.SourceAlignments);
                 alignmentsRemoving.AddRange(existingTokenComposite.TargetAlignments);
-
             }
             else
             {
