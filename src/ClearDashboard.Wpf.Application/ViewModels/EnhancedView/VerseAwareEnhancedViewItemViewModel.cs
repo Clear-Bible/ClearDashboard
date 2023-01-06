@@ -1,18 +1,20 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SIL.Machine.Tokenization;
 using SIL.Scripture;
 using System;
 using System.Collections.Generic;
@@ -23,15 +25,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Helpers;
-using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
-using ClearDashboard.DAL.Alignment.Translation;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
+using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using SIL.Machine.Corpora;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using ClearDashboard.Wpf.Application.Dialogs;
-using ClearDashboard.Wpf.Application.Events;
 
 // ReSharper disable InconsistentNaming
 
@@ -463,6 +459,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
+            // THIS IS HANDLED BY THE ENHANCED VIEW MODEL
+            // PRODUCES DOUBLE RESULTS OTHERWISE
+
             //await GetData(ReloadType.Refresh, cancellationToken);
             //await Task.CompletedTask;
         }
