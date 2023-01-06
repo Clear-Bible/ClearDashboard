@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.Views.Project.ProjectDesignSurfaceView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,9 +12,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -30,11 +31,11 @@
                 -->
 
                 <ResourceDictionary Source="/Styles/ProjectDesignSurface/SharedVisualTemplates.xaml" />
-                <ResourceDictionary Source="ProjectDesignSurfaceViewStyle.xaml"/>
+                <ResourceDictionary Source="ProjectDesignSurfaceViewStyle.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
-  
+
             <!--  Define a data-template for the 'NodeViewModel' class.  -->
             <DataTemplate x:Name="NodeViewModelTemplate" DataType="{x:Type projectDesignSurface:CorpusNodeViewModel}">
 
@@ -135,7 +136,7 @@
                                                 <TextBlock
                                                     Margin="5,5,0,0"
                                                     VerticalAlignment="Center"
-                                                    Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                    Foreground="{StaticResource PrimaryHueMidBrush}"
                                                     Text="{Binding Header}" />
                                             </StackPanel>
                                         </HierarchicalDataTemplate>
@@ -431,7 +432,7 @@
                     FontSize="16"
                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
                 <WrapPanel>
-                    <!-- Hebrew Manuscript  -->
+                    <!--  Hebrew Manuscript  -->
                     <Button
                         x:Name="AddManuscriptHebrewCorpus"
                         Margin="10,0,10,10"
@@ -440,7 +441,7 @@
                         IsEnabled="{Binding DesignSurfaceViewModel.AddManuscriptHebrewEnabled}"
                         Style="{StaticResource BigButton}"
                         Tag=" ScriptTextOutline" />
-                    <!-- Greek Manuscript  -->
+                    <!--  Greek Manuscript  -->
                     <Button
                         x:Name="AddManuscriptGreekCorpus"
                         Margin="10,0,10,10"
@@ -458,7 +459,7 @@
                         Tag="ScriptTextOutline"
                         Visibility="Collapsed" />
 
-                    <!-- Paratext Corpus  -->
+                    <!--  Paratext Corpus  -->
                     <Button
                         x:Name="AddParatextCorpus"
                         Margin="10,0,10,10"
@@ -577,6 +578,7 @@
                     Grid.Column="1"
                     Padding="0"
                     Command="{StaticResource Commands.FitContent}"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Fit all nodes to the viewport">
                     <materialDesign:PackIcon Kind="FitToScreenOutline" />
                 </Button>
@@ -588,6 +590,7 @@
                     Grid.Column="3"
                     Padding="0"
                     Command="{StaticResource Commands.Fill}"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Fit the entire content area to the viewport">
                     <materialDesign:PackIcon Kind="FitToPageOutline" />
                 </Button>
@@ -599,6 +602,7 @@
                     Grid.Column="5"
                     Padding="0"
                     Command="{StaticResource Commands.OneHundredPercent}"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Scale the content to 100%">
                     100%
                 </Button>
@@ -626,6 +630,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.ZoomOut}"
                     FontSize="25"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Zoom out from the content">
                     -
                 </Button>
@@ -633,6 +638,7 @@
                 <!--  Slider to change the current zoom level.  -->
                 <Slider
                     Grid.Column="12"
+                    VerticalAlignment="Center"
                     LargeChange="20"
                     Maximum="200"
                     Minimum="10"
@@ -650,6 +656,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.ZoomIn}"
                     FontSize="20"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Zoom in on the content">
                     +
                 </Button>
@@ -697,39 +704,39 @@
                             This grid specifies the size of the ZoomAndPanControl's content.
                             It wraps up both the ProjectDesignSurfaceView and drag-zooming Canvas.
                         -->
-                        <Grid Width="{Binding DesignSurfaceViewModel.ContentWidth}" Height="{Binding DesignSurfaceViewModel.ContentHeight}">
+                        <Grid
+                            Width="{Binding DesignSurfaceViewModel.ContentWidth}"
+                            Height="{Binding DesignSurfaceViewModel.ContentHeight}"
+                            Background="Azure">
 
                             <!--  In this sample the ProjectDesignSurfaceView is the content displayed by the ZoomAndPanControl.  -->
 
-                                <!--
+                            <!--
                                 ConnectionDragCompleted="OnParallelCorpusConnectionDragCompleted"
                                 ConnectionDragStarted="OnProjectDesignSurfaceConnectionDragStarted"
                                 ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
-                                QueryConnectionFeedback="OnProjectDesignSurfaceQueryConnectionFeedback"  
-                            
-                            
-                                 ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
-                            
-                               [Event ConnectionDragging] = [Action OnParallelCorpusConnectionDragging($this, $eventArgs)];
-
+                                QueryConnectionFeedback="OnProjectDesignSurfaceQueryConnectionFeedback"
+                                
+                                
+                                ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
+                                
+                                [Event ConnectionDragging] = [Action OnParallelCorpusConnectionDragging($this, $eventArgs)];
+                                
                                 cm:Action.Target="{Binding DesignSurface}"
-                                -->
+                            -->
 
 
                             <controls:ProjectDesignSurface
                                 x:Name="ProjectDesignSurface"
-                                ConnectionsSource="{Binding Path=DesignSurfaceViewModel.ParallelCorpusConnections}"
+                                cm:Action.TargetWithoutContext="{Binding ElementName=ProjectDesignSurface, Path=DataContext.DesignSurfaceViewModel}"
+                                cm:Message.Attach="[Event NodeDragCompleted] = [Action OnCorpusNodeDragCompleted($this,$eventArgs)];                                                    [Event ConnectionDragCompleted] = [Action OnParallelCorpusConnectionDragCompleted($this, $eventArgs)];                                                    [Event ConnectionDragStarted] = [Action OnParallelCorpusConnectionDragStarted($this, $eventArgs)];                                                    [Event QueryConnectionFeedback] = [Action OnProjectDesignSurfaceQueryConnectionFeedback($this, $eventArgs)];"
                                 ConnectionDragging="OnProjectDesignSurfaceConnectionDragging"
+                                ConnectionsSource="{Binding Path=DesignSurfaceViewModel.ParallelCorpusConnections}"
                                 MouseDown="OnDesignSurfaceMouseDown"
                                 MouseMove="OnDesignSurfaceMouseMove"
                                 MouseUp="OnDesignSurfaceMouseUp"
                                 MouseWheel="OnMouseWheel"
-                                NodesSource="{Binding DesignSurfaceViewModel.CorpusNodes}"
-                                cm:Action.TargetWithoutContext="{Binding ElementName=ProjectDesignSurface, Path=DataContext.DesignSurfaceViewModel}"
-                                cm:Message.Attach="[Event NodeDragCompleted] = [Action OnCorpusNodeDragCompleted($this,$eventArgs)];
-                                                   [Event ConnectionDragCompleted] = [Action OnParallelCorpusConnectionDragCompleted($this, $eventArgs)];
-                                                   [Event ConnectionDragStarted] = [Action OnParallelCorpusConnectionDragStarted($this, $eventArgs)];
-                                                   [Event QueryConnectionFeedback] = [Action OnProjectDesignSurfaceQueryConnectionFeedback($this, $eventArgs)];" />
+                                NodesSource="{Binding DesignSurfaceViewModel.CorpusNodes}" />
 
 
 

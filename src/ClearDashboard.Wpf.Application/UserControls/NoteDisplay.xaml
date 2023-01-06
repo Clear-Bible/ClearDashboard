@@ -146,18 +146,20 @@
                 Orientation="Horizontal"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ButtonVisibility}">
                 <Button
-                    Height="25"
+                    Height="40"
                     Margin="5"
                     Click="ApplyNote"
                     Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=ApplyLabel}"
                     FontSize="11"
-                    Foreground="{DynamicResource MaterialDesignBody}" />
+                    Foreground="{DynamicResource MaterialDesignBody}"
+                    Style="{StaticResource TransparentStyle}" />
                 <Button
-                    Height="25"
+                    Height="40"
                     Margin="5"
                     Click="Cancel"
                     FontSize="11"
-                    Foreground="{DynamicResource MaterialDesignBody}">
+                    Foreground="{DynamicResource MaterialDesignBody}"
+                    Style="{StaticResource TransparentStyle}">
                     Cancel
                 </Button>
             </StackPanel>

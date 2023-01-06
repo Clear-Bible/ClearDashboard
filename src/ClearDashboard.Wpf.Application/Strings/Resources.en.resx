@@ -221,7 +221,7 @@
     <value>GEN</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectAll" xml:space="preserve">
-    <value>SELECT ALL</value>
+    <value>Select All</value>
   </data>
   <data name="RegistrationDialogView_Register" xml:space="preserve">
     <value>Register</value>
@@ -596,7 +596,7 @@
     <value>PHP</value>
   </data>
   <data name="AddParatextCorpusDialog_SelectBooks" xml:space="preserve">
-    <value>SELECT BOOKS TO PROCESS</value>
+    <value>Select books to process</value>
   </data>
   <data name="Pds_ManuscriptGreek" xml:space="preserve">
     <value>Macula Greek</value>
@@ -734,7 +734,7 @@
     <value>HAB</value>
   </data>
   <data name="AddParatextCorpusDialog_UnSelectAll" xml:space="preserve">
-    <value>UNSELECT ALL</value>
+    <value>Unselect All</value>
   </data>
   <data name="Pds_StudyBibleAdditions" xml:space="preserve">
     <value>StudyBibleAdditions</value>

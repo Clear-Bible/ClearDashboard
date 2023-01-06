@@ -321,7 +321,7 @@
                             Background="Transparent"
                             Tag="{Binding DataContext, ElementName=GridLayout}">
                             <materialDesign:Card.ContextMenu>
-                                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Visibility="{x:Static startup:StartupDialogViewModel.DeleteVisible}">
+                                <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />
                                 </ContextMenu>
                             </materialDesign:Card.ContextMenu>

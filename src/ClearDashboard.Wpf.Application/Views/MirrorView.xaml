@@ -16,5 +16,20 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
-    <Grid x:Name="MirrorViewRoot" />
+    <Grid x:Name="MirrorViewRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Slider
+            Name="ZoomSlider"
+            Grid.Column="0"
+            AutoToolTipPlacement="BottomRight"
+            AutoToolTipPrecision="2"
+            Maximum="2.25"
+            Minimum="0.75"
+            Orientation="Vertical"
+            ValueChanged="ZoomSlider_OnValueChanged" />
+    </Grid>
+
 </Window>

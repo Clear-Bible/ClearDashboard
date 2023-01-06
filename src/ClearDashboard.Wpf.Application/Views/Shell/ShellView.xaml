@@ -347,7 +347,7 @@
                             Kind="Notes" />
                     </Button>
                 </StackPanel>-->
-                <userControls:ReleaseNotesUserControl></userControls:ReleaseNotesUserControl>
+                <userControls:ReleaseNotesUserControl />
             </StatusBarItem>
         </StatusBar>
 
