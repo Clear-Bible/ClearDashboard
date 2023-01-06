@@ -39,7 +39,7 @@ echo code sign the WPF exe
  	sign /v /f %RETVAL% ^
  	/p "%PASSWORD%" ^
  	/t http://timestamp.comodoca.com/authenticode ^
-	"%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\ClearDashboard.Wpf.Application.dll"
+	"%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\ClearDashboard.Wpf.Application.dll"
 
 rem echo move new secure .exe file to the publish root
 rem SET COPYCMD=/Y && move /Y "%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\ClearDashboard.Wpf.Application_Secure\ClearDashboard.Wpf.Application.dll" "%CURRENTPATH%\..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\"
