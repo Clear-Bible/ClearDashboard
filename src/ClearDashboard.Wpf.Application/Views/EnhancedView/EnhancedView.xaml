@@ -77,7 +77,7 @@
                         CommandParameter="{x:Static Dock.Top}"
                         Content="CLOSE"
                         FontSize="10"
-                        Foreground="White" />
+                        Style="{StaticResource SmallTransparentStyle}" />
 
                     <!--  ROW 0  -->
                     <Label
@@ -373,10 +373,12 @@
                 <Button
                     Grid.Row="0"
                     Grid.Column="0"
+                    Width="50"
                     Margin="4,4,4,4"
                     Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
                     CommandParameter="{x:Static Dock.Top}"
                     Content="{materialDesign:PackIcon Kind=Tune}"
+                    Style="{StaticResource SmallTransparentStyle}"
                     ToolTip="Show the Enhanced View Controls" />
 
                 <userControls:BcvUserControl

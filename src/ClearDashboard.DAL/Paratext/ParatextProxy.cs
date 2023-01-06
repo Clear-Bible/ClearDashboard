@@ -73,6 +73,30 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return Process.GetProcessesByName("Paratext").Length > 0;
         }
 
+        public void StopParatext()
+        {
+            try
+            {
+                var processes = Process.GetProcessesByName("Paratext");
+                if (processes.Length > 0)
+                {
+                    _logger.LogInformation($"Paratext is running with {processes.Length} instances, stopping all instances.");
+                    foreach (var process in processes)
+                    { 
+                        process.Kill(true);
+                        _logger.LogInformation($"Paratext - instance '{process.Id}' stopped.");
+                    }
+                    return;
+                }
+
+                _logger.LogInformation("Paratext is not running.");
+            }
+            catch (Exception ex)
+            {
+                _logger .LogError(ex, "An unexpected error occurred while stopping Paratext.");
+            }
+        }
+
         public  async Task<Process> StartParatextAsync(int secondsToWait = 10)
         {
             var paratext = Process.GetProcessesByName("Paratext");
@@ -97,21 +121,6 @@ namespace ClearDashboard.DataAccessLayer.Paratext
 
 
         }
-
-        //protected async Task StopParatextAsync()
-        //{
-        //    if (StopParatextOnTestConclusion)
-        //    {
-        //        Output.WriteLine("Stopping Paratext.");
-        //        Process.Kill(true);
-
-        //        Process = null;
-
-        //        var seconds = 2;
-        //        Output.WriteLine($"Waiting for {seconds} seconds for Paratext to stop.");
-        //        await Task.Delay(TimeSpan.FromSeconds(seconds));
-        //    }
-        //}
 
         private  async Task<Process> InternalStartParatextAsync()
         {
