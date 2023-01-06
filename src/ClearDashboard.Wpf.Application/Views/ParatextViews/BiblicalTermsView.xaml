@@ -518,9 +518,8 @@
                                     <DataTemplate>
                                         <TextBlock
                                             VerticalAlignment="Center"
-                                            Text="{Binding VerseId}"
-                                            Foreground="{StaticResource BlueMidBrush}">
-                                        </TextBlock>
+                                            Foreground="{StaticResource BlueMidBrush}"
+                                            Text="{Binding VerseId}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
