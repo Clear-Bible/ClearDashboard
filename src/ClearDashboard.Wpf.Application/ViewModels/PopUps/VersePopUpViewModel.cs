@@ -1,12 +1,15 @@
 ﻿using System.Data;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -126,70 +129,104 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// Generate the chapter data for display
         /// </summary>
         /// <param name="view"></param>
-        protected override void OnViewReady(object view)
+        protected override async void OnViewReady(object view)
         {
             var project = ProjectManager.CurrentDashboardProject;
             _dt.Columns.Add("Highlight", typeof(bool));
             _dt.Columns.Add("Verse", typeof(string));
-            _dt.Columns.Add(project.TargetProject.Name, typeof(string));
-            var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(project.TargetProject, _verse.Entity);
+            _dt.Columns.Add(project.ProjectName, typeof(string));
 
-            foreach (var verse in verses)
+
+            // ReSharper disable once InconsistentNaming
+            var BBBCCCVVV = _verse.Entity.VerseBBBCCCVVV.PadLeft(9, '0');
+
+            var verseIdShort = BookChapterVerseViewModel.GetVerseStrShortFromBBBCCCVVV(BBBCCCVVV);
+
+            var bookNum = int.Parse(BBBCCCVVV.Substring(0, 3));
+            var chapterNum = int.Parse(BBBCCCVVV.Substring(3, 3));
+            var verseNum = int.Parse(BBBCCCVVV.Substring(6, 3));
+
+            var verseTextResult = await ExecuteRequest(new GetParatextVerseTextQuery(bookNum, chapterNum, verseNum),
+                CancellationToken.None);
+            var verseText = "";
+            if (verseTextResult.Success)
+                verseText = verseTextResult.Data.Name;
+            else
             {
-                // split off verse from text
-                var verseNum = verse.Substring(0, verse.IndexOf(' '));
-                if (verseNum == @"\v")
-                {
-                    verseNum = verse.Substring(3, verse.IndexOf(' ')).Trim();
-                    var verseText = verse.Substring(verseNum.Length + 3);
-
-                    var row = _dt.NewRow();
-                    if (_verse.VerseString == verseNum.PadLeft(3, '0'))
-                    {
-                        row[0] = true;
-                    }
-                    else
-                    {
-                        row[0] = false;
-                    }
-                    row[1] = verseNum.Trim();
-                    row[2] = verseText.Trim();
-
-                    _dt.Rows.Add(row);
-                }
+                verseText = "There was an issue getting the text for this verse.";
+                //_logger.LogInformation("Failure to GetParatextVerseTextQuery");
             }
+
+            var row = _dt.NewRow();
+            //if (_verse.VerseString == verseNum.PadLeft(3, '0'))
+            //{
+            //    row[0] = true;
+            //}
+            //else
+            //{
+            //    row[0] = false;
+            //}
+            //row[1] = verseNum.Trim();
+            row[2] = verseText.Trim();
+
+            //var verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(project.TargetProject, _verse.Entity);
+
+            //foreach (var verse in verses)
+            //{
+            //    // split off verse from text
+            //    var verseNum = verse.Substring(0, verse.IndexOf(' '));
+            //    if (verseNum == @"\v")
+            //    {
+            //        verseNum = verse.Substring(3, verse.IndexOf(' ')).Trim();
+            //        var verseText = verse.Substring(verseNum.Length + 3);
+
+            //        var row = _dt.NewRow();
+            //        if (_verse.VerseString == verseNum.PadLeft(3, '0'))
+            //        {
+            //            row[0] = true;
+            //        }
+            //        else
+            //        {
+            //            row[0] = false;
+            //        }
+            //        row[1] = verseNum.Trim();
+            //        row[2] = verseText.Trim();
+
+            //        _dt.Rows.Add(row);
+            //    }
+            //}
 
             // add each back translation to grid
-            foreach (var btProject in project.BackTranslationProjects)
-            {
-                verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(btProject, _verse.Entity);
-                if (verses.Count > 0)
-                {
-                    _dt.Columns.Add(btProject.Name);
+            //foreach (var btProject in project.BackTranslationProjects)
+            //{
+            //    verses = DataAccessLayer.Paratext.ExtractVersesFromChapter.ParseUSFM(btProject, _verse.Entity);
+            //    if (verses.Count > 0)
+            //    {
+            //        _dt.Columns.Add(btProject.Name);
 
-                    foreach (var verse in verses)
-                    {
-                        // split off verse from text
-                        var verseNum = verse.Substring(0, verse.IndexOf(' '));
-                        if (verseNum == @"\v")
-                        {
-                            verseNum = verse.Substring(3, verse.IndexOf(' '));
-                            var verseText = verse.Substring(verseNum.Length + 3).Trim();
-                            verseNum = verseNum.Trim();
+            //        foreach (var verse in verses)
+            //        {
+            //            // split off verse from text
+            //            var verseNum = verse.Substring(0, verse.IndexOf(' '));
+            //            if (verseNum == @"\v")
+            //            {
+            //                verseNum = verse.Substring(3, verse.IndexOf(' '));
+            //                var verseText = verse.Substring(verseNum.Length + 3).Trim();
+            //                verseNum = verseNum.Trim();
 
-                            // find this verse in the existing datagrid
-                            foreach (DataRow row in _dt.Rows)
-                            {
-                                if ((string)row["Verse"] == verseNum)
-                                {
-                                    row[btProject.Name] = verseText;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                // find this verse in the existing datagrid
+            //                foreach (DataRow row in _dt.Rows)
+            //                {
+            //                    if ((string)row["Verse"] == verseNum)
+            //                    {
+            //                        row[btProject.Name] = verseText;
+            //                        break;
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
 
             VersesView = _dt.DefaultView;
