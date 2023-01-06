@@ -641,6 +641,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return;
             }
 
+            if (ParatextSync == false)
+            {
+                return;
+            }
+            
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
                 CurrentBcv.SetVerseFromId(message.Verse);
