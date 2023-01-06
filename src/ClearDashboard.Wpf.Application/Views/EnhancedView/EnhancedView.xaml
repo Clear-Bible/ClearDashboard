@@ -100,7 +100,7 @@
                             Maximum="48"
                             Minimum="8"
                             TickFrequency="1"
-                            Value="16" />
+                            Value="{Binding TitleFontSizeValue}"/>
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
