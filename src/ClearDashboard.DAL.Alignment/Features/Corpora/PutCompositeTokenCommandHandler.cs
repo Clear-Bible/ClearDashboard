@@ -31,7 +31,22 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         protected override async Task<RequestResult<Unit>> SaveDataAsync(PutCompositeTokenCommand request,
             CancellationToken cancellationToken)
         {
-            if (request.CompositeToken.Tokens.Count() == 1)
+            if (request.CompositeToken.Tokens
+                    .Intersect(request.CompositeToken.OtherTokens)
+                    .Any())
+            {
+                return new RequestResult<Unit>
+                (
+                    success: false,
+                    message: $"CompositeToken '{request.CompositeToken.TokenId}' found in request contains at least one child token into both Tokens and OtherTokens"
+                );
+            }
+
+            var compositeCandiateGuids = request.CompositeToken.Tokens
+                .Union(request.CompositeToken.OtherTokens)
+                .Select(t => t.TokenId.Id);
+
+            if (compositeCandiateGuids.Count() == 1)
             {
                 return new RequestResult<Unit>
                 (
@@ -48,10 +63,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Include(tc => tc.TargetAlignments.Where(a => a.Deleted == null))
                 .Where(tc => tc.Id == request.CompositeToken.TokenId.Id)
                 .FirstOrDefault();
-
-            var compositeCandiateGuids = request.CompositeToken.Tokens
-                .Union(request.CompositeToken.OtherTokens)
-                .Select(t => t.TokenId.Id);
 
             if (existingTokenComposite is not null)
             {

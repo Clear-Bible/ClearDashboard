@@ -35,7 +35,7 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel,
-            IHandle<VerseChangedMessage>
+            IHandle<VerseChangedMessage>, IHandle<TokensJoinedMessage>, IHandle<TokenUnjoinedMessage>
     {
         public IWindowManager WindowManager { get; }
 
@@ -642,6 +642,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return "Seqoe UI";
         }
 
-     
+        public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
+        {
+            if (EnhancedViewItemMetadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusMetadatum)
+            {
+                tokenizedCorpusMetadatum.TokenizedTextCorpus = null;
+            }
+            if (EnhancedViewItemMetadatum is ParallelCorpusEnhancedViewItemMetadatum parallelCorpusMetadatum)
+            {
+                parallelCorpusMetadatum.ParallelCorpus = null;
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        {
+            if (EnhancedViewItemMetadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusMetadatum)
+            {
+                tokenizedCorpusMetadatum.TokenizedTextCorpus = null;
+            }
+            if (EnhancedViewItemMetadatum is ParallelCorpusEnhancedViewItemMetadatum parallelCorpusMetadatum)
+            {
+                parallelCorpusMetadatum.ParallelCorpus = null;
+            }
+
+            await Task.CompletedTask;
+        }
     }
 }
