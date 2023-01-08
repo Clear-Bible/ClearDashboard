@@ -16,6 +16,9 @@ using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearBible.Engine.Persistence;
 
+using Models = ClearDashboard.DataAccessLayer.Models;
+using SIL.Extensions;
+
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
 public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
@@ -181,7 +184,7 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
     {
         try
         {
-            var textCorpus = CreateFakeTextCorpusWithComposite(false);
+            var textCorpus = TestDataHelpers.GetSampleTextCorpus();
 
             // Create the corpus in the database:
             var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
@@ -196,14 +199,18 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
             ProjectDbContext!.ChangeTracker.Clear();
 
             var verseRows = ProjectDbContext!.VerseRows
-                .Include(vr => vr.TokenComponents)
-                .Take(2)
+                .Include(vr => vr.TokenComponents.Where(tc => tc.GetType() == typeof(Models.Token)).AsQueryable())
+                    .ThenInclude(tc => ((Models.Token)tc).TokenCompositeTokenAssociations)
+                        .ThenInclude(ta => ta.TokenComposite)
+                .Where(vr => vr.TokenizedCorpusId == tokenizedTextCorpus.TokenizedTextCorpusId.Id)
+                .Take(3)
                 .ToArray();
 
             var tokensForComposite1 = verseRows[0].Tokens.Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
             var composite1 = new CompositeToken(tokensForComposite1);
             composite1.TokenId.Id = Guid.NewGuid();
 
+            // First this should succeed since its the first one:
             await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite1, null);
 
             ProjectDbContext!.ChangeTracker.Clear();
@@ -218,27 +225,37 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
             var tokensForComposite2 = verseRows[0].Tokens.Skip(1).Take(4).Select(tc => ModelHelper.BuildToken(tc)).ToList();
             var composite2 = new CompositeToken(tokensForComposite2);
-            composite2.TokenId.Id = composite1.TokenId.Id;
+            composite2.TokenId.Id = Guid.NewGuid();
 
-            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, null);
+            // Should fail since its a new composite Id and some of the same tokens in composite1:
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite2, null));
 
-            ProjectDbContext!.ChangeTracker.Clear();
-
-            var tokenComposite2 = ProjectDbContext.TokenComposites.Include(tc => tc.Tokens)
-                .Where(tc => tc.Id == composite2.TokenId.Id)
-                .FirstOrDefault();
-
-            Assert.NotNull(tokenComposite2);
-            Assert.Equal(composite2.Tokens.Count(), tokenComposite2.Tokens.Count);
-            Assert.Empty(composite2.Tokens.Select(t => t.TokenId.Id).Except(tokenComposite2.Tokens.Select(tc => tc.Id)));
-
-            // Exception case:  multiple VerseRow tokens in non-ParallelCorpus Composite
+            // Should succeed:  multiple VerseRow tokens in non-ParallelCorpus Composite
+            // (same compositeId as in composite1)
             var tokensForComposite3 = verseRows[0].Tokens.Skip(2).Take(3).Select(tc => ModelHelper.BuildToken(tc)).ToList();
-            tokensForComposite3.AddRange(verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)));
-            var composite3 = new CompositeToken(tokensForComposite3);
+            var otherTokensForComposite3 = verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            var composite3 = new CompositeToken(tokensForComposite3, otherTokensForComposite3);
             composite3.TokenId.Id = composite1.TokenId.Id;
 
-            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, null));
+            await TokenizedTextCorpus.PutCompositeToken(Mediator!, composite3, null);
+
+            // Should fail:  multiple TokenizedCorpus tokens:
+            var tokenizedTextCorpusOther = await textCorpus.Create(Mediator!, corpus.CorpusId, "Unit Test", tokenizationFunction);
+            var verseRowsOther = ProjectDbContext!.VerseRows
+                .Include(vr => vr.TokenComponents.Where(tc => tc.GetType() == typeof(Models.Token)).AsQueryable())
+                    .ThenInclude(tc => ((Models.Token)tc).TokenCompositeTokenAssociations)
+                        .ThenInclude(ta => ta.TokenComposite)
+                .Where(vr => vr.TokenizedCorpusId == tokenizedTextCorpusOther.TokenizedTextCorpusId.Id)
+                .Take(1)
+                .ToArray();
+
+            var tokensForComposite4 = verseRows[0].Tokens.Skip(2).Take(3).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            var otherTokensForComposite4 = verseRows[1].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)).ToList();
+            otherTokensForComposite4.AddRange(verseRowsOther[0].Tokens.Take(2).Select(tc => ModelHelper.BuildToken(tc)).ToList());
+            var composite4 = new CompositeToken(tokensForComposite4, otherTokensForComposite4);
+            composite4.TokenId.Id = composite1.TokenId.Id;
+
+            await Assert.ThrowsAsync<MediatorErrorEngineException>(() => TokenizedTextCorpus.PutCompositeToken(Mediator!, composite4, null));
 
             // Full round trip.  Use the API to retrieve the CompositeToken:
             var ttc = await TokenizedTextCorpus.Get(Mediator!, tokenizedTextCorpus.TokenizedTextCorpusId);
@@ -253,12 +270,12 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
 
                 if (bookChapterVerse == verseRows[0].BookChapterVerse)
                 {
-                    var t2 = ttr.Tokens.Where(t => t.TokenId.Id == composite2.TokenId.Id).FirstOrDefault();
-                    Assert.NotNull(t2);
-                    Assert.IsType<CompositeToken>(t2);
-                    var c2 = (CompositeToken)t2;
-                    Assert.Equal(composite2.Tokens.Count(), c2.Tokens.Count());
-                    Assert.Empty(composite2.Tokens.Select(t => t.TokenId.Id).Except(c2.Tokens.Select(tc => tc.TokenId.Id)));
+                    var t4 = ttr.Tokens.Where(t => t.TokenId.Id == composite4.TokenId.Id).FirstOrDefault();
+                    Assert.NotNull(t4);
+                    Assert.IsType<CompositeToken>(t4);
+                    var c4 = (CompositeToken)t4;
+                    Assert.Equal(composite4.Tokens.Count(), c4.Tokens.Count());
+                    Assert.Empty(composite4.Tokens.Select(t => t.TokenId.Id).Except(c4.Tokens.Select(tc => tc.TokenId.Id)));
                 }
             }
 

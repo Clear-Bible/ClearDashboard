@@ -122,6 +122,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 using var tokenizedCorpusInsertCommand = TokenizedCorpusDataUtil.CreateTokenizedCorpusInsertCommand(connection);
                 using var verseRowInsertCommand = TokenizedCorpusDataUtil.CreateVerseRowInsertCommand(connection);
                 using var tokenComponentInsertCommand = TokenizedCorpusDataUtil.CreateTokenComponentInsertCommand(connection);
+                using var tokenCompositeTokenAssociationInsertCommand = TokenizedCorpusDataUtil.CreateTokenCompositeTokenAssociationInsertCommand(connection);
 
                 await TokenizedCorpusDataUtil.InsertTokenizedCorpusAsync(tokenizedCorpus, tokenizedCorpusInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
                 var tokenizedCorpusId = (Guid)tokenizedCorpusInsertCommand.Parameters["@Id"].Value!;
@@ -136,7 +137,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         cancellationToken.ThrowIfCancellationRequested();
 
                         await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                        await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, cancellationToken);
+                        await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                     }
                 }
 
