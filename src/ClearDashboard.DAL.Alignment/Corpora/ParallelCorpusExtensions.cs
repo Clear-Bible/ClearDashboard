@@ -26,9 +26,8 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<ParallelCorpus> Create(
             this EngineParallelTextCorpus engineParallelTextCorpus,
             string displayName,
-            IMediator mediator,
-            CancellationToken token = default,
-            bool useCache = false)
+            IMediator mediator, 
+            CancellationToken token = default)
         {
             if (engineParallelTextCorpus.GetType() == typeof(ParallelCorpus))
             {
@@ -57,7 +56,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             createParallelCorpusCommandResult.ThrowIfCanceledOrFailed(true);
 
-            return await ParallelCorpus.Get(mediator, createParallelCorpusCommandResult.Data!, token, useCache);
+            return await ParallelCorpus.Get(mediator, createParallelCorpusCommandResult.Data!, token);
         }
     }
 }

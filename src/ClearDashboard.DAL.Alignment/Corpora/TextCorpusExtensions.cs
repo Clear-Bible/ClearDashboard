@@ -28,7 +28,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         /// <returns></returns>
         /// <exception cref="InvalidTypeEngineException"></exception>
         /// <exception cref="MediatorErrorEngineException"></exception>
-        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string displayName, string tokenizationFunction, CancellationToken token = default, bool useCache = false)
+        public static async Task<TokenizedTextCorpus> Create(this ITextCorpus textCorpus, IMediator mediator, CorpusId corpusId, string displayName, string tokenizationFunction, CancellationToken token = default)
         {
             try
             {
@@ -44,9 +44,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
 
-            var createdTokenizedTextCorpus = result.Data!;
-            createdTokenizedTextCorpus.UseCache = useCache;
-            return createdTokenizedTextCorpus;
+            return result.Data!;
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.Wpf.Controls.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Controls.Utils;
 using Size = System.Windows.Size;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
@@ -39,7 +39,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         private string _name = string.Empty;
 
         private readonly IEventAggregator? _eventAggregator;
-
+        private readonly DashboardProjectManager? _projectManager;
 
         /// <summary>
         /// The X coordinate for the position of the node.
@@ -96,7 +96,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         }
 
         [JsonIgnore]
-        public string TranslationFontFamily { get; set; } = FontNames.DefaultFontFamily;
+        public string TranslationFontFamily { get; set; } = "Segoe UI";
 
         /// <summary>
         /// The X coordinate for the position of the node.
@@ -319,10 +319,11 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         {
         }
 
-        public CorpusNodeViewModel(string name, IEventAggregator? eventAggregator)
+        public CorpusNodeViewModel(string name, IEventAggregator? eventAggregator, DashboardProjectManager? projectManager)
         {
             _name = name;
             _eventAggregator = eventAggregator;
+            _projectManager = projectManager;
         }
 
         #endregion //Constructor

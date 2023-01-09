@@ -57,29 +57,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         $"TargetTokenizedCorpus not found for TokenizedCorpusId '{request.TargetTokenizedCorpusId.Id}'"
                 );
             }
-
-            if (request.VerseMappings
-                .Any(vm => vm.SourceVerses
-                    .Any(v => v.TokenIds.Where(tid => tid.GetType() == typeof(CompositeTokenId)).Any())))
-            {
-                return new RequestResult<ParallelCorpusId>
-                (
-                    success: false,
-                    message: $"VerseMappings SourceVerses contain at least one CompositeTokenId (only regular TokenIds allowed)"
-                );
-            }
-
-            if (request.VerseMappings
-                .Any(vm => vm.TargetVerses
-                    .Any(v => v.TokenIds.Where(tid => tid.GetType() == typeof(CompositeTokenId)).Any())))
-            {
-                return new RequestResult<ParallelCorpusId>
-                (
-                    success: false,
-                    message: $"VerseMappings TargetVerses contain at least one CompositeTokenId (only regular TokenIds allowed)"
-                );
-            }
-
 #if DEBUG
             Logger.LogInformation($"Elapsed={sw.Elapsed} - Insert ParallelCorpus '{request.DisplayName}' [verse mapping count: {request.VerseMappings.Count()}]");
             sw.Restart();
@@ -118,9 +95,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
         {
             var bookAbbreviationsToNumbers =
                 FileGetBookIds.BookIds.ToDictionary(x => x.silCannonBookAbbrev, x => int.Parse(x.silCannonBookNum), StringComparer.OrdinalIgnoreCase);
-
-            // FIXME:  if incoming VerseMappings contain ParellelCorpus composites, 
-            // do I need to add them to the database?  
 
             parallelCorpusModel.VerseMappings.AddRange(verseMappings
                 .Select(vm =>
