@@ -595,7 +595,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 EnableBcvControl = true;
             }
            
-
             sw.Stop();
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
