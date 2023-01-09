@@ -1,23 +1,8 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-using System.Diagnostics;
-using System.Drawing;
-using System.Windows;
-using System.Windows.Navigation;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using ClearDashboard.Wpf.Application.Views.Startup;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Menus
 {
@@ -35,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
         public MainViewModel ViewModel
         {
             get => _mainViewModel;
-            set { _mainViewModel = value; }
+            set => _mainViewModel = value;
         }
 
 
@@ -84,15 +69,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
             }
         }
 
-
-
-        private string _Id;
+        private string _id;
         public string Id
         {
-            get => _Id;
+            get => _id;
             set
             {
-                _Id = value;
+                _id = value;
                 NotifyOfPropertyChange(() => Id);
             }
         }
@@ -111,15 +94,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Menus
 
         public ObservableCollection<MenuItemViewModel> MenuItems { get; set; }
 
-        public ICommand Command
-        {
-            get
-            {
-                return _command;
-            }
-        }
+        public ICommand Command => _command;
 
-        
+
         private async void Execute()
         {
             if (Id is "NewID" or "OpenID")

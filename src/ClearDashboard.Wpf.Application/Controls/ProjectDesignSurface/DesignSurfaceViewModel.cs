@@ -61,8 +61,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected IEventAggregator? EventAggregator { get; }
         protected IMediator Mediator { get; }
         
-        // ReSharper disable once NotAccessedField.Local
-        private readonly IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? _designSurfaceDataProvider;
+    
         ///
         /// The current scale at which the content is being viewed.
         /// 
@@ -240,16 +239,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         #region ctor
 
         public DesignSurfaceViewModel(ILogger<DesignSurfaceViewModel>? logger,
-             IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator,
-            IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider)
+             IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator)
         {
-            //_navigationService = navigationService;
-            //_projectManager = projectManager;
             Logger = logger;
             EventAggregator = eventEventAggregator;
             LifecycleScope = lifecycleScope;
             Mediator = mediator;
-            _designSurfaceDataProvider = designSurfaceDataProvider;
         }
         #endregion
 
@@ -455,10 +450,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel
             });
         }
-
-
-
-
 
         private void AddInterlinearMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection,
             TopLevelProjectIds topLevelProjectIds, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
