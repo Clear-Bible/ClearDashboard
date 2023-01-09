@@ -8,22 +8,49 @@ using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    internal class TokenizedText : ScriptureText
+    internal class TokenizedText : ScriptureText, ICache
     {
-        private readonly TokenizedTextCorpusId tokenizedCorpusId_;
-        private readonly IMediator mediator_;
+        protected readonly TokenizedTextCorpusId tokenizedCorpusId_;
+        protected readonly IMediator mediator_;
 
-        public TokenizedText(TokenizedTextCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId)
+        protected IEnumerable<TextRow>? TextRowsCache { get; set; }
+        public bool UseCache { get; set; }
+        public void InvalidateCache()
+        {
+            TextRowsCache = null;
+        }
+
+        public TokenizedText(TokenizedTextCorpusId tokenizedCorpusId, IMediator mediator, ScrVers versification, string bookId, bool useCache)
             : base(bookId, versification)
         {
             tokenizedCorpusId_ = tokenizedCorpusId;
             mediator_ = mediator;
+
+            UseCache = useCache;
+            TextRowsCache = null;
         }
         protected override IEnumerable<TextRow> GetVersesInDocOrder()
         {
-            var command = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedCorpusId_, Id); //Note that in ScriptureText Id is the book abbreviation bookId.
+            if (UseCache)
+            {
+                if (TextRowsCache == null)
+                {
+                    TextRowsCache = GetTextRows(mediator_, tokenizedCorpusId_, Id);
+                }
 
-            var result = Task.Run(() => mediator_.Send(command)).GetAwaiter().GetResult();
+                return TextRowsCache;
+            }
+            else
+            {
+                return GetTextRows(mediator_, tokenizedCorpusId_, Id);
+            }
+        }
+
+        protected IEnumerable<TextRow> GetTextRows(IMediator mediator,TokenizedTextCorpusId tokenizedTextCorpusId, string bookId)
+        {
+            var command = new GetTokensByTokenizedCorpusIdAndBookIdQuery(tokenizedTextCorpusId, bookId); //Note that in ScriptureText Id is the book abbreviation bookId.
+
+            var result = Task.Run(() => mediator.Send(command)).GetAwaiter().GetResult();
             result.ThrowIfCanceledOrFailed();
 
             var verses = result.Data;

@@ -472,7 +472,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
                         "Macula Hebrew",
                         Tokenizers.WhitespaceTokenizer.ToString(),
-                        cancellationToken);
+                        cancellationToken,
+                        true);
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
@@ -593,7 +594,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
                         "Macula Greek",
                         Tokenizers.WhitespaceTokenizer.ToString(),
-                        cancellationToken);
+                        cancellationToken,
+                        true);
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
