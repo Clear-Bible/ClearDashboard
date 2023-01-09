@@ -639,7 +639,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return result.Data;
             }
 
-            return "Seqoe UI";
+            return FontNames.DefaultFontFamily;
         }
 
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)

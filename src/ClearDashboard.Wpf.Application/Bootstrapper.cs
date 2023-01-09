@@ -150,7 +150,6 @@ namespace ClearDashboard.Wpf.Application
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
-            builder.RegisterModule<ProjectDesignSurfaceModule>();
         }
 
         protected override async Task NavigateToMainWindow()

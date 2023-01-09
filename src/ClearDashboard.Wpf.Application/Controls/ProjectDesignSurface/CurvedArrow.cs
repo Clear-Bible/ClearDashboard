@@ -14,10 +14,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
     /// </summary>
     public class CurvedArrow : Shape
     {
-        private readonly DashboardProjectManager _projectManager;
-        private readonly IEventAggregator _eventAggregator;
-
-        #region Dependency Property/Event Definitions
+       #region Dependency Property/Event Definitions
 
         public static readonly DependencyProperty ArrowHeadLengthProperty =
             DependencyProperty.Register("ArrowHeadLength", typeof(double), typeof(CurvedArrow),
@@ -84,12 +81,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         }
 
-        public CurvedArrow(DashboardProjectManager projectManager, IEventAggregator eventAggregator)
-        {
-            _projectManager = projectManager;
-            _eventAggregator = eventAggregator;
-        }
-
+     
         #region Private Methods
 
         /// <summary>
