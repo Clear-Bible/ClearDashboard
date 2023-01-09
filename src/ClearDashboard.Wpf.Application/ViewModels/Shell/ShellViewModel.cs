@@ -328,6 +328,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region Caliburn.Micro overrides
 
+
         protected override async  Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             NavigationService!.Navigated -= NavigationServiceOnNavigated;

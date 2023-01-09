@@ -48,7 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     var corpusIds = await ParallelCorpus.GetAllParallelCorpusIds(Mediator!);
                     corpusId = corpusIds.First();
                 }
-                var corpus = await ParallelCorpus.Get(Mediator!, corpusId, useCache: true);
+                var corpus = await ParallelCorpus.Get(Mediator!, corpusId);
 
                 Detokenizer = corpus.Detokenizer;
                 stopwatch.Stop();

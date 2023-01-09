@@ -9,7 +9,7 @@ using SIL.Machine.Tokenization;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    public class ParallelCorpus : EngineParallelTextCorpus, ICache
+    public class ParallelCorpus : EngineParallelTextCorpus
     {
         public ParallelCorpusId ParallelCorpusId { get; set; }
 
@@ -23,46 +23,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
 
         public EngineStringDetokenizer Detokenizer => ParallelCorpusId.SourceTokenizedCorpusId?.Detokenizer ?? new EngineStringDetokenizer(new LatinWordDetokenizer());
-
-        public bool InvalidateSourceCache(string bookId)
-        {
-            return ((TokenizedTextCorpus)SourceCorpus).InvalidateCache(bookId);
-        }
-
-        public bool InvalidateTargetCache(string bookId)
-        {
-            return ((TokenizedTextCorpus)TargetCorpus).InvalidateCache(bookId);
-        }
-
-        /// <summary>
-        /// Invalidates the cache on SourceCorpus and TargetCorpus.
-        /// </summary>
-        public void InvalidateCache()
-        {
-            ((TokenizedTextCorpus)SourceCorpus).InvalidateCache();
-            ((TokenizedTextCorpus)TargetCorpus).InvalidateCache();
-        }
-
-        private bool useCache_;
-        /// <summary>
-        /// Gets use cache setting. 
-        /// Set's UseCache property on both SourceCorpus and TargetCorpus.
-        /// </summary>
-        public bool UseCache
-        {
-            get
-            {
-                return useCache_;
-            }
-            set
-            {
-                useCache_ = value;
-                ((TokenizedTextCorpus)SourceCorpus)
-                    .UseCache = useCache_;
-                ((TokenizedTextCorpus)TargetCorpus)
-                    .UseCache = useCache_;
-            }
-        }
 
         public async Task Update(IMediator mediator, CancellationToken token = default)
         {
@@ -87,8 +47,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         public static async Task<ParallelCorpus> Get(
             IMediator mediator,
             ParallelCorpusId parallelCorpusId, 
-            CancellationToken token = default,
-            bool useCache = false)
+            CancellationToken token = default)
         {
             var command = new GetParallelCorpusByParallelCorpusIdQuery(parallelCorpusId);
 
@@ -97,11 +56,10 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             var data =  result.Data;
             return new ParallelCorpus(
-                await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId, useCache), 
-                await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId, useCache), 
+                await TokenizedTextCorpus.Get(mediator, data.sourceTokenizedCorpusId), 
+                await TokenizedTextCorpus.Get(mediator, data.targetTokenizedCorpusId), 
                 data.verseMappings, 
-                data.parallelCorpusId,
-                useCache);
+                data.parallelCorpusId);
         }
 
         public static async Task Delete(
@@ -114,16 +72,15 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var result = await mediator.Send(command, token);
             result.ThrowIfCanceledOrFailed(true);
         }
+
         internal ParallelCorpus(
             TokenizedTextCorpus sourceTokenizedTextCorpus,
             TokenizedTextCorpus targetTokenizedTextCorpus,
             IEnumerable<VerseMapping> verseMappings,
-            ParallelCorpusId parallelCorpusId,
-            bool useCache )
+            ParallelCorpusId parallelCorpusId)
             : base(sourceTokenizedTextCorpus, targetTokenizedTextCorpus, verseMappings.ToList())
         {
             ParallelCorpusId = parallelCorpusId;
-            useCache_ = useCache;
         }
     }
 }

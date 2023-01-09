@@ -35,16 +35,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // We do a ToList() here to avoid 'cannot create expression tree'
             // errors in the VerseTokens GroupBy below
             var bookNumberAsPaddedString = $"{bookNumberForAbbreviation:000}";
-
             var verseRows = ProjectDbContext.VerseRows
-                .Include(vr => vr.TokenComponents
-                    .Where(tc => tc.Deleted == null)
-                    .Where(tc => tc.GetType() == typeof(Models.Token))
-                    .AsQueryable())
-                    .ThenInclude(tc => ((Models.Token)tc).TokenCompositeTokenAssociations
-                        .Where(ta => ta.Deleted == null)
-                        .AsQueryable())
-                        .ThenInclude(ta => ta.TokenComposite)
+                .Include(vr => vr.TokenComponents.Where(tc => tc.Deleted == null))
                 .Where(vr => vr.TokenizedCorpusId == request.TokenizedCorpusId.Id)
                 .Where(vr => vr.BookChapterVerse!.Substring(0, 3) == bookNumberAsPaddedString)
                 .OrderBy(vr => vr.BookChapterVerse)
@@ -55,22 +47,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 throw new Exception($"Tokenized Corpus {request.TokenizedCorpusId.Id} does not exist.");
             }
 
-            var tokenCompositeGuids = ProjectDbContext.TokenCompositeTokenAssociations
-                .Include(ta => ta.Token)
-                .Include(ta => ta.TokenComposite)
-                .Where(ta => ta.Deleted == null)
-                .Where(ta => ta.TokenComposite!.TokenizedCorpusId == request.TokenizedCorpusId.Id)
-                .Where(ta => ta.TokenComposite!.ParallelCorpusId == null)
-                .Where(ta => ta.Token!.Deleted == null)
-                .Where(ta => ta.Token!.BookNumber == bookNumberForAbbreviation)
-                .Select(ta => ta.TokenCompositeId)
-                .Distinct();
-
-            var tokenCompositesByGuid = ProjectDbContext.TokenComposites
-                .Include(tc => tc.Tokens)
-                .Where(tc => tokenCompositeGuids.Contains(tc.Id))
-                .ToDictionary(tc => tc.Id, tc => tc);
-
             var verseTokens = verseRows
                 .Select(vr => {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -78,38 +54,41 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     var chapter = int.Parse(vr.BookChapterVerse!.Substring(3, 3)).ToString();
                     var verse = int.Parse(vr.BookChapterVerse!.Substring(6, 3)).ToString();
 
-                    var tokens = vr.Tokens
-                        .Where(t => !t.TokenCompositeTokenAssociations
-                            .Where(ta => ta.TokenComposite!.ParallelCorpusId == null)
-                            .Any())
-                        .Select(t => ModelHelper.BuildToken(t))
-                        .OrderBy(t => t.TokenId)
-                        .ToList();
+                    var tokenCompositeMap = vr.TokenComponents
+                        .Where(tc => tc is Models.TokenComposite)
+                        .Where(tc => (tc as Models.TokenComposite)!.ParallelCorpusId == null)
+                        .ToDictionary(
+                            tc => (tc as Models.TokenComposite)!.Id,
+                            tc => (tc as Models.TokenComposite)!);
 
-                    var composites = vr.Tokens
-                        .SelectMany(t => t.TokenCompositeTokenAssociations
-                            .Select(ta => ta.TokenCompositeId))
-                        .Distinct()
-                        .SelectMany(id =>
+                    var tokens = vr.TokenComponents
+                        .Where(tc => tc is Models.Token)
+                        .GroupBy(tc => (tc as Models.Token)!.TokenCompositeId)
+                        .SelectMany(g =>
                         {
-                            if (tokenCompositesByGuid.TryGetValue(id, out var tokenComposite))
+                            if (g.Key != null)
                             {
-                                return new[]
+                                // Only TokenComposites with a null ParallelCorpusId 
+                                // are in the dictionary, therefore this should filter
+                                // out non-null ones:
+                                if (tokenCompositeMap.TryGetValue((Guid)g.Key!, out var tokenComposite))
                                 {
-                                    ModelHelper.BuildCompositeToken(
-                                        tokenComposite,
-                                        tokenComposite.Tokens.Where(t => t.VerseRowId == vr.Id),
-                                        tokenComposite.Tokens.Where(t => t.VerseRowId != vr.Id))
-                                };
+                                    return new[]
+                                    {
+                                        ModelHelper.BuildCompositeToken(tokenComposite, g.Select(t => (t as Models.Token)!))
+                                    };
+                                }
+                                else
+                                {
+                                    return Enumerable.Empty<Token>();
+                                }
                             }
                             else
                             {
-                                return Enumerable.Empty<CompositeToken>();
+                                return g.Select(t => ModelHelper.BuildToken(t));
                             }
                         })
                         .ToList();
-
-                    tokens.AddRange(composites);
                                 
                     return new VerseTokens(
                         chapter,

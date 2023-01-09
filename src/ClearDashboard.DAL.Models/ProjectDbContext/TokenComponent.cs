@@ -18,11 +18,11 @@ namespace ClearDashboard.DataAccessLayer.Models
         public string? TrainingText { get; set; }
         public string? ExtendedProperties { get; set; }
 
-        [ForeignKey(nameof(VerseRowId))]
+        [ForeignKey("VerseRowId")]
         public Guid? VerseRowId { get; set; }
         public virtual VerseRow? VerseRow { get; set; }
 
-        [ForeignKey(nameof(TokenizedCorpusId))]
+        [ForeignKey("TokenizedCorpusId")]
         public Guid TokenizedCorpusId { get; set; }
         public virtual TokenizedCorpus? TokenizedCorpus { get; set; }
 

@@ -1,15 +1,21 @@
-﻿using ClearDashboard.DAL.CQRS;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
+using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.WebApiParatextPlugin.Features.Project
 {
+
+
     public class GetProjectMetadataQueryHandler : IRequestHandler<GetProjectMetadataQuery, RequestResult<List<ParatextProjectMetadata>>>
     {
        
@@ -17,7 +23,8 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
        
         private readonly MainWindow _mainWindow;
 
-        public GetProjectMetadataQueryHandler(ILogger<GetProjectMetadataQueryHandler> logger, MainWindow mainWindow)
+        public GetProjectMetadataQueryHandler(IProject project, ILogger<GetProjectMetadataQueryHandler> logger,
+            IPluginHost host, IVerseRef verseRef, MainWindow mainWindow)
         {
            _logger = logger;
            _mainWindow = mainWindow;
@@ -34,7 +41,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while retrieving metadata for the Paratext projects.");
+                _logger.LogError(ex, "An unexpected erorr occurred while retrieving metadata for the Paratext projects.");
                 return Task.FromResult(new RequestResult<List<ParatextProjectMetadata>> { Message = ex.Message, Success = false});
             }
            

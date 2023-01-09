@@ -177,5 +177,113 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["MirrorViewScaleValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int TitleFontSizeValue {
+            get {
+                return ((int)(this["TitleFontSizeValue"]));
+            }
+            set {
+                this["TitleFontSizeValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int TargetFontSizeValue {
+            get {
+                return ((int)(this["TargetFontSizeValue"]));
+            }
+            set {
+                this["TargetFontSizeValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int TargetVerticalValue {
+            get {
+                return ((int)(this["TargetVerticalValue"]));
+            }
+            set {
+                this["TargetVerticalValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int TargetHorizontalValue {
+            get {
+                return ((int)(this["TargetHorizontalValue"]));
+            }
+            set {
+                this["TargetHorizontalValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int SourceFontSizeValue {
+            get {
+                return ((int)(this["SourceFontSizeValue"]));
+            }
+            set {
+                this["SourceFontSizeValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int SourceVerticalValue {
+            get {
+                return ((int)(this["SourceVerticalValue"]));
+            }
+            set {
+                this["SourceVerticalValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int SourceHorizontalValue {
+            get {
+                return ((int)(this["SourceHorizontalValue"]));
+            }
+            set {
+                this["SourceHorizontalValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public int TranslationsFontSizeValue {
+            get {
+                return ((int)(this["TranslationsFontSizeValue"]));
+            }
+            set {
+                this["TranslationsFontSizeValue"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int NoteIndicatorSizeValue {
+            get {
+                return ((int)(this["NoteIndicatorSizeValue"]));
+            }
+            set {
+                this["NoteIndicatorSizeValue"] = value;
+            }
+        }
     }
 }

@@ -19,9 +19,9 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         }
 
         [HttpPost]
-        public async Task<RequestResult<ParatextProject>> GetAsync([FromBody] GetCurrentProjectQuery query)
+        public async Task<RequestResult<DataAccessLayer.Models.ParatextProject>> GetAsync([FromBody] GetCurrentProjectQuery query)
         {
-            return await ExecuteRequestAsync<RequestResult<ParatextProject>, DataAccessLayer.Models.ParatextProject>(query, CancellationToken.None);
+            return await ExecuteRequestAsync<RequestResult<DataAccessLayer.Models.ParatextProject>, DataAccessLayer.Models.ParatextProject>(query, CancellationToken.None);
 
         }
 
@@ -31,13 +31,7 @@ namespace ClearDashboard.WebApiParatextPlugin.Features.Project
         public async Task<RequestResult<List<ParatextProjectMetadata>>> GetProjectMetadataAsync([FromBody] GetProjectMetadataQuery query)
         {
             return await ExecuteRequestAsync<RequestResult<List<ParatextProjectMetadata>>, List<ParatextProjectMetadata>>(query, CancellationToken.None);
-        }
 
-        [HttpPost]
-        [ActionName("fontfamily")]
-        public async Task<RequestResult<string>> GetProjectFontFamilyAsync([FromBody] GetProjectFontFamilyQuery query)
-        {
-            return await ExecuteRequestAsync<RequestResult<string>, string>(query, CancellationToken.None);
         }
 
     }

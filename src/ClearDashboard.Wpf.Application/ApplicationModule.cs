@@ -48,10 +48,8 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
             builder.RegisterType<TranslationManager>().AsSelf();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
-
-            builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
-        }
-
+        }        
+        
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
         {
             builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();

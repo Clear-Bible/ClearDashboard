@@ -58,7 +58,6 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Token> Tokens => Set<Token>();
         public virtual DbSet<TokenComponent> TokenComponents => Set<TokenComponent>();
         public virtual DbSet<TokenComposite> TokenComposites => Set<TokenComposite>();
-        public virtual DbSet<TokenCompositeTokenAssociation> TokenCompositeTokenAssociations => Set<TokenCompositeTokenAssociation>();
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
@@ -255,11 +254,6 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<TokenComposite>().ToTable("TokenComponent");
             //modelBuilder.Entity<TokenComposite>().Navigation(e => e.Tokens).AutoInclude();
 
-            modelBuilder
-                .Entity<TokenComposite>()
-                .HasMany(p => p.Tokens)
-                .WithMany(p => p.TokenComposites)
-                .UsingEntity<TokenCompositeTokenAssociation>();
 
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
 
@@ -270,9 +264,7 @@ namespace ClearDashboard.DataAccessLayer.Data
             modelBuilder.Entity<Token>().HasIndex(e => e.TrainingText);
             //modelBuilder.Entity<Token>().HasIndex(e => e.WordNumber);
             //modelBuilder.Entity<Token>().HasIndex(e => e.SubwordNumber);
-
-            modelBuilder.Entity<TokenCompositeTokenAssociation>().HasIndex(e => e.TokenId);
-            modelBuilder.Entity<TokenCompositeTokenAssociation>().HasIndex(e => e.TokenCompositeId);
+            modelBuilder.Entity<Token>().HasIndex(e => e.TokenCompositeId);
 
             //modelBuilder.Entity<Token>()
             //    .HasIndex(e => new { e.BookNumber, e.ChapterNumber, e.VerseNumber });

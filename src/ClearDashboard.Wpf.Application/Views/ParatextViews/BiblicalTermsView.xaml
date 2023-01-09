@@ -40,9 +40,9 @@
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
         <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -284,7 +284,7 @@
 
             <DataGrid.Columns>
                 <!--  rendering note button  -->
-                <DataGridTemplateColumn Width="20" Header="">
+                <DataGridTemplateColumn Width="2*" Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -306,7 +306,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="Auto" Header="{helpers:Localization BiblicalTermsForm_Term}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization BiblicalTermsForm_Term}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -320,7 +320,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="110" Header="{helpers:Localization BiblicalTermsForm_Category}">
+                <DataGridTemplateColumn Width="11*" Header="{helpers:Localization BiblicalTermsForm_Category}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -333,7 +333,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="150" Header="{helpers:Localization BiblicalTermsForm_GlossLower}">
+                <DataGridTemplateColumn Width="15*" Header="{helpers:Localization BiblicalTermsForm_GlossLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -346,29 +346,31 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Localization BiblicalTermsForm_Counts}">
+                <DataGridTemplateColumn Width="4*" Header="{helpers:Localization BiblicalTermsForm_Counts}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                Width="20"
-                                Height="15"
-                                Margin="-8"
-                                Text="{Binding RenderingCount}" />
+                                Margin="-18,0,-6,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding RenderingCount}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{helpers:Localization BiblicalTermsForm_Found}">
+                <DataGridTemplateColumn Width="4*" Header="{helpers:Localization BiblicalTermsForm_Found}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                Width="20"
-                                Height="15"
-                                Margin="-8"
-                                Text="{Binding References.Count}" />
+                                Margin="-18,0,-6,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding References.Count}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="200" Header="{helpers:Localization BiblicalTermsForm_RenderingsLower}">
+                <DataGridTemplateColumn Width="20*" Header="{helpers:Localization BiblicalTermsForm_RenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -376,7 +378,8 @@
                                 Margin="-8"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
-                                Text="{Binding RenderingString}">
+                                Text="{Binding RenderingString}"
+                                TextWrapping="Wrap">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
@@ -515,31 +518,23 @@
                                     <DataTemplate>
                                         <TextBlock
                                             VerticalAlignment="Center"
-                                            Cursor="Hand"
-                                            FontStyle="Italic"
-                                            Foreground="{StaticResource BlueMidBrush}">
-                                            <TextBlock.InputBindings>
-                                                <MouseBinding
-                                                    Command="{Binding Path=DataContext.VerseClickCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
-                                                    CommandParameter="{Binding VerseBBCCCVVV}"
-                                                    MouseAction="LeftClick" />
-                                            </TextBlock.InputBindings>
-                                            <Underline>
-                                                <Run Text="{Binding VerseId}" />
-                                            </Underline>
-                                        </TextBlock>
+                                            Foreground="{StaticResource BlueMidBrush}"
+                                            Text="{Binding VerseId}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <helpers:BindableTextBlock
-                                            Width="Auto"
-                                            FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
-                                            FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
-                                            InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                            TextWrapping="Wrap" />
+                                        <ScrollViewer MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                            <helpers:BindableTextBlock
+                                                Width="Auto"
+                                                Margin="0,0,10,0"
+                                                FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
+                                                FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
+                                                InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
+                                                TextWrapping="Wrap" />
+                                        </ScrollViewer>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

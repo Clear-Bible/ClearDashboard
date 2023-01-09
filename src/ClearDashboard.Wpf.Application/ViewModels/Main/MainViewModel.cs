@@ -1,24 +1,22 @@
 ﻿using Autofac;
-using AvalonDock;
 using AvalonDock.Layout;
 using AvalonDock.Layout.Serialization;
 using AvalonDock.Themes;
 using Caliburn.Micro;
 using ClearApplicationFoundation.LogHelpers;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.ViewModels.Menus;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -38,12 +36,17 @@ using System.Drawing.Imaging;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using AvalonDock;
+using ClearDashboard.Wpf.Application.Exceptions;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
+using Paratext.PluginInterfaces;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
@@ -60,7 +63,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
                 IHandle<FilterPinsMessage>,
-                IHandle<AddAquaCorpusAnalysisToEnhancedViewMessage>
+                IHandle<AddAquaCorpusAnalysisToEnhancedViewMessage>,
+                IHandle<ProjectsMetadataChangedMessage>
     {
         #region Member Variables
 
@@ -118,6 +122,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         // ReSharper disable once MemberCanBePrivate.Global
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DashboardProject Parameter { get; set; }
+
+        public List<ParatextProjectMetadata> ProjectMetadata = new();
 
         #endregion //Public Properties
 
@@ -528,6 +534,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // send out a notice that the project is loaded up
             await EventAggregator.PublishOnUIThreadAsync(new ProjectLoadCompleteMessage(true));
 
+            // get the project metadata from Paratext
+            var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), CancellationToken.None);
+            if (result.Success)
+            {
+                ProjectMetadata = result.Data.OrderBy(p => p.Name).ToList();
+            }
+
             base.OnViewLoaded(view);
         }
 
@@ -746,6 +759,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         #endregion //Constructor
 
         #region Methods
+
+        public void StopTailBlazer()
+        {
+
+        }
 
         private void ShowLogs()
         {
@@ -1814,6 +1832,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public Task HandleAsync(FilterPinsMessage message, CancellationToken cancellationToken)
         {
             UnhideWindow("PINS");
+            return Task.CompletedTask;
+        }
+
+        public string GetFontFamilyFromParatextProjectId(string paratextProjectId)
+        {
+            if (paratextProjectId == ManuscriptIds.HebrewManuscriptId)
+            {
+                return ManuscriptIds.HebrewFontFamily;
+            }
+
+            if (paratextProjectId == ManuscriptIds.GreekManuscriptId)
+            {
+                return ManuscriptIds.GreekFontFamily;
+            }
+
+            var sourceProject = ProjectMetadata.FirstOrDefault(p => p.Id == paratextProjectId);
+            if (sourceProject is not null)
+            {
+                return sourceProject.FontFamily;
+            }
+            return "Segoe UI";
+        }
+
+
+        /// <summary>
+        /// update the project metadata coming in from the AddParatextCorpus method
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public Task HandleAsync(ProjectsMetadataChangedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.ProjectsMetadata is not null)
+            {
+                ProjectMetadata = message.ProjectsMetadata;
+            }
+
             return Task.CompletedTask;
         }
     }

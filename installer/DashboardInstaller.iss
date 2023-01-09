@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Clear Dashboard"
-#define MyAppVersion "0.4.6.1"
+#define MyAppVersion "0.4.6.3"
 #define MyAppPublisher "Clear Bible, Inc."
 #define MyAppURL "https://www.clear.bible/"
 #define MyAppExeName "ClearDashboard.Wpf.Application.exe"
@@ -129,10 +129,11 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-Source: "windowsdesktop-runtime-6.0.12-win-x64.exe"; Flags: dontcopy noencryption
+Source: "windowsdesktop-runtime-7.0.1-win-x64.exe"; Flags: dontcopy noencryption
+Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\ClearDashboard.Wpf.Application.dll"; DestDir: "{app}"; Flags: ignoreversion
 ;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
@@ -162,12 +163,19 @@ var
     ResultCode: Integer;
 begin
   if IsWin64 then begin
+    // run the C++ Runtime installer
+    if not FileExists(ExpandConstant('{tmp}{\}') + 'VC_redist.x64.exe') then begin          
+        ExtractTemporaryFile('VC_redist.x64.exe');
+    end;
+    // ShellExec(const Verb, Filename, Params, WorkingDir: String; const ShowCmd: Integer; const Wait: TExecWait; var ErrorCode: Integer): Boolean;
+    Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'VC_redist.x64.exe', '/install /passive /norestart', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+    
     // install the .NET Runtime
-    if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\6.0.12\') then begin
-      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-6.0.12-win-x64.exe') then begin          
-        ExtractTemporaryFile('windowsdesktop-runtime-6.0.12-win-x64.exe');
+    if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.1\') then begin
+      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.1-win-x64.exe') then begin          
+        ExtractTemporaryFile('windowsdesktop-runtime-7.0.1-win-x64.exe');
       end;
-      Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-6.0.12-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+      Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.1-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     end;
     Result := true;
   end

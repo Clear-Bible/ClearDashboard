@@ -27,7 +27,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Point = System.Windows.Point;
-using ClearDashboard.DataAccessLayer;
 
 // ReSharper disable InconsistentNaming
 
@@ -363,7 +362,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
 
-        private string _fontFamily = FontNames.DefaultFontFamily;
+        private string _fontFamily = "Segoe UI";
         public string FontFamily
         {
             get => _fontFamily;
@@ -965,7 +964,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     if (SelectedWordFilterEnum == FilterWordEnum.Gloss)
                     {
                         // make this case insensitive
-                        if (btFilter.LocalGloss.IndexOf(FilterText, StringComparison.InvariantCultureIgnoreCase) > -1)
+                        if (btFilter.Gloss.IndexOf(FilterText, StringComparison.InvariantCultureIgnoreCase) > -1)
                         {
                             return true;
                         }
@@ -1086,8 +1085,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     if (result.Success)
                     {
                         biblicalTermsList = result.Data;
-
-                        await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: BiblicalTermsList read"), cancellationToken);
 
                         // send to the task started event aggregator for everyone else to hear about a background task starting
                         await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus

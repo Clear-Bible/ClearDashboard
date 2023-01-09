@@ -7,7 +7,6 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
 //USE TO ACCESS Models
 using Models = ClearDashboard.DataAccessLayer.Models;
@@ -49,6 +48,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         .ThenInclude(vm => vm.Verses)
                             .ThenInclude(v => v.TokenVerseAssociations.Where(tva => tva.Deleted == null))
                                 .ThenInclude(tva => tva.TokenComponent)
+                    .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
+                        .ThenInclude(tc => tc.Tokens)
+                            .ThenInclude(t => t.VerseRow)
                     .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
                         .ThenInclude(tc => tc.Tokens)
                             .ThenInclude(t => t.VerseRow)
@@ -104,11 +106,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Where(vm => vm.Verses != null)
                 .Select(vm =>
                 {
-                    var sourceVerseMappingTokenComposites = new List<Models.TokenComposite>();
-                    var targetVerseMappingTokenComposites = new List<Models.TokenComposite>();
-
-                    var sourceVerseMappingBCVs = new List<string>();
-                    var targetVerseMappingBCVs = new List<string>();
+                    var sourceVerseMappingComposites = new List<CompositeToken>();
+                    var targetVerseMappingComposites = new List<CompositeToken>();
 
                     var sourceVerses = vm.Verses
                         .Where(v => v.CorpusId == sourceCorpusId)
@@ -119,29 +118,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             cancellationToken.ThrowIfCancellationRequested();
 
                             var currentBCV = VerseBCV(v);
-                            sourceVerseMappingBCVs.Add(currentBCV);
 
                             var sourceTokenIds = v.TokenVerseAssociations
                                 .Where(tva => tva.TokenComponent != null)
                                 .OrderBy(tva => tva.Position)
-                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
-                                .ToList();
+                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
 
-                            // Capture TokenComposites containing any Tokens that either match the current
-                            // Verses's TokenVerseAssociation Tokens, or are in the current Verse's BCV:
-                            sourceVerseMappingTokenComposites.AddRange(parallelCorpus.TokenComposites
+                            sourceVerseMappingComposites.AddRange(parallelCorpus.TokenComposites
                                 .Where(tc => tc.TokenizedCorpusId == parallelCorpus.SourceTokenizedCorpusId)
-                                .Where(tc =>
-                                    tc.Tokens.Any(t => t.VerseRow!.BookChapterVerse == currentBCV) ||
-                                    tc.Tokens.Any(t => sourceTokenIds.Select(tid => tid.Id).ToList().Contains(t.Id))
-                                ));
+                                .Where(tc => tc.Tokens.Any(t => t.VerseRow!.BookChapterVerse == currentBCV))
+                                .Select(tc => ModelHelper.BuildCompositeToken(tc)));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 sourceTokenIds);
-                        }).OrderBy(v => v.BookNum).ThenBy(v => v.ChapterNum).ThenBy(v => v.VerseNum).ToList();
+                        });
 
                     var targetVerses = vm.Verses
                         .Where(v => v.CorpusId == targetCorpusId)
@@ -152,55 +145,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             cancellationToken.ThrowIfCancellationRequested();
 
                             var currentBCV = VerseBCV(v);
-                            targetVerseMappingBCVs.Add(currentBCV);
 
                             var targetTokenIds = v.TokenVerseAssociations
                                 .Where(tva => tva.TokenComponent != null)
                                 .OrderBy(tva => tva.Position)
-                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!))
-                                .ToList();
+                                .Select(tva => ModelHelper.BuildTokenId(tva.TokenComponent!));
 
-                            // Capture TokenComposites containing any Tokens that either match the current
-                            // Verses's TokenVerseAssociation Tokens, or are in the current Verse's BCV:
-                            targetVerseMappingTokenComposites.AddRange(parallelCorpus.TokenComposites
+                            targetVerseMappingComposites.AddRange(parallelCorpus.TokenComposites
                                 .Where(tc => tc.TokenizedCorpusId == parallelCorpus.TargetTokenizedCorpusId)
-                                .Where(tc =>
-                                    tc.Tokens.Any(t => t.VerseRow!.BookChapterVerse == currentBCV) ||
-                                    tc.Tokens.Any(t => targetTokenIds.Select(tid => tid.Id).ToList().Contains(t.Id))
-                                ));
+                                .Where(tc => tc.Tokens.Any(t => t.VerseRow!.BookChapterVerse == currentBCV))
+                                .Select(tc => ModelHelper.BuildCompositeToken(tc)));
 
                             return new Verse(
                                 bookNumbersToAbbreviations[(int)v.BookNumber!],
                                 (int)v.ChapterNumber!,
                                 (int)v.VerseNumber!,
                                 targetTokenIds);
-                        }).OrderBy(v => v.BookNum).ThenBy(v => v.ChapterNum).ThenBy(v => v.VerseNum).ToList();
-
-                    var sourceVerseMappingTokenGuidsByTVA = sourceVerses.SelectMany(sv => sv.TokenIds.Select(tid => tid.Id));
-
-                    var sourceVerseMappingComposites = sourceVerseMappingTokenComposites
-                        .Select(tc => ModelHelper.BuildCompositeToken(
-                            tc,
-                            tc.Tokens.Where(t =>
-                                sourceVerseMappingTokenGuidsByTVA.Contains(t.Id) ||
-                                sourceVerseMappingBCVs.Contains(t.VerseRow!.BookChapterVerse!)),
-                            tc.Tokens.Where(t =>
-                                !sourceVerseMappingTokenGuidsByTVA.Contains(t.Id) &&
-                                !sourceVerseMappingBCVs.Contains(t.VerseRow!.BookChapterVerse!))
-                        )).ToList();
-
-                    var targetVerseMappingTokenGuidsByTVA = targetVerses.SelectMany(sv => sv.TokenIds.Select(tid => tid.Id));
-
-                    var targetVerseMappingComposites = targetVerseMappingTokenComposites
-                        .Select(tc => ModelHelper.BuildCompositeToken(
-                            tc,
-                            tc.Tokens.Where(t =>
-                                targetVerseMappingTokenGuidsByTVA.Contains(t.Id) ||
-                                targetVerseMappingBCVs.Contains(t.VerseRow!.BookChapterVerse!)),
-                            tc.Tokens.Where(t =>
-                                !targetVerseMappingTokenGuidsByTVA.Contains(t.Id) &&
-                                !targetVerseMappingBCVs.Contains(t.VerseRow!.BookChapterVerse!))
-                        )).ToList();
+                        });
 
                     return new VerseMapping(sourceVerses, targetVerses, sourceVerseMappingComposites, targetVerseMappingComposites);
                 });
