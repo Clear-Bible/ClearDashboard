@@ -175,6 +175,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
                 else if (_verseChange != value)
                 {
+                  
                     ProjectManager!.CurrentVerse = value;
                     // push to Paratext
                     if (ParatextSync && !DashboardProjectManager.IncomingChangesStarted)
@@ -235,6 +236,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _verses;
             set => Set(ref _verses, value);
+        }
+
+        public bool EnableBcvControl
+        {
+            get => _enableBcvControl;
+            set => Set(ref _enableBcvControl, value);
         }
 
         #region DrawerProperties
@@ -450,6 +457,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout)
         {
+            EnableBcvControl = true;
             EnhancedViewLayout = enhancedViewLayout;
 
             Title = enhancedViewLayout.Title;
@@ -576,7 +584,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             var sw =Stopwatch.StartNew();
 
-            await ReloadData();
+            EnableBcvControl = false;
+
+            try
+            {
+                await ReloadData();
+            }
+            finally
+            {
+                EnableBcvControl = true;
+            }
+           
 
             sw.Stop();
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
@@ -978,6 +996,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private Visibility _noteControlVisibility = Visibility.Collapsed;
         private EnhancedViewLayout? _enhancedViewLayout;
+        private bool _enableBcvControl;
 
         public Visibility NoteControlVisibility
         {

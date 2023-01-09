@@ -387,7 +387,7 @@
                     Margin="50,0,0,0"
                     BcvDictionary="{Binding Path=BcvDictionary}"
                     CurrentBcv="{Binding Path=CurrentBcv}"
-                    IsControlEnabled="True"
+                    IsControlEnabled="{Binding EnableBcvControl}"
                     IsControlMinimal="False"
                     IsRtl="{Binding IsRtl}"
                     ParatextSync="{Binding Path=ParatextSync, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
