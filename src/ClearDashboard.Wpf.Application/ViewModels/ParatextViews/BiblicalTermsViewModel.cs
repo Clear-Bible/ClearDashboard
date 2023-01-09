@@ -27,6 +27,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Point = System.Windows.Point;
+using ClearDashboard.DataAccessLayer;
 
 // ReSharper disable InconsistentNaming
 
@@ -362,7 +363,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
 
-        private string _fontFamily = "Segoe UI";
+        private string _fontFamily = FontNames.DefaultFontFamily;
         public string FontFamily
         {
             get => _fontFamily;

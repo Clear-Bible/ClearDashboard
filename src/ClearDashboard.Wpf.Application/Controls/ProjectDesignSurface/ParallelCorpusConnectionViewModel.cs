@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.Wpf.Controls.Utils;
 using System;
 using System.Windows;
@@ -177,8 +178,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         public ParallelCorpusId? ParallelCorpusId { get; set; }
         public string? ParallelCorpusDisplayName { get; set; }
 
-        public string? SourceFontFamily { get; set; } = "Segoe UI";
-        public string? TargetFontFamily { get; set; } = "Segoe UI";
+        public string? SourceFontFamily { get; set; } = FontNames.DefaultFontFamily;
+        public string? TargetFontFamily { get; set; } = FontNames.DefaultFontFamily;
 
 
         /// <summary>

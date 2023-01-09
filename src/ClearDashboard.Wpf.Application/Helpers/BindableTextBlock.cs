@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using ClearDashboard.DataAccessLayer;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -9,33 +10,25 @@ namespace ClearDashboard.Wpf.Application.Helpers
     {
         public ObservableCollection<Inline> InlineList
         {
-            get
-            {
-                return (ObservableCollection<Inline>)GetValue(InlineListProperty);
-            }
-            set
-            {
-                SetValue(InlineListProperty, value);
-            }
+            get => (ObservableCollection<Inline>)GetValue(InlineListProperty);
+            set => SetValue(InlineListProperty, value);
         }
 
-        public new string FontFamily = "Segoe UI";
+        public new string FontFamily = FontNames.DefaultFontFamily;
         public new float FontSize = 13;
 
-        public static new readonly DependencyProperty FontSizeProperty =
+        public new static readonly DependencyProperty FontSizeProperty =
             DependencyProperty.Register("FontSize", typeof(float), typeof(BindableTextBlock), new UIPropertyMetadata(13f, OnPropertyChanged));
-
-
-        public static new readonly DependencyProperty FontFamilyProperty =
-            DependencyProperty.Register("FontFamily", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata("Segoe UI", OnPropertyChanged));
-
-
+        
+        public new static readonly DependencyProperty FontFamilyProperty =
+            DependencyProperty.Register("FontFamily", typeof(string), typeof(BindableTextBlock), new UIPropertyMetadata(FontNames.DefaultFontFamily, OnPropertyChanged));
+        
         public static readonly DependencyProperty InlineListProperty =
             DependencyProperty.Register("InlineList", typeof(ObservableCollection<Inline>), typeof(BindableTextBlock), new UIPropertyMetadata(null, OnPropertyChanged));
 
         private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            BindableTextBlock textBlock = (BindableTextBlock)sender;
+            var textBlock = (BindableTextBlock)sender;
             textBlock.Inlines.Clear();
             if (e.NewValue != null)
             {

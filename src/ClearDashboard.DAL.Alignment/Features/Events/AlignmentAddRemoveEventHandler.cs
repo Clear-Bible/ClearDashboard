@@ -40,16 +40,17 @@ namespace ClearDashboard.DAL.Alignment.Features.Events
                 alignments.Add(notification.AlignmentAdding);
             }
 
-            notification.ProjectDbContext.AlignmentSetDenormalizationTasks.AddRange(alignments
-                .Where(a => a.Deleted == null)
-                .Where(a => a.AlignmentSet != null)
+            var denormalizationTasks = alignments
+                .Where(a => a.AlignmentSetId != Guid.Empty)
                 .Where(a => a.SourceTokenComponent?.TrainingText != null)
                 .GroupBy(a => new { a.AlignmentSetId, SourceText = a.SourceTokenComponent!.TrainingText! })
                 .Select(g => new AlignmentSetDenormalizationTask()
                 {
                     AlignmentSetId = g.Key.AlignmentSetId,
                     SourceText = g.Key.SourceText
-                }));
+                });
+
+            notification.ProjectDbContext.AlignmentSetDenormalizationTasks.AddRange(denormalizationTasks);
 
             await notification.ProjectDbContext.SaveChangesAsync(cancellationToken);
         }

@@ -21,7 +21,7 @@
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="DarkSlateGray" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="NodeFillBrushBacktranslation" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushBackTranslation" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="Orange" />
     </LinearGradientBrush>
@@ -41,7 +41,7 @@
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="CornflowerBlue" />
     </LinearGradientBrush>
-    <LinearGradientBrush x:Key="NodeFillBrushReferenceAuxilary" StartPoint="0,0" EndPoint="0,1">
+    <LinearGradientBrush x:Key="NodeFillBrushReferenceAuxiliary" StartPoint="0,0" EndPoint="0,1">
         <GradientStop Offset="0" Color="White" />
         <GradientStop Offset="0.6" Color="Beige" />
     </LinearGradientBrush>
