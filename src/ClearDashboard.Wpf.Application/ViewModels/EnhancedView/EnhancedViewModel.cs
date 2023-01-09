@@ -437,6 +437,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout)
         {
+
+            EnableBcvControl = true;
             EnhancedViewLayout = enhancedViewLayout;
 
             Title = enhancedViewLayout.Title;
@@ -451,8 +453,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
         {
+            EnableBcvControl = false;
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
-            await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+            try
+            {
+                await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+            }
+            finally
+            {
+                EnableBcvControl = true;
+            }
         }
 
         public async Task LoadData(CancellationToken token)
@@ -478,9 +488,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var enhancedViewItemViewModel =
-                    await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                var enhancedViewItemViewModel = await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                EnableBcvControl = false;
                 await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+               
             });
         }
 
