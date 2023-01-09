@@ -291,12 +291,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 if (reloadType == ReloadType.Force)
                 {
                     metadatum.TokenizedTextCorpus = await TokenizedTextCorpus.Get(Mediator!,
-                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value));
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true);
                 }
                 else
                 {
                     metadatum.TokenizedTextCorpus ??= await TokenizedTextCorpus.Get(Mediator!,
-                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value));
+                        new TokenizedTextCorpusId(metadatum.TokenizedTextCorpusId!.Value), true);
                 }
 
                 var offset = (ushort)ParentViewModel.VerseOffsetRange;
@@ -538,7 +538,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     try
                     {
                         metadatum.ParallelCorpus = await ParallelCorpus.Get(Mediator!,
-                            new ParallelCorpusId(Guid.Parse(metadatum.ParallelCorpusId!)));
+                            new ParallelCorpusId(Guid.Parse(metadatum.ParallelCorpusId!)), useCache: true);
                     }
                     finally
                     {

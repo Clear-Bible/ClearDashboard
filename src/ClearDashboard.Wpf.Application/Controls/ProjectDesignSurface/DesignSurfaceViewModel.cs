@@ -28,6 +28,8 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
+using ClearDashboard.Wpf.Application.Services;
+
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
 
@@ -63,6 +65,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         
         // ReSharper disable once NotAccessedField.Local
         private readonly IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? _designSurfaceDataProvider;
+        private readonly IWindowManager windowManager_;
+        private readonly IAquaManager aquaManager_;
+
         ///
         /// The current scale at which the content is being viewed.
         /// 
@@ -241,7 +246,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public DesignSurfaceViewModel(ILogger<DesignSurfaceViewModel>? logger,
              IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator,
-            IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider)
+            IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider,
+            IWindowManager windowManager,
+            IAquaManager aquaManager)
         {
             //_navigationService = navigationService;
             //_projectManager = projectManager;
@@ -250,6 +257,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             LifecycleScope = lifecycleScope;
             Mediator = mediator;
             _designSurfaceDataProvider = designSurfaceDataProvider;
+            windowManager_ = windowManager;
+            aquaManager_ = aquaManager;
         }
         #endregion
 
@@ -455,11 +464,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel
             });
         }
-
-
-
-
-
         private void AddInterlinearMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection,
             TopLevelProjectIds topLevelProjectIds, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
             BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
@@ -737,13 +741,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 /*
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
 
-                nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel
+                nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel(aquaManager_, Logger!, windowManager_, nodeMenuItems) //FIXME: should come from DI?
                 {
-                    // Show Verses in New Windows
-                    Header = LocalizationStrings.Get("Pds_AquaRequestCorpusAnalysisMenu", Logger!),
-                    Id = DesignSurfaceMenuIds.AquaRequestCorpusAnalysis,
-                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                    IconKind = PackIconPicolIconsKind.Api.ToString(),
                     CorpusNodeViewModel = corpusNode,
                 });
                 */

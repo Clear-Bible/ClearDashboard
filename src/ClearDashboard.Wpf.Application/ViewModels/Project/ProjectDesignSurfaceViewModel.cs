@@ -472,7 +472,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
                         "Macula Hebrew",
                         Tokenizers.WhitespaceTokenizer.ToString(),
-                        cancellationToken);
+                        cancellationToken,
+                        true);
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
@@ -593,7 +594,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
                         "Macula Greek",
                         Tokenizers.WhitespaceTokenizer.ToString(),
-                        cancellationToken);
+                        cancellationToken,
+                        true);
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
@@ -1235,45 +1237,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 await SaveDesignSurfaceData();
             }
         }
-
-        public async Task ExecuteAquaCorpusAnalysisMenuCommand(AquaCorpusAnalysisMenuItemViewModel aquaCorpusAnalysisMenuItemViewModel)
-        {
-            var corpusNodeViewModel = aquaCorpusAnalysisMenuItemViewModel.CorpusNodeViewModel;
-            if (corpusNodeViewModel == null)
-            {
-                Logger!.LogInformation($"The CorpusNodeViewModel on the CorpusNodeMenuItem: '{aquaCorpusAnalysisMenuItemViewModel.Id}' is null., Returning...");
-                return;
-            }
-
-            switch (aquaCorpusAnalysisMenuItemViewModel.Id)
-            {
-                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaRequestCorpusAnalysis:  //fixme
-                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaAddLatestCorpusAnalysisToCurrentEnhancedView:
-                    await EventAggregator.PublishOnUIThreadAsync(new AddAquaCorpusAnalysisToEnhancedViewMessage(new AquaCorpusAnalysisEnhancedViewItemMetadatum()
-                    {
-                        IsNewWindow = false
-                    })); ;
-                    break;
-                //case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaRequestCorpusAnalysis:
-                //    await AquaRequestCorpusAnalysis(corpusNodeViewModel.ParatextProjectId);
-                //    break;
-                case DesignSurfaceViewModel.DesignSurfaceMenuIds.AquaGetCorpusAnalysis:
-                    await AquaGetCorpusAnalysis(corpusNodeViewModel.ParatextProjectId);
-                    break;
-            }
-        }
-
-        private async Task AquaRequestCorpusAnalysis(string paratextProjectId)
-        {
-
-        }
-
-        private async Task AquaGetCorpusAnalysis(string paratextProjectId)
-        {
-
-        }
-
-
         public void ShowCorpusProperties(CorpusNodeViewModel corpus)
         {
             SelectedDesignSurfaceComponent = corpus;
