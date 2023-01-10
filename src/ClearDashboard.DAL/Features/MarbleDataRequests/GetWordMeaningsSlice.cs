@@ -256,7 +256,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     .FirstOrDefault(x => x.Attribute("LanguageCode").Value.Equals(_languageCode));
 
                 var definitionLong = lexSense.Element("DefinitionLong").Value;
-                var definationShort = lexSense.Element("DefinitionShort").Value;
+                var definitionShort = lexSense.Element("DefinitionShort").Value;
 
 
                 var glosses = lexSense.Elements("Glosses")
@@ -394,7 +394,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 {
                     Sense = String.Join("; ", glosses),
                     DescriptionLong = definitionLong,
-                    DescriptionShort = definationShort,
+                    DescriptionShort = definitionShort,
                     Glosses = glosses,
                     VerseTotal = totalSenseVerseCount.Count,
                     Verses = verseList,

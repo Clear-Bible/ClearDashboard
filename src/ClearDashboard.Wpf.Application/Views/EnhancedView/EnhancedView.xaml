@@ -100,7 +100,7 @@
                             Maximum="48"
                             Minimum="8"
                             TickFrequency="1"
-                            Value="{Binding TitleFontSizeValue}"/>
+                            Value="{Binding TitleFontSizeValue}" />
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
@@ -367,7 +367,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="25" />
+                    <!--<RowDefinition Height="25" />-->
                 </Grid.RowDefinitions>
 
                 <Button
@@ -396,7 +396,7 @@
                     VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                <StackPanel
+                <!--<StackPanel
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
@@ -415,7 +415,7 @@
                         VerticalAlignment="Center"
                         Content="{Binding Message}"
                         FontSize="12" />
-                </StackPanel>
+                </StackPanel>-->
             </Grid>
         </materialDesign:DrawerHost>
 
