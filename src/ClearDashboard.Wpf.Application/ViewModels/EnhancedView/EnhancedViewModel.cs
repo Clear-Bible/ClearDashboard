@@ -238,6 +238,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _verses, value);
         }
 
+
         private bool _enableBcvControl;
         public bool EnableBcvControl
         {
