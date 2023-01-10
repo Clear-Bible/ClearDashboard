@@ -635,7 +635,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     throw new MissingEnhancedViewModelException(
                         $"Cannot locate an EnhancedViewModel for '{enhancedView.Title}'");
                 }
-                await enhancedViewModel.LoadData(cancellationToken);
+
+                enhancedViewModel.EnableBcvControl = false;
+                try
+                {
+                    await enhancedViewModel.LoadData(cancellationToken);
+                }
+                finally
+                {
+                    enhancedViewModel.EnableBcvControl = true;
+                }
+              
 
             });
         }
