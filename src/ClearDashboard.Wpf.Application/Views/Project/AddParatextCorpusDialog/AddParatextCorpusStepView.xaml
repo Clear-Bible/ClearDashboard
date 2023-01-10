@@ -137,6 +137,7 @@
                     Height="Auto"
                     Margin="15"
                     VerticalAlignment="Top"
+                    FontSize="16"
                     IsEnabled="{Binding IsEnabledSelectedProject}"
                     ItemsSource="{Binding Projects}"
                     SelectedItem="{Binding SelectedProject}"
