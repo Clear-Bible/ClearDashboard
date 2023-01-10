@@ -238,6 +238,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _verses, value);
         }
 
+        private bool _enableBcvControl;
         public bool EnableBcvControl
         {
             get => _enableBcvControl;
@@ -996,7 +997,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private Visibility _noteControlVisibility = Visibility.Collapsed;
         private EnhancedViewLayout? _enhancedViewLayout;
-        private bool _enableBcvControl;
+        
 
         public Visibility NoteControlVisibility
         {
