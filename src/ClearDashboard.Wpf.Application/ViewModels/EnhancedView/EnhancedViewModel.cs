@@ -499,17 +499,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         //FIXME: should go in ClearApplicationFramework
         private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
         {
-            var metadataAssemblyQualifiedName =
-                enhancedViewItemMetadatum.GetEnhancedViewItemMetadatumType().AssemblyQualifiedName
-                ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
-
-            var metadataAssemblyQualifiedName2 = enhancedViewItemMetadatum.GetType().AssemblyQualifiedName
-                ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
-
-            Logger!.LogDebug("************************************");
-            Logger!.LogDebug($"{metadataAssemblyQualifiedName}");
-            Logger!.LogDebug($"{metadataAssemblyQualifiedName2}");
-            Logger!.LogDebug("************************************");
+           var metadataAssemblyQualifiedName = 
+                    (enhancedViewItemMetadatum.GetType().BaseType != null ? 
+                        enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName : 
+                        enhancedViewItemMetadatum.GetType().AssemblyQualifiedName)
+                            ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
 
             var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName
                 .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
@@ -556,12 +550,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     .Select(g => g.First())
                     .ToList();
 
-                foreach (var book in books)
+                foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
                 {
-                    var bookId = book.Substring(0, 3);
-
-                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
-
                     CurrentBcv.BibleBookList?.Add(bookName);
                 }
             }
