@@ -1,5 +1,5 @@
 ﻿<Window
-    x:Class="ClearDashboard.Wpf.Application.Views.ParatextViews.VersePopUpView"
+    x:Class="ClearDashboard.Wpf.Application.Views.PopUps.VersePopUpView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"

@@ -17,7 +17,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -27,6 +26,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using wpfKeyBoard;
+using System.ComponentModel;
+using ClearDashboard.Wpf.Application.UserControls;
+
+
 #pragma warning disable CS8618
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Marble
@@ -42,6 +45,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         public ICommand GetVerseDetailCommand { get; set; }
         public ICommand ShowDrawerCommand { get; set; }
         public ICommand GotoSourceWordCommand { get; set; }
+
+        // used by the MarbleLinkControl
+        private ICommand _linkCommand;
+        public ICommand LinkCommand
+        {
+            get => _linkCommand;
+            set
+            {
+                _linkCommand = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion Commands
 
@@ -286,14 +301,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private string _selectedHebrew = "";
-        public string SelectedHebrew
+        private string _selectedWord = "";
+        public string SelectedWord
         {
-            get => _selectedHebrew;
+            get => _selectedWord;
             set
             {
-                _selectedHebrew = value;
-                NotifyOfPropertyChange(() => SelectedHebrew);
+                _selectedWord = value;
+                NotifyOfPropertyChange(() => SelectedWord);
             }
         }
 
@@ -318,7 +333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
                 if (_selectedLexicalLink is not null)
                 {
-                    SelectedHebrew = _selectedLexicalLink.Word;
+                    SelectedWord = _selectedLexicalLink.Word;
                     _ = GetWord();
                 }
 
@@ -425,6 +440,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             GetVerseDetailCommand = new RelayCommandAsync(GetVerseDetail);
             ShowDrawerCommand = new RelayCommand(ShowDrawer);
             GotoSourceWordCommand = new RelayCommand(GotoSourceWord);
+
+            LinkCommand = new DelegateCommand<string>(OnLinkCommand);
         }
 
 
@@ -580,7 +597,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         {
             if (obj is Button button)
             {
-                SelectedHebrew = button.Content.ToString();
+                SelectedWord = button.Content.ToString();
                 if (button.Tag.ToString() == "1")
                 {
                     _ = GetWord(true, true);
@@ -780,7 +797,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             if (_lexicalLinks.Count > 0)
             {
                 SelectedLexicalLink = _lexicalLinks[0];
-                SelectedHebrew = _lexicalLinks[0].Word;
+                SelectedWord = _lexicalLinks[0].Word;
                 await GetWord().ConfigureAwait(false);
             }
             NotifyOfPropertyChange(() => LexicalLinks);
@@ -838,12 +855,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                     IsOt = false;
                 }
 
-                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(bcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
+                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(bcv, languageCode, _selectedWord, _lookup), CancellationToken.None).ConfigureAwait(false);
             }
             else
             {
                 // send with the actual current BCV verse
-                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedHebrew, _lookup), CancellationToken.None).ConfigureAwait(false);
+                queryResult = await ExecuteRequest(new GetWordMeaningsQuery(CurrentBcv, languageCode, _selectedWord, _lookup), CancellationToken.None).ConfigureAwait(false);
             }
             
             if (queryResult.Success == false)
@@ -856,7 +873,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
             if (queryResult.Data == null)
             {
-                Logger!.LogError($"MABLE DB Query returned null for {CurrentBcv.BBBCCCVVV} Word: {_selectedHebrew}");
+                Logger!.LogError($"MABLE DB Query returned null for {CurrentBcv.BBBCCCVVV} Word: {_selectedWord}");
                 return;
             }
 
@@ -922,7 +939,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         {
             if (obj is RelatedLemma lemma)
             {
-                _selectedHebrew = lemma.Lemma;
+                _selectedWord = lemma.Lemma;
                 await GetWord().ConfigureAwait(false);
             }
         }
@@ -936,7 +953,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
 
 
-            var safeUrl = Uri.EscapeDataString(SelectedHebrew).Replace('%', '$');
+            var safeUrl = Uri.EscapeDataString(SelectedWord).Replace('%', '$');
 
             // OT or NT?
             if (CurrentBcv.BookNum < 40)
@@ -955,7 +972,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         private void LaunchLogosStrongNumber(object obj)
         {
-            if (SelectedHebrew == "")
+            if (SelectedWord == "")
             {
                 return;
             }
@@ -988,6 +1005,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         public void LaunchMirrorView(double actualWidth, double actualHeight)
         {
             LaunchMirrorView<MarbleView>.Show(this, actualWidth, actualHeight);
+        }
+
+        /// <summary>
+        /// Go to linked word in short description
+        /// </summary>
+        /// <param name="word"></param>
+        private void OnLinkCommand(string word)
+        {
+            SelectedWord = word;
+            _ = GetWord();
         }
 
 
@@ -1056,6 +1083,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         #endregion // Methods
 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
     }
 }

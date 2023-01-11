@@ -227,7 +227,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 try
                 {
                     var result = await ExecuteRequest(new GetTextCollectionsQuery(workWithUsx), CancellationToken.None).ConfigureAwait(false);
-                    await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{this.DisplayName}: TextCollections read"));
 
                     if (result.Success)
                     {

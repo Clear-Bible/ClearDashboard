@@ -671,10 +671,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return;
             }
 
+            if (ParatextSync == false)
+            {
+                return;
+            }
+
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Verse Change"), cancellationToken);
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
         }
@@ -685,9 +688,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (ProjectManager?.CurrentParatextProject is not null)
             {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
-
                 UpdatingCurrentVerse = true;
                 try
                 {
