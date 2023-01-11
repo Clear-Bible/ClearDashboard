@@ -31,6 +31,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {

@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;

@@ -16,6 +16,7 @@ using CefSharp.Wpf;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
 using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;

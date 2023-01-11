@@ -1,16 +1,10 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,16 +44,16 @@ namespace ClearDashboard.Wpf.Application.Services
             await SlowTask("GetCorpusAnalysis", 10, cancellationToken);
         }
 
-        protected static async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken cancellationToken)
+        protected  async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken cancellationToken)
         {
-            HttpResponseMessage response = await client.GetAsync(url, cancellationToken);
-            byte[] content = await response.Content.ReadAsByteArrayAsync(cancellationToken);
-            Console.WriteLine($"{url,-60} {content.Length,10:#,#}");
+            var response = await client.GetAsync(url, cancellationToken);
+            var content = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+            Logger!.LogDebug($"{url,-60} {content.Length,10:#,#}");
 
             return content.Length;
         }
 
-        protected static async Task SlowTask(string name, int iterations, CancellationToken cancellationToken)
+        protected async Task SlowTask(string name, int iterations, CancellationToken cancellationToken)
         {
             await Task.Run(() =>
             {
@@ -69,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.Services
                         cancellationToken.ThrowIfCancellationRequested();
                     if (iterations-- == 0)
                         return;
-                    Console.WriteLine($"{name} Iteration: {iterations}");
+                    Logger!.LogDebug($"{name} Iteration: {iterations}");
                     Thread.Sleep(2000);
                 }
             });

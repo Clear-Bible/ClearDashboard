@@ -1,24 +1,17 @@
-using Microsoft.EntityFrameworkCore;
+using Autofac;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Exceptions;
+using ClearDashboard.DataAccessLayer.Features.Projects;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.ViewModels;
 using ClearDashboard.ParatextPlugin.CQRS.Features.User;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using MvvmHelpers;
-using Nelibur.ObjectMapper;
 using System;
-using System.Collections.Generic;
-
 using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
-using ClearDashboard.DataAccessLayer.Features.Projects;
 
 namespace ClearDashboard.DataAccessLayer
 {
@@ -27,20 +20,22 @@ namespace ClearDashboard.DataAccessLayer
 #nullable disable
         #region Properties
        
-        protected ILogger Logger { get; private set; }
-        protected ParatextProxy ParatextProxy { get; private set; }
-        protected ILifetimeScope LifetimeScope { get; private set; }
+        protected ILogger Logger { get; }
+        protected ParatextProxy ParatextProxy { get; }
+        protected ILifetimeScope LifetimeScope { get; }
+
+        #region IUserProvider
         public User CurrentUser { get; set; }
+        //public string ParatextUserName { get; set; } = "";
+
+        #endregion IUserProvider
+
+        #region IProjectProvider
         public Project CurrentProject { get; set; }
         public ParatextProject CurrentParatextProject { get; set; }
         public bool HasCurrentProject => CurrentProject != null;
         public bool HasCurrentParatextProject => CurrentParatextProject != null;
-        
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextProjects { get; set; } = new();
 
-        public ObservableRangeCollection<ParatextProjectViewModel> ParatextResources { get; set; } = new();
-        public bool ParatextVisible = false;
-        public string ParatextUserName { get; set; } = "";
         private string _currentVerse;
         public string CurrentVerse
         {
@@ -59,16 +54,15 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
-        private Dictionary<string, string> _bcvDictionary = new();
-        private Dictionary<string, string> BCVDictionary
-        {
-            get => _bcvDictionary;
-            set
-            {
-                _bcvDictionary = value;
-            }
-        }
+        #endregion IProjectProvider
 
+
+       
+
+
+      
+
+   
         #endregion
 
         #region Events
@@ -95,10 +89,16 @@ namespace ClearDashboard.DataAccessLayer
         public virtual async Task Initialize()
         {
             EnsureDashboardDirectory(FilePathTemplates.ProjectBaseDirectory);
+            await Task.CompletedTask;
         }
 
         private void EnsureDashboardDirectory(string directory)
         {
+            if (string.IsNullOrEmpty(directory))
+            {
+                throw new ArgumentNullException(nameof(directory));
+            }
+
             if (!Directory.Exists(directory))
             {
                 // need to create that directory
@@ -114,17 +114,15 @@ namespace ClearDashboard.DataAccessLayer
             }
         }
 
+
+        // TODO:  Review - should we be throwing an exception here if a licensed user can not be loaded?
         private Guid TemporaryUserGuid => Guid.Parse("5649B1D2-2766-4C10-9274-F7E7BF75E2B7");
         public User GetLicensedUser()
         {
-            var user = LicenseManager.GetUser<User>();
-            if (user == null)
+            var user = LicenseManager.GetUser<User>() ?? new User
             {
-                user = new User
-                {
-                    Id = TemporaryUserGuid,
-                };
-            }
+                Id = TemporaryUserGuid,
+            };
 
             return user;
         }
@@ -139,12 +137,12 @@ namespace ClearDashboard.DataAccessLayer
 
             var result = await ExecuteRequest(new GetCurrentParatextUserQuery(), CancellationToken.None);
 
-            Logger.LogInformation(result.Success ? $"Found Paratext user - {result.Data.Name}" : $"GetParatextUserName - {result.Message}");
+            Logger.LogInformation(result.Success ? $"Found Paratext user - {result.Data!.Name}" : $"GetParatextUserName - {result.Message}");
 
 
             if (result.Success && result.HasData)
             {
-                var paratextUserName = result.Data.Name;
+                var paratextUserName = result.Data!.Name;
                 CurrentUser = GetLicensedUser();
                 CurrentUser.ParatextUserName = paratextUserName;
                 await PublishParatextUser(CurrentUser);
@@ -167,7 +165,7 @@ namespace ClearDashboard.DataAccessLayer
         {
             CurrentDashboardProject = new DashboardProject
             {
-                ParatextUser = ParatextUserName,
+               // ParatextUser = ParatextUserName,
                 Created = DateTime.Now
             };
 
@@ -215,16 +213,22 @@ namespace ClearDashboard.DataAccessLayer
         public async Task<Project> LoadProject(string projectName)
         {
             var result = await ExecuteRequest(new LoadProjectQuery(projectName), CancellationToken.None);
-            CurrentProject = result.Data;
 
-            if (CurrentDashboardProject != null)
+            if (result.Success && result.HasData)
             {
-                CurrentDashboardProject.DirectoryPath = string.Format(
-                    FilePathTemplates.ProjectDirectoryTemplate,
-                    ProjectDbContextFactory.ConvertProjectNameToSanitizedName(CurrentProject.ProjectName));
+                CurrentProject = result.Data;
+
+                if (CurrentDashboardProject != null)
+                {
+                    CurrentDashboardProject.DirectoryPath = string.Format(
+                        FilePathTemplates.ProjectDirectoryTemplate,
+                        ProjectDbContextFactory.ConvertProjectNameToSanitizedName(CurrentProject!.ProjectName!));
+                }
+
+                return CurrentProject;
             }
 
-            return CurrentProject;
+            throw new CouldNotLoadProjectException(projectName);
         }
 
         public async Task<Project> DeleteProject(string projectName)

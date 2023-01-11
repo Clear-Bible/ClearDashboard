@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 public abstract class EnhancedViewItemMetadatum
 {

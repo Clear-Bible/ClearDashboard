@@ -14,7 +14,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -42,6 +42,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -865,7 +866,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var viewModel = IoC.Get<SlackMessageViewModel>();
             viewModel.Files = files;
-            viewModel.ParatextUser = ProjectManager.ParatextUserName;
+            viewModel.ParatextUser = ProjectManager.CurrentUser.ParatextUserName!;
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
