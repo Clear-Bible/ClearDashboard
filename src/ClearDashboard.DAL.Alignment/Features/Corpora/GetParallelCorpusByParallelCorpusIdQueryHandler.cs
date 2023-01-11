@@ -7,6 +7,7 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Linq;
 
 //USE TO ACCESS Models
@@ -37,6 +38,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             ParallelCorpusId parallelCorpusId)>> GetDataAsync(GetParallelCorpusByParallelCorpusIdQuery request, CancellationToken cancellationToken)
 
         {
+#if DEBUG
+            Stopwatch sw = new();
+            sw.Start();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (start)");
+#endif
+
             await Task.CompletedTask;
 
             //DB Impl notes: use command.ParallelCorpusId to retrieve from ParallelCorpus table and return
@@ -53,6 +60,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         .ThenInclude(tc => tc.Tokens)
                             .ThenInclude(t => t.VerseRow)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
+
+#if DEBUG
+            sw.Stop();
+#endif
 
             var invalidArgMsg = "";
             if (parallelCorpus == null)
@@ -78,10 +89,27 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
+#if DEBUG
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Get parallel corpus '{parallelCorpus!.DisplayName}'");
+            sw.Restart();
+            Process proc = Process.GetCurrentProcess();
+
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (BEFORE Build VerseMappings): {proc.PrivateMemorySize64}");
+#endif
+
             var bookNumbersToAbbreviations =
                 FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
 
             var verseMappings = BuildVerseMappings(parallelCorpus!, bookNumbersToAbbreviations, cancellationToken);
+
+#if DEBUG
+            proc.Refresh();
+            Logger.LogInformation($"Private memory usage (AFTER Build VerseMappings): {proc.PrivateMemorySize64}");
+
+            sw.Stop();
+            Logger.LogInformation($"Elapsed={sw.Elapsed} - Handler (end) [verse mapping count: {verseMappings.Count()}]");
+#endif
 
             return new RequestResult<(TokenizedTextCorpusId sourceTokenizedCorpusId,
                     TokenizedTextCorpusId targetTokenizedCorpusId,
