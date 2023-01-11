@@ -238,7 +238,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _verses, value);
         }
 
-
         private bool _enableBcvControl;
         public bool EnableBcvControl
         {
@@ -459,6 +458,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout)
         {
+
             EnableBcvControl = true;
             EnhancedViewLayout = enhancedViewLayout;
 
@@ -474,8 +474,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
         {
+            EnableBcvControl = false;
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
-            await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+            try
+            {
+                await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+            }
+            finally
+            {
+                EnableBcvControl = true;
+            }
         }
 
         public async Task LoadData(CancellationToken token)
@@ -501,9 +509,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var enhancedViewItemViewModel =
-                    await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                var enhancedViewItemViewModel = await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                EnableBcvControl = false;
                 await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+               
             });
         }
 
@@ -584,7 +593,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task VerseChangeRerender()
         {
-            var sw =Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
             EnableBcvControl = false;
 
@@ -596,11 +605,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 EnableBcvControl = true;
             }
-           
 
             sw.Stop();
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
+
 
         private async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
         {
