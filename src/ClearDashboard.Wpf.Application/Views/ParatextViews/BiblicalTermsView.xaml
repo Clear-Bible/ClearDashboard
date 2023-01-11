@@ -350,10 +350,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                Width="20"
-                                Height="15"
-                                Margin="-8"
-                                Text="{Binding RenderingCount}" />
+                                Margin="-18,0,-6,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding RenderingCount}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -361,10 +362,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                Width="20"
-                                Height="15"
-                                Margin="-8"
-                                Text="{Binding References.Count}" />
+                                Margin="-18,0,-6,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding References.Count}"
+                                TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
