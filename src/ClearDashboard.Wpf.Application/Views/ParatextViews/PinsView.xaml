@@ -144,6 +144,13 @@
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </DataGrid.ColumnHeaderStyle>
 
@@ -153,6 +160,13 @@
                     <Setter Property="Height" Value="40" />
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="Padding" Value="0" />
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <Trigger Property="AlternationIndex" Value="1">
                             <Setter Property="Background" Value="{DynamicResource GridBrush}" />
@@ -163,11 +177,12 @@
 
             <DataGrid.Columns>
                 <!--  XmlSource  -->
-                <DataGridTemplateColumn MaxWidth="59">
+                <DataGridTemplateColumn Width="4*" MaxWidth="59">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Border
                                 Width="26"
+                                Margin="-13,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 BorderBrush="{StaticResource PrimaryHueMidBrush}"
@@ -184,7 +199,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  SimpRefs  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_VerseReferences}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_VerseReferences}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -212,10 +227,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Lexeme  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="250"
-                    Header="{helpers:Localization Pins_Lexeme}">
+                <DataGridTemplateColumn Width="16*" Header="{helpers:Localization Pins_Lexeme}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -231,10 +243,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  gloss  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="250"
-                    Header="{helpers:Localization Pins_Gloss}">
+                <DataGridTemplateColumn Width="16*" Header="{helpers:Localization Pins_Gloss}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -249,10 +258,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  origin id  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="250"
-                    Header="{helpers:Localization Pins_Origin}">
+                <DataGridTemplateColumn Width="16*" Header="{helpers:Localization Pins_Origin}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -279,7 +285,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  language  -->
-                <DataGridTemplateColumn Width="125" Header="{helpers:Localization Pins_Language}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_Language}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -318,7 +324,7 @@
                 </DataGridTemplateColumn>-->
 
                 <!--  Phrase  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Phrase}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Phrase}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -331,7 +337,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Word  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Word}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Word}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -344,7 +350,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Prefix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Prefix}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Prefix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -357,7 +363,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Stem  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Stem}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Stem}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -370,7 +376,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Suffix  -->
-                <DataGridTemplateColumn Width="80" Header="{helpers:Localization Pins_Suffix}">
+                <DataGridTemplateColumn Width="5*" Header="{helpers:Localization Pins_Suffix}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -383,10 +389,7 @@
                 </DataGridTemplateColumn>
 
                 <!--  Notes  -->
-                <DataGridTemplateColumn
-                    MinWidth="125"
-                    MaxWidth="1000"
-                    Header="{helpers:Localization Pins_Notes}">
+                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Pins_Notes}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -527,7 +530,7 @@
             <Border
                 MinWidth="256"
                 MinHeight="256"
-                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                BorderBrush="{StaticResource PrimaryHueMidBrush}"
                 BorderThickness="0"
                 ClipToBounds="True" />
         </materialDesign:DialogHost>
