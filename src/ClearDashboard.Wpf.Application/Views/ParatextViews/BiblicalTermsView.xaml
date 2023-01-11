@@ -534,12 +534,15 @@
                             <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <helpers:BindableTextBlock
-                                            Width="Auto"
-                                            FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
-                                            FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
-                                            InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                            TextWrapping="Wrap" />
+                                        <ScrollViewer MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                            <TextBlock
+                                                Width="Auto"
+                                                Margin="0,0,10,0"
+                                                FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
+                                                FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
+                                                Text="{Binding Path=VerseText}"
+                                                TextWrapping="Wrap" />
+                                        </ScrollViewer>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
