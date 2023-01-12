@@ -14,6 +14,8 @@ namespace ClearDashboard.Wpf.Application.Helpers
             set => SetValue(InlineListProperty, value);
         }
 
+        private static ObservableCollection<Inline> _oldValue;
+        
         public new string FontFamily = FontNames.DefaultFontFamily;
         public new float FontSize = 13;
 
@@ -30,10 +32,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             var textBlock = (BindableTextBlock)sender;
             textBlock.Inlines.Clear();
-            if (e.NewValue != null)
+            if (e.NewValue != null  && (ObservableCollection<Inline>)e.NewValue != _oldValue)
             {
                 textBlock.Inlines.AddRange((ObservableCollection<Inline>)e.NewValue);
             }
+            _oldValue = (ObservableCollection<Inline>)e.NewValue;
         }
 
 
