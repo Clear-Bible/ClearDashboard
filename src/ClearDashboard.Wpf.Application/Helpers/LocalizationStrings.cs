@@ -1,10 +1,26 @@
 ﻿using System;
 using System.Threading;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Strings;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
+
+    public class LocalizationService : ILocalizationService
+    {
+        private readonly ILogger<LocalizationService> _logger;
+
+        public LocalizationService(ILogger<LocalizationService> logger)
+        {
+            _logger = logger;
+        }
+        public string Get(string key)
+        {
+            return LocalizationStrings.Get(key, _logger);
+        }
+    }
+
     public static class LocalizationStrings
     {
         public static string Get(string key, ILogger logger)

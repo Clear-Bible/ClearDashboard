@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Wpf", "ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj", "{755B768F-DAD9-4FB9-87B1-C03CECEF3590}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Application.Abstractions", "ClearDashboard.DAL.Wpf\ClearDashboard.Application.Abstractions.csproj", "{755B768F-DAD9-4FB9-87B1-C03CECEF3590}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.DAL.Data", "ClearDashboard.DAL.Data\ClearDashboard.DAL.Data.csproj", "{50004CCE-532A-495F-87BD-47FA7BF7E77F}"
 EndProject

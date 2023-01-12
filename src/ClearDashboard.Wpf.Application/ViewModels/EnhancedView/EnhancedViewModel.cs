@@ -1,12 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
@@ -19,7 +14,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -32,13 +26,20 @@ using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public class EnhancedViewModel : DashboardConductorAllActive<EnhancedViewItemViewModel>, IPaneViewModel,
+    public interface IEnhancedViewModel
+    {
+        Dictionary<string, string> BcvDictionary { get; set; }
+        BookChapterVerseViewModel CurrentBcv { get; set; }
+        int VerseOffsetRange { get; set; }
+    }
+
+    public class EnhancedViewModel : VerseAwareConductorAllActive, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>,
         IHandle<ReloadDataMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>
+        IHandle<TokenizedCorpusUpdatedMessage>, IEnhancedViewModel
     {
         #region Commands
 
@@ -49,30 +50,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #endregion
 
         #region Member Variables
-        private readonly ILogger<EnhancedViewModel> _logger;
-        private readonly DashboardProjectManager? _projectManager;
 
         public NoteManager NoteManager { get; }
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
 
-        private string CurrentBookDisplay => string.IsNullOrEmpty(CurrentBook?.Code) ? string.Empty : $"<{CurrentBook.Code}>";
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
         #endregion //Member Variables
 
         #region Public Properties
-
-        public EnhancedViewLayout? EnhancedViewLayout
-        {
-            get => _enhancedViewLayout;
-            set => Set(ref _enhancedViewLayout, value);
-        }
-
-
-
-
-        public MainViewModel MainViewModel => (MainViewModel)Parent;
 
         private VerseDisplayViewModel _selectedVerseDisplayViewModel;
         public VerseDisplayViewModel SelectedVerseDisplayViewModel
@@ -82,116 +69,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         #region BCV
-        private bool _paratextSync = true;
-
-        public bool ParatextSync
-        {
-            get => _paratextSync;
-            set
-            {
-                if (value)
-                {
-                    // update Paratext with the verseId
-                    //_ = Task.Run(() =>
-                    //    ExecuteRequest(new SetCurrentVerseCommand(CurrentBcv.BBBCCCVVV), CancellationToken.None));
-
-                    // update this window with the Paratext verse
-                    CurrentBcv.SetVerseFromId(_projectManager!.CurrentVerse);
-                }
-
-                var set = Set(ref _paratextSync, value);
-                if (set)
-                {
-                    EnhancedViewLayout!.ParatextSync = _paratextSync;
-                }
-            }
-        }
-
-        private Dictionary<string, string> _bcvDictionary;
-        public Dictionary<string, string> BcvDictionary
-        {
-            get => _bcvDictionary;
-            set => Set(ref _bcvDictionary, value);
-        }
-
-        private BookChapterVerseViewModel _currentBcv = new();
-        public BookChapterVerseViewModel CurrentBcv
-        {
-            get => _currentBcv;
-            set
-            {
-                var set = Set(ref _currentBcv, value);
-                if (set)
-                {
-                    EnhancedViewLayout!.BBBCCCVVV = _currentBcv.BBBCCCVVV;
-                }
-            }
-        }
-
-        private int _verseOffsetRange;
-        public int VerseOffsetRange
-        {
-            get => _verseOffsetRange;
-            set
-            {
-                var set = Set(ref _verseOffsetRange, value);
-                if (set)
-                {
-                    EnhancedViewLayout!.VerseOffset = value;
-#pragma warning disable CS4014
-                    VerseChangeRerender();
-#pragma warning restore CS4014
-                }
-            }
-        }
-
-        private BookInfo? _currentBook;
-        public BookInfo? CurrentBook
-        {
-            get => _currentBook;
-            set
-            {
-                Set(ref _currentBook, value);
-                NotifyOfPropertyChange(() => CurrentBookDisplay);
-            }
-        }
-
-        private string _verseChange = string.Empty;
-        public string VerseChange
-        {
-            get => _verseChange;
-            set
-            {
-                if (_verseChange == "000000000")
-                {
-                    return;
-                }
-
-                if (_verseChange == "")
-                {
-                    _verseChange = value;
-                    NotifyOfPropertyChange(() => VerseChange);
-                }
-                else if (_verseChange != value)
-                {
-                    ProjectManager!.CurrentVerse = value;
-                    // push to Paratext
-                    if (ParatextSync && !UpdatingCurrentVerse)
-                    {
-                        Task.Run(() =>
-                            ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None)
-                        );
-                    }
-
-                    _verseChange = value;
-
-#pragma warning disable CS4014
-                    VerseChangeRerender();
-#pragma warning restore CS4014
-                    NotifyOfPropertyChange(() => VerseChange);
-                }
-            }
-        }
 
         #endregion BCV
 
@@ -227,20 +104,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _message;
             set => Set(ref _message, value);
-        }
-
-        private BindableCollection<TokensTextRow>? _verses;
-        public BindableCollection<TokensTextRow>? Verses
-        {
-            get => _verses;
-            set => Set(ref _verses, value);
-        }
-
-        private bool _enableBcvControl;
-        public bool EnableBcvControl
-        {
-            get => _enableBcvControl;
-            set => Set(ref _enableBcvControl, value);
         }
 
         #region DrawerProperties
@@ -416,8 +279,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
 #pragma warning restore CS8618
         {
-            _logger = logger;
-            _projectManager = projectManager;
+      
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
@@ -466,7 +328,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async Task LoadData(CancellationToken token)
+        public override async Task LoadData(CancellationToken token)
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
             {
@@ -499,17 +361,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         //FIXME: should go in ClearApplicationFramework
         private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
         {
-           var metadataAssemblyQualifiedName = 
-                    (enhancedViewItemMetadatum.GetType().BaseType != null ? 
-                        enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName : 
+            string? metadataAssemblyQualifiedName;
+            if (enhancedViewItemMetadatum is VerseAwareEnhancedViewItemMetadatum)
+            {
+                metadataAssemblyQualifiedName = typeof(VerseAwareEnhancedViewItemMetadatum).AssemblyQualifiedName;
+            }
+            else
+            {
+                metadataAssemblyQualifiedName =
+                    (enhancedViewItemMetadatum.GetType().BaseType != null ?
+                        enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName :
                         enhancedViewItemMetadatum.GetType().AssemblyQualifiedName)
-                            ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+                    ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+            }
 
-            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName
+            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName!
                 .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
                 .Replace("Models", "ViewModels");
-            return Type.GetType(viewModelAssemblyQualifiedName) 
-                ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
+            return Type.GetType(viewModelAssemblyQualifiedName)
+                   ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
 
         }
 
@@ -560,9 +430,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 BcvDictionary = new Dictionary<string, string>();
             }
 
-            CurrentBcv.SetVerseFromId(_projectManager!.CurrentVerse);
+            CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
-            VerseChange = _projectManager.CurrentVerse;
+            VerseChange = ProjectManager.CurrentVerse;
 
             base.OnViewAttached(view, context);
         }
@@ -571,27 +441,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region Methods
 
-        private async Task VerseChangeRerender()
-        {
-            var sw = Stopwatch.StartNew();
-
-            EnableBcvControl = false;
-
-            try
-            {
-                await ReloadData();
-            }
-            finally
-            {
-                EnableBcvControl = true;
-            }
-
-            sw.Stop();
-            _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
-        }
-
-
-        private async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
+        protected override async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
         {
             await Parallel.ForEachAsync(VerseAwareEnhancedViewItemViewModels, new ParallelOptions(), async (viewModel, cancellationToken) =>
             {
@@ -645,21 +495,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        public static ParatextProjectMetadata HebrewManuscriptMetadata => new ParatextProjectMetadata
-        {
-            Id = ManuscriptIds.HebrewManuscriptId,
-            CorpusType = CorpusType.ManuscriptHebrew,
-            Name = "Macula Hebrew",
-            AvailableBooks = BookInfo.GenerateScriptureBookList(),
-        };
-
-        public static ParatextProjectMetadata GreekManuscriptMetadata => new ParatextProjectMetadata
-        {
-            Id = ManuscriptIds.GreekManuscriptId,
-            CorpusType = CorpusType.ManuscriptGreek,
-            Name = "Macula Greek",
-            AvailableBooks = BookInfo.GenerateScriptureBookList(),
-        };
+      
 
 
         #region IHandle
@@ -682,7 +518,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        protected bool UpdatingCurrentVerse { get; set; }
+       
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
@@ -709,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public Task HandleAsync(BCVLoadedMessage message, CancellationToken cancellationToken)
         {
-            BcvDictionary = _projectManager!.CurrentParatextProject.BcvDictionary;
+            BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
 
             return Task.CompletedTask;
         }
@@ -994,7 +830,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         #region VerseControlMethods
 
         private Visibility _noteControlVisibility = Visibility.Collapsed;
-        private EnhancedViewLayout? _enhancedViewLayout;
 
         public Visibility NoteControlVisibility
         {

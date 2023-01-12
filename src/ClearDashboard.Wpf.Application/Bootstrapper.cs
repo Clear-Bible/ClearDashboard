@@ -24,6 +24,10 @@ using System.Windows;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Services;
 using DashboardApplication = System.Windows.Application;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using ClearApplicationFoundation.Extensions;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -150,6 +154,7 @@ namespace ClearDashboard.Wpf.Application
         {
             base.LoadModules(builder);
             builder.RegisterModule<ApplicationModule>();
+            builder.RegisterModule<AbstractionsModule>();
         }
 
         protected override async Task NavigateToMainWindow()
@@ -176,6 +181,15 @@ namespace ClearDashboard.Wpf.Application
             }
             base.RestoreMainWindowState();
         }
+
+        //protected override IEnumerable<Assembly> SelectAssemblies()
+        //{
+        //    var assemblies = base.SelectAssemblies().ToList();
+
+        //    assemblies.Add(Assembly.GetAssembly(typeof(FoundationBootstrapper)));
+
+        //    return assemblies.LoadModuleAssemblies();
+        //}
 
         protected override void SaveMainWindowState()
         {
