@@ -8,12 +8,13 @@ public class Translation : SynchronizableTimestampedEntity
     public string? TargetText { get; set; }
     public virtual TranslationOriginatedFrom TranslationState { get; set; }
 
-    [ForeignKey("TranslationSetId")]
+    [ForeignKey(nameof(TranslationSetId))]
     public Guid TranslationSetId { get; set; }
     public virtual TranslationSet? TranslationSet { get; set; }
 
-    [ForeignKey("SourceTokenComponentId")]
+    [ForeignKey(nameof(SourceTokenComponentId))]
     public virtual TokenComponent? SourceTokenComponent { get; set; }
 
+    public DateTimeOffset? Modified { get; set; }
     public DateTimeOffset? Deleted { get; set; }
 }

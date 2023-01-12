@@ -4,6 +4,8 @@ using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,14 +36,20 @@ namespace ClearDashboard.Wpf.Application.Services
             }));
         }
 
-        public async Task RequestCorpusAnalysis(string paratextProjectId, CancellationToken cancellationToken)
+        public async Task RequestCorpusAnalysis(
+            string paratextProjectId, 
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress = null)
         {
-            await SlowTask("RequestCorpusAnalysis", 10, cancellationToken);
+            await SlowTask("RequestCorpusAnalysis", 10, cancellationToken, progress);
         }
 
-        public async Task GetCorpusAnalysis(string paratextProjectId, CancellationToken cancellationToken)
+        public async Task GetCorpusAnalysis(
+            string paratextProjectId, 
+            CancellationToken cancellationToken, 
+            IProgress<ProgressStatus>? progress = null)
         {
-            await SlowTask("GetCorpusAnalysis", 10, cancellationToken);
+            await SlowTask("GetCorpusAnalysis", 10, cancellationToken, progress);
         }
 
         protected  async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken cancellationToken)
@@ -53,20 +61,29 @@ namespace ClearDashboard.Wpf.Application.Services
             return content.Length;
         }
 
-        protected async Task SlowTask(string name, int iterations, CancellationToken cancellationToken)
+        protected static async Task SlowTask(
+            string name,
+            int iterations,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress)
         {
+            int totalIterations = iterations;
+
             await Task.Run(() =>
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 while (true)
                 {
                     if (cancellationToken.IsCancellationRequested)
                         cancellationToken.ThrowIfCancellationRequested();
                     if (iterations-- == 0)
                         return;
-                    Logger!.LogDebug($"{name} Iteration: {iterations}");
+                    Console.WriteLine($"{name} Iteration: {iterations}");
+                    progress?.Report(new ProgressStatus(totalIterations - iterations, totalIterations));
                     Thread.Sleep(2000);
                 }
             });
+            return;
         }
     }
 }

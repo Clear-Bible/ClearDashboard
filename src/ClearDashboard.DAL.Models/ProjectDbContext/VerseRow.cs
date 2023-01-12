@@ -30,5 +30,6 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         [NotMapped]
         public IEnumerable<TokenComposite> TokenComposites => TokenComponents.Where(tc => tc.GetType() == typeof(TokenComposite)).Cast<TokenComposite>();
+        public DateTimeOffset? Modified { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SIL.Machine.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,14 @@ namespace ClearDashboard.Wpf.Application.Services
         public const string AquaGetCorpusAnalysis = "AquaGetCorpusAnalysis";
         public const string AquaAddLatestCorpusAnalysisToCurrentEnhancedView = "AquaAddLatestCorpusAnalysisToCurrentEnhancedView";
         public Task AddCorpusAnalysisToEnhancedView();
-        public Task RequestCorpusAnalysis(string paratextProjectId, CancellationToken cancellationToken);
+        public Task RequestCorpusAnalysis(
+            string paratextProjectId, 
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress);
 
-        public Task GetCorpusAnalysis(string paratextProjectId, CancellationToken cancellationToken);
+        public Task GetCorpusAnalysis(
+            string paratextProjectId, 
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress);
     }
 }
