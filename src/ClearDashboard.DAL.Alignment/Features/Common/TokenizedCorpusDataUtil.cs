@@ -146,6 +146,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
         public static async Task UpdateVerseRowAsync(Models.VerseRow verseRow, DbCommand verseRowCmd, CancellationToken cancellationToken)
         {
+            verseRowCmd.Parameters["@Id"].Value = verseRow.Id;
             verseRowCmd.Parameters["@OriginalText"].Value = verseRow.OriginalText != null ? verseRow.OriginalText : DBNull.Value;
             verseRowCmd.Parameters["@IsSentenceStart"].Value = verseRow.IsSentenceStart;
             verseRowCmd.Parameters["@IsInRange"].Value = verseRow.IsInRange;

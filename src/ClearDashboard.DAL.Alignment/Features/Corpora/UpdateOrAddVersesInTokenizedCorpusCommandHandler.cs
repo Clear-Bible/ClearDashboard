@@ -89,7 +89,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     using var transSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Translation));
                     using var alignSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Alignment));
                     using var tvaSD   = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenVerseAssociation));
-                    using var tcIdUpdate = TokenizedCorpusDataUtil.CreateTokenCompositeIdUpdateCommand(connection);
                     using var verseRowUpdate = TokenizedCorpusDataUtil.CreateVerseRowUpdateCommand(connection);
 
                     async Task del(Guid id, DbCommand cmd) => await DataUtil.SoftDeleteByIdAsync(currentDateTime, id, cmd, cancellationToken);
@@ -136,7 +135,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                         foreach (var e in tc.TokenCompositeTokenAssociations) { await del(e.Id, taSD); }
                                         foreach (var e in tc.TokenVerseAssociations) { await del(e.Id, tvaSD); }
                                         foreach (var e in tc.Translations) { await del(e.Id, transSD); }
-                                        foreach (var e in tc.SourceAlignments) { await del(e.Id, alignSD); }
+                                        foreach (var e in tc.SourceAlignments) { await del(e.Id, alignSD); } 
                                         foreach (var e in tc.TargetAlignments) { await del(e.Id, alignSD); }
 
                                         alignmentsRemoving.AddRange(tc.SourceAlignments);
