@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Properties;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -244,97 +245,117 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region DrawerProperties
 
-        private int _targetFontSizeValue = 14;
+        private int _titleFontSizeValue = Settings.Default.TitleFontSizeValue;
+        public int TitleFontSizeValue
+        {
+            get => _titleFontSizeValue;
+            set
+            {
+                _titleFontSizeValue = value;
+                Settings.Default.TitleFontSizeValue = value;
+                NotifyOfPropertyChange(() => TitleFontSizeValue);
+            }
+        }
+
+        private int _targetFontSizeValue = Settings.Default.TargetFontSizeValue;
         public int TargetFontSizeValue
         {
             get => _targetFontSizeValue;
             set
             {
                 _targetFontSizeValue = value;
+                Settings.Default.TargetFontSizeValue = value;
                 NotifyOfPropertyChange(() => TargetFontSizeValue);
             }
         }
 
 
-        private int _targetVerticalValue = 5;
+        private int _targetVerticalValue = Settings.Default.TargetVerticalValue;
         public int TargetVerticalValue
         {
             get => _targetVerticalValue;
             set
             {
                 _targetVerticalValue = value;
+                Settings.Default.TargetVerticalValue = value;
                 NotifyOfPropertyChange(() => TargetVerticalValue);
             }
         }
 
 
-        private int _targetHorizontalValue = 10;
+        private int _targetHorizontalValue = Settings.Default.TargetHorizontalValue;
         public int TargetHorizontalValue
         {
             get => _targetHorizontalValue;
             set
             {
                 _targetHorizontalValue = value;
+                Settings.Default.TargetHorizontalValue = value;
                 NotifyOfPropertyChange(() => TargetHorizontalValue);
             }
         }
 
 
-        private int _sourceFontSizeValue = 14;
+        private int _sourceFontSizeValue = Settings.Default.SourceFontSizeValue;
         public int SourceFontSizeValue
         {
             get => _sourceFontSizeValue;
             set
             {
                 _sourceFontSizeValue = value;
+                Settings.Default.SourceFontSizeValue = value;
                 NotifyOfPropertyChange(() => SourceFontSizeValue);
             }
         }
 
 
-        private int _sourceVerticalValue = 5;
+        private int _sourceVerticalValue = Settings.Default.SourceVerticalValue;
         public int SourceVerticalValue
         {
             get => _sourceVerticalValue;
             set
             {
                 _sourceVerticalValue = value;
+                Settings.Default.SourceVerticalValue = value;
                 NotifyOfPropertyChange(() => SourceVerticalValue);
             }
         }
 
 
-        private int _sourceHorizontalValue = 10;
+        private int _sourceHorizontalValue = Settings.Default.SourceHorizontalValue;
         public int SourceHorizontalValue
         {
             get => _sourceHorizontalValue;
             set
             {
                 _sourceHorizontalValue = value;
+                Settings.Default.SourceHorizontalValue = value;
                 NotifyOfPropertyChange(() => SourceHorizontalValue);
             }
         }
 
 
-        private int _translationsFontSizeValue = 16;
+        private int _translationsFontSizeValue = Settings.Default.TranslationsFontSizeValue;
         public int TranslationsFontSizeValue
         {
             get => _translationsFontSizeValue;
             set
             {
                 _translationsFontSizeValue = value;
+                Settings.Default.TranslationsFontSizeValue = value;
                 NotifyOfPropertyChange(() => TranslationsFontSizeValue);
             }
         }
 
 
-        private int _noteIndicatorsSizeValue = 4;
+        private int _noteIndicatorsSizeValue = Settings.Default.NoteIndicatorSizeValue;
         public int NoteIndicatorsSizeValue
         {
             get => _noteIndicatorsSizeValue;
             set
             {
                 _noteIndicatorsSizeValue = value;
+                Settings.Default.NoteIndicatorSizeValue = value;
                 NotifyOfPropertyChange(() => NoteIndicatorsSizeValue);
             }
         }
