@@ -4,12 +4,7 @@ public class SynchronizableTimestampedEntity : SynchronizableEntity
 {
     public SynchronizableTimestampedEntity()
     {
-        var utcNow = DateTimeOffset.UtcNow;
-
-        // Remove any fractions of a millisecond 
-        utcNow = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond));
-
-        Created = utcNow;
+        Created = TimestampedEntity.GetUtcNowRoundedToMillisecond();
     }
 
     /// <summary>
