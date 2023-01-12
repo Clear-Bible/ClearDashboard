@@ -12,7 +12,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -26,6 +26,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -459,8 +460,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
         {
-            await GetData(ReloadType.Refresh, cancellationToken);
-            await Task.CompletedTask;
+            // THIS IS HANDLED BY THE ENHANCED VIEW MODEL
+            // PRODUCES DOUBLE RESULTS OTHERWISE
+
+            //await GetData(ReloadType.Refresh, cancellationToken);
+            //await Task.CompletedTask;
         }
 
         private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
@@ -639,7 +643,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return result.Data;
             }
 
-            return "Seqoe UI";
+            return FontNames.DefaultFontFamily;
         }
 
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)

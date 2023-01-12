@@ -1007,6 +1007,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("ParallelCorpusId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -1031,6 +1034,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("CorpusHistoryId");
 
                     b.HasIndex("CorpusId");
+
+                    b.HasIndex("ParallelCorpusId");
 
                     b.HasIndex("UserId");
 
@@ -1739,6 +1744,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CorpusId");
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
+                        .WithMany()
+                        .HasForeignKey("ParallelCorpusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -1752,6 +1763,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Corpus");
+
+                    b.Navigation("ParallelCorpus");
 
                     b.Navigation("User");
 

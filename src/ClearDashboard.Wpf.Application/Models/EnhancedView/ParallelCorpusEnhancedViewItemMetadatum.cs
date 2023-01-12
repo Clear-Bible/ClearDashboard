@@ -3,7 +3,7 @@ using System;
 using System.Text.Json.Serialization;
 using ClearDashboard.DAL.Alignment.Corpora;
 
-namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 public abstract class ParallelCorpusEnhancedViewItemMetadatum : VerseAwareEnhancedViewItemMetadatum
 {

@@ -526,7 +526,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (verseId != "")
                 {
                     CboVerse.SelectedIndex = 0;
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                    CurrentBcv.SetVerseFromId(verseId);
 
                     CalculateVerses();
                     somethingChanged = true;

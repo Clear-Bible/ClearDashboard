@@ -1,13 +1,12 @@
 using Autofac;
 using Caliburn.Micro;
-using ClearBible.Engine.Tokenization;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
-using Microsoft.Xaml.Behaviors.Layout;
-using SIL.Machine.Tokenization;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -18,83 +17,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
-using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 
 namespace ClearDashboard.DataAccessLayer.Wpf;
 
-public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);
-
-public record GetApplicationWindowSettings();
-public record ApplicationWindowSettings(WindowSettings WindowSettings);
-
-//public record AddTokenizedCorpusToEnhancedViewMessage(
-//    string? ParatextProjectId, 
-//    string? ProjectName,
-//    string? TokenizationType,
-//    Guid? CorpusId, 
-//    Guid? TokenizedTextCorpusId, 
-//    CorpusType CorpusType,
-//    //FIXME:surface serializationEngineStringDetokenizer Detokenizer,
-//    bool? IsRTL, 
-//    bool? IsNewWindow);
-
-//public record AddTokenizedCorpusToEnhancedViewMessage(TokenizedCorpusEnhancedViewItemMetadatum Metadatum);
 
 
-//public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
-
-//public record AddAlignmentToEnhancedViewMessage(
-//    string? TranslationSetId, 
-//    string? AlignmentSetId, 
-//    string? DisplayName, 
-//    string? ParallelCorpusId,
-//    string? ParallelCorpusDisplayName,
-//    //FIXME:surface serialization EngineStringDetokenizer SourceDetokenizer, 
-//    bool? IsRTL,
-//    //FIXME:surface serialization EngineStringDetokenizer? TargetDetokenizer, 
-//    bool? IsTargetRTL, 
-//    bool? IsNewWindow,
-//    string? SourceParatextId,
-//    string? TargetParatextId);
-
-public record UiLanguageChangedMessage(string LanguageCode);
-
-public record VerseChangedMessage(string Verse);
-public record ProjectLoadCompleteMessage(bool Loaded);
-
-
-public record ProjectChangedMessage(ParatextProject Project);
-
-public record TextCollectionChangedMessage(List<TextCollection> TextCollections);
-
-public record ParatextConnectedMessage(bool Connected);
-
-public record UserMessage(User User);
-
-
-public record FilterPinsMessage(string Message);
-
-public record CreateProjectMessage(string Message);
-
-public record ProjectsMetadataChangedMessage(List<ParatextProjectMetadata> ProjectsMetadata);
-
-
-
-#region ProjectDesignSurfaceMessages
-public record NodeSelectedChangedMessage(object? Node);
-public record ConnectionSelectedChangedMessage(Guid ConnectorId);
-public record CorpusAddedMessage(string ParatextId);
-public record CorpusDeletedMessage(string ParatextId);
-public record CorpusSelectedMessage(string ParatextId);
-public record CorpusDeselectedMessage(string ParatextId);
-public record ParallelCorpusAddedMessage(string SourceParatextId, string TargetParatextId, Guid ConnectorGuid);
-public record ParallelCorpusDeletedMessage(string SourceParatextId, string TargetParatextId, Guid ConnectorGuid);
-public record ParallelCorpusSelectedMessage(string SourceParatextId, string TargetParatextId, Guid ConnectorGuid);
-public record ParallelCorpusDeselectedMessage(Guid ConnectorGuid);
-
-#endregion //ProjectDesignSurfaceMessages
 
 
 public class DashboardProjectManager : ProjectManager
@@ -112,7 +40,7 @@ public class DashboardProjectManager : ProjectManager
     private readonly INavigationService _navigationService;
 
     private bool _licenseCleared = false;
-    public static bool IncomingChangesStarted { get; set; }
+    private bool UpdatingCurrentVerse { get; set; }
 
     public List<ParatextProjectMetadata> ProjectMetadata = new();
 
@@ -183,6 +111,7 @@ public class DashboardProjectManager : ProjectManager
         //}
 
         //Logger.LogInformation("SignalR Connection is closed.");
+        await Task.CompletedTask;
     }
 
     private async void HandleSignalRConnectionClosed()
@@ -212,7 +141,7 @@ public class DashboardProjectManager : ProjectManager
     protected override async Task PublishParatextUser(User user)
     {
         await EventAggregator.PublishOnUIThreadAsync(new UserMessage(user));
-        this.ParatextUserName = user.ParatextUserName;
+        //this.ParatextUserName = user.ParatextUserName;
     }
 
     protected async Task HookSignalREvents()
@@ -223,12 +152,12 @@ public class DashboardProjectManager : ProjectManager
 
         {
             requestedVerses.Add(verse);
-            if (!IncomingChangesStarted)
+            if (!UpdatingCurrentVerse)
             {
-                IncomingChangesStarted = true;
+                UpdatingCurrentVerse = true;
                 CurrentVerse = verse;
                 await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
-                IncomingChangesStarted = false;
+                UpdatingCurrentVerse = false;
 
                 if (requestedVerses.Last().PadLeft(9, '0') != CurrentVerse.PadLeft(9, '0'))
                 {
@@ -288,8 +217,7 @@ public class DashboardProjectManager : ProjectManager
         return project;
     }
 
-    public static dynamic NewProjectDialogSettings => CreateNewProjectDialogSettings();
-    public static dynamic AddParatextCorpusDialogSettings => CreateAddParatextCorpusDialogSettings();
+  
     
     public void CheckLicense<TViewModel>(TViewModel viewModel)
     {
@@ -351,27 +279,6 @@ public class DashboardProjectManager : ProjectManager
     }
 
 
-    private static dynamic CreateNewProjectDialogSettings()
-    {
-        dynamic settings = new ExpandoObject();
-        settings.WindowStyle = WindowStyle.None;
-        settings.ShowInTaskbar = false;
-        settings.WindowState = WindowState.Normal;
-        settings.ResizeMode = ResizeMode.NoResize;
-        return settings;
-    }
-
-    private static dynamic CreateAddParatextCorpusDialogSettings()
-    {
-        dynamic settings = new ExpandoObject();
-        settings.WindowStyle = WindowStyle.None;
-        settings.ShowInTaskbar = false;
-        settings.WindowState = WindowState.Normal;
-        settings.ResizeMode = ResizeMode.NoResize;
-        settings.Width = 850;
-        settings.Height = 600;
-        return settings;
-    }
 
     public async Task InvokeDialog<TDialogViewModel, TNavigationViewModel>(dynamic settings, Func<TDialogViewModel, Task<bool>> callback, DialogMode dialogMode = DialogMode.Add) where TDialogViewModel : new()
     {

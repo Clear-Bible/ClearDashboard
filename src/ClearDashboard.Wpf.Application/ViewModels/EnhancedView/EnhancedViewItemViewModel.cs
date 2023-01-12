@@ -6,10 +6,10 @@ using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 // ReSharper disable InconsistentNaming
 
@@ -19,12 +19,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 {
    
-    protected Visibility _visibility = Visibility.Collapsed;
-    public Visibility Visibility
-    {
-        get => _visibility;
-        set => Set(ref _visibility, value);
-    }
+    //protected Visibility _visibility = Visibility.Collapsed;
+    //public Visibility Visibility
+    //{
+    //    get => _visibility;
+    //    set => Set(ref _visibility, value);
+    //}
 
 
     protected Brush _borderColor = Brushes.Blue;

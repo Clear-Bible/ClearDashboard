@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 

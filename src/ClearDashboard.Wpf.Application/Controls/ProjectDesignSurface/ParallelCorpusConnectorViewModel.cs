@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using ClearDashboard.Wpf.Controls.Utils;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface

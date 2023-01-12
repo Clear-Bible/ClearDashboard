@@ -12,6 +12,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -158,7 +159,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         }
 
         public AddParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager, string initialParatextProjectId,
-            INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
+            INavigationService navigationService, ILogger<AddParatextCorpusStepViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope,
             IValidator<AddParatextCorpusStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
@@ -204,7 +205,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
 
                 if (!string.IsNullOrEmpty(_initialParatextProjectId))
                 {
-                    SelectedProject = Projects.Where(p => p.Id == _initialParatextProjectId).FirstOrDefault();
+                    SelectedProject = Projects.FirstOrDefault(p => p.Id == _initialParatextProjectId);
                     if (SelectedProject != null)
                     {
                         IsEnabledSelectedProject = false;

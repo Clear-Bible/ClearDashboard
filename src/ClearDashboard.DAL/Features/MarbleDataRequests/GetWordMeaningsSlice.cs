@@ -1,23 +1,19 @@
-﻿using ClearDashboard.DAL.CQRS.Features;
-using ClearDashboard.DAL.CQRS;
+﻿using ClearDashboard.DAL.CQRS;
+using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.MarbleHelpers;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
-using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
-using Unidecode.NET;
 using System.Xml.Linq;
-using System.Collections.ObjectModel;
-using ClearDashboard.DataAccessLayer.MarbleHelpers;
-using SIL.Extensions;
 
 namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
 {
@@ -256,7 +252,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                     .FirstOrDefault(x => x.Attribute("LanguageCode").Value.Equals(_languageCode));
 
                 var definitionLong = lexSense.Element("DefinitionLong").Value;
-                var definationShort = lexSense.Element("DefinitionShort").Value;
+                var definitionShort = lexSense.Element("DefinitionShort").Value;
 
 
                 var glosses = lexSense.Elements("Glosses")
@@ -394,7 +390,7 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 {
                     Sense = String.Join("; ", glosses),
                     DescriptionLong = definitionLong,
-                    DescriptionShort = definationShort,
+                    DescriptionShort = definitionShort,
                     Glosses = glosses,
                     VerseTotal = totalSenseVerseCount.Count,
                     Verses = verseList,

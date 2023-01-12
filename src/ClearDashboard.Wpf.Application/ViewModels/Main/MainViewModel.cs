@@ -14,7 +14,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Exceptions;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -42,6 +42,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -640,7 +641,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task DrawEnhancedViewTabs(List<EnhancedViewLayout> enhancedViewLayouts)
         {
-            int index = 0;
+            var index = 0;
             foreach (var enhancedViewLayout in enhancedViewLayouts)
             {
                 EnhancedViewModel enhancedViewModel = null;
@@ -865,7 +866,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             var viewModel = IoC.Get<SlackMessageViewModel>();
             viewModel.Files = files;
-            viewModel.ParatextUser = ProjectManager.ParatextUserName;
+            viewModel.ParatextUser = ProjectManager.CurrentUser.ParatextUserName!;
 
             IWindowManager manager = new WindowManager();
             manager.ShowDialogAsync(viewModel, null, settings);
@@ -910,8 +911,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IsActive = true
             };
 
-            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-            documentPane?.Children.Add(windowDockable);
+            AddNewEnhancedViewTab(windowDockable);
         }
 
         private BindableCollection<LayoutFile> GetFileLayouts()
@@ -1209,6 +1209,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         // Documents
                         WorkspaceLayoutNames.EnhancedView => GetPaneViewModelFromItems("EnhancedViewModel"),
+                        //WorkspaceLayoutNames.EnhancedView => GetPaneViewModelFromItems<EnhancedViewModel>(),
                         // Tools
                         WorkspaceLayoutNames.BiblicalTerms => GetToolViewModelFromItems("BiblicalTermsViewModel"),
                         //case WorkspaceLayoutNames.WordMeanings:
@@ -1300,21 +1301,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <returns></returns>
         private IPaneViewModel GetPaneViewModelFromItems(string vm)
         {
-            foreach (var t in Items)
+            foreach (var item in Items)
             {
-                var type = t;
+                var type = item;
                 if (type.GetType().Name == vm)
                 {
                     switch (type)
                     {
                         case EnhancedViewModel:
-                            return (IPaneViewModel)t;
+                            return (IPaneViewModel)item;
                     }
                 }
             }
 
             return (IPaneViewModel)Items[0];
         }
+
+        //private TDockType GetPaneViewModelFromItems<TViewModel, TDockType>()
+        //     where TDockType : IPaneViewModel
+        //{
+          
+        //    foreach (var item in Items)
+        //    {
+        //        var type = item.GetType();
+        //        if (type == typeof(TViewModel))
+        //        {
+        //            switch (item)
+        //            {
+        //                case EnhancedViewModel model:
+        //                    return model;
+        //            }
+        //        }
+        //    }
+
+        //    return (TDockType)Items[0];
+        //}
 
 
         /// <summary>
@@ -1344,7 +1365,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return (ToolViewModel)Items[0];
         }
 
-        private (object vm, string title, DockSide dockSide) LoadWindow(string windowTag)
+        private (object vm, string title, DockSide dockSide) LoadWindowViewModel(string windowTag)
         {
             // window has been closed so we need to reopen it
             switch (windowTag)
@@ -1352,6 +1373,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // DOCUMENTS
                 case WorkspaceLayoutNames.EnhancedView:
                     var enhancedViewModel = GetPaneViewModelFromItems("EnhancedViewModel");
+                    //var enhancedViewModel = GetPaneViewModelFromItems<EnhancedViewModel>();
                     return (enhancedViewModel, enhancedViewModel.Title, enhancedViewModel.DockSide);
                 // TOOLS
                 case WorkspaceLayoutNames.BiblicalTerms:
@@ -1388,7 +1410,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     if (a.ContentId is not null)
                     {
-                        Debug.WriteLine(a.ContentId);
+                        //Debug.WriteLine(a.ContentId);
                         return a.ContentId.ToUpper() == windowTag.ToUpper();
                     }
                     return false;
@@ -1418,7 +1440,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         if (a.ContentId is not null)
                         {
-                            Debug.WriteLine(a.ContentId);
+                            //Debug.WriteLine(a.ContentId);
                             return a.ContentId.ToUpper() == windowTag.ToUpper();
                         }
                         return false;
@@ -1430,22 +1452,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         // Documents
                         case WorkspaceLayoutNames.EnhancedView:
+
+                            // setup the right ViewModel for the pane
+                            var tuple = LoadWindowViewModel(windowTag);
                             windowDockable = new LayoutDocument
                             {
-                                ContentId = windowTag
+                                ContentId = windowTag,
+                                Content = tuple.vm,
+                                Title = tuple.title,
+                                IsActive = true
                             };
-                            // setup the right ViewModel for the pane
-                            var obj = LoadWindow(windowTag);
-                            windowDockable.Content = obj.vm;
-                            windowDockable.Title = obj.title;
-                            windowDockable.IsActive = true;
 
-                            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-
-                            if (documentPane != null)
-                            {
-                                documentPane.Children.Add(windowDockable);
-                            }
+                            AddNewEnhancedViewTab(windowDockable);
                             break;
 
                         // Tools
@@ -1455,24 +1473,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         case WorkspaceLayoutNames.Pins:
                         case WorkspaceLayoutNames.TextCollection:
                             {
+
+                                // setup the right ViewModel for the pane
+                                tuple = LoadWindowViewModel(windowTag);
+
                                 // window has been closed so reload it
                                 windowPane = new LayoutAnchorable
                                 {
-                                    ContentId = windowTag
+                                    ContentId = windowTag,
+                                    Content = tuple.vm,
+                                    Title = tuple.title,
+                                    IsActive = true
                                 };
 
-                                // setup the right ViewModel for the pane
-                                obj = LoadWindow(windowTag);
-                                windowPane.Content = obj.vm;
-                                windowPane.Title = obj.title;
-                                windowPane.IsActive = true;
 
                                 // set where it will doc on layout
-                                if (obj.dockSide == DockSide.Bottom)
+                                if (tuple.dockSide == DockSide.Bottom)
                                 {
                                     windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Bottom);
                                 }
-                                else if (obj.dockSide == DockSide.Left)
+                                else if (tuple.dockSide == DockSide.Left)
                                 {
                                     windowPane.AddToLayout(_dockingManager, AnchorableShowStrategy.Left);
                                 }
@@ -1512,11 +1532,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <exception cref="NotImplementedException"></exception>
         public async Task HandleAsync(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
+            if (await TryUpdateExistingEnhancedView(message.Metadatum, cancellationToken)) return;
 
-            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
+            await AddTokenizedCorpusToNewEnhancedView(message, cancellationToken);
+        }
 
+        private async Task AddTokenizedCorpusToNewEnhancedView(AddTokenizedCorpusToEnhancedViewMessage message,
+            CancellationToken cancellationToken)
+        {
             await DeactivateDockedWindows();
-
 
             //TODO:  How should this be refactored?
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
@@ -1542,14 +1566,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IsActive = true
             };
 
-            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-            documentPane?.Children.Add(windowDockable);
-
-            // await viewModel.ShowCorpusTokens(message, cancellationToken);
+            AddNewEnhancedViewTab(windowDockable);
         }
 
-        private async Task<bool> TryUpdateExistingEnhancedViewTab(EnhancedViewItemMetadatum metadatum,
-            CancellationToken cancellationToken)
+        private async Task<bool> TryUpdateExistingEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
             // the user wants to add to the currently active window
             if (metadatum.IsNewWindow == false)
@@ -1558,7 +1578,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     .OfType<LayoutDocument>().ToList();
                 if (dockableWindows.Count == 1)
                 {
-                    // await EnhancedViewModels.First().ShowCorpusTokens(message, cancellationToken);
                     await EnhancedViewModels.First().AddItem(metadatum, cancellationToken);
                     return true;
                 }
@@ -1570,8 +1589,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     {
                         // ReSharper disable once PossibleNullReferenceException
                         var guid = enhancedViewModel.PaneId;
-
-
                         if (EnhancedViewModels.Any(item => item.PaneId == guid))
                         {
                             await enhancedViewModel.AddItem(metadatum, cancellationToken);
@@ -1652,7 +1669,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         public async Task HandleAsync(AddInterlinearToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
-            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
+            if (await TryUpdateExistingEnhancedView(message.Metadatum, cancellationToken)) return;
 
             await DeactivateDockedWindows();
 
@@ -1668,6 +1685,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
 
+            await viewModel.AddItem(message.Metadatum, cancellationToken);
 
             // make a new document for the windows
             var windowDockable = new LayoutDocument
@@ -1678,17 +1696,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IsActive = true
             };
 
-            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-            documentPane?.Children.Add(windowDockable);
-
-            await viewModel.AddItem(message.Metadatum, cancellationToken);
-
+            AddNewEnhancedViewTab(windowDockable);
         }
 
         public async Task HandleAsync(AddAlignmentSetToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
 
-            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
+            if (await TryUpdateExistingEnhancedView(message.Metadatum, cancellationToken)) return;
 
             await DeactivateDockedWindows();
 
@@ -1705,6 +1719,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
             viewModel.VerseChange = ProjectManager.CurrentVerse;
 
+            await viewModel.AddItem(message.Metadatum, cancellationToken);
 
             // make a new document for the windows
             var windowDockable = new LayoutDocument
@@ -1715,16 +1730,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IsActive = true
             };
 
-            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-            documentPane?.Children.Add(windowDockable);
-
-            await viewModel.AddItem(message.Metadatum, cancellationToken);
-
+            AddNewEnhancedViewTab(windowDockable);
         }
+
+
         public async Task HandleAsync(AddAquaCorpusAnalysisToEnhancedViewMessage message, CancellationToken cancellationToken)
         {
             
-            if (await TryUpdateExistingEnhancedViewTab(message.Metadatum, cancellationToken)) return;
+            if (await TryUpdateExistingEnhancedView(message.Metadatum, cancellationToken)) return;
             /*
             await DeactivateDockedWindows();
 
@@ -1753,8 +1766,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IsActive = true
             };
 
-            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-            documentPane?.Children.Add(windowDockable);
+            AddNewEnhancedViewTab(windowDockable);
             */
 
             /*  FIXME: should use AddnewEnhnacedView()?
@@ -1779,8 +1791,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IsActive = true
             };
 
-            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
-            documentPane?.Children.Add(windowDockable);
+            AddNewEnhancedViewTab(windowDockable);
             */
 
         }

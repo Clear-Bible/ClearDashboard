@@ -1,4 +1,4 @@
-﻿using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+﻿using ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 

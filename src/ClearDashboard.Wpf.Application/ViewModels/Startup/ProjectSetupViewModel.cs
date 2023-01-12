@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
