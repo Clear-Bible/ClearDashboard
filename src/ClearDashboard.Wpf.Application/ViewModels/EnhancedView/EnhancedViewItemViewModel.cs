@@ -1,17 +1,15 @@
-﻿using System.Threading.Tasks;
-using System.Threading;
-using System.Windows;
-using System.Windows.Media;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ClearDashboard.Wpf.Application.Models.EnhancedView;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Media;
 
-// ReSharper disable InconsistentNaming
+
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -19,15 +17,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 {
    
-    //protected Visibility _visibility = Visibility.Collapsed;
-    //public Visibility Visibility
-    //{
-    //    get => _visibility;
-    //    set => Set(ref _visibility, value);
-    //}
-
-
-    protected Brush _borderColor = Brushes.Blue;
+    private Brush _borderColor = Brushes.Blue;
     public Brush BorderColor
     {
         get => _borderColor;
