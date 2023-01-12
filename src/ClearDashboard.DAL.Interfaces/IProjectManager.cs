@@ -8,4 +8,6 @@ public interface IProjectManager
     Task<Project> DeleteProject(string projectName);
     Task<Project> CreateProject(string projectName);
     Task<Project> UpdateProject(Project project);
+
+    string CurrentVerse { get; set; }
 }

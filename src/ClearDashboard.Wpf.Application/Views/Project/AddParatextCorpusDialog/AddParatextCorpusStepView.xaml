@@ -137,10 +137,11 @@
                     Height="Auto"
                     Margin="15"
                     VerticalAlignment="Top"
+                    FontSize="16"
                     IsEnabled="{Binding IsEnabledSelectedProject}"
                     ItemsSource="{Binding Projects}"
                     SelectedItem="{Binding SelectedProject}"
-                    Style="{StaticResource MaterialDesignComboBox}"
+                    Style="{StaticResource MaterialDesignFilledComboBox}"
                     TextSearch.TextPath="LongName">
                     <controls1:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
@@ -292,7 +293,8 @@
                     Margin="15"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type project:Tokenizers}}}"
-                    SelectedItem="{Binding SelectedTokenizer}">
+                    SelectedItem="{Binding SelectedTokenizer}"
+                    Style="{StaticResource MaterialDesignFilledComboBox}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">

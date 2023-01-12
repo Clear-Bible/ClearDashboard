@@ -20,7 +20,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public bool IsRangeStart { get; set; }
         public bool IsEmpty { get; set; }
 
-        [ForeignKey("TokenizedCorpusId")]
+        [ForeignKey(nameof(TokenizedCorpusId))]
         public Guid TokenizedCorpusId { get; set; }
         public virtual TokenizedCorpus? TokenizedCorpus { get; set; }
         public virtual ICollection<TokenComponent> TokenComponents { get; set; }

@@ -1,17 +1,12 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,11 +52,11 @@ namespace ClearDashboard.Wpf.Application.Services
             await SlowTask("GetCorpusAnalysis", 10, cancellationToken, progress);
         }
 
-        protected static async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken cancellationToken)
+        protected  async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken cancellationToken)
         {
-            HttpResponseMessage response = await client.GetAsync(url, cancellationToken);
-            byte[] content = await response.Content.ReadAsByteArrayAsync(cancellationToken);
-            Console.WriteLine($"{url,-60} {content.Length,10:#,#}");
+            var response = await client.GetAsync(url, cancellationToken);
+            var content = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+            Logger!.LogDebug($"{url,-60} {content.Length,10:#,#}");
 
             return content.Length;
         }

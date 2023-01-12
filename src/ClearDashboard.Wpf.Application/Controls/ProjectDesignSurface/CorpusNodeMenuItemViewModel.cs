@@ -20,6 +20,7 @@
 
         protected override void Execute()
         {
+           
             ProjectDesignSurfaceViewModel?.ExecuteCorpusNodeMenuCommand(this);
         }
 

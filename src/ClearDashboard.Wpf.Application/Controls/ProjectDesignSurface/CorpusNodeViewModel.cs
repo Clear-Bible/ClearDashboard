@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using Size = System.Windows.Size;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface

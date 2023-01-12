@@ -153,17 +153,7 @@ namespace ClearDashboard.Wpf.Application
         }
     }
 
-    internal class ProjectDesignSurfaceModule : Module
-    {
-        protected override void Load(ContainerBuilder builder)
-        {
-            //builder.RegisterType<CorpusNodeViewModel>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<ProjectDesignSurfaceDataProvider>()
-                .As<IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>>()
-                .InstancePerLifetimeScope();
-            base.Load(builder);
-        }
-    }
+    
 
     internal class ApplicationModule : Module
     {

@@ -70,7 +70,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             try
             {
                 var result = await WindowManager!.ShowDialogAsync(dialogViewModel, null,
-                    DashboardProjectManager.AddParatextCorpusDialogSettings);
+                    DialogSettings.AddParatextCorpusDialogSettings);
 
                 if (result)
                 {

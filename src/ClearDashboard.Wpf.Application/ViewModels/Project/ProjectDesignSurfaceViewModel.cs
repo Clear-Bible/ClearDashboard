@@ -36,6 +36,8 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
@@ -676,7 +678,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             try
             {
                 var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
-                    DashboardProjectManager.AddParatextCorpusDialogSettings);
+                    DialogSettings.AddParatextCorpusDialogSettings);
 
                 if (result)
                 {
@@ -826,7 +828,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             try
             {
                 var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
-                    DashboardProjectManager.AddParatextCorpusDialogSettings);
+                    DialogSettings.AddParatextCorpusDialogSettings);
 
                 if (result)
                 {
@@ -1156,7 +1158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             };
 
             var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
-            var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+            var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.NewProjectDialogSettings);
 
             if (result)
             {
@@ -1209,7 +1211,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             try
             {
-                var success = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DashboardProjectManager.NewProjectDialogSettings);
+                var success = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.NewProjectDialogSettings);
 
                 PlaySound.PlaySoundFromResource();
 

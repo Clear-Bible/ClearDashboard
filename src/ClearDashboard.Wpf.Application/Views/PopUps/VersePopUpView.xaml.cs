@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ClearDashboard.Wpf.Application.Views.ParatextViews
+namespace ClearDashboard.Wpf.Application.Views.PopUps
 {
     /// <summary>
     /// Interaction logic for VersePopUpView.xaml
