@@ -882,7 +882,18 @@
                 Content="{helpers:Localization Ok}"
                 FontSize="12"
                 IsEnabled="{Binding ContinueEnabled}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}" 
+                Visibility="{Binding OkVisibility}"/>
+            <Button
+                Width="90"
+                Margin="0,0,15,15"
+                HorizontalAlignment="Right"
+                Command="{Binding NextCommand}"
+                Content="{helpers:Localization Next}"
+                FontSize="12"
+                IsEnabled="{Binding ContinueEnabled}"
+                Style="{StaticResource TransparentStyle}"
+                Visibility="{Binding NextVisibility}"/>
         </StackPanel>
     </Grid>
 </UserControl>

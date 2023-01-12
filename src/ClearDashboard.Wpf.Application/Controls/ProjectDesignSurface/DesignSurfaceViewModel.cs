@@ -30,6 +30,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
@@ -65,6 +66,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected IMediator Mediator { get; }
         
         private readonly IWindowManager windowManager_;
+        private readonly ILifetimeScope lifetimeScope_;
+        private readonly LongRunningTaskManager longRunningTaskManager_;
         private readonly IAquaManager aquaManager_;
 
         ///
@@ -243,9 +246,14 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         #region ctor
 
-        public DesignSurfaceViewModel(ILogger<DesignSurfaceViewModel>? logger,
-             IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator,
-          IWindowManager windowManager,
+        public DesignSurfaceViewModel(
+            ILogger<DesignSurfaceViewModel>? logger,
+            IEventAggregator? eventEventAggregator, 
+            ILifetimeScope lifecycleScope, 
+            IMediator mediator,
+            IWindowManager windowManager,
+            ILifetimeScope lifetimeScope,
+            LongRunningTaskManager longRunningTaskManager,
             IAquaManager aquaManager)
         {
             Logger = logger;
@@ -253,6 +261,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             LifecycleScope = lifecycleScope;
             Mediator = mediator;
             windowManager_ = windowManager;
+            lifetimeScope_ = lifetimeScope;
+            longRunningTaskManager_ = longRunningTaskManager;
             aquaManager_ = aquaManager;
         }
         #endregion
@@ -737,7 +747,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 /*
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
 
-                nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel(aquaManager_, Logger!, windowManager_, nodeMenuItems) //FIXME: should come from DI?
+                nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel(aquaManager_, Logger!, windowManager_, nodeMenuItems, lifetimeScope_, longRunningTaskManager_) //FIXME: should come from DI?
                 {
                     CorpusNodeViewModel = corpusNode,
                 });

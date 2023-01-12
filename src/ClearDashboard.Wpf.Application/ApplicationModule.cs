@@ -19,6 +19,7 @@ using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
 using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
 using ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Project.Aqua;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -48,8 +49,6 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
             builder.RegisterType<TranslationManager>().AsSelf();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
-
-            builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
         }
 
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
@@ -129,6 +128,29 @@ namespace ClearDashboard.Wpf.Application
                 .Keyed<IWorkflowStepViewModel>("ParallelCorpusDialog")
                 .WithMetadata("Order", 4);
         }
+
+        public static void RegisterAquaDependencies(this ContainerBuilder builder)
+        {
+            //manager
+
+            builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
+
+            //pds dialogs
+
+            //RequestCorpusAnalysisDialog
+
+            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+                .WithMetadata("Order", 1);
+
+            builder.RegisterType<AquaMakeRequestStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+                .WithMetadata("Order", 2);
+
+            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+                .WithMetadata("Order", 3);
+        }
     }
 
     
@@ -147,9 +169,12 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterLocalizationDependencies();
             builder.RegisterStartupDialogDependencies();
             builder.RegisterParallelCorpusDialogDependencies();
-            builder.RegisterParatextDialogDependencies();  
+            builder.RegisterParatextDialogDependencies();
 
             //builder.RegisterSmtModelDialogDependencies();
+
+
+            builder.RegisterAquaDependencies();
         }
     }
 }
