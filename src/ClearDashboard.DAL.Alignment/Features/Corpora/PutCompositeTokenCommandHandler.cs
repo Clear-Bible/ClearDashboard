@@ -159,8 +159,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 );
             }
 
-            var utcNow = DateTimeOffset.UtcNow;
-            var deletedDateTime = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond)); // Remove any fractions of a millisecond
+            var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
             var tokensAddedToComposite = new List<Models.Token>();
             var alignmentsRemoving = new List<Models.Alignment>();
@@ -185,9 +184,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                      existingTokenComposite.Tokens.Remove(toRemove);
                 }
 
-                foreach (var e in existingTokenComposite.Translations) { e.Deleted = deletedDateTime; }
-                foreach (var e in existingTokenComposite.SourceAlignments) { e.Deleted = deletedDateTime; }
-                foreach (var e in existingTokenComposite.TargetAlignments) { e.Deleted = deletedDateTime; }
+                foreach (var e in existingTokenComposite.Translations) { e.Deleted = currentDateTime; }
+                foreach (var e in existingTokenComposite.SourceAlignments) { e.Deleted = currentDateTime; }
+                foreach (var e in existingTokenComposite.TargetAlignments) { e.Deleted = currentDateTime; }
 
                 alignmentsRemoving.AddRange(existingTokenComposite.SourceAlignments);
                 alignmentsRemoving.AddRange(existingTokenComposite.TargetAlignments);
@@ -229,9 +228,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             // associated, soft delete them:
             tokensAddedToComposite.ForEach(tc =>
             {
-                foreach (var e in tc.Translations) { e.Deleted = deletedDateTime; }
-                foreach (var e in tc.SourceAlignments) { e.Deleted = deletedDateTime; }
-                foreach (var e in tc.TargetAlignments) { e.Deleted = deletedDateTime; }
+                foreach (var e in tc.Translations) { e.Deleted = currentDateTime; }
+                foreach (var e in tc.SourceAlignments) { e.Deleted = currentDateTime; }
+                foreach (var e in tc.TargetAlignments) { e.Deleted = currentDateTime; }
 
                 alignmentsRemoving.AddRange(tc.SourceAlignments);
                 alignmentsRemoving.AddRange(tc.TargetAlignments);

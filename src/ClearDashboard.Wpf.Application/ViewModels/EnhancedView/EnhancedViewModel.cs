@@ -520,13 +520,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         //FIXME: should go in ClearApplicationFramework
         private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
         {
-           var metadataAssemblyQualifiedName = 
-                    (enhancedViewItemMetadatum.GetType().BaseType != null ? 
-                        enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName : 
-                        enhancedViewItemMetadatum.GetType().AssemblyQualifiedName)
-                            ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+            string? metadataAssemblyQualifiedName;
+            if (enhancedViewItemMetadatum is VerseAwareEnhancedViewItemMetadatum)
+            {
+                metadataAssemblyQualifiedName = typeof(VerseAwareEnhancedViewItemMetadatum).AssemblyQualifiedName;
+            }
+            else
+            {
+                metadataAssemblyQualifiedName =
+                        (enhancedViewItemMetadatum.GetType().BaseType != null ?
+                            enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName :
+                            enhancedViewItemMetadatum.GetType().AssemblyQualifiedName)
+                                ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+            }
 
-            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName
+            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName!
                 .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
                 .Replace("Models", "ViewModels");
             return Type.GetType(viewModelAssemblyQualifiedName) 
