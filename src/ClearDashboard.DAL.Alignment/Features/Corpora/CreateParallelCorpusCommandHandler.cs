@@ -143,7 +143,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 VerseNumber = v.VerseNum,
                                 BookNumber = bookNumber,
                                 ChapterNumber = v.ChapterNum,
-                                CorpusId = parallelCorpusModel.SourceTokenizedCorpus!.CorpusId
+                                CorpusId = parallelCorpusModel.SourceTokenizedCorpus!.CorpusId,
+                                ParallelCorpus = parallelCorpusModel
                             };
                             if (v.TokenIds.Any())
                             {
@@ -170,7 +171,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 VerseNumber = v.VerseNum,
                                 BookNumber = bookNumber,
                                 ChapterNumber = v.ChapterNum,
-                                CorpusId = parallelCorpusModel.TargetTokenizedCorpus!.CorpusId
+                                CorpusId = parallelCorpusModel.TargetTokenizedCorpus!.CorpusId,
+                                ParallelCorpus = parallelCorpusModel
                             };
                             if (v.TokenIds.Any())
                             {
