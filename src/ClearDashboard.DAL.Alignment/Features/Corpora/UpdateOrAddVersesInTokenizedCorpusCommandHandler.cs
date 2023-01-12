@@ -82,8 +82,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     //    .GroupBy(e => e.GetType().FindEntityIdGenericType()?.Name ?? $"__{e.GetType().Name}")
                     //    .ToDictionary(g => g.Key, g => g.Select(g => g.Id));
 
-                    var utcNow = DateTimeOffset.UtcNow;
-                    var deletedDateTime = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond)); // Remove any fractions of a millisecond
+                    var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
 
                     using var tokenSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenComponent));
                     using var taSD    = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenCompositeTokenAssociation));
@@ -91,8 +90,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     using var alignSD = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.Alignment));
                     using var tvaSD   = DataUtil.CreateSoftDeleteByIdUpdateCommand(connection, typeof(Models.TokenVerseAssociation));
                     using var tcIdUpdate = TokenizedCorpusDataUtil.CreateTokenCompositeIdUpdateCommand(connection);
+                    using var verseRowUpdate = TokenizedCorpusDataUtil.CreateVerseRowUpdateCommand(connection);
 
-                    async Task del(Guid id, DbCommand cmd) => await DataUtil.SoftDeleteByIdAsync(deletedDateTime, id, cmd, cancellationToken);
+                    async Task del(Guid id, DbCommand cmd) => await DataUtil.SoftDeleteByIdAsync(currentDateTime, id, cmd, cancellationToken);
 
                     foreach (var bookId in bookIdsToUpdate)
                     {
@@ -113,7 +113,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             var verseRowDb = bookVerseRowsDb.Where(vr => vr.BookChapterVerse == verseRow.BookChapterVerse).FirstOrDefault();
                             if (verseRowDb is not null)
                             {
-                                if (verseRowDb.OriginalText == verseRow.OriginalText)
+                                if (verseRowDb.OriginalText != verseRow.OriginalText)
                                 {
                                     // delete(soft delete so notes references work ?) all Tokens and associated Alignments:
                                     var tokensToSoftDelete = ProjectDbContext.Tokens
@@ -165,8 +165,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                             alignmentsRemoving.AddRange(tc.TargetAlignments);
                                         });
 
-                                    // add the new Tokens
-                                    await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
+                                    // update the verse row and add the new Tokens:
+                                    verseRow.Id = verseRowDb.Id;
+                                    verseRow.Modified = currentDateTime;
+                                    foreach (var tc in verseRow.TokenComponents)
+                                    {
+                                        tc.VerseRowId = verseRowDb.Id;
+                                    }
+
+                                    await TokenizedCorpusDataUtil.UpdateVerseRowAsync(verseRow, verseRowUpdate, cancellationToken);
                                     await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                                 }
                             }

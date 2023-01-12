@@ -61,6 +61,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
         private void PutPropagate(Models.TranslationSet translationSet, Alignment.Translation.Translation requestTranslation, CancellationToken cancellationToken)
         {
+            var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+
             var rTokenId = requestTranslation.SourceToken.TokenId;
 
             var translations = ProjectDbContext!.Translations
@@ -88,6 +90,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                     tr.TranslationState = exactMatch
                         ? Models.TranslationOriginatedFrom.Assigned
                         : Models.TranslationOriginatedFrom.FromOther;
+                    tr.Modified = currentDateTime;
                 }
 
                 tokenGuidsUpdated.Add(tr.SourceTokenComponent!.Id);
@@ -135,6 +138,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             {
                 translation.TargetText = requestTranslation.TargetTranslationText;
                 translation.TranslationState = Models.TranslationOriginatedFrom.Assigned;
+                translation.Modified = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
             }
             else
             {

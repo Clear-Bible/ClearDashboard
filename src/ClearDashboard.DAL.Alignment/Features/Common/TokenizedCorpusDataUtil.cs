@@ -131,6 +131,30 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
 
             return (verseRows, tokenCount);
         }
+        public static DbCommand CreateVerseRowUpdateCommand(DbConnection connection)
+        {
+            var command = connection.CreateCommand();
+            var columns = new string[] { "OriginalText", "IsSentenceStart", "IsInRange", "IsRangeStart", "IsEmpty", "Modified" };
+            var whereColumns = new string[] { "Id" };
+
+            DataUtil.ApplyColumnsToUpdateCommand(command, typeof(Models.VerseRow), columns, whereColumns);
+
+            command.Prepare();
+
+            return command;
+        }
+
+        public static async Task UpdateVerseRowAsync(Models.VerseRow verseRow, DbCommand verseRowCmd, CancellationToken cancellationToken)
+        {
+            verseRowCmd.Parameters["@OriginalText"].Value = verseRow.OriginalText != null ? verseRow.OriginalText : DBNull.Value;
+            verseRowCmd.Parameters["@IsSentenceStart"].Value = verseRow.IsSentenceStart;
+            verseRowCmd.Parameters["@IsInRange"].Value = verseRow.IsInRange;
+            verseRowCmd.Parameters["@IsRangeStart"].Value = verseRow.IsRangeStart;
+            verseRowCmd.Parameters["@IsEmpty"].Value = verseRow.IsEmpty;
+            verseRowCmd.Parameters["@Modified"].Value = verseRow.Modified;
+
+            _ = await verseRowCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+        }
 
         public static DbCommand CreateVerseRowInsertCommand(DbConnection connection)
         {

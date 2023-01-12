@@ -4,10 +4,7 @@ public class TimestampedEntity : IdentifiableEntity
 {
     public TimestampedEntity()
     {
-        var utcNow = DateTimeOffset.UtcNow;
-
-        // Remove any fractions of a millisecond 
-        utcNow = utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond));
+        var utcNow = GetUtcNowRoundedToMillisecond();
 
         Created = utcNow;
         Modified = utcNow;
@@ -21,5 +18,11 @@ public class TimestampedEntity : IdentifiableEntity
     /// <summary>
     /// Gets or sets the time and date that the entity was last modified (in UTC).
     /// </summary>
-    public DateTimeOffset Modified { get; set; } 
+    public DateTimeOffset Modified { get; set; }
+
+    public static DateTimeOffset GetUtcNowRoundedToMillisecond()
+    {
+        var utcNow = DateTimeOffset.UtcNow;
+        return utcNow.AddTicks(-(utcNow.Ticks % TimeSpan.TicksPerMillisecond)); // Remove any fractions of a millisecond
+    }
 }
