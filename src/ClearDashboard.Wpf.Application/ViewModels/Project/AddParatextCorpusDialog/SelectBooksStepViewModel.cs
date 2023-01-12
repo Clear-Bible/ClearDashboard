@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -27,6 +28,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public RelayCommand NoneCommand { get; }
         public RelayCommand AllCommand { get; }
         public RelayCommand OkCommand { get; }
+        public RelayCommand NextCommand { get; }
         public RelayCommand BackCommand { get; }
 
         #endregion //Member Variables
@@ -70,6 +72,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             get => _dialogMode;
             set => Set(ref _dialogMode, value);
         }
+        public Visibility NextVisibility { get; } = Visibility.Collapsed;
+        public Visibility OkVisibility { get; } = Visibility.Visible;
 
         private bool _canOk;
         public bool CanOk
@@ -106,13 +110,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             // no-op
         }
 
-        public SelectBooksStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
+        public SelectBooksStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager, bool selectBooksStepNextVisible,
             INavigationService navigationService, ILogger<SelectBooksStepViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<SelectBooksStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
         {
             _projectManager = projectManager;
-
+            if (selectBooksStepNextVisible)
+            {
+                NextVisibility = Visibility.Visible;
+                OkVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                NextVisibility = Visibility.Collapsed;
+                OkVisibility = Visibility.Visible;
+            }
             DialogMode = dialogMode;
             CanMoveForwards = true;
             CanMoveBackwards = true;
@@ -129,6 +142,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             NoneCommand = new RelayCommand(UnselectAll);
             AllCommand = new RelayCommand(SelectAll);
             OkCommand = new RelayCommand(Ok);
+            NextCommand = new RelayCommand(Next);
             BackCommand = new RelayCommand(BackAsync);
 
             // initialize the Bible books 
@@ -198,6 +212,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             ParentViewModel?.Ok();
         }
 
+        public async void Next(object obj)
+        {
+            foreach (var book in SelectedBooks)
+            {
+                if (book.IsEnabled && book.IsSelected)
+                {
+                    ParentViewModel.BookIds.Add(book.Abbreviation);
+                }
+            }
+            await MoveForwards();
+        }
         public void BackAsync(object obj)
         {
             MoveBackwards();

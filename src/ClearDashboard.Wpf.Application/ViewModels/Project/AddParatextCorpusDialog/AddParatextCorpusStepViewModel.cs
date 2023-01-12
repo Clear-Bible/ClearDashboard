@@ -158,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         }
 
         public AddParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager, string initialParatextProjectId,
-            INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
+            INavigationService navigationService, ILogger<AddParatextCorpusStepViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope,
             IValidator<AddParatextCorpusStepViewModel> validator)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
