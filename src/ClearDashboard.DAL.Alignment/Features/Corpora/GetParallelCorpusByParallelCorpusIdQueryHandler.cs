@@ -53,14 +53,24 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var parallelCorpus =
                 ModelHelper.AddIdIncludesParallelCorpaQuery(ProjectDbContext)
                     .Include(pc => pc.VerseMappings)
-                        .ThenInclude(vm => vm.Verses)
-                            .ThenInclude(v => v.TokenVerseAssociations.Where(tva => tva.Deleted == null))
-                                .ThenInclude(tva => tva.TokenComponent)
                     .Include(pc => pc.TokenComposites.Where(tc => tc.Deleted == null))
                         .ThenInclude(tc => tc.Tokens)
                             .ThenInclude(t => t.VerseRow)
                     .FirstOrDefault(pc => pc.Id == request.ParallelCorpusId.Id);
 
+            var versesByVerseMappingId = ProjectDbContext.Verses
+                .Include(v => v.TokenVerseAssociations.Where(tva => tva.Deleted == null))
+                    .ThenInclude(tva => tva.TokenComponent)
+                .Where(v => v.ParallelCorpusId == request.ParallelCorpusId.Id)
+                .ToList()
+                .GroupBy(v => v.VerseMappingId)
+                .ToDictionary(g => g.Key, g => g
+                    .Select(v => v)
+                    .OrderBy(v => v.BookNumber)
+                    .OrderBy(v => v.ChapterNumber)
+                    .OrderBy(v => v.VerseNumber)
+                    .AsEnumerable()
+                );
 #if DEBUG
             sw.Stop();
 #endif
@@ -101,7 +111,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var bookNumbersToAbbreviations =
                 FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum), x => x.silCannonBookAbbrev);
 
-            var verseMappings = BuildVerseMappings(parallelCorpus!, bookNumbersToAbbreviations, cancellationToken);
+            var verseMappings = BuildVerseMappings(parallelCorpus!, versesByVerseMappingId, bookNumbersToAbbreviations, cancellationToken);
 
 #if DEBUG
             proc.Refresh();
@@ -123,13 +133,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 ));
         }
 
-        private static IEnumerable<VerseMapping> BuildVerseMappings(Models.ParallelCorpus parallelCorpus, Dictionary<int, string> bookNumbersToAbbreviations, CancellationToken cancellationToken)
+        private static IEnumerable<VerseMapping> BuildVerseMappings(Models.ParallelCorpus parallelCorpus, Dictionary<Guid, IEnumerable<Models.Verse>> versesByVerseMappingId, Dictionary<int, string> bookNumbersToAbbreviations, CancellationToken cancellationToken)
         {
             var sourceCorpusId = parallelCorpus!.SourceTokenizedCorpus!.CorpusId;
             var targetCorpusId = parallelCorpus!.TargetTokenizedCorpus!.CorpusId;
 
             var verseMappings = parallelCorpus.VerseMappings
-                .Where(vm => vm.Verses != null)
+                .Where(vm => versesByVerseMappingId.ContainsKey(vm.Id) && versesByVerseMappingId[vm.Id].Any())
                 .Select(vm =>
                 {
                     var sourceVerseMappingTokenComposites = new List<Models.TokenComposite>();
@@ -138,7 +148,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     var sourceVerseMappingBCVs = new List<string>();
                     var targetVerseMappingBCVs = new List<string>();
 
-                    var sourceVerses = vm.Verses
+                    var sourceVerses = versesByVerseMappingId[vm.Id]
                         .Where(v => v.CorpusId == sourceCorpusId)
                         .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
                         .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))
@@ -171,7 +181,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 sourceTokenIds);
                         }).OrderBy(v => v.BookNum).ThenBy(v => v.ChapterNum).ThenBy(v => v.VerseNum).ToList();
 
-                    var targetVerses = vm.Verses
+                    var targetVerses = versesByVerseMappingId[vm.Id]
                         .Where(v => v.CorpusId == targetCorpusId)
                         .Where(v => v.BookNumber != null && v.ChapterNumber != null && v.VerseNumber != null)
                         .Where(v => bookNumbersToAbbreviations.ContainsKey((int)v.BookNumber!))
