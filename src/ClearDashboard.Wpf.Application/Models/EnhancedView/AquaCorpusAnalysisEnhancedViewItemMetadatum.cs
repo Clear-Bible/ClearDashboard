@@ -1,10 +1,6 @@
-﻿using System;
-using System.Text.Json.Serialization;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DataAccessLayer.Models;
-using Dahomey.Json.Attributes;
+﻿using Dahomey.Json.Attributes;
 
-namespace ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 [JsonDiscriminator(nameof(AquaCorpusAnalysisEnhancedViewItemMetadatum))]
 public class AquaCorpusAnalysisEnhancedViewItemMetadatum : EnhancedViewItemMetadatum

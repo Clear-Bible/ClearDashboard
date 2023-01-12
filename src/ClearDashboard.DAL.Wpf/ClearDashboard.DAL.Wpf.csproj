@@ -21,4 +21,9 @@
     <ProjectReference Include="..\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

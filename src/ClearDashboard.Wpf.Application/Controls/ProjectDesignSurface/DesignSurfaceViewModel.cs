@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DataAccessLayer;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
@@ -63,8 +64,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected IEventAggregator? EventAggregator { get; }
         protected IMediator Mediator { get; }
         
-        // ReSharper disable once NotAccessedField.Local
-        private readonly IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? _designSurfaceDataProvider;
         private readonly IWindowManager windowManager_;
         private readonly IAquaManager aquaManager_;
 
@@ -246,17 +245,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public DesignSurfaceViewModel(ILogger<DesignSurfaceViewModel>? logger,
              IEventAggregator? eventEventAggregator, ILifetimeScope lifecycleScope, IMediator mediator,
-            IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>? designSurfaceDataProvider,
-            IWindowManager windowManager,
+          IWindowManager windowManager,
             IAquaManager aquaManager)
         {
-            //_navigationService = navigationService;
-            //_projectManager = projectManager;
             Logger = logger;
             EventAggregator = eventEventAggregator;
             LifecycleScope = lifecycleScope;
             Mediator = mediator;
-            _designSurfaceDataProvider = designSurfaceDataProvider;
             windowManager_ = windowManager;
             aquaManager_ = aquaManager;
         }
@@ -464,6 +459,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel
             });
         }
+
         private void AddInterlinearMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection,
             TopLevelProjectIds topLevelProjectIds, ProjectDesignSurfaceViewModel projectDesignSurfaceViewModel,
             BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
