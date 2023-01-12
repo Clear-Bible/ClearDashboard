@@ -209,8 +209,14 @@ namespace ClearDashboard.DAL.ViewModels
             {
                 return false;
             }
+
+            if (verseId == BBBCCCVVV)
+            {
+                return false;
+            }
+
             // Convert the number into a string we can parse.
-            var verseLocationId = verseId.ToString().PadLeft(9, '0');
+            var verseLocationId = verseId.PadLeft(9, '0');
             var bookNumStr = verseLocationId.Substring(0, 3);
             // Test each parse, and only return a TRUE if they all are parsed.
             if (int.TryParse(bookNumStr, out var bookNum))
