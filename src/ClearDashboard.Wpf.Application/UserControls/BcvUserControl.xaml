@@ -181,7 +181,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="11"
             Margin="-1,-1,-1,0"
-            Background="{DynamicResource MahApps.Brushes.Badged.Background.Disabled}"
+            Background="{StaticResource MahApps.Brushes.Badged.Background.Disabled}"
             CornerRadius="4" />
 
 
@@ -280,6 +280,7 @@
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="BookUpArrow_Click"
             IsEnabled="False"
+            Style="{StaticResource SmallTransparentStyle}"
             ToolTip="Previous Book">
             <TextBlock
                 Name="PreviousBookArrow"
@@ -302,6 +303,7 @@
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="BookDownArrow_Click"
             IsEnabled="False"
+            Style="{StaticResource SmallTransparentStyle}"
             ToolTip="Next Book">
 
             <TextBlock
@@ -326,6 +328,7 @@
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="ChapterUpArrow_Click"
             IsEnabled="False"
+            Style="{StaticResource SmallTransparentStyle}"
             ToolTip="Previous Chapter">
             <TextBlock
                 Name="PreviousChapterArrow"
@@ -348,6 +351,7 @@
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="ChapterDownArrow_Click"
             IsEnabled="False"
+            Style="{StaticResource SmallTransparentStyle}"
             ToolTip="Next Chapter">
 
             <TextBlock
@@ -373,6 +377,7 @@
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="VerseUpArrow_Click"
             IsEnabled="False"
+            Style="{StaticResource SmallTransparentStyle}"
             ToolTip="Previous Verse">
 
             <TextBlock
@@ -396,6 +401,7 @@
             materialDesign:RippleAssist.Feedback="#DD000000"
             Click="VerseDownArrow_Click"
             IsEnabled="False"
+            Style="{StaticResource SmallTransparentStyle}"
             ToolTip="Next Verse">
 
             <TextBlock

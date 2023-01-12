@@ -9,7 +9,7 @@ using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -176,7 +176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     ProjectManager!.CurrentVerse = value;
                     // push to Paratext
-                    if (ParatextSync && !DashboardProjectManager.IncomingChangesStarted)
+                    if (ParatextSync && !UpdatingCurrentVerse)
                     {
                         Task.Run(() =>
                             ExecuteRequest(new SetCurrentVerseCommand(value), CancellationToken.None)
@@ -234,6 +234,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             get => _verses;
             set => Set(ref _verses, value);
+        }
+
+        private bool _enableBcvControl;
+        public bool EnableBcvControl
+        {
+            get => _enableBcvControl;
+            set => Set(ref _enableBcvControl, value);
         }
 
         #region DrawerProperties
@@ -383,6 +390,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
         }
+
+   
         public async Task RequestClose(object obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
@@ -429,6 +438,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout)
         {
+
+            EnableBcvControl = true;
             EnhancedViewLayout = enhancedViewLayout;
 
             Title = enhancedViewLayout.Title;
@@ -443,8 +454,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task AddItem(EnhancedViewItemMetadatum item, CancellationToken cancellationToken)
         {
+            EnableBcvControl = false;
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
-            await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+            try
+            {
+                await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+            }
+            finally
+            {
+                EnableBcvControl = true;
+            }
         }
 
         public async Task LoadData(CancellationToken token)
@@ -470,20 +489,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var enhancedViewItemViewModel =
-                    await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                var enhancedViewItemViewModel = await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                EnableBcvControl = false;
                 await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+               
             });
         }
 
         //FIXME: should go in ClearApplicationFramework
         private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
         {
-            var metadataAssemblyQualifiedName = enhancedViewItemMetadatum.GetEnhancedViewItemMetadatumType().AssemblyQualifiedName 
-                ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+           var metadataAssemblyQualifiedName = 
+                    (enhancedViewItemMetadatum.GetType().BaseType != null ? 
+                        enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName : 
+                        enhancedViewItemMetadatum.GetType().AssemblyQualifiedName)
+                            ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
+
             var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName
                 .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
-                .Replace("Models.ProjectSerialization", "ViewModels.EnhancedView");
+                .Replace("Models", "ViewModels");
             return Type.GetType(viewModelAssemblyQualifiedName) 
                 ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
 
@@ -491,7 +515,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         //FIXME: should go in ClearApplicationFramework
         /// <summary>
-        /// Expects Metadatum to be in a 'Models.ProjectSerialization' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
+        /// Expects Metadatum to be in a 'Models.EnhancedView' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
         /// EnhancedViewItemMetadatum suffix with EnhancedViewItemViewModel suffix.
         /// </summary>
         /// <param name="enhancedViewItemMetadatum"></param>
@@ -499,10 +523,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <returns></returns>
         protected async Task<EnhancedViewItemViewModel> ActivateItemAsync1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
         {
-            EnhancedViewItemViewModel viewModel = (EnhancedViewItemViewModel) LifetimeScope.Resolve(ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum));
+            var viewModelType = ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum);
+            var viewModel = (EnhancedViewItemViewModel) LifetimeScope!.Resolve(viewModelType);
             viewModel.Parent = this;
             viewModel.ConductWith(this);
-            UIElement view = ViewLocator.LocateForModel(viewModel, null, null);
+            var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
             await ActivateItemAsync((EnhancedViewItemViewModel)(object)viewModel, cancellationToken);
             return viewModel;
@@ -510,11 +535,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             DisplayName = "Enhanced View";
-
-            // await ActivateItemAsync<TestEnhancedViewItemViewModel>(cancellationToken);
             await base.OnInitializeAsync(cancellationToken);
         }
 
+      
         protected override void OnViewAttached(object view, object context)
         {
             // grab the dictionary of all the verse lookups
@@ -526,12 +550,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     .Select(g => g.First())
                     .ToList();
 
-                foreach (var book in books)
+                foreach (var bookName in books.Select(book => book.Substring(0, 3)).Select(BookChapterVerseViewModel.GetShortBookNameFromBookNum))
                 {
-                    var bookId = book.Substring(0, 3);
-
-                    var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
-
                     CurrentBcv.BibleBookList?.Add(bookName);
                 }
             }
@@ -553,13 +573,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private async Task VerseChangeRerender()
         {
-            var sw =Stopwatch.StartNew();
+            var sw = Stopwatch.StartNew();
 
-            await ReloadData();
+            EnableBcvControl = false;
+
+            try
+            {
+                await ReloadData();
+            }
+            finally
+            {
+                EnableBcvControl = true;
+            }
 
             sw.Stop();
             _logger.LogInformation("VerseChangeRerender took {0} ms", sw.ElapsedMilliseconds);
         }
+
 
         private async Task ReloadData(ReloadType reloadType = ReloadType.Refresh)
         {
@@ -641,28 +671,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 return;
             }
 
+            if (ParatextSync == false)
+            {
+                return;
+            }
+
             if (message.Verse != "" && CurrentBcv.BBBCCCVVV != message.Verse.PadLeft(9, '0'))
             {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Verse Change"), cancellationToken);
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
         }
+
+        protected bool UpdatingCurrentVerse { get; set; }
 
         public async Task HandleAsync(ProjectChangedMessage message, CancellationToken cancellationToken)
         {
             if (ProjectManager?.CurrentParatextProject is not null)
             {
-                // send to log
-                await EventAggregator.PublishOnUIThreadAsync(new LogActivityMessage($"{DisplayName}: Project Change"), cancellationToken);
-
-                DashboardProjectManager.IncomingChangesStarted = true;
-
-                // set the CurrentBcv prior to listening to the event
-                CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-
-                NotifyOfPropertyChange(() => CurrentBcv);
-                DashboardProjectManager.IncomingChangesStarted = false;
+                UpdatingCurrentVerse = true;
+                try
+                {
+                    // set the CurrentBcv prior to listening to the event
+                    CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+                    NotifyOfPropertyChange(() => CurrentBcv);
+                }
+                finally
+                {
+                    UpdatingCurrentVerse = false;
+                }
             }
             else
             {
@@ -683,6 +719,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectedVerseDisplayViewModel = message.SelectedVerseDisplayViewModel;
             return Task.CompletedTask;
         }
+
+
 
         public async Task HandleAsync(ReloadDataMessage message, CancellationToken cancellationToken)
         {

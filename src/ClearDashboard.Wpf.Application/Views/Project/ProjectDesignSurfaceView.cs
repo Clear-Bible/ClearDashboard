@@ -280,22 +280,13 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// The 'Fill' command was executed.
         /// </summary>
         private void FitContent_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            IList nodes;
-
-            if (ProjectDesignSurface.SelectedNodes.Count > 0)
+        {  
+            var nodes = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CorpusNodes;
+            if (nodes.Count == 0)
             {
-                nodes = ProjectDesignSurface.SelectedNodes;
+                return;
             }
-            else
-            {
-                nodes = ProjectDesignSurfaceViewModel.DesignSurfaceViewModel!.CorpusNodes;
-                if (nodes.Count == 0)
-                {
-                    return;
-                }
-            }
-
+         
             SavePrevZoomRect();
 
             var actualContentRect = DetermineAreaOfNodes(nodes);

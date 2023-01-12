@@ -13,9 +13,12 @@ namespace ClearDashboard.DAL.Alignment.Features
 {
     public static class ModelHelper
     {
-        public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> tokens)
+        public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> tokens, IEnumerable<Models.Token>? otherTokens = null)
         {
-            var ct = new CompositeToken(tokens.Select(t => BuildToken(t)));
+            var ct = new CompositeToken(
+                tokens.Select(t => BuildToken(t)),
+                otherTokens?.Select(t => BuildToken(t))
+            );
             ct.TokenId.Id = tokenComposite.Id;
             ct.ExtendedProperties = tokenComposite.ExtendedProperties;
 

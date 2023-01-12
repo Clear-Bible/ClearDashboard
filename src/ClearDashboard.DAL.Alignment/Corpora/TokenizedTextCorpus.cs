@@ -9,21 +9,68 @@ using SIL.Scripture;
 
 namespace ClearDashboard.DAL.Alignment.Corpora
 {
-    public class TokenizedTextCorpus : ScriptureTextCorpus
+    public class TokenizedTextCorpus : ScriptureTextCorpus, ICache
     {
         public TokenizedTextCorpusId TokenizedTextCorpusId { get; set; }
         public override ScrVers Versification { get; }
 
-        internal TokenizedTextCorpus(TokenizedTextCorpusId tokenizedCorpusId, IMediator mediator, IEnumerable<string> bookAbbreviations, ScrVers versification)
+        private bool useCache_;
+
+        /// <summary>
+        /// Gets use cache setting. 
+        /// Set's UseCache property on all TokenizedText.
+        /// </summary>
+        public bool UseCache { 
+            get
+            {
+                return useCache_;
+            }
+            set
+            {
+                useCache_ = value;
+                TextDictionary
+                    .Select(kvp => ((TokenizedText)kvp.Value).UseCache = useCache_);
+            }
+        }
+
+        /// <summary>
+        /// Invalidates the cache on the TokenizedText for a specific bookId.
+        /// </summary>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
+        public bool InvalidateCache(string bookId)
         {
+            IText? text;
+            var success = TextDictionary.TryGetValue(bookId, out text);
+            if (success && text != null)
+                ((TokenizedText)text).InvalidateCache();
+            return success;
+        }
+
+        /// <summary>
+        /// Invalidates the cache on all TokenizedText.
+        /// </summary>
+        public void InvalidateCache()
+        {
+            TextDictionary
+                .Select(kvp =>
+                {
+                    ((TokenizedText)kvp.Value).InvalidateCache();
+                    return true; //make linq happy
+                });
+        }
+
+        internal TokenizedTextCorpus(TokenizedTextCorpusId tokenizedCorpusId, IMediator mediator, IEnumerable<string> bookAbbreviations, ScrVers versification, bool useCache)
+        {
+            useCache_ = useCache;
+
             TokenizedTextCorpusId = tokenizedCorpusId;
             Versification = versification;
 
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation));
+                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, useCache));
             }
-
         }
 
         public async Task UpdateOrAddVerses(IMediator mediator, ITextCorpus textCorpus, CancellationToken token = default)
@@ -49,7 +96,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             foreach (var bookAbbreviation in updateOrAddResult.Data!)
             {
-                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation));
+                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, UseCache));
             }
         }
 
@@ -78,14 +125,15 @@ namespace ClearDashboard.DAL.Alignment.Corpora
         }
         public static async Task<TokenizedTextCorpus> Get(
             IMediator mediator,
-            TokenizedTextCorpusId tokenizedTextCorpusId)
+            TokenizedTextCorpusId tokenizedTextCorpusId,
+            bool useCache = false)
         {
             var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpusId);
 
             var result = await mediator.Send(command);
             result.ThrowIfCanceledOrFailed(true);
 
-            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification);
+            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache);
         }
 
         /// <summary>

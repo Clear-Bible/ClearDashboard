@@ -756,7 +756,8 @@ namespace ClearDashboard.Wpf.Controls
                 return;
             }
 
-            _viewport = newSize;
+            _viewport.Width = newSize.Width;
+            _viewport.Height = newSize.Width;
 
             //
             // Update the viewport size in content coordiates.

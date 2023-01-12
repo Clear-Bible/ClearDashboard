@@ -48,8 +48,10 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<SelectionManager>().AsSelf().SingleInstance();
             builder.RegisterType<TranslationManager>().AsSelf();
             builder.RegisterType<VerseManager>().AsSelf().SingleInstance();
-        }        
-        
+
+            builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
+        }
+
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
         {
             builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();
@@ -129,23 +131,14 @@ namespace ClearDashboard.Wpf.Application
         }
     }
 
-    internal class ProjectDesignSurfaceModule : Module
-    {
-        protected override void Load(ContainerBuilder builder)
-        {
-            //builder.RegisterType<CorpusNodeViewModel>().AsSelf().InstancePerLifetimeScope();
-            builder.RegisterType<ProjectDesignSurfaceDataProvider>()
-                .As<IDesignSurfaceDataProvider<DesignSurfaceViewModel, ProjectDesignSurfaceSerializationModel>>()
-                .InstancePerLifetimeScope();
-            base.Load(builder);
-        }
-    }
+    
 
     internal class ApplicationModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
+            builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();

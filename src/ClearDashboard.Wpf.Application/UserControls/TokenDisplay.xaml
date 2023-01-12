@@ -25,24 +25,24 @@
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=CompositeIndicatorVisibility}" />
         <Button
             x:Name="TokenButton"
+            Width="{Binding ElementName=SurfaceTextBlock, Path=ActualWidth}"
+            Height="Auto"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}"
+            Padding="0"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenBackground}"
             BorderThickness="0"
+            Click="OnTokenClicked"
+            ContextMenuOpening="OnTokenContextMenuOpening"
             FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFlowDirection}"
             FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontFamily}"
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontSize}"
             FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontStyle}"
             FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenFontWeight}"
             Foreground="{DynamicResource MaterialDesignBody}"
-            Height="Auto"
-            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-            HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
             IsDefault="False"
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TokenMargin}"
-            Padding="0"
-            Width="{Binding ElementName=SurfaceTextBlock, Path=ActualWidth}"
-            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-            Click="OnTokenClicked"
-            ContextMenuOpening="OnTokenContextMenuOpening"
             MouseDoubleClick="OnTokenDoubleClicked"
             MouseEnter="OnTokenMouseEnter"
             MouseLeave="OnTokenMouseLeave"
@@ -55,8 +55,14 @@
             <Button.ContextMenu>
                 <ContextMenu FlowDirection="LeftToRight">
                     <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
-                    <MenuItem x:Name="JoinTokensMenuItem" Click="OnTokenJoin" Header="Join Tokens" />
-                    <MenuItem x:Name="UnjoinTokenMenuItem" Click="OnTokenUnjoin" Header="Unjoin Composite Token" />
+                    <MenuItem
+                        x:Name="JoinTokensMenuItem"
+                        Click="OnTokenJoin"
+                        Header="Join Tokens" />
+                    <MenuItem
+                        x:Name="UnjoinTokenMenuItem"
+                        Click="OnTokenUnjoin"
+                        Header="Unjoin Composite Token" />
                     <MenuItem Click="OnFilterPins" Header="Filter Pins" />
                 </ContextMenu>
             </Button.ContextMenu>
@@ -72,7 +78,7 @@
                     Placement="Left"
                     PlacementRectangle="50,0,0,0"
                     VerticalOffset="20">
-                        <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
+                    <controls:ExtendedPropertiesTreeView x:Name="ExtendedPropertiesTreeViewName" ExtendePropertiesXml="{Binding ExtendedProperties}" />
                 </ToolTip>
             </Button.ToolTip>
         </Button>
@@ -91,22 +97,22 @@
             MouseWheel="OnNoteMouseWheel"
             Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteIndicatorVisibility}" />
         <Button
+            Height="Auto"
+            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
+            Padding="0"
+            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
+            materialDesign:ShadowAssist.ShadowDepth="Depth0"
             Background="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationBackground}"
             BorderThickness="0"
+            Click="OnTranslationClicked"
             FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFlowDirection}"
             FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
             FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
             FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
             FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
             Foreground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationColor}"
-            Height="Auto"
-            HorizontalAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
-            HorizontalContentAlignment="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationAlignment}"
             IsDefault="False"
-            Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
-            Padding="0"
-            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-            Click="OnTranslationClicked"
             MouseDoubleClick="OnTranslationDoubleClicked"
             MouseEnter="OnTranslationMouseEnter"
             MouseLeave="OnTranslationMouseLeave"

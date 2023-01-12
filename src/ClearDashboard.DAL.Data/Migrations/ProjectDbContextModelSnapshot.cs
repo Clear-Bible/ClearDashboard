@@ -735,6 +735,30 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenCompositeTokenAssociation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<long?>("Deleted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("TokenCompositeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("TokenId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TokenCompositeId");
+
+                    b.HasIndex("TokenId");
+
+                    b.ToTable("TokenCompositeTokenAssociation");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
                 {
                     b.Property<Guid>("Id")
@@ -983,6 +1007,9 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<long>("Created")
                         .HasColumnType("INTEGER");
 
+                    b.Property<Guid>("ParallelCorpusId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("TEXT");
 
@@ -1007,6 +1034,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("CorpusHistoryId");
 
                     b.HasIndex("CorpusId");
+
+                    b.HasIndex("ParallelCorpusId");
 
                     b.HasIndex("UserId");
 
@@ -1153,9 +1182,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("SurfaceText")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("TokenCompositeId")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("VerseNumber")
                         .HasColumnType("INTEGER");
 
@@ -1165,8 +1191,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("BookNumber");
 
                     b.HasIndex("ChapterNumber");
-
-                    b.HasIndex("TokenCompositeId");
 
                     b.HasIndex("TrainingText");
 
@@ -1553,6 +1577,25 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("VerseRow");
                 });
 
+            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenCompositeTokenAssociation", b =>
+                {
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComposite", "TokenComposite")
+                        .WithMany("TokenCompositeTokenAssociations")
+                        .HasForeignKey("TokenCompositeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.Token", "Token")
+                        .WithMany("TokenCompositeTokenAssociations")
+                        .HasForeignKey("TokenId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Token");
+
+                    b.Navigation("TokenComposite");
+                });
+
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenVerseAssociation", b =>
                 {
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComponent", "TokenComponent")
@@ -1701,6 +1744,12 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .WithMany()
                         .HasForeignKey("CorpusId");
 
+                    b.HasOne("ClearDashboard.DataAccessLayer.Models.ParallelCorpus", "ParallelCorpus")
+                        .WithMany()
+                        .HasForeignKey("ParallelCorpusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -1714,6 +1763,8 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Corpus");
+
+                    b.Navigation("ParallelCorpus");
 
                     b.Navigation("User");
 
@@ -1760,15 +1811,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Navigation("TokenizedCorpus");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
-                {
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.TokenComposite", "TokenComposite")
-                        .WithMany("Tokens")
-                        .HasForeignKey("TokenCompositeId");
-
-                    b.Navigation("TokenComposite");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComposite", b =>
@@ -1911,11 +1953,13 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Token", b =>
                 {
                     b.Navigation("Adornment");
+
+                    b.Navigation("TokenCompositeTokenAssociations");
                 });
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.TokenComposite", b =>
                 {
-                    b.Navigation("Tokens");
+                    b.Navigation("TokenCompositeTokenAssociations");
                 });
 #pragma warning restore 612, 618
         }

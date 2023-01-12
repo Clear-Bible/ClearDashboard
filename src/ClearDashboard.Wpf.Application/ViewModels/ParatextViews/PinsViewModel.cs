@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Paratext;
@@ -30,6 +31,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
+using ClearDashboard.DataAccessLayer.Wpf.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -93,7 +95,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public ObservableCollection<PinsVerseList> SelectedItemVerses { get; } = new();
 
-        public string FontFamily { get; set; } = "Segoe UI";
+        public string FontFamily { get; set; } = FontNames.DefaultFontFamily;
 
         public float FontSize { get; } = 12;
 
