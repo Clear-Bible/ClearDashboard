@@ -251,18 +251,6 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-
-                    <Button
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="3"
-                        Width="200"
-                        Margin="5"
-                        VerticalAlignment="Center"
-                        Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
-                        CommandParameter="{x:Static Dock.Top}"
-                        Content="CLOSE"
-                        Style="{StaticResource TransparentStyle}" />
                 </Grid>
             </materialDesign:DrawerHost.TopDrawerContent>
             <Grid>
