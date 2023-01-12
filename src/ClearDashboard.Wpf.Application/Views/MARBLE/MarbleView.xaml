@@ -442,10 +442,15 @@
                             </GroupBox.HeaderTemplate>
 
                             <ScrollViewer>
-                                <StackPanel Orientation="Horizontal">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="3*" />
+                                    </Grid.ColumnDefinitions>
 
 
-                                    <Expander Header="Strong Codes   ">
+                                    <Expander Grid.Column="0" Header="Strong Codes   ">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -535,7 +540,7 @@
                                         </StackPanel>
                                     </Expander>
 
-                                    <Expander Header="Parts of Speech   ">
+                                    <Expander Grid.Column="1" Header="Parts of Speech   ">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -612,7 +617,7 @@
                                         </StackPanel>
                                     </Expander>
 
-                                    <Expander Header="Related Lemmas   ">
+                                    <Expander Grid.Column="2" Header="Related Lemmas   ">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -720,7 +725,7 @@
                                         </StackPanel>
                                     </Expander>
 
-                                </StackPanel>
+                                </Grid>
                             </ScrollViewer>
                         </GroupBox>
 
