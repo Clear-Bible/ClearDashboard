@@ -60,8 +60,14 @@ namespace ClearDashboard.Wpf.Controls
             //
             foreach (var nodeItem in _cachedSelectedNodeItems)
             {
-                nodeItem.X += e.HorizontalChange;
-                nodeItem.Y += e.VerticalChange;
+                if (this.ActualWidth - nodeItem.ActualWidth > nodeItem.X + e.HorizontalChange && nodeItem.X + e.HorizontalChange > 0)
+                {
+                    nodeItem.X += e.HorizontalChange;
+                }
+                if (this.ActualHeight - nodeItem.ActualHeight > nodeItem.Y + e.VerticalChange && nodeItem.Y + e.VerticalChange > 0)
+                {
+                    nodeItem.Y += e.VerticalChange;
+                }
             }
 
             var eventArgs = new NodeDraggingEventArgs(NodeDraggingEvent, this, SelectedNodes, e.HorizontalChange, e.VerticalChange);

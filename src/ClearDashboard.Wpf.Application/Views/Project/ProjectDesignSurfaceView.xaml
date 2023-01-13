@@ -640,7 +640,7 @@
                     VerticalAlignment="Center"
                     LargeChange="20"
                     Maximum="200"
-                    Minimum="10"
+                    Minimum="1"
                     SmallChange="10"
                     TickFrequency="10"
                     TickPlacement="TopLeft"

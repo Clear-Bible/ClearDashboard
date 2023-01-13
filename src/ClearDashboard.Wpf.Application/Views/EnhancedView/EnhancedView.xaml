@@ -436,6 +436,7 @@
                 Grid.ColumnSpan="2"
                 Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
                 ItemsSource="{Binding Items}"
+                ScrollViewer.CanContentScroll="False"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                 ScrollViewer.IsDeferredScrollingEnabled="True"
                 VirtualizingStackPanel.IsVirtualizing="True"
@@ -533,7 +534,7 @@
                                             Text="{Binding Title}" />
 
                                     </StackPanel>
-                                    <ContentControl HorizontalAlignment="Left" cm:View.Model="{Binding .}" />
+                                    <ContentControl Name="VerseContentControl" HorizontalAlignment="Left" cm:View.Model="{Binding .}" PreviewMouseWheel="VerseContentControl_OnPreviewMouseWheel"/>
 
                                 </StackPanel>
                             </Border>
