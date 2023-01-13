@@ -9,6 +9,7 @@ using CefSharp.DevTools.Database;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.ViewModels.Marble;
 using ClearDashboard.Wpf.Application.Views;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MahApps.Metro.IconPacks.Converter;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -53,6 +54,10 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
             // set the view's datacontext to whatever we are passing in to mirror
             mirroredView.DataContext = datacontext;
+            if (mirroredView is BiblicalTermsView biblicalTermsView)
+            {
+                biblicalTermsView.MainGrid.Tag = "True";
+            }
             // force the MirrorView to show
             mirror.Show();
             // now that it is shown, we can get it's actual size
