@@ -78,6 +78,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenerateSemantiDomainLookup
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf.Application.Abstractions", "ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj", "{45CF7338-CBEA-4B44-896E-D909B1BC32B5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{391E5146-482A-4E39-BEDC-BCF0896BEFFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -269,6 +271,7 @@ Global
 		{FB117BF8-5925-4320-8AF8-F4FBF4C5A9F4} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 		{929A67A3-4C1C-44CD-9AF4-22A5928C3C0C} = {AA93D4BA-F38C-4446-BF88-90BDE0DC5F0B}
 		{45CF7338-CBEA-4B44-896E-D909B1BC32B5} = {F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}
+		{391E5146-482A-4E39-BEDC-BCF0896BEFFF} = {F1DB3A1C-E7CA-4022-A54D-DAE725BBD0BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFF05FFA-E592-49AC-8796-A4E60A3D729F}
