@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
 
@@ -35,6 +36,13 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         public EnhancedView()
         {
             InitializeComponent();
+        }
+
+        private void VerseContentControl_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(OuterListView);
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
+            e.Handled = true;
         }
     }
 }

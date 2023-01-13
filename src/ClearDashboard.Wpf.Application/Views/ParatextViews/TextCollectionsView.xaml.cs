@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CefSharp;
+using CefSharp.Wpf;
 using ClearDashboard.DataAccessLayer.Annotations;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
@@ -27,6 +29,13 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         public TextCollectionsView()
         {
             InitializeComponent();
+        }
+
+        private void Chromium_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(TextCollectionListView);
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
+            e.Handled = true;
         }
     }
 }
