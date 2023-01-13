@@ -1,15 +1,14 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 {

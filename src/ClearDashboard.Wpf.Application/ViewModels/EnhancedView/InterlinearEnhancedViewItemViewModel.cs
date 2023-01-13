@@ -2,7 +2,7 @@
 using Caliburn.Micro;
 
 using ClearDashboard.DataAccessLayer.Wpf;
-
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +13,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class InterlinearEnhancedViewItemViewModel : VerseAwareEnhancedViewItemViewModel
     {
-        public InterlinearEnhancedViewItemViewModel(DashboardProjectManager? projectManager, INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager)
+        public InterlinearEnhancedViewItemViewModel(DashboardProjectManager? projectManager, INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : 
+            base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, windowManager, localizationService)
         {
         }
     }

@@ -2,13 +2,15 @@
 using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
-using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.Marble;
 using MaterialDesignThemes.Wpf;
@@ -17,6 +19,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -24,10 +27,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using wpfKeyBoard;
-using System.ComponentModel;
-using ClearDashboard.Wpf.Application.UserControls;
 
 
 #pragma warning disable CS8618

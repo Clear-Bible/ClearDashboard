@@ -24,6 +24,11 @@ namespace ClearDashboard.Wpf.Application.Views.Marble
         {
             InitializeComponent();
         }
-        
+
+        private void AllowScrolling_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            MarbleScrollViewer.ScrollToVerticalOffset(MarbleScrollViewer.VerticalOffset - e.Delta / 3);
+            e.Handled = true;
+        }
     }
 }

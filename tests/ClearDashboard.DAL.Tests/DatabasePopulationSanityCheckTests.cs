@@ -1,21 +1,14 @@
 ﻿
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
-using Caliburn.Micro;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DAL.Tests.Mocks;
 using ClearDashboard.DAL.Tests.Slices.ProjectInfo;
-using ClearDashboard.DAL.Tests.Slices.Users;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf.Extensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using SIL.Providers;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 

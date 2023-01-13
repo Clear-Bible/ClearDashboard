@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
@@ -67,6 +69,21 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             Regex InvalidFileRegex = new Regex(string.Format("[{0}]", Regex.Escape(@"<>:""/\|?*")));
             return InvalidFileRegex.Replace(fileName, string.Empty);
+        }
+
+        public static T GetChildOfType<T>(DependencyObject depObj)
+            where T : DependencyObject
+        {
+            if (depObj == null) return null;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetChildOfType<T>(child);
+                if (result != null) return result;
+            }
+            return null;
         }
     }
 }

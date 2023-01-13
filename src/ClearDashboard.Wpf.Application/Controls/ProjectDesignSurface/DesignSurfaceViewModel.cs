@@ -3,11 +3,13 @@ using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.AllProjects;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 using ClearDashboard.Wpf.Application.Views.Project;
@@ -24,13 +26,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Wpf.Messages;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
+using ClearDashboard.Wpf.Application.Messages;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {

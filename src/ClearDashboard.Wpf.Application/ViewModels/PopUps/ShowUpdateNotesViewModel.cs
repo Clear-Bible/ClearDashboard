@@ -1,15 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Collections.ObjectModel;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {

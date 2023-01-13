@@ -135,21 +135,22 @@ namespace ClearDashboard.Wpf.Application
 
             builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
 
-            //pds dialogs
-
-            //RequestCorpusAnalysisDialog
-
-            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+            builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 1);
 
-            builder.RegisterType<AquaMakeRequestStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 2);
 
-            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+            builder.RegisterType<AquaAddRevisionStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 3);
+
+            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
+                .WithMetadata("Order", 4);
+
         }
     }
 
@@ -161,6 +162,7 @@ namespace ClearDashboard.Wpf.Application
         {
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
             builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
+            builder.RegisterType<LocalizationService>().As<ILocalizationService>().SingleInstance();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
-    internal class TailBlazerProxy
+    public class TailBlazerProxy
     {
         public CaptureFilePathHook FilePathHook { get; }
         public ILogger<TailBlazerProxy> Logger { get; }

@@ -484,74 +484,68 @@
                     MinHeight="{Binding ElementName=LowerBorder, Path=ActualHeight}"
                     Margin="5"
                     VerticalAlignment="Top"
-                    ItemsSource="{Binding SelectedItemVerses}">
-                    <ListView.View>
-                        <GridView>
-                            <GridView.ColumnHeaderContainerStyle>
-                                <Style TargetType="{x:Type GridViewColumnHeader}">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </Style>
-                            </GridView.ColumnHeaderContainerStyle>
+                    ItemsSource="{Binding SelectedItemVerses}"
+                    ScrollViewer.CanContentScroll="False">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30" />
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}" />
+                                </Grid.ColumnDefinitions>
 
-                            <GridViewColumn Width="30">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <materialDesign:PackIcon Width="20" Height="20">
-                                            <materialDesign:PackIcon.Style>
-                                                <Style TargetType="materialDesign:PackIcon">
-                                                    <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
-                                                    <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Found}" Value="False">
-                                                            <Setter Property="Kind" Value="CloseBox" />
-                                                            <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </materialDesign:PackIcon.Style>
-                                        </materialDesign:PackIcon>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="80">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock
-                                            VerticalAlignment="Center"
-                                            Foreground="{StaticResource BlueMidBrush}"
-                                            Text="{Binding VerseId}" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=SelectedItemVerses, Converter={converters:BiblicalTermsListViewWidthConvertor}, ConverterParameter='130'}">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ScrollViewer MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
-                                            <helpers:BindableTextBlock
-                                                Width="Auto"
-                                                Margin="0,0,10,0"
-                                                FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
-                                                FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
-                                                TextWrapping="Wrap">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="helpers:BindableTextBlock">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="False">
-                                                                <Setter Property="InlineList" Value="{Binding Path=Inlines}" />
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="True">
-                                                                <Setter Property="Text" Value="{Binding Path=VerseText}" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </helpers:BindableTextBlock>
-                                        </ScrollViewer>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
+                                <materialDesign:PackIcon
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    Margin="0,15,0,0"
+                                    VerticalAlignment="Top">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Kind" Value="CheckboxMarkedCircleOutline" />
+                                            <Setter Property="Foreground" Value="{StaticResource GreenDarkBrush}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Found}" Value="False">
+                                                    <Setter Property="Kind" Value="CloseBox" />
+                                                    <Setter Property="Foreground" Value="{DynamicResource SecondaryHueMidBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
+
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="0,16,0,0"
+                                    VerticalAlignment="Top"
+                                    Foreground="{StaticResource BlueMidBrush}"
+                                    Text="{Binding VerseId}" />
+
+                                <ScrollViewer Grid.Column="2" MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                    <helpers:BindableTextBlock
+                                        Width="Auto"
+                                        Margin="0,0,10,0"
+                                        FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
+                                        FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
+                                        TextWrapping="Wrap">
+                                        <TextBlock.Style>
+                                            <Style TargetType="helpers:BindableTextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="False">
+                                                        <Setter Property="InlineList" Value="{Binding Path=Inlines}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding Path=Tag, ElementName=MainGrid}" Value="True">
+                                                        <Setter Property="Text" Value="{Binding Path=VerseText}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </helpers:BindableTextBlock>
+                                </ScrollViewer>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
             </Border>
         </Grid>

@@ -1,4 +1,18 @@
-﻿using System;
+﻿using Autofac;
+using Caliburn.Micro;
+using CefSharp;
+using CefSharp.Wpf;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.Views.ParatextViews;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,27 +20,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Autofac;
-using Caliburn.Micro;
-using CefSharp;
-using CefSharp.Wpf;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Models.Paratext;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Messages;
-using ClearDashboard.ParatextPlugin.CQRS.Features.TextCollections;
-using ClearDashboard.ParatextPlugin.CQRS.Features.UnifiedScripture;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.Models;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
