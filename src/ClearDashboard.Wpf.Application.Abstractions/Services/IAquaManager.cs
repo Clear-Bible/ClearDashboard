@@ -10,18 +10,42 @@ namespace ClearDashboard.Wpf.Application.Services
 {
     public interface IAquaManager
     {
-        public const string AquaRequestCorpusAnalysis = "AquaRequestCorpusAnalysis";
-        public const string AquaGetCorpusAnalysis = "AquaGetCorpusAnalysis";
-        public const string AquaAddLatestCorpusAnalysisToCurrentEnhancedView = "AquaAddLatestCorpusAnalysisToCurrentEnhancedView";
+        public const string AquaDialogMenuId = "AquaDialogMenuId";
+
+        //public const string AquaAddToCurrentEnhancedView = "AquaAddToCurrentEnhancedView";
         public Task AddCorpusAnalysisToEnhancedView();
-        public Task RequestCorpusAnalysis(
-            string paratextProjectId, 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="paratextProjectId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="progress"></param>
+        /// <returns>VersionId</returns>
+        public Task<string> AddVersion(
+            string paratextProjectId,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress);
+        public Task<string> AddRevision(
+            string versionId, 
             CancellationToken cancellationToken,
             IProgress<ProgressStatus>? progress);
 
-        public Task<string> GetCorpusAnalysis(
-            string paratextProjectId, 
+        public Task<IEnumerable<string>> GetRevisions(
+            string versionId,
             CancellationToken cancellationToken,
             IProgress<ProgressStatus>? progress);
+
+
+        public Task<IEnumerable<string>> GetAssessmentStatuses(
+            string revisionId, 
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress);
+
+        public Task<string> GetAssessmentResult(
+            string assessmentId,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress);
+
     }
 }

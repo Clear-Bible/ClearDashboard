@@ -11,19 +11,18 @@ using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.Aqua;
 
-public class AquaDoGetStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaGetCorpusAnalysisDialogViewModel>
+public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaDialogViewModel>
 {
-    public AquaDoGetStepViewModel()
+    public AquaAddRevisionStepViewModel()
     {
     }
-    public AquaDoGetStepViewModel(
+    public AquaAddRevisionStepViewModel( 
         string paratextProjectId,
-        string requestId,
-        DialogMode dialogMode, 
-        
+
+        DialogMode dialogMode,  
         DashboardProjectManager projectManager,
         INavigationService navigationService, 
-        ILogger<AquaMakeRequestStepViewModel> logger, 
+        ILogger<AquaAddRevisionStepViewModel> logger, 
         IEventAggregator eventAggregator,
         IMediator mediator, 
         ILifetimeScope? lifetimeScope)
@@ -34,18 +33,19 @@ public class AquaDoGetStepViewModel : DashboardApplicationWorkflowStepViewModel<
         CanMoveBackwards = true;
         EnableControls = true;
 
-        BodyTitle = "Do Get Body Title";
-        BodyText = "Do Get Body Text";
+        BodyTitle = "Add Revision Body Title";
+        BodyText = "Add Revision Body Text";
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
-        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
         return base.OnInitializeAsync(cancellationToken);
     }
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {
+        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
         return base.OnActivateAsync(cancellationToken);
     }
+
 
     private DialogMode _dialogMode;
     public DialogMode DialogMode
@@ -76,13 +76,14 @@ public class AquaDoGetStepViewModel : DashboardApplicationWorkflowStepViewModel<
         }
     }
 
+
     public void Ok(object obj)
     {
-        ParentViewModel?.Ok();
+        ParentViewModel!.Ok();
     }
     public void Cancel(object obj)
     {
-        ParentViewModel?.Cancel();
+        ParentViewModel!.Cancel();
     }
     public async void MoveForwards(object obj)
     {
@@ -92,11 +93,11 @@ public class AquaDoGetStepViewModel : DashboardApplicationWorkflowStepViewModel<
     {
         await MoveBackwards();
     }
-    public async void Get()
+    public async void AddRevision()
     {
         try
         {
-            var processStatus = await ParentViewModel!.GetAnalysis();
+            var processStatus = await ParentViewModel!.AddRevision();
 
             switch (processStatus)
             {
@@ -105,7 +106,7 @@ public class AquaDoGetStepViewModel : DashboardApplicationWorkflowStepViewModel<
                     break;
                 case LongRunningTaskStatus.Failed:
                 case LongRunningTaskStatus.Cancelled:
-                    ParentViewModel.Cancel();
+                    ParentViewModel!.Cancel();
                     break;
                 case LongRunningTaskStatus.NotStarted:
                     break;

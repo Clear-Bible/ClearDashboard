@@ -42,51 +42,22 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             LongRunningTaskManager = longRunningTaskManager;
             WindowManager = windowManager;
 
-            Header = LocalizationStrings.Get("Pds_AquaRequestCorpusAnalysisMenu", Logger);
-            Id = IAquaManager.AquaRequestCorpusAnalysis;
+            Header = LocalizationStrings.Get("Pds_AquaDialogMenuId", Logger);
+            Id = IAquaManager.AquaDialogMenuId;
             ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel;
             IconKind = PackIconPicolIconsKind.Api.ToString();
         }
 
-        private async Task ShowRequestCorpusAnalysisDialog(string paratextProjectId)
-        {
-            var parameters = new List<Autofac.Core.Parameter>
-            {
-                new NamedParameter("dialogMode", DialogMode.Edit),
-                new NamedParameter("paratextProjectId", paratextProjectId)
-            };
-
-            var dialogViewModel = LifetimeScope?.Resolve<AquaRequestCorpusAnalysisDialogViewModel>(parameters);
-
-            try
-            {
-                var result = await WindowManager!.ShowDialogAsync(dialogViewModel, null,
-                    DialogSettings.AddParatextCorpusDialogSettings);
-
-                if (result)
-                {
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
-            finally
-            {
-                //await SaveDesignSurfaceData();
-            }
-        }
-
-        private async Task ShowGetCorpusAnalysisDialog(string paratextProjectId, string requestId)
+        private async Task ShowAquaDialog(string paratextProjectId, string? versionId)
         {
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode.Edit),
                 new NamedParameter("paratextProjectId", paratextProjectId),
-                new NamedParameter("requestId", requestId)
+                new NamedParameter("versionId", versionId ?? "")
             };
 
-            var dialogViewModel = LifetimeScope?.Resolve<AquaGetCorpusAnalysisDialogViewModel>(parameters);
+            var dialogViewModel = LifetimeScope?.Resolve<AquaDialogViewModel>(parameters);
 
             try
             {
@@ -110,36 +81,20 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         {
             switch (Id)
             {
-                case IAquaManager.AquaRequestCorpusAnalysis:
-                    await ShowRequestCorpusAnalysisDialog(CorpusNodeViewModel!.ParatextProjectId);
+                case IAquaManager.AquaDialogMenuId:
+                    await ShowAquaDialog(CorpusNodeViewModel!.ParatextProjectId, "123");
 
 
-                    Header = LocalizationStrings.Get("Pds_AquaGetCorpusAnalysisMenu", Logger);
-                    Id = IAquaManager.AquaGetCorpusAnalysis;
-                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel;
-                    IconKind = PackIconPicolIconsKind.Api.ToString();
-
-                    break;
-
-                case IAquaManager.AquaAddLatestCorpusAnalysisToCurrentEnhancedView:
-                    //AquaManager!.AddCorpusAnalysisToEnhancedView();
-
-                    Header = LocalizationStrings.Get("Pds_AquaRequestCorpusAnalysisMenu", Logger);
-                    Id = IAquaManager.AquaRequestCorpusAnalysis;
-                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel;
-                    IconKind = PackIconPicolIconsKind.Api.ToString();
+                    //Header = LocalizationStrings.Get("Pds_AquaGetCorpusAnalysisMenu", Logger);
+                    //Id = IAquaManager.AquaListRevisionsAndAssessmentsAndAddRevision;
+                    //ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel;
+                    //IconKind = PackIconPicolIconsKind.Api.ToString();
 
                     break;
 
-                case IAquaManager.AquaGetCorpusAnalysis:
-                    await ShowGetCorpusAnalysisDialog(CorpusNodeViewModel!.ParatextProjectId, "35");
-
-                    Header = LocalizationStrings.Get("Pds_AquaAddCorpusAnalysisToEnhancedViewMenu", Logger);
-                    Id = IAquaManager.AquaAddLatestCorpusAnalysisToCurrentEnhancedView;
-                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel;
-                    IconKind = PackIconPicolIconsKind.Api.ToString();
-
-                    break;
+                //case IAquaManager.AquaListRevisionsAndAssessmentsAndAddRevision:
+                //    await ShowAquaListRevisionsAndAssessmentsAndAddRevisionDialog(CorpusNodeViewModel!.ParatextProjectId, "35");
+                //    break;
             }
         }
     }

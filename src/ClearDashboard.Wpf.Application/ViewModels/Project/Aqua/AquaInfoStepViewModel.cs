@@ -22,7 +22,7 @@ public class AquaInfoStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         DialogMode dialogMode,  
         DashboardProjectManager projectManager,
         INavigationService navigationService, 
-        ILogger<AquaMakeRequestStepViewModel> logger, 
+        ILogger<AquaAddRevisionStepViewModel> logger, 
         IEventAggregator eventAggregator,
         IMediator mediator, 
         ILifetimeScope? lifetimeScope)
