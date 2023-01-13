@@ -370,7 +370,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var enhancedViewItemViewModel = await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
+                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
                 EnableBcvControl = false;
                 await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
                
@@ -378,7 +378,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         //FIXME: should go in ClearApplicationFramework
-        private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
+        private Type ConvertToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
         {
             string? metadataAssemblyQualifiedName;
             if (enhancedViewItemMetadatum is VerseAwareEnhancedViewItemMetadatum)
@@ -410,9 +410,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <param name="enhancedViewItemMetadatum"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        protected async Task<EnhancedViewItemViewModel> ActivateItemAsync1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
+        protected async Task<EnhancedViewItemViewModel> ActivateItemFromMetadatumAsync(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var viewModelType = ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum);
+            var viewModelType = enhancedViewItemMetadatum.ConvertToEnhancedViewItemViewModelType();
             var viewModel = (EnhancedViewItemViewModel) LifetimeScope!.Resolve(viewModelType);
             viewModel.Parent = this;
             viewModel.ConductWith(this);
