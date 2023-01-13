@@ -98,43 +98,18 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         private StringBuilder GetCpuManufacturer(StringBuilder sb)
         {
-            string? cpuMan = String.Empty;
-            //create an instance of the Management class with the
-            //Win32_Processor class
-            ManagementClass managementClass = new ManagementClass("Win32_Processor");
-            //create a ManagementObjectCollection to loop through
-            ManagementObjectCollection objCol = managementClass.GetInstances();
-            //start our loop for all processors found
-            foreach (var o in objCol)
-            {
-                var obj = (ManagementObject)o;
-                if (cpuMan == String.Empty)
-                {
-                    // only return manufacturer from first CPU
-                    cpuMan = obj.Properties["Manufacturer"].Value.ToString();
-                }
-            }
-
-            sb.AppendLine($"CPU Brand: {cpuMan}");
+            sb.AppendLine(string.Format("CPU Type: {0}", System.Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")));
 
             return sb;
         }
 
         private StringBuilder GetCpuSpeedInGHz(StringBuilder sb)
         {
-            // ReSharper disable once InconsistentNaming
-            double? GHz = null;
-            using (ManagementClass mc = new ManagementClass("Win32_Processor"))
+            foreach (ManagementObject obj in new ManagementObjectSearcher("SELECT *, Name FROM Win32_Processor").Get())
             {
-                foreach (var o in mc.GetInstances())
-                {
-                    var mo = (ManagementObject)o;
-                    GHz = 0.001 * (UInt32)mo.Properties["CurrentClockSpeed"].Value;
-                    break;
-                }
+                double maxSpeed = Convert.ToDouble(obj["MaxClockSpeed"]) / 1000;
+                sb.AppendLine(string.Format("{0} Running at {1:0.00} Ghz", obj["Name"], maxSpeed));
             }
-
-            sb.AppendLine($"CPU Speed: {GHz} GHz");
 
             return sb;
         }
@@ -219,7 +194,6 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             sb.AppendLine($"User Name: {Environment.UserName}");
             sb.AppendLine($"Domain Name: {Environment.UserDomainName}");
-            //sb.AppendLine(string.Format("User Display Name: {0}", System.DirectoryServices.AccountManagement.UserPrincipal.Current.DisplayName));
             return sb;
         }
 
