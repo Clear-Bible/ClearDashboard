@@ -1,19 +1,16 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using FluentValidation;
 //using ClearDashboard.Wpf.Validators;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
-
-using ParallelCorpus = ClearDashboard.DataAccessLayer.Models.ParallelCorpus;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
 

@@ -50,9 +50,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.CQRS.Features\ClearDashboard.DAL.CQRS.Features.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL.Models\ClearDashboard.DAL.Models.csproj" />
-    <ProjectReference Include="..\..\src\ClearDashboard.DAL.Wpf\ClearDashboard.DAL.Wpf.csproj" />
+    <ProjectReference Include="..\..\src\ClearDashboard.DAL.Wpf\ClearDashboard.Wpf.Application.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.DAL\ClearDashboard.DAL.csproj" />
     <ProjectReference Include="..\..\src\ClearDashboard.ParatextPlugin.CQRS\ClearDashboard.ParatextPlugin.CQRS.csproj" />
+    <ProjectReference Include="..\..\src\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,19 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.Helpers;
-using MediatR;
-using Microsoft.Extensions.Logging;
-
-namespace ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog
+﻿namespace ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog
 {
     //public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<SmtModelDialogViewModel>
     //{

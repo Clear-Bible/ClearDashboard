@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Core.Lifetime;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -6,13 +7,13 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -39,6 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IHandle<VerseChangedMessage>, IHandle<TokensJoinedMessage>, IHandle<TokenUnjoinedMessage>
     {
         public IWindowManager WindowManager { get; }
+
+        public VerseAwareConductorAllActive ParentViewModel => (VerseAwareConductorAllActive)Parent;
 
         //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 
@@ -136,8 +138,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private VerseDisplayViewModel? _selectedVerseDisplayViewModel;
-
-
+        
         public VerseDisplayViewModel? SelectedVerseDisplayViewModel
         {
             get => _selectedVerseDisplayViewModel;
@@ -146,7 +147,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public VerseAwareEnhancedViewItemViewModel(DashboardProjectManager? projectManager,
             INavigationService? navigationService, ILogger<VerseAwareEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        IMediator? mediator, ILifetimeScope? lifetimeScope, IWindowManager windowManager, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             WindowManager = windowManager;
         }
@@ -265,11 +266,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
                 if (metadatum.ParatextProjectId == ManuscriptIds.HebrewManuscriptId)
                 {
-                    metadata = EnhancedViewModel.HebrewManuscriptMetadata;
+                    metadata = ProjectMetadata.HebrewManuscriptMetadata;
                 }
                 else if (metadatum.ParatextProjectId == ManuscriptIds.GreekManuscriptId)
                 {
-                    metadata = EnhancedViewModel.GreekManuscriptMetadata;
+                    metadata = ProjectMetadata.GreekManuscriptMetadata;
                 }
                 else
                 {
@@ -355,13 +356,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private  string CreateNoVerseDataTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum)
         {
-            var localizedMessage = LocalizationStrings.Get("EnhancedView_NoVerseData", Logger!); ;
+            var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); ;
             return $"{metadatum.ProjectName} - {metadatum.TokenizationType}    {localizedMessage}";
         }
 
         private string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
         {
-            var localizedMessage = LocalizationStrings.Get("EnhancedView_NoVerseData", Logger!); ;
+            var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); ;
             return $"{metadatum.ParallelCorpusDisplayName}   {localizedMessage}";
         }
 
@@ -469,7 +470,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
         {
-            var title = $"{metadatum.ParallelCorpusDisplayName ?? string.Empty} {LocalizationStrings.Get(localizationKey, Logger!)}";
+            var title = $"{metadatum.ParallelCorpusDisplayName ?? string.Empty} {LocalizationService.Get(localizationKey)}";
 
             var verseRange = GetValidVerseRange(ParentViewModel.CurrentBcv.BBBCCCVVV, ParentViewModel.VerseOffsetRange);
 

@@ -1,14 +1,13 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
+using System;
 using System.Threading;
-using ClearDashboard.DataAccessLayer.Threading;
+using System.Threading.Tasks;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 

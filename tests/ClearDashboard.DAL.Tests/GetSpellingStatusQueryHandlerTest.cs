@@ -2,11 +2,12 @@
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.DataAccessLayer.Features.PINS;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application;
 using Xunit;
 using Xunit.Abstractions;
 

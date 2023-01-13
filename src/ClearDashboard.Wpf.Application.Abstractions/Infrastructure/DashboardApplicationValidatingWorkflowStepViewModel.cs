@@ -5,7 +5,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+namespace ClearDashboard.Wpf.Application.Infrastructure;
 
 public abstract class DashboardApplicationValidatingWorkflowStepViewModel<TParentViewModel,TEntity> : ValidatingWorkflowStepViewModel<TEntity>
 where TParentViewModel : class

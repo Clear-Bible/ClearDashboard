@@ -47,16 +47,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public bool ParatextSync
         {
             get => (bool)GetValue(ParatextSyncProperty);
-            set
-            {
-                SetValue(ParatextSyncProperty, value);
-            }
+            set => SetValue(ParatextSyncProperty, value);
         }
 
         #endregion ParatextSync
-
-
-
+        
         #region Rtl
 
         public static readonly DependencyProperty IsRtlProperty =
@@ -71,9 +66,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         #endregion Rtl
         
-        
-
-
         #region CurrentBcv
 
         public static readonly DependencyProperty CurrentBcvProperty =
@@ -134,10 +126,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public string VerseChange
         {
             get => (string)GetValue(VerseChangeProperty);
-            set
-            {
-                SetValue(VerseChangeProperty, value);
-            }
+            set => SetValue(VerseChangeProperty, value);
         }
 
         #endregion VerseChange
@@ -190,15 +179,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public static readonly DependencyProperty ShowHeaderProperty =
             DependencyProperty.Register(nameof(ShowHeader), typeof(bool), typeof(BcvUserControl),
-                new PropertyMetadata(true, new PropertyChangedCallback(OnShowHeaderPropteryChanged)));
+                new PropertyMetadata(true, new PropertyChangedCallback(OnShowHeaderPropertyChanged)));
 
-        private static void OnShowHeaderPropteryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnShowHeaderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BcvUserControl? userControl = d as BcvUserControl;
-            userControl?.OnShowHeaderPropteryChanged(e);
+            userControl?.OnShowHeaderPropertyChanged(e);
         }
 
-        private void OnShowHeaderPropteryChanged(DependencyPropertyChangedEventArgs e)
+        private void OnShowHeaderPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
             ShowHeader = (bool)e.NewValue;
         }

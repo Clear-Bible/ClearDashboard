@@ -1,15 +1,14 @@
-﻿using System;
-using System.Threading;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Threading;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Threading;
 
-namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
+namespace ClearDashboard.Wpf.Application.Infrastructure
 {
     public class DashboardApplicationWorkflowShellViewModel : WorkflowShellViewModel, IDialog
     {

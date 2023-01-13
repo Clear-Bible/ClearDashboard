@@ -1,14 +1,13 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Controls.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using ClearDashboard.DataAccessLayer.Wpf.Messages;
 using Size = System.Windows.Size;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClearDashboard.DataAccessLayer.Wpf.Messages
+namespace ClearDashboard.Wpf.Application.Messages
 {
 
     public record NodeSelectedChangedMessage(object? Node);

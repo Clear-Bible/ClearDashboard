@@ -1,14 +1,14 @@
-﻿using ClearDashboard.DAL.Alignment.Features.Corpora;
+﻿using System;
+using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.BackgroundServices;
-using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
-namespace ClearDashboard.DataAccessLayer.Wpf.Extensions
+namespace ClearDashboard.Wpf.Application.Extensions
 {
     public static class ServiceCollectionExtensions
     {
