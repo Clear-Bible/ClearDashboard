@@ -2,9 +2,9 @@
 
 namespace ClearDashboard.Wpf.Application.Views.Project.Aqua
 {
-    public partial class AquaGetView : UserControl
+    public partial class AquaDoGetStepView : UserControl
     {
-        public AquaGetView()
+        public AquaDoGetStepView()
         {
             InitializeComponent();
         }

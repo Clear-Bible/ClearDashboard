@@ -19,7 +19,7 @@ namespace ClearDashboard.Wpf.Application.Services
             CancellationToken cancellationToken,
             IProgress<ProgressStatus>? progress);
 
-        public Task GetCorpusAnalysis(
+        public Task<string> GetCorpusAnalysis(
             string paratextProjectId, 
             CancellationToken cancellationToken,
             IProgress<ProgressStatus>? progress);

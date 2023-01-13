@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.Views.Project.Aqua.AquaGetView"
+    x:Class="ClearDashboard.Wpf.Application.Views.Project.Aqua.AquaDoGetStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:aqua="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Aqua"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:translation="clr-namespace:ClearDashboard.DAL.Alignment.Translation;assembly=ClearDashboard.DAL.Alignment"
-    d:DataContext="{d:DesignInstance Type=aqua:AquaGetViewModel,
+    d:DataContext="{d:DesignInstance Type=aqua:AquaDoGetStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -49,20 +48,7 @@
             Margin="0,20"
             VerticalAlignment="Top"
             Orientation="Vertical">
-            <Label Content="{helpers:Localization AquaRequestCorpusAnalysisDialog_GetAnalysisFromAqua}" />
-            <ComboBox
-                Margin="30,0,30,0"
-                VerticalAlignment="Top"
-                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type translation:SmtModelType}}}"
-                SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="18" Text="{Binding .}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <Label Content="{Binding BodyText}" />
         </StackPanel>
 
         <StackPanel

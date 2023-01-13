@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:aqua="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Aqua"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:translation="clr-namespace:ClearDashboard.DAL.Alignment.Translation;assembly=ClearDashboard.DAL.Alignment"
     d:DataContext="{d:DesignInstance Type=aqua:AquaInfoStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -49,20 +48,7 @@
             Margin="0,20"
             VerticalAlignment="Top"
             Orientation="Vertical">
-            <Label Content="{helpers:Localization AquaRequestCorpusAnalysisDialog_Information}" />
-            <ComboBox
-                Margin="30,0,30,0"
-                VerticalAlignment="Top"
-                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type translation:SmtModelType}}}"
-                SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="18" Text="{Binding .}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+            <Label Content="{Binding BodyText}" />
         </StackPanel>
 
         <StackPanel
