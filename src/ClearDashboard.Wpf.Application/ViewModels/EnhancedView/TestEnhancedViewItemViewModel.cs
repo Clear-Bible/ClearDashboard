@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +15,7 @@ public class TestEnhancedViewItemViewModel : EnhancedViewItemViewModel
 
     public TestEnhancedViewItemViewModel(DashboardProjectManager? projectManager,
         INavigationService? navigationService, ILogger<TestEnhancedViewItemViewModel>? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         Title = "TestEnhancedViewItemViewModel";
         Message = "This message was created in the TestEnhancedViewItemViewModel constructor.";

@@ -1,13 +1,12 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Features.Projects;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Wpf;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
+using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application;
 using Xunit;
 using Xunit.Abstractions;
 

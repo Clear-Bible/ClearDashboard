@@ -1,10 +1,9 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Versification;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -14,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {

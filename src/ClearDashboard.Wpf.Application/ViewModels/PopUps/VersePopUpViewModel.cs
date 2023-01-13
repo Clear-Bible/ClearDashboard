@@ -1,16 +1,15 @@
-﻿using System.Data;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Data;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 {

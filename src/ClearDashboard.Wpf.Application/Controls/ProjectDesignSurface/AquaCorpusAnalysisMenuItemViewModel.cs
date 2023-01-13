@@ -1,17 +1,17 @@
-﻿using Caliburn.Micro;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Project.Aqua;
 using MahApps.Metro.IconPacks;
 using Microsoft.Extensions.Logging;
-using System.Diagnostics;
 using System;
-using System.Threading.Tasks;
-using ClearDashboard.Wpf.Application.ViewModels.Project.Aqua;
-using Autofac;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.DataAccessLayer.Wpf;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Infrastructure;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
