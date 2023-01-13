@@ -353,25 +353,25 @@ namespace ClearDashboard.DataAccessLayer.Paratext
             return projects;
         }
 
-        public static List<SelectedBook> UpdateBooks(ParatextProject paratextProject, List<SelectedBook> books)
-        {
-            for (var i = 0; i < paratextProject.BooksList.Count; i++)
-            {
-                if (paratextProject.BooksList[i].Available)
-                {
-                    //_logger.LogInformation(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " AVAILABLE");
-                    books[i].IsEnabled = true;
-                }
-                else
-                {
-                    //_logger.LogInformation(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " MISSING");
-                    books[i].IsEnabled = false;
-                    books[i].IsSelected = false;
-                }
-            }
+        //public static List<SelectedBook> UpdateBooks(ParatextProject paratextProject, List<SelectedBook> books)
+        //{
+        //    for (var i = 0; i < paratextProject.BooksList.Count; i++)
+        //    {
+        //        if (paratextProject.BooksList[i].Available)
+        //        {
+        //            //_logger.LogInformation(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " AVAILABLE");
+        //            books[i].IsEnabled = true;
+        //        }
+        //        else
+        //        {
+        //            //_logger.LogInformation(books[i].BookName + " " + paratextProject.BooksList[i].BookNameShort + " MISSING");
+        //            books[i].IsEnabled = false;
+        //            books[i].IsSelected = false;
+        //        }
+        //    }
 
-            return books;
-        }
+        //    return books;
+        //}
 
         /// <summary>
         /// Parse through the Settings file and return back a ParatextProject obj

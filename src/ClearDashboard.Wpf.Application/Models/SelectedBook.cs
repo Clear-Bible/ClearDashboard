@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Runtime.CompilerServices;
+using System.Windows.Media;
 
-namespace ClearDashboard.DataAccessLayer.Models
+namespace ClearDashboard.Wpf.Application.Models
 {
-    public class SelectedBook 
+    public class SelectedBook
     {
-        public enum EBookColor : int
+        public enum EBookColor
         {
             Pentateuch = 0,
             Historical = 1,
@@ -28,10 +26,10 @@ namespace ClearDashboard.DataAccessLayer.Models
 
         public string Abbreviation { get; set; }
 
-        public Color BackColor { get; set; }
+        public Brush BackColor { get; set; }
 
 
-        
+
         public float ProgressNum { get; set; }
 
 
@@ -47,44 +45,44 @@ namespace ClearDashboard.DataAccessLayer.Models
                 {
                     // OT
                     case EBookColor.Pentateuch:
-                        BookColor = Color.Cyan;
+                        BookColor = Brushes.Cyan;
                         break;
                     case EBookColor.Historical:
-                        BookColor = Color.Coral;
+                        BookColor = Brushes.Coral;
                         break;
                     case EBookColor.Wisdom:
-                        BookColor = Color.LimeGreen;
+                        BookColor = Brushes.LimeGreen;
                         break;
                     case EBookColor.Prophets:
-                        BookColor = Color.Magenta;
+                        BookColor = Brushes.Magenta;
                         break;
 
                     // NT
                     case EBookColor.Gospels:
-                        BookColor = Color.MediumPurple;
+                        BookColor = Brushes.MediumPurple;
                         break;
                     case EBookColor.Acts:
-                        BookColor = Color.Gold;
+                        BookColor = Brushes.Gold;
                         break;
                     case EBookColor.Epistles:
-                        BookColor = Color.MediumSpringGreen;
+                        BookColor = Brushes.MediumSpringGreen;
                         break;
                     case EBookColor.Revelation:
-                        BookColor = Color.Turquoise;
+                        BookColor = Brushes.Turquoise;
                         break;
 
                 }
-             
+
             }
         }
 
-     
-        public Color BookColor { get; set; }
+
+        public SolidColorBrush? BookColor { get; set; }
 
         public string? BookNum { get; set; }
 
         public bool IsOt { get; set; }
-     
+
 
         public static List<SelectedBook> Init()
         {
