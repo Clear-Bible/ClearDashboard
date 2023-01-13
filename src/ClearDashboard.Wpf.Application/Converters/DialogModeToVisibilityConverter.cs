@@ -1,8 +1,8 @@
-﻿using System;
+﻿using ClearDashboard.Wpf.Application.Infrastructure;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 
 namespace ClearDashboard.Wpf.Application.Converters;
 

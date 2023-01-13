@@ -1,10 +1,9 @@
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using ClearDashboard.DataAccessLayer.Paratext;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.Extensions.Logging;
 using System;
@@ -17,13 +16,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Xml.Linq;
-using ClearDashboard.DataAccessLayer.Wpf.Messages;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Messages;
 
-namespace ClearDashboard.DataAccessLayer.Wpf;
-
-
-
-
+namespace ClearDashboard.Wpf.Application;
 
 public class DashboardProjectManager : ProjectManager
 {

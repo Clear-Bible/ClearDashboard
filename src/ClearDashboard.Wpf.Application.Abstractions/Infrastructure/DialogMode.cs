@@ -1,4 +1,4 @@
-﻿namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+﻿namespace ClearDashboard.Wpf.Application.Infrastructure;
 
 public enum DialogMode
 {

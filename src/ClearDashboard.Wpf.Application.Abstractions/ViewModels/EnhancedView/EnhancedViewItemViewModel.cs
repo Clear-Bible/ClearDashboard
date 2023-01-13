@@ -1,14 +1,13 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
+using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Services;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;

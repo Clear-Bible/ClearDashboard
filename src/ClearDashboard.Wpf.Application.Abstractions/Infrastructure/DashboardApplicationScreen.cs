@@ -1,10 +1,11 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Wpf.Application;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace ClearDashboard.DataAccessLayer.Wpf.Infrastructure
+namespace ClearDashboard.Wpf.Application.Infrastructure
 {
     public abstract class DashboardApplicationScreen : ApplicationScreen
     {

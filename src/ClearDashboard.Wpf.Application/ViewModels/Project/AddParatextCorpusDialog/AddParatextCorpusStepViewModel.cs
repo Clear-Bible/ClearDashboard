@@ -1,4 +1,17 @@
-﻿using System;
+﻿using Autofac;
+using Caliburn.Micro;
+using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.DataAccessLayer.Models.Common;
+using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
+using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using FluentValidation;
+using FluentValidation.Results;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,22 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using Autofac;
-using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.DataAccessLayer.Models.Common;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.DataAccessLayer.Wpf.Messages;
-using ClearDashboard.ParatextPlugin.CQRS.Features.CheckUsfm;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
-using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using FluentValidation;
-using FluentValidation.Results;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using ClearDashboard.Wpf.Application.Messages;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {

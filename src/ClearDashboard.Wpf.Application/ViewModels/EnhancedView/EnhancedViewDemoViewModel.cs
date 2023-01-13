@@ -1,6 +1,22 @@
 ﻿// Uncomment this preprocessor definition to use mock data for dev/test purposes.
 //#define MOCK
 
+using Autofac;
+using Caliburn.Micro;
+using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Tokenization;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using SIL.Machine.Tokenization;
+using SIL.Scripture;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -8,25 +24,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Autofac;
-using Caliburn.Micro;
-using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearBible.Engine.Corpora;
-using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.Tokenization;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
-using ClearDashboard.DataAccessLayer.Wpf;
-using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
-using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using SIL.Machine.Tokenization;
-using SIL.Scripture;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo

@@ -3,7 +3,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Models.Paratext;
 using System.Collections.Generic;
 
-namespace ClearDashboard.DataAccessLayer.Wpf.Messages
+namespace ClearDashboard.Wpf.Application.Messages
 {
 
     public record SetProjectMetadataQuery(List<ParatextProjectMetadata> ProjectMetadata);

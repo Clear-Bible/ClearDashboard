@@ -4,7 +4,7 @@ using Caliburn.Micro;
 using ClearApplicationFoundation;
 using ClearDashboard.DAL.Alignment.BackgroundServices;
 using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.DataAccessLayer.Wpf.Extensions;
+using ClearDashboard.DataAccessLayer.Paratext;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
@@ -21,13 +21,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using ClearDashboard.DataAccessLayer.Paratext;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
 using DashboardApplication = System.Windows.Application;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using ClearApplicationFoundation.Extensions;
 
 namespace ClearDashboard.Wpf.Application
 {

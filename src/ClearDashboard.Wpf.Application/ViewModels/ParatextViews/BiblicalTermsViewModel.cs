@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
@@ -25,9 +25,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using Point = System.Windows.Point;
-using ClearDashboard.DataAccessLayer;
 
 // ReSharper disable InconsistentNaming
 
