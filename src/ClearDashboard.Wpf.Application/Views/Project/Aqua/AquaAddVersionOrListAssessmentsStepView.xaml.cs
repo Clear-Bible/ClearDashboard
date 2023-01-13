@@ -1,11 +1,10 @@
 ﻿using System.Windows.Controls;
 
-
 namespace ClearDashboard.Wpf.Application.Views.Project.Aqua
 {
-    public partial class AquaMakeRequestStepView : UserControl
+    public partial class AquaAddVersionOrListAssessmentsStepView : UserControl
     {
-        public AquaMakeRequestStepView()
+        public AquaAddVersionOrListAssessmentsStepView()
         {
             InitializeComponent();
         }

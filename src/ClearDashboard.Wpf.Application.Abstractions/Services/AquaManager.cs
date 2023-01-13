@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +36,53 @@ namespace ClearDashboard.Wpf.Application.Services
                 IsNewWindow = false
             }));
         }
+
+        public async Task<string> AddVersion(
+            string paratextProjectId,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress)
+        {
+            await SlowTask("AddVersion", 10, cancellationToken, progress);
+            return "versionId";
+        }
+        public async Task<string> AddRevision(
+            string versionId,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress)
+        {
+            await SlowTask("AddRevision", 10, cancellationToken, progress);
+            return "revisionId";
+        }
+
+        public async Task<IEnumerable<string>> GetRevisions(
+            string versionId,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress)
+        {
+            await SlowTask("GetRevisions", 10, cancellationToken, progress);
+            return new List<string>() { "Revision1", "Revision2" };
+        }
+
+        public async Task<IEnumerable<string>> GetAssessmentStatuses(
+            string revisionId,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress)
+        {
+            await SlowTask("GetAssessments", 10, cancellationToken, progress);
+            return new List<string>() { "AssessmentStatus1", "AssessmentStatus2" };
+        }
+
+        public async Task<string> GetAssessmentResult(
+            string assessmentId,
+            CancellationToken cancellationToken,
+            IProgress<ProgressStatus>? progress)
+        {
+            await SlowTask("GetAssessmentResult", 10, cancellationToken, progress);
+            return "AssessmentResult";
+        }
+
+
+
 
         public async Task RequestCorpusAnalysis(
             string paratextProjectId, 

@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.Views.Project.Aqua.AquaDoGetStepView"
+    x:Class="ClearDashboard.Wpf.Application.Views.Project.Aqua.AquaAddVersionOrListAssessmentsStepView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:aqua="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Aqua"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    d:DataContext="{d:DesignInstance Type=aqua:AquaDoGetStepViewModel,
+    d:DataContext="{d:DesignInstance Type=aqua:AquaAddVersionOrListAssessmentsStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -59,8 +59,8 @@
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button
-                x:Name="Get"
-                Content="{helpers:Localization AquaRequestCorpusAnalysisDialog_Get}"
+                x:Name="AddVersion"
+                Content="{helpers:Localization AquaAddVersionStepButton}"
                 IsDefault="True"
                 IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
                 Style="{StaticResource TransparentStyle}" />

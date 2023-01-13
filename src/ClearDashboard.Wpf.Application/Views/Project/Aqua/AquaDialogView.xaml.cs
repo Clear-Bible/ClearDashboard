@@ -2,9 +2,9 @@
 
 namespace ClearDashboard.Wpf.Application.Views.Project.Aqua
 {
-    public partial class AquaGetCorpusAnalysisDialogView : DialogWindow
+    public partial class AquaDialogView : DialogWindow
     {
-        public AquaGetCorpusAnalysisDialogView()
+        public AquaDialogView()
         {
             InitializeComponent();
             Prepare();
