@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,20 +12,21 @@ using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.Aqua;
 
-public class AquaMakeRequestStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaRequestCorpusAnalysisDialogViewModel>
+public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaDialogViewModel>
 {
-    public AquaMakeRequestStepViewModel()
+    public AquaAddVersionOrListAssessmentsStepViewModel()
     {
+        OkCommand = new RelayCommand(Ok);
     }
-    public AquaMakeRequestStepViewModel( 
+    public AquaAddVersionOrListAssessmentsStepViewModel(
         string paratextProjectId,
 
-        DialogMode dialogMode,  
+        DialogMode dialogMode,
         DashboardProjectManager projectManager,
-        INavigationService navigationService, 
-        ILogger<AquaMakeRequestStepViewModel> logger, 
+        INavigationService navigationService,
+        ILogger<AquaAddRevisionStepViewModel> logger,
         IEventAggregator eventAggregator,
-        IMediator mediator, 
+        IMediator mediator,
         ILifetimeScope? lifetimeScope)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
@@ -33,16 +35,19 @@ public class AquaMakeRequestStepViewModel : DashboardApplicationWorkflowStepView
         CanMoveBackwards = true;
         EnableControls = true;
 
-        BodyTitle = "Make Request Body Title";
-        BodyText = "Make Request Body Text";
+        OkCommand = new RelayCommand(Ok);
+
+        BodyTitle = "Add Version Body Title";
+        BodyText = "Add Version Body Text";
+
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
+        ParentViewModel!.StatusBarVisibility = Visibility.Hidden;
         return base.OnInitializeAsync(cancellationToken);
     }
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {
-        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
         return base.OnActivateAsync(cancellationToken);
     }
 
@@ -75,15 +80,18 @@ public class AquaMakeRequestStepViewModel : DashboardApplicationWorkflowStepView
             NotifyOfPropertyChange(() => BodyText);
         }
     }
+    public RelayCommand OkCommand { get; }
+
 
 
     public void Ok(object obj)
     {
-        ((IAquaDialogViewModel)ParentViewModel!).Ok();
+        ParentViewModel!.Ok();
     }
+
     public void Cancel(object obj)
     {
-        ((IAquaDialogViewModel)ParentViewModel!).Cancel();
+        ParentViewModel!.Cancel();
     }
     public async void MoveForwards(object obj)
     {
@@ -93,11 +101,12 @@ public class AquaMakeRequestStepViewModel : DashboardApplicationWorkflowStepView
     {
         await MoveBackwards();
     }
-    public async void Request()
+
+    public async void AddVersion()
     {
         try
         {
-            var processStatus = await ParentViewModel!.RequestAnalysis();
+            var processStatus = await ParentViewModel!.AddVersion();
 
             switch (processStatus)
             {
@@ -106,7 +115,7 @@ public class AquaMakeRequestStepViewModel : DashboardApplicationWorkflowStepView
                     break;
                 case LongRunningTaskStatus.Failed:
                 case LongRunningTaskStatus.Cancelled:
-                    ((IAquaDialogViewModel)ParentViewModel!).Cancel();
+                    ParentViewModel!.Cancel();
                     break;
                 case LongRunningTaskStatus.NotStarted:
                     break;
@@ -118,7 +127,7 @@ public class AquaMakeRequestStepViewModel : DashboardApplicationWorkflowStepView
         }
         catch (Exception)
         {
-            ((IAquaDialogViewModel)ParentViewModel!).Cancel();
+            ParentViewModel!.Cancel();
         }
     }
 }

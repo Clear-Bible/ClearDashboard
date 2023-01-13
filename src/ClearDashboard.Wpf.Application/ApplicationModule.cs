@@ -135,31 +135,22 @@ namespace ClearDashboard.Wpf.Application
 
             builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
 
-            //pds dialogs
-
-            //Request corpus analysis dialog sequence
+            builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
+                .WithMetadata("Order", 1);
 
             builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
-                .WithMetadata("Order", 1);
-
-            builder.RegisterType<AquaMakeRequestStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 2);
 
-            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
+            builder.RegisterType<AquaAddRevisionStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 3);
 
-
-            //Get corpus analysis dialog sequence
-            builder.RegisterType<AquaDoGetStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaGetCorpusAnalysisDialog")
-                .WithMetadata("Order", 1);
-
             builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaGetCorpusAnalysisDialog")
-                .WithMetadata("Order", 2);
+                .Keyed<IWorkflowStepViewModel>("AquaDialog")
+                .WithMetadata("Order", 4);
+
         }
     }
 
