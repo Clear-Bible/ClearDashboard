@@ -350,7 +350,10 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void ZoomOut(Point contentZoomCenter)
         {
-            zoomAndPanControl.ZoomAboutPoint(zoomAndPanControl.ContentScale - 0.1, contentZoomCenter);
+            if (zoomAndPanControl.ContentScale>0.02)
+            {
+                zoomAndPanControl.ZoomAboutPoint(zoomAndPanControl.ContentScale - 0.01, contentZoomCenter);
+            }
         }
 
         /// <summary>
@@ -358,7 +361,10 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void ZoomIn(Point contentZoomCenter)
         {
-            zoomAndPanControl.ZoomAboutPoint(zoomAndPanControl.ContentScale + 0.1, contentZoomCenter);
+            if (zoomAndPanControl.ContentScale<0.99)
+            {
+                zoomAndPanControl.ZoomAboutPoint(zoomAndPanControl.ContentScale + 0.01, contentZoomCenter);
+            }
         }
 
         /// <summary>
