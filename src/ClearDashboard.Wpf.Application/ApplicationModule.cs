@@ -137,7 +137,7 @@ namespace ClearDashboard.Wpf.Application
 
             //pds dialogs
 
-            //RequestCorpusAnalysisDialog
+            //Request corpus analysis dialog sequence
 
             builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
@@ -150,6 +150,16 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaRequestCorpusAnalysisDialog")
                 .WithMetadata("Order", 3);
+
+
+            //Get corpus analysis dialog sequence
+            builder.RegisterType<AquaDoGetStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaGetCorpusAnalysisDialog")
+                .WithMetadata("Order", 1);
+
+            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
+                .Keyed<IWorkflowStepViewModel>("AquaGetCorpusAnalysisDialog")
+                .WithMetadata("Order", 2);
         }
     }
 

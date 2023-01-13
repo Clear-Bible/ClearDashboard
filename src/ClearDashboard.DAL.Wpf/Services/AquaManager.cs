@@ -44,12 +44,13 @@ namespace ClearDashboard.Wpf.Application.Services
             await SlowTask("RequestCorpusAnalysis", 10, cancellationToken, progress);
         }
 
-        public async Task GetCorpusAnalysis(
+        public async Task<string> GetCorpusAnalysis(
             string paratextProjectId, 
             CancellationToken cancellationToken, 
             IProgress<ProgressStatus>? progress = null)
         {
             await SlowTask("GetCorpusAnalysis", 10, cancellationToken, progress);
+            return "Analysis 454";
         }
 
         protected  async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken cancellationToken)

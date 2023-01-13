@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.DataAccessLayer.Wpf.Infrastructure;
@@ -8,7 +7,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System.Threading;
-using ClearDashboard.DataAccessLayer.Threading;
 using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.Aqua;
@@ -17,28 +15,41 @@ public class AquaInfoStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 {
     public AquaInfoStepViewModel()
     {
+        OkCommand = new RelayCommand(Ok);
     }
     public AquaInfoStepViewModel( 
+        string paratextProjectId,
+
         DialogMode dialogMode,  
         DashboardProjectManager projectManager,
         INavigationService navigationService, 
         ILogger<AquaMakeRequestStepViewModel> logger, 
         IEventAggregator eventAggregator,
         IMediator mediator, 
-        ILifetimeScope? lifetimeScope,
-        LongRunningTaskManager longRunningTaskManager)
+        ILifetimeScope? lifetimeScope)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
         DialogMode = dialogMode;
-        LongRunningTaskManager = longRunningTaskManager;
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
 
         OkCommand = new RelayCommand(Ok);
+
+        BodyTitle = "Info Body Title";
+        BodyText = "Info Body Text";
+
+    }
+    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+    {
+        ParentViewModel!.StatusBarVisibility = Visibility.Hidden;
+        return base.OnInitializeAsync(cancellationToken);
+    }
+    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        return base.OnActivateAsync(cancellationToken);
     }
 
-    public RelayCommand OkCommand { get; }
 
     private DialogMode _dialogMode;
     public DialogMode DialogMode
@@ -46,28 +57,40 @@ public class AquaInfoStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         get => _dialogMode;
         set => Set(ref _dialogMode, value);
     }
-    public LongRunningTaskManager LongRunningTaskManager { get; }
-    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+
+    private string? bodyTitle_;
+    public string? BodyTitle
     {
-        ParentViewModel.StatusBarVisibility = Visibility.Hidden;
-        return base.OnInitializeAsync(cancellationToken);
+        get => bodyTitle_;
+        set
+        {
+            bodyTitle_ = value;
+            NotifyOfPropertyChange(() => BodyTitle);
+        }
     }
 
-    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    private string? bodyText_;
+    public string? BodyText
     {
-        ParentViewModel!.CurrentStepTitle =
-            LocalizationStrings.Get("AquaRequestCorpusAnalysisDialog_InfoStep", Logger!);
-
-        return base.OnActivateAsync(cancellationToken);
+        get => bodyText_;
+        set
+        {
+            bodyText_ = value;
+            NotifyOfPropertyChange(() => BodyText);
+        }
     }
+    public RelayCommand OkCommand { get; }
+
+
+
     public void Ok(object obj)
     {
-        ParentViewModel?.Ok();
+        ((IAquaDialogViewModel)ParentViewModel!).Ok();
     }
 
     public void Cancel(object obj)
     {
-        ParentViewModel?.Cancel();
+        ((IAquaDialogViewModel)ParentViewModel!).Cancel();
     }
     public async void MoveForwards(object obj)
     {

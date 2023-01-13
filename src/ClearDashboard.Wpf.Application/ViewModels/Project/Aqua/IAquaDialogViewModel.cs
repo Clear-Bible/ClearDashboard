@@ -1,18 +1,13 @@
-﻿using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.Aqua
 {
-    public interface IAquaDialogViewModel : IParatextCorpusDialogViewModel
+    public interface IAquaDialogViewModel
     {
-        Task<LongRunningTaskStatus> RequestAnalysis();
-
         Visibility StatusBarVisibility { get; set; }
+        string? DialogTitle { get; set; }
+
+        void Ok();
+        void Cancel();
     }
 }
