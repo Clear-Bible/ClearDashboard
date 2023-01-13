@@ -12,7 +12,6 @@
     Width="500"
     Height="450"
     helpers1:Translation.ResourceManager="{x:Static strings:Resources.ResourceManager}"
-    WindowStyle="ToolWindow"
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
@@ -24,7 +23,7 @@
         <Image Source="/Assets/ClearDashboard_logo_250.png" />
 
         <TextBlock
-            Grid.Row="0"
+            Grid.Row="1"
             Margin="0,0,0,10"
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
@@ -32,18 +31,19 @@
             Text="Clear Dashboard" />
 
         <TextBlock
-            Grid.Row="1"
+            Grid.Row="2"
             HorizontalAlignment="Center"
             FontSize="26"
             Text="{Binding VersionInfo}" />
 
         <Button
             x:Name="ClickLink"
-            Grid.Row="2"
+            Grid.Row="3"
             Width="160"
             Height="40"
-            Margin="10"
-            Style="{StaticResource TransparentButton}">
+            Margin="10,10,10,40"
+            Background="Transparent"
+            BorderBrush="Transparent">
             <TextBlock
                 Cursor="Hand"
                 FontSize="24"
@@ -51,10 +51,11 @@
                 Text="Clear Bible"
                 TextDecorations="Underline" />
         </Button>
-        <Button
+        <!--<Button
             x:Name="Close"
             Grid.Row="3"
             Margin="3"
-            Content="{helpers:Localization Close}" />
+            Content="{helpers:Localization Close}"
+            Style="{StaticResource TransparentStyle}" />-->
     </Grid>
 </Window>
