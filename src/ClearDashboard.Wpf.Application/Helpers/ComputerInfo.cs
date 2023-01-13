@@ -98,43 +98,55 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         private StringBuilder GetCpuManufacturer(StringBuilder sb)
         {
-            string? cpuMan = String.Empty;
-            //create an instance of the Management class with the
-            //Win32_Processor class
-            ManagementClass managementClass = new ManagementClass("Win32_Processor");
-            //create a ManagementObjectCollection to loop through
-            ManagementObjectCollection objCol = managementClass.GetInstances();
-            //start our loop for all processors found
-            foreach (var o in objCol)
-            {
-                var obj = (ManagementObject)o;
-                if (cpuMan == String.Empty)
-                {
-                    // only return manufacturer from first CPU
-                    cpuMan = obj.Properties["Manufacturer"].Value.ToString();
-                }
-            }
+            //string? cpuMan = String.Empty;
+            ////create an instance of the Management class with the
+            ////Win32_Processor class
+            //ManagementClass managementClass = new ManagementClass("Win32_Processor");
+            ////create a ManagementObjectCollection to loop through
+            //ManagementObjectCollection objCol = managementClass.GetInstances();
+            ////start our loop for all processors found
+            //foreach (var o in objCol)
+            //{
+            //    var obj = (ManagementObject)o;
+            //    if (cpuMan == String.Empty)
+            //    {
+            //        // only return manufacturer from first CPU
+            //        cpuMan = obj.Properties["Manufacturer"].Value.ToString();
+            //    }
+            //}
 
-            sb.AppendLine($"CPU Brand: {cpuMan}");
+            //sb.AppendLine($"CPU Brand: {cpuMan}");
+
+            sb.AppendLine(string.Format("CPU Type: {0}", System.Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER")));
 
             return sb;
         }
 
         private StringBuilder GetCpuSpeedInGHz(StringBuilder sb)
         {
-            // ReSharper disable once InconsistentNaming
-            double? GHz = null;
-            using (ManagementClass mc = new ManagementClass("Win32_Processor"))
-            {
-                foreach (var o in mc.GetInstances())
-                {
-                    var mo = (ManagementObject)o;
-                    GHz = 0.001 * (UInt32)mo.Properties["CurrentClockSpeed"].Value;
-                    break;
-                }
-            }
+            //	double? GHz = null;
+            //	using (ManagementClass mc = new ManagementClass("Win32_Processor"))
+            //	{
+            //		foreach (ManagementObject mo in mc.GetInstances())
+            //		{
+            //			GHz = 0.001 * (UInt32)mo.Properties["CurrentClockSpeed"].Value;
+            //			sb.AppendLine(string.Format("CPU Speed: {0} GHz", GHz));
+            //			break;
+            //		}
+            //	}
+            //
+            //	using (ManagementObject Mo = new ManagementObject("Win32_Processor.DeviceID='CPU0'"))
+            //	{
+            //		//currentsp = (uint)(Mo["CurrentClockSpeed"]);
+            //		var maxSpeed = (uint)(Mo["MaxClockSpeed"]);
+            //		sb.AppendLine(string.Format("CPU Speed: {0} GHz", (double)maxSpeed / 1000));
+            //	}
 
-            sb.AppendLine($"CPU Speed: {GHz} GHz");
+            foreach (ManagementObject obj in new ManagementObjectSearcher("SELECT *, Name FROM Win32_Processor").Get())
+            {
+                double maxSpeed = Convert.ToDouble(obj["MaxClockSpeed"]) / 1000;
+                sb.AppendLine(string.Format("{0} Running at {1:0.00} Ghz", obj["Name"], maxSpeed));
+            }
 
             return sb;
         }
