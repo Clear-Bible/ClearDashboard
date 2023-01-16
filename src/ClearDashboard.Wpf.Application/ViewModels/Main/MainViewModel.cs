@@ -42,6 +42,8 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -816,8 +818,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 try
                 {
-                    var bounds = new Rectangle((int)_windowSettings.Left, (int)_windowSettings.Top, (int)_windowSettings.Width,
-                        (int)_windowSettings.Height);
+                    Rectangle bounds = new Rectangle(0,0,0,0);
+                    if (_windowSettings.IsMaximized)
+                    {
+                        // capture the whole screen
+                        var screen = WpfScreen.GetScreenFrom(new System.Windows.Point((int)_windowSettings.Left, (int)_windowSettings.Top));
+                        var workingArea = screen.WorkingArea;
+
+                        bounds = new Rectangle((int)workingArea.Left, (int)workingArea.Top, (int)workingArea.Width,
+                            (int)workingArea.Height);
+                    }
+                    else
+                    {
+                        bounds = new Rectangle((int)_windowSettings.Left, (int)_windowSettings.Top, (int)_windowSettings.Width,
+                            (int)_windowSettings.Height);
+
+                    }
                     using var bitmap = new Bitmap(bounds.Width, bounds.Height);
                     using (var graphics = Graphics.FromImage(bitmap))
                     {
@@ -851,6 +867,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             // open the message window
             ShowSlackMessageWindow(files);
         }
+
 
         private void ShowSlackMessageWindow(List<string> files)
         {

@@ -92,6 +92,8 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
         private async void ApplicationWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            bool isMaximized = WindowState == WindowState.Maximized;
+
             var shellViewModel = (ShellViewModel)this.DataContext;
             var windowSettings = new WindowSettings
             {
@@ -99,6 +101,7 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
                 Width = Width,
                 Left = Left,
                 Top = Top,
+                IsMaximized = isMaximized,
             };
 
             await shellViewModel.SetWindowsSettings(windowSettings);
