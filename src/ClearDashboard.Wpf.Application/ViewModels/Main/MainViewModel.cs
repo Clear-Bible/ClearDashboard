@@ -819,18 +819,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 try
                 {
                     Rectangle bounds = new Rectangle(0,0,0,0);
+
+                    System.Windows.Point screenPoint = new System.Windows.Point((int)_windowSettings.Left, (int)_windowSettings.Top);
+
+                    var monitors = Helpers.Monitor.AllMonitors;
+                    Rect workingArea;
+                    foreach (var monitor in monitors)
+                    {
+                        Debug.WriteLine(screenPoint);
+                        Debug.WriteLine(monitor.Bounds);
+
+                        if (monitor.Bounds.Contains(screenPoint))
+                        {
+                            workingArea = monitor.Bounds;
+                        }
+                    }
+
                     if (_windowSettings.IsMaximized)
                     {
-                        // capture the whole screen
-                        var screen = WpfScreen.GetScreenFrom(new System.Windows.Point((int)_windowSettings.Left, (int)_windowSettings.Top));
-                        var workingArea = screen.WorkingArea;
-
                         bounds = new Rectangle((int)workingArea.Left, (int)workingArea.Top, (int)workingArea.Width,
                             (int)workingArea.Height);
                     }
                     else
                     {
-                        bounds = new Rectangle((int)_windowSettings.Left, (int)_windowSettings.Top, (int)_windowSettings.Width,
+                        bounds = new Rectangle((int)_windowSettings.Left,
+                             (int)_windowSettings.Top,
+                             (int)_windowSettings.Width,
                             (int)_windowSettings.Height);
 
                     }
