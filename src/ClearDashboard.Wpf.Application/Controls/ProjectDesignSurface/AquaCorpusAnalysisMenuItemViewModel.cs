@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 {
@@ -24,6 +25,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected new BindableCollection<CorpusNodeMenuItemViewModel> MenuItems { get; }  //FIXME: Binable collection should not be generically typed to CorpusNodeMenuItemViewModel.
         public ILifetimeScope LifetimeScope { get; }
         public LongRunningTaskManager LongRunningTaskManager { get; }
+
+        public TokenizedTextCorpusId TokenizedTextCorpusId { get; set; }
 
         //FIXME: should base generic MenuItemViewModel have menuitems too? What is it for? 
 

@@ -734,22 +734,25 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             CorpusNodeViewModel = corpusNode,
                             Tokenizer = tokenizer.ToString(),
                         });
+                        /*
+                        corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
+
+                        corpusNodeMenuViewModel.MenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel(
+                            aquaManager_, 
+                            Logger!, 
+                            windowManager_, 
+                            nodeMenuItems, 
+                            lifetimeScope_, 
+                            longRunningTaskManager_) //FIXME: AquaCorpusAnalysisMenuItemViewModel should probably participate in DI and have these injected directly rather than manually here.
+                        {
+                            TokenizedTextCorpusId = tokenizedCorpus,
+                            CorpusNodeViewModel = corpusNode,
+                        });
+                        */
                     }
                     nodeMenuItems.Add(corpusNodeMenuViewModel);
                     corpusNode.TokenizationCount++;
                 }
-            }
-
-            if (!isResource)
-            {
-                /*
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
-
-                nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel(aquaManager_, Logger!, windowManager_, nodeMenuItems, lifetimeScope_, longRunningTaskManager_) //FIXME: should come from DI?
-                {
-                    CorpusNodeViewModel = corpusNode,
-                });
-                */
             }
 
             //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel

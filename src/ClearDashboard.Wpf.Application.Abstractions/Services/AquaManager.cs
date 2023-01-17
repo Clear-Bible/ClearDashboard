@@ -3,11 +3,14 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using SIL.Machine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -101,6 +104,52 @@ namespace ClearDashboard.Wpf.Application.Services
             return "Analysis 454";
         }
 
+        static async Task<T?> GetFromJsonAsync<T>(
+            HttpClient httpClient, 
+            string protocolHostPortFileString, 
+            Dictionary<string, string>? query,
+            CancellationToken cancellationToken)
+        {
+            var uri = QueryHelpers.AddQueryString(protocolHostPortFileString, query);
+            return await httpClient.GetFromJsonAsync<T>(uri, cancellationToken);
+        }
+
+        static async Task<string> PostKeyValueDataAsync(
+            HttpClient httpClient,
+            string protocolHostPortFileString,
+            Dictionary<string, string>? keyValueData,
+            CancellationToken cancellationToken)
+        {
+            var uri = QueryHelpers.AddQueryString(protocolHostPortFileString, keyValueData);
+
+            using HttpResponseMessage response = await httpClient.PostAsync(
+                uri,
+                null,
+                cancellationToken);
+
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        }
+
+        static async Task<string> PostStringAsFile(
+            HttpClient httpClient,
+            string url,
+            string fileName,
+            string content,
+            string mediaTypeHeaderValueString = "text/pain")
+        {
+            using (var multipartFormContent = new MultipartFormDataContent())
+            {
+                var fileStreamContent = new StringContent(content);
+                fileStreamContent.Headers.ContentType = new MediaTypeHeaderValue(mediaTypeHeaderValueString);
+
+                multipartFormContent.Add(fileStreamContent, name: "file", fileName: fileName);
+
+                var response = await httpClient.PostAsync(url, multipartFormContent);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+        }
         protected  async Task<int> ProcessUrlAsync(string url, HttpClient client, CancellationToken cancellationToken)
         {
             var response = await client.GetAsync(url, cancellationToken);
