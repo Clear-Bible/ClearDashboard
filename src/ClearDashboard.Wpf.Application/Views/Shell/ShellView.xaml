@@ -27,6 +27,7 @@
     Icon="..\..\Assets/ClearDashboard_Icon.ico"
     Initialized="OnWindowInitialized"
     Loaded="OnWindowLoaded"
+    LocationChanged="OnWindowMoved"
     ShowIconOnTitleBar="True"
     SizeChanged="ApplicationWindow_SizeChanged"
     TextElement.FontSize="13"

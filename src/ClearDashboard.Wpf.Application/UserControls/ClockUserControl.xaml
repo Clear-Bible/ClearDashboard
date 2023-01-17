@@ -126,6 +126,7 @@
 
                             <ComboBox
                                 Height="26"
+                                Margin="0,0,30,0"
                                 Foreground="Black"
                                 ItemsSource="{Binding UtcStringList}"
                                 MouseEnter="TextBox_OnMouseEnter"

@@ -339,7 +339,7 @@
                 </Grid>
 
 
-                <ScrollViewer Grid.Row="1">
+                <ScrollViewer x:Name="MarbleScrollViewer" Grid.Row="1">
                     <Grid ShowGridLines="False">
                         <Grid.RowDefinitions>
                             <!--  row 0  -->
@@ -380,11 +380,13 @@
 
                         <!--  ROW 2  -->
                         <GroupBox
+                            Name="GeneralInformationGroupBox"
                             Grid.Row="2"
                             Grid.Column="0"
                             Width="Auto"
                             Margin="10,5,10,10"
-                            Header="General Information">
+                            Header="General Information"
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
                             <GroupBox.HeaderTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
@@ -735,6 +737,7 @@
 
                         <!--  ROW 3  -->
                         <GroupBox
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
                             Grid.Row="3"
                             Grid.Column="0"
                             Width="Auto"
@@ -825,6 +828,7 @@
                         </GroupBox>
 
                         <ScrollViewer
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
                             Grid.Row="2"
                             Grid.RowSpan="2"
                             Grid.Column="1"

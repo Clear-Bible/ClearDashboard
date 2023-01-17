@@ -4,6 +4,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -92,13 +93,31 @@ namespace ClearDashboard.Wpf.Application.Views.Shell
 
         private async void ApplicationWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            await GetWindowLocation();
+        }
+
+        private async void OnWindowMoved(object? sender, EventArgs e)
+        {
+            await GetWindowLocation();
+        }
+
+        private async Task GetWindowLocation()
+        {
+            if (this.DataContext is null)
+            {
+                return;
+            }
+
             var shellViewModel = (ShellViewModel)this.DataContext;
+            bool isMaximized = WindowState == WindowState.Maximized;
+
             var windowSettings = new WindowSettings
             {
                 Height = Height,
                 Width = Width,
                 Left = Left,
                 Top = Top,
+                IsMaximized = isMaximized,
             };
 
             await shellViewModel.SetWindowsSettings(windowSettings);

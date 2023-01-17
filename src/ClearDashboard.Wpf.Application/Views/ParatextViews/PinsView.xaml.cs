@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
