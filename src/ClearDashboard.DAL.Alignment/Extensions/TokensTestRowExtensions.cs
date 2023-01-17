@@ -12,8 +12,15 @@ namespace ClearDashboard.DAL.Alignment.Extensions
                 where firstToken != null
                 let tokenId = firstToken.TokenId
                 select
-                    new VerseTokens(tokenId.ChapterNumber.ToString(), tokenId.VerseNumber.ToString(), row.Tokens,
-                        row.IsSentenceStart));
+                    new VerseTokens(
+                        tokenId.ChapterNumber.ToString(), 
+                        tokenId.VerseNumber.ToString(), 
+                        row.Tokens,
+                        row.IsSentenceStart,
+                        row.IsInRange,
+                        row.IsRangeStart,
+                        row.IsEmpty,
+                        row.OriginalText));
         }
     }
 }
