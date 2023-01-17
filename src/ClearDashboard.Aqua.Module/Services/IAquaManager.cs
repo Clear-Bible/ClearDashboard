@@ -1,12 +1,10 @@
 ﻿using SIL.Machine.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ClearDashboard.Wpf.Application.Services
+namespace ClearDashboard.Aqua.Module.Services
 {
     public interface IAquaManager
     {

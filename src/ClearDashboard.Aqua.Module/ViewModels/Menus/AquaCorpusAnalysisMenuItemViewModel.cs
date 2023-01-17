@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.DataAccessLayer.Wpf;

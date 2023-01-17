@@ -19,6 +19,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Wpf.Application;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
