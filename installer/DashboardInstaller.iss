@@ -162,11 +162,13 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
+var
+    ParatextInstallationPath: string;
+
 function InitializeSetup: Boolean;
 var
     ResultCode: Integer;
     Value: string;
-    ParatextInstallationPath: string;
 begin
   if IsWin64 then begin
    // run the C++ Runtime installer
