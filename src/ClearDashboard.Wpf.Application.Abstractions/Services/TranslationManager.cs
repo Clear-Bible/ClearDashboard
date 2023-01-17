@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -48,7 +49,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        private async Task GetTranslationsAsync()
+        public async Task GetTranslationsAsync()
         {
             try
             {
@@ -72,6 +73,48 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Adds a translation for a token to the current set of translations.
+        /// </summary>
+        /// <param name="tokenId">The token ID to add.</param>
+        /// <returns>The translation for the additional token.</returns>
+        public async Task<Translation?> AddTranslationAsync(TokenId tokenId)
+        {
+            try
+            {
+                if (TranslationSet != null)
+                {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+
+                    var newTranslations = (await TranslationSet.GetTranslations(tokenId.ToEnumerable())).ToList();
+                    if (Translations != null)
+                    {
+                        Translations.AddRange(newTranslations);
+                    }
+                    else
+                    {
+                        Translations = new TranslationCollection(newTranslations);
+                    }
+
+                    stopwatch.Stop();
+                    Logger.LogInformation($"Retrieved {newTranslations.Count()} translations from translation set {TranslationSetId.DisplayName} ({TranslationSetId.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+
+                    return newTranslations.FirstOrDefault();
+                }
+                else
+                {
+                    Logger.LogCritical("Could not retrieve translations without a valid translation set.");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+            return null;
         }
 
         /// <summary>

@@ -210,16 +210,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.SubscribeOnUIThread(this);
         }
 
-        public Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
-            return Task.CompletedTask;
+            await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
+            //Task.Run(() => RefreshTranslationsAsync(message.CompositeToken, message.Tokens).GetAwaiter(), cancellationToken);
+            //return Task.CompletedTask;
         }
 
-        public Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
-            return Task.CompletedTask;
+            await RefreshTranslationsAsync(message.Tokens);
+            //Task.Run(() => RefreshTranslationsAsync(message.CompositeToken, message.Tokens).GetAwaiter(), cancellationToken);
+            //return Task.CompletedTask;
+        }
+
+        protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
+        {
+            await Task.CompletedTask;
         }
     }
 }
