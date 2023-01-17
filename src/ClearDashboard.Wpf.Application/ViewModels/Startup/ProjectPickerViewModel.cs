@@ -435,6 +435,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
+            IsParatextRunning = true;
             await Task.CompletedTask;
         }
 
