@@ -427,7 +427,11 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="19*" />
                 <ColumnDefinition Width="106*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition
+                    x:Name="NotesColumn"
+                    Width="Auto"
+                    MinWidth="24"
+                    MaxWidth="300" />
             </Grid.ColumnDefinitions>
 
             <!--  OUTER LISTVIEW  -->
@@ -534,7 +538,11 @@
                                             Text="{Binding Title}" />
 
                                     </StackPanel>
-                                    <ContentControl Name="VerseContentControl" HorizontalAlignment="Left" cm:View.Model="{Binding .}" PreviewMouseWheel="VerseContentControl_OnPreviewMouseWheel"/>
+                                    <ContentControl
+                                        Name="VerseContentControl"
+                                        HorizontalAlignment="Left"
+                                        cm:View.Model="{Binding .}"
+                                        PreviewMouseWheel="VerseContentControl_OnPreviewMouseWheel" />
 
                                 </StackPanel>
                             </Border>
@@ -544,16 +552,24 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-
+            <GridSplitter
+                x:Name="NotesSplitter"
+                Grid.Column="1"
+                Width="10"
+                Background="Red"
+                DragDelta="ProjectDesignSurfaceSplitter_OnDragDelta" />
 
             <controls:SidebarExpander
+                x:Name="NotesExpander"
                 Grid.Row="0"
                 Grid.Column="2"
                 mah:HeaderedControlHelper.HeaderBackground="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 Background="{DynamicResource IconPackBrowser.Brushes.PanelBackground}"
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray10}"
                 BorderThickness="2"
+                Collapsed="ProjectDesignSurfaceExpander_OnCollapsed"
                 ExpandDirection="Left"
+                Expanded="ProjectDesignSurfaceExpander_OnExpanded"
                 IsExpanded="True"
                 Style="{StaticResource RightExpander}">
                 <controls:SidebarExpander.Header>
@@ -571,6 +587,7 @@
                 </controls:SidebarExpander.Header>
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <userControls:NoteCollectionDisplay
+                        x:Name="NotesControl"
                         Margin="0,0"
                         EntityIds="{Binding Path=SelectionManager.SelectedEntityIds}"
                         LabelBackground="BlanchedAlmond"

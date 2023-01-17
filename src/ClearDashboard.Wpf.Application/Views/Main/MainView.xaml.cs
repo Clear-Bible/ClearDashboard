@@ -161,10 +161,12 @@ namespace ClearDashboard.Wpf.Application.Views.Main
             {
                 ProjectDesignSurfaceExpander.Width = 500;
                 ProjectDesignSurfaceControl.Width = 500;
+
+                ProjectDesignSurfaceColumn.Width = new GridLength(1, GridUnitType.Auto);
+                ProjectDesignSurfaceSplitter.Visibility = Visibility.Visible;
             }
 
-            ProjectDesignSurfaceColumn.Width = new GridLength(1, GridUnitType.Auto);
-            ProjectDesignSurfaceSplitter.Visibility = Visibility.Visible;
+            
         }
 
         private void ProjectDesignSurfaceExpander_OnCollapsed(object sender, RoutedEventArgs e)
