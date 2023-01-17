@@ -47,7 +47,7 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
 
-    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IHandle<UiLanguageChangedMessage>, IDisposable
+    public class ProjectDesignSurfaceViewModel : DashboardConductorOneActive<Screen>, IProjectDesignSurfaceViewModel, IHandle<UiLanguageChangedMessage>, IDisposable
     {
         #region Member Variables
 
@@ -181,7 +181,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         {
             Items.Clear();
             EventAggregator.SubscribeOnUIThread(this);
-            DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
+            try
+            {
+                DesignSurfaceViewModel = await ActivateItemAsync<DesignSurfaceViewModel>(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                var s= ex.ToString();
+            }
+
             await DrawDesignSurface();
 
             _busyState.CollectionChanged += BusyStateOnCollectionChanged;
@@ -996,9 +1004,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
 
-
-
-
         public async Task ExecuteConnectionMenuCommand(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
         {
             var connectionViewModel = connectionMenuItem.ConnectionViewModel;
@@ -1260,7 +1265,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             foreach (var corpusNode in DesignSurfaceViewModel!.CorpusNodes)
             {
                 var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusNode.CorpusId);
-                DesignSurfaceViewModel!.CreateCorpusNodeMenu(corpusNode, tokenizedCorpora);
+                await DesignSurfaceViewModel!.CreateCorpusNodeMenu(corpusNode, tokenizedCorpora);
 
                 foreach (var parallelCorpus in corpusNode.AttachedConnections)
                 {

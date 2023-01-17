@@ -21,24 +21,19 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public interface IEnhancedViewModel
-    {
-        Dictionary<string, string> BcvDictionary { get; set; }
-        BookChapterVerseViewModel CurrentBcv { get; set; }
-        int VerseOffsetRange { get; set; }
-    }
-
-    public class EnhancedViewModel : VerseAwareConductorAllActive, IPaneViewModel,
+   
+    public class EnhancedViewModel : VerseAwareConductorAllActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>,
         IHandle<ReloadDataMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>, IEnhancedViewModel
+        IHandle<TokenizedCorpusUpdatedMessage>
     {
         #region Commands
 
@@ -317,7 +312,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             PaneId = Guid.NewGuid();
         }
 
-        public async Task Initialize(EnhancedViewLayout enhancedViewLayout)
+        public async Task Initialize(EnhancedViewLayout enhancedViewLayout, EnhancedViewItemMetadatum? metadatum, CancellationToken cancellationToken)
         {
 
             EnableBcvControl = true;
@@ -327,6 +322,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             VerseOffsetRange = enhancedViewLayout.VerseOffset;
             BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
             ParatextSync = enhancedViewLayout.ParatextSync;
+            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            VerseChange = ProjectManager.CurrentVerse;
+
+            if (metadatum != null) {
+
+                if (metadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusEnhancedViewItemMetadatum)
+                {
+                    CurrentCorpusName = tokenizedCorpusEnhancedViewItemMetadatum.ProjectName!;
+                }
+
+                await AddItem(metadatum, cancellationToken);
+            }
 
             EventAggregator.SubscribeOnPublishedThread(this);
 

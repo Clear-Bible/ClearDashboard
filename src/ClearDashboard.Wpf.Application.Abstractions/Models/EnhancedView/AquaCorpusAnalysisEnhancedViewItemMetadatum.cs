@@ -1,10 +1,10 @@
-﻿using Dahomey.Json.Attributes;
+﻿//using Dahomey.Json.Attributes;
 
-namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
+//namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
 
-[JsonDiscriminator(nameof(AquaCorpusAnalysisEnhancedViewItemMetadatum))]
-public class AquaCorpusAnalysisEnhancedViewItemMetadatum : EnhancedViewItemMetadatum
-{
-    public string? DisplayName { get; set; }
-    public string? ParatextProjectId { get; set; }
-}
+//[JsonDiscriminator(nameof(AquaCorpusAnalysisEnhancedViewItemMetadatum))]
+//public class AquaCorpusAnalysisEnhancedViewItemMetadatum : EnhancedViewItemMetadatum
+//{
+//    public string? DisplayName { get; set; }
+//    public string? ParatextProjectId { get; set; }
+//}

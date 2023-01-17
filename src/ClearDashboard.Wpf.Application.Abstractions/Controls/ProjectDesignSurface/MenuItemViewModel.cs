@@ -58,8 +58,8 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
         set => Set(ref _header, value);
     }
 
-    private ProjectDesignSurfaceViewModel? _projectDesignSurfaceViewModel;
-    public ProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
+    private IProjectDesignSurfaceViewModel? _projectDesignSurfaceViewModel;
+    public IProjectDesignSurfaceViewModel? ProjectDesignSurfaceViewModel
     {
         get => _projectDesignSurfaceViewModel;
         set => Set(ref _projectDesignSurfaceViewModel, value);

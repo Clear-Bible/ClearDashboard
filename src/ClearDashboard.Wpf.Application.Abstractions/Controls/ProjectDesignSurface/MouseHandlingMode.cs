@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines the current state of the mouse handling logic.
     /// </summary>
-    internal enum MouseHandlingMode
+    public enum MouseHandlingMode
     {
         /// <summary>
         /// Not in any special mode.

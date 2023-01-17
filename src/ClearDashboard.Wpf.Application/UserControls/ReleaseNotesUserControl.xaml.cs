@@ -66,7 +66,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private async void CheckForProgramUpdates()
         {
-
             var fullUpdateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();
 
             var isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);

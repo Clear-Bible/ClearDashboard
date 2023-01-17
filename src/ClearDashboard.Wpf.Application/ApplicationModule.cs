@@ -129,29 +129,29 @@ namespace ClearDashboard.Wpf.Application
                 .WithMetadata("Order", 4);
         }
 
-        public static void RegisterAquaDependencies(this ContainerBuilder builder)
-        {
-            //manager
+        //public static void RegisterAquaDependencies(this ContainerBuilder builder)
+        //{
+        //    //manager
 
-            builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
+        //    builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
 
-            builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 1);
+        //    builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
+        //        .Keyed<IWorkflowStepViewModel>("AquaDialog")
+        //        .WithMetadata("Order", 1);
 
-            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 2);
+        //    builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
+        //        .Keyed<IWorkflowStepViewModel>("AquaDialog")
+        //        .WithMetadata("Order", 2);
 
-            builder.RegisterType<AquaAddRevisionStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 3);
+        //    builder.RegisterType<AquaAddRevisionStepViewModel>().As<IWorkflowStepViewModel>()
+        //        .Keyed<IWorkflowStepViewModel>("AquaDialog")
+        //        .WithMetadata("Order", 3);
 
-            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 4);
+        //    builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
+        //        .Keyed<IWorkflowStepViewModel>("AquaDialog")
+        //        .WithMetadata("Order", 4);
 
-        }
+        //}
     }
 
     
@@ -176,7 +176,7 @@ namespace ClearDashboard.Wpf.Application
             //builder.RegisterSmtModelDialogDependencies();
 
 
-            builder.RegisterAquaDependencies();
+            //builder.RegisterAquaDependencies();
         }
     }
 }
