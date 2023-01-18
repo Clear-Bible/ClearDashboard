@@ -337,9 +337,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// Required for design-time support
         /// </summary>
         // ReSharper disable once UnusedMember.Global
-        public MainViewModel(ILocalizationService localizationService)
+        public MainViewModel()
         {
-            _localizationService = localizationService;
+           
             // no-op for design time support
         }
 
@@ -380,6 +380,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #pragma warning restore CA1416 // Validate platform compatibility
 
             this.SelectedTheme = Settings.Default.Theme == MaterialDesignThemes.Wpf.BaseTheme.Dark ? Themes[0] : Themes[1];
+
         }
 
 
