@@ -11,6 +11,7 @@
     FontSize="16"
     mc:Ignorable="d">
     <Border
+        Margin="0,0,41,0"
         Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
         BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
         BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
