@@ -60,11 +60,8 @@
                 <ListBox
                     x:Name="ListBoxKnownIssues"
                     Margin="10,0,10,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch"
-                    VerticalContentAlignment="Stretch"
                     ItemsSource="{Binding KnownIssues, Mode=TwoWay}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
                     ScrollViewer.VerticalScrollBarVisibility="Visible">
 
                     <ListBox.ItemContainerStyle>
@@ -75,13 +72,18 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="700" />
+                                </Grid.ColumnDefinitions>
                                 <iconPacks:PackIconCodicons Margin="5" Kind="Issues" />
                                 <TextBlock
+                                    Grid.Column="1"
                                     VerticalAlignment="Center"
                                     Text="{Binding}"
                                     TextWrapping="Wrap" />
-                            </StackPanel>
+                            </Grid>
 
                         </DataTemplate>
                     </ListBox.ItemTemplate>
