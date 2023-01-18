@@ -82,7 +82,8 @@
                 <ColumnDefinition
                     Name="ProjectDesignSurfaceColumn"
                     Width="Auto"
-                    MaxWidth="500" MinWidth="24" />
+                    MinWidth="24"
+                    MaxWidth="500" />
                 <!--<ColumnDefinition Width="10" />-->
                 <ColumnDefinition Name="DockManagerColumn" Width="*" />
             </Grid.ColumnDefinitions>
@@ -100,7 +101,7 @@
                 IsExpanded="True"
                 Style="{StaticResource LeftExpander}">
                 <controls:SidebarExpander.Header>
-                      <!--Project Design Surface-->  
+                    <!--  Project Design Surface  -->
                     <TextBlock
                         Margin="-2,0,0,0"
                         BaselineOffset="100"
@@ -123,10 +124,9 @@
 
             <GridSplitter
                 Name="ProjectDesignSurfaceSplitter"
-                DragDelta="ProjectDesignSurfaceSplitter_OnDragDelta"
                 Grid.Column="0"
-                Width="10"
-                Background="Red" />
+                Width="5"
+                DragDelta="ProjectDesignSurfaceSplitter_OnDragDelta" />
 
             <DockingManager
                 x:Name="DockManager"
