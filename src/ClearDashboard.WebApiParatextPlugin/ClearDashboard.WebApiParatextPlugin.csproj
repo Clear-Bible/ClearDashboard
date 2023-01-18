@@ -5,7 +5,7 @@
 	<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 	<PlatformTarget>AnyCPU</PlatformTarget>
 	<AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-	<Version>0.5.0.0</Version>
+	<Version>0.4.7.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
