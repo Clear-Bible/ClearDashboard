@@ -173,7 +173,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set
             {
                 _dashboardProjectsDisplay = value;
-                NotifyOfPropertyChange(() => SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
             }
         }
 
@@ -292,8 +292,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             foreach (var project in DashboardProjects)
             {
-                project.IsCompatibleVersion =
-                    await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
             }
 
             _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
