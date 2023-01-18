@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
@@ -10,7 +11,6 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.Views.Marble;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,12 +22,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-   
+
     public class EnhancedViewModel : VerseAwareConductorAllActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
@@ -50,7 +49,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
 
-        protected ILocalizationService LocalizationService { get; }
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
         #endregion //Member Variables
@@ -297,8 +295,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
-            LocalizationService = localizationService;
-
+            
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 
             ContentId = "ENHANCEDVIEW";
@@ -347,7 +344,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
             try
             {
-                await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+                await ActivateNewVerseAwareViewItem(item, cancellationToken);
             }
             finally
             {
@@ -359,58 +356,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
             {
-                await ActivateNewVerseAwareViewItem1(enhancedViewItemMetadatum, cancellationToken);
+                await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
 
             });
         }
+
+        //private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
+        //{
+        //    await Execute.OnUIThreadAsync(async () =>
+        //    {
+        //        var verseAwareEnhancedViewItemViewModel =
+        //            await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>(cancellationToken);
+        //        await verseAwareEnhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+        //    });
+        //}
 
         private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var verseAwareEnhancedViewItemViewModel =
-                    await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>(cancellationToken);
-                await verseAwareEnhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
-            });
-        }
-
-        private async Task ActivateNewVerseAwareViewItem1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
-        {
-            await Execute.OnUIThreadAsync(async () =>
-            {
-                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
-                EnableBcvControl = false;
-                await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); 
+                //EnableBcvControl = false;
+                await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
                
             });
         }
 
-        //FIXME: should go in ClearApplicationFramework
-        private Type ConvertToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
-        {
-            string? metadataAssemblyQualifiedName;
-            if (enhancedViewItemMetadatum is VerseAwareEnhancedViewItemMetadatum)
-            {
-                metadataAssemblyQualifiedName = typeof(VerseAwareEnhancedViewItemMetadatum).AssemblyQualifiedName;
-            }
-            else
-            {
-                metadataAssemblyQualifiedName =
-                    (enhancedViewItemMetadatum.GetType().BaseType != null ?
-                        enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName :
-                        enhancedViewItemMetadatum.GetType().AssemblyQualifiedName)
-                    ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
-            }
+     
 
-            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName!
-                .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
-                .Replace("Models", "ViewModels");
-            return Type.GetType(viewModelAssemblyQualifiedName)
-                   ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
-
-        }
-
-        //FIXME: should go in ClearApplicationFramework
         /// <summary>
         /// Expects Metadatum to be in a 'Models.EnhancedView' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
         /// EnhancedViewItemMetadatum suffix with EnhancedViewItemViewModel suffix.
@@ -426,7 +399,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             viewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
-            await ActivateItemAsync((EnhancedViewItemViewModel)(object)viewModel, cancellationToken);
+            await ActivateItemAsync(viewModel, cancellationToken);
             return viewModel;
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -546,6 +519,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
+
+            await Task.CompletedTask;
         }
 
        
@@ -570,6 +545,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 BcvDictionary = new Dictionary<string, string>();
             }
+
+            await Task.CompletedTask;
         }
 
 
