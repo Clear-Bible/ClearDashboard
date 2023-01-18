@@ -66,29 +66,27 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private async void CheckForProgramUpdates()
         {
-
+            bool isNewer = false;
+            bool acknowledgePrerelease =false;
             var fullUpdateDataList = await ReleaseNotesManager.GetUpdateDataFromFile();
-
-            var isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);
-            if (fullUpdateDataList == null)
+            if (fullUpdateDataList != null)
             {
-                UpdateLink.Visibility = Visibility.Collapsed;
-                return;
-            }
+                isNewer = ReleaseNotesManager.CheckWebVersion(fullUpdateDataList.FirstOrDefault().Version);
 
-            Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
-            UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
+                Updates = await ReleaseNotesManager.GetRelevantUpdates(fullUpdateDataList);
+                UpdateUrl = new Uri(fullUpdateDataList.FirstOrDefault().DownloadLink);
 
-            var acknowledgePrerelease = false;
-            if (fullUpdateDataList.FirstOrDefault().VersionType == VersionType.Prerelease)
-            {
-                if (PrereleaseToggle.IsChecked.Value)
+                acknowledgePrerelease = false;
+                if (fullUpdateDataList.FirstOrDefault().VersionType == VersionType.Prerelease)
                 {
-                    acknowledgePrerelease = true;
-                }
-                else
-                {
-                    acknowledgePrerelease = false;
+                    if (PrereleaseToggle.IsChecked.Value)
+                    {
+                        acknowledgePrerelease = true;
+                    }
+                    else
+                    {
+                        acknowledgePrerelease = false;
+                    }
                 }
             }
 

@@ -129,7 +129,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-Source: "windowsdesktop-runtime-7.0.1-win-x64.exe"; Flags: dontcopy noencryption
+Source: "windowsdesktop-runtime-7.0.2-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
@@ -141,6 +141,10 @@ Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x6
 ; Install Hebrew & Greek Fonts
 Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_Hbrw.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Hebrew"
 Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_grk.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Greek"
+
+; Install Paratext Plugin
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppName}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppName}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 
 [Registry]
@@ -158,9 +162,13 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
+var
+    ParatextInstallationPath: string;
+
 function InitializeSetup: Boolean;
 var
     ResultCode: Integer;
+    Value: string;
 begin
   if IsWin64 then begin
    // run the C++ Runtime installer
@@ -171,13 +179,32 @@ begin
     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'VC_redist.x64.exe', '/install /passive /norestart', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     
     // install the .NET Runtime
-     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.1\') then begin
-      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.1-win-x64.exe') then begin          
-        ExtractTemporaryFile('windowsdesktop-runtime-7.0.1-win-x64.exe');
+     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.2\') then begin
+      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.2-win-x64.exe') then begin          
+        ExtractTemporaryFile('windowsdesktop-runtime-7.0.2-win-x64.exe');
       end;
-     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.1-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.2-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     end;
     Result := true;
-  end
+  end;
+
+  // get the paratext install directory
+  if RegQueryStringValue(
+       HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Paratext\8',
+       'Paratext9_Full_Release_AppPath', Value) then
+    begin
+      ParatextInstallationPath := ExtractFileDir(Value);
+      Log(Format('APPLICATION installed to %s', [ParatextInstallationPath]));
+      Result := True;
+    end
+  else
+    begin
+      MsgBox('Paratext is either missing or not up to date.  You must have Paratext to use this plugin.', mbError, MB_OK);
+      Result := False;
+    end;
 end;
 
+function GetParatextInstallationPath(Param: string): string;
+begin
+  Result := ParatextInstallationPath;
+end;
