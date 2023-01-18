@@ -374,9 +374,9 @@
                 <Button
                     Grid.Row="0"
                     Grid.Column="0"
-                    Width="20"
-                    Height="20"
-                    Margin="5,5,10,0"
+                    Width="36"
+                    Height="36"
+                    Margin="4,4,4,4"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
@@ -405,7 +405,8 @@
                 <Button
                     Grid.Row="0"
                     Grid.Column="1"
-                    Width="50"
+                    Width="36"
+                    Height="36"
                     Margin="4,4,4,4"
                     Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
                     CommandParameter="{x:Static Dock.Top}"
