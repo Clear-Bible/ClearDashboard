@@ -12,7 +12,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     public class TokenizedTextCorpus : ScriptureTextCorpus, ICache
     {
         public TokenizedTextCorpusId TokenizedTextCorpusId { get; set; }
-        public override ScrVers Versification { get; }
         public bool NonTokenized { get; }
 
         private bool useCache_;
