@@ -49,6 +49,7 @@ namespace ClearDashboard.Wpf.Application
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
         {
             builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();
+            builder.RegisterType<LocalizationService>().As<ILocalizationService>().SingleInstance();
         }
 
         public static void RegisterDatabaseDependencies(this ContainerBuilder builder)
@@ -135,7 +136,7 @@ namespace ClearDashboard.Wpf.Application
         {
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
             builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
-            builder.RegisterType<LocalizationService>().As<ILocalizationService>().SingleInstance();
+          
             builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
 
             builder.RegisterDatabaseDependencies();
