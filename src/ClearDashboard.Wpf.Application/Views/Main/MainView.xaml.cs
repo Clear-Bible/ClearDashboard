@@ -181,6 +181,19 @@ namespace ClearDashboard.Wpf.Application.Views.Main
 
         private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
         {
+            if (ProjectDesignSurfaceColumn.ActualWidth < 200)
+            {
+                ProjectDesignSurfaceControl.PdsLabelWide.Visibility = Visibility.Collapsed;
+                ProjectDesignSurfaceControl.ProjectNameWide.Visibility = Visibility.Collapsed;
+                ProjectDesignSurfaceControl.LabelsNarrow.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ProjectDesignSurfaceControl.PdsLabelWide.Visibility = Visibility.Visible;
+                ProjectDesignSurfaceControl.ProjectNameWide.Visibility = Visibility.Visible;
+                ProjectDesignSurfaceControl.LabelsNarrow.Visibility = Visibility.Collapsed;
+            }
+            
             ProjectDesignSurfaceExpander.Width = ProjectDesignSurfaceColumn.ActualWidth;
             ProjectDesignSurfaceControl.Width = ProjectDesignSurfaceColumn.ActualWidth;
         }

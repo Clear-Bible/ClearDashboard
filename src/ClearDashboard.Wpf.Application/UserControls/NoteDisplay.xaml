@@ -11,7 +11,7 @@
     FontSize="16"
     mc:Ignorable="d">
     <Border
-        Margin="0,0,41,0"
+        Margin="0,0,-5,0"
         Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
         BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
         BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
@@ -83,9 +83,8 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <StackPanel
+            <WrapPanel
                 Grid.Row="1"
-                Height="20"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Orientation="Horizontal"
@@ -109,7 +108,7 @@
                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}" />
                 <Button
                     Name="DeleteNoteButton"
-                    Margin="10,-5,15,0"
+                    Margin="10,-5,0,0"
                     Padding="0,0,0,0"
                     Background="Transparent"
                     BorderThickness="0"
@@ -140,7 +139,7 @@
                         </StackPanel>
                     </Border>
                 </Popup>
-            </StackPanel>
+            </WrapPanel>
             <StackPanel
                 Grid.Row="1"
                 HorizontalAlignment="Center"

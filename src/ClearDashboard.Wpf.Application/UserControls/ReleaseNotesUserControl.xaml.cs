@@ -89,6 +89,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     }
                 }
             }
+            else
+            {
+                ShowNotes.IsEnabled = false;
+            }
 
             if (isNewer && acknowledgePrerelease)
             {
