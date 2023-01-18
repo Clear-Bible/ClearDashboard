@@ -363,7 +363,7 @@
             <Grid Background="LightGray">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <!--<ColumnDefinition Width="Auto" />-->
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -371,7 +371,7 @@
                     <!--<RowDefinition Height="25" />-->
                 </Grid.RowDefinitions>
 
-                <Button
+                <!--<Button
                     Grid.Row="0"
                     Grid.Column="0"
                     Width="36"
@@ -401,10 +401,10 @@
                         Background="Transparent"
                         Foreground="{StaticResource SecondaryHueDarkBrush}"
                         Kind="ArrowExpandAll" />
-                </Button>
+                </Button>-->
                 <Button
                     Grid.Row="0"
-                    Grid.Column="1"
+                    Grid.Column="0"
                     Width="36"
                     Height="36"
                     Margin="4,4,4,4"
@@ -416,7 +416,7 @@
 
                 <userControls:BcvUserControl
                     Grid.Row="0"
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Margin="50,0,0,0"
                     BcvDictionary="{Binding Path=BcvDictionary}"
                     CurrentBcv="{Binding Path=CurrentBcv}"

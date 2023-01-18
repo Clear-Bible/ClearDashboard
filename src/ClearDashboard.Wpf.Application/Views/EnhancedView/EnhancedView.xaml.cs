@@ -71,7 +71,15 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
         {
             NotesExpander.Width = NotesColumn.ActualWidth;
-            NotesControl.Width = NotesColumn.ActualWidth;
+            if (NotesColumn.ActualWidth - 50 >= 0)
+            {
+                NotesControl.Width = NotesColumn.ActualWidth - 50;
+            }
+            else
+            {
+                NotesControl.Width = 0;
+            }
+
         }
     }
 }
