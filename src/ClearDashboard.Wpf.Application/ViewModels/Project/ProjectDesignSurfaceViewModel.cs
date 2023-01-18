@@ -1301,39 +1301,52 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
-           
-                // Deletes the ParallelCorpora and removes the connector between nodes. 
-                foreach (var connection in node.AttachedConnections)
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            {
+                Name = "Deleting Corpus Node",
+                Description = "Deleting parallel corpus connections and the node itself...",
+                StartTime = DateTime.Now,
+                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
+            }));
+
+            // Deletes the ParallelCorpora and removes the connector between nodes. 
+            foreach (var connection in node.AttachedConnections)
+            {
+                //connection.ParallelCorpusId
+                DeleteParallelCorpusConnection(connection);
+            }
+
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.Id == node.CorpusId);
+
+            await Task.Factory.StartNew(async () =>
+            {
+                // ****************************************************************************
+                // MICHAEL: not sure what needs to happen if 'corpusId' is null.  Also,
+                // this method will accept a third CancellationToken argument if you have
+                // one available here
+                //
+                // If corpusId is invalid/doesn't exist, this will throw an exception - do you 
+                // want to catch it here or let it bubble out?
+                // ****************************************************************************
+                if (corpusId is not null)
                 {
-                    //connection.ParallelCorpusId
-                    DeleteParallelCorpusConnection(connection);
+                    await Corpus.Delete(Mediator!, corpusId);
                 }
-
-                var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-
-                var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.Id == node.CorpusId);
-
-                await Task.Factory.StartNew(async () =>
-                {
-                    // ****************************************************************************
-                    // MICHAEL: not sure what needs to happen if 'corpusId' is null.  Also,
-                    // this method will accept a third CancellationToken argument if you have
-                    // one available here
-                    //
-                    // If corpusId is invalid/doesn't exist, this will throw an exception - do you 
-                    // want to catch it here or let it bubble out?
-                    // ****************************************************************************
-                    if (corpusId is not null)
-                    {
-                        await Corpus.Delete(Mediator!, corpusId);
-                    }
-                });
-            
-
-                // Removes the CorpusNode form the project design surface:
-                DesignSurfaceViewModel!.DeleteCorpusNode(node);
-         
+            });
         
+
+            // Removes the CorpusNode form the project design surface:
+            DesignSurfaceViewModel!.DeleteCorpusNode(node);
+
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            {
+                Name = "Deleting Corpus Node",
+                Description = "Delete Complete",
+                StartTime = DateTime.Now,
+                TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+            }));
         }
     }
 }
