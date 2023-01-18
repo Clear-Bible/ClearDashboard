@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Threading;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -24,14 +25,16 @@ namespace ClearDashboard.Wpf.Application.Infrastructure
         public DashboardApplicationWorkflowShellViewModel(DashboardProjectManager? projectManager, 
             INavigationService navigationService,
             ILogger logger,
-            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
+            IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, ILocalizationService localizationService) : base(
             navigationService, logger, eventAggregator, mediator, lifetimeScope)
         {
             ProjectManager = projectManager;
+            LocalizationService = localizationService;
             DialogMode = DialogMode.Add;
         }
 
         public DashboardProjectManager? ProjectManager { get; private set; }
+        protected ILocalizationService? LocalizationService { get; }
 
         public DialogMode DialogMode
         {

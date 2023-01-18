@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
@@ -30,8 +31,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         public ShowUpdateNotesViewModel(INavigationService navigationService, ILogger<ShowUpdateNotesViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _navigationService = navigationService;
             _logger = logger;

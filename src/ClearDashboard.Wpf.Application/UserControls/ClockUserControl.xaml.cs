@@ -263,7 +263,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         }
 
-        private string GetLocalizedLocalTimeString()
+        private string? GetLocalizedLocalTimeString()
         {
             return LocalizationStrings.Get("ClockUserControl_LocalTime", _logger);
         }

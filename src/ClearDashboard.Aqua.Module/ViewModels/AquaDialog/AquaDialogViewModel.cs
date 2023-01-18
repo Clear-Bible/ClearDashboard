@@ -123,8 +123,9 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             IMediator mediator,
             IAquaManager aquaManager,
             ILocalizationService localization,
-            LongRunningTaskManager longRunningTaskManager)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            LongRunningTaskManager longRunningTaskManager,
+            ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             paratextProjectId_ = paratextProjectId;
             DialogMode = dialogMode;

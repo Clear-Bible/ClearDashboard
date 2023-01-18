@@ -15,15 +15,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Interfaces\**" />
     <Compile Remove="Models\EnhancedView\**" />
     <Compile Remove="ViewModels\About\**" />
     <Compile Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
     <EmbeddedResource Remove="Models\EnhancedView\**" />
     <EmbeddedResource Remove="ViewModels\About\**" />
     <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <None Remove="Interfaces\**" />
     <None Remove="Models\EnhancedView\**" />
     <None Remove="ViewModels\About\**" />
     <None Remove="Views\DesignSurface\**" />
+    <Page Remove="Interfaces\**" />
     <Page Remove="Models\EnhancedView\**" />
     <Page Remove="ViewModels\About\**" />
     <Page Remove="Views\DesignSurface\**" />
@@ -472,7 +476,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
     <Folder Include="Resources\TailBlazor\" />
   </ItemGroup>
 

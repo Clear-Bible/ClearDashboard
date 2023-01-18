@@ -2,6 +2,7 @@
 
 using Autofac;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Aqua.Module.Models;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 using ClearDashboard.Wpf.Application;
@@ -19,6 +20,8 @@ namespace ClearDashboard.Aqua.Module
             //    .Where(type => type.Name.EndsWith("ViewModel"))
             //    .AsSelf()
             //    .InstancePerDependency();
+
+            builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
         }
     }
 

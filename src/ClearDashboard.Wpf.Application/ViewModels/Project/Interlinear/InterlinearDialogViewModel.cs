@@ -4,6 +4,7 @@ using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 using FluentValidation;
 using MediatR;
@@ -59,8 +60,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear
 
         public InterlinearDialogViewModel(ParallelCorpusId parallelCorpusId, TranslationSource? translationSource, INavigationService navigationService,
             ILogger<InterlinearDialogViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
-            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, IValidator<InterlinearDialogViewModel> validator)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
+            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, IValidator<InterlinearDialogViewModel> validator, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
             _translationSource = translationSource;
             ParallelCorpusId = parallelCorpusId;

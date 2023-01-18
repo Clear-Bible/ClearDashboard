@@ -78,8 +78,8 @@ public class MenuItemNest : INotifyPropertyChanged
 
 
     public Visibility TextBlockVisibility { get; set; }
-    private string _textBlockText { get; set; }
-    public string TextBlockText
+    private string? _textBlockText { get; set; }
+    public string? TextBlockText
     {
         get => _textBlockText;
         set

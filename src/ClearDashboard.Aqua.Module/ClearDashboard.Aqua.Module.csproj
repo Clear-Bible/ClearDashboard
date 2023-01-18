@@ -28,4 +28,8 @@
     <Folder Include="Controls\" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="robocopy $(TargetDir) $(SolutionDir)ClearDashboard.Wpf.Application\bin\Debug\net7.0-windows $(TargetName).*&#xD;&#xA;if %25errorlevel%25 leq 1 exit 0 else exit %25errorlevel%25" />
+  </Target>
+
 </Project>

@@ -17,15 +17,33 @@ namespace ClearDashboard.Wpf.Application.Helpers
         }
         public string Get(string key)
         {
-            return LocalizationStrings.Get(key, _logger);
+            //return LocalizationStrings.Get(key, _logger);
+            string localizedString;
+            try
+            {
+                localizedString = Resources.ResourceManager.GetString(key, Thread.CurrentThread.CurrentUICulture);
+            }
+            catch (Exception e)
+            {
+                _logger.LogCritical($"Localization string missing for key '{key}' {e.Message} {Thread.CurrentThread.CurrentUICulture.Name}");
+                localizedString = key;
+            }
+
+            if (localizedString == null)
+            {
+                _logger.LogCritical($"Localization string missing for key '{key}' {Thread.CurrentThread.CurrentUICulture.Name}");
+                localizedString = key;
+            }
+            return localizedString;
         }
     }
 
+    [Obsolete("This class has been deprecated and will be removed in a future release.  Please inject ILocalizationService instead.")]
     public static class LocalizationStrings
     {
-        public static string Get(string key, ILogger logger)
+        public static string? Get(string? key, ILogger logger)
         {
-            string localizedString;
+            string? localizedString;
             try
             {
                 localizedString = Resources.ResourceManager.GetString(key, Thread.CurrentThread.CurrentUICulture);

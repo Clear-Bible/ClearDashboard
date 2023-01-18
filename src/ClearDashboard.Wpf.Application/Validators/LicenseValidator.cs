@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 
@@ -8,9 +9,11 @@ namespace ClearDashboard.Wpf.Application.Validators
 {
     public class LicenseUserValidator : AbstractValidator<LicenseUser>
     {
-        ILogger _logger;
-        public LicenseUserValidator(ILogger<LicenseUserValidator> logger)
+        private ILogger _logger;
+        private ILocalizationService _localizationService;
+        public LicenseUserValidator(ILogger<LicenseUserValidator> logger, ILocalizationService localizationService)
         {
+            _localizationService = localizationService;
             //RuleFor(x => x.FirstName).Custom((firstName, context) => {
 
             //    if (string.IsNullOrEmpty(firstName))
@@ -37,13 +40,13 @@ namespace ClearDashboard.Wpf.Application.Validators
 
             RuleFor(x => x.FirstName)
                 .NotEmpty()
-                .WithMessage(LocalizationStrings.Get("LicenseValidator_FirstMissing", _logger));
+                .WithMessage(_localizationService.Get("LicenseValidator_FirstMissing"));
             RuleFor(x => x.LastName)
                 .NotEmpty()
-                .WithMessage(LocalizationStrings.Get("LicenseValidator_LastMissing", _logger));
+                .WithMessage(_localizationService.Get("LicenseValidator_LastMissing"));
             RuleFor(x => x.LicenseKey)
                 .NotEmpty()
-                .WithMessage(LocalizationStrings.Get("LicenseValidator_LicenseMissing", _logger));
+                .WithMessage(_localizationService.Get("LicenseValidator_LicenseMissing"));
         }
 
     }

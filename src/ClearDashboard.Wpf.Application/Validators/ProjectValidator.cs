@@ -4,14 +4,17 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.Validators
 {
     public class ProjectValidator : AbstractValidator<DataAccessLayer.Models.Project>
     {
         private ILogger? _logger;
-        public ProjectValidator(ILogger<ProjectValidator> logger)
+        private ILocalizationService? _localizationService;
+        public ProjectValidator(ILogger<ProjectValidator> logger, ILocalizationService? localizationService)
         {
+            _localizationService = localizationService;
             RuleFor(x => x.ProjectName).Custom((projectName, context) => {
 
                 if (string.IsNullOrEmpty(projectName))
@@ -32,7 +35,7 @@ namespace ClearDashboard.Wpf.Application.Validators
                 if (!foundMatch)
                 {
                     //context.AddFailure($"The project name '{projectName}' contains illegal characters.  Valid characters include 'A-Z' (lowercase and uppercase), numbers '0-9' and the characters '-' and '_'.");
-                    context.AddFailure(LocalizationStrings.Get("ProjectValidator_IllegalCharacters", _logger));
+                    context.AddFailure(_localizationService.Get("ProjectValidator_IllegalCharacters"));
                 }
 
                 // check to see if the project directory already exists:
@@ -41,13 +44,11 @@ namespace ClearDashboard.Wpf.Application.Validators
 
                 if (Directory.Exists(projectDirectory))
                 {
-                    var test = LocalizationStrings.Get("Landing_NewProject", logger);
+                    var test = _localizationService.Get("Landing_NewProject");
                     //context.AddFailure($"A project with the name '{projectName}' already exists. Please choose a unique name.");
-                    context.AddFailure(LocalizationStrings.Get("ProjectValidator_SameName", _logger));
+                    context.AddFailure(_localizationService.Get("ProjectValidator_SameName"));
                 }
             });
-
-
         }
 
     }

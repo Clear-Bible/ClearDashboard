@@ -32,7 +32,7 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     protected EnhancedViewItemViewModel(DashboardProjectManager? projectManager,
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         LocalizationService = localizationService;
         // no-op

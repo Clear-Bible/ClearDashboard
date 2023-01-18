@@ -44,6 +44,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using ClearApplicationFoundation.Extensions;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -70,6 +71,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
 #nullable disable
         private readonly LongRunningTaskManager _longRunningTaskManager;
+        private readonly ILocalizationService _localizationService;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
         private INavigationService NavigationService { get; }
@@ -335,8 +337,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// Required for design-time support
         /// </summary>
         // ReSharper disable once UnusedMember.Global
-        public MainViewModel()
+        public MainViewModel(ILocalizationService localizationService)
         {
+            _localizationService = localizationService;
             // no-op for design time support
         }
 
@@ -349,9 +352,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                              IWindowManager windowManager,
                              ILifetimeScope lifetimeScope,
                              NoteManager noteManager,
-                             LongRunningTaskManager longRunningTaskManager)
+                             LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
         {
             _longRunningTaskManager = longRunningTaskManager;
+            _localizationService = localizationService;
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
             NoteManager = noteManager;
@@ -498,7 +502,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         }
 
-        private static JsonSerializerOptions CreateDiscriminatedJsonSerializerOptions()
+        private JsonSerializerOptions CreateDiscriminatedJsonSerializerOptions()
         {
             var options = new JsonSerializerOptions
             {
@@ -509,10 +513,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var registry = options.GetDiscriminatorConventionRegistry();
             registry.ClearConventions();
             registry.RegisterConvention(new DefaultDiscriminatorConvention<string>(options, "_t"));
-            registry.RegisterType<InterlinearEnhancedViewItemMetadatum>();
-            registry.RegisterType<AlignmentEnhancedViewItemMetadatum>();
-            registry.RegisterType<TokenizedCorpusEnhancedViewItemMetadatum>();
-            //registry.RegisterType<AquaCorpusAnalysisEnhancedViewItemMetadatum>();
+
+            var registrars = LifetimeScope.Resolve<IEnumerable<IJsonDiscriminatorRegistrar>>();
+            foreach (var registrar in registrars)
+            {
+                registrar.Register(registry);
+            }
             return options;
         }
 
@@ -887,7 +893,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowSlackMessageWindow(List<string> files)
         {
-            var localizedString = LocalizationStrings.Get("SlackMessageView_Title", Logger);
+            var localizedString = _localizationService!.Get("SlackMessageView_Title");
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -906,7 +912,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowAboutWindow()
         {
-            var localizedString = LocalizationStrings.Get("MainView_About", Logger);
+            var localizedString = _localizationService!.Get("MainView_About");
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -1012,21 +1018,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // Save Current Layout
                 new MenuItemViewModel
                 {
-                    Header = "🖫 " + LocalizationStrings.Get("MainView_LayoutsSave", Logger), Id = "SaveID",
+                    Header = "🖫 " + _localizationService!.Get("MainView_LayoutsSave"), Id = "SaveID",
                     ViewModel = this
                 },
                 
                 // Delete Saved Layout
                 new MenuItemViewModel
                 {
-                    Header = "🗑 " + LocalizationStrings.Get("MainView_LayoutsDelete", Logger), Id = "DeleteID",
+                    Header = "🗑 " +_localizationService!.Get("MainView_LayoutsDelete"), Id = "DeleteID",
                     ViewModel = this,
                 },
 
                 // STANDARD LAYOUTS
                 new MenuItemViewModel
                 {
-                    Header = "---- " + LocalizationStrings.Get("MainView_LayoutsStandardLayouts", Logger) + " ----",
+                    Header = "---- " + _localizationService!.Get("MainView_LayoutsStandardLayouts") + " ----",
                     Id = "SeparatorID", ViewModel = this,
                 }
             };
@@ -1039,7 +1045,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     layouts.Add(new MenuItemViewModel
                     {
-                        Header = "---- " + LocalizationStrings.Get("MainView_LayoutsProjectLayouts", Logger) + " ----",
+                        Header = "---- " + _localizationService!.Get("MainView_LayoutsProjectLayouts") + " ----",
                         Id = "SeparatorID",
                         ViewModel = this,
                     });
@@ -1062,43 +1068,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // File
                 new()
                 {
-                    Header = LocalizationStrings.Get("MainView_File", Logger), Id = "FileID", ViewModel = this,
+                    Header =_localizationService!.Get("MainView_File"), Id = "FileID", ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // New
-                        new() { Header = LocalizationStrings.Get("MainView_FileNew", Logger), Id = "NewID", ViewModel = this, IsEnabled = false },
-                        new() { Header = LocalizationStrings.Get("MainView_FileOpen", Logger), Id = "OpenID", ViewModel = this, IsEnabled = false }
+                        new() { Header =_localizationService!.Get("MainView_FileNew"), Id = "NewID", ViewModel = this, IsEnabled = false },
+                        new() { Header = _localizationService!.Get("MainView_FileOpen"), Id = "OpenID", ViewModel = this, IsEnabled = false }
                     }
                 },
                 new()
                 {
                     // Layouts
-                    Header = LocalizationStrings.Get("MainView_Layouts", Logger), Id = "LayoutID", ViewModel = this,
+                    Header = _localizationService!.Get("MainView_Layouts"), Id = "LayoutID", ViewModel = this,
                     MenuItems = layouts,
                 },
                 new()
                 {
                     // Windows
-                    Header = LocalizationStrings.Get("MainView_Windows", Logger), Id = "WindowID", ViewModel = this,
+                    Header = _localizationService!.Get("MainView_Windows"), Id = "WindowID", ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // Enhanced Corpus
-                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsNewEnhancedView", Logger), Id = "NewEnhancedCorpusID", ViewModel = this, },
+                        new() { Header = "⳼ " + _localizationService!.Get("MainView_WindowsNewEnhancedView"), Id = "NewEnhancedCorpusID", ViewModel = this, },
 
                         // separator
                         new() { Header = "---------------------------------", Id = "SeparatorID", ViewModel = this, },
 
                         // Biblical Terms
-                        new() { Header = "🕮 " + LocalizationStrings.Get("MainView_WindowsBiblicalTerms", Logger), Id = "BiblicalTermsID", ViewModel = this, },
+                        new() { Header = "🕮 " + _localizationService!.Get("MainView_WindowsBiblicalTerms"), Id = "BiblicalTermsID", ViewModel = this, },
                         
                         // Enhanced Corpus
-                        new() { Header = "⳼ " + LocalizationStrings.Get("MainView_WindowsEnhancedView", Logger), Id = "EnhancedCorpusID", ViewModel = this, },
+                        new() { Header = "⳼ " +_localizationService!.Get("MainView_WindowsEnhancedView"), Id = "EnhancedCorpusID", ViewModel = this, },
                         
                         // PINS
-                        new() { Header = "⍒ " + LocalizationStrings.Get("MainView_WindowsPINS", Logger), Id = "PINSID", ViewModel = this, },
+                        new() { Header = "⍒ " + _localizationService!.Get("MainView_WindowsPINS"), Id = "PINSID", ViewModel = this, },
                         
                         // Text Collection
-                        new() { Header = "🗐 " + LocalizationStrings.Get("MainView_WindowsTextCollections", Logger), Id = "TextCollectionID", ViewModel = this, },
+                        new() { Header = "🗐 " +_localizationService!.Get("MainView_WindowsTextCollections"), Id = "TextCollectionID", ViewModel = this, },
                         
                         // Word Meanings
                         //new() { Header = "⌺ " + LocalizationStrings.Get("MainView_WindowsWordMeanings", Logger), Id = "WordMeaningsID", ViewModel = this, },
@@ -1111,16 +1117,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // HELP
                 new()
                 {
-                    Header = LocalizationStrings.Get("MainView_Help", Logger), Id =  "HelpID", ViewModel = this,
+                    Header = _localizationService!.Get("MainView_Help"), Id =  "HelpID", ViewModel = this,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // Gather Logs
-                        new() { Header = LocalizationStrings.Get("MainView_ShowLog", Logger), Id = "ShowLogID", ViewModel = this, },
+                        new() { Header = _localizationService!.Get("MainView_ShowLog"), Id = "ShowLogID", ViewModel = this, },
 
                         // Gather Logs
-                        new() { Header = LocalizationStrings.Get("MainView_GatherLogs", Logger), Id = "GatherLogsID", ViewModel = this, },
+                        new() { Header = _localizationService!.Get("MainView_GatherLogs"), Id = "GatherLogsID", ViewModel = this, },
                         // About
-                        new() { Header = LocalizationStrings.Get("MainView_About", Logger), Id = "AboutID", ViewModel = this, },
+                        new() { Header = _localizationService!.Get("MainView_About"), Id = "AboutID", ViewModel = this, },
                     }
                 }
             };

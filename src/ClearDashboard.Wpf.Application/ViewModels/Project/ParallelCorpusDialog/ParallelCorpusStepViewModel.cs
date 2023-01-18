@@ -11,6 +11,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Services;
+
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
 
@@ -80,8 +82,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public ParallelCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
             INavigationService navigationService, ILogger<ParallelCorpusStepViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpusStepViewModel> validator)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
+            IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<ParallelCorpusStepViewModel> validator, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
         {
             DialogMode = dialogMode;
             CanMoveForwards = false;
@@ -95,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         protected override Task OnActivateAsync(CancellationToken cancellationToken)
         {
             ParentViewModel.CurrentStepTitle =
-                LocalizationStrings.Get("ParallelCorpusDialog_AddParallelRelationship", Logger);
+                LocalizationService!.Get("ParallelCorpusDialog_AddParallelRelationship");
 
             ParallelCorpusDisplayName =
                 $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name}";

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application;
+using ClearDashboard.Wpf.Application.Services;
 
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
@@ -29,8 +30,9 @@ public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplication
         ILogger<AquaAddRevisionStepViewModel> logger,
         IEventAggregator eventAggregator,
         IMediator mediator,
-        ILifetimeScope? lifetimeScope)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        ILifetimeScope? lifetimeScope,
+        ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         DialogMode = dialogMode;
         CanMoveForwards = true;

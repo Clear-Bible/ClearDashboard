@@ -7,6 +7,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -27,8 +28,9 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
         ILogger<AquaAddRevisionStepViewModel> logger, 
         IEventAggregator eventAggregator,
         IMediator mediator, 
-        ILifetimeScope? lifetimeScope)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        ILifetimeScope? lifetimeScope,
+        ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         DialogMode = dialogMode;
         CanMoveForwards = true;

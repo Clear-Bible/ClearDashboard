@@ -49,6 +49,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
 
+        protected ILocalizationService LocalizationService { get; }
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
         #endregion //Member Variables
@@ -287,18 +288,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager selectionManager, 
             IEventAggregator? eventAggregator, 
             IMediator mediator,
-            ILifetimeScope? lifetimeScope
-            ) :
-            base(navigationService: navigationService, logger: logger, projectManager: projectManager,
-                eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
+            ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
+            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
       
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
+            LocalizationService = localizationService;
 
-            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
+            Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 
             ContentId = "ENHANCEDVIEW";
 
