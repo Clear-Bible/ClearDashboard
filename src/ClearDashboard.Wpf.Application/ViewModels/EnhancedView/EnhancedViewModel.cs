@@ -10,6 +10,7 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.Views.Marble;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -521,7 +522,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-      
+        public void LaunchMirrorView(double actualWidth, double actualHeight)
+        {
+            LaunchMirrorView<Views.EnhancedView.EnhancedView>.Show(this, actualWidth, actualHeight);
+        }
 
 
         #region IHandle

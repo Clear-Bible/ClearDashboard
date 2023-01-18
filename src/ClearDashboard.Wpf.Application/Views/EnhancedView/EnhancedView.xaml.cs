@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
@@ -43,6 +44,34 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
             ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(OuterListView);
             scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
             e.Handled = true;
+        }
+
+        private void ProjectDesignSurfaceExpander_OnExpanded(object sender, RoutedEventArgs e)
+        {
+            if (NotesExpander != null && NotesControl != null)
+            {
+                NotesExpander.Width = 300;
+                NotesControl.Width = 300;
+            }
+
+            NotesColumn.Width = new GridLength(300, GridUnitType.Auto);
+            NotesSplitter.Visibility = Visibility.Visible;
+        }
+
+        private void ProjectDesignSurfaceExpander_OnCollapsed(object sender, RoutedEventArgs e)
+        {
+            NotesExpander.Width = 24;
+            NotesControl.Width = 24;
+
+            NotesColumn.Width = new GridLength(1, GridUnitType.Auto);
+            
+            NotesSplitter.Visibility = Visibility.Collapsed;
+        }
+
+        private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
+        {
+            NotesExpander.Width = NotesColumn.ActualWidth;
+            NotesControl.Width = NotesColumn.ActualWidth;
         }
     }
 }

@@ -362,21 +362,30 @@
 
                         <!--  DataContext="{Binding Senses, Source={StaticResource ViewModelsSource}}"  -->
                         <!--  DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=Senses}"  -->
-                        <pieChart:PieChartLayout
+
+
+                        <Expander
                             Grid.Row="1"
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
-                            Margin="10"
-                            HorizontalAlignment="Stretch"
-                            ManuscriptTextProperty="ManuscriptWord"
-                            PlottedProperty="VerseTotal">
-                            <pieChart:PieChartLayout.DataContext>
-                                <Binding Path="Senses" />
-                            </pieChart:PieChartLayout.DataContext>
-                            <pieChart:PieChartLayout.ColorSelector>
-                                <pieChart:IndexedColourSelector Brushes="{StaticResource brushes}" />
-                            </pieChart:PieChartLayout.ColorSelector>
-                        </pieChart:PieChartLayout>
+                            Margin="10,10,23,10"
+                            Header="Frequency Graph"
+                            IsExpanded="False"
+                            Style="{StaticResource ExpanderStyle}">
+                            <pieChart:PieChartLayout
+                                Margin="2"
+                                HorizontalAlignment="Stretch"
+                                Background="White"
+                                ManuscriptTextProperty="ManuscriptWord"
+                                PlottedProperty="VerseTotal">
+                                <pieChart:PieChartLayout.DataContext>
+                                    <Binding Path="Senses" />
+                                </pieChart:PieChartLayout.DataContext>
+                                <pieChart:PieChartLayout.ColorSelector>
+                                    <pieChart:IndexedColourSelector Brushes="{StaticResource brushes}" />
+                                </pieChart:PieChartLayout.ColorSelector>
+                            </pieChart:PieChartLayout>
+                        </Expander>
 
                         <!--  ROW 2  -->
                         <GroupBox
@@ -737,12 +746,12 @@
 
                         <!--  ROW 3  -->
                         <GroupBox
-                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
                             Grid.Row="3"
                             Grid.Column="0"
                             Width="Auto"
                             Margin="5,5,10,10"
-                            Header="Senses">
+                            Header="Senses"
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
 
                             <ListView
                                 x:Name="SensesListView"
@@ -828,11 +837,11 @@
                         </GroupBox>
 
                         <ScrollViewer
-                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel"
                             Grid.Row="2"
                             Grid.RowSpan="2"
                             Grid.Column="1"
-                            Margin="5">
+                            Margin="5"
+                            PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
                             <StackPanel Orientation="Vertical">
                                 <Expander
                                     Header="Definition"

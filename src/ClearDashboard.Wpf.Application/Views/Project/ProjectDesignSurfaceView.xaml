@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -18,7 +19,7 @@
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
-    d:DesignWidth="300"
+    d:DesignWidth="500"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
 
@@ -405,7 +406,7 @@
 
     </UserControl.CommandBindings>
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -418,19 +419,42 @@
             Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
             <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"  -->
-            <StackPanel MinWidth="400">
-                <Label
-                    Margin="0,-5,30,-12"
-                    HorizontalContentAlignment="Right"
-                    Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
-                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                <!--  Add Corpora  -->
-                <Label
-                    Margin="5,5,0,5"
-                    Content="{helpers:Localization Pds_AddCorpora}"
-                    FontSize="16"
-                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
-                <WrapPanel>
+            <Grid MinWidth="400">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <WrapPanel
+                    Grid.Row="0"
+                    Width="{Binding ActualWidth, ElementName=MainGrid, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
+                    Margin="5,5,0,5">
+                    <!--  Add Corpora  -->
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Content="{helpers:Localization Pds_AddCorpora}"
+                        FontSize="16"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                    <Label
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
+                        Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                </WrapPanel>
+
+                <WrapPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Width="{Binding ActualWidth, ElementName=MainGrid, Converter={converters:WidthSubtraction}, ConverterParameter='10'}">
                     <!--  Hebrew Manuscript  -->
                     <Button
                         x:Name="AddManuscriptHebrewCorpus"
@@ -476,10 +500,11 @@
                         Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />-->
                 </WrapPanel>
-            </StackPanel>
+            </Grid>
         </materialDesign:Card>
 
         <ProgressBar
+            Grid.Row="0"
             Width="50"
             Height="50"
             Margin="0,0,50,0"
