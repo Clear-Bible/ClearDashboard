@@ -46,7 +46,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Where(tc => tc.BookNumber == bookNumberForAbbreviation)
                 .ToList()
                 .GroupBy(tc => tc.VerseRow)
-                .ToDictionary(g => (g.Key.Id, g.Key.BookChapterVerse, g.Key.IsSentenceStart), g => g.Select(tc => tc));
+                .ToDictionary(g => g.Key!.Id, g => (VerseRow: g.Key!, Tokens: g.Select(tc => tc)));
 
 #if DEBUG
             sw.Stop();
@@ -79,8 +79,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
             var tokenCompositeTokensByGuid = tokenCompositeAssociations
                 .GroupBy(ta => ta.TokenComposite)
                 .ToDictionary(
-                    g => g.Key.Id, 
-                    g => new { TokenComposite = g.Key, Tokens = g.Select(ta => ta.Token)});
+                    g => g.Key!.Id, 
+                    g => new { TokenComposite = g.Key!, Tokens = g.Select(ta => ta.Token!)});
 
             var tokenCompositeGuidByTokenGuid = tokenCompositeAssociations
                 .ToDictionary(ta => ta.TokenId, ta => ta.TokenCompositeId);
@@ -94,16 +94,16 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 .Select(kvp => {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var chapter = int.Parse(kvp.Key.BookChapterVerse.Substring(3, 3)).ToString();
-                    var verse = int.Parse(kvp.Key.BookChapterVerse.Substring(6, 3)).ToString();
+                    var chapter = int.Parse(kvp.Value.VerseRow.BookChapterVerse!.Substring(3, 3)).ToString();
+                    var verse = int.Parse(kvp.Value.VerseRow.BookChapterVerse!.Substring(6, 3)).ToString();
 
-                    var tokens = kvp.Value
+                    var tokens = kvp.Value.Tokens
                         .Where(tc => !tokenCompositeGuidByTokenGuid.ContainsKey(tc.Id))
                         .Select(t => ModelHelper.BuildToken(t))
                         .OrderBy(t => t.TokenId)
                         .ToList();
 
-                    var composites = kvp.Value
+                    var composites = kvp.Value.Tokens
                         .Where(t => tokenCompositeGuidByTokenGuid.ContainsKey(t.Id))
                         .Select(t => tokenCompositeGuidByTokenGuid[t.Id])
                         .Distinct()
@@ -115,8 +115,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                 {
                                     ModelHelper.BuildCompositeToken(
                                         tokenCompositeTokens.TokenComposite,
-                                        tokenCompositeTokens.Tokens.Where(t => t.VerseRowId == kvp.Key.Id),
-                                        tokenCompositeTokens.Tokens.Where(t => t.VerseRowId != kvp.Key.Id))
+                                        tokenCompositeTokens.Tokens.Where(t => t.VerseRowId == kvp.Key),
+                                        tokenCompositeTokens.Tokens.Where(t => t.VerseRowId != kvp.Key))
                                 };
                             }
                             else
@@ -132,7 +132,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         chapter,
                         verse,
                         tokens,
-                        kvp.Key.IsSentenceStart);
+                        kvp.Value.VerseRow.IsSentenceStart,
+                        kvp.Value.VerseRow.IsInRange,
+                        kvp.Value.VerseRow.IsRangeStart,
+                        kvp.Value.VerseRow.IsEmpty,
+                        kvp.Value.VerseRow.OriginalText ?? string.Empty
+                        );
                 }).ToList();
 
             // need an await to get the compiler to be 'quiet'

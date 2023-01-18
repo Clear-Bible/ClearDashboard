@@ -58,6 +58,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 sb = MachineInfo(sb);
                 sb = GetCpuManufacturer(sb);
                 sb = GetCpuSpeedInGHz(sb);
+                sb = GetMonitorInfo(sb);
                 sb = OperatingSystemInfo(sb);
                 sb = UserInfo(sb);
                 sb = LocaleInfo(sb);
@@ -88,7 +89,25 @@ namespace ClearDashboard.Wpf.Application.Helpers
             
             return sb;
         }
-        
+
+        private StringBuilder GetMonitorInfo(StringBuilder sb)
+        {
+            var monitors = Monitor.AllMonitors;
+            if (monitors != null)
+            {
+                int i = 1;
+                foreach (var monitor in monitors)
+                {
+                    sb.AppendLine($"Monitor #{i} {monitor.Name}");
+                    sb.AppendLine($"  Primary: {monitor.IsPrimary}");
+                    sb.AppendLine($"  Size: {monitor.Bounds}");
+
+                    i++;
+                }
+            }
+            return sb;
+        }
+
         private StringBuilder MachineInfo(StringBuilder sb)
         {
             sb.AppendLine($"Computer Name: {Environment.MachineName}");

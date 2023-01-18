@@ -35,17 +35,33 @@ namespace ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers
                 .SelectMany(g => g
                     .GroupBy(sg => ((VerseRef)sg.Ref).VerseNum)
                     .OrderBy(sg => sg.Key)
-                    .Select(sg => new
+                    .Select(sg =>
                     {
-                        Chapter = g.Key,
-                        Verse = sg.Key,
-                        Tokens = sg
-                            .SelectMany(v => ((TokensTextRow)v).Tokens),
-                        IsSentenceStart = sg
-                            .First().IsSentenceStart
+                        var textRow = sg.First();
+
+                        return new
+                        {
+                            Chapter = g.Key,
+                            Verse = sg.Key,
+                            Tokens = sg
+                                .SelectMany(v => ((TokensTextRow)v).Tokens),
+                            textRow.IsSentenceStart,
+                            textRow.IsInRange,
+                            textRow.IsRangeStart,
+                            textRow.IsEmpty,
+                            textRow.OriginalText
+                        };
                     })
                 )
-                .Select(cvts => new VerseTokens(cvts.Chapter.ToString(), cvts.Verse.ToString(), cvts.Tokens, cvts.IsSentenceStart));
+                .Select(cvts => new VerseTokens(
+                    cvts.Chapter.ToString(), 
+                    cvts.Verse.ToString(), 
+                    cvts.Tokens, 
+                    cvts.IsSentenceStart,
+                    cvts.IsInRange,
+                    cvts.IsRangeStart,
+                    cvts.IsEmpty,
+                    cvts.OriginalText));
 
 
             return Task.FromResult(
