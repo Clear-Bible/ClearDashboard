@@ -56,13 +56,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ActiveDocumentMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
-                IHandle<FilterPinsMessage>,
-                IHandle<AddAlignmentSetToEnhancedViewMessage>,
-                IHandle<AddInterlinearToEnhancedViewMessage>,
-                IHandle<AddTokenizedCorpusToEnhancedViewMessage>
-
-                // IHandle<AddAquaCorpusAnalysisToEnhancedViewMessage>,
-                //IHandle<AddToEnhancedViewMessage>
+                IHandle<FilterPinsMessage>
     {
         #region Member Variables
 
@@ -1353,27 +1347,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return (IPaneViewModel)Items[0];
         }
 
-        //private TDockType GetPaneViewModelFromItems<TViewModel, TDockType>()
-        //     where TDockType : IPaneViewModel
-        //{
-          
-        //    foreach (var item in Items)
-        //    {
-        //        var type = item.GetType();
-        //        if (type == typeof(TViewModel))
-        //        {
-        //            switch (item)
-        //            {
-        //                case EnhancedViewModel model:
-        //                    return model;
-        //            }
-        //        }
-        //    }
-
-        //    return (TDockType)Items[0];
-        //}
-
-
         /// <summary>
         /// return the correct existing vm from Items list - TOOLS
         /// </summary>
@@ -1559,40 +1532,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         }
 
 
-        /// <summary>
-        /// Pop open a new Corpus Tokenization window and pass in the current corpus
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public async Task HandleAsync(AddTokenizedCorpusToEnhancedViewMessage message, CancellationToken cancellationToken)
-        {
-            await AddMetadatumEnhancedView(message.Metadatum, cancellationToken);
-            //await AddTokenizedCorpusToNewEnhancedView(message.Metadatum, cancellationToken);
-        }
-
-        //public async Task AddTokenizedCorpusToNewEnhancedView(TokenizedCorpusEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
-        //{
-        //    if (await TryUpdateExistingEnhancedView(metadatum, cancellationToken)) return;
-
-        //    await DeactivateDockedWindows();
-
-        //    //TODO:  How should this be refactored?
-        //    var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-        //    await viewModel.Initialize(new EnhancedViewLayout
-        //        {
-        //            ParatextSync = false,
-        //            Title = $"{metadatum.ProjectName} ({metadatum.TokenizationType})",
-        //            VerseOffset = 0
-
-        //        },
-        //        metadatum, 
-        //        cancellationToken
-        //    );
-          
-        //    AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
-        //}
 
         private async Task<bool> TryUpdateExistingEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
@@ -1691,54 +1630,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             return Task.CompletedTask;
         }
-
-        public async Task HandleAsync(AddInterlinearToEnhancedViewMessage message, CancellationToken cancellationToken)
-        {
-            await AddMetadatumEnhancedView(message.Metadatum, cancellationToken);
-
-            //await AddInterlinearToEnhancedView(message.Metadatum, cancellationToken);
-        }
-
-        //private async Task AddInterlinearToEnhancedView(InterlinearEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
-        //{
-        //    if (await TryUpdateExistingEnhancedView(metadatum, cancellationToken)) return;
-
-        //    await DeactivateDockedWindows();
-
-        //    // TODO:  How should this be refactored?
-        //    var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-        //    await viewModel.Initialize(new EnhancedViewLayout
-        //    {
-        //        ParatextSync = false,
-        //        Title = $"{metadatum.DisplayName}",
-        //        VerseOffset = 0
-        //    }, metadatum, cancellationToken);
-
-        //    AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
-        //}
-
-        public async Task HandleAsync(AddAlignmentSetToEnhancedViewMessage message, CancellationToken cancellationToken)
-        {
-            await AddMetadatumEnhancedView(message.Metadatum, cancellationToken);
-            //await AddAlignmentSetToEnhancedView(message.Metadatum, cancellationToken);
-        }
-
-        //public async Task AddAlignmentSetToEnhancedView(AlignmentEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
-        //{
-        //    if (await TryUpdateExistingEnhancedView(metadatum, cancellationToken)) return;
-
-        //    await DeactivateDockedWindows();
-        //    var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-        //    await viewModel.Initialize(new EnhancedViewLayout
-        //    {
-        //        ParatextSync = false,
-        //        Title = $"{metadatum.DisplayName}",
-        //        VerseOffset = 0
-        //    }, metadatum, cancellationToken);
-
-        //    AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
-        //}
-
 
         public async Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken = default)
         {
