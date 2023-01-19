@@ -33,13 +33,15 @@ namespace ClearDashboard.Aqua.Module.ViewModels.Menus
             IAquaManager aquaManager, 
             ILogger<DesignSurfaceViewModel> logger, 
             IWindowManager windowManager,
-            BindableCollection<CorpusNodeMenuItemViewModel> menuItems, 
+            BindableCollection<CorpusNodeMenuItemViewModel> menuItems,
+            CorpusNodeViewModel corpusNodeViewModel,
             ILifetimeScope lifetimeScope, 
             LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService) //FIXME: Bindable collection should not be generically typed to CorpusNodeMenuItemViewModel.
         {
             AquaManager = aquaManager;
             Logger = logger;
             MenuItems = menuItems;
+            CorpusNodeViewModel = corpusNodeViewModel;
             LifetimeScope = lifetimeScope;
             LongRunningTaskManager = longRunningTaskManager;
             LocalizationService = localizationService;

@@ -24,10 +24,11 @@ namespace ClearDashboard.Aqua.Module.Menu
 
             var parameters = new List<Autofac.Core.Parameter>
             {
-                new NamedParameter("menuItems", corpusNode.MenuItems)
+                new NamedParameter("menuItems", corpusNode.MenuItems),
+                new NamedParameter("corpusNodeViewModel", corpusNode)
             };
             var menuItem = LifetimeScope.Resolve<AquaCorpusAnalysisMenuItemViewModel>(parameters);
-            menuItem.CorpusNodeViewModel = corpusNode;
+           
             corpusNode.MenuItems.Add(menuItem); 
            ;
         }
