@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         protected ILogger<DesignSurfaceViewModel>? Logger { get; }
 
         //private readonly DashboardProjectManager? _projectManager;
-        protected ILifetimeScope LifecycleScope { get; }
+        protected ILifetimeScope LifetimeScope { get; }
         protected IEventAggregator? EventAggregator { get; }
         protected IMediator Mediator { get; }
         
@@ -247,13 +247,13 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         public DesignSurfaceViewModel(
             ILogger<DesignSurfaceViewModel>? logger,
             IEventAggregator? eventEventAggregator, 
-            ILifetimeScope lifecycleScope, 
+            ILifetimeScope lifetimeScope, 
             IMediator mediator,
             ILocalizationService localizationService)
        {
             Logger = logger;
             EventAggregator = eventEventAggregator;
-            LifecycleScope = lifecycleScope;
+            LifetimeScope = lifetimeScope;
             Mediator = mediator;
             LocalizationService = localizationService;
        }
@@ -337,7 +337,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 new NamedParameter("name", corpus.CorpusId.Name ?? string.Empty)
             };
 
-            var node = LifecycleScope.Resolve<CorpusNodeViewModel>(parameters);
+            var node = LifetimeScope.Resolve<CorpusNodeViewModel>(parameters);
 
             if (node == null)
             {
@@ -358,7 +358,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             node.IsRtl = corpus.CorpusId.IsRtl;
             node.TranslationFontFamily = corpus.CorpusId.FontFamily ?? Corpus.DefaultFontFamily;
 
-            var targetConnector = LifecycleScope.Resolve<ParallelCorpusConnectorViewModel>(new List<Autofac.Core.Parameter>
+            var targetConnector = LifetimeScope.Resolve<ParallelCorpusConnectorViewModel>(new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("name", "Target"),
                 new NamedParameter("paratextProjectId", node.ParatextProjectId),
@@ -367,7 +367,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             node.InputConnectors.Add(targetConnector);
 
 
-            var outputConnector = LifecycleScope.Resolve<ParallelCorpusConnectorViewModel>(new List<Autofac.Core.Parameter>
+            var outputConnector = LifetimeScope.Resolve<ParallelCorpusConnectorViewModel>(new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("name", "Source"),
                 new NamedParameter("paratextProjectId", node.ParatextProjectId),
@@ -609,7 +609,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         /// </summary>
         /// <param name="corpusNodeViewModel"></param>
         /// <param name="tokenizedCorpora"></param>
-        public async Task CreateCorpusNodeMenu(CorpusNodeViewModel corpusNodeViewModel, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
+        public async Task  CreateCorpusNodeMenu(CorpusNodeViewModel corpusNodeViewModel, IEnumerable<TokenizedTextCorpusId> tokenizedCorpora)
         {
             corpusNodeViewModel.MenuItems.Clear();
             corpusNodeViewModel.TokenizationCount = 0;
@@ -624,7 +624,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             if (corpusNodeViewModel.CorpusType != CorpusType.ManuscriptHebrew && corpusNodeViewModel.CorpusType != CorpusType.ManuscriptGreek)
             {
                 // Add new tokenization
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+                corpusNodeViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
                 {
                     Header = LocalizationService.Get("Pds_AddNewTokenizationMenu"),
                     Id = DesignSurfaceMenuIds.AddParatextCorpus,
@@ -704,13 +705,30 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             Tokenizer = tokenizer.ToString(),
                         });
                     }
-                    nodeMenuItems.Add(corpusNodeMenuViewModel);
+
+                    corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);
+                    //nodeMenuItems.Add(corpusNodeMenuViewModel);
                     corpusNodeViewModel.TokenizationCount++;
                 }
             }
 
             if (!isResource)
             {
+                try
+                {
+                   
+                    var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
+
+                    foreach (var menuBuilder in menuBuilders)
+                    {
+                        menuBuilder.CreateCorpusNodeMenu(corpusNodeViewModel);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger!.LogError(ex, "An unexpected error occurred while creating plug-in menus.");
+                }
+              
                 /*
                 nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
 
@@ -739,7 +757,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel
             //});
 
-            corpusNodeViewModel.MenuItems.AddRange(nodeMenuItems);
+            //corpusNodeViewModel.MenuItems.AddRange(nodeMenuItems);
         }
 
         private void AddSeparatorMenu(BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems)

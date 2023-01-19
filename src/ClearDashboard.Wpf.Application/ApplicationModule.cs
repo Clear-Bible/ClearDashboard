@@ -26,9 +26,16 @@ namespace ClearDashboard.Wpf.Application
             // IMPORTANT!  - override the default ShellViewModel from the foundation.
             builder.RegisterType<ShellViewModel>().As<IShellViewModel>().SingleInstance();
             builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
+
+
             builder.RegisterType<BackgroundTasksViewModel>().AsSelf().SingleInstance();
-            builder.RegisterType<ProjectDesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectDesignSurfaceViewModel>()
+                .AsSelf()
+                .As<IProjectDesignSurfaceViewModel>()
+                .SingleInstance();
             //builder.RegisterType<DesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
+
+           
         }
 
         public static void RegisterValidationDependencies(this ContainerBuilder builder)

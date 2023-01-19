@@ -327,6 +327,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         var node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, point);
                         var tokenizedCorpora =
                             topLevelProjectIds.TokenizedTextCorpusIds.Where(ttc => ttc.CorpusId!.Id == corpusId.Id);
+
                         await DesignSurfaceViewModel!.CreateCorpusNodeMenu(node, tokenizedCorpora);
                     }
 
@@ -359,7 +360,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             DesignSurfaceViewModel.ParallelCorpusConnections.Add(connection);
                             // add in the context menu
                             DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connection, topLevelProjectIds);
-                        }
+                        }             
                     }
                 }
 

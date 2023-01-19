@@ -2,26 +2,40 @@
 
 using Autofac;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
+using ClearDashboard.Aqua.Module.Menu;
 using ClearDashboard.Aqua.Module.Models;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
+using ClearDashboard.Aqua.Module.ViewModels.Menus;
 using ClearDashboard.Wpf.Application;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Plugin;
 using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Aqua.Module
 {
-    public class PluginModule : Autofac.Module
+    public class AquaPluginModule : PluginModule
     {
 
         protected override void Load(ContainerBuilder builder)
-        {
-            //var assembly = typeof(PluginModule).Assembly;
-            //builder.RegisterAssemblyTypes(assembly)
-            //    .Where(type => type.Name.EndsWith("ViewModel"))
-            //    .AsSelf()
-            //    .InstancePerDependency();
+        { 
+            
+            base.Load(builder);
 
+            builder.RegisterType<AquaDesignSurfaceMenuBuilder>().As<IDesignSurfaceMenuBuilder>();
+            builder.RegisterAquaDependencies();
+
+            
+        }
+
+        protected override void RegisterJsonDiscriminatorRegistrar(ContainerBuilder builder)
+        {
             builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
+        }
+
+        protected override void RegisterEnhancedViewAbstractions(ContainerBuilder builder)
+        {
+            //no-op for now
         }
     }
 
@@ -32,6 +46,8 @@ namespace ClearDashboard.Aqua.Module
             //manager
 
             builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
+
+            builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf();
 
             builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
