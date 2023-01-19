@@ -131,6 +131,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "windowsdesktop-runtime-7.0.2-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
+Source: "..\help_docs\Dashboard_Instructions.pdf"; DestDir: "{autodesktop}"; Flags: noencryption
 
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net7.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
