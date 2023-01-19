@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
-using Autofac.Core.Lifetime;
+﻿using Autofac;
 using ClearDashboard.Aqua.Module.ViewModels.Menus;
-using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
+using System.Collections.Generic;
 
 namespace ClearDashboard.Aqua.Module.Menu
 {
@@ -24,11 +18,11 @@ namespace ClearDashboard.Aqua.Module.Menu
 
             var parameters = new List<Autofac.Core.Parameter>
             {
-                new NamedParameter("menuItems", corpusNode.MenuItems),
+                //new NamedParameter("menuItems", corpusNode.MenuItems),
                 new NamedParameter("corpusNodeViewModel", corpusNode)
             };
             var menuItem = LifetimeScope.Resolve<AquaCorpusAnalysisMenuItemViewModel>(parameters);
-           
+
             corpusNode.MenuItems.Add(menuItem); 
            ;
         }

@@ -11,6 +11,11 @@ using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Plugin;
 using ClearDashboard.Wpf.Application.Services;
+using System.Reflection;
+using System.Threading;
+using System;
+using System.Diagnostics;
+using Autofac.Features.AttributeFilters;
 
 namespace ClearDashboard.Aqua.Module
 {
@@ -18,14 +23,10 @@ namespace ClearDashboard.Aqua.Module
     {
 
         protected override void Load(ContainerBuilder builder)
-        { 
+        {
             
             base.Load(builder);
-
-            builder.RegisterType<AquaDesignSurfaceMenuBuilder>().As<IDesignSurfaceMenuBuilder>();
             builder.RegisterAquaDependencies();
-
-            
         }
 
         protected override void RegisterJsonDiscriminatorRegistrar(ContainerBuilder builder)
@@ -47,7 +48,11 @@ namespace ClearDashboard.Aqua.Module
 
             builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
 
-            builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf();
+            builder.RegisterType<AquaDesignSurfaceMenuBuilder>().As<IDesignSurfaceMenuBuilder>().WithAttributeFiltering();
+            builder.RegisterType<AquaLocalizationService>().Keyed<ILocalizationService>("Aqua");
+            builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf().WithAttributeFiltering();
+
+            //builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf();
 
             builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")

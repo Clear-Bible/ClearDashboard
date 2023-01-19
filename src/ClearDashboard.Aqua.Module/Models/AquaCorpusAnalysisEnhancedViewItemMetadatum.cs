@@ -16,7 +16,7 @@ public class AquaCorpusAnalysisEnhancedViewItemMetadatum : EnhancedViewItemMetad
         {
             ContentId = ParatextProjectId,
             Content = viewModel,
-            Title = $"⳼ {viewModel.Title})",
+            Title = $"⳼ {viewModel.Title}",
             IsActive = true
         };
     }

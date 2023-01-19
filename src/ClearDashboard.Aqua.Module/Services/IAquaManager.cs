@@ -9,6 +9,8 @@ namespace ClearDashboard.Aqua.Module.Services
     public interface IAquaManager
     {
         public const string AquaDialogMenuId = "AquaDialogMenuId";
+        public const string AquaDialogAddToFocusedEnhancedView = "AquaDialogAddToFocusedEnhancedView";
+        public const string AquaDialogAddToNewEnhancedView = "AquaDialogAddToNewEnhancedView";
 
         //public const string AquaAddToCurrentEnhancedView = "AquaAddToCurrentEnhancedView";
         public Task AddCorpusAnalysisToEnhancedView();

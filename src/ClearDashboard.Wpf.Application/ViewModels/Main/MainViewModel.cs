@@ -11,7 +11,6 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Exceptions;
-using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
@@ -42,9 +41,6 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-using ClearApplicationFoundation.Extensions;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -52,7 +48,8 @@ using Point = System.Drawing.Point;
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
 
-    public class MainViewModel : Conductor<IScreen>.Collection.AllActive,
+    public class MainViewModel : Conductor<IScreen>.Collection.AllActive, 
+                IEnhancedViewManager,
                 IHandle<ProgressBarVisibilityMessage>,
                 IHandle<ProgressBarMessage>,
                 IHandle<UiLanguageChangedMessage>,
@@ -1743,117 +1740,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         //}
 
 
-        public async Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        public async Task AddMetadatumEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken = default)
         {
-            if (await TryUpdateExistingEnhancedView(metadatum, cancellationToken)) return;
-
-            await DeactivateDockedWindows();
-            var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-            await viewModel.Initialize(new EnhancedViewLayout
+            if (!await TryUpdateExistingEnhancedView(metadatum, cancellationToken))
             {
-                ParatextSync = false,
-                Title = $"{metadatum.DisplayName}",
-                VerseOffset = 0
-            }, metadatum, cancellationToken);
+                await DeactivateDockedWindows();
+                var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
+                await viewModel.Initialize(new EnhancedViewLayout
+                {
+                    ParatextSync = false,
+                    Title = $"{metadatum.DisplayName}",
+                    VerseOffset = 0
+                }, metadatum, cancellationToken);
 
-            AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
+                AddNewEnhancedViewTab(metadatum.CreateLayoutDocument(viewModel));
+            }
+            await SaveAvalonDockLayout();
         }
 
-        //public Task HandleAsync(AddToEnhancedViewMessage message, CancellationToken cancellationToken)
-        //{
-        //    if (await TryUpdateExistingEnhancedView(message.Metadatum, cancellationToken)) return;
-
-        //    await DeactivateDockedWindows();
-
-        //    // TODO:  How should this be refactored?
-        //    var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-        //    await viewModel.Initialize(new EnhancedViewLayout
-        //    {
-        //        ParatextSync = false,
-        //        Title = $"{message.Metadatum.DisplayName}",
-        //        VerseOffset = 0
-        //    });
-        //    viewModel.Title = message.Metadatum.DisplayName;
-        //    viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-        //    viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-        //    viewModel.VerseChange = ProjectManager.CurrentVerse;
-
-        //    await viewModel.AddItem(message.Metadatum, cancellationToken);
-
-        //    // make a new document for the windows
-        //    var windowDockable = new LayoutDocument
-        //    {
-        //        ContentId = message.Metadatum.AlignmentSetId,
-        //        Content = viewModel,
-        //        Title = message.Metadatum.DisplayName,
-        //        IsActive = true
-        //    };
-
-        //    AddNewEnhancedViewTab(windowDockable);
-        //}
-
-
-        //public async Task HandleAsync(AddAquaCorpusAnalysisToEnhancedViewMessage message, CancellationToken cancellationToken)
-        //{
-
-        //    if (await TryUpdateExistingEnhancedView(message.Metadatum, cancellationToken)) return;
-        //    /*
-        //    await DeactivateDockedWindows();
-
-
-        //    //TODO:  How should this be refactored?
-        //    var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
-        //    await viewModel.Initialize(new EnhancedViewLayout
-        //    {
-        //        ParatextSync = false,
-        //        Title = $"{message.Metadatum.DisplayName})",
-        //        VerseOffset = 0
-        //    });
-        //    viewModel.CurrentCorpusName = message!.Metadatum.ProjectName!;
-        //    viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-        //    viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-        //    viewModel.VerseChange = ProjectManager.CurrentVerse;
-
-        //    await viewModel.AddItem(message.Metadatum, cancellationToken);
-
-        //    // make a new document for the windows
-        //    var windowDockable = new LayoutDocument
-        //    {
-        //        ContentId = message.Metadatum.ParatextProjectId,
-        //        Content = viewModel,
-        //        Title = $"⳼ {message.Metadatum.ProjectName} ({message.Metadatum.TokenizationType})",
-        //        IsActive = true
-        //    };
-
-        //    AddNewEnhancedViewTab(windowDockable);
-        //    */
-
-        //    /*  FIXME: should use AddnewEnhnacedView()?
-
-        //    var viewModel = IoC.Get<EnhancedViewModel>();
-        //    viewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-        //    viewModel.CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
-        //    viewModel.VerseChange = ProjectManager.CurrentVerse;
-
-
-        //    // add vm to conductor
-        //    Items.Add(viewModel);
-
-        //    // figure out how many enhanced views there are and set the title number for the window
-        //    var enhancedViews = Items.Where(w => w is EnhancedViewModel).ToList();
-
-        //    // make a new document for the windows
-        //    var windowDockable = new LayoutDocument
-        //    {
-        //        Title = $"{viewModel.Title}  ({enhancedViews.Count})",
-        //        Content = viewModel,
-        //        IsActive = true
-        //    };
-
-        //    AddNewEnhancedViewTab(windowDockable);
-        //    */
-
-        //}
         /// <summary>
         /// Ensure that there is at least one document tab open at all times
         /// </summary>

@@ -117,7 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="TestKey" xml:space="preserve">
-    <value>Oh yeah!</value>
+  <data name="Pds_AquaDialogAddToFocusedEnhancedView" xml:space="preserve">
+    <value>Add Aqua Analysis to Focused Enhanced View</value>
+  </data>
+  <data name="Pds_AquaDialogAddToNewEnhancedView" xml:space="preserve">
+    <value>Add Aqua Analysis to New Enhanced View</value>
+  </data>
+  <data name="Pds_AquaDialogMenuId" xml:space="preserve">
+    <value>Aqua Analysis</value>
   </data>
 </root>

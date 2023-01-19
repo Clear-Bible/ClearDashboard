@@ -6,14 +6,15 @@ using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
-public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBase
+public abstract class MenuItemViewModel : PropertyChangedBase
 {
     protected MenuItemViewModel()
     {
-        MenuItems = new BindableCollection<TMenuItemViewModel>();
+        MenuItems = new BindableCollection<MenuItemViewModel>();
         Command = new CommandViewModel(Execute);
         Enabled = true;
     }
+
     private bool? _isChecked = false;
     public bool? IsChecked
     {
@@ -43,7 +44,7 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
         set => Set(ref _id, value);
     }
 
-    private bool  _enabled;
+    private bool _enabled;
     public bool Enabled
     {
         get => _enabled;
@@ -65,9 +66,23 @@ public abstract class MenuItemViewModel<TMenuItemViewModel> : PropertyChangedBas
         set => Set(ref _projectDesignSurfaceViewModel, value);
     }
 
-    public BindableCollection<TMenuItemViewModel>? MenuItems { get; set; }
+    public BindableCollection<MenuItemViewModel>? MenuItems { get; set; }
 
     public ICommand? Command { get; protected set; }
 
     protected abstract void Execute();
+}
+
+public abstract class MenuItemViewModel<TMenuItemViewModel> : MenuItemViewModel
+{
+    protected MenuItemViewModel()
+    {
+        MenuItems = new BindableCollection<TMenuItemViewModel>();
+      
+    }
+   
+
+    public new BindableCollection<TMenuItemViewModel>? MenuItems { get; set; }
+
+  
 }

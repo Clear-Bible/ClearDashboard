@@ -28,11 +28,12 @@ public abstract class EnhancedViewItemMetadatum
         }
         else
         {
-            metadataAssemblyQualifiedName =
-                (GetType().BaseType != null ?
-                    GetType().BaseType!.AssemblyQualifiedName :
-                    GetType().AssemblyQualifiedName)
-                ?? throw new Exception($"AssemblyQualifiedName is null for type name {GetType().Name}");
+            //metadataAssemblyQualifiedName =
+            //    (GetType().BaseType != null ?
+            //        GetType().BaseType!.AssemblyQualifiedName :
+            //        GetType().AssemblyQualifiedName)
+            metadataAssemblyQualifiedName = GetType().AssemblyQualifiedName
+                                            ?? throw new Exception($"AssemblyQualifiedName is null for type name {GetType().Name}");
         }
 
         var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName!

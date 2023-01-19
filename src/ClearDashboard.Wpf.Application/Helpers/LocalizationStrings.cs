@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Resources;
 using System.Threading;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.Strings;
@@ -17,7 +19,15 @@ namespace ClearDashboard.Wpf.Application.Helpers
         }
         public string Get(string key)
         {
-            //return LocalizationStrings.Get(key, _logger);
+
+            //var resourceManager = new ResourceManager(typeof("ClearDashboard.Aqua.Module.Strings.Resources"))
+            //var resourceSet = resourceManager.GetResourceSet(CultureInfo.GetCultureInfo("en-us"), true, true);
+            //if (resourceSet == null)
+            //    throw new Exception("Unable to create ResourceSet.");
+
+            //var s = resourceSet.GetString("TestKey");
+
+
             string localizedString;
             try
             {

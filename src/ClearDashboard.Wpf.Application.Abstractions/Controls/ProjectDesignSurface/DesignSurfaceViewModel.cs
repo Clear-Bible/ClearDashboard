@@ -625,7 +625,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             {
                 // Add new tokenization
                 corpusNodeViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
-                //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
                 {
                     Header = LocalizationService.Get("Pds_AddNewTokenizationMenu"),
                     Id = DesignSurfaceMenuIds.AddParatextCorpus,
@@ -674,26 +673,14 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 IconKind = PackIconPicolIconsKind.DocumentText.ToString(),
                                 CorpusNodeViewModel = corpusNodeViewModel,
                                 Tokenizer = tokenizer.ToString(),
-                            },
-                            //new CorpusNodeMenuItemViewModel
-                            //{
-                            //    // Properties
-                            //    Header = localizationService_.Get("Pds_PropertiesMenu"),
-                            //    Id = DesignSurfaceMenuIds.ShowTokenizationProperties,
-                            //    ProjectDesignSurfaceViewModel = this,
-                            //    IconKind = PackIconPicolIconsKind.Settings.ToString(),
-                            //    CorpusNodeViewModel = corpusNode,
-                            //    Tokenizer = nodeTokenization.TokenizationName,
-                            //},
+                            }
                         }
                     };
 
                     if (!isResource)
                     {
                         AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
-
-                        //corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
-
+                   
                         corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                         {
                             // Show Verses in New Windows
@@ -707,7 +694,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     }
 
                     corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);
-                    //nodeMenuItems.Add(corpusNodeMenuViewModel);
                     corpusNodeViewModel.TokenizationCount++;
                 }
             }
@@ -729,35 +715,10 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                     Logger!.LogError(ex, "An unexpected error occurred while creating plug-in menus.");
                 }
               
-                /*
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
-
-                nodeMenuItems.Add(new AquaCorpusAnalysisMenuItemViewModel(aquaManager_, Logger!, windowManager_, nodeMenuItems, lifetimeScope_, longRunningTaskManager_) //FIXME: should come from DI?
-                {
-                    CorpusNodeViewModel = corpusNode,
-                });
-                */
+           
             }
 
-            //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
-            //{
-            //    Header = "",
-            //    Id = DesignSurfaceMenuIds.Separator,
-            //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-            //    IsSeparator = true
-            //});
-
-            //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
-            //{
-            //    // Properties
-            //    Header = localizationService_.Get("Pds_PropertiesMenu"),
-            //    Id = DesignSurfaceMenuIds.ShowCorpusNodeProperties,
-            //    IconKind = PackIconPicolIconsKind.Settings.ToString(),
-            //    CorpusNodeViewModel = corpusNode,
-            //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel
-            //});
-
-            //corpusNodeViewModel.MenuItems.AddRange(nodeMenuItems);
+          
         }
 
         private void AddSeparatorMenu(BindableCollection<CorpusNodeMenuItemViewModel> nodeMenuItems)

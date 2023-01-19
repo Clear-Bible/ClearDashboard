@@ -17,10 +17,10 @@ namespace ClearDashboard.Aqua.Module.Services
     public class AquaManager : IAquaManager
     {
         private IEventAggregator EventAggregator { get; }
-        private ILogger<NoteManager>? Logger { get; }
+        private ILogger<AquaManager>? Logger { get; }
         private IMediator Mediator { get; }
         private IUserProvider UserProvider { get; }
-        public AquaManager(IEventAggregator eventAggregator, ILogger<NoteManager>? logger, IMediator mediator, IUserProvider userProvider)
+        public AquaManager(IEventAggregator eventAggregator, ILogger<AquaManager>? logger, IMediator mediator, IUserProvider userProvider)
         {
             EventAggregator = eventAggregator;
             Logger = logger;
