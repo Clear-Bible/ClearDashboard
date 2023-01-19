@@ -20,7 +20,7 @@ namespace ClearDashboard.Aqua.Module.Menu
 
         public override void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode)
         {
-            corpusNode.MenuItems.Add(new CorpusNodeMenuItemViewModel { Header = "", Id = "SeparatorId", ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel, IsSeparator = true });
+            corpusNode.MenuItems.Add(CreateCorpusNodeSeparatorMenuItem());
 
             var parameters = new List<Autofac.Core.Parameter>
             {
