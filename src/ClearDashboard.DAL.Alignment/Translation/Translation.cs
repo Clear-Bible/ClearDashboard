@@ -22,8 +22,10 @@ public class Translation
     public TranslationId? TranslationId { get; private set; }
     public Token SourceToken { get; private set; }
     public string TargetTranslationText { get; set; }
+    
+    public string SourceTokenSurfaceText => SourceToken is CompositeToken token ? string.Join(" ", token.Tokens.Select(t => t.SurfaceText)) : SourceToken.SurfaceText;
 
-    public byte[] SourceTokenSurfaceTextBytes => Encoding.Unicode.GetBytes(SourceToken.SurfaceText);
+    public byte[] SourceTokenSurfaceTextBytes => Encoding.Unicode.GetBytes(SourceTokenSurfaceText);
     public string SourceTokenSurfaceByteString => string.Join(" ", SourceTokenSurfaceTextBytes.Select(x => x.ToString("X2")));
 
     public byte[] TargetTranslationTextBytes => Encoding.Unicode.GetBytes(TargetTranslationText);

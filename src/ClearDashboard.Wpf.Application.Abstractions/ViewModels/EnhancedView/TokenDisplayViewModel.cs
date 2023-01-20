@@ -19,6 +19,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public Token Token { get; }
 
+        public Token TokenForTranslation => IsCompositeTokenMember ? CompositeToken! : Token;
+
         /// <summary>
         /// The <see cref="VerseDisplayViewModel"/> that this token is part of.
         /// </summary>
@@ -104,7 +106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// The surface text of the token to be displayed for translations.
         /// </summary>
-        public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken.Tokens.Select(t => t.SurfaceText))
+        public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.SurfaceText))
                                                                        : Token.SurfaceText;
 
         /// <summary>

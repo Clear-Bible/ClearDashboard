@@ -213,7 +213,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 await TranslationSet.PutTranslation(translation, translationActionType);
                 stopwatch.Stop();
                 
-                Logger.LogInformation($"Saved translation for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger.LogInformation($"Saved translation for {translation.SourceTokenSurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
 
                 if (TranslationActionTypes.PutPropagate == translationActionType)
                 {
