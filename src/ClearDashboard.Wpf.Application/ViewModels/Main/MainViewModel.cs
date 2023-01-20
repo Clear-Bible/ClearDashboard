@@ -1576,7 +1576,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             await viewModel.Initialize(new EnhancedViewLayout
             {
-                ParatextSync = false,
+                ParatextSync = true,
                 Title = $"{message.Metadatum.ProjectName} ({message.Metadatum.TokenizationType})",
                 VerseOffset = 0
             });
@@ -1707,7 +1707,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             await viewModel.Initialize(new EnhancedViewLayout
             {
-                ParatextSync = false,
+                ParatextSync = true,
                 Title = $"{message.Metadatum.DisplayName}",
                 VerseOffset = 0
             });
@@ -1740,7 +1740,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
             await viewModel.Initialize(new EnhancedViewLayout
             {
-                ParatextSync = false,
+                ParatextSync = true,
                 Title = $"{message.Metadatum.DisplayName}",
                 VerseOffset = 0
             });
