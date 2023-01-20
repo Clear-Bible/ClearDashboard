@@ -688,7 +688,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     new EnhancedViewLayout
                     {
-                        ParatextSync = false,
+                        ParatextSync = true,
                         Title = "⳼ ENHANCED VIEW",
                         VerseOffset = 0
                     }
