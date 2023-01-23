@@ -99,9 +99,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     Tokens.Remove(childToken);
                 }
 
-                FlattenedTokens = new TokenCollection(Tokens.GetPositionalSortedBaseTokens());
-                PaddedTokens = new PaddedTokenCollection(Detokenizer.Detokenize(_flattenedTokens));
+                RebuildPaddedTokens();
+            }
+        }
 
+        private void RebuildPaddedTokens()
+        {
+            FlattenedTokens = new TokenCollection(Tokens.GetPositionalSortedBaseTokens());
+            PaddedTokens = new PaddedTokenCollection(Detokenizer.Detokenize(_flattenedTokens));
+        }
+
+        public void RemoveCompositeToken(CompositeToken compositeToken, TokenCollection childTokens)
+        {
+            var compositeIndex = Tokens.IndexOf(compositeToken);
+            if (compositeIndex != -1)
+            {
+                foreach (var childToken in childTokens)
+                {
+                    Tokens.Insert(compositeIndex++, childToken);
+                }
+                Tokens.Remove(compositeToken);
+
+                RebuildPaddedTokens();
             }
         }
 
