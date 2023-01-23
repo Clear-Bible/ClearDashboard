@@ -809,8 +809,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 CorpusNodes.Remove(node);
 
 
-                AddManuscriptGreekEnabled = (node.CorpusType == CorpusType.ManuscriptGreek);
-                AddManuscriptHebrewEnabled = (node.CorpusType == CorpusType.ManuscriptHebrew);
+                if (node.CorpusType == CorpusType.ManuscriptGreek)
+                {
+                    AddManuscriptGreekEnabled = true;
+                }
+
+                if (node.CorpusType == CorpusType.ManuscriptHebrew)
+                {
+                    AddManuscriptHebrewEnabled = true;
+                }
 
 
                 EventAggregator.PublishOnUIThreadAsync(new CorpusDeletedMessage(node.ParatextProjectId));
