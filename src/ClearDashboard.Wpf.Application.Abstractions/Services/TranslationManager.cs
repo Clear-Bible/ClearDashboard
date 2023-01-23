@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -19,8 +20,20 @@ namespace ClearDashboard.Wpf.Application.Services
     /// </summary>
     public sealed class TranslationManager : PropertyChangedBase
     {
-        private EngineParallelTextRow ParallelTextRow { get; }
-        private IEnumerable<TokenId> SourceTokenIds => ParallelTextRow.SourceTokens?.Select(t => t.TokenId) ?? new List<TokenId>();
+        private EngineParallelTextRow? _parallelTextRow;
+        private EngineParallelTextRow? ParallelTextRow
+        {
+            get => _parallelTextRow;
+            set
+            {
+                _parallelTextRow = value;
+                if (_parallelTextRow is { SourceTokens: { } })
+                {
+                    SourceTokenIds = _parallelTextRow.SourceTokens.Select(t => t.TokenId).ToList();
+                }
+            }
+        }
+        private List<TokenId> SourceTokenIds { get; set; } = new();
         private TranslationSetId TranslationSetId { get; }
         private TranslationSet? TranslationSet { get; set; }
         private TranslationCollection? Translations { get; set; } 
@@ -48,7 +61,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        private async Task GetTranslationsAsync()
+        public async Task GetTranslationsAsync()
         {
             try
             {
@@ -72,6 +85,48 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Adds a translation for a token to the current set of translations.
+        /// </summary>
+        /// <param name="tokenId">The token ID to add.</param>
+        /// <returns>The translation for the additional token.</returns>
+        public async Task<Translation?> AddTranslationAsync(TokenId tokenId)
+        {
+            try
+            {
+                if (TranslationSet != null)
+                {
+                    var stopwatch = new Stopwatch();
+                    stopwatch.Start();
+
+                    var newTranslations = (await TranslationSet.GetTranslations(tokenId.ToEnumerable())).ToList();
+                    if (Translations != null)
+                    {
+                        Translations.AddRange(newTranslations);
+                    }
+                    else
+                    {
+                        Translations = new TranslationCollection(newTranslations);
+                    }
+
+                    stopwatch.Stop();
+                    Logger.LogInformation($"Retrieved {newTranslations.Count()} translations from translation set {TranslationSetId.DisplayName} ({TranslationSetId.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+
+                    return newTranslations.FirstOrDefault();
+                }
+                else
+                {
+                    Logger.LogCritical("Could not retrieve translations without a valid translation set.");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+            return null;
         }
 
         /// <summary>
@@ -170,8 +225,12 @@ namespace ClearDashboard.Wpf.Application.Services
                 await TranslationSet.PutTranslation(translation, translationActionType);
                 stopwatch.Stop();
                 
-                Logger.LogInformation($"Saved translation for {translation.SourceToken.SurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger.LogInformation($"Saved translation for {translation.SourceTokenSurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
 
+                if (!SourceTokenIds.Contains(translation.SourceToken.TokenId))
+                {
+                    SourceTokenIds.Add(translation.SourceToken.TokenId);
+                }
                 if (TranslationActionTypes.PutPropagate == translationActionType)
                 {
                     // If translation propagates to other tokens, then we need a fresh call to retrieve the translations.

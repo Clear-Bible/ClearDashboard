@@ -644,6 +644,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task TokenJoinAsync(TokenEventArgs e)
         {
+            await VerseManager.JoinTokensAsync(e.SelectedTokens.TokenCollection, null);
+        }
+
+        public void TokenJoinLanguagePair(object sender, TokenEventArgs e)
+        {
+            Task.Run(() => TokenJoinLanguagePairAsync(e).GetAwaiter());
+        }
+
+        public async Task TokenJoinLanguagePairAsync(TokenEventArgs e)
+        {
             await VerseManager.JoinTokensAsync(e.SelectedTokens.TokenCollection, e.TokenDisplay.VerseDisplay.ParallelCorpusId);
         }
 
