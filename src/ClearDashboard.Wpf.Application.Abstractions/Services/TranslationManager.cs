@@ -20,8 +20,20 @@ namespace ClearDashboard.Wpf.Application.Services
     /// </summary>
     public sealed class TranslationManager : PropertyChangedBase
     {
-        private EngineParallelTextRow ParallelTextRow { get; }
-        private IEnumerable<TokenId> SourceTokenIds => ParallelTextRow.SourceTokens?.Select(t => t.TokenId) ?? new List<TokenId>();
+        private EngineParallelTextRow? _parallelTextRow;
+        private EngineParallelTextRow? ParallelTextRow
+        {
+            get => _parallelTextRow;
+            set
+            {
+                _parallelTextRow = value;
+                if (_parallelTextRow is { SourceTokens: { } })
+                {
+                    SourceTokenIds = _parallelTextRow.SourceTokens.Select(t => t.TokenId).ToList();
+                }
+            }
+        }
+        private List<TokenId> SourceTokenIds { get; set; } = new();
         private TranslationSetId TranslationSetId { get; }
         private TranslationSet? TranslationSet { get; set; }
         private TranslationCollection? Translations { get; set; } 
@@ -215,6 +227,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 
                 Logger.LogInformation($"Saved translation for {translation.SourceTokenSurfaceText} in {stopwatch.ElapsedMilliseconds} ms");
 
+                if (!SourceTokenIds.Contains(translation.SourceToken.TokenId))
+                {
+                    SourceTokenIds.Add(translation.SourceToken.TokenId);
+                }
                 if (TranslationActionTypes.PutPropagate == translationActionType)
                 {
                     // If translation propagates to other tokens, then we need a fresh call to retrieve the translations.
