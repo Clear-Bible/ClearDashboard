@@ -53,10 +53,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         #endregion Internal Data Members
 
        
-
         protected ILogger<DesignSurfaceViewModel>? Logger { get; }
-
-       
+        
         protected ILifetimeScope LifetimeScope { get; }
         protected IEventAggregator? EventAggregator { get; }
         protected IMediator Mediator { get; }

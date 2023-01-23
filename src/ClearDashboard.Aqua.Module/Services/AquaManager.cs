@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Interfaces;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Caliburn.Micro;
-using ClearDashboard.Aqua.Module.Models;
-using ClearDashboard.Aqua.Module.ViewModels.Messages;
-using ClearDashboard.DAL.Interfaces;
-using ClearDashboard.Wpf.Application.Services;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using SIL.Machine.Utils;
 
 namespace ClearDashboard.Aqua.Module.Services
 {
@@ -28,14 +25,6 @@ namespace ClearDashboard.Aqua.Module.Services
             UserProvider = userProvider;
 
             EventAggregator.SubscribeOnUIThread(this);
-        }
-
-        public async Task AddCorpusAnalysisToEnhancedView()
-        {
-            await EventAggregator.PublishOnUIThreadAsync(new AddAquaCorpusAnalysisToEnhancedViewMessage(new AquaCorpusAnalysisEnhancedViewItemMetadatum()
-            {
-                IsNewWindow = false
-            }));
         }
 
         public async Task<string> AddVersion(

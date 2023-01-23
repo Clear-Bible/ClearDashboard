@@ -8,11 +8,11 @@ namespace ClearDashboard.Wpf.Application.Plugin
         protected override void Load(ContainerBuilder builder)
         {
             RegisterJsonDiscriminatorRegistrar(builder);
-            RegisterEnhancedViewAbstractions(builder);
+            RegisterPluginAbstractions(builder);
 
         }
 
         protected abstract void RegisterJsonDiscriminatorRegistrar(ContainerBuilder builder);
-        protected abstract void RegisterEnhancedViewAbstractions(ContainerBuilder builder);
+        protected abstract void RegisterPluginAbstractions(ContainerBuilder builder);
     }
 }

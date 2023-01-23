@@ -13,8 +13,7 @@ namespace ClearDashboard.Aqua.Module.Services
         public const string AquaDialogAddToNewEnhancedView = "AquaDialogAddToNewEnhancedView";
 
         //public const string AquaAddToCurrentEnhancedView = "AquaAddToCurrentEnhancedView";
-        public Task AddCorpusAnalysisToEnhancedView();
-
+      
         /// <summary>
         /// 
         /// </summary>

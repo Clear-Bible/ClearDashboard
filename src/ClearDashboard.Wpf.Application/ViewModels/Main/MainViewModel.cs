@@ -1531,15 +1531,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await Task.CompletedTask;
         }
 
-
-
         private async Task<bool> TryUpdateExistingEnhancedView(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
+
+            var dockableWindows = _dockingManager.Layout.Descendents()
+                .OfType<LayoutDocument>().ToList();
+
+            // There are no EnhancedViews currently being displayed, so
+            // return "false".
+            if (dockableWindows.Count == 0)
+            {
+                return false;
+            }
+
+
             // the user wants to add to the currently active window
             if (metadatum.IsNewWindow == false)
             {
-                var dockableWindows = _dockingManager.Layout.Descendents()
-                    .OfType<LayoutDocument>().ToList();
+               
+
+              
                 if (dockableWindows.Count == 1)
                 {
                     await EnhancedViewModels.First().AddItem(metadatum, cancellationToken);

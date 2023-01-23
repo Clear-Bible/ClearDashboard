@@ -22,21 +22,14 @@ namespace ClearDashboard.Aqua.Module
     public class AquaPluginModule : PluginModule
     {
 
-        protected override void Load(ContainerBuilder builder)
-        {
-            
-            base.Load(builder);
-            builder.RegisterAquaDependencies();
-        }
-
         protected override void RegisterJsonDiscriminatorRegistrar(ContainerBuilder builder)
         {
             builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
         }
 
-        protected override void RegisterEnhancedViewAbstractions(ContainerBuilder builder)
+        protected override void RegisterPluginAbstractions(ContainerBuilder builder)
         {
-            //no-op for now
+            builder.RegisterAquaDependencies();
         }
     }
 
