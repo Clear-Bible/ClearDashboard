@@ -87,6 +87,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return Tokens.Where(t => t is CompositeToken).Cast<CompositeToken>().FirstOrDefault(compositeToken => compositeToken.Tokens.Any(t => t.TokenId.IdEquals(token.TokenId)));
         }
 
+        public void AddCompositeToken(CompositeToken compositeToken)
+        {
+            var firstChild = compositeToken.Tokens.FirstOrDefault();
+            if (firstChild != null)
+            {
+                var firstChildIndex = Tokens.IndexOf(firstChild);
+                Tokens.Insert(firstChildIndex, compositeToken);
+                foreach (var childToken in compositeToken.Tokens)
+                {
+                    Tokens.Remove(childToken);
+                }
+
+                FlattenedTokens = new TokenCollection(Tokens.GetPositionalSortedBaseTokens());
+                PaddedTokens = new PaddedTokenCollection(Detokenizer.Detokenize(_flattenedTokens));
+
+            }
+        }
+
         public TokenMap(IEnumerable<Token> tokens, EngineStringDetokenizer detokenizer, bool isRtl)
         {
             Detokenizer = detokenizer;
