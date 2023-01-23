@@ -657,15 +657,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             if (corpusNode.CorpusType != CorpusType.ManuscriptHebrew && corpusNode.CorpusType != CorpusType.ManuscriptGreek)
             {
                 // Add new tokenization
-                nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
-                {
-                    Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", Logger!),
-                    Id = DesignSurfaceMenuIds.AddParatextCorpus,
-                    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
-                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                    CorpusNodeViewModel = corpusNode,
-                });
-                addSeparator = true;
+                //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
+                //{
+                //    Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", Logger!),
+                //    Id = DesignSurfaceMenuIds.AddParatextCorpus,
+                //    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
+                //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                //    CorpusNodeViewModel = corpusNode,
+                //});
+                //addSeparator = true;
             }
 
 
