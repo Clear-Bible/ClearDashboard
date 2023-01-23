@@ -594,15 +594,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             // restrict the ability of Manuscript to add new tokenizers
             if (corpusNodeViewModel.CorpusType != CorpusType.ManuscriptHebrew && corpusNodeViewModel.CorpusType != CorpusType.ManuscriptGreek)
             {
-                // Add new tokenization
-                corpusNodeViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
-                {
-                    Header = LocalizationService.Get("Pds_AddNewTokenizationMenu"),
-                    Id = DesignSurfaceMenuIds.AddParatextCorpus,
-                    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
-                    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                    CorpusNodeViewModel = corpusNodeViewModel,
-                });
+                //// Add new tokenization
+                //corpusNodeViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                //{
+                //    Header = LocalizationService.Get("Pds_AddNewTokenizationMenu"),
+                //    Id = DesignSurfaceMenuIds.AddParatextCorpus,
+                //    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
+                //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
+                //    CorpusNodeViewModel = corpusNodeViewModel,
+                //});
                 addSeparator = true;
             }
 

@@ -312,6 +312,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     foreach (var corpusId in topLevelProjectIds.CorpusIds)
                     {
+
+                      
                         if (corpusId.CorpusType == CorpusType.ManuscriptHebrew.ToString())
                         {
                             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = false;
