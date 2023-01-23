@@ -48,6 +48,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public string ReleaseDate { get; set; } = String.Empty;
         public List<ReleaseNote> ReleaseNotes { get; set; } = new();
         public string DownloadLink { get; set; } = String.Empty;
+        public List<string> KnownIssues { get; set; } = new();
     }
 
     public class ReleaseNote

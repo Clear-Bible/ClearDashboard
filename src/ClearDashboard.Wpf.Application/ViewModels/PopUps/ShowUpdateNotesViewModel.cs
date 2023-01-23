@@ -20,9 +20,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
             set
             {
                 _updates = value;
+
+                foreach (var update in _updates)
+                {
+                    if (update.KnownIssues.Count > 0)
+                    {
+                        KnownIssues = new ObservableCollection<string>(update.KnownIssues);
+                        break;
+                    }
+                }
+
+
                 NotifyOfPropertyChange(() => Updates);
             }
         }
+
+        private ObservableCollection<string> _knownIssues;
+        public ObservableCollection<string> KnownIssues
+        {
+            get => _knownIssues;
+            set
+            {
+                _knownIssues = value;
+                NotifyOfPropertyChange(() => KnownIssues);
+            }
+        }
+
 
         public ShowUpdateNotesViewModel()
         {
