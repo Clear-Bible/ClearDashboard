@@ -102,6 +102,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenJoinEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenJoinLanguagePairEvent = EventManager.RegisterRoutedEvent
+            ("TokenJoinLanguagePair", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TokenUnjoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
@@ -562,6 +568,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenJoinEvent, e);
         }        
         
+        private void OnTokenJoinLanguagePair(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenJoinLanguagePairEvent, e);
+        }        
+        
         private void OnTokenLeftButtonDown(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenLeftButtonDownEvent, e);
@@ -959,6 +970,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenJoinEvent, value);
             remove => RemoveHandler(TokenJoinEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to join multiple tokens into a composite token for a language pair.
+        /// </summary>
+        public event RoutedEventHandler TokenJoinLanguagePair
+        {
+            add => AddHandler(TokenJoinLanguagePairEvent, value);
+            remove => RemoveHandler(TokenJoinLanguagePairEvent, value);
         }
 
         /// <summary>
