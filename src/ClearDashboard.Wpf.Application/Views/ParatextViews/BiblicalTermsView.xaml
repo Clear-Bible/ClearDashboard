@@ -454,7 +454,11 @@
                             Margin="5,0,5,0"
                             Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Text="{helpers:Localization BiblicalTermsForm_GlossLower}" />
-                        <TextBlock Foreground="{StaticResource SecondaryHueMidBrush}" Text="{Binding Gloss}" />
+                        <TextBlock
+                            Foreground="{StaticResource SecondaryHueMidBrush}"
+                            Text="{Binding Gloss}"
+                            TextWrapping="Wrap" 
+                            Width="{Binding ActualWidth, ElementName=SelectedItemVerses, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"/>
                     </StackPanel>
                     <ListBox
                         x:Name="SelectedItemVerseRenderings"

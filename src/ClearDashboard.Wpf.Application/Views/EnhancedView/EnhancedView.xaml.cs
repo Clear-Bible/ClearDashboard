@@ -51,7 +51,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
             if (NotesExpander != null && NotesControl != null)
             {
                 NotesExpander.Width = 300;
-                NotesControl.Width = 300;
+                NotesControl.Width = NotesExpander.Width - 37;
             }
 
             NotesColumn.Width = new GridLength(300, GridUnitType.Auto);
@@ -71,9 +71,9 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
         {
             NotesExpander.Width = NotesColumn.ActualWidth;
-            if (NotesColumn.ActualWidth - 50>=0)
+            if (NotesColumn.ActualWidth - 37>=0)
             {
-                NotesControl.Width = NotesColumn.ActualWidth - 50;
+                NotesControl.Width = NotesColumn.ActualWidth - 37;
             }
             else
             {
