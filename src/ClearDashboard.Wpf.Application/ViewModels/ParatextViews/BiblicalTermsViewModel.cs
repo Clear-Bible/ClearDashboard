@@ -615,7 +615,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         /// <exception cref="NotImplementedException"></exception>
         private void ShowNotes(object obj)
         {
+#if DEBUG
             throw new NotImplementedException();
+#endif
         }
 
         /// <summary>

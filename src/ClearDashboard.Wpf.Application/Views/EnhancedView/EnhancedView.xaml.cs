@@ -14,6 +14,8 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
     /// </summary>
     public partial class EnhancedView : UserControl
     {
+        private double RightHandNotesMarginOnDrag = 35;
+        private double ExpanderHeaderWidth = 24;
 
         // TODO:  this needs to be moved into VerseAwareEnhancedViewItemViewModel.
         public void TranslationClicked(object sender, RoutedEventArgs routedEventArgs)
@@ -51,7 +53,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
             if (NotesExpander != null && NotesControl != null)
             {
                 NotesExpander.Width = 300;
-                NotesControl.Width = 300;
+                NotesControl.Width = NotesExpander.Width - RightHandNotesMarginOnDrag;
             }
 
             NotesColumn.Width = new GridLength(300, GridUnitType.Auto);
@@ -60,8 +62,8 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 
         private void ProjectDesignSurfaceExpander_OnCollapsed(object sender, RoutedEventArgs e)
         {
-            NotesExpander.Width = 24;
-            NotesControl.Width = 24;
+            NotesExpander.Width = ExpanderHeaderWidth;
+            NotesControl.Width = ExpanderHeaderWidth;
 
             NotesColumn.Width = new GridLength(1, GridUnitType.Auto);
             
@@ -71,9 +73,9 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
         private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
         {
             NotesExpander.Width = NotesColumn.ActualWidth;
-            if (NotesColumn.ActualWidth - 50 >= 0)
+            if (NotesColumn.ActualWidth - RightHandNotesMarginOnDrag >= 0)
             {
-                NotesControl.Width = NotesColumn.ActualWidth - 50;
+                NotesControl.Width = NotesColumn.ActualWidth - RightHandNotesMarginOnDrag;
             }
             else
             {

@@ -40,6 +40,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         /// <summary>
+        /// Refreshes the translations for the specified tokens when a composite token is joined or unjoined.
+        /// </summary>
+        /// <param name="tokens">The tokens to refresh.</param>
+        /// <param name="compositeToken">A composite token for a join operation; null for an unjoin operation.</param>
+        /// <returns>An awaitable Task.</returns>
+        protected override async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)
+        {
+            if (compositeToken != null)
+            {
+                await TranslationManager!.AddTranslationAsync(compositeToken.TokenId);
+            }
+            foreach (var tokenDisplay in SourceTokenDisplayViewModels)
+            {
+                if (tokens.Contains(tokenDisplay.Token))
+                {
+                    tokenDisplay.Translation = GetTranslationForToken(tokenDisplay.Token, compositeToken);
+                }
+            }
+            await TranslationManager.GetTranslationsAsync();
+            await BuildTokenDisplayViewModelsAsync();
+            await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
+        }
+
+        /// <summary>
         /// Gets a collection of <see cref="TranslationOption"/>s for a given translation.
         /// </summary>
         /// <param name="token">The <see cref="Token"/> for which to provide options.</param>

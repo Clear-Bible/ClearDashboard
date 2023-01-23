@@ -594,16 +594,16 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             // restrict the ability of Manuscript to add new tokenizers
             if (corpusNodeViewModel.CorpusType != CorpusType.ManuscriptHebrew && corpusNodeViewModel.CorpusType != CorpusType.ManuscriptGreek)
             {
-                //// Add new tokenization
-                //corpusNodeViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
+                // Add new tokenization
+                //nodeMenuItems.Add(new CorpusNodeMenuItemViewModel
                 //{
-                //    Header = LocalizationService.Get("Pds_AddNewTokenizationMenu"),
+                //    Header = LocalizationStrings.Get("Pds_AddNewTokenizationMenu", Logger!),
                 //    Id = DesignSurfaceMenuIds.AddParatextCorpus,
                 //    IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
                 //    ProjectDesignSurfaceViewModel = ProjectDesignSurfaceViewModel,
-                //    CorpusNodeViewModel = corpusNodeViewModel,
+                //    CorpusNodeViewModel = corpusNode,
                 //});
-                addSeparator = true;
+                //addSeparator = true;
             }
 
 
@@ -765,8 +765,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 CorpusNodes.Remove(node);
 
 
-                AddManuscriptGreekEnabled = (node.CorpusType == CorpusType.ManuscriptGreek);
-                AddManuscriptHebrewEnabled = (node.CorpusType == CorpusType.ManuscriptHebrew);
+                if (node.CorpusType == CorpusType.ManuscriptGreek)
+                {
+                    AddManuscriptGreekEnabled = true;
+                }
+
+                if (node.CorpusType == CorpusType.ManuscriptHebrew)
+                {
+                    AddManuscriptHebrewEnabled = true;
+                }
 
 
                 EventAggregator.PublishOnUIThreadAsync(new CorpusDeletedMessage(node.ParatextProjectId));
