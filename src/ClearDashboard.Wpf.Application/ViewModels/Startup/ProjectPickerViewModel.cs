@@ -216,7 +216,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _translationSource = translationSource;
             NoProjectVisibility = Visibility.Visible;
             SearchBlankVisibility = Visibility.Collapsed;
+
             IsParatextRunning = _paratextProxy.IsParatextRunning();
+            if (IsParatextRunning && !Connected)
+            {
+                ParatextUserName = "Paratext is on but not connected.";
+            }
         }
 
         public async Task StartParatext()
