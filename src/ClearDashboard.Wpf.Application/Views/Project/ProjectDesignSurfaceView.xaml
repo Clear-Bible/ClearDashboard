@@ -612,7 +612,7 @@
                         x:Name="tb4"
                         Grid.Column="8"
                         Width="15"
-                        Margin="-13,0,3,0"
+                        Margin="-8,0,3,0"
                         VerticalAlignment="Center"
                         Text="%" />
                 </StackPanel>
