@@ -213,17 +213,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public async Task HandleAsync(TokensJoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = message.CompositeToken);
+            SourceTokenMap!.AddCompositeToken(message.CompositeToken);
             await RefreshTranslationsAsync(message.Tokens, message.CompositeToken);
-            //Task.Run(() => RefreshTranslationsAsync(message.CompositeToken, message.Tokens).GetAwaiter(), cancellationToken);
-            //return Task.CompletedTask;
         }
 
         public async Task HandleAsync(TokenUnjoinedMessage message, CancellationToken cancellationToken)
         {
             MatchingTokenAction(message.Tokens.TokenIds, t => t.CompositeToken = null);
+            SourceTokenMap!.RemoveCompositeToken(message.CompositeToken, message.Tokens);
             await RefreshTranslationsAsync(message.Tokens);
-            //Task.Run(() => RefreshTranslationsAsync(message.CompositeToken, message.Tokens).GetAwaiter(), cancellationToken);
-            //return Task.CompletedTask;
         }
 
         protected virtual async Task RefreshTranslationsAsync(TokenCollection tokens, CompositeToken? compositeToken = null)

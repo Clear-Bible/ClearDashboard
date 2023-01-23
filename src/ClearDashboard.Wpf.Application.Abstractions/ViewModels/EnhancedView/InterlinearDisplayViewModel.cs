@@ -58,6 +58,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     tokenDisplay.Translation = GetTranslationForToken(tokenDisplay.Token, compositeToken);
                 }
             }
+            await TranslationManager.GetTranslationsAsync();
+            await BuildTokenDisplayViewModelsAsync();
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
         }
 
