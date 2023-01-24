@@ -15,15 +15,6 @@ public class LocalizationService : ILocalizationService
     }
     public string Get(string key)
     {
-
-        //var resourceManager = new ResourceManager(typeof("ClearDashboard.Aqua.Module.Strings.Resources"))
-        //var resourceSet = resourceManager.GetResourceSet(CultureInfo.GetCultureInfo("en-us"), true, true);
-        //if (resourceSet == null)
-        //    throw new Exception("Unable to create ResourceSet.");
-
-        //var s = resourceSet.GetString("TestKey");
-
-
         string localizedString;
         try
         {
