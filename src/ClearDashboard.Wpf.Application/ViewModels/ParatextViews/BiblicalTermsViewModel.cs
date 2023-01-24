@@ -6,6 +6,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
@@ -500,11 +501,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         public BiblicalTermsViewModel(INavigationService navigationService, ILogger<BiblicalTermsViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _longRunningTaskManager = longRunningTaskManager;
-            Title = "🕮 " + LocalizationStrings.Get("Windows_BiblicalTerms", Logger);
+            Title = "🕮 " + LocalizationService!.Get("Windows_BiblicalTerms");
             ContentId = "BIBLICALTERMS";
             DockSide = DockSide.Bottom;
            ClearFilterCommand = new RelayCommand(ClearFilter);
@@ -640,7 +641,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
                     new VersePopUpViewModel(NavigationService, logger, ProjectManager, EventAggregator, Mediator,
-                        verses[0], LifetimeScope) ,null, null);
+                        verses[0], LifetimeScope, LocalizationService) ,null, null);
             }
         }
 
@@ -720,7 +721,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                     if (loc.Length > 1)
                     {
-                        localizedString = LocalizationStrings.Get(loc[0], Logger) + $" {loc[1]}";
+                        localizedString = LocalizationService!.Get(loc[0]) + $" {loc[1]}";
                     }
 
                     _selectedItemVerses.Add(new VerseViewModel
@@ -1003,7 +1004,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             foreach (var loc in filter)
             {
                 // get the localized rendering for this
-                var localizedString = LocalizationStrings.Get(loc, Logger);
+                var localizedString = LocalizationService!.Get(loc);
                 _scope.Rows.Add(localizedString, loc);
             }
         }
@@ -1021,7 +1022,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             foreach (var loc in filter)
             {
                 // get the localized rendering for this
-                var localizedString = LocalizationStrings.Get(loc, Logger);
+                var localizedString = LocalizationService!.Get(loc);
                 _renderingsFilters.Rows.Add(localizedString, loc);
             }
         }
@@ -1039,7 +1040,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             foreach (var loc in filter)
             {
                 // get the localized rendering for this
-                var localizedString = LocalizationStrings.Get(loc, Logger);
+                var localizedString = LocalizationService!.Get(loc);
                 _domains.Rows.Add(localizedString, loc);
             }
 

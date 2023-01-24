@@ -27,6 +27,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearDashboard.Wpf.Application.Services;
 using wpfKeyBoard;
 
 
@@ -419,8 +420,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
         public MarbleViewModel(INavigationService navigationService, ILogger<MarbleViewModel> logger,
             DashboardProjectManager? projectManager, TranslationSource translationSource,
-            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, ILocalizationService localizationService)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _logger = logger;
             _projectManager = projectManager;

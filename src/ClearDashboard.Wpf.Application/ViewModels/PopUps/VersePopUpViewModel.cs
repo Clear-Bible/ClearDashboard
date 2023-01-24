@@ -4,6 +4,7 @@ using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Data;
@@ -93,8 +94,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// <param name="verse"></param>
         ///
         public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, VerseViewModel verse, ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, VerseViewModel verse, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _verse = verse;
 
@@ -112,8 +113,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         /// <param name="eventAggregator"></param>
         /// <param name="verse"></param>
         public VersePopUpViewModel(INavigationService navigationService, ILogger<VersePopUpViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse, ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, PinsVerseList verse, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             VerseViewModel verseViewModel = new VerseViewModel();
             _verse = verseViewModel.SetVerseFromBBBCCCVVV(verse.BBBCCCVVV);

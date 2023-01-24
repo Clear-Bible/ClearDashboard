@@ -12,9 +12,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
-    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -556,7 +556,6 @@
 
             <WrapPanel Margin="5,5,5,5" HorizontalAlignment="Center">
                 <Button
-                    Grid.Column="1"
                     Width="40"
                     Margin="3"
                     Padding="0"
@@ -570,7 +569,6 @@
                     The fill button.  Causes the content to be scaled so that it fits in the viewport.
                 -->
                 <Button
-                    Grid.Column="3"
                     Width="40"
                     Margin="3"
                     Padding="0"
@@ -584,7 +582,6 @@
                     The 100% button.  Causes the content to be scaled to 100 percent.
                 -->
                 <Button
-                    Grid.Column="5"
                     Width="40"
                     Margin="3"
                     Padding="0"
@@ -601,16 +598,14 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         x:Name="tb3"
-                        Grid.Column="7"
                         Width="30"
-                        Margin="3,0,0,0"
+                        Margin="3,0,5,0"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Center"
                         Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
                     <TextBlock
                         x:Name="tb4"
-                        Grid.Column="8"
                         Width="15"
                         Margin="-8,0,3,0"
                         VerticalAlignment="Center"
@@ -621,7 +616,6 @@
                 <!--  Button to zoom out.  -->
                 <StackPanel Orientation="Horizontal">
                     <Button
-                        Grid.Column="10"
                         Width="35"
                         Margin="3"
                         Padding="0"
@@ -634,7 +628,6 @@
 
                     <!--  Slider to change the current zoom level.  -->
                     <Slider
-                        Grid.Column="12"
                         Width="120"
                         Margin="3"
                         VerticalAlignment="Center"
@@ -651,7 +644,6 @@
                         Button to zoom in.
                     -->
                     <Button
-                        Grid.Column="14"
                         Width="35"
                         Margin="3"
                         Padding="0"
@@ -765,7 +757,7 @@
 
         <xctk:PropertyGrid
             x:Name="_propertyGrid"
-            Grid.Row="2"
+            Grid.Row="1"
             Margin="5,5,35,5"
             Filter=""
             Foreground="Black"

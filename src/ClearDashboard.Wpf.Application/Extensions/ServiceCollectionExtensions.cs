@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.Extensions
 {
@@ -16,6 +17,7 @@ namespace ClearDashboard.Wpf.Application.Extensions
         public static void AddLocalization(this IServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<TranslationSource>();
+            serviceCollection.AddTransient<ILocalizationService, LocalizationService>();
         }
 
         public static FrameSet AddCaliburnMicro(this IServiceCollection serviceCollection)

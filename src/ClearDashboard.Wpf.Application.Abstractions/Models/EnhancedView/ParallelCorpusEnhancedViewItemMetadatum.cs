@@ -7,7 +7,6 @@ namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
 
 public abstract class ParallelCorpusEnhancedViewItemMetadatum : VerseAwareEnhancedViewItemMetadatum
 {
-    public string? DisplayName { get; set; }
     public string? ParallelCorpusId { get; set; }
     public string? ParallelCorpusDisplayName { get; set; }
     public bool? IsRtl { get; set; }

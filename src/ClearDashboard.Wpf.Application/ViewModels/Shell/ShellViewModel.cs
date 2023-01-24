@@ -8,6 +8,7 @@ using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
 using ClearDashboard.Wpf.Application.Views.Shell;
 using MediatR;
@@ -168,8 +169,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
             ILogger<ShellViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
-            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, BackgroundTasksViewModel backgroundTasksViewModel )
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, BackgroundTasksViewModel backgroundTasksViewModel, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             BackgroundTasksViewModel = backgroundTasksViewModel;
             _translationSource = translationSource;
