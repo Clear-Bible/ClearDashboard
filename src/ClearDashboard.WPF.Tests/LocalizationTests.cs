@@ -19,9 +19,11 @@ namespace ClearDashboard.WPF.Tests
         {
             var localization = ServiceProvider.GetService<ILocalizationService>();
             var text = localization.Get("Landing_NewProject");
+
             Assert.Equal("New Project", text);
 
-
+            var indexerText = localization["Landing_NewProject"];
+            Assert.Equal("New Project", indexerText);
         }
     }
 }
