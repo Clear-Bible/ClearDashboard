@@ -1,4 +1,5 @@
 ﻿using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit;
@@ -16,8 +17,8 @@ namespace ClearDashboard.WPF.Tests
 
         public void GetLocalizedStringTest()
         {
-            var logger = ServiceProvider.GetService<ILogger<LocalizationTests>>();
-            var text = LocalizationStrings.Get("Landing_NewProject", logger!);
+            var localization = ServiceProvider.GetService<ILocalizationService>();
+            var text = localization.Get("Landing_NewProject");
             Assert.Equal("New Project", text);
 
 
