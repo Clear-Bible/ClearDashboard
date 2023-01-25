@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -89,8 +90,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         }
 
         public PaneViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
-            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
+            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             RequestCloseCommand = new RelayCommandAsync(RequestClose);
             PaneId  = Guid.NewGuid();

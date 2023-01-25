@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -111,8 +112,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             ILifetimeScope lifetimeScope,
             INavigationService navigationService,
             IMediator mediator,
-            LongRunningTaskManager longRunningTaskManager)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            LongRunningTaskManager longRunningTaskManager,
+            ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             CanOk = true;
             DialogMode = dialogMode;
@@ -123,8 +125,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             _lifetimeScope = lifetimeScope;
             _errorTitle = string.Empty;
 
-            DisplayName = LocalizationStrings.Get("ParatextCorpusDialog_ParatextCorpus", Logger!);
-            ErrorTitle = Helpers.LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", _logger);
+            DisplayName = LocalizationService!.Get("ParatextCorpusDialog_ParatextCorpus");
+            ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_NoErrors");
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)

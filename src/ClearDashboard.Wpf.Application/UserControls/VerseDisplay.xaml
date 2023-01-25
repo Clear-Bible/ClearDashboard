@@ -44,6 +44,7 @@
                 TokenFontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontStyle}"
                 TokenFontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=SourceFontWeight}"
                 TokenJoin="OnTokenJoin"
+                TokenJoinLanguagePair="OnTokenJoinLanguagePair"
                 TokenLeftButtonDown="OnTokenLeftButtonDown"
                 TokenLeftButtonUp="OnTokenLeftButtonUp"
                 TokenMouseEnter="OnTokenMouseEnter"

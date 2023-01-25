@@ -8,19 +8,27 @@
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Assets\ClearDashboard_Icon.ico</ApplicationIcon>
     <Copyright>Clear Bible, 2022</Copyright>
-    <AssemblyVersion>0.4.7.0</AssemblyVersion>
-    <FileVersion>0.4.7.0</FileVersion>
-    <Version>0.4.7.0</Version>
+    <AssemblyVersion>0.4.7.1</AssemblyVersion>
+    <FileVersion>0.4.7.1</FileVersion>
+    <Version>0.4.7.1</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Interfaces\**" />
+    <Compile Remove="Models\EnhancedView\**" />
     <Compile Remove="ViewModels\About\**" />
     <Compile Remove="Views\DesignSurface\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Models\EnhancedView\**" />
     <EmbeddedResource Remove="ViewModels\About\**" />
     <EmbeddedResource Remove="Views\DesignSurface\**" />
+    <None Remove="Interfaces\**" />
+    <None Remove="Models\EnhancedView\**" />
     <None Remove="ViewModels\About\**" />
     <None Remove="Views\DesignSurface\**" />
+    <Page Remove="Interfaces\**" />
+    <Page Remove="Models\EnhancedView\**" />
     <Page Remove="ViewModels\About\**" />
     <Page Remove="Views\DesignSurface\**" />
   </ItemGroup>
@@ -468,8 +476,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-    <Folder Include="Models\EnhancedView\" />
     <Folder Include="Resources\TailBlazor\" />
   </ItemGroup>
 

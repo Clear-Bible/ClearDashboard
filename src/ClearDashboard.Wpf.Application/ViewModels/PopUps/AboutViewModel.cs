@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -33,12 +34,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
         }
 
         public AboutViewModel(INavigationService navigationService, ILogger<AboutViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             Version thisVersion = Assembly.GetEntryAssembly().GetName().Version;
 
-            var localizedString = LocalizationStrings.Get("AboutView_Version", logger);
+            var localizedString = LocalizationService!.Get("AboutView_Version");
             VersionInfo = $"{localizedString}: {thisVersion.ToString()}";
         }
 

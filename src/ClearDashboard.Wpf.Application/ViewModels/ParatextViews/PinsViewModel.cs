@@ -10,6 +10,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.ParatextPlugin.CQRS.Features.VerseText;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
@@ -146,10 +147,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         // ReSharper disable once UnusedMember.Global
         public PinsViewModel(INavigationService navigationService, ILogger<PinsViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope,localizationService)
         {
-            Title = "⍒ " + LocalizationStrings.Get("Windows_PINS", Logger);
+            Title = "⍒ " + LocalizationService!.Get("Windows_PINS");
             this.ContentId = "PINS";
 
             _logger = logger;

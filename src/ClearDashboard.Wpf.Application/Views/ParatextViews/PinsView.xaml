@@ -422,7 +422,7 @@
             Grid.Column="0"
             Grid.ColumnSpan="3"
             VerticalAlignment="Center"
-            CloseOnClickAway="True"
+            CloseOnClickAway="False"
             DialogTheme="Inherit"
             IsOpen="{Binding VerseRefDialogOpen}"
             OverlayBackground="{DynamicResource PrimaryHueMidBrush}">

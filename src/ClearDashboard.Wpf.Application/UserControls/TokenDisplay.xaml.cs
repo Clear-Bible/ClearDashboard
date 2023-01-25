@@ -349,6 +349,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("TokenJoin", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the TokenJoinLanguagePairEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenJoinLanguagePairEvent = EventManager.RegisterRoutedEvent
+            ("TokenJoinLanguagePair", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the TokenUnjoinEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TokenUnjoinEvent = EventManager.RegisterRoutedEvent
@@ -560,6 +566,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenJoinEvent, value);
             remove => RemoveHandler(TokenJoinEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when the user requests to join multiple tokens into a composite token for a language pair.
+        /// </summary>
+        public event RoutedEventHandler TokenJoinLanguagePair
+        {
+            add => AddHandler(TokenJoinLanguagePairEvent, value);
+            remove => RemoveHandler(TokenJoinLanguagePairEvent, value);
         }
 
         /// <summary>
@@ -794,6 +809,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
             UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -956,6 +972,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenJoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenJoinEvent, e);
+        }
+
+        private void OnTokenJoinLanguagePair(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenJoinLanguagePairEvent, e);
         }
 
         private void OnTokenUnjoin(object sender, RoutedEventArgs e)

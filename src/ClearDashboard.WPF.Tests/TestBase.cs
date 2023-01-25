@@ -3,6 +3,8 @@ using System.Diagnostics;
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.Wpf.Application.Extensions;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -33,7 +35,6 @@ namespace ClearDashboard.WPF.Tests
             Services.AddMediatR(typeof(IMediatorRegistrationMarker));
             Services.AddLogging();
             Services.AddLocalization();
-          
         }
 
     }
