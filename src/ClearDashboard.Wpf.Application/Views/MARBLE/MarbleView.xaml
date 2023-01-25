@@ -457,7 +457,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="1*" />
                                         <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="2*" />
+                                        <ColumnDefinition Width="2*"/>
                                     </Grid.ColumnDefinitions>
 
 
@@ -574,7 +574,7 @@
                                                     <Style TargetType="ListBoxItem">
                                                         <Setter Property="Padding" Value="0" />
                                                         <Setter Property="Margin" Value="0" />
-                                                        <Setter Property="Height" Value="30" />
+                                                        <!--<Setter Property="Height" Value="30" />-->
 
                                                         <Style.Triggers>
                                                             <Trigger Property="IsSelected" Value="True">
@@ -593,7 +593,7 @@
                                                                 <SolidColorBrush Color="#EBEBEB" />
                                                             </Grid.Background>
 
-                                                            <StackPanel Orientation="Horizontal">
+                                                            <WrapPanel Orientation="Horizontal">
                                                                 <!--  instance id number  -->
                                                                 <TextBlock
                                                                     Margin="3"
@@ -620,7 +620,7 @@
                                                                     Foreground="{StaticResource PrimaryHueMidBrush}"
                                                                     Text="{Binding Long}"
                                                                     TextWrapping="Wrap" />
-                                                            </StackPanel>
+                                                            </WrapPanel>
                                                         </Grid>
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>

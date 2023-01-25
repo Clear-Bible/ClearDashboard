@@ -388,8 +388,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
         }
 
-        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, SelectionManager selectionManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, SelectionManager selectionManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             NoteManager = noteManager;
             SelectionManager = selectionManager;

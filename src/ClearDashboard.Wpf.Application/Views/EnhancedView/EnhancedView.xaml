@@ -14,7 +14,6 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
@@ -24,9 +23,9 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+            <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
-            <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+            <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->
         </ResourceDictionary>
 
 
@@ -373,7 +372,8 @@
                 <Button
                     Grid.Row="0"
                     Grid.Column="0"
-                    Width="50"
+                    Width="36"
+                    Height="36"
                     Margin="4,4,4,4"
                     Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
                     CommandParameter="{x:Static Dock.Top}"
@@ -384,7 +384,7 @@
                 <userControls:BcvUserControl
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="50,0,0,0"
+                    Margin="20,0,0,0"
                     BcvDictionary="{Binding Path=BcvDictionary}"
                     CurrentBcv="{Binding Path=CurrentBcv}"
                     IsControlEnabled="{Binding EnableBcvControl}"

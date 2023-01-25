@@ -8,6 +8,7 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Verse;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
 using ClearDashboard.Wpf.Application.Views.ParatextViews;
 using MediatR;
@@ -166,11 +167,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         }
 
         public TextCollectionsViewModel(INavigationService navigationService, ILogger<TextCollectionsViewModel> logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope) : base(
-            navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, ILocalizationService localizationService) : base(
+            navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _projectManager = projectManager;
-            Title = "🗐 " + LocalizationStrings.Get("Windows_TextCollection", Logger);
+            Title = "🗐 " + LocalizationService!.Get("Windows_TextCollection");
             this.ContentId = "TEXTCOLLECTION";
         }
 

@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Features;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -59,7 +60,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
         public ToolViewModel(INavigationService navigationService, ILogger logger,
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator,
-            ILifetimeScope lifetimeScope) : base(navigationService: navigationService, logger: logger, projectManager: projectManager, eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
+            ILifetimeScope lifetimeScope, ILocalizationService localizationService) : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
 
         }

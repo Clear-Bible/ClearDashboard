@@ -18,7 +18,7 @@
                 BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=BorderThickness}"
                 CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LabelCornerRadius}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Width="85" Text="{Binding Path=Text}" />
+                    <TextBlock Width="85" Text="{Binding Path=Text}" TextWrapping="Wrap"/>
                     <Button
                         Name="RemoveLabelButton"
                         Height="12"

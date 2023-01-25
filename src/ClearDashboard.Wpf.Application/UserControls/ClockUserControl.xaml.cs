@@ -11,6 +11,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -263,9 +266,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         }
 
-        private string GetLocalizedLocalTimeString()
+        private string? GetLocalizedLocalTimeString()
         {
-            return LocalizationStrings.Get("ClockUserControl_LocalTime", _logger);
+            var localization = IoC.Get<ILocalizationService>();
+            return (localization != null)
+                ? localization.Get("ClockUserControl_LocalTime")
+                : throw new NullReferenceException("ILocalizationService has not been registered with the DI container.");
+
         }
 
         private void InstantClockRefresh()

@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
@@ -22,6 +23,14 @@ public class Translation
     public Token SourceToken { get; private set; }
     public string TargetTranslationText { get; set; }
     
+    public string SourceTokenSurfaceText => SourceToken is CompositeToken token ? string.Join(" ", token.Tokens.Select(t => t.SurfaceText)) : SourceToken.SurfaceText;
+
+    public byte[] SourceTokenSurfaceTextBytes => Encoding.Unicode.GetBytes(SourceTokenSurfaceText);
+    public string SourceTokenSurfaceByteString => string.Join(" ", SourceTokenSurfaceTextBytes.Select(x => x.ToString("X2")));
+
+    public byte[] TargetTranslationTextBytes => Encoding.Unicode.GetBytes(TargetTranslationText);
+    public string TargetTranslationTextByteString => string.Join(" ", TargetTranslationTextBytes.Select(x => x.ToString("X2")));
+
     /// <summary>
     /// Possible values are:  "FromOther", "Assigned", "FromTranslationModel", "FromAlignmentModel", "None"
     /// </summary>

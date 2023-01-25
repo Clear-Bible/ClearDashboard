@@ -6,6 +6,8 @@ using System.IO;
 using System.Windows.Interop;
 using CefSharp.Wpf;
 using CefSharp;
+using System.Reflection;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -71,7 +73,32 @@ namespace ClearDashboard.Wpf.Application
                 //Perform dependency check to make sure all relevant resources are in our output directory.
                 Cef.Initialize(settings, performDependencyCheck: true, browserProcessHandler: null);
             }
+
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
-        
+   
+
+        private Assembly CurrentDomain_AssemblyResolve(object? sender, ResolveEventArgs args)
+        {
+            try
+            {
+                if (args.Name != null && args.Name.Contains(".resources") && !args.Name.Contains("ClearDashboard.Wpf.Application.resources"))
+                {
+                    var assemblyName = args.Name.Split(",")[0];
+                    string assemblyPath = $"{AppDomain.CurrentDomain.BaseDirectory}{Thread.CurrentThread.CurrentUICulture.Name}\\{assemblyName}.dll";
+                    Assembly assembly = Assembly.LoadFrom(assemblyPath);
+                    return assembly;
+                }
+
+                return null;
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine($"Error loading translations for {args.Name}");
+                Trace.WriteLine(e);
+                return null;
+            }
+        }
+
     }
 }

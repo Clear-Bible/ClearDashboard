@@ -10,8 +10,8 @@
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DataContext="{d:DesignInstance Type=addParatextCorpusDialog:AddParatextCorpusStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="500"
