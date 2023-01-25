@@ -167,8 +167,8 @@
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
                 <!--<TextBlock
                     Margin="5,0,5,0"
-                    HorizontalAlignment="Left"
                     VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
                     Foreground="{DynamicResource PrimaryHueMidBrush}">
                     <Run Text="Paratext is not running" />
                 </TextBlock>-->
@@ -214,8 +214,7 @@
                 </Button>
             </StackPanel>
         </StackPanel>
-        <!--<StackPanel
-            Grid.Row="1"
+        <!--<StackPanel Grid.Row="1"
             Grid.Column="0"
             VerticalAlignment="Center">
 
