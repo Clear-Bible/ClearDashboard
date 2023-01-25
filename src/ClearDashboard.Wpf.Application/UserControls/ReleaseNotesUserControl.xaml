@@ -37,7 +37,7 @@
                     Cursor="Hand"
                     Foreground="DodgerBlue"
                     Text="{helpers:Localization ShellView_UpdateFound}"
-                    TextDecorations="Underline" />
+                    TextDecorations="Underline"/>
             </Button>
             <Button
                 x:Name="ShowNotes"

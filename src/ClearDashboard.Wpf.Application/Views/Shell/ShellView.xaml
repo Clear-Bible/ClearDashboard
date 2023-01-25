@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.Views.Shell.ShellView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -14,7 +15,6 @@
     xmlns:shell1="clr-namespace:ClearDashboard.Wpf.Application.Views.Shell"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Title="ClearDashboard"
     d:DataContext="{d:DesignInstance Type=shell:ShellViewModel,
                                      IsDesignTimeCreatable=True}"
