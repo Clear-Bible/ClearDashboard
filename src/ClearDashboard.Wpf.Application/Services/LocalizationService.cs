@@ -13,6 +13,10 @@ public class LocalizationService : ILocalizationService
     {
         _logger = logger;
     }
+
+
+    public string this[string key] => Get(key);
+
     public string Get(string key)
     {
         string localizedString;
