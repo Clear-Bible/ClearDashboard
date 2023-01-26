@@ -74,11 +74,15 @@ namespace ClearDashboard.DataAccessLayer.Features.MarbleDataRequests
                 .Where(x => x.Attribute("Id").Value.StartsWith(_bcv.BBBCCCVVV))
                 .ToList();
 
-            var lexicalLinks = result.Elements("LexicalLinks")
-                .Elements("LexicalLink")
-                .ToList()
-                .Select(x => x.Value)
-                .ToList();
+            List<string> lexicalLinks = new();
+            foreach (var element in result)
+            {
+                var links = element.Elements("LexicalLinks").Elements("LexicalLink").ToList();
+                if (links.Count() > 0)
+                {
+                    lexicalLinks.Add(links[0].Value);
+                }
+            }
 
             _lexicalLinks = new();
             foreach (var link in lexicalLinks)
