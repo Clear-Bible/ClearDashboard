@@ -172,7 +172,7 @@
                     HorizontalAlignment="Left"
                     Foreground="{DynamicResource PrimaryHueMidBrush}">
                     <Run Text="Paratext is not running" />
-                 </TextBlock>-->
+                </TextBlock>-->
                 <Button
                     x:Name="StartParatext"
                     Width="340"
@@ -215,9 +215,9 @@
                 </Button>
             </StackPanel>
         </StackPanel>
-        <!--<StackPanel  Grid.Row="1"
-                     Grid.Column="0"
-                     VerticalAlignment="Center">
+        <!--<StackPanel Grid.Row="1"
+            Grid.Column="0"
+            VerticalAlignment="Center">
 
             <TextBox
                 x:Name="SearchText"
@@ -314,18 +314,19 @@
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card
+                        <!--  This was changed from a card to a border to handle Jira DI 96  -->
+                        <Border
                             Width="532"
                             Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             Background="Transparent"
                             Tag="{Binding DataContext, ElementName=GridLayout}">
-                            <materialDesign:Card.ContextMenu>
+                            <Border.ContextMenu>
                                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem cal:Message.Attach="DeleteProject($dataContext)" Header="{helpers:Localization ProjectPicker_DeleteProject}" />
                                 </ContextMenu>
-                            </materialDesign:Card.ContextMenu>
+                            </Border.ContextMenu>
                             <StackPanel Margin="0" Orientation="Horizontal">
                                 <Grid Width="450" Height="45">
                                     <Grid.ColumnDefinitions>
@@ -392,7 +393,7 @@
                                 </Grid>
 
                             </StackPanel>
-                        </materialDesign:Card>
+                        </Border>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -492,25 +493,35 @@
         <StatusBar
             x:Name="StatusBar"
             Grid.Row="3"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
+            Grid.Column="1"
             Height="40"
             Foreground="{DynamicResource MaterialDesignDarkForeground}">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="40" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
-            <StatusBarItem Grid.Column="4">
-                <userControls:ReleaseNotesUserControl />
+            <StatusBarItem Grid.Column="1">
+                <StackPanel>
+                    <userControls:ReleaseNotesUserControl>
+                        <!--  This DataTrigger was added to work around an issue where this control froze the UI.  See Jira DI 96  -->
+                        <userControls:ReleaseNotesUserControl.Style>
+                            <Style TargetType="userControls:ReleaseNotesUserControl">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Connected}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </userControls:ReleaseNotesUserControl.Style>
+                    </userControls:ReleaseNotesUserControl>
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
     </Grid>
