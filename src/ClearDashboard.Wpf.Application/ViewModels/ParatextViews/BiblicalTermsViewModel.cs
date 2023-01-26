@@ -1108,7 +1108,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                                     foreach (var rendering in biblicalTermsList[i].Renderings)
                                     {
-                                        _biblicalTerms[i].RenderingString += rendering + " ";
+                                        if (rendering != biblicalTermsList[i].Renderings.Last())
+                                        {
+                                            _biblicalTerms[i].RenderingString += rendering + "\n";
+                                        }
+                                        else
+                                        {
+                                            _biblicalTerms[i].RenderingString += rendering;
+                                        }
+                                       
                                         cancellationToken.ThrowIfCancellationRequested();
                                     }
                                 }
