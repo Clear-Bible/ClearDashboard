@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -105,8 +106,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.PopUps
 
         public SlackMessageViewModel(INavigationService navigationService, ILogger<SlackMessageViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator eventAggregator, IMediator mediator,
-            ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _logger = logger;
         }

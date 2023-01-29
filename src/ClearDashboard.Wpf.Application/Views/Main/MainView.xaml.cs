@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -154,6 +155,48 @@ namespace ClearDashboard.Wpf.Application.Views.Main
         //    //await _mainViewModel.DeactivateAsync(true);
 
         //}
+        private void ProjectDesignSurfaceExpander_OnExpanded(object sender, RoutedEventArgs e)
+        {
+            if(ProjectDesignSurfaceExpander != null && ProjectDesignSurfaceControl != null)
+            {
+                ProjectDesignSurfaceExpander.Width = 500;
+                ProjectDesignSurfaceControl.Width = 500;
+
+                ProjectDesignSurfaceColumn.Width = new GridLength(1, GridUnitType.Auto);
+                ProjectDesignSurfaceSplitter.Visibility = Visibility.Visible;
+            }
+
+            
+        }
+
+        private void ProjectDesignSurfaceExpander_OnCollapsed(object sender, RoutedEventArgs e)
+        {
+            ProjectDesignSurfaceExpander.Width = 24;
+            ProjectDesignSurfaceControl.Width = 24;
+
+            ProjectDesignSurfaceColumn.Width = new GridLength(1, GridUnitType.Auto);
+
+            ProjectDesignSurfaceSplitter.Visibility = Visibility.Collapsed;
+        }
+
+        private void ProjectDesignSurfaceSplitter_OnDragDelta(object sender, DragDeltaEventArgs e)
+        {
+            if (ProjectDesignSurfaceColumn.ActualWidth < 200)
+            {
+                ProjectDesignSurfaceControl.PdsLabelWide.Visibility = Visibility.Collapsed;
+                ProjectDesignSurfaceControl.ProjectNameWide.Visibility = Visibility.Collapsed;
+                ProjectDesignSurfaceControl.LabelsNarrow.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ProjectDesignSurfaceControl.PdsLabelWide.Visibility = Visibility.Visible;
+                ProjectDesignSurfaceControl.ProjectNameWide.Visibility = Visibility.Visible;
+                ProjectDesignSurfaceControl.LabelsNarrow.Visibility = Visibility.Collapsed;
+            }
+            
+            ProjectDesignSurfaceExpander.Width = ProjectDesignSurfaceColumn.ActualWidth;
+            ProjectDesignSurfaceControl.Width = ProjectDesignSurfaceColumn.ActualWidth;
+        }
     }
 
 

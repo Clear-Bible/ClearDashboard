@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -78,8 +79,8 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
 
     public AlignmentSetStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<AlignmentSetStepViewModel> logger, IEventAggregator eventAggregator,
-        IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<AlignmentSetStepViewModel> validator)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
+        IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<AlignmentSetStepViewModel> validator, ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator,localizationService)
     {
 
         DialogMode = dialogMode;
@@ -101,9 +102,9 @@ public class AlignmentSetStepViewModel : DashboardApplicationValidatingWorkflowS
     protected async override Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel.CurrentStepTitle =
-            LocalizationStrings.Get("ParallelCorpusDialog_AddAlignmentSet", Logger);
+            LocalizationService!.Get("ParallelCorpusDialog_AddAlignmentSet");
 
-        var alignment = LocalizationStrings.Get("AddParatextCorpusDialog_Alignment", Logger); 
+        var alignment = LocalizationService!.Get("AddParatextCorpusDialog_Alignment"); 
 
         AlignmentSetDisplayName =
             $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {alignment}";

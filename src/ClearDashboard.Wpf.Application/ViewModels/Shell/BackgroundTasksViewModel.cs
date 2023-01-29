@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -17,6 +18,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public class BackgroundTasksViewModel : Screen, IHandle<BackgroundTaskChangedMessage>, IHandle<ToggleBackgroundTasksVisibilityMessage>
     {
         private readonly LongRunningTaskManager? _longRunningTaskManager;
+        private readonly ILocalizationService _localizationService;
         private readonly IEventAggregator? _eventAggregator;
         private readonly ILogger<BackgroundTasksViewModel> _logger;
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
@@ -29,14 +31,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public BackgroundTasksViewModel()
         {
+          
             // required for design-time
         }
 
-        public BackgroundTasksViewModel(LongRunningTaskManager? longRunningTaskManager, IEventAggregator? eventAggregator, ILogger<BackgroundTasksViewModel> logger)
+        public BackgroundTasksViewModel(LongRunningTaskManager? longRunningTaskManager, IEventAggregator? eventAggregator, ILogger<BackgroundTasksViewModel> logger, ILocalizationService localizationService)
         {
             _longRunningTaskManager = longRunningTaskManager;
             _eventAggregator = eventAggregator;
             _logger = logger;
+            _localizationService = localizationService;
 
             // setup timer to clean up old background tasks
             _timer = new Timer(TimerElapsed, null, _startTimeSpan, _periodTimeSpan);
@@ -93,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
                 backgroundTaskStatus.EndTime = DateTime.Now;
                 backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                backgroundTaskStatus.Description = LocalizationStrings.Get("BackgroundTasks_TaskCancelled", _logger!);
+                backgroundTaskStatus.Description = _localizationService!.Get("BackgroundTasks_TaskCancelled");
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
 
                 ToggleSpinner();

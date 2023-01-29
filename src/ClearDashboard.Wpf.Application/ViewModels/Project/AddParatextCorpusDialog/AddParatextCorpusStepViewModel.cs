@@ -20,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -159,8 +160,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
         public AddParatextCorpusStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager, string initialParatextProjectId,
             INavigationService navigationService, ILogger<AddParatextCorpusStepViewModel> logger, IEventAggregator eventAggregator,
             IMediator mediator, ILifetimeScope? lifetimeScope,
-            IValidator<AddParatextCorpusStepViewModel> validator)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
+            IValidator<AddParatextCorpusStepViewModel> validator,
+            ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator,localizationService)
         {
             DialogMode = dialogMode;
             CanMoveForwards = true;
@@ -255,12 +257,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
                 if (errors.NumberOfErrors == 0)
                 {
                     UsfmErrors = new();
-                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_NoErrors", Logger);
+                    ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_NoErrors");
                 }
                 else
                 {
                     UsfmErrors = new ObservableCollection<UsfmError>(errors.UsfmErrors);
-                    ErrorTitle = LocalizationStrings.Get("AddParatextCorpusDialog_ErrorCount", Logger);
+                    ErrorTitle = LocalizationService!.Get("AddParatextCorpusDialog_ErrorCount");
                 }
 
             }

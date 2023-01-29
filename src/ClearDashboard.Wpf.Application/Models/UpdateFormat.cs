@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Reflection.Metadata;
 
 namespace ClearDashboard.Wpf.Application.Models
 {
@@ -47,6 +48,7 @@ namespace ClearDashboard.Wpf.Application.Models
         public string ReleaseDate { get; set; } = String.Empty;
         public List<ReleaseNote> ReleaseNotes { get; set; } = new();
         public string DownloadLink { get; set; } = String.Empty;
+        public List<string> KnownIssues { get; set; } = new();
     }
 
     public class ReleaseNote
@@ -60,15 +62,17 @@ namespace ClearDashboard.Wpf.Application.Models
     {
         public static List<ReleaseNote> UpdateNotes { get; set; }
         public static List<UpdateFormat> UpdateData { get; set; }
-        public static bool UpdateDataUpdated { get; set; }
+        public static bool UpdateDataFethced { get; set; }
 
         public static async Task<List<UpdateFormat>> GetUpdateDataFromFile()
         {
-            if (!UpdateDataUpdated)
+            if (!UpdateDataFethced)
             {
-                var connectedToInternet = await NetworkHelper.IsConnectedToInternet();
+                var connectedToInternet = InternetAvailability.IsInternetAvailable();
+
                 if (!connectedToInternet)
                 {
+                    UpdateDataFethced = true;
                     return UpdateData;
                 }
 
@@ -79,10 +83,10 @@ namespace ClearDashboard.Wpf.Application.Models
                     req.Accept = "application/json";
                     WebResponse response = req.GetResponse(); //Error Here
                     Stream dataStream = response.GetResponseStream();
-                    
+
                     var options = new JsonSerializerOptions { WriteIndented = true };
                     UpdateData = await JsonSerializer.DeserializeAsync<List<UpdateFormat>>(dataStream, options);
-                    UpdateDataUpdated = true;
+                    UpdateDataFethced = true;
                 }
                 catch (Exception)
                 {

@@ -11,6 +11,7 @@
     FontSize="16"
     mc:Ignorable="d">
     <Border
+        Margin="0,0,-5,0"
         Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderPadding}"
         BorderBrush="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderBrush}"
         BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
@@ -39,11 +40,12 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Label
+            <TextBlock
+                TextWrapping="Wrap"
                 Grid.Row="0"
                 Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextMargin}"
                 Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextPadding}"
-                Content="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Text}"
+                Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Note.Text}"
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteTextFontStyle}"
@@ -82,10 +84,9 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <StackPanel
+            <WrapPanel
                 Grid.Row="1"
-                Height="20"
-                HorizontalAlignment="Right"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Orientation="Horizontal"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TimestampRowVisibility}">
@@ -108,7 +109,7 @@
                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=UserFontWeight}" />
                 <Button
                     Name="DeleteNoteButton"
-                    Margin="10,-5,10,0"
+                    Margin="9,-5,0,0"
                     Padding="0,0,0,0"
                     Background="Transparent"
                     BorderThickness="0"
@@ -139,7 +140,7 @@
                         </StackPanel>
                     </Border>
                 </Popup>
-            </StackPanel>
+            </WrapPanel>
             <StackPanel
                 Grid.Row="1"
                 HorizontalAlignment="Center"

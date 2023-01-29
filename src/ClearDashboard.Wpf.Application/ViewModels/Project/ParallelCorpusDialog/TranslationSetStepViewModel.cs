@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -25,8 +26,8 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
 
     public TranslationSetStepViewModel(DialogMode dialogMode, DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<TranslationSetStepViewModel> logger, IEventAggregator eventAggregator,
-        IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<TranslationSetStepViewModel> validator)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator)
+        IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, IValidator<TranslationSetStepViewModel> validator, ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
     {
         DialogMode = dialogMode;
         CanMoveForwards = true;
@@ -119,9 +120,9 @@ public class TranslationSetStepViewModel : DashboardApplicationValidatingWorkflo
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel.CurrentStepTitle =
-            LocalizationStrings.Get("ParallelCorpusDialog_AddTranslationSet", Logger);
+            LocalizationService!.Get("ParallelCorpusDialog_AddTranslationSet");
 
-        var gloss = LocalizationStrings.Get("AddParatextCorpusDialog_Interlinear", Logger);
+        var gloss = LocalizationService!.Get("AddParatextCorpusDialog_Interlinear");
 
         TranslationSetDisplayName =
             $"{ParentViewModel.SourceCorpusNodeViewModel.Name} - {ParentViewModel.TargetCorpusNodeViewModel.Name} {gloss}";

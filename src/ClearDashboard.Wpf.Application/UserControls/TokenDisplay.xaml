@@ -60,6 +60,10 @@
                         Click="OnTokenJoin"
                         Header="Join Tokens" />
                     <MenuItem
+                        x:Name="JoinTokensLanguagePairMenuItem"
+                        Click="OnTokenJoinLanguagePair"
+                        Header="Join Tokens for Language Pair" />
+                    <MenuItem
                         x:Name="UnjoinTokenMenuItem"
                         Click="OnTokenUnjoin"
                         Header="Unjoin Composite Token" />

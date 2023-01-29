@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Services;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 
@@ -128,14 +129,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             ILogger<ParallelCorpusDialogViewModel> logger,
             IEventAggregator eventAggregator,
             IMediator mediator,
-            ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager,
+            ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             _tokenizedCorpora = tokenizedCorpora;
             _longRunningTaskManager = longRunningTaskManager;
             CanOk = true;
 
-            DisplayName = LocalizationStrings.Get("ParallelCorpusDialog_ParallelCorpus", Logger!);
+            DisplayName = LocalizationService!.Get("ParallelCorpusDialog_ParallelCorpus");
 
             DialogMode = dialogMode;
             ParallelCorpusConnectionViewModel = parallelCorpusConnectionViewModel;

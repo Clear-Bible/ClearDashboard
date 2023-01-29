@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cm="http://caliburnmicro.com"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Controls;assembly=ClearDashboard.Wpf.Controls"
+    xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -11,14 +12,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
-    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
-    d:DesignWidth="300"
+    d:DesignWidth="500"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
 
@@ -405,7 +406,7 @@
 
     </UserControl.CommandBindings>
 
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -418,19 +419,64 @@
             Background="{DynamicResource PrimaryHueMidBrush}"
             Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}">
             <!--  IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"  -->
-            <StackPanel MinWidth="400">
+            <Grid MinWidth="400">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
                 <Label
-                    Margin="0,-5,30,-12"
-                    HorizontalContentAlignment="Right"
-                    Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
-                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                <!--  Add Corpora  -->
-                <Label
-                    Margin="5,5,0,5"
+                    Name="PdsLabelWide"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="5,0,0,0"
                     Content="{helpers:Localization Pds_AddCorpora}"
                     FontSize="16"
                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
-                <WrapPanel>
+                <Label
+                    Name="ProjectNameWide"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,35,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
+                    Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+
+
+                <!--</WrapPanel>-->
+                <WrapPanel
+                    Visibility="Collapsed"
+                    Name="LabelsNarrow"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Width="{Binding ActualWidth, ElementName=MainGrid, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
+                    Margin="5,5,0,5">
+                    <Label
+                        Content="{helpers:Localization Pds_AddCorpora}"
+                        FontSize="16"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}" />
+                    <Label
+                        Margin="0,0,35,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Content="{Binding ProjectName, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Mode=TwoWay}"
+                        Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                </WrapPanel>
+
+                <WrapPanel
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Width="{Binding ActualWidth, ElementName=MainGrid, Converter={converters:WidthSubtraction}, ConverterParameter='10'}">
                     <!--  Hebrew Manuscript  -->
                     <Button
                         x:Name="AddManuscriptHebrewCorpus"
@@ -476,10 +522,11 @@
                         Style="{StaticResource BigParatextButton}"
                         Tag=" ScriptTextOutline" />-->
                 </WrapPanel>
-            </StackPanel>
+            </Grid>
         </materialDesign:Card>
 
         <ProgressBar
+            Grid.Row="0"
             Width="50"
             Height="50"
             Margin="0,0,50,0"
@@ -507,74 +554,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!--<Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>-->
-
-            <!--  Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons.  -->
-
-            <Grid Margin="5,5,5,5" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-
-                    <!--  empty space  -->
-                    <ColumnDefinition Width="Auto" />
-
-                    <!--  the fit content button  -->
-                    <ColumnDefinition Width="40" />
-
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
-
-                    <!--  the fill button  -->
-                    <ColumnDefinition Width="40" />
-
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
-
-                    <!--  the 100% button  -->
-                    <ColumnDefinition Width="40" />
-
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
-
-                    <!--  the zoom percentage label  -->
-                    <ColumnDefinition Width="30" />
-
-                    <!--  the % symbol  -->
-                    <ColumnDefinition Width="15" />
-
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
-
-                    <!--  the zoom out button  -->
-                    <ColumnDefinition Width="35" />
-
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
-
-                    <!--  the zoom slider  -->
-                    <ColumnDefinition Width="120" />
-
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="5" />
-
-                    <!--  the zoom in button  -->
-                    <ColumnDefinition Width="35" />
-
-                    <!--  spacer  -->
-                    <ColumnDefinition Width="10" />
-
-                    <!--  resize grip  -->
-                    <ColumnDefinition Width="Auto" />
-
-                </Grid.ColumnDefinitions>
-
-                <!--
-                    The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.
-                -->
+            <WrapPanel Margin="5,5,5,5" HorizontalAlignment="Center">
                 <Button
-                    Grid.Column="1"
+                    Width="40"
+                    Margin="3"
                     Padding="0"
                     Command="{StaticResource Commands.FitContent}"
                     Style="{StaticResource SmallTransparentStyle}"
@@ -586,7 +569,8 @@
                     The fill button.  Causes the content to be scaled so that it fits in the viewport.
                 -->
                 <Button
-                    Grid.Column="3"
+                    Width="40"
+                    Margin="3"
                     Padding="0"
                     Command="{StaticResource Commands.Fill}"
                     Style="{StaticResource SmallTransparentStyle}"
@@ -598,7 +582,8 @@
                     The 100% button.  Causes the content to be scaled to 100 percent.
                 -->
                 <Button
-                    Grid.Column="5"
+                    Width="40"
+                    Margin="3"
                     Padding="0"
                     Command="{StaticResource Commands.OneHundredPercent}"
                     Style="{StaticResource SmallTransparentStyle}"
@@ -610,60 +595,71 @@
                     This is the label that shows what the current zoom level
                     is while zooming in and out.
                 -->
-                <TextBlock
-                    x:Name="tb3"
-                    Grid.Column="7"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="tb3"
+                        Width="30"
+                        Margin="3,0,5,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
-                <TextBlock
-                    x:Name="tb4"
-                    Grid.Column="8"
-                    VerticalAlignment="Center"
-                    Text="%" />
+                    <TextBlock
+                        x:Name="tb4"
+                        Width="15"
+                        Margin="-8,0,3,0"
+                        VerticalAlignment="Center"
+                        Text="%" />
+                </StackPanel>
+
 
                 <!--  Button to zoom out.  -->
-                <Button
-                    Grid.Column="10"
-                    Padding="0"
-                    Command="{StaticResource Commands.ZoomOut}"
-                    FontSize="25"
-                    Style="{StaticResource SmallTransparentStyle}"
-                    ToolTip="Zoom out from the content">
-                    -
-                </Button>
+                <StackPanel Orientation="Horizontal">
+                    <Button
+                        Width="35"
+                        Margin="3"
+                        Padding="0"
+                        Command="{StaticResource Commands.ZoomOut}"
+                        FontSize="25"
+                        Style="{StaticResource SmallTransparentStyle}"
+                        ToolTip="Zoom out from the content">
+                        -
+                    </Button>
 
-                <!--  Slider to change the current zoom level.  -->
-                <Slider
-                    Grid.Column="12"
-                    VerticalAlignment="Center"
-                    LargeChange="20"
-                    Maximum="200"
-                    Minimum="1"
-                    SmallChange="10"
-                    TickFrequency="10"
-                    TickPlacement="TopLeft"
-                    ToolTip="Change the zoom level of the content"
-                    Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
+                    <!--  Slider to change the current zoom level.  -->
+                    <Slider
+                        Width="120"
+                        Margin="3"
+                        VerticalAlignment="Center"
+                        LargeChange="20"
+                        Maximum="200"
+                        Minimum="1"
+                        SmallChange="10"
+                        TickFrequency="10"
+                        TickPlacement="TopLeft"
+                        ToolTip="Change the zoom level of the content"
+                        Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
-                <!--
-                    Button to zoom in.
-                -->
-                <Button
-                    Grid.Column="14"
-                    Padding="0"
-                    Command="{StaticResource Commands.ZoomIn}"
-                    FontSize="20"
-                    Style="{StaticResource SmallTransparentStyle}"
-                    ToolTip="Zoom in on the content">
-                    +
-                </Button>
+                    <!--
+                        Button to zoom in.
+                    -->
+                    <Button
+                        Width="35"
+                        Margin="3"
+                        Padding="0"
+                        Command="{StaticResource Commands.ZoomIn}"
+                        FontSize="20"
+                        Style="{StaticResource SmallTransparentStyle}"
+                        ToolTip="Zoom in on the content">
+                        +
+                    </Button>
+                </StackPanel>
+
 
                 <!--  Stick a resize grip in the bottom right corner of the window.  -->
                 <!--<ResizeGrip Grid.Column="16" />-->
 
-            </Grid>
+            </WrapPanel>
 
             <!--
                 The ScrollViewer displays scrollbars when the content is too big to fit in the viewport.
@@ -761,7 +757,7 @@
 
         <xctk:PropertyGrid
             x:Name="_propertyGrid"
-            Grid.Row="2"
+            Grid.Row="1"
             Margin="5,5,35,5"
             Filter=""
             Foreground="Black"

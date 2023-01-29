@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Services;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
@@ -173,7 +174,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             set
             {
                 _dashboardProjectsDisplay = value;
-                NotifyOfPropertyChange(() => SearchText);
+                NotifyOfPropertyChange(() => DashboardProjectsDisplay);
             }
         }
 
@@ -205,8 +206,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Constructor
         public ProjectPickerViewModel(TranslationSource translationSource, DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
             INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
@@ -216,7 +217,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _translationSource = translationSource;
             NoProjectVisibility = Visibility.Visible;
             SearchBlankVisibility = Visibility.Collapsed;
+
             IsParatextRunning = _paratextProxy.IsParatextRunning();
+            if (IsParatextRunning && !Connected)
+            {
+                ParatextUserName = "unavailable.  Paratext is on but not connected.";
+            }
         }
 
         public async Task StartParatext()
@@ -292,8 +298,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             foreach (var project in DashboardProjects)
             {
-                project.IsCompatibleVersion =
-                    await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
+                project.IsCompatibleVersion = await ReleaseNotesManager.CheckVersionCompatibility(project.Version).ConfigureAwait(true);
             }
 
             _dashboardProjectsDisplay = new ObservableCollection<DashboardProject>();
@@ -435,6 +440,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {
             Connected = message.Connected;
+            IsParatextRunning = true;
             await Task.CompletedTask;
         }
 

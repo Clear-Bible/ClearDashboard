@@ -361,11 +361,11 @@ namespace ClearDashboard.Wpf.Application.Views.Project
         /// </summary>
         private void ZoomIn(Point contentZoomCenter)
         {
-            if (zoomAndPanControl.ContentScale<0.99)
+            if (zoomAndPanControl.ContentScale <= 2.0)
             {
                 zoomAndPanControl.ZoomAboutPoint(zoomAndPanControl.ContentScale + 0.01, contentZoomCenter);
             }
-        }
+    }
 
         /// <summary>
         /// Initialize the rectangle that the use is dragging out.

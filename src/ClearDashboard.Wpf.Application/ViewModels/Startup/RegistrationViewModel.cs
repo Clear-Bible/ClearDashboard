@@ -14,12 +14,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DataAccessLayer.Wpf;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
     public class RegistrationViewModel : ValidatingWorkflowStepViewModel<LicenseUser>
     {
         private readonly DashboardProjectManager _dashboardProjectManager;
+        private readonly ILocalizationService _localizationService;
 
         #region Member Variables
         private RegistrationDialogViewModel _parent;
@@ -88,10 +90,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IEventAggregator? eventAggregator,
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
-            IValidator<LicenseUser> licenseValidator)
+            IValidator<LicenseUser> licenseValidator,
+            ILocalizationService localizationService)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope, licenseValidator)
         {
             _dashboardProjectManager = dashboardProjectManager;
+            _localizationService = localizationService;
             LicenseUser = new LicenseUser();
         }
 
@@ -176,7 +180,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
             catch (Exception)
             {
-                MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_FaultyKey", Logger));
+                MessageBox.Show(_localizationService!.Get("RegistrationDialogViewModel_FaultyKey"));
             }
         }
         #endregion  Methods

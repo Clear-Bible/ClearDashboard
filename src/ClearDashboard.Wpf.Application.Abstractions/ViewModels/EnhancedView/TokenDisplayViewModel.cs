@@ -19,6 +19,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public Token Token { get; }
 
+        public Token TokenForTranslation => IsCompositeTokenMember ? CompositeToken! : Token;
+
         /// <summary>
         /// The <see cref="VerseDisplayViewModel"/> that this token is part of.
         /// </summary>
@@ -78,10 +80,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public string PaddingAfter { get; set; } = string.Empty;
 
+        private Translation? _translation;
+
         /// <summary>
         /// The <see cref="Translation"/> associated with the token.
         /// </summary>
-        public Translation? Translation { get; set; }
+        public Translation? Translation
+        {
+            get => _translation;
+            set
+            {
+                if (Set(ref _translation, value))
+                {
+                    NotifyOfPropertyChange(nameof(TargetTranslationText));
+                    NotifyOfPropertyChange(nameof(TranslationState));
+                }
+            }
+        }
 
         /// <summary>
         /// The surface text of the token to be displayed.  
@@ -91,7 +106,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <summary>
         /// The surface text of the token to be displayed for translations.
         /// </summary>
-        public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken.Tokens.Select(t => t.SurfaceText))
+        public string TranslationSurfaceText => IsCompositeTokenMember ? string.Join(" ", CompositeToken!.Tokens.Select(t => t.SurfaceText))
                                                                        : Token.SurfaceText;
 
         /// <summary>
@@ -147,6 +162,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private bool _isNoteHovered;
+        private Translation? _translation1;
+
         /// <summary>
         /// Gets or sets whether a note to which the token is associated is hovered by the mouse.
         /// </summary>

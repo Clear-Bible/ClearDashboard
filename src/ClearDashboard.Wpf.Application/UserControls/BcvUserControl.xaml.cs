@@ -511,7 +511,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
 
                 // chapter switch so find the first verse for that book and chapter
-                var verseId = CurrentBcv.BBBCCCVVV;
+                var verseId = BBBCCC+"001";
                 if (verseId != "")
                 {
                     CboVerse.SelectedIndex = 0;
