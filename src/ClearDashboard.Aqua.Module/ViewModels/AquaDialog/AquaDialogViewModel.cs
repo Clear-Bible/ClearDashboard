@@ -7,7 +7,6 @@ using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
@@ -21,6 +20,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Wpf.Application;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 {
@@ -35,6 +36,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             public const string GetAssessmentResult = "GetAssessmentResult";
         }
 
+        private readonly TokenizedTextCorpusId tokenizedTextCorpusId_;
+
         #region Member Variables   
 
         private readonly ILogger<AquaDialogViewModel>? logger_;
@@ -44,16 +47,14 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
         private readonly ILocalizationService _localization;
         private readonly LongRunningTaskManager? longRunningTaskManager_;
         private LongRunningTask? currentLongRunningTask_;
-        private string? paratextProjectId_;
+
 
         #endregion //Member Variables
 
 
         #region Public Properties
 
-        public List<string>? BookIds { get; set; } = new();
-
-        public string? VersionId { get; set; }  
+        public string? AquaId { get; set; }
 
         #endregion //Public Properties
 
@@ -111,9 +112,11 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
         }
 
         public AquaDialogViewModel(
-            string paratextProjectId,
-            string versionId,
             DialogMode dialogMode,
+            CorpusNodeViewModel corpusNodeViewModel,
+            TokenizedTextCorpusId tokenizedTextCorpusId,
+
+            IAquaManager aquaManager,
 
             ILogger<AquaDialogViewModel> logger,
             DashboardProjectManager projectManager,
@@ -121,13 +124,11 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             ILifetimeScope lifetimeScope,
             INavigationService navigationService,
             IMediator mediator,
-            IAquaManager aquaManager,
             ILocalizationService localization,
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-            paratextProjectId_ = paratextProjectId;
             DialogMode = dialogMode;
 
             CanOk = true;
@@ -141,17 +142,23 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             DisplayName = _localization.Get("AquaDialog_DisplayName");
 
             DialogTitle = "Aqua dialog title";
+
+            tokenizedTextCorpusId_ = tokenizedTextCorpusId;
         }
 
+        private string? ObtainAquaId(TokenizedTextCorpusId tokenizedTextCorpusId)
+        {
+            //look in TokenizedTextCorpus.Metadata for an AquaId, and if there return else null.
+            return "AQUAID";
+        }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            await RetrieveParatextProjectMetadata(cancellationToken);
+            AquaId = ObtainAquaId(tokenizedTextCorpusId_);
 
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode),
-                new NamedParameter("paratextProjectId", paratextProjectId_!),
-                new NamedParameter("selectBooksStepNextVisible", true)
+                new NamedParameter("aquaId", AquaId),
             };
 
             var views = lifetimeScope_?.ResolveKeyedOrdered<IWorkflowStepViewModel>("AquaDialog", parameters, "Order").ToArray();
@@ -175,22 +182,6 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
             await base.OnInitializeAsync(cancellationToken);
         }
-
-        private async Task RetrieveParatextProjectMetadata(CancellationToken cancellationToken)
-        {
-            var result = await projectManager_!.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
-            if (result.Success && result.HasData)
-            {
-                SelectedProject = result.Data!.FirstOrDefault(b =>
-                               b.Id == paratextProjectId_!.Replace("-", "")) ??
-                           throw new InvalidOperationException();
-            }
-            else
-            {
-                throw new InvalidOperationException(result.Message);
-            }
-        }
-
 
         #endregion //Constructor
 
@@ -246,7 +237,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
                 Logger!.LogInformation($"Adding version.");
 
                 await aquaManager_!.AddVersion(
-                    "",
+                    tokenizedTextCorpusId_,
                     cancellationToken,
                     new DelegateProgress(async status =>
                     {
@@ -333,6 +324,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
                 Logger!.LogInformation($"Adding revision.");
 
                 await aquaManager_!.AddRevision(
+                    tokenizedTextCorpusId_,
                     "",
                     cancellationToken,
                     new DelegateProgress(async status =>

@@ -19,8 +19,8 @@ public class AquaInfoStepViewModel : DashboardApplicationWorkflowStepViewModel<I
     {
         OkCommand = new RelayCommand(Ok);
     }
-    public AquaInfoStepViewModel( 
-        string paratextProjectId,
+    public AquaInfoStepViewModel(
+        string aquaId,
 
         DialogMode dialogMode,  
         DashboardProjectManager projectManager,
