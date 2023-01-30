@@ -24,7 +24,6 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 AddText(new ParatextProjectText(ParatextProjectId, mediator, Versification, bookAbbreviation));
             }
         }
-        public override ScrVers Versification { get; }
 
 
         public static async Task<ParatextProjectTextCorpus> Get(
