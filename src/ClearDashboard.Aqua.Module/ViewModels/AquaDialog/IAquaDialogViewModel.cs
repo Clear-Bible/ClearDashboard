@@ -9,10 +9,9 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
         Visibility StatusBarVisibility { get; set; }
         string? DialogTitle { get; set; }
 
-        // already in IParatextCorpusDialogViewModel
+        string? AquaId { get; set; }
         void Ok();
         void Cancel();
-
         Task<LongRunningTaskStatus> AddVersion();
 
         Task<LongRunningTaskStatus> AddRevision();

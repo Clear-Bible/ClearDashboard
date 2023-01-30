@@ -58,6 +58,12 @@
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
             <Button
+                x:Name="MoveBackwards"
+                Content="Back"
+                IsDefault="True"
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                Style="{StaticResource TransparentStyle}" />
+            <Button
                 x:Name="AddRevision"
                 Content="Add Revision"
                 IsDefault="True"
