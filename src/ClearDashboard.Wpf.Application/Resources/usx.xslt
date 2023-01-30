@@ -233,7 +233,7 @@
           text-indent: 0;
           text-align: left;
           border-radius: 4px;
-          border: 1px solid #dcdcdc; }
+          border: 1px solid #7c7c7c;}
 
           .fr {
           font-weight: bold; }
@@ -676,8 +676,7 @@
           font-style: normal;}
 
           .vh {
-          background-color:#f5f571;
-          }
+          background-color:#f5f571;}
 
           .res {
           font-weight: bold;
@@ -755,21 +754,6 @@
     </sup>
   </xsl:template>
 
-  <xsl:template match="verse[@style='vh']">
-    <sup class="vh">
-      <xsl:attribute name="id">
-        <!--put your logic in variable-->
-        <xsl:variable name="str">
-          <xsl:value-of select="@sid" />
-        </xsl:variable>
-        <!--normalize space will prevent spaces from left and right of string, then all spaces inside will be replaced by '-' -->
-        <xsl:value-of select="translate(normalize-space($str), ' ', '-')"/>
-      </xsl:attribute>
-
-      <xsl:value-of select="@number" />
-    </sup>
-  </xsl:template>
-
   <xsl:template match="book">
     <div>
       <xsl:attribute name="id">
@@ -784,14 +768,14 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="node()[count(preceding-sibling::verse[@style='vh'])=1 and count(following-sibling::verse[@style='vh'])=1]">
-    <nobr class="vh">
+  <xsl:template match="node()[count(preceding::verse[@style='vh'])>=1 and count(following::verse[@style='vh'])>=1]">
+    <span class="vh">
 
       <xsl:copy>
         <xsl:apply-templates select="@*|node()" />
       </xsl:copy>
 
-    </nobr>
+    </span>
   </xsl:template>
 
 </xsl:stylesheet>
