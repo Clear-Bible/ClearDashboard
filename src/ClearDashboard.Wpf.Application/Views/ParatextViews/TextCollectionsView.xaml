@@ -107,6 +107,7 @@
                                 Width="{Binding ActualWidth, ElementName=TextCollectionItemGridViewColumn, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
                                 Height="200"
                                 paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}"
+                                Loaded="TextCollectionWebBrowser_OnLoaded"
                                 PreviewMouseWheel="Chromium_OnPreviewMouseWheel" />
                         </StackPanel>
                     </DataTemplate>
