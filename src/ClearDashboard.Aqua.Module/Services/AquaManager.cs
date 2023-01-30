@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.WebUtilities;
@@ -31,7 +32,7 @@ namespace ClearDashboard.Aqua.Module.Services
         }
 
         public async Task<string> AddVersion(
-            string paratextProjectId,
+            TokenizedTextCorpusId tokenizedTextCorpusId,
             CancellationToken cancellationToken,
             IProgress<ProgressStatus>? progress)
         {
@@ -39,6 +40,7 @@ namespace ClearDashboard.Aqua.Module.Services
             return "versionId";
         }
         public async Task<string> AddRevision(
+            TokenizedTextCorpusId tokenizedTextCorpusId,
             string versionId,
             CancellationToken cancellationToken,
             IProgress<ProgressStatus>? progress)

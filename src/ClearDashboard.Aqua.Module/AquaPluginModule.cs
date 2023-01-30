@@ -37,33 +37,27 @@ namespace ClearDashboard.Aqua.Module
     {
         public static void RegisterAquaDependencies(this ContainerBuilder builder)
         {
-            //manager
+            //managers
 
             builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
+
+            //menus and localization
 
             builder.RegisterType<AquaDesignSurfaceMenuBuilder>().As<IDesignSurfaceMenuBuilder>().WithAttributeFiltering();
             builder.RegisterType<AquaLocalizationService>().Keyed<ILocalizationService>("Aqua");
             builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf().WithAttributeFiltering();
 
-            //builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf();
+            //AquaDialog
 
             builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 1);
-
-            // THIRDPARTY MODULE TODO: How to reference SelectBooksStepViewModel?
-            //builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
-            //    .Keyed<IWorkflowStepViewModel>("AquaDialog")
-            //    .WithMetadata("Order", 2);
-
             builder.RegisterType<AquaAddRevisionStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 3);
-
+                .WithMetadata("Order", 2);
             builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 4);
-
+                .WithMetadata("Order", 3);
         }
     }
 }

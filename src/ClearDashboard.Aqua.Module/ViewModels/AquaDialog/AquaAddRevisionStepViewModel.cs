@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
 using Caliburn.Micro;
+using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Infrastructure;
@@ -19,8 +20,8 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
     public AquaAddRevisionStepViewModel()
     {
     }
-    public AquaAddRevisionStepViewModel( 
-        string paratextProjectId,
+    public AquaAddRevisionStepViewModel(
+        IAquaManager aquaManager,
 
         DialogMode dialogMode,  
         DashboardProjectManager projectManager,

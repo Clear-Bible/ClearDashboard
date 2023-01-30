@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Services;
-
+using ClearDashboard.Aqua.Module.Services;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
@@ -22,7 +22,9 @@ public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplication
         OkCommand = new RelayCommand(Ok);
     }
     public AquaAddVersionOrListAssessmentsStepViewModel(
-        string paratextProjectId,
+        string aquaId,
+        IAquaManager aquaManager,
+        IEnhancedViewManager enhancedViewManager,
 
         DialogMode dialogMode,
         DashboardProjectManager projectManager,
