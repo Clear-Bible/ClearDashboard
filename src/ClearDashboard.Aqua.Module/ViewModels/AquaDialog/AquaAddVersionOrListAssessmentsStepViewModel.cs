@@ -117,7 +117,7 @@ public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplication
             switch (processStatus)
             {
                 case LongRunningTaskStatus.Completed:
-                    await MoveForwards();
+                    //await MoveForwards();
                     break;
                 case LongRunningTaskStatus.Failed:
                 case LongRunningTaskStatus.Cancelled:

@@ -107,9 +107,11 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
             switch (processStatus)
             {
                 case LongRunningTaskStatus.Completed:
-                    await MoveForwards();
+                    //await MoveForwards();
+                    await MoveBackwards();
                     break;
                 case LongRunningTaskStatus.Failed:
+                    break;
                 case LongRunningTaskStatus.Cancelled:
                     ParentViewModel!.Cancel();
                     break;

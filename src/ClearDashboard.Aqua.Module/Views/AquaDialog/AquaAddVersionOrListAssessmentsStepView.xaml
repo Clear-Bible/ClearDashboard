@@ -63,6 +63,12 @@
                 IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
                 Style="{StaticResource TransparentStyle}" />
         </StackPanel>
+        <Button
+            x:Name="MoveForwards"
+            Content="Add Revision"
+            IsDefault="True"
+            IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+            Style="{StaticResource TransparentStyle}" Margin="667,345,5,85" Grid.RowSpan="2" />
 
     </Grid>
 </UserControl>

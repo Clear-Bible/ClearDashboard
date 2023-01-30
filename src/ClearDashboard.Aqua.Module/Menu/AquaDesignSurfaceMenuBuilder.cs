@@ -25,7 +25,7 @@ namespace ClearDashboard.Aqua.Module.Menu
                 
                 //new NamedParameter("menuItems", corpusNode.MenuItems),
                 new NamedParameter("corpusNodeViewModel", corpusNode),
-                new NamedParameter("tokenizedTextCorpusId", new TokenizedTextCorpusId("123"))
+                new NamedParameter("tokenizedTextCorpusId", new TokenizedTextCorpusId(Guid.NewGuid()))
             };
             var menuItem = LifetimeScope.Resolve<AquaCorpusAnalysisMenuItemViewModel>(parameters);
 
