@@ -39,9 +39,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using ControlzEx.Standard;
+using System.Xml.Linq;
 
 
 // ReSharper disable once CheckNamespace
@@ -59,6 +62,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private readonly IWindowManager? _windowManager;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
+        private SoundType _soundType;
         #endregion //Member Variables
 
         #region Observable Properties
@@ -518,6 +522,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                     if (!cancellationToken.IsCancellationRequested)
                     {
+                        _soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                            exception: ex, cancellationToken: cancellationToken);
 
@@ -535,7 +540,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     else
                     {
-                        PlaySound.PlaySoundFromResource();
+                        PlaySound.PlaySoundFromResource(_soundType);
+                        _soundType = SoundType.Success;
                     }
 
                 }
@@ -637,6 +643,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                     if (!cancellationToken.IsCancellationRequested)
                     {
+                        _soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                             exception: ex, cancellationToken: cancellationToken);
                     }
@@ -652,7 +659,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     else
                     {
-                        PlaySound.PlaySoundFromResource();
+                        PlaySound.PlaySoundFromResource(_soundType);
+                        _soundType = SoundType.Success;
                     }
                 }
             }, cancellationToken);
@@ -763,6 +771,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
                             if (!cancellationToken.IsCancellationRequested)
                             {
+                                _soundType = SoundType.Error;
                                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                    exception: ex, cancellationToken: cancellationToken);
                             }
@@ -771,8 +780,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             _longRunningTaskManager.TaskComplete(taskName);
                             _busyState.Remove(taskName);
-                                
-                            PlaySound.PlaySoundFromResource();
+                            
+                            PlaySound.PlaySoundFromResource(_soundType);
+                            _soundType = SoundType.Success;
                         }
                     }, cancellationToken);
                 }
@@ -952,6 +962,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
                                 if (!cancellationToken.IsCancellationRequested)
                                 {
+                                    _soundType = SoundType.Error;
                                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                         exception: ex, cancellationToken: cancellationToken);
                                 }
@@ -964,6 +975,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
                             if (!cancellationToken.IsCancellationRequested)
                             {
+                                _soundType = SoundType.Error;
                                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                    exception: ex, cancellationToken: cancellationToken);
                             }
@@ -978,7 +990,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
                             else
                             {
-                                PlaySound.PlaySoundFromResource();
+                                PlaySound.PlaySoundFromResource(_soundType);
+                                _soundType = SoundType.Success;
                             }
 
                         }

@@ -48,6 +48,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         private CorpusNodeViewModel _sourceCorpusNodeViewModel;
         private CorpusNodeViewModel _targetCorpusNodeViewModel;
         private ParallelCorpusConnectionViewModel _parallelCorpusConnectionViewModel;
+        private SoundType _soundType;
 
         #endregion //Member Variables
 
@@ -299,6 +300,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while creating the ParallelCorpus.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    _soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -327,7 +329,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource();
+                PlaySound.PlaySoundFromResource(_soundType);
+                _soundType = SoundType.Success;
             }
 
             return CurrentTask.Status;
@@ -387,6 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while creating creating the TranslationSet.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    _soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -410,7 +414,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
-            PlaySound.PlaySoundFromResource();
+            PlaySound.PlaySoundFromResource(_soundType);
+            _soundType = SoundType.Success;
 
             return CurrentTask.Status;
 
@@ -469,6 +474,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while creating creating the AlignmentSet.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    _soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -495,7 +501,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource();
+                PlaySound.PlaySoundFromResource(_soundType);
+                _soundType = SoundType.Success;
             }
 
             return CurrentTask.Status;
@@ -565,6 +572,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while training the SMT model.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    _soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -590,7 +598,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource();
+                PlaySound.PlaySoundFromResource(_soundType);
+                _soundType = SoundType.Success;
             }
 
 

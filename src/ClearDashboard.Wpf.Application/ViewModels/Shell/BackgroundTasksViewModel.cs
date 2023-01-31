@@ -170,6 +170,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
                     {
                         status.Description = backgroundTaskStatus.ErrorMessage;
+                        ShowPopup = true;
                     }
                     status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
 
