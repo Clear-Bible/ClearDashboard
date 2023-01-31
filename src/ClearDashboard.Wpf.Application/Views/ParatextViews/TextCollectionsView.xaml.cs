@@ -37,5 +37,13 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
             scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
             e.Handled = true;
         }
+
+        private void TextCollectionWebBrowser_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is ChromiumWebBrowser webBrowser && webBrowser.BrowserCore != null)
+            {
+                webBrowser.Reload(true);
+            }
+        }
     }
 }
