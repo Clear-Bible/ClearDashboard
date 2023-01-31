@@ -68,6 +68,7 @@
                         Click="OnTokenUnjoin"
                         Header="Unjoin Composite Token" />
                     <MenuItem Click="OnFilterPins" Header="Filter Pins" />
+                    <MenuItem Click="OnCopy" Header="Copy" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock

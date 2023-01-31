@@ -7,11 +7,11 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+    xmlns:enhancedView1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:enhancedView1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Application.Abstractions"
     d:DataContext="{d:DesignInstance Type=enhancedView1:VerseAwareEnhancedViewItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -109,6 +109,9 @@
                             </b:EventTrigger>
                             <b:EventTrigger EventName="FilterPins">
                                 <b:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="Copy">
+                                <b:CallMethodAction MethodName="Copy" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
                             <b:EventTrigger EventName="TranslateQuick">
                                 <b:CallMethodAction MethodName="TranslateQuick" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
