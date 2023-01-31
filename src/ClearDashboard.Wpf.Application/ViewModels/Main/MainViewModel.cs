@@ -904,7 +904,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private void ShowAboutWindow()
         {
-            var localizedString = _localizationService!.Get("MainView_About");
+            var localizedString = _localizationService!["MainView_About"];
 
             dynamic settings = new ExpandoObject();
             settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
