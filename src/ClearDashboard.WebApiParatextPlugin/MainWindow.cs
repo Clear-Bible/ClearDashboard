@@ -694,16 +694,20 @@ namespace ClearDashboard.WebApiParatextPlugin
             }
             else
             {
-                try
+                // make sure that we actually have an active window in Paratext
+                if (_host.ActiveWindowState is not null)
                 {
-                    // set up a new Versification reference for this verse
-                    var newVerse = _project.Versification.CreateReference(book, chapter, verse);
-                    _host.SetReferenceForSyncGroup(newVerse, _host.ActiveWindowState.SyncReferenceGroup);
-                }
-                catch (Exception ex)
-                {
-                    Log.Error(ex.Message);
-                    AppendText(Color.Red, ex.Message);
+                    try
+                    {
+                        // set up a new Versification reference for this verse
+                        var newVerse = _project.Versification.CreateReference(book, chapter, verse);
+                        _host.SetReferenceForSyncGroup(newVerse, _host.ActiveWindowState.SyncReferenceGroup);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex.Message);
+                        AppendText(Color.Red, ex.Message);
+                    }
                 }
             }
         }
