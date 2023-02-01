@@ -24,6 +24,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using HtmlAgilityPack;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -245,6 +246,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         {
                             TextCollectionLists.Clear();
                             var data = result.Data;
+                            
+                            string collectiveBody = string.Empty;
+                            string head =string.Empty;
+                            List<string> titles = new List<string>();
 
                             foreach (var textCollection in data)
                             {
@@ -253,6 +258,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 var endPart = textCollection.Data;
                                 var startPart = textCollection.ReferenceShort;
 
+                                titles.Add(startPart);
+
                                 if (workWithUsx)
                                 {
                                     try
@@ -260,6 +267,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                         string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
                                         var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
                                         tc.MyHtml = html;
+
+                                        HtmlDocument thisHtml = new();
+                                        thisHtml.LoadHtml(html);
+
+                                        head = thisHtml.DocumentNode.SelectNodes("//head").FirstOrDefault().OuterHtml;
+
+                                        HtmlDocument htmlSnippet = new HtmlDocument();
+                                        htmlSnippet.LoadHtml(html);
+                                        var body = htmlSnippet.DocumentNode.SelectNodes("//body");
+                                        var text = body.FirstOrDefault().InnerHtml;
+
+                                        collectiveBody += 
+                                            "<div id='"+startPart+"'>" +
+                                                "<details open>" +
+                                                    "<summary>" +
+                                                        "<a href='#Home'>" +
+                                                            "Home" +
+                                                        "<a/>"+
+                                                        startPart+":" +
+                                                    "</summary>"
+                                                    +text+
+                                                "</details>" +
+                                            "</div>" +
+                                            "<hr>";
                                     }
                                     catch (Exception e)
                                     {
@@ -277,6 +308,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                                 TextCollectionLists.Add(tc);
                             }
+
+                            string topAnchor = string.Empty;
+                            foreach (var title in titles)
+                            {
+                                topAnchor += "<a href=#" + title + ">" + title + "</a>";
+                            }
+
+                            collectiveBody = "<div id='Home' class='navbar'>" + topAnchor + "</div>" + collectiveBody;
+                            MyHtml = "<html>" + head + collectiveBody + "</html>";
                         });
                     }
                 }

@@ -89,7 +89,14 @@
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="1">
-            <ListView
+            <cef:ChromiumWebBrowser
+                x:Name="TextCollectionWebBrowser"
+                Width="{Binding ActualWidth, ElementName=TextCollectionItemGridViewColumn, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
+                Height="{Binding ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='0'}"
+                paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}"
+                Loaded="TextCollectionWebBrowser_OnLoaded"
+                PreviewMouseWheel="Chromium_OnPreviewMouseWheel" />
+            <!--<ListView
                 x:Name="TextCollectionListView"
                 Width="{Binding ActualWidth, ElementName=LowerBorder}"
                 Height="{Binding ElementName=LowerBorder, Path=ActualHeight}"
@@ -126,7 +133,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView>-->
         </Border>
     </Grid>
 </UserControl>
