@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
@@ -42,6 +43,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
 
         #endregion //Public Properties
+
+        #region Commands
+
+        public ICommand RefreshCommand { get; set; }
+
+
+        #endregion
+
 
         #region Observable Properties
 
@@ -173,7 +182,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             _projectManager = projectManager;
             Title = "🗐 " + LocalizationService!.Get("Windows_TextCollection");
             this.ContentId = "TEXTCOLLECTION";
+
+
+            // wire up the commands
+            RefreshCommand = new RelayCommand(Refresh);
         }
+
+
 
         protected override async void OnViewAttached(object view, object context)
         {
@@ -274,6 +289,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
 
             
+        }
+
+        public async void Refresh(object obj)
+        {
+            await CallGetTextCollections();
         }
 
         public void LaunchMirrorView(double actualWidth, double actualHeight)

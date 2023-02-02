@@ -7,6 +7,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.ParatextViews"
@@ -52,6 +53,7 @@
                     </Style>
                 </Button.Style>
                 <materialDesign:PackIcon
+                    cm:Message.Attach="[Event Click] = [Action LaunchMirrorView(MainGrid.ActualWidth,MainGrid.ActualHeight)]"
                     Background="Transparent"
                     Foreground="{StaticResource SecondaryHueDarkBrush}"
                     Kind="ArrowExpandAll" />
@@ -68,6 +70,18 @@
                 ShowOffsetControl="False"
                 VerseChange="{Binding Path=VerseChange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 VerseOffsetRange="{Binding Path=VerseOffsetRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+            <Button
+                Width="30"
+                Height="25"
+                Margin="10,0,0,0"
+                Command="{Binding Path=DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType={x:Type Grid}}}"
+                CommandParameter="{Binding}"
+                Style="{StaticResource SmallTransparentStyle}"
+                ToolTip="{helpers:Localization Refresh}">
+                <iconPacks:PackIconOcticons Kind="Sync" />
+            </Button>
         </StackPanel>
         <Border
             x:Name="LowerBorder"
