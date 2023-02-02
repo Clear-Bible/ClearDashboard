@@ -89,44 +89,11 @@
             Margin="5"
             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
             BorderThickness="1">
-            <ListView
-                x:Name="TextCollectionListView"
-                Width="{Binding ActualWidth, ElementName=LowerBorder}"
-                Height="{Binding ElementName=LowerBorder, Path=ActualHeight}"
-                VerticalAlignment="Top"
-                materialDesign:RippleAssist.IsDisabled="True"
-                ItemsSource="{Binding TextCollectionLists, UpdateSourceTrigger=PropertyChanged}"
-                ScrollViewer.CanContentScroll="False">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <ContentPresenter />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Width="{Binding ActualWidth, ElementName=TextCollectionListView, Converter={converters:WidthSubtraction}, ConverterParameter='24'}" Orientation="Vertical">
-                            <helpers:BindableTextBlock
-                                Width="Auto"
-                                InlineList="{Binding Path=Inlines, UpdateSourceTrigger=PropertyChanged}"
-                                TextWrapping="Wrap" />
-                            <cef:ChromiumWebBrowser
-                                x:Name="TextCollectionWebBrowser"
-                                Width="{Binding ActualWidth, ElementName=TextCollectionItemGridViewColumn, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
-                                Height="200"
-                                paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}"
-                                Loaded="TextCollectionWebBrowser_OnLoaded"
-                                PreviewMouseWheel="Chromium_OnPreviewMouseWheel" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <cef:ChromiumWebBrowser
+                x:Name="TextCollectionWebBrowser"
+                Width="{Binding ActualWidth, ElementName=TextCollectionItemGridViewColumn, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
+                Height="{Binding ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='0'}"
+                paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}"/>
         </Border>
     </Grid>
 </UserControl>
