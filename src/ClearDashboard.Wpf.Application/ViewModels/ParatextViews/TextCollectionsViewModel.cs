@@ -261,53 +261,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                                 titles.Add(startPart);
 
-                                if (workWithUsx)
+                                try
                                 {
-                                    try
+                                    string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
+                                    var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
+
+                                    HtmlDocument htmlSnippet = new();
+                                    htmlSnippet.LoadHtml(html);
+
+                                    if (head == string.Empty)
                                     {
-                                        string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
-                                        var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
-                                        tc.MyHtml = html;
-
-                                        HtmlDocument thisHtml = new();
-                                        thisHtml.LoadHtml(html);
-
-                                        head = thisHtml.DocumentNode.SelectNodes("//head").FirstOrDefault().OuterHtml;
-
-                                        HtmlDocument htmlSnippet = new HtmlDocument();
-                                        htmlSnippet.LoadHtml(html);
-                                        var body = htmlSnippet.DocumentNode.SelectNodes("//body");
-                                        var text = body.FirstOrDefault().InnerHtml;
-
-                                        collectiveBody += 
-                                            "<div id='"+startPart+"'>" +
-                                                "<details open>" +
-                                                    "<summary>" +
-                                                        "<a href='#Home'>" +
-                                                            "<i class='material-icons'>home</i>" +
-                                                        "<a/>"+
-                                                        startPart+":" +
-                                                    "</summary>"
-                                                    +text+
-                                                "</details>" +
-                                            "</div>" +
-                                            "<hr>";
+                                        head = htmlSnippet.DocumentNode.SelectNodes("//head").FirstOrDefault().OuterHtml;
                                     }
-                                    catch (Exception e)
-                                    {
-                                        Console.WriteLine(e);
-                                        tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                                    }
+                                    var currentBody = htmlSnippet.DocumentNode.SelectNodes("//body");
+
+                                    endPart = currentBody.FirstOrDefault().InnerHtml;
                                 }
-                                else
+                                catch (Exception e)
                                 {
-                                    tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                                    Console.WriteLine(e);
                                 }
 
-                                SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
-                                tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
-
-                                TextCollectionLists.Add(tc);
+                                collectiveBody +=
+                                "<div id='"+startPart+"'>" +
+                                    "<details open>" +
+                                        "<summary>" +
+                                            "<a href='#Home'>" +
+                                                "<i class='material-icons'>home</i>" +
+                                            "<a/>"+
+                                            startPart+":" +
+                                        "</summary>"
+                                        +endPart+
+                                    "</details>" +
+                                "</div>" +
+                                "<hr>";
                             }
 
                             string topAnchor = string.Empty;
@@ -332,8 +319,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 _textCollectionCallInProgress = false;
             }
-
-            
         }
 
         public async void Refresh(object obj)
