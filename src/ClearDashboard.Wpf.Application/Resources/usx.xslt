@@ -698,7 +698,7 @@
           .navbar {
           overflow: hidden;
           background-color: #333;
-        
+
           top: 0; /* Position the navbar at the top of the page */
           width: 100%; /* Full width */
           }
@@ -718,6 +718,16 @@
           background: #ddd;
           color: black;
           }
+
+          summary{
+          vertical-align:text-top;
+          font-size:23px;
+          color:#0069C0;
+          }
+
+          .material-icons{
+          font-size:20px;
+          color:#C79100;
 
 
         </style>

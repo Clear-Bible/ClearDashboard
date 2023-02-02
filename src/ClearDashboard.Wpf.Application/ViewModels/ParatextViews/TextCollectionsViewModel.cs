@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -24,6 +25,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using AvalonDock.Properties;
 using HtmlAgilityPack;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
@@ -187,9 +189,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             // wire up the commands
             RefreshCommand = new RelayCommand(Refresh);
+
         }
-
-
 
         protected override async void OnViewAttached(object view, object context)
         {
@@ -283,7 +284,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                                 "<details open>" +
                                                     "<summary>" +
                                                         "<a href='#Home'>" +
-                                                            "Home" +
+                                                            "<i class='material-icons'>home</i>" +
                                                         "<a/>"+
                                                         startPart+":" +
                                                     "</summary>"
@@ -316,7 +317,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                             }
 
                             collectiveBody = "<div id='Home' class='navbar'>" + topAnchor + "</div>" + collectiveBody;
-                            MyHtml = "<html>" + head + collectiveBody + "</html>";
+                            MyHtml = "<html>" +
+                                        "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">" + 
+                                        head + 
+                                        collectiveBody + 
+                                    "</html>";
                         });
                     }
                 }
