@@ -30,20 +30,5 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         {
             InitializeComponent();
         }
-
-        private void Chromium_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(TextCollectionListView);
-            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
-            e.Handled = true;
-        }
-
-        private void TextCollectionWebBrowser_OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (sender is ChromiumWebBrowser webBrowser && webBrowser.BrowserCore != null)
-            {
-                webBrowser.Reload(true);
-            }
-        }
     }
 }
