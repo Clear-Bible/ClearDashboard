@@ -1303,6 +1303,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteParallelCorpusConnection(ParallelCorpusConnectionViewModel connection)
         {
+            // Removes the connector between corpus nodes:
+            DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
 
             await Task.Factory.StartNew(async () =>
             {
@@ -1319,10 +1321,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await DAL.Alignment.Corpora.ParallelCorpus.Delete(Mediator!, connection.ParallelCorpusId);
                 }
             });
-           
-
-            // Removes the connector between corpus nodes:
-            DesignSurfaceViewModel!.DeleteParallelCorpusConnection(connection);
         }
 
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
@@ -1334,6 +1332,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 StartTime = DateTime.Now,
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
             }));
+
+            // Removes the CorpusNode form the project design surface:
+            DesignSurfaceViewModel!.DeleteCorpusNode(node);
 
             // Deletes the ParallelCorpora and removes the connector between nodes. 
             foreach (var connection in node.AttachedConnections)
@@ -1361,11 +1362,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     await Corpus.Delete(Mediator!, corpusId);
                 }
             });
-        
-
-            // Removes the CorpusNode form the project design surface:
-            DesignSurfaceViewModel!.DeleteCorpusNode(node);
-
+            
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
                 Name = "Deleting Corpus Node",

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -24,6 +25,8 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using AvalonDock.Properties;
+using HtmlAgilityPack;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {
@@ -186,9 +189,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
             // wire up the commands
             RefreshCommand = new RelayCommand(Refresh);
+
         }
-
-
 
         protected override async void OnViewAttached(object view, object context)
         {
@@ -245,6 +247,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                         {
                             TextCollectionLists.Clear();
                             var data = result.Data;
+                            
+                            string collectiveBody = string.Empty;
+                            string head =string.Empty;
+                            List<string> titles = new List<string>();
 
                             foreach (var textCollection in data)
                             {
@@ -253,30 +259,56 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 var endPart = textCollection.Data;
                                 var startPart = textCollection.ReferenceShort;
 
-                                if (workWithUsx)
+                                titles.Add(startPart);
+
+                                try
                                 {
-                                    try
+                                    string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
+                                    var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
+
+                                    HtmlDocument htmlSnippet = new();
+                                    htmlSnippet.LoadHtml(html);
+
+                                    if (head == string.Empty)
                                     {
-                                        string xsltPath = Path.Combine(Environment.CurrentDirectory, @"resources\usx.xslt");
-                                        var html = UsxParser.TransformXMLToHTML(endPart, xsltPath);
-                                        tc.MyHtml = html;
+                                        head = htmlSnippet.DocumentNode.SelectNodes("//head").FirstOrDefault().OuterHtml;
                                     }
-                                    catch (Exception e)
-                                    {
-                                        Console.WriteLine(e);
-                                        tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
-                                    }
+                                    var currentBody = htmlSnippet.DocumentNode.SelectNodes("//body");
+
+                                    endPart = currentBody.FirstOrDefault().InnerHtml;
                                 }
-                                else
+                                catch (Exception e)
                                 {
-                                    tc.Inlines.Insert(0, new Run(endPart) { FontWeight = FontWeights.Normal });
+                                    Console.WriteLine(e);
                                 }
 
-                                SolidColorBrush PrimaryHueDarkBrush = System.Windows.Application.Current.TryFindResource("PrimaryHueDarkBrush") as SolidColorBrush;
-                                tc.Inlines.Insert(0, new Run(startPart + ":  ") { FontWeight = FontWeights.Bold, Foreground = PrimaryHueDarkBrush });
-
-                                TextCollectionLists.Add(tc);
+                                collectiveBody +=
+                                "<div id='"+startPart+"'>" +
+                                    "<details open>" +
+                                        "<summary>" +
+                                            "<a href='#Home'>" +
+                                                "<i class='material-icons'>home</i>" +
+                                            "<a/>"+
+                                            startPart+":" +
+                                        "</summary>"
+                                        +endPart+
+                                    "</details>" +
+                                "</div>" +
+                                "<hr>";
                             }
+
+                            string topAnchor = string.Empty;
+                            foreach (var title in titles)
+                            {
+                                topAnchor += "<a href=#" + title + ">" + title + "</a>";
+                            }
+
+                            collectiveBody = "<div id='Home' class='navbar'>" + topAnchor + "</div>" + collectiveBody;
+                            MyHtml = "<html>" +
+                                        "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">" + 
+                                        head + 
+                                        collectiveBody + 
+                                    "</html>";
                         });
                     }
                 }
@@ -287,8 +319,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 _textCollectionCallInProgress = false;
             }
-
-            
         }
 
         public async void Refresh(object obj)
