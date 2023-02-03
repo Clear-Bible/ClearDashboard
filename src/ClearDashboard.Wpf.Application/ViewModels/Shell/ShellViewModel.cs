@@ -14,10 +14,15 @@ using ClearDashboard.Wpf.Application.Views.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
@@ -41,6 +46,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         //    DESKTOPVERTRES = 117
         //}
 
+        
 
         #region Properties
 
@@ -441,6 +447,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
            
             await Task.CompletedTask;
+        }
+
+        private RelayCommand _helpCommand;
+        public ICommand HelpCommand => _helpCommand ??= new RelayCommand(Help);
+
+        private void Help(object commandParameter)
+        {
+            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            if (File.Exists(path))
+            {
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
+            }
+            else
+            {
+                Logger.LogInformation("Dashboard_Instructions.pdf missing.");
+            }
         }
     }
 }

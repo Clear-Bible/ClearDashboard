@@ -38,6 +38,10 @@
     TitleCharacterCasing="Normal"
     mc:Ignorable="d">
 
+    <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding HelpCommand}" />
+    </Window.InputBindings>
+
     <Window.Resources>
         <system:Boolean x:Key="True">True</system:Boolean>
         <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
