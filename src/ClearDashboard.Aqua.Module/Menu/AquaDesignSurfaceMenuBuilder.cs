@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.ViewModels.Menus;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
@@ -14,22 +15,21 @@ namespace ClearDashboard.Aqua.Module.Menu
         {
         }
 
-        public override void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode)
+        public override void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpusId)
         {
-            corpusNode.MenuItems.Add(CreateCorpusNodeSeparatorMenuItem());
+            if (corpusNodeMenuItemViewModel?.MenuItems == null)
+                throw new InvalidParameterEngineException(name: "MenuItems", value: "null", message: "Cannot add to null menu.");
+
+            corpusNodeMenuItemViewModel.MenuItems.Add(CreateCorpusNodeSeparatorMenuItem());
 
             var parameters = new List<Autofac.Core.Parameter>
             {
-                //FIXMEAQUA: need to add in tokenizedTextCorpus submenu and provide something
-                // enabling MeuItemViewModel to determine TokenizedTextCorpusId
-                
-                //new NamedParameter("menuItems", corpusNode.MenuItems),
-                new NamedParameter("corpusNodeViewModel", corpusNode),
-                new NamedParameter("tokenizedTextCorpusId", new TokenizedTextCorpusId(Guid.NewGuid()))
+                new NamedParameter("corpusNodeMenuItemViewModel", corpusNodeMenuItemViewModel),
+                new NamedParameter("tokenizedTextCorpusId", tokenizedCorpusId)
             };
             var menuItem = LifetimeScope.Resolve<AquaCorpusAnalysisMenuItemViewModel>(parameters);
 
-            corpusNode.MenuItems.Add(menuItem);
+            corpusNodeMenuItemViewModel.MenuItems.Add(menuItem);
         }
     }
 }
