@@ -65,7 +65,7 @@
             Command="{Binding DecreaseTextSizeCommand}"
             Modifiers="Control+Shift" />
         <KeyBinding
-            Key="0"
+            Key="O"
             Command="{Binding ResetTextSizeCommand}"
             Modifiers="Control" />
         <KeyBinding
@@ -80,10 +80,6 @@
             Key="Down"
             Command="{Binding NextVerseCommand}"
             Modifiers="Control" />
-        <KeyBinding
-            Key="S"
-            Command="{Binding SendReceiveProjectCommand}"
-            Modifiers="Control+Shift" />
         <KeyBinding Key="F8" Command="{Binding NextChapterCommand}" />
         <KeyBinding Key="F9" Command="{Binding NextBookCommand}" />
         <KeyBinding

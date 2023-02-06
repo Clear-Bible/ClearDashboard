@@ -27,6 +27,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.UserControls;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -55,7 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private readonly TranslationSource? _translationSource;
 
         private UpdateFormat? _updateData;
-
+        private bool _verseChangeInProgress=false;
 
         private string? _paratextUserName;
         public string? ParatextUserName
@@ -469,6 +471,130 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             {
                 Logger.LogInformation("Dashboard_Instructions.pdf missing.");
             }
+        }
+
+        private RelayCommand sendReceiveProjectCommand;
+        public ICommand SendReceiveProjectCommand => sendReceiveProjectCommand ??= new RelayCommand(SendReceiveProject);
+
+        private void SendReceiveProject(object commandParameter)
+        {
+        }
+
+        private RelayCommand openProjectCommand;
+        public ICommand OpenProjectCommand => openProjectCommand ??= new RelayCommand(OpenProject);
+
+        private void OpenProject(object commandParameter)
+        {
+        }
+
+        private RelayCommand saveProjectCommand;
+        public ICommand SaveProjectCommand => saveProjectCommand ??= new RelayCommand(SaveProject);
+
+        private void SaveProject(object commandParameter)
+        {
+        }
+
+        private RelayCommand insertNoteCommand;
+        public ICommand InsertNoteCommand => insertNoteCommand ??= new RelayCommand(InsertNote);
+
+        private void InsertNote(object commandParameter)
+        {
+        }
+
+        private RelayCommand increaseTextSizeCommand;
+        public ICommand IncreaseTextSizeCommand => increaseTextSizeCommand ??= new RelayCommand(IncreaseTextSize);
+
+        private void IncreaseTextSize(object commandParameter)
+        {
+        }
+
+        private RelayCommand decreaseTextSizeCommand;
+        public ICommand DecreaseTextSizeCommand => decreaseTextSizeCommand ??= new RelayCommand(DecreaseTextSize);
+
+        private void DecreaseTextSize(object commandParameter)
+        {
+        }
+
+        private RelayCommand resetTextSizeCommand;
+        public ICommand ResetTextSizeCommand => resetTextSizeCommand ??= new RelayCommand(ResetTextSize);
+
+        private void ResetTextSize(object commandParameter)
+        {
+        }
+
+        private RelayCommand findTextCommand;
+        public ICommand FindTextCommand => findTextCommand ??= new RelayCommand(FindText);
+
+        private void FindText(object commandParameter)
+        {
+        }
+
+        private RelayCommand previousVerseCommand;
+        public ICommand PreviousVerseCommand => previousVerseCommand ??= new RelayCommand(PreviousVerse);
+
+        private void PreviousVerse(object commandParameter)
+        {
+        }
+
+        private RelayCommand nextVerseCommand;
+        public ICommand NextVerseCommand => nextVerseCommand ??= new RelayCommand(NextVerse);
+
+        private void NextVerse(object commandParameter)
+        {
+        }
+
+        private RelayCommand nextChapterCommand;
+        public ICommand NextChapterCommand => nextChapterCommand ??= new RelayCommand(NextChapter);
+
+        private void NextChapter(object commandParameter)
+        {
+        }
+
+        private RelayCommand nextBookCommand;
+        public ICommand NextBookCommand => nextBookCommand ??= new RelayCommand(NextBook);
+
+        private async void NextBook(object commandParameter)
+        {
+            var currentVerse = ProjectManager.CurrentVerse;
+
+            BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel();
+            bcvViewModel.SetVerseFromId(currentVerse);
+
+            BcvUserControl bcvUserControl = new BcvUserControl();
+
+            bcvUserControl.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
+            bcvUserControl.CurrentBcv = bcvViewModel;
+
+            if (bcvViewModel.BookNum < 66 && !_verseChangeInProgress)
+            {
+                _verseChangeInProgress = true;
+
+                var newVerseId = "0" + (bcvViewModel.BookNum + 1) + bcvViewModel.ChapterIdText + bcvViewModel.VerseIdText;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
+                
+                _verseChangeInProgress = false;
+            }
+        }
+
+        private RelayCommand openWordlistCommand;
+        public ICommand OpenWordlistCommand => openWordlistCommand ??= new RelayCommand(OpenWordlist);
+
+        private void OpenWordlist(object commandParameter)
+        {
+        }
+
+        private RelayCommand openBiblicalTermsCommand;
+        public ICommand OpenBiblicalTermsCommand => openBiblicalTermsCommand ??= new RelayCommand(OpenBiblicalTerms);
+
+        private void OpenBiblicalTerms(object commandParameter)
+        {
+        }
+
+        private RelayCommand openParallelPassagesCommand;
+        public ICommand OpenParallelPassagesCommand => openParallelPassagesCommand ??= new RelayCommand(OpenParallelPassages);
+
+        private void OpenParallelPassages(object commandParameter)
+        {
         }
     }
 }
