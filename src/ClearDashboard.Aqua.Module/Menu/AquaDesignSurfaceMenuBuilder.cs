@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ClearDashboard.Aqua.Module.ViewModels.Menus;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
@@ -30,6 +31,11 @@ namespace ClearDashboard.Aqua.Module.Menu
             var menuItem = LifetimeScope.Resolve<AquaCorpusAnalysisMenuItemViewModel>(parameters);
 
             corpusNode.MenuItems.Add(menuItem);
+        }
+
+        public override void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
+        {
+            throw new NotImplementedException();
         }
     }
 }

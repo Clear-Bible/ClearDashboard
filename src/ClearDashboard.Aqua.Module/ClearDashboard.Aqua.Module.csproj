@@ -14,9 +14,9 @@
 		<PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
 	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
+	</ItemGroup>
 
   <ItemGroup>
     <Page Update="Views\AquaCorpusAnalysisEnhancedViewItemView.xaml">
