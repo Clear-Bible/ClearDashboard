@@ -3,9 +3,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:aqua="clr-namespace:ClearDashboard.Aqua.Module.ViewModels.AquaDialog"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
+    xmlns:aqua="clr-namespace:ClearDashboard.Aqua.Module.ViewModels.AquaDialog"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:resx="clr-namespace:ClearDashboard.Aqua.Module.Strings"
     d:DataContext="{d:DesignInstance Type=aqua:AquaAddVersionOrListAssessmentsStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -47,6 +50,122 @@
             VerticalAlignment="Top"
             Orientation="Vertical">
             <Label Content="{Binding BodyText}" />
+
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+
+                <TextBox x:Name="UnvalidatedText"
+                     materialDesign:HintAssist.FloatingScale="0.60"
+                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                     materialDesign:HintAssist.Hint="{helpers:Localization UnvalidatedText}"
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="UnvalidatedText"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="false" />
+                    </TextBox.Text>
+                </TextBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                <TextBox x:Name="ValidatedText"
+                     materialDesign:HintAssist.FloatingScale="0.60"
+                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                     materialDesign:HintAssist.Hint="{helpers:Localization ValidatedText}"
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="ValidatedText"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                <TextBox x:Name="LengthText"
+                     materialDesign:HintAssist.FloatingScale="0.60"
+                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                     materialDesign:HintAssist.Hint="{helpers:Localization LengthText}"
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="LengthText"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Top">
+                <TextBox x:Name="NumericText"
+                     materialDesign:HintAssist.FloatingScale="0.60"
+                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                     materialDesign:HintAssist.Hint="{helpers:Localization NumericText}"
+                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                     Foreground="{DynamicResource MaterialDesignBody}"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="NumericText"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>
+            </StackPanel>
         </StackPanel>
 
         <StackPanel
