@@ -80,7 +80,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Wpf.Applicat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{391E5146-482A-4E39-BEDC-BCF0896BEFFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearDashboard.Aqua.Module", "ClearDashboard.Aqua.Module\ClearDashboard.Aqua.Module.csproj", "{AB081F7B-C4B6-46EB-86EA-DA6B7AE5B6BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Aqua.Module", "ClearDashboard.Aqua.Module\ClearDashboard.Aqua.Module.csproj", "{AB081F7B-C4B6-46EB-86EA-DA6B7AE5B6BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
