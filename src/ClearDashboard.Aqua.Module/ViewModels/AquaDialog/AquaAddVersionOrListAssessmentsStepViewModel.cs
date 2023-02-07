@@ -6,6 +6,7 @@ using ClearDashboard.Wpf.Application.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,6 +20,12 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
 public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IAquaDialogViewModel, AquaAddVersionOrListAssessmentsStepViewModel>
 {
+
+    public class AquaItem
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
     public AquaAddVersionOrListAssessmentsStepViewModel()
     {
         OkCommand = new RelayCommand(Ok);
@@ -53,13 +60,22 @@ public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplication
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
         ParentViewModel!.StatusBarVisibility = Visibility.Hidden;
+        Items.Add(new AquaItem { Id = 1, Name = "Aqua Item 1" });
+        Items.Add(new AquaItem { Id = 2, Name = "Aqua Item 2" });
+        Items.Add(new AquaItem { Id = 3, Name = "Aqua Item 3" });
+        Items.Add(new AquaItem { Id = 4, Name = "Aqua Item 4" });
+        Items.Add(new AquaItem { Id = 5, Name = "Aqua Item 5" });
         return base.OnInitializeAsync(cancellationToken);
+
+
     }
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {
         return base.OnActivateAsync(cancellationToken);
     }
 
+
+    public ObservableCollection<AquaItem> Items { get; set; } = new ObservableCollection<AquaItem>();
 
     private DialogMode _dialogMode;
     public DialogMode DialogMode
