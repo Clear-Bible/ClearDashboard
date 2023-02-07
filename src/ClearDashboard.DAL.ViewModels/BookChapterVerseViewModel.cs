@@ -6,15 +6,41 @@ namespace ClearDashboard.DAL.ViewModels
 {
     public class BookChapterVerseViewModel : ViewModelBase<BookChapterVerse>
     {
-        #nullable disable
-        public BookChapterVerseViewModel() : base()
-        {
+        private bool _verseChangeInProgress { get; set; }
+        private bool _chapterChangeInProgress { get; set; }
+        private bool _bookChangeInProgress { get; set; }
 
+
+#nullable disable
+        public BookChapterVerseViewModel(bool isBcvNavigationHelper = false, Dictionary<string, string> bcvDictionary = null, string verseId = "041001001") : base()
+        {
+           
+            if (isBcvNavigationHelper)
+            {
+                SetVerseFromId(verseId);
+                BcvDictionary = bcvDictionary;
+                CalculateBooks();
+                CalculateChapters();
+                CalculateVerses();
+            }
         }
 
         public BookChapterVerseViewModel(BookChapterVerse entity) : base(entity)
         {
 
+        }
+
+        public Dictionary<string,string> BcvDictionary
+        {
+            get => Entity?.BcvDictionary;
+            set
+            {
+                if (Entity != null)
+                {
+                    Entity.BcvDictionary = value;
+                }
+                NotifyOfPropertyChange();
+            }
         }
 
         public List<string> BibleBookList
@@ -1043,5 +1069,248 @@ namespace ClearDashboard.DAL.ViewModels
             return verseStr;
 
         }
+
+        public void PreviousBook()
+        {
+            _bookChangeInProgress = true;
+            if (this.BookNum > 1)
+            {
+                this.BookNum -= 1;
+                BookChanged();
+            }
+            _bookChangeInProgress = false;
+        }
+
+        public void NextBook()
+        {
+            _bookChangeInProgress = true;
+            var currentIndex = this.BibleBookList.IndexOf(BookAbbr);
+            if (currentIndex < this.BibleBookList.Count-1)
+            {
+                BookAbbr = BibleBookList[currentIndex + 1];
+                BookNum=GetIntBookNumFromBookName(BookAbbr);
+                BookChanged();
+            }
+            _bookChangeInProgress = false;
+        }
+
+        //public void PreviousChapter()
+        //{
+        //    _chapterChangeInProgress = true;
+
+        //    if (this.ChapterNum > 1)
+        //    {
+        //        this.Chapter -= 1;
+        //    }
+        //    else // Switch to the previous book.
+        //    {
+        //        PreviousBook();
+        //        this.Chapter = this.ChapterNumbers.LastOrDefault();
+        //    }
+        //    ChapterChanged();
+        //    _chapterChangeInProgress = false;
+        //}
+
+        public void NextChapter()
+        {
+            _chapterChangeInProgress = true;
+            var currentIndex = ChapterNumbers.IndexOf(Chapter.Value);
+            if (currentIndex < this.ChapterNumbers.Count()-1)
+            {
+                Chapter = ChapterNumbers[currentIndex + 1];
+            }
+            else // Switch to the next book.
+            {
+                NextBook();
+            }
+            ChapterChanged();
+            _chapterChangeInProgress = false;
+        }
+
+        //private void VerseUpArrow_Click(object sender, RoutedEventArgs e)
+        //{
+        //    _verseChangeInProgress = true;
+        //    if (CboVerse.SelectedIndex > 0)
+        //    {
+        //        CboVerse.SelectedIndex -= 1;
+        //    }
+        //    else // Switch to the previous chapter.
+        //    {
+        //        ChapterUpArrow_Click(null, null);
+        //        CboVerse.SelectedIndex = CboVerse.Items.Count - 1;
+        //    }
+        //    _verseChangeInProgress = false;
+        //}
+
+        //private void VerseDownArrow_Click(object sender, RoutedEventArgs e)
+        //{
+        //    _verseChangeInProgress = true;
+        //    if (CboVerse.SelectedIndex < CboVerse.Items.Count - 1)
+        //    {
+        //        CboVerse.SelectedIndex += 1;
+        //    }
+        //    else // Switch to the next chapter.
+        //    {
+        //        ChapterDownArrow_Click(null, null);
+        //        CboVerse.SelectedIndex = 0;
+        //    }
+        //    _verseChangeInProgress = false;
+        //}
+
+        public void CalculateBooks()
+        {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
+            BibleBookList?.Clear();
+
+            var books = BcvDictionary.Values.GroupBy(b => b.Substring(0, 3))
+                .Select(g => g.First())
+                .ToList();
+
+            foreach (var book in books)
+            {
+                var bookId = book.Substring(0, 3);
+
+                var bookName = BookChapterVerseViewModel.GetShortBookNameFromBookNum(bookId);
+
+                BibleBookList?.Add(bookName);
+            }
+        }
+
+        public void CalculateChapters()
+        {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
+            // CHAPTERS
+            var bookId = Book;
+            var chapters = BcvDictionary.Values.Where(b => bookId != null && b.StartsWith(bookId)).ToList();
+            for (int i = 0; i < chapters.Count; i++)
+            {
+                chapters[i] = chapters[i].Substring(3, 3);
+            }
+
+            chapters = chapters.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            //System.Windows.Application.Current.Dispatcher.Invoke(delegate
+            //{
+                List<int> chapterNumbers = new List<int>();
+                foreach (var chapter in chapters)
+                {
+                    chapterNumbers.Add(Convert.ToInt16(chapter));
+                }
+
+                ChapterNumbers = chapterNumbers;
+            //});
+        }
+
+        public void CalculateVerses()
+        {
+            if (BcvDictionary is null)
+            {
+                return;
+            }
+
+            // VERSES
+            var bookId = Book;
+            var chapId = ChapterIdText;
+            var verses = BcvDictionary.Values.Where(b => b.StartsWith(bookId + chapId)).ToList();
+
+            for (int i = 0; i < verses.Count; i++)
+            {
+                verses[i] = verses[i].Substring(6);
+            }
+
+            verses = verses.DistinctBy(v => v).ToList().OrderBy(b => b).ToList();
+            // invoke to get it to run in STA mode
+            //System.Windows.Application.Current.Dispatcher.Invoke(delegate
+            //{
+                List<int> verseNumbers = new List<int>();
+                foreach (var verse in verses)
+                {
+                    verseNumbers.Add(Convert.ToInt16(verse));
+                }
+
+                VerseNumbers = verseNumbers;
+            //});
+        }
+
+        private void BookChanged()
+        {
+            _bookChangeInProgress = true;
+            //if (GetVerseId() != VerseChange)
+            //{
+                bool somethingChanged = false;
+
+                // book switch so find the first chapter and verse for that book
+                var verseId = BBBCCCVVV;
+                if (verseId != "")
+                {
+                    this.Verse = 1;
+                    this.Chapter = 1;
+                    //SetVerseFromId(BBBCCCVVV);
+
+                    CalculateChapters();
+                    CalculateVerses();
+                    somethingChanged = true;
+                }
+
+                //if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress)
+                //{
+                    //VerseChange = CurrentBcv.GetVerseId();
+                //}
+            //}
+
+            _bookChangeInProgress = false;
+        }
+
+        private void ChapterChanged()
+        {
+            _chapterChangeInProgress = true;
+            //if (CurrentBcv.GetVerseId() != VerseChange)
+            //{
+                bool somethingChanged = false;
+                var BBBCCC = Book + ChapterIdText;
+
+                // chapter switch so find the first verse for that book and chapter
+                var verseId = BBBCCC+"001";
+                if (verseId != "")
+                {
+                    this.Verse = 1;
+                    //SetVerseFromId(verseId);
+
+                    CalculateVerses();
+                    somethingChanged = true;
+                }
+
+                //if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress)
+                //{
+                //    VerseChange = CurrentBcv.GetVerseId();
+                //}
+            //}
+
+            _chapterChangeInProgress = false;
+        }
+
+
+        //private void CboVerse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        //{
+        //    _verseChangeInProgress = true;
+        //    if (CurrentBcv.GetVerseId() != VerseChange)
+        //    {
+        //        //CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+        //        if (!_bookChangeInProgress && !_chapterChangeInProgress)
+        //        {
+        //            VerseChange = CurrentBcv.GetVerseId();
+        //        }
+        //    }
+
+        //    _verseChangeInProgress = false;
+        //}
     }
 }

@@ -1,11 +1,16 @@
 ﻿using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Linq;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -100,6 +105,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 CalculateVerses();
 
                 VerseChange = CurrentBcv.GetVerseId();
+
+                //CboBook.ItemsSource = value.BibleBookList;
+                //CboBook.SelectedItem = value.BookAbbr;
+                //CboChapter.ItemsSource = value.ChapterNumbers;
+                //CboChapter.SelectedItem = value.Chapter;
+                //CboVerse.ItemsSource = value.VerseNumbers;
+                //CboVerse.SelectedItem = value.Verse;
             }
         }
 
@@ -264,9 +276,20 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         
         #region Constructor
-        public BcvUserControl()
+        public BcvUserControl()//bool isHeadless = false
         {
             InitializeComponent();
+
+            //if (isHeadless)
+            //{
+            //    Binding myBinding = new Binding();
+            //    myBinding.Source = CurrentBcv;
+            //    myBinding.Path = new PropertyPath("BcvDictionary");
+            //    myBinding.Mode = BindingMode.TwoWay;
+            //    myBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            //    BindingOperations.SetBinding(txtText, TextBox.TextProperty, myBinding);
+            //}
+
             LayoutRoot.DataContext = this;
 
             // Rotate the arrows
@@ -313,11 +336,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             _bookChangeInProgress = false;
         }
 
-        private void BookDownArrow_Click(object sender, RoutedEventArgs e)
+        public void BookDownArrow_Click(object sender, RoutedEventArgs e)
         {
             _bookChangeInProgress = true;
 
             CboBook.SelectedIndex += 1;
+            //CurrentBcv.BookNum = CboBook.SelectedIndex+1;
+            //CurrentBcv.BookAbbr = (string)CboBook.SelectedItem;
 
             _bookChangeInProgress = false;
         }
@@ -570,7 +595,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
 
 
         #endregion

@@ -6,6 +6,8 @@ namespace ClearDashboard.DataAccessLayer.Models
     /// </summary>
     public class BookChapterVerse
     {
+        public Dictionary<string,string>? BcvDictionary { get; set; } = new Dictionary<string, string>();
+
         public List<string>? BibleBookList { get; set; } = new List<string>();
 
         public string BookAbbr { get; set; } = string.Empty;
