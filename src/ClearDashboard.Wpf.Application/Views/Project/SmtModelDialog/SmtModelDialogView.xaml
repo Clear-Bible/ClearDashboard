@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:cm="http://caliburnmicro.com"
-      xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+      xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
       xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
       xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:smtModelDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.SmtModelDialog"
