@@ -1,8 +1,6 @@
 ﻿using Autofac;
-using Autofac.Core.Lifetime;
-using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
