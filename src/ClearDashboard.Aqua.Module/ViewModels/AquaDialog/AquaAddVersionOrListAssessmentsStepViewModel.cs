@@ -20,6 +20,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
 public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IAquaDialogViewModel, AquaAddVersionOrListAssessmentsStepViewModel>
 {
+    private readonly IEnhancedViewManager _enhancedViewManager;
 
     public class AquaItem
     {
@@ -46,6 +47,7 @@ public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplication
         ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
     {
+        _enhancedViewManager = enhancedViewManager;
         DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
@@ -69,6 +71,7 @@ public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplication
 
 
     }
+
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {
         return base.OnActivateAsync(cancellationToken);
@@ -148,7 +151,18 @@ public class AquaAddVersionOrListAssessmentsStepViewModel : DashboardApplication
 
     public RelayCommand OkCommand { get; }
 
+    public void AddItemToEnhancedView(AquaItem item)
+    {
+        Logger!.LogInformation($"AddItemToEnhancedView - {item.Name}");
+        // use item as needed.
+        //_enhancedViewManager.AddMetadatumEnhancedView(... create metadatum instance)
+    }
 
+    public void DeleteItem(AquaItem item)
+    {
+        Logger!.LogInformation($"DeleteItem - {item.Name}");
+        Items.Remove(item);
+    }
 
     public void Ok(object obj)
     {

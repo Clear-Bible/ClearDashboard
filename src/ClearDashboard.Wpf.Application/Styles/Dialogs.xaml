@@ -23,6 +23,7 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Height" Value="50" />
         <Setter Property="MinWidth" Value="100" />
+        <Setter Property="Margin" Value="2" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="Template">
             <Setter.Value>

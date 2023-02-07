@@ -9,6 +9,7 @@
     xmlns:aqua="clr-namespace:ClearDashboard.Aqua.Module.ViewModels.AquaDialog"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:resx="clr-namespace:ClearDashboard.Aqua.Module.Strings"
+    xmlns:cm="http://caliburnmicro.com"
     d:DataContext="{d:DesignInstance Type=aqua:AquaAddVersionOrListAssessmentsStepViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
@@ -38,7 +39,7 @@
         </Style>
 
     </UserControl.Resources>
-    <Grid Margin="30,0" >
+    <Grid Margin="30" Name="StepGrid" Width="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height=".10*" />
@@ -177,7 +178,7 @@
         </StackPanel>
         <ListView Grid.Row="5"
                 x:Name="ListView"
-                Margin="0,0,5,0"
+                Margin="5, 30"
                 ItemsSource="{Binding Items}"
                 ScrollViewer.CanContentScroll="False"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -188,7 +189,7 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="Height" Value="Auto" />
-
+                    <Setter Property="Width" Value="Auto"></Setter>
                     <Style.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
                             <Setter Property="Background" Value="LightGreen" />
@@ -202,11 +203,11 @@
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid ShowGridLines="True" HorizontalAlignment="Stretch">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width=".8*" />
-                            <ColumnDefinition Width=".1*" />
-                            <ColumnDefinition Width=".1*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
                             Margin="8,0,5,0"
@@ -214,8 +215,12 @@
                             FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                             FontWeight="Bold"
                             Text="{Binding Name}" />
-                        <Button Grid.Column="1" >+</Button>
-                        <Button Grid.Column="2" >X</Button>
+                        <Button Grid.Column="1" 
+                                cm:Message.Attach="AddItemToEnhancedView($dataContext)"
+                                Style="{StaticResource TransparentStyle}">+</Button>
+                        <Button Grid.Column="2" 
+                                cm:Message.Attach="DeleteItem($dataContext)"
+                                Style="{StaticResource TransparentStyle}">X</Button>
                     </Grid>
 
                 </DataTemplate>
