@@ -7,7 +7,7 @@
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"

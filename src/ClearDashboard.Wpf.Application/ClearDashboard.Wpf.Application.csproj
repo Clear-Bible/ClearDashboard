@@ -52,6 +52,7 @@
     <None Remove="Resources\block_16.png" />
     <None Remove="Resources\ClearDashboard_logo_128.png" />
     <None Remove="Resources\Crystal Click 2.wav" />
+    <None Remove="Resources\DashboardFailure.wav" />
     <None Remove="Resources\donut_icon.ico" />
     <None Remove="Resources\GalSILB.ttf" />
     <None Remove="Resources\GalSILR.ttf" />
@@ -109,6 +110,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Crystal Click 2.wav" />
+    <EmbeddedResource Include="Resources\DashboardFailure.wav" />
   </ItemGroup>
 
   <ItemGroup>
@@ -124,6 +126,7 @@
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.71.1" />
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.4.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />

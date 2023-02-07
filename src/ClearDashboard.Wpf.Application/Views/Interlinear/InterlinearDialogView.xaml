@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:interlinear="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.Interlinear"
         xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-        xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+        xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"
         mc:Ignorable="d"

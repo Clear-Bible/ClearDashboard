@@ -1,5 +1,8 @@
 ﻿using Autofac;
-using ClearDashboard.DAL.Alignment;
+using Autofac.Core.Lifetime;
+using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
@@ -13,6 +16,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         ParallelCorpusConnectionMenuItemViewModel CreateParallelCorpusConnectionSeparatorMenuItem();
 
         void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds);
+        void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus);
     }
 
     public abstract class DesignSurfaceMenuBuilder : IDesignSurfaceMenuBuilder
@@ -36,7 +40,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             };
         }
 
-        public abstract void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode);
+        public virtual void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode)
+        {
+        }
 
 
         public ParallelCorpusConnectionMenuItemViewModel CreateParallelCorpusConnectionSeparatorMenuItem()
@@ -50,5 +56,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
         public abstract void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds);
 
+        public virtual void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus)
+        {
+        }
     }
 }

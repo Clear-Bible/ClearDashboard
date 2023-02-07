@@ -210,6 +210,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         public async Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName)
         {
+            var soundType = SoundType.Success;
             // var sourceNodeTokenization = SourceCorpusNodeViewModel.Tokenizations.FirstOrDefault();
             var sourceTokenizedTextCorpusId =
                 _tokenizedCorpora.FirstOrDefault(tc => tc.CorpusId.Id == _sourceCorpusNodeViewModel.CorpusId);
@@ -299,6 +300,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while creating the ParallelCorpus.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -327,7 +329,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource();
+                PlaySound.PlaySoundFromResource(soundType);
             }
 
             return CurrentTask.Status;
@@ -336,6 +338,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
         {
             IsBusy = true;
+            var soundType = SoundType.Success;
             var taskName = TaskNames.TranslationSet;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask.CancellationTokenSource.Token;
@@ -387,6 +390,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while creating creating the TranslationSet.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -410,7 +414,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Message = string.Empty;
             }
 
-            PlaySound.PlaySoundFromResource();
+            PlaySound.PlaySoundFromResource(soundType);
 
             return CurrentTask.Status;
 
@@ -419,7 +423,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName)
         {
             IsBusy = true;
-
+            var soundType = SoundType.Success;
             var taskName = TaskNames.AlignmentSet;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask.CancellationTokenSource.Token;
@@ -469,6 +473,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while creating creating the AlignmentSet.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -495,7 +500,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource();
+                PlaySound.PlaySoundFromResource(soundType);
             }
 
             return CurrentTask.Status;
@@ -504,6 +509,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> TrainSmtModel()
         {
             IsBusy = true;
+            var soundType = SoundType.Success;
             var taskName = TaskNames.TrainingSmtModel;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask.CancellationTokenSource.Token;
@@ -565,6 +571,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 Logger!.LogError(ex, $"An unexpected error occurred while training the SMT model.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
+                    soundType = SoundType.Error;
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Failed,
                         cancellationToken,
@@ -590,7 +597,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             if (UseDefaults == false)
             {
-                PlaySound.PlaySoundFromResource();
+                PlaySound.PlaySoundFromResource(soundType);
             }
 
 
