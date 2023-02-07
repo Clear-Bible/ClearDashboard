@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DisplayName" xml:space="preserve">
+    <value>DisplayName!</value>
+  </data>
+  <data name="LengthText" xml:space="preserve">
+    <value>Length Text</value>
+  </data>
+  <data name="NumericText" xml:space="preserve">
+    <value>Numeric Text</value>
+  </data>
+  <data name="NumericTextValidationMessage" xml:space="preserve">
+    <value>{0} must be an integer greater than 1</value>
+  </data>
   <data name="Pds_AquaDialogAddToFocusedEnhancedView" xml:space="preserve">
     <value>Add Aqua Analysis to Focused Enhanced View</value>
   </data>
@@ -125,5 +137,11 @@
   </data>
   <data name="Pds_AquaDialogMenuId" xml:space="preserve">
     <value>Aqua Analysis</value>
+  </data>
+  <data name="UnvalidatedText" xml:space="preserve">
+    <value>Unvalidated Text</value>
+  </data>
+  <data name="ValidatedText" xml:space="preserve">
+    <value>Validated Text</value>
   </data>
 </root>

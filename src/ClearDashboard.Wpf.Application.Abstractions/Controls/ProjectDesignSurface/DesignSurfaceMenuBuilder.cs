@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core.Lifetime;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 
@@ -16,6 +17,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         CorpusNodeMenuItemViewModel CreateCorpusNodeSeparatorMenuItem();
 
         void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode);
+        void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus);
     }
     public abstract class DesignSurfaceMenuBuilder : IDesignSurfaceMenuBuilder
     {
@@ -38,7 +40,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             };
         }
 
-        public abstract void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode);
+        public virtual void CreateCorpusNodeMenu(CorpusNodeViewModel corpusNode)
+        {
+        }
 
+        public virtual void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus)
+        {
+        }
     }
 }

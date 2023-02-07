@@ -662,6 +662,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             CorpusNodeViewModel = corpusNodeViewModel,
                             Tokenizer = tokenizer.ToString(),
                         });
+
+                        var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
+                        foreach (var menuBuilder in menuBuilders)
+                        {
+                            menuBuilder.CreateCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
+                        }
                     }
 
                     corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);
