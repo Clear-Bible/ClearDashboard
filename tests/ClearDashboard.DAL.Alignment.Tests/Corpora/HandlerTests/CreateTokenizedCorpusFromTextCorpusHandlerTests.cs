@@ -2,6 +2,7 @@
 using ClearBible.Engine.Tokenization;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
+using ClearDashboard.DAL.Extensions;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Scripture;
@@ -15,9 +16,9 @@ using System.Text;
 using ClearDashboard.DAL.Alignment.Features;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearBible.Engine.Persistence;
-
 using Models = ClearDashboard.DataAccessLayer.Models;
 using SIL.Extensions;
+using System.Text.Json;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -520,6 +521,114 @@ public class CreateTokenizedCorpusFromTextCorpusHandlerTests : TestBase
         {
             await DeleteDatabaseContext();
         }
+    }
+
+    [Fact]
+    [Trait("Category", "Handlers")]
+    public async void TokenizedCorpus__Update()
+    {
+        try
+        {
+            var textCorpus = TestDataHelpers.GetSampleTextCorpus();
+
+            // Create the corpus in the database:
+            var corpus = await Corpus.Create(Mediator!, true, "NameX", "LanguageX", "Standard", Guid.NewGuid().ToString());
+
+            // Create the TokenizedCorpus + Tokens in the database:
+            var tokenizedTextCorpus = await textCorpus.Create(
+                Mediator!,
+                corpus.CorpusId,
+                "DisplayNameV1",
+                "Func1");
+
+            // Check initial save values:
+            Assert.NotNull(tokenizedTextCorpus);
+            Assert.Equal("DisplayNameV1", tokenizedTextCorpus.TokenizedTextCorpusId.DisplayName);
+            Assert.Equal(new Dictionary<string, object>(), tokenizedTextCorpus.TokenizedTextCorpusId.Metadata);
+
+            var currentTime = DateTimeOffset.UtcNow;
+            var m2 = new MetadataObject
+            {
+                ValueString = "Hi there!",
+                ValueBool = true,
+                ValueInt = 14,
+                ValueDateTimeOffset = currentTime
+            };
+
+            // Change values to "V2" and save:
+            tokenizedTextCorpus.TokenizedTextCorpusId.DisplayName = "DisplayNameV2";
+            tokenizedTextCorpus.TokenizedTextCorpusId.Metadata.Add("m2", m2);
+
+            await tokenizedTextCorpus.Update(Mediator!);
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            // Check "V2" values via API:
+            var tokenizedTextCorpus2 = await TokenizedTextCorpus.Get(
+                Mediator!,
+                tokenizedTextCorpus.TokenizedTextCorpusId,
+                false);
+
+            Assert.NotNull(tokenizedTextCorpus2);
+            Assert.Equal("DisplayNameV2", tokenizedTextCorpus2.TokenizedTextCorpusId.DisplayName);
+            Assert.True(tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.ContainsKey("m2"));
+            Assert.True(tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata["m2"] is JsonElement);
+
+            var m2Deserialized = tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.DeserializeValue<MetadataObject>("m2");
+
+            Assert.Equal(m2, m2Deserialized);
+
+            tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.Add("ValueInt", 14);
+            tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.Add("ValueBool", true);
+            tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.Add("ValueString", "hi!");
+            tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.Add("ValueDateTimeOffset", currentTime);
+            tokenizedTextCorpus2.TokenizedTextCorpusId.Metadata.Add("ValueEnum", Models.CorpusType.SourceLanguage);
+
+            await tokenizedTextCorpus2.Update(Mediator!);
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            // Check "V2" values via API:
+            var tokenizedTextCorpus3 = await TokenizedTextCorpus.Get(
+                Mediator!,
+                tokenizedTextCorpus2.TokenizedTextCorpusId,
+                false);
+
+            var metadata3 = tokenizedTextCorpus3.TokenizedTextCorpusId.Metadata;
+            Assert.NotNull(tokenizedTextCorpus3);
+            Assert.Equal(14, metadata3.DeserializeValue<int>("ValueInt"));
+            Assert.True(metadata3.DeserializeValue<bool>("ValueBool"));
+            Assert.Equal("hi!", metadata3.DeserializeValue<string>("ValueString"));
+            Assert.Equal(currentTime, metadata3.DeserializeValue<DateTimeOffset>("ValueDateTimeOffset"));
+            Assert.Equal(Models.CorpusType.SourceLanguage, metadata3.DeserializeValue<Models.CorpusType>("ValueEnum"));
+
+            // Set Metadata back to default and save:
+            tokenizedTextCorpus3.TokenizedTextCorpusId.Metadata = new Dictionary<string, object>();
+
+            await tokenizedTextCorpus3.Update(Mediator!);
+            ProjectDbContext!.ChangeTracker.Clear();
+
+            // Check "V3" values via API:
+            var tokenizedTextCorpus4 = await TokenizedTextCorpus.Get(
+                Mediator!,
+                tokenizedTextCorpus3.TokenizedTextCorpusId,
+                false);
+
+            Assert.NotNull(tokenizedTextCorpus4);
+            Assert.Equal("DisplayNameV2", tokenizedTextCorpus4.TokenizedTextCorpusId.DisplayName);
+            Assert.Equal(new Dictionary<string, object>(), tokenizedTextCorpus4.TokenizedTextCorpusId.Metadata);
+        }
+
+        finally
+        {
+            await DeleteDatabaseContext();
+        }
+    }
+
+    private struct MetadataObject
+    {
+        public string ValueString { get; set; }
+        public bool ValueBool { get; set; }
+        public int ValueInt { get; set; }
+        public DateTimeOffset ValueDateTimeOffset { get; set; }
     }
 
     [Fact]
