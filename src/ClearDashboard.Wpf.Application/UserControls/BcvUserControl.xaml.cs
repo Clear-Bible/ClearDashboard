@@ -324,10 +324,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void ChapterUpArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (CboChapter.SelectedIndex != 0)
-            {
+            //if (CboChapter.SelectedIndex != 0)
+            //{
                 _chapterChangeInProgress = true;
-            }
+            //}
 
             if (CboChapter.SelectedIndex > 0)
             {
@@ -343,10 +343,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void ChapterDownArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (CboChapter.SelectedIndex != 0)
-            {
+            //if (CboChapter.SelectedIndex != 0)
+            //{
                 _chapterChangeInProgress = true;
-            }
+            //}
             
             if (CboChapter.SelectedIndex < CboChapter.Items.Count - 1)
             {
@@ -490,11 +490,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
                     CalculateChapters();
                     CalculateVerses();
+
                     somethingChanged = true;
                 }
 
                 if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress)
                 {
+                   
+
+                   
+
                     VerseChange = CurrentBcv.GetVerseId();
                 }
             }
@@ -518,11 +523,16 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     CurrentBcv.SetVerseFromId(verseId);
 
                     CalculateVerses();
+
                     somethingChanged = true;
                 }
 
                 if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress)
                 {
+                  
+
+                   
+
                     VerseChange = CurrentBcv.GetVerseId();
                 }
             }
@@ -536,9 +546,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
             _verseChangeInProgress = true;
             if (CurrentBcv.GetVerseId() != VerseChange)
             {
-                CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                
                 if (!_bookChangeInProgress && !_chapterChangeInProgress)
                 {
+                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+
                     VerseChange = CurrentBcv.GetVerseId();
                 }
             }
