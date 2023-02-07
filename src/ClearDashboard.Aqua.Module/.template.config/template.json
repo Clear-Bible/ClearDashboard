@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Clear Bible",
+  "classifications": [ "Module" ],
+  "identity": "ClearBible.ClearDashboard.Module",
+  "name": "ClearBible.ClearDashboard.Module",
+  "shortName": "dashboard-module",
+  "tags": {
+    "type": "project",
+    "language": "C#"
+  },
+  "sourceName": "ClearDashboard.Aqua.Module"
+
+}
