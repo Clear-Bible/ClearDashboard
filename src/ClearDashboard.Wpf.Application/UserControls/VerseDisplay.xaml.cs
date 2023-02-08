@@ -1,22 +1,19 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Collections;
+using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using SIL.Extensions;
+using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Caliburn.Micro;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Corpora;
-using ClearDashboard.Wpf.Application.Collections;
-using ClearDashboard.Wpf.Application.Events;
-using SIL.Extensions;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -32,13 +29,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
+        //protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        //{
+        //    if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        //    field = value;
+        //    OnPropertyChanged(propertyName);
+        //    return true;
+        //}
 
         #region Static RoutedEvents
         /// <summary>
@@ -452,8 +449,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly DependencyProperty WrapProperty = DependencyProperty.Register(nameof(Wrap), typeof(bool), typeof(VerseDisplay),
             new PropertyMetadata(true, OnWrapChanged));
 
-        private static IEventAggregator _eventAggregator;
-
+ 
         #endregion Static DependencyProperties
         #region Private event handlers
 
@@ -492,7 +488,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTokenEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            RaiseTokenEvent(routedEvent, e as TokenEventArgs);
+            RaiseTokenEvent(routedEvent, (TokenEventArgs)e);
         }
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
@@ -586,8 +582,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenRightButtonDown(object sender, RoutedEventArgs e)
         {
             var control = e.Source as FrameworkElement;
-            var tokenDisplay = control?.DataContext as TokenDisplayViewModel;
-            if (tokenDisplay is { IsTokenSelected: false })
+            if (control?.DataContext is TokenDisplayViewModel { IsTokenSelected: false } tokenDisplay)
             {
                 UpdateVerseSelection(tokenDisplay, false);
             }
@@ -602,137 +597,22 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
-            //var control = e.Source as FrameworkElement;
-            //var tokenDisplayViewModel = control?.DataContext as TokenDisplayViewModel;
-            var args = e as TokenEventArgs;
+            var args = (TokenEventArgs)e;
             var tokenDisplayViewModel = args.TokenDisplay;
 
             if (DataContext is VerseDisplayViewModel verseDisplayViewModel)
             {
                 if (args.IsShiftPressed)
                 {
-                    if (tokenDisplayViewModel != null && verseDisplayViewModel.Alignments != null)
+                    if (verseDisplayViewModel.Alignments != null)
                     {
-                        IEnumerable<Token> sourceTokens;
-                        IEnumerable<Token> targetTokens;
-                        if (tokenDisplayViewModel.IsSource)
-                        {
-                            targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
-                                    .TokenId))
-                                .SelectMany(a =>
-                                {
-                                    if (a.AlignedTokenPair.TargetToken is not CompositeToken)
-                                    {
-                                        return new List<Token>() { a.AlignedTokenPair.TargetToken };
-                                    }
-                                    else
-                                    {
-                                        return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
-                                    }
-                                });
-                            ;
-                            sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenDisplayViewModel.Token
-                                    .TokenId))
-                                .SelectMany(a =>
-                                {
-                                    if (a.AlignedTokenPair.SourceToken is not CompositeToken)
-                                    {
-                                        return new List<Token>() { a.AlignedTokenPair.SourceToken };
-                                    }
-                                    else
-                                    {
-                                        return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
-                                    }
-                                });
-                        }
-                        else
-                        {
-                            sourceTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
-                                    .TokenId))
-                                .SelectMany(a =>
-                                {
-                                    if (a.AlignedTokenPair.SourceToken is not CompositeToken)
-                                    {
-                                        return new List<Token>() { a.AlignedTokenPair.SourceToken };
-                                    }
-                                    else
-                                    {
-                                        return ((CompositeToken)a.AlignedTokenPair.SourceToken).Tokens;
-                                    }
-                                });
-                            ;
-                            targetTokens = verseDisplayViewModel.Alignments
-                                .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenDisplayViewModel.Token
-                                    .TokenId))
-                                .SelectMany(a =>
-                                {
-                                    if (a.AlignedTokenPair.TargetToken is not CompositeToken)
-                                    {
-                                        return new List<Token>() { a.AlignedTokenPair.TargetToken };
-                                    }
-                                    else
-                                    {
-                                        return ((CompositeToken)a.AlignedTokenPair.TargetToken).Tokens;
-                                    }
-                                });
-                        }
-
-                        verseDisplayViewModel.SourceTokenDisplayViewModels
-                            .Select(tdm =>
-                            {
-                                if (sourceTokens
-                                    .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
-                                {
-                                    tdm.IsHighlighted = true;
-                                }
-                                else
-                                {
-                                    tdm.IsHighlighted = false;
-                                }
-
-                                return tdm;
-                            })
-                            .ToList();
-                        verseDisplayViewModel.TargetTokenDisplayViewModels
-                            .Select(tdm =>
-                            {
-                                if (targetTokens
-                                    .Select(t => t.TokenId)
-                                    .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
-                                {
-                                    tdm.IsHighlighted = true;
-                                }
-                                else
-                                {
-                                    tdm.IsHighlighted = false;
-                                }
-
-                                return tdm;
-                            })
-                            .ToList();
+                        verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.Token.TokenId);
                     }
                 }
-                else if (args.IsAltPressed)
+                
+                if (args.IsAltPressed)
                 {
-                    verseDisplayViewModel.SourceTokenDisplayViewModels
-                        .Select(tdm =>
-                        {
-                            tdm.IsHighlighted = false;
-                            return tdm;
-                        })
-                        .ToList();
-                    verseDisplayViewModel.TargetTokenDisplayViewModels
-                        .Select(tdm =>
-                        {
-                            tdm.IsHighlighted = false;
-                            return tdm;
-                        })
-                        .ToList();
-
+                    verseDisplayViewModel.UnhighlightTokens();
                 }
             }
 
@@ -756,13 +636,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
         {
-            var control = e.Source as TokenDisplay;
+            var control = (TokenDisplay)e.Source;
             RaiseEvent(new TranslationEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplay = control?.TokenDisplayViewModel,
+                TokenDisplay = control.TokenDisplayViewModel,
                 InterlinearDisplay = VerseDisplayViewModel as InterlinearDisplayViewModel,
-                Translation = control?.TokenDisplayViewModel?.Translation,
+                Translation = control.TokenDisplayViewModel.Translation!,
             }) ;
         }
 
@@ -816,7 +696,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseEvent(new NoteEventArgs
             {
                 RoutedEvent = routedEvent,
-                TokenDisplayViewModel = control?.TokenDisplayViewModel,
+                TokenDisplayViewModel = control?.TokenDisplayViewModel!,
                 SelectedTokens = VerseSelectedTokens,
             });
         }
@@ -1299,7 +1179,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
         /// </summary>
-        public IEnumerable SourceTokens => VerseDisplayViewModel?.SourceTokenDisplayViewModels;
+        public IEnumerable SourceTokens => VerseDisplayViewModel.SourceTokenDisplayViewModels;
 
         /// <summary>
         /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.
@@ -1513,7 +1393,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the strongly-typed VerseDisplayViewModel bound to this control.
         /// </summary>
-        public VerseDisplayViewModel VerseDisplayViewModel => DataContext.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null;
+        public VerseDisplayViewModel VerseDisplayViewModel => (DataContext.GetType().Name != "NamedObject" ? DataContext as VerseDisplayViewModel : null)!;
 
         /// <summary>
         /// Gets or sets the margin for the tokens list.

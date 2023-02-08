@@ -89,6 +89,96 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </remarks>
         public virtual AlignmentCollection? Alignments => null;
 
+        /// <summary>
+        /// Gets a enumerable of source tokens.
+        /// </summary>
+        /// <remarks>
+        /// Alignment information is only available when this is a <see cref="AlignmentDisplayViewModel"/> derived type.
+        /// </remarks>
+        protected virtual IEnumerable<Token>? GetSourceTokens(bool isSource, TokenId tokenId)
+        {
+            return null;
+        }
+        /// <summary>
+        /// Gets a enumerable of target tokens.
+        /// </summary>
+        /// <remarks>
+        /// Alignment information is only available when this is a <see cref="AlignmentDisplayViewModel"/> derived type.
+        /// </remarks>
+        protected virtual IEnumerable<Token>? GetTargetTokens(bool isSource, TokenId tokenId)
+        {
+            return null;
+        }
+
+        protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
+        {
+            var sourceTokens = GetSourceTokens(isSource, tokenId);
+            _ = SourceTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    if (sourceTokens
+                        .Select(t => t.TokenId)
+                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
+                    {
+                        tdm.IsHighlighted = true;
+                    }
+                    else
+                    {
+                        tdm.IsHighlighted = false;
+                    }
+
+                    return tdm;
+                })
+                .ToList();
+        }
+
+        protected virtual void HighlightTargetTokens(bool isSource, TokenId tokenId)
+        {
+             var targetTokens = GetTargetTokens(isSource, tokenId);
+              _ =  TargetTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    if (targetTokens
+                        .Select(t => t.TokenId)
+                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
+                    {
+                        tdm.IsHighlighted = true;
+                    }
+                    else
+                    {
+                        tdm.IsHighlighted = false;
+                    }
+
+                    return tdm;
+                })
+                .ToList();
+        }
+
+        public virtual void HighlightTokens(bool isSource, TokenId tokenId)
+        {
+            HighlightSourceTokens(isSource, tokenId);
+            HighlightTargetTokens(isSource, tokenId);
+        }
+
+        public virtual void UnhighlightTokens()
+        {
+            _ = SourceTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    tdm.IsHighlighted = false;
+                    return tdm;
+                })
+                .ToList();
+
+            _ = TargetTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    tdm.IsHighlighted = false;
+                    return tdm;
+                })
+                .ToList();
+        }
+
         public bool IsSourceRtl => SourceTokenMap?.IsRtl ?? false;
         public bool IsTargetRtl => TargetTokenMap?.IsRtl ?? false;
 
@@ -228,5 +318,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Task.CompletedTask;
         }
+
+       
     }
 }

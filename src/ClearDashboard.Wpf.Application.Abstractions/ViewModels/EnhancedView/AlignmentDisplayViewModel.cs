@@ -9,6 +9,9 @@ using Autofac;
 using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
 using ClearDashboard.Wpf.Application.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -25,6 +28,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// Gets the collection of alignments for the verse.
         /// </summary>
         public override AlignmentCollection? Alignments => AlignmentManager?.Alignments;
+
+
+        protected override IEnumerable<Token>? GetTargetTokens(bool isSource, TokenId tokenId)
+        {
+
+            switch (isSource)
+            {
+                case true:
+                {
+                    return Alignments?
+                        .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
+                        .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken targetToken? new List<Token>() { a.AlignedTokenPair.TargetToken } : targetToken.Tokens);
+                }
+                case false:
+                {
+                    return Alignments?
+                        .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
+                        .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.TargetToken } : token.Tokens);
+                }
+            }
+
+        }
+
+        protected override IEnumerable<Token>? GetSourceTokens(bool isSource, TokenId tokenId)
+        {
+
+            switch (isSource)
+            {
+                case true:
+                {
+                    return Alignments?
+                        .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
+                        .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                    }
+                case false:
+                {
+                    return Alignments?
+                        .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
+                        .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                    }
+            }
+
+        }
 
         /// <summary>
         /// Initializes the view model with the alignments for the verse.
