@@ -405,6 +405,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
+                
                 var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum);
 
                 if (rows == null || rows.Count == 0)
@@ -412,7 +413,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
                 }
-
+                Verses.Clear();
                 foreach (var row in rows)
                 {
                     Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
@@ -431,12 +432,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             try
             {
+                
                 var rows = await GetParallelCorpusVerseTextRows(ParentViewModel.CurrentBcv.GetBBBCCCVVV(), metadatum);
                 if (rows == null || rows.Count == 0)
                 {
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
                 }
+                Verses.Clear();
                 foreach (var row in rows)
                 {
                     Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 

@@ -28,9 +28,9 @@
         <KeyBinding
             Key="OemMinus"
             Command="{Binding DecreaseTextSizeCommand}"
-            Modifiers="Control+Shift" />
+            Modifiers="Control" />
         <KeyBinding
-            Key="O"
+            Key="D0"
             Command="{Binding ResetTextSizeCommand}"
             Modifiers="Control" />
     </UserControl.InputBindings>
