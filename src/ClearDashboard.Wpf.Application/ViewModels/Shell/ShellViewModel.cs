@@ -532,15 +532,39 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         private RelayCommand previousVerseCommand;
         public ICommand PreviousVerseCommand => previousVerseCommand ??= new RelayCommand(PreviousVerse);
 
-        private void PreviousVerse(object commandParameter)
+        private async void PreviousVerse(object commandParameter)
         {
+            if (!_verseChangeInProgress)
+            {
+                _verseChangeInProgress = true;
+
+                var currentVerse = ProjectManager.CurrentVerse;
+                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager.CurrentParatextProject.BcvDictionary, currentVerse);
+                bcvViewModel.PreviousVerse();
+                var newVerseId = bcvViewModel.BBBCCCVVV;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
+
+                _verseChangeInProgress = false;
+            }
         }
 
         private RelayCommand nextVerseCommand;
         public ICommand NextVerseCommand => nextVerseCommand ??= new RelayCommand(NextVerse);
 
-        private void NextVerse(object commandParameter)
+        private async void NextVerse(object commandParameter)
         {
+            if (!_verseChangeInProgress)
+            {
+                _verseChangeInProgress = true;
+
+                var currentVerse = ProjectManager.CurrentVerse;
+                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager.CurrentParatextProject.BcvDictionary, currentVerse);
+                bcvViewModel.NextVerse();
+                var newVerseId = bcvViewModel.BBBCCCVVV;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
+
+                _verseChangeInProgress = false;
+            }
         }
 
         private RelayCommand nextChapterCommand;
@@ -548,22 +572,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private async void NextChapter(object commandParameter)
         {
-
-            //var currentVerse = ProjectManager.CurrentVerse;
-
-            //BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel();//true, ProjectManager.CurrentParatextProject.BcvDictionary
-                                                                                     //bcvViewModel.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-
-            //bcvViewModel.SetVerseFromId(currentVerse);
-            //bcvViewModel.CalculateBooks();
-            //bcvViewModel.CalculateChapters();
-            //bcvViewModel.CalculateVerses();
-
-            //BcvUserControl bcvUserControl = new BcvUserControl();
-
-            //bcvUserControl.BcvDictionary = ProjectManager.CurrentParatextProject.BcvDictionary;
-            //bcvUserControl.CurrentBcv = bcvViewModel;
-
             if (!_verseChangeInProgress)
             {
                 _verseChangeInProgress = true;

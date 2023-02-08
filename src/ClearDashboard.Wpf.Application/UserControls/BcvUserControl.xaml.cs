@@ -509,21 +509,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var verseId = CurrentBcv.BBBCCCVVV;
                 if (verseId != "")
                 {
-                    CboVerse.SelectedIndex = 0;
-                    CboChapter.SelectedIndex = 0;
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                   
 
                     CalculateChapters();
                     CalculateVerses();
 
+                    CboVerse.SelectedIndex = 0;
+                    CboChapter.SelectedIndex = 0;
+                    //CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+
                     somethingChanged = true;
                 }
 
-                if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress)
+                if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress && !CurrentBcv.ChapterChangeInProgress && !CurrentBcv.VerseChangeInProgress)
                 {
-                   
 
-                   
+
+
 
                     VerseChange = CurrentBcv.GetVerseId();
                 }
@@ -535,7 +537,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void CboChapter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             _chapterChangeInProgress = true;
-            if (CurrentBcv.GetVerseId() != VerseChange)
+            if (CurrentBcv.BBBCCCVVV != VerseChange)
             {
                 bool somethingChanged = false;
                 var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
@@ -544,21 +546,23 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var verseId = BBBCCC+"001";
                 if (verseId != "")
                 {
-                    CboVerse.SelectedIndex = 0;
-                    CurrentBcv.SetVerseFromId(verseId);
+                  
 
                     CalculateVerses();
+
+                    CboVerse.SelectedIndex = 0;
+                    //CurrentBcv.SetVerseFromId(verseId);
 
                     somethingChanged = true;
                 }
 
-                if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress)
+                if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress && !CurrentBcv.BookChangeInProgress && !CurrentBcv.VerseChangeInProgress)
                 {
                   
 
                    
 
-                    VerseChange = CurrentBcv.GetVerseId();
+                    VerseChange = CurrentBcv.BBBCCCVVV;//CurrentBcv.GetVerseId();
                 }
             }
 
@@ -569,14 +573,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void CboVerse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             _verseChangeInProgress = true;
-            if (CurrentBcv.GetVerseId() != VerseChange)
+            if (CurrentBcv.BBBCCCVVV != VerseChange)
             {
                 
-                if (!_bookChangeInProgress && !_chapterChangeInProgress)
+                if (!_bookChangeInProgress && !_chapterChangeInProgress && !CurrentBcv.BookChangeInProgress && !CurrentBcv.ChapterChangeInProgress)
                 {
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                    //CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
 
-                    VerseChange = CurrentBcv.GetVerseId();
+                    VerseChange = CurrentBcv.BBBCCCVVV;//CurrentBcv.GetVerseId();
                 }
             }
 

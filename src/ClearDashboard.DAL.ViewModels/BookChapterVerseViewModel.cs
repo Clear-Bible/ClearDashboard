@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata;
+using System.Runtime.InteropServices.ComTypes;
 using ClearDashboard.DataAccessLayer.Models;
 using static System.String;
 
@@ -6,13 +7,13 @@ namespace ClearDashboard.DAL.ViewModels
 {
     public class BookChapterVerseViewModel : ViewModelBase<BookChapterVerse>
     {
-        private bool _verseChangeInProgress { get; set; }
-        private bool _chapterChangeInProgress { get; set; }
-        private bool _bookChangeInProgress { get; set; }
+        public bool VerseChangeInProgress { get; set; }
+        public bool ChapterChangeInProgress { get; set; }
+        public bool BookChangeInProgress { get; set; }
 
 
 #nullable disable
-        public BookChapterVerseViewModel(bool isBcvNavigationHelper = false, Dictionary<string, string> bcvDictionary = null, string verseId = "041001001") : base()
+        public BookChapterVerseViewModel(bool isBcvNavigationHelper = false, Dictionary<string, string> bcvDictionary = null, string verseId = "001001001") : base()
         {
            
             if (isBcvNavigationHelper)
@@ -243,39 +244,66 @@ namespace ClearDashboard.DAL.ViewModels
 
             // Convert the number into a string we can parse.
             var verseLocationId = verseId.PadLeft(9, '0');
+            
             var bookNumStr = verseLocationId.Substring(0, 3);
+            var chapterIdText = verseLocationId.Substring(3, 3);
+            var verseIdText = verseLocationId.Substring(6, 3);
+
+            if (verseIdText != "001")//must be a verse change, we want to block all book and chapter changes
+            {
+                VerseChangeInProgress = true;
+            }
+            else if (chapterIdText != "001")//could be a verse or chapter change.  let's block only book changes
+            {
+                //VerseChangeInProgress = true;
+                ChapterChangeInProgress = true;
+            }
+            else
+            {
+                //VerseChangeInProgress = true;
+                //ChapterChangeInProgress = true;
+                BookChangeInProgress = true;
+            }
+
             // Test each parse, and only return a TRUE if they all are parsed.
             if (int.TryParse(bookNumStr, out var bookNum))
             {
+                //BookChangeInProgress = true;
                 // The book number for use in the array used in the pull down list.
                 BookNum = bookNum;
                 BookName = GetShortBookNameFromBookNum(bookNumStr);
                 BookAbbr = BookName;
+                BookChangeInProgress = false;
             }
             else
             {
                 return false;
             }
 
-            string chapterIdText = verseLocationId.Substring(3, 3);
+            
             if (int.TryParse(chapterIdText, out Int32 chapterNum))
             {
+                //ChapterChangeInProgress = true;
                 Chapter = chapterNum;
+                ChapterChangeInProgress = false;
             }
             else
             {
                 return false;
             }
 
-            var verseIdText = verseLocationId.Substring(6, 3);
+            
             if (int.TryParse(verseIdText, out int verseNum))
             {
+                //VerseChangeInProgress = true;
                 Verse = verseNum;
 
                 if (verseNum == 0)
                 {
                     Verse = 1;
                 }
+
+                VerseChangeInProgress = false;
             }
             else
             {
@@ -1072,18 +1100,20 @@ namespace ClearDashboard.DAL.ViewModels
 
         public void PreviousBook()
         {
-            _bookChangeInProgress = true;
-            if (this.BookNum > 1)
+            BookChangeInProgress = true;
+            var currentIndex = this.BibleBookList.IndexOf(BookAbbr);
+            if (currentIndex > 0)
             {
-                this.BookNum -= 1;
+                BookAbbr = BibleBookList[currentIndex - 1];
+                BookNum=GetIntBookNumFromBookName(BookAbbr);
                 BookChanged();
             }
-            _bookChangeInProgress = false;
+            BookChangeInProgress = false;
         }
 
         public void NextBook()
         {
-            _bookChangeInProgress = true;
+            BookChangeInProgress = true;
             var currentIndex = this.BibleBookList.IndexOf(BookAbbr);
             if (currentIndex < this.BibleBookList.Count-1)
             {
@@ -1091,29 +1121,29 @@ namespace ClearDashboard.DAL.ViewModels
                 BookNum=GetIntBookNumFromBookName(BookAbbr);
                 BookChanged();
             }
-            _bookChangeInProgress = false;
+            BookChangeInProgress = false;
         }
 
-        //public void PreviousChapter()
-        //{
-        //    _chapterChangeInProgress = true;
-
-        //    if (this.ChapterNum > 1)
-        //    {
-        //        this.Chapter -= 1;
-        //    }
-        //    else // Switch to the previous book.
-        //    {
-        //        PreviousBook();
-        //        this.Chapter = this.ChapterNumbers.LastOrDefault();
-        //    }
-        //    ChapterChanged();
-        //    _chapterChangeInProgress = false;
-        //}
+        public void PreviousChapter()
+        {
+            ChapterChangeInProgress = true;
+            var currentIndex = ChapterNumbers.IndexOf(Chapter.Value);
+            if (currentIndex > 0)
+            {
+                Chapter = ChapterNumbers[currentIndex - 1];
+            }
+            else // Switch to the next book.
+            {
+                PreviousBook();
+                Chapter = ChapterNumbers.LastOrDefault();
+            }
+            ChapterChanged();
+            ChapterChangeInProgress = false;
+        }
 
         public void NextChapter()
         {
-            _chapterChangeInProgress = true;
+            ChapterChangeInProgress = true;
             var currentIndex = ChapterNumbers.IndexOf(Chapter.Value);
             if (currentIndex < this.ChapterNumbers.Count()-1)
             {
@@ -1122,40 +1152,45 @@ namespace ClearDashboard.DAL.ViewModels
             else // Switch to the next book.
             {
                 NextBook();
+                Chapter = ChapterNumbers.FirstOrDefault();
             }
             ChapterChanged();
-            _chapterChangeInProgress = false;
+            ChapterChangeInProgress = false;
         }
 
-        //private void VerseUpArrow_Click(object sender, RoutedEventArgs e)
-        //{
-        //    _verseChangeInProgress = true;
-        //    if (CboVerse.SelectedIndex > 0)
-        //    {
-        //        CboVerse.SelectedIndex -= 1;
-        //    }
-        //    else // Switch to the previous chapter.
-        //    {
-        //        ChapterUpArrow_Click(null, null);
-        //        CboVerse.SelectedIndex = CboVerse.Items.Count - 1;
-        //    }
-        //    _verseChangeInProgress = false;
-        //}
+        public void PreviousVerse()
+        {
+            VerseChangeInProgress = true;
+            var currentIndex = VerseNumbers.IndexOf(Verse.Value);
+            if (currentIndex > 0)
+            {
+                Verse = VerseNumbers[currentIndex-1];
+            }
+            else // Switch to the previous chapter.
+            {
+                PreviousChapter();
+                Verse = VerseNumbers.LastOrDefault();
+            }
+            VerseChanged();
+            VerseChangeInProgress = false;
+        }
 
-        //private void VerseDownArrow_Click(object sender, RoutedEventArgs e)
-        //{
-        //    _verseChangeInProgress = true;
-        //    if (CboVerse.SelectedIndex < CboVerse.Items.Count - 1)
-        //    {
-        //        CboVerse.SelectedIndex += 1;
-        //    }
-        //    else // Switch to the next chapter.
-        //    {
-        //        ChapterDownArrow_Click(null, null);
-        //        CboVerse.SelectedIndex = 0;
-        //    }
-        //    _verseChangeInProgress = false;
-        //}
+        public void NextVerse()
+        {
+            VerseChangeInProgress = true;
+            var currentIndex = VerseNumbers.IndexOf(Verse.Value);
+            if (currentIndex < this.VerseNumbers.Count()-1)
+            {
+                Verse = VerseNumbers[currentIndex+1];
+            }
+            else // Switch to the previous chapter.
+            {
+                NextChapter();
+                Verse = VerseNumbers.FirstOrDefault();
+            }
+            VerseChanged();
+            VerseChangeInProgress = false;
+        }
 
         public void CalculateBooks()
         {
@@ -1242,7 +1277,7 @@ namespace ClearDashboard.DAL.ViewModels
 
         private void BookChanged()
         {
-            _bookChangeInProgress = true;
+            BookChangeInProgress = true;
             //if (GetVerseId() != VerseChange)
             //{
                 bool somethingChanged = false;
@@ -1251,27 +1286,32 @@ namespace ClearDashboard.DAL.ViewModels
                 var verseId = BBBCCCVVV;
                 if (verseId != "")
                 {
-                    this.Verse = 1;
-                    this.Chapter = 1;
+                   
                     //SetVerseFromId(BBBCCCVVV);
 
                     CalculateChapters();
                     CalculateVerses();
-                    somethingChanged = true;
+
+                    
+
+                somethingChanged = true;
                 }
 
-                //if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress)
-                //{
-                    //VerseChange = CurrentBcv.GetVerseId();
-                //}
+            if (somethingChanged && !ChapterChangeInProgress && !VerseChangeInProgress)
+            {
+                this.Verse = VerseNumbers.FirstOrDefault();
+                this.Chapter = ChapterNumbers.FirstOrDefault();
+
+                //VerseChange = CurrentBcv.GetVerseId();
+            }
             //}
 
-            _bookChangeInProgress = false;
+            BookChangeInProgress = false;
         }
 
         private void ChapterChanged()
         {
-            _chapterChangeInProgress = true;
+            ChapterChangeInProgress = true;
             //if (CurrentBcv.GetVerseId() != VerseChange)
             //{
                 bool somethingChanged = false;
@@ -1281,36 +1321,40 @@ namespace ClearDashboard.DAL.ViewModels
                 var verseId = BBBCCC+"001";
                 if (verseId != "")
                 {
-                    this.Verse = 1;
+                    
                     //SetVerseFromId(verseId);
 
                     CalculateVerses();
-                    somethingChanged = true;
+
+                   
+
+                somethingChanged = true;
                 }
 
-                //if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress)
-                //{
-                //    VerseChange = CurrentBcv.GetVerseId();
-                //}
+            if (somethingChanged && !VerseChangeInProgress && !BookChangeInProgress)
+            {
+                this.Verse = VerseNumbers.FirstOrDefault();
+                //VerseChange = CurrentBcv.GetVerseId();
+            }
             //}
 
-            _chapterChangeInProgress = false;
+            ChapterChangeInProgress = false;
         }
 
 
-        //private void CboVerse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        //{
-        //    _verseChangeInProgress = true;
-        //    if (CurrentBcv.GetVerseId() != VerseChange)
-        //    {
-        //        //CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-        //        if (!_bookChangeInProgress && !_chapterChangeInProgress)
-        //        {
-        //            VerseChange = CurrentBcv.GetVerseId();
-        //        }
-        //    }
+        private void VerseChanged()
+        {
+            VerseChangeInProgress = true;
+            //if (CurrentBcv.GetVerseId() != VerseChange)
+            //{
+                //CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
+                //if (!_bookChangeInProgress && !_chapterChangeInProgress)
+                //{
+                    //VerseChange = CurrentBcv.GetVerseId();
+                //}
+            //}
 
-        //    _verseChangeInProgress = false;
-        //}
+            VerseChangeInProgress = false;
+        }
     }
 }
