@@ -20,7 +20,20 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
-
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="OemPlus"
+            Command="{Binding IncreaseTextSizeCommand}"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="OemMinus"
+            Command="{Binding DecreaseTextSizeCommand}"
+            Modifiers="Control+Shift" />
+        <KeyBinding
+            Key="O"
+            Command="{Binding ResetTextSizeCommand}"
+            Modifiers="Control" />
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
@@ -131,7 +144,7 @@
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
-                            Content="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                            Content="{Binding ElementName=SourceTokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="1"

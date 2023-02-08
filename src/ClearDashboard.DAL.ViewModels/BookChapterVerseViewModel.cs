@@ -249,11 +249,12 @@ namespace ClearDashboard.DAL.ViewModels
             var chapterIdText = verseLocationId.Substring(3, 3);
             var verseIdText = verseLocationId.Substring(6, 3);
 
+            //it's ok to block verse change as long as another change is called 
             if (verseIdText != "001")//must be a verse change, we want to block all book and chapter changes
             {
                 VerseChangeInProgress = true;
             }
-            else if (chapterIdText != "001")//could be a verse or chapter change.  let's block only book changes
+            else if (chapterIdText != "001")//could be a verse or chapter change, we want to block book changes //should I remove "chapterchangesInProgress" from verse Cbo changed method?
             {
                 //VerseChangeInProgress = true;
                 ChapterChangeInProgress = true;

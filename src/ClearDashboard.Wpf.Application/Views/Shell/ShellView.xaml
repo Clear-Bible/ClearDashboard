@@ -57,18 +57,6 @@
             Command="{Binding InsertNoteCommand}"
             Modifiers="Control+Shift" />
         <KeyBinding
-            Key="OemPlus"
-            Command="{Binding IncreaseTextSizeCommand}"
-            Modifiers="Control" />
-        <KeyBinding
-            Key="OemMinus"
-            Command="{Binding DecreaseTextSizeCommand}"
-            Modifiers="Control+Shift" />
-        <KeyBinding
-            Key="O"
-            Command="{Binding ResetTextSizeCommand}"
-            Modifiers="Control" />
-        <KeyBinding
             Key="F"
             Command="{Binding FindTextCommand}"
             Modifiers="Control" />

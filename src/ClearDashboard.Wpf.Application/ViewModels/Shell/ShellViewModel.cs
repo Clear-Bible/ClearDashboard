@@ -501,27 +501,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
         }
 
-        private RelayCommand increaseTextSizeCommand;
-        public ICommand IncreaseTextSizeCommand => increaseTextSizeCommand ??= new RelayCommand(IncreaseTextSize);
-
-        private void IncreaseTextSize(object commandParameter)
-        {
-        }
-
-        private RelayCommand decreaseTextSizeCommand;
-        public ICommand DecreaseTextSizeCommand => decreaseTextSizeCommand ??= new RelayCommand(DecreaseTextSize);
-
-        private void DecreaseTextSize(object commandParameter)
-        {
-        }
-
-        private RelayCommand resetTextSizeCommand;
-        public ICommand ResetTextSizeCommand => resetTextSizeCommand ??= new RelayCommand(ResetTextSize);
-
-        private void ResetTextSize(object commandParameter)
-        {
-        }
-
         private RelayCommand findTextCommand;
         public ICommand FindTextCommand => findTextCommand ??= new RelayCommand(FindText);
 
@@ -617,6 +596,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private void OpenBiblicalTerms(object commandParameter)
         {
+            var mainViewModel = IoC.Get<MainViewModel>();
+            mainViewModel.MenuItems[2].MenuItems[2].Command.Execute(null);
         }
 
         private RelayCommand openParallelPassagesCommand;

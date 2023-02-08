@@ -856,6 +856,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #endregion
 
+        private RelayCommand increaseTextSizeCommand;
+        public ICommand IncreaseTextSizeCommand => increaseTextSizeCommand ??= new RelayCommand(IncreaseTextSize);
 
+        private void IncreaseTextSize(object commandParameter)
+        {
+            SourceFontSizeValue += 1;
+            TargetFontSizeValue += 1;
+            TitleFontSizeValue += 1;
+            TranslationsFontSizeValue += 1;
+        }
+
+        private RelayCommand decreaseTextSizeCommand;
+        public ICommand DecreaseTextSizeCommand => decreaseTextSizeCommand ??= new RelayCommand(DecreaseTextSize);
+
+        private void DecreaseTextSize(object commandParameter)
+        {
+            SourceFontSizeValue -= 1;
+            TargetFontSizeValue -= 1;
+            TitleFontSizeValue -= 1;
+            TranslationsFontSizeValue -= 1;
+        }
+
+        private RelayCommand resetTextSizeCommand;
+        public ICommand ResetTextSizeCommand => resetTextSizeCommand ??= new RelayCommand(ResetTextSize);
+
+        private void ResetTextSize(object commandParameter)
+        {
+            SourceFontSizeValue = 14;
+            TargetFontSizeValue = 14;
+            TitleFontSizeValue = 14;
+            TranslationsFontSizeValue = 16;
+        }
     }
 }
