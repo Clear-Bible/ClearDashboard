@@ -53,10 +53,6 @@
             Command="{Binding SaveProjectCommand}"
             Modifiers="Control" />
         <KeyBinding
-            Key="N"
-            Command="{Binding InsertNoteCommand}"
-            Modifiers="Control+Shift" />
-        <KeyBinding
             Key="F"
             Command="{Binding FindTextCommand}"
             Modifiers="Control" />
@@ -71,16 +67,8 @@
         <KeyBinding Key="F8" Command="{Binding NextChapterCommand}" />
         <KeyBinding Key="F9" Command="{Binding NextBookCommand}" />
         <KeyBinding
-            Key="W"
-            Command="{Binding OpenWordlistCommand}"
-            Modifiers="Control" />
-        <KeyBinding
             Key="B"
             Command="{Binding OpenBiblicalTermsCommand}"
-            Modifiers="Control+Shift" />
-        <KeyBinding
-            Key="A"
-            Command="{Binding OpenParallelPassagesCommand}"
             Modifiers="Control+Shift" />
     </Window.InputBindings>
 

@@ -15,6 +15,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -887,6 +888,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TargetFontSizeValue = 14;
             TitleFontSizeValue = 14;
             TranslationsFontSizeValue = 16;
+        }
+
+        private RelayCommand insertNoteCommand;
+        public ICommand InsertNoteCommand => insertNoteCommand ??= new RelayCommand(InsertNote);
+
+        private void InsertNote(object commandParameter)
+        {
+            if (SelectionManager.SelectedEntityIds.Count != 0)
+            {
+                NoteCreate(null, null);
+            }
         }
     }
 }

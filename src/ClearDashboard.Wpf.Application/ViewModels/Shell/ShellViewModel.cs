@@ -494,13 +494,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
         }
 
-        private RelayCommand insertNoteCommand;
-        public ICommand InsertNoteCommand => insertNoteCommand ??= new RelayCommand(InsertNote);
-
-        private void InsertNote(object commandParameter)
-        {
-        }
-
         private RelayCommand findTextCommand;
         public ICommand FindTextCommand => findTextCommand ??= new RelayCommand(FindText);
 
@@ -584,13 +577,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
         }
 
-        private RelayCommand openWordlistCommand;
-        public ICommand OpenWordlistCommand => openWordlistCommand ??= new RelayCommand(OpenWordlist);
-
-        private void OpenWordlist(object commandParameter)
-        {
-        }
-
         private RelayCommand openBiblicalTermsCommand;
         public ICommand OpenBiblicalTermsCommand => openBiblicalTermsCommand ??= new RelayCommand(OpenBiblicalTerms);
 
@@ -598,13 +584,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var mainViewModel = IoC.Get<MainViewModel>();
             mainViewModel.MenuItems[2].MenuItems[2].Command.Execute(null);
-        }
-
-        private RelayCommand openParallelPassagesCommand;
-        public ICommand OpenParallelPassagesCommand => openParallelPassagesCommand ??= new RelayCommand(OpenParallelPassages);
-
-        private void OpenParallelPassages(object commandParameter)
-        {
         }
     }
 }

@@ -33,6 +33,10 @@
             Key="D0"
             Command="{Binding ResetTextSizeCommand}"
             Modifiers="Control" />
+        <KeyBinding
+            Key="N"
+            Command="{Binding InsertNoteCommand}"
+            Modifiers="Control+Shift" />
     </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
