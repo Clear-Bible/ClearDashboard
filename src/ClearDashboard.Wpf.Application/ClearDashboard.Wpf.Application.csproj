@@ -115,7 +115,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="109.1.110" />
-	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.0" />
+	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.1" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
     <PackageReference Include="Dahomey.Json.Attributes" Version="1.0.1" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1" />
