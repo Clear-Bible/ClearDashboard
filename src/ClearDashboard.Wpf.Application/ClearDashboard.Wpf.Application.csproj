@@ -52,6 +52,7 @@
     <None Remove="Resources\block_16.png" />
     <None Remove="Resources\ClearDashboard_logo_128.png" />
     <None Remove="Resources\Crystal Click 2.wav" />
+    <None Remove="Resources\DashboardFailure.wav" />
     <None Remove="Resources\donut_icon.ico" />
     <None Remove="Resources\GalSILB.ttf" />
     <None Remove="Resources\GalSILR.ttf" />
@@ -109,6 +110,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Crystal Click 2.wav" />
+    <EmbeddedResource Include="Resources\DashboardFailure.wav" />
   </ItemGroup>
 
   <ItemGroup>

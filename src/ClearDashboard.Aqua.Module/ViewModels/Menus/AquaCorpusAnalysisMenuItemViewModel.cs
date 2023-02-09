@@ -37,7 +37,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.Menus
             IAquaManager aquaManager, 
             ILogger<AquaCorpusAnalysisMenuItemViewModel> logger, 
             IWindowManager windowManager,
-            CorpusNodeViewModel corpusNodeViewModel,
+            CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel,
             TokenizedTextCorpusId tokenizedTextCorpusId,
             ILifetimeScope lifetimeScope, 
             LongRunningTaskManager longRunningTaskManager,
@@ -56,7 +56,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.Menus
             AquaManager = aquaManager;
             EnhancedViewManager = enhancedViewManager;
 
-            CorpusNodeViewModel = corpusNodeViewModel;
+            CorpusNodeViewModel = corpusNodeMenuItemViewModel.CorpusNodeViewModel;
             TokenizedTextCorpusId = tokenizedTextCorpusId;
         }
         private async Task ShowAquaDialog()

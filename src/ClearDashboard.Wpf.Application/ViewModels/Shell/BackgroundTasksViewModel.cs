@@ -169,7 +169,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     status.Description = backgroundTaskStatus.Description;
                     if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
                     {
-                        status.Description = backgroundTaskStatus.ErrorMessage;
+                        if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
+                        {
+                            status.Description = backgroundTaskStatus.Name+ " Failed:\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.";
+                        }
+                        else
+                        {
+                            status.Description = backgroundTaskStatus.Name+ " Failed:\n " + backgroundTaskStatus.ErrorMessage;
+                        }
+                        ShowPopup = true;
                     }
                     status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
 

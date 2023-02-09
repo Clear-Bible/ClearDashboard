@@ -39,9 +39,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using Corpus = ClearDashboard.DAL.Alignment.Corpora.Corpus;
 using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using ControlzEx.Standard;
+using System.Xml.Linq;
 
 
 // ReSharper disable once CheckNamespace
@@ -457,6 +460,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 _busyState.Add(taskName, true);
                 CorpusNodeViewModel corpusNode = new();
+                var soundType = SoundType.Success;
 
                 try
                 {
@@ -518,6 +522,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                     if (!cancellationToken.IsCancellationRequested)
                     {
+                        soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                            exception: ex, cancellationToken: cancellationToken);
 
@@ -535,7 +540,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     else
                     {
-                        PlaySound.PlaySoundFromResource();
+                        PlaySound.PlaySoundFromResource(soundType);
                     }
 
                 }
@@ -582,7 +587,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //_ = await Task.Factory.StartNew(async () =>
             {
                 _busyState.Add(taskName, true);
-
+                var soundType = SoundType.Success;
                 CorpusNodeViewModel corpusNode = new();
 
                 try
@@ -637,6 +642,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {metadata.Name} ");
                     if (!cancellationToken.IsCancellationRequested)
                     {
+                        soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                             exception: ex, cancellationToken: cancellationToken);
                     }
@@ -652,7 +658,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
                     else
                     {
-                        PlaySound.PlaySoundFromResource();
+                        PlaySound.PlaySoundFromResource(soundType);
                     }
                 }
             }, cancellationToken);
@@ -705,6 +711,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     _ = Task.Run(async () =>
                     {
+                        var soundType = SoundType.Success;
                         try
                         {
                             var node = DesignSurfaceViewModel!.CorpusNodes
@@ -763,6 +770,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
                             if (!cancellationToken.IsCancellationRequested)
                             {
+                                soundType = SoundType.Error;
                                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                    exception: ex, cancellationToken: cancellationToken);
                             }
@@ -771,8 +779,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         {
                             _longRunningTaskManager.TaskComplete(taskName);
                             _busyState.Remove(taskName);
-                                
-                            PlaySound.PlaySoundFromResource();
+                            
+                            PlaySound.PlaySoundFromResource(soundType);
                         }
                     }, cancellationToken);
                 }
@@ -865,6 +873,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             node = DesignSurfaceViewModel!.CorpusNodes.Single(cn => cn.ParatextProjectId == selectedProject.Id);
                         }
 
+                        var soundType = SoundType.Success;
+                        
                         try
                         {
                             var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
@@ -952,6 +962,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
                                 if (!cancellationToken.IsCancellationRequested)
                                 {
+                                    soundType = SoundType.Error;
                                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                         exception: ex, cancellationToken: cancellationToken);
                                 }
@@ -964,6 +975,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
                             if (!cancellationToken.IsCancellationRequested)
                             {
+                                soundType = SoundType.Error;
                                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                    exception: ex, cancellationToken: cancellationToken);
                             }
@@ -978,7 +990,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
                             else
                             {
-                                PlaySound.PlaySoundFromResource();
+                                PlaySound.PlaySoundFromResource(soundType);
                             }
 
                         }
