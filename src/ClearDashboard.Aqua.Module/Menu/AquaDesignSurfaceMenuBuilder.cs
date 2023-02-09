@@ -35,7 +35,8 @@ namespace ClearDashboard.Aqua.Module.Menu
 
         public override void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
         {
-            throw new NotImplementedException();
+            //TODO:  Implement if required.
+            //throw new NotImplementedException();
         }
     }
 }
