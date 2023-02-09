@@ -469,6 +469,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("FilterPins", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
         /// <summary>
+        /// Identifies the CopyEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent CopyEvent = EventManager.RegisterRoutedEvent
+            ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
+        /// <summary>
         /// Identifies the TranslateQuickEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslateQuickEvent = EventManager.RegisterRoutedEvent
@@ -749,6 +755,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         }
 
         /// <summary>
+        /// Occurs when the user requests to copy.
+        /// </summary>
+        public event RoutedEventHandler Copy
+        {
+            add => AddHandler(CopyEvent, value);
+            remove => RemoveHandler(CopyEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when the user requests to translate quick.
         /// </summary>
         public event RoutedEventHandler TranslateQuick
@@ -987,6 +1002,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnFilterPins(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(FilterPinsEvent, e);
+        }
+
+        private void OnCopy(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(CopyEvent, e);
         }
 
         private void OnTranslateQuick(object sender, RoutedEventArgs e)
