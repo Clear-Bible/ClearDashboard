@@ -5,11 +5,15 @@
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:display="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DataContext="{d:DesignInstance Type=display:TokenDisplayViewModel}"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    d:DataContext="{d:DesignInstance Type=enhancedView:TokenDisplayViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
 
     <StackPanel
@@ -54,21 +58,21 @@
             ToolTipOpening="OnToolTipOpening">
             <Button.ContextMenu>
                 <ContextMenu FlowDirection="LeftToRight">
-                    <MenuItem Click="OnCreateNote" Header="View/Create Notes" />
+                    <MenuItem Click="OnCreateNote" Header="{helpers:Localization EnhancedView_CreateNote}" />
                     <MenuItem
                         x:Name="JoinTokensMenuItem"
                         Click="OnTokenJoin"
-                        Header="Join Tokens" />
+                        Header="{helpers:Localization EnhancedView_JoinTokens}" />
                     <MenuItem
                         x:Name="JoinTokensLanguagePairMenuItem"
                         Click="OnTokenJoinLanguagePair"
-                        Header="Join Tokens for Language Pair" />
+                        Header="{helpers:Localization EnhancedView_JoinTokensForLanguagePair}" />
                     <MenuItem
                         x:Name="UnjoinTokenMenuItem"
                         Click="OnTokenUnjoin"
-                        Header="Unjoin Composite Token" />
-                    <MenuItem Click="OnFilterPins" Header="Filter Pins" />
-                    <MenuItem Click="OnCopy" Header="Copy" />
+                        Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
+                    <MenuItem Click="OnFilterPins" Header="{helpers:Localization EnhancedView_FilterPins}" />
+                    <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock
