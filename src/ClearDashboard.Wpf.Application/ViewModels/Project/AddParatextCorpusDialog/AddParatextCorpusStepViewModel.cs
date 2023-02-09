@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
-using SIL.Linq;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog
 {
@@ -202,9 +201,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success)
             {
-                var currentNodes = IoC.Get<ProjectDesignSurfaceViewModel>().DesignSurfaceViewModel.CorpusNodes;
+                var currentNodes = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>().DesignSurfaceViewModel.CorpusNodes; ;
                 List<string> currentNodeIds = new();
-                currentNodes.ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
+                currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
 
                 Projects = result.Data.Where(c=>!currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
 
