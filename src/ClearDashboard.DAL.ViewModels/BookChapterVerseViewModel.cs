@@ -236,14 +236,14 @@ namespace ClearDashboard.DAL.ViewModels
                 return false;
             }
 
-            if (verseId == BBBCCCVVV)
+            // Convert the number into a string we can parse.
+            var verseLocationId = verseId.PadLeft(9, '0');
+
+            if (verseLocationId == BBBCCCVVV)
             {
                 return false;
             }
 
-            // Convert the number into a string we can parse.
-            var verseLocationId = verseId.PadLeft(9, '0');
-            
             var bookNumStr = verseLocationId.Substring(0, 3);
             var chapterIdText = verseLocationId.Substring(3, 3);
             var verseIdText = verseLocationId.Substring(6, 3);
@@ -1286,21 +1286,23 @@ namespace ClearDashboard.DAL.ViewModels
                 var verseId = BBBCCCVVV;
                 if (verseId != "")
                 {
-                   
-                    //SetVerseFromId(BBBCCCVVV);
 
-                    CalculateChapters();
-                    CalculateVerses();
+                //SetVerseFromId(BBBCCCVVV);
 
-                    
+
+                CalculateChapters();
+                this.Chapter = ChapterNumbers.FirstOrDefault();
+                CalculateVerses();
+
 
                 somethingChanged = true;
                 }
 
             if (somethingChanged && !ChapterChangeInProgress && !VerseChangeInProgress)
             {
+
+
                 this.Verse = VerseNumbers.FirstOrDefault();
-                this.Chapter = ChapterNumbers.FirstOrDefault();
 
                 //VerseChange = CurrentBcv.GetVerseId();
             }
