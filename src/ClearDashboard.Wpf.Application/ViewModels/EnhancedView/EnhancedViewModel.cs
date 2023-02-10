@@ -672,6 +672,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }
 
+        public void Copy(object sender, NoteEventArgs e)
+        {
+            var surfaceText = e.SelectedTokens.CombinedSurfaceText.Replace(',', ' ');
+            Clipboard.SetText(surfaceText);
+        }
+
         public void TranslateQuick(object sender, NoteEventArgs e)
         {
             try

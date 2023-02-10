@@ -1,21 +1,17 @@
 ﻿
 
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.Aqua.Module.Menu;
-using ClearDashboard.Aqua.Module.Models;
 using ClearDashboard.Aqua.Module.Services;
+using ClearDashboard.Aqua.Module.Validators;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 using ClearDashboard.Aqua.Module.ViewModels.Menus;
-using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.Plugin;
 using ClearDashboard.Wpf.Application.Services;
-using System.Reflection;
-using System.Threading;
-using System;
-using System.Diagnostics;
-using Autofac.Features.AttributeFilters;
+using FluentValidation;
 
 namespace ClearDashboard.Aqua.Module
 {
@@ -41,10 +37,15 @@ namespace ClearDashboard.Aqua.Module
 
             builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
 
+
+            //Validation
+            builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModelValidator>()
+                .As<IValidator<AquaAddVersionOrListAssessmentsStepViewModel>>();
+
             //menus and localization
 
             builder.RegisterType<AquaDesignSurfaceMenuBuilder>().As<IDesignSurfaceMenuBuilder>().WithAttributeFiltering();
-            builder.RegisterType<AquaLocalizationService>().Keyed<ILocalizationService>("Aqua");
+            builder.RegisterType<AquaLocalizationService>().AsSelf().Keyed<ILocalizationService>("Aqua");
             builder.RegisterType<AquaCorpusAnalysisMenuItemViewModel>().AsSelf().WithAttributeFiltering();
 
             //AquaDialog
@@ -58,6 +59,10 @@ namespace ClearDashboard.Aqua.Module
             builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 3);
+
+          
+
+            //builder.RegisterValidators(typeof(AquaAddVersionOrListAssessmentsStepViewModel).Assembly);
         }
     }
 }

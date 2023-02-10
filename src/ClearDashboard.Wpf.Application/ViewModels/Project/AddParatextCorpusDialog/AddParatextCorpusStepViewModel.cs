@@ -201,7 +201,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success)
             {
-                Projects = result.Data.OrderBy(p => p.Name).ToList();
+                var currentNodes = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>().DesignSurfaceViewModel.CorpusNodes; ;
+                List<string> currentNodeIds = new();
+                currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
+
+                Projects = result.Data.Where(c=>!currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();
 
                 if (!string.IsNullOrEmpty(_initialParatextProjectId))
                 {

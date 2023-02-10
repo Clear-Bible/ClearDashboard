@@ -238,7 +238,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
                 await aquaManager_!.AddVersion(
                     tokenizedTextCorpusId_,
-                    cancellationToken,
+                    new IAquaManager.Version("name", "isoLanguage", "isoScript", "versionAbbreviation"),
+                    cancellationToken /*,
                     new DelegateProgress(async status =>
                     {
                         var message =
@@ -247,7 +248,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
                         message);
                         Logger!.LogInformation(message);
 
-                    }));
+                    })*/);
 
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,

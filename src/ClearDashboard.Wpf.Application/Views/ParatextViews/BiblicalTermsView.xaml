@@ -5,7 +5,7 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -455,10 +455,10 @@
                             Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Text="{helpers:Localization BiblicalTermsForm_GlossLower}" />
                         <TextBlock
+                            Width="{Binding ActualWidth, ElementName=SelectedItemVerses, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
                             Foreground="{StaticResource SecondaryHueMidBrush}"
                             Text="{Binding Gloss}"
-                            TextWrapping="Wrap" 
-                            Width="{Binding ActualWidth, ElementName=SelectedItemVerses, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"/>
+                            TextWrapping="Wrap" />
                     </StackPanel>
                     <ListBox
                         x:Name="SelectedItemVerseRenderings"
@@ -466,6 +466,15 @@
                         VerticalAlignment="Top"
                         materialDesign:ListBoxItemAssist.ShowSelection="False"
                         ItemsSource="{Binding Renderings}">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem
+                                    Command="{Binding ClearFilterCommand}"
+                                    CommandParameter="{Binding}"
+                                    Header="{helpers:Localization Pins_ClearFilter}" />
+                                <MenuItem Click="CopyText_OnClick" Header="{helpers:Localization Copy}" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
@@ -490,6 +499,15 @@
                     VerticalAlignment="Top"
                     ItemsSource="{Binding SelectedItemVerses}"
                     ScrollViewer.CanContentScroll="False">
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem
+                                Command="{Binding ClearFilterCommand}"
+                                CommandParameter="{Binding}"
+                                Header="{helpers:Localization Pins_ClearFilter}" />
+                            <MenuItem Click="CopyText_OnClick" Header="{helpers:Localization Copy}" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>

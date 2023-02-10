@@ -116,10 +116,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             await Task.FromException(new NotImplementedException());
         }
 
-        public async void Update()
+        public async Task Update(IMediator mediator, CancellationToken token = default)
         {
-            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
-            await Task.FromException(new NotImplementedException());
+            var command = new UpdateTokenizedCorpusCommand(TokenizedTextCorpusId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
         }
 
         public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId? corpusId)
