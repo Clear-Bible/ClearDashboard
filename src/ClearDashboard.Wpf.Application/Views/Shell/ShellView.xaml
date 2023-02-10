@@ -44,7 +44,7 @@
             Key="S"
             Command="{Binding SendReceiveProjectCommand}"
             Modifiers="Control+Shift" />
-        <KeyBinding
+        <!--<KeyBinding
             Key="O"
             Command="{Binding OpenProjectCommand}"
             Modifiers="Control" />
@@ -55,7 +55,7 @@
         <KeyBinding
             Key="F"
             Command="{Binding FindTextCommand}"
-            Modifiers="Control" />
+            Modifiers="Control" />-->
         <KeyBinding
             Key="Up"
             Command="{Binding PreviousVerseCommand}"

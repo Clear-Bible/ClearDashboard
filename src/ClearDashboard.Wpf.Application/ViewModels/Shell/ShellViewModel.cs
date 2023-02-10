@@ -16,19 +16,15 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
 using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.Wpf.Application.UserControls;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -48,7 +44,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         //    DESKTOPVERTRES = 117
         //}
 
-        
 
         #region Properties
 
@@ -56,8 +51,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private readonly TranslationSource? _translationSource;
 
-        private UpdateFormat? _updateData;
-        private bool _verseChangeInProgress=false;
+        private UpdateFormat? _updateData;//delete this?
+
+        private bool _verseChangeInProgress;
 
         private string? _paratextUserName;
         public string? ParatextUserName
@@ -159,6 +155,135 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             {
                 _colorStylesCommand = value;
             }
+        }
+        
+        public ICommand HelpCommand => new RelayCommand(Help);
+
+        private void Help(object commandParameter)
+        {
+            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            if (File.Exists(path))
+            {
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
+            }
+            else
+            {
+                Logger?.LogInformation("Dashboard_Instructions.pdf missing.");
+            }
+        }
+
+        //private RelayCommand sendReceiveProjectCommand;
+        //public ICommand SendReceiveProjectCommand => sendReceiveProjectCommand ??= new RelayCommand(SendReceiveProject);
+
+        //private void SendReceiveProject(object commandParameter)
+        //{
+        //}
+
+        //private RelayCommand openProjectCommand;
+        //public ICommand OpenProjectCommand => openProjectCommand ??= new RelayCommand(OpenProject);
+
+        //private void OpenProject(object commandParameter)
+        //{
+        //}
+
+        //private RelayCommand saveProjectCommand;
+        //public ICommand SaveProjectCommand => saveProjectCommand ??= new RelayCommand(SaveProject);
+
+        //private void SaveProject(object commandParameter)
+        //{
+        //}
+
+        //private RelayCommand findTextCommand;
+        //public ICommand FindTextCommand => findTextCommand ??= new RelayCommand(FindText);
+
+        //private void FindText(object commandParameter)
+        //{
+        //}
+        
+        public ICommand PreviousVerseCommand => new RelayCommand(PreviousVerse);
+
+        private async void PreviousVerse(object commandParameter)
+        {
+            if (!_verseChangeInProgress)
+            {
+                _verseChangeInProgress = true;
+
+                var currentVerse = ProjectManager?.CurrentVerse;
+                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager?.CurrentParatextProject.BcvDictionary, currentVerse);
+                bcvViewModel.PreviousVerse();
+                var newVerseId = bcvViewModel.BBBCCCVVV;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
+
+                _verseChangeInProgress = false;
+            }
+        }
+        
+        public ICommand NextVerseCommand => new RelayCommand(NextVerse);
+
+        private async void NextVerse(object commandParameter)
+        {
+            if (!_verseChangeInProgress)
+            {
+                _verseChangeInProgress = true;
+
+                var currentVerse = ProjectManager?.CurrentVerse;
+                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager?.CurrentParatextProject.BcvDictionary, currentVerse);
+                bcvViewModel.NextVerse();
+                var newVerseId = bcvViewModel.BBBCCCVVV;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
+
+                _verseChangeInProgress = false;
+            }
+        }
+        
+        public ICommand NextChapterCommand => new RelayCommand(NextChapter);
+
+        private async void NextChapter(object commandParameter)
+        {
+            if (!_verseChangeInProgress)
+            {
+                _verseChangeInProgress = true;
+
+                var currentVerse = ProjectManager?.CurrentVerse;
+                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager?.CurrentParatextProject.BcvDictionary, currentVerse);
+                bcvViewModel.NextChapter();
+                var newVerseId = bcvViewModel.BBBCCCVVV;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
+
+                _verseChangeInProgress = false;
+            }
+        }
+        
+        public ICommand NextBookCommand => new RelayCommand(NextBook);
+
+        private async void NextBook(object commandParameter)
+        {
+
+            if (!_verseChangeInProgress)
+            {
+                _verseChangeInProgress = true;
+                var currentVerse = ProjectManager?.CurrentVerse;
+                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager?.CurrentParatextProject.BcvDictionary, currentVerse);
+                bcvViewModel.NextBook();
+                var newVerseId = bcvViewModel.BBBCCCVVV;
+                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
+
+                _verseChangeInProgress = false;
+            }
+        }
+        
+        public ICommand OpenBiblicalTermsCommand => new RelayCommand(OpenBiblicalTerms);
+
+        private void OpenBiblicalTerms(object commandParameter)
+        {
+            var mainViewModel = LifetimeScope.Resolve<MainViewModel>();
+            mainViewModel.MenuItems[2].MenuItems[2].Command.Execute(null);
         }
 
         #endregion
@@ -439,7 +564,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings), cancellationToken);
         }
 
-        #endregion
 
         public async  Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
@@ -451,139 +575,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await Task.CompletedTask;
         }
 
-        private RelayCommand _helpCommand;
-        public ICommand HelpCommand => _helpCommand ??= new RelayCommand(Help);
-
-        private void Help(object commandParameter)
-        {
-            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
-            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
-            if (File.Exists(path))
-            {
-                var p = new Process();
-                p.StartInfo = new ProcessStartInfo(path)
-                {
-                    UseShellExecute = true
-                };
-                p.Start();
-            }
-            else
-            {
-                Logger.LogInformation("Dashboard_Instructions.pdf missing.");
-            }
-        }
-
-        private RelayCommand sendReceiveProjectCommand;
-        public ICommand SendReceiveProjectCommand => sendReceiveProjectCommand ??= new RelayCommand(SendReceiveProject);
-
-        private void SendReceiveProject(object commandParameter)
-        {
-        }
-
-        private RelayCommand openProjectCommand;
-        public ICommand OpenProjectCommand => openProjectCommand ??= new RelayCommand(OpenProject);
-
-        private void OpenProject(object commandParameter)
-        {
-        }
-
-        private RelayCommand saveProjectCommand;
-        public ICommand SaveProjectCommand => saveProjectCommand ??= new RelayCommand(SaveProject);
-
-        private void SaveProject(object commandParameter)
-        {
-        }
-
-        private RelayCommand findTextCommand;
-        public ICommand FindTextCommand => findTextCommand ??= new RelayCommand(FindText);
-
-        private void FindText(object commandParameter)
-        {
-        }
-
-        private RelayCommand previousVerseCommand;
-        public ICommand PreviousVerseCommand => previousVerseCommand ??= new RelayCommand(PreviousVerse);
-
-        private async void PreviousVerse(object commandParameter)
-        {
-            if (!_verseChangeInProgress)
-            {
-                _verseChangeInProgress = true;
-
-                var currentVerse = ProjectManager.CurrentVerse;
-                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager.CurrentParatextProject.BcvDictionary, currentVerse);
-                bcvViewModel.PreviousVerse();
-                var newVerseId = bcvViewModel.BBBCCCVVV;
-                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
-
-                _verseChangeInProgress = false;
-            }
-        }
-
-        private RelayCommand nextVerseCommand;
-        public ICommand NextVerseCommand => nextVerseCommand ??= new RelayCommand(NextVerse);
-
-        private async void NextVerse(object commandParameter)
-        {
-            if (!_verseChangeInProgress)
-            {
-                _verseChangeInProgress = true;
-
-                var currentVerse = ProjectManager.CurrentVerse;
-                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager.CurrentParatextProject.BcvDictionary, currentVerse);
-                bcvViewModel.NextVerse();
-                var newVerseId = bcvViewModel.BBBCCCVVV;
-                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
-
-                _verseChangeInProgress = false;
-            }
-        }
-
-        private RelayCommand nextChapterCommand;
-        public ICommand NextChapterCommand => nextChapterCommand ??= new RelayCommand(NextChapter);
-
-        private async void NextChapter(object commandParameter)
-        {
-            if (!_verseChangeInProgress)
-            {
-                _verseChangeInProgress = true;
-
-                var currentVerse = ProjectManager.CurrentVerse;
-                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager.CurrentParatextProject.BcvDictionary, currentVerse);
-                bcvViewModel.NextChapter();
-                var newVerseId = bcvViewModel.BBBCCCVVV;
-                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
-
-                _verseChangeInProgress = false;
-            }
-        }
-
-        private RelayCommand nextBookCommand;
-        public ICommand NextBookCommand => nextBookCommand ??= new RelayCommand(NextBook);
-
-        private async void NextBook(object commandParameter)
-        {
-
-            if (!_verseChangeInProgress)
-            {
-                _verseChangeInProgress = true;
-                var currentVerse = ProjectManager.CurrentVerse;
-                BookChapterVerseViewModel bcvViewModel = new BookChapterVerseViewModel(true, ProjectManager.CurrentParatextProject.BcvDictionary,currentVerse);
-                bcvViewModel.NextBook();
-                var newVerseId = bcvViewModel.BBBCCCVVV;
-                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(newVerseId));
-
-                _verseChangeInProgress = false;
-            }
-        }
-
-        private RelayCommand openBiblicalTermsCommand;
-        public ICommand OpenBiblicalTermsCommand => openBiblicalTermsCommand ??= new RelayCommand(OpenBiblicalTerms);
-
-        private void OpenBiblicalTerms(object commandParameter)
-        {
-            var mainViewModel = IoC.Get<MainViewModel>();
-            mainViewModel.MenuItems[2].MenuItems[2].Command.Execute(null);
-        }
+        #endregion
     }
 }

@@ -15,7 +15,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.DirectoryServices.ActiveDirectory;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -41,6 +40,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand MoveCorpusDownRowCommand { get; set; }
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
+        public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
+
+        private void IncreaseTextSize(object commandParameter)
+        {
+            SourceFontSizeValue += 1;
+            TargetFontSizeValue += 1;
+            TitleFontSizeValue += 1;
+            TranslationsFontSizeValue += 1;
+        }
+
+        public ICommand DecreaseTextSizeCommand => new RelayCommand(DecreaseTextSize);
+
+        private void DecreaseTextSize(object commandParameter)
+        {
+            SourceFontSizeValue -= 1;
+            TargetFontSizeValue -= 1;
+            TitleFontSizeValue -= 1;
+            TranslationsFontSizeValue -= 1;
+        }
+
+        public ICommand ResetTextSizeCommand => new RelayCommand(ResetTextSize);
+
+        private void ResetTextSize(object commandParameter)
+        {
+            SourceFontSizeValue = 14;
+            TargetFontSizeValue = 14;
+            TitleFontSizeValue = 14;
+            TranslationsFontSizeValue = 16;
+        }
+
+        public ICommand InsertNoteCommand => new RelayCommand(InsertNote);
+
+        private void InsertNote(object commandParameter)
+        {
+            if (SelectionManager.SelectedEntityIds.Count != 0)
+            {
+                NoteCreate(null, null);
+            }
+        }
 
         #endregion
 
@@ -862,49 +900,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         #endregion
-
-        private RelayCommand increaseTextSizeCommand;
-        public ICommand IncreaseTextSizeCommand => increaseTextSizeCommand ??= new RelayCommand(IncreaseTextSize);
-
-        private void IncreaseTextSize(object commandParameter)
-        {
-            SourceFontSizeValue += 1;
-            TargetFontSizeValue += 1;
-            TitleFontSizeValue += 1;
-            TranslationsFontSizeValue += 1;
-        }
-
-        private RelayCommand decreaseTextSizeCommand;
-        public ICommand DecreaseTextSizeCommand => decreaseTextSizeCommand ??= new RelayCommand(DecreaseTextSize);
-
-        private void DecreaseTextSize(object commandParameter)
-        {
-            SourceFontSizeValue -= 1;
-            TargetFontSizeValue -= 1;
-            TitleFontSizeValue -= 1;
-            TranslationsFontSizeValue -= 1;
-        }
-
-        private RelayCommand resetTextSizeCommand;
-        public ICommand ResetTextSizeCommand => resetTextSizeCommand ??= new RelayCommand(ResetTextSize);
-
-        private void ResetTextSize(object commandParameter)
-        {
-            SourceFontSizeValue = 14;
-            TargetFontSizeValue = 14;
-            TitleFontSizeValue = 14;
-            TranslationsFontSizeValue = 16;
-        }
-
-        private RelayCommand insertNoteCommand;
-        public ICommand InsertNoteCommand => insertNoteCommand ??= new RelayCommand(InsertNote);
-
-        private void InsertNote(object commandParameter)
-        {
-            if (SelectionManager.SelectedEntityIds.Count != 0)
-            {
-                NoteCreate(null, null);
-            }
-        }
+        
     }
 }

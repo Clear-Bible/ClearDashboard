@@ -1,16 +1,11 @@
 ﻿using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.Wpf.Application.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Xml.Linq;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -21,9 +16,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
     {
         #region Member Variables
 
-        private bool _verseChangeInProgress { get; set; }
-        private bool _chapterChangeInProgress { get; set; }
-        private bool _bookChangeInProgress { get; set; }
+        private bool _verseChangeInProgress; 
+        private bool _chapterChangeInProgress;
+        private bool _bookChangeInProgress;
 
         #endregion
 
@@ -105,13 +100,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 CalculateVerses();
 
                 VerseChange = CurrentBcv.GetVerseId();
-
-                //CboBook.ItemsSource = value.BibleBookList;
-                //CboBook.SelectedItem = value.BookAbbr;
-                //CboChapter.ItemsSource = value.ChapterNumbers;
-                //CboChapter.SelectedItem = value.Chapter;
-                //CboVerse.ItemsSource = value.VerseNumbers;
-                //CboVerse.SelectedItem = value.Verse;
             }
         }
 
@@ -276,20 +264,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         
         #region Constructor
-        public BcvUserControl()//bool isHeadless = false
+        public BcvUserControl()
         {
             InitializeComponent();
-
-            //if (isHeadless)
-            //{
-            //    Binding myBinding = new Binding();
-            //    myBinding.Source = CurrentBcv;
-            //    myBinding.Path = new PropertyPath("BcvDictionary");
-            //    myBinding.Mode = BindingMode.TwoWay;
-            //    myBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-            //    BindingOperations.SetBinding(txtText, TextBox.TextProperty, myBinding);
-            //}
-
             LayoutRoot.DataContext = this;
 
             // Rotate the arrows
@@ -336,23 +313,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             _bookChangeInProgress = false;
         }
 
-        public void BookDownArrow_Click(object sender, RoutedEventArgs e)
+        private void BookDownArrow_Click(object sender, RoutedEventArgs e)
         {
             _bookChangeInProgress = true;
 
             CboBook.SelectedIndex += 1;
-            //CurrentBcv.BookNum = CboBook.SelectedIndex+1;
-            //CurrentBcv.BookAbbr = (string)CboBook.SelectedItem;
 
             _bookChangeInProgress = false;
         }
 
         private void ChapterUpArrow_Click(object sender, RoutedEventArgs e)
         {
-            //if (CboChapter.SelectedIndex != 0)
-            //{
-                _chapterChangeInProgress = true;
-            //}
+            _chapterChangeInProgress = true;
 
             if (CboChapter.SelectedIndex > 0)
             {
@@ -368,10 +340,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void ChapterDownArrow_Click(object sender, RoutedEventArgs e)
         {
-            //if (CboChapter.SelectedIndex != 0)
-            //{
-                _chapterChangeInProgress = true;
-            //}
+            _chapterChangeInProgress = true;
             
             if (CboChapter.SelectedIndex < CboChapter.Items.Count - 1)
             {
@@ -509,24 +478,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var verseId = CurrentBcv.BBBCCCVVV;
                 if (verseId != "")
                 {
-                   
 
                     CalculateChapters();
                     CalculateVerses();
 
                     CboVerse.SelectedIndex = 0;
                     CboChapter.SelectedIndex = 0;
-                    //CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
 
                     somethingChanged = true;
                 }
 
                 if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress && !CurrentBcv.ChapterChangeInProgress && !CurrentBcv.VerseChangeInProgress)
                 {
-
-
-
-
                     VerseChange = CurrentBcv.GetVerseId();
                 }
             }
@@ -546,23 +509,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var verseId = BBBCCC+"001";
                 if (verseId != "")
                 {
-                  
 
                     CalculateVerses();
 
                     CboVerse.SelectedIndex = 0;
-                    //CurrentBcv.SetVerseFromId(verseId);
 
                     somethingChanged = true;
                 }
 
                 if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress && !CurrentBcv.BookChangeInProgress && !CurrentBcv.VerseChangeInProgress)
                 {
-                  
-
-                   
-
-                    VerseChange = CurrentBcv.BBBCCCVVV;//CurrentBcv.GetVerseId();
+                    VerseChange = CurrentBcv.BBBCCCVVV;
                 }
             }
 
@@ -578,9 +535,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 
                 if (!_bookChangeInProgress && !_chapterChangeInProgress && !CurrentBcv.BookChangeInProgress && !CurrentBcv.ChapterChangeInProgress)
                 {
-                    //CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-
-                    VerseChange = CurrentBcv.BBBCCCVVV;//CurrentBcv.GetVerseId();
+                    VerseChange = CurrentBcv.BBBCCCVVV;
                 }
             }
 

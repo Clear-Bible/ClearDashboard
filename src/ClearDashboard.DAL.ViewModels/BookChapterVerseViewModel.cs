@@ -1,5 +1,4 @@
 ﻿using System.Reflection.Metadata;
-using System.Runtime.InteropServices.ComTypes;
 using ClearDashboard.DataAccessLayer.Models;
 using static System.String;
 
@@ -1133,7 +1132,7 @@ namespace ClearDashboard.DAL.ViewModels
             {
                 Chapter = ChapterNumbers[currentIndex - 1];
             }
-            else // Switch to the next book.
+            else // Switch to the previous book.
             {
                 PreviousBook();
                 Chapter = ChapterNumbers.LastOrDefault();
@@ -1184,7 +1183,7 @@ namespace ClearDashboard.DAL.ViewModels
             {
                 Verse = VerseNumbers[currentIndex+1];
             }
-            else // Switch to the previous chapter.
+            else // Switch to the next chapter.
             {
                 NextChapter();
                 Verse = VerseNumbers.FirstOrDefault();
