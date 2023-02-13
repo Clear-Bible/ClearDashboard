@@ -565,7 +565,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public Task HandleAsync(BcvArrowMessage message, CancellationToken cancellationToken)
         {
-            if (ParatextSync == true)
+            if (IsControlEnabled)
             {
                 switch (message.Arrow)
                 {
