@@ -6,13 +6,18 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Messages;
+using System.Threading.Tasks;
+using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
     /// Interaction logic for BookChapterVerse.xaml
     /// </summary>
-    public partial class BcvUserControl : INotifyPropertyChanged
+    public partial class BcvUserControl : INotifyPropertyChanged, IHandle<BcvArrowMessage>
     {
         #region Member Variables
 
@@ -297,6 +302,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             BtnVerseLeft.IsEnabled = true;
             BtnVerseRight.IsEnabled = true;
+
+            IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            eventAggregator.Subscribe(this);
         }
 
         #endregion
@@ -553,6 +561,35 @@ namespace ClearDashboard.Wpf.Application.UserControls
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public Task HandleAsync(BcvArrowMessage message, CancellationToken cancellationToken)
+        {
+            if (ParatextSync == true)
+            {
+                switch (message.Arrow)
+                {
+                    case BcvArrow.PreviousVerse:
+                        VerseUpArrow_Click(null, null);
+                        break;
+                    case BcvArrow.NextVerse:
+                        VerseDownArrow_Click(null, null);
+                        break;
+                    case BcvArrow.PreviousChapter:
+                        ChapterUpArrow_Click(null, null);
+                        break;
+                    case BcvArrow.NextChapter:
+                        ChapterDownArrow_Click(null, null);
+                        break;
+                    case BcvArrow.PreviousBook:
+                        BookUpArrow_Click(null, null);
+                        break;
+                    case BcvArrow.NextBook:
+                        BookDownArrow_Click(null, null);
+                        break;
+                }
+            }
+            return Task.CompletedTask;
         }
 
 
