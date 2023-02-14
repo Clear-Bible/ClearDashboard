@@ -274,6 +274,14 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
+            <DataGrid.CommandBindings>
+                <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+            </DataGrid.CommandBindings>
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+            </DataGrid.InputBindings>
+
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
@@ -466,6 +474,13 @@
                         VerticalAlignment="Top"
                         materialDesign:ListBoxItemAssist.ShowSelection="False"
                         ItemsSource="{Binding Renderings}">
+                        <ListBox.CommandBindings>
+                            <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+                        </ListBox.CommandBindings>
+
+                        <ListBox.InputBindings>
+                            <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                        </ListBox.InputBindings>
                         <ListBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem
@@ -499,6 +514,15 @@
                     VerticalAlignment="Top"
                     ItemsSource="{Binding SelectedItemVerses}"
                     ScrollViewer.CanContentScroll="False">
+
+                    <ListView.CommandBindings>
+                        <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+                    </ListView.CommandBindings>
+
+                    <ListView.InputBindings>
+                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                    </ListView.InputBindings>
+
                     <ListView.ContextMenu>
                         <ContextMenu>
                             <MenuItem
@@ -544,8 +568,16 @@
                                     Foreground="{StaticResource BlueMidBrush}"
                                     Text="{Binding VerseId}" />
 
-                                <ScrollViewer Grid.Column="2" MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                <ScrollViewer Name="ContentScroller" Grid.Column="2" MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                    <ScrollViewer.CommandBindings>
+                                        <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+                                        </ScrollViewer.CommandBindings>
+
+                                    <ScrollViewer.InputBindings>
+                                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                                    </ScrollViewer.InputBindings>
                                     <helpers:BindableTextBlock
+                                        Name="VerseTextBlock"
                                         Width="Auto"
                                         Margin="0,0,10,0"
                                         FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
