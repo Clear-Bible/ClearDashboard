@@ -132,6 +132,14 @@
             SelectionUnit="Cell"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
 
+            <DataGrid.CommandBindings>
+                <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+            </DataGrid.CommandBindings>
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+            </DataGrid.InputBindings>
+
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem

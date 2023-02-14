@@ -31,11 +31,14 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 
         private void CopyText_OnClick(object sender, RoutedEventArgs e)
         {
-            var menuItem = (MenuItem)sender;
-            var parent = menuItem.Parent;
-            var contextMenu = (ContextMenu)parent;
-            var target = contextMenu.PlacementTarget;
-            var item = (DataGrid)target;
+            if (sender is MenuItem menuItem)
+            {
+                var parent = menuItem.Parent;
+                var contextMenu = (ContextMenu)parent;
+                sender = contextMenu.PlacementTarget;
+            }
+            
+            var item = (DataGrid)sender;
 
             var columnIndex = item.SelectedCells[0].Column.DisplayIndex;
 
