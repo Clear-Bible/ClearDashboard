@@ -83,21 +83,25 @@
                 <iconPacks:PackIconOcticons Kind="Sync" />
             </Button>
             <TextBox
-                TextChanged="SearchBox_OnTextChanged"
-                Margin="0,1,0,1"
                 Name="SearchBox"
                 Width="150"
-                materialDesign:HintAssist.Hint="Search" />
+                Margin="0,1,0,1"
+                materialDesign:HintAssist.Hint="Search"
+                TextChanged="SearchBox_OnTextChanged" />
             <Button
+                Width="30"
+                Height="25"
                 Margin="1,0,1,0"
                 Click="FindPreviousButtonClick"
-                Style="{StaticResource TransparentStyle}">
+                Style="{StaticResource SmallTransparentStyle}">
                 <Path Data="M 0 6 L 12 6 L 6 0 Z" Fill="Black" />
             </Button>
             <Button
+                Width="30"
+                Height="25"
                 Margin="1,0,1,0"
                 Click="FindNextButtonClick"
-                Style="{StaticResource TransparentStyle}">
+                Style="{StaticResource SmallTransparentStyle}">
                 <Path Data="M 0 0 L 6 6 L 12 0 Z" Fill="Black" />
             </Button>
         </StackPanel>
