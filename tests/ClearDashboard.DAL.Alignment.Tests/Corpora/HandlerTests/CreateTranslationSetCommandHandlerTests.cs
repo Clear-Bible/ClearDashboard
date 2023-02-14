@@ -426,6 +426,39 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
                     new Dictionary<string, object>(),
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
+
+            var count = 0;
+            List<EngineParallelTextRow> someRows = new();
+            foreach (var e in parallelCorpus)
+            {
+                someRows.Add((EngineParallelTextRow)e);
+                if (count++ > 5) break;
+            }
+
+            var someAlignments = await alignmentSet.GetAlignments(someRows);
+            Assert.True(someAlignments.Any());
+
+            var alignment = someAlignments.First();
+            Assert.NotNull(alignment);
+            Assert.NotNull(alignment.AlignmentId);
+
+            var alignmentDbBefore = ProjectDbContext!.Alignments
+                .Where(e => e.Id == alignment.AlignmentId.Id)
+                .FirstOrDefault();
+
+            Assert.NotNull(alignmentDbBefore);
+            Assert.Null(alignmentDbBefore.Deleted);
+
+            ProjectDbContext.ChangeTracker.Clear();
+
+            await alignmentSet.DeleteAlignment(alignment.AlignmentId);
+
+            var alignmentDbAfter = ProjectDbContext!.Alignments
+                .Where(e => e.Id == alignment.AlignmentId.Id)
+                .FirstOrDefault();
+
+            Assert.NotNull(alignmentDbAfter);
+            Assert.NotNull(alignmentDbAfter.Deleted);
         }
         finally
         {
