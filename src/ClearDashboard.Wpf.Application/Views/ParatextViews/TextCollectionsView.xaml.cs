@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using CefSharp;
 using CefSharp.Wpf;
 using ClearDashboard.DataAccessLayer.Annotations;
+using MaterialDesignThemes.Wpf;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
@@ -29,6 +30,21 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         public TextCollectionsView()
         {
             InitializeComponent();
+        }
+
+        private void ZoomInButtonClick(object sender, EventArgs e)
+        { 
+            TextCollectionWebBrowser.ZoomInCommand.Execute(null);
+        }
+
+        private void ZoomOutButtonClick(object sender, EventArgs e)
+        {
+           TextCollectionWebBrowser.ZoomOutCommand.Execute(null);
+        }
+
+        private void ZoomResetButtonClick(object sender, EventArgs e)
+        {
+            TextCollectionWebBrowser.ZoomResetCommand.Execute(null);
         }
 
         private void FindNextButtonClick(object sender, EventArgs e)
@@ -56,6 +72,11 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             Find(true);
+        }
+
+        private void FindText_OnClick(object sender, RoutedEventArgs e)
+        {
+            SearchBox.Focus();
         }
     }
 }

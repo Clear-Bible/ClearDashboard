@@ -21,12 +21,39 @@
     FlowDirection="{Binding WindowFlowDirection}"
     mc:Ignorable="d">
 
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Find" Executed="FindText_OnClick" />
+        <CommandBinding Command="IncreaseZoom" Executed="ZoomInButtonClick" />
+        <CommandBinding Command="DecreaseZoom" Executed="ZoomOutButtonClick" />
+        <CommandBinding Command="Rewind" Executed="ZoomResetButtonClick" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="F"
+            Command="Find"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="OemPlus"
+            Command="IncreaseZoom"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="OemMinus"
+            Command="DecreaseZoom"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="D0"
+            Command="Rewind"
+            Modifiers="Control" />
+    </UserControl.InputBindings>
+
     <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignPaper}">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
             <!--<RowDefinition Height="*" />-->
         </Grid.RowDefinitions>
+
         <StackPanel Orientation="Horizontal">
             <Button
                 Width="20"
