@@ -82,6 +82,24 @@
                 ToolTip="{helpers:Localization Refresh}">
                 <iconPacks:PackIconOcticons Kind="Sync" />
             </Button>
+            <TextBox
+                TextChanged="SearchBox_OnTextChanged"
+                Margin="0,1,0,1"
+                Name="SearchBox"
+                Width="150"
+                materialDesign:HintAssist.Hint="Search" />
+            <Button
+                Margin="1,0,1,0"
+                Click="FindPreviousButtonClick"
+                Style="{StaticResource TransparentStyle}">
+                <Path Data="M 0 6 L 12 6 L 6 0 Z" Fill="Black" />
+            </Button>
+            <Button
+                Margin="1,0,1,0"
+                Click="FindNextButtonClick"
+                Style="{StaticResource TransparentStyle}">
+                <Path Data="M 0 0 L 6 6 L 12 0 Z" Fill="Black" />
+            </Button>
         </StackPanel>
         <Border
             x:Name="LowerBorder"
@@ -93,7 +111,7 @@
                 x:Name="TextCollectionWebBrowser"
                 Width="{Binding ActualWidth, ElementName=TextCollectionItemGridViewColumn, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
                 Height="{Binding ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='0'}"
-                paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}"/>
+                paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}" />
         </Border>
     </Grid>
 </UserControl>

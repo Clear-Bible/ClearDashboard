@@ -30,5 +30,32 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         {
             InitializeComponent();
         }
+
+        private void FindNextButtonClick(object sender, EventArgs e)
+        {
+            Find(true);
+        }
+
+        private void FindPreviousButtonClick(object sender, EventArgs e)
+        {
+            Find(false);
+        }
+
+        private void Find(bool next)
+        {
+            if (!string.IsNullOrEmpty(SearchBox.Text))
+            {
+                TextCollectionWebBrowser.Find(SearchBox.Text, next, false, true);
+            }
+            else
+            {
+                TextCollectionWebBrowser.StopFinding(true);
+            }
+        }
+
+        private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            Find(true);
+        }
     }
 }
