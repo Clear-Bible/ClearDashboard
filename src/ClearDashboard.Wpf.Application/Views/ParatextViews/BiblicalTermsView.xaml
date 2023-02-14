@@ -52,6 +52,14 @@
             <RowDefinition Height="230" />
         </Grid.RowDefinitions>-->
 
+        <Grid.CommandBindings>
+            <CommandBinding Command="Find" Executed="FindText_OnClick" />
+        </Grid.CommandBindings>
+
+        <Grid.InputBindings>
+            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+        </Grid.InputBindings>
+
         <StackPanel
             Grid.Column="0"
             Background="{DynamicResource MaterialDesignPaper}"

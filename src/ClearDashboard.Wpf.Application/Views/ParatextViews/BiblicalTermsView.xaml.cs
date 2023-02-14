@@ -106,5 +106,10 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 
             Clipboard.SetText(copyText);
         }
+
+        private void FindText_OnClick(object sender, ExecutedRoutedEventArgs e)
+        {
+            FilterText.Focus();
+        }
     }
 }
