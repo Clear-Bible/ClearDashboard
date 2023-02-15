@@ -239,15 +239,21 @@ namespace ClearDashboard.DAL.ViewModels
             // Convert the number into a string we can parse.
             var verseLocationId = verseId.PadLeft(9, '0');
 
-            if (verseLocationId == BBBCCCVVV)
-            {
-                return false;
-            }
-
             var bookNumStr = verseLocationId.Substring(0, 3);
             var chapterIdText = verseLocationId.Substring(3, 3);
             var verseIdText = verseLocationId.Substring(6, 3);
 
+            if (verseIdText == "000")
+            {
+                verseIdText = "001";
+                verseLocationId = bookNumStr + chapterIdText + verseIdText;
+            }
+
+            if (verseLocationId == BBBCCCVVV)
+            {
+                return false;
+            }
+            
             //it's ok to block verse change as long as another change is called 
             if (verseIdText != "001")//must be a verse change, we want to block all book and chapter changes
             {
