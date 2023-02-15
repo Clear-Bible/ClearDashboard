@@ -52,7 +52,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private readonly TranslationSource? _translationSource;
 
-        private UpdateFormat? _updateData;//delete this?
+        private UpdateFormat? _updateData;
 
         private bool _verseChangeInProgress;
 

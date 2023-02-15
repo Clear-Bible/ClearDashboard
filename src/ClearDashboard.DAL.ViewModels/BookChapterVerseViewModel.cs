@@ -233,27 +233,22 @@ namespace ClearDashboard.DAL.ViewModels
                 return false;
             }
             
-            //it's ok to block verse change as long as another change is called 
-            if (verseIdText != "001")//must be a verse change, we want to block all book and chapter changes
+            if (verseIdText != "001")
             {
                 VerseChangeInProgress = true;
             }
-            else if (chapterIdText != "001")//could be a verse or chapter change, we want to block book changes //should I remove "chapterchangesInProgress" from verse Cbo changed method?
+            else if (chapterIdText != "001")
             {
-                //VerseChangeInProgress = true;
                 ChapterChangeInProgress = true;
             }
             else
             {
-                //VerseChangeInProgress = true;
-                //ChapterChangeInProgress = true;
                 BookChangeInProgress = true;
             }
 
             // Test each parse, and only return a TRUE if they all are parsed.
             if (int.TryParse(bookNumStr, out var bookNum))
             {
-                //BookChangeInProgress = true;
                 // The book number for use in the array used in the pull down list.
                 BookNum = bookNum;
                 BookName = GetShortBookNameFromBookNum(bookNumStr);
@@ -265,10 +260,8 @@ namespace ClearDashboard.DAL.ViewModels
                 return false;
             }
 
-            
             if (int.TryParse(chapterIdText, out Int32 chapterNum))
             {
-                //ChapterChangeInProgress = true;
                 Chapter = chapterNum;
                 ChapterChangeInProgress = false;
             }
@@ -277,10 +270,8 @@ namespace ClearDashboard.DAL.ViewModels
                 return false;
             }
 
-            
             if (int.TryParse(verseIdText, out int verseNum))
             {
-                //VerseChangeInProgress = true;
                 Verse = verseNum;
 
                 if (verseNum == 0)
