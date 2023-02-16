@@ -38,6 +38,30 @@
     TitleCharacterCasing="Normal"
     mc:Ignorable="d">
 
+    <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding HelpCommand}" />
+        <KeyBinding
+            Key="S"
+            Command="{Binding SendReceiveProjectCommand}"
+            Modifiers="Control+Shift" />
+        <KeyBinding
+            Key="OemMinus"
+            Command="{Binding PreviousVerseCommand}"
+            Modifiers="Control+Shift" />
+        <KeyBinding
+            Key="OemPlus"
+            Command="{Binding NextVerseCommand}"
+            Modifiers="Control+Shift" />
+        <KeyBinding Key="F8" Command="{Binding NextChapterCommand}" />
+        <KeyBinding Key="F9" Command="{Binding NextBookCommand}" />
+        <KeyBinding
+            Key="B"
+            Command="{Binding OpenBiblicalTermsCommand}"
+            Modifiers="Control+Shift" />
+    </Window.InputBindings>
+
+
+
     <Window.Resources>
         <system:Boolean x:Key="True">True</system:Boolean>
         <BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />

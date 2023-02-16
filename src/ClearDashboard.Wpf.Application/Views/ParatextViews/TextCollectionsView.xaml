@@ -21,12 +21,39 @@
     FlowDirection="{Binding WindowFlowDirection}"
     mc:Ignorable="d">
 
+    <UserControl.CommandBindings>
+        <CommandBinding Command="Find" Executed="FindText_OnClick" />
+        <CommandBinding Command="IncreaseZoom" Executed="ZoomInButtonClick" />
+        <CommandBinding Command="DecreaseZoom" Executed="ZoomOutButtonClick" />
+        <CommandBinding Command="Rewind" Executed="ZoomResetButtonClick" />
+    </UserControl.CommandBindings>
+
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="F"
+            Command="Find"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="OemPlus"
+            Command="IncreaseZoom"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="OemMinus"
+            Command="DecreaseZoom"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="D0"
+            Command="Rewind"
+            Modifiers="Control" />
+    </UserControl.InputBindings>
+
     <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignPaper}">
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
             <RowDefinition Height="*" />
             <!--<RowDefinition Height="*" />-->
         </Grid.RowDefinitions>
+
         <StackPanel Orientation="Horizontal">
             <Button
                 Width="20"
@@ -82,6 +109,28 @@
                 ToolTip="{helpers:Localization Refresh}">
                 <iconPacks:PackIconOcticons Kind="Sync" />
             </Button>
+            <TextBox
+                Name="SearchBox"
+                Width="150"
+                Margin="0,1,0,1"
+                materialDesign:HintAssist.Hint="Search"
+                TextChanged="SearchBox_OnTextChanged" />
+            <Button
+                Width="30"
+                Height="25"
+                Margin="1,0,1,0"
+                Click="FindPreviousButtonClick"
+                Style="{StaticResource SmallTransparentStyle}">
+                <Path Data="M 0 6 L 12 6 L 6 0 Z" Fill="Black" />
+            </Button>
+            <Button
+                Width="30"
+                Height="25"
+                Margin="1,0,1,0"
+                Click="FindNextButtonClick"
+                Style="{StaticResource SmallTransparentStyle}">
+                <Path Data="M 0 0 L 6 6 L 12 0 Z" Fill="Black" />
+            </Button>
         </StackPanel>
         <Border
             x:Name="LowerBorder"
@@ -93,7 +142,7 @@
                 x:Name="TextCollectionWebBrowser"
                 Width="{Binding ActualWidth, ElementName=TextCollectionItemGridViewColumn, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
                 Height="{Binding ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='0'}"
-                paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}"/>
+                paratextViews:ChromiumWebBrowserHelper.Body="{Binding MyHtml}" />
         </Border>
     </Grid>
 </UserControl>

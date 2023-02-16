@@ -40,6 +40,45 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand MoveCorpusDownRowCommand { get; set; }
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
+        public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
+
+        private void IncreaseTextSize(object commandParameter)
+        {
+            SourceFontSizeValue += 1;
+            TargetFontSizeValue += 1;
+            TitleFontSizeValue += 1;
+            TranslationsFontSizeValue += 1;
+        }
+
+        public ICommand DecreaseTextSizeCommand => new RelayCommand(DecreaseTextSize);
+
+        private void DecreaseTextSize(object commandParameter)
+        {
+            SourceFontSizeValue -= 1;
+            TargetFontSizeValue -= 1;
+            TitleFontSizeValue -= 1;
+            TranslationsFontSizeValue -= 1;
+        }
+
+        public ICommand ResetTextSizeCommand => new RelayCommand(ResetTextSize);
+
+        private void ResetTextSize(object commandParameter)
+        {
+            SourceFontSizeValue = _originalSourceFontSizeValue;
+            TargetFontSizeValue = _originalTargetFontSizeValue;
+            TitleFontSizeValue = _originalTitleFontSizeValue;
+            TranslationsFontSizeValue = _originalTranslationsFontSizeValue;
+        }
+
+        public ICommand InsertNoteCommand => new RelayCommand(InsertNote);
+
+        private void InsertNote(object commandParameter)
+        {
+            if (SelectionManager.SelectedEntityIds.Count != 0)
+            {
+                NoteCreate(null, null);
+            }
+        }
 
         #endregion
 
@@ -51,6 +90,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
+        private int _originalSourceFontSizeValue = 14;
+        private int _originalTargetFontSizeValue = 14;
+        private int _originalTitleFontSizeValue = 14;
+        private int _originalTranslationsFontSizeValue = 16;
+        
         #endregion //Member Variables
 
         #region Public Properties
@@ -861,7 +905,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         #endregion
-
-
+        
     }
 }
