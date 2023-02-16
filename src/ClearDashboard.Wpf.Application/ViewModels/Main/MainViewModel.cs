@@ -682,7 +682,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private List<EnhancedViewLayout> LoadEnhancedViewTabLayout()
         {
-            if (ProjectManager.CurrentProject?.WindowTabLayout is null)
+            if (ProjectManager.CurrentProject?.WindowTabLayout is null ||ProjectManager.CurrentProject?.WindowTabLayout == "[null]")
             {
                 var newLayouts = new List<EnhancedViewLayout>
                 {
@@ -1064,8 +1064,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // New
-                        new() { Header =_localizationService!.Get("MainView_FileNew"), Id = "NewID", ViewModel = this, IsEnabled = false },
-                        new() { Header = _localizationService!.Get("MainView_FileOpen"), Id = "OpenID", ViewModel = this, IsEnabled = false }
+                        new() { Header =_localizationService!.Get("MainView_FileNew"), Id = "NewID", ViewModel = this, IsEnabled = true },
+                        new() { Header = _localizationService!.Get("MainView_FileOpen"), Id = "OpenID", ViewModel = this, IsEnabled = true }
                     }
                 },
                 new()

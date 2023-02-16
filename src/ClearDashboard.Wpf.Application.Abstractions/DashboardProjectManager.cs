@@ -151,8 +151,13 @@ public class DashboardProjectManager : ProjectManager
             if (!UpdatingCurrentVerse)
             {
                 UpdatingCurrentVerse = true;
-                CurrentVerse = verse;
-                await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
+              
+                if (verse.PadLeft(9,'0') != CurrentVerse)
+                {
+                    CurrentVerse = verse;
+                    await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
+                }
+                
                 UpdatingCurrentVerse = false;
 
                 if (requestedVerses.Last().PadLeft(9, '0') != CurrentVerse.PadLeft(9, '0'))
