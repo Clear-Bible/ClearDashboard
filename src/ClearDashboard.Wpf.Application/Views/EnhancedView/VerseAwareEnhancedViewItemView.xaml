@@ -27,10 +27,6 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <!--<UserControl.CommandBindings>
-        <CommandBinding Command="{x:Static input:Commands.Secret}" Executed="_secretCommand_Executed"/>
-    </UserControl.CommandBindings>-->
-
     <Grid>
 
 
@@ -123,6 +119,9 @@
                             </b:EventTrigger>
                             <b:EventTrigger EventName="FilterPins">
                                 <b:CallMethodAction MethodName="FilterPins" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
+                            <b:EventTrigger EventName="Copy">
+                                <b:CallMethodAction MethodName="Copy" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
                             <b:EventTrigger EventName="TranslateQuick">
                                 <b:CallMethodAction MethodName="TranslateQuick" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />

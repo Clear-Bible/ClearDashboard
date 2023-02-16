@@ -20,6 +20,7 @@
                 HorizontalAlignment="Left"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
+                Copy="OnCopy"
                 HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteCreate="OnNoteCreate"
@@ -70,13 +71,22 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
-                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}" />
+                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
+                <local:TokenDisplay.CommandBindings>
+                    <CommandBinding Command="Copy" Executed="OnCopy" />
+                </local:TokenDisplay.CommandBindings>
+
+                <local:TokenDisplay.InputBindings>
+                    <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                </local:TokenDisplay.InputBindings>
+            </local:TokenDisplay>
         </DataTemplate>
         <DataTemplate x:Key="TargetTokenDisplay">
             <local:TokenDisplay
                 HorizontalAlignment="Left"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
+                Copy="OnCopy"
                 HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteCreate="OnNoteCreate"
@@ -126,7 +136,15 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
-                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}" />
+                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}" >
+                <local:TokenDisplay.CommandBindings>
+                    <CommandBinding Command="Copy" Executed="OnCopy" />
+                </local:TokenDisplay.CommandBindings>
+
+                <local:TokenDisplay.InputBindings>
+                    <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                </local:TokenDisplay.InputBindings>
+            </local:TokenDisplay>
         </DataTemplate>
         <ItemsPanelTemplate x:Key="SourceWrapPanelTemplate">
             <WrapPanel FlowDirection="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.(enhancedView:VerseDisplayViewModel.IsSourceRtl), Converter={StaticResource BoolFlowDirectionConverter}}" Orientation="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Orientation}" />

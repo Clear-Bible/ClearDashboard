@@ -52,6 +52,14 @@
             <RowDefinition Height="230" />
         </Grid.RowDefinitions>-->
 
+        <Grid.CommandBindings>
+            <CommandBinding Command="Find" Executed="FindText_OnClick" />
+        </Grid.CommandBindings>
+
+        <Grid.InputBindings>
+            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+        </Grid.InputBindings>
+
         <StackPanel
             Grid.Column="0"
             Background="{DynamicResource MaterialDesignPaper}"
@@ -274,6 +282,14 @@
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
+            <DataGrid.CommandBindings>
+                <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+            </DataGrid.CommandBindings>
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+            </DataGrid.InputBindings>
+
             <DataGrid.ColumnHeaderStyle>
                 <Style TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
@@ -455,10 +471,10 @@
                             Foreground="{StaticResource PrimaryHueDarkBrush}"
                             Text="{helpers:Localization BiblicalTermsForm_GlossLower}" />
                         <TextBlock
+                            Width="{Binding ActualWidth, ElementName=SelectedItemVerses, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"
                             Foreground="{StaticResource SecondaryHueMidBrush}"
                             Text="{Binding Gloss}"
-                            TextWrapping="Wrap" 
-                            Width="{Binding ActualWidth, ElementName=SelectedItemVerses, Converter={converters:WidthSubtraction}, ConverterParameter='15'}"/>
+                            TextWrapping="Wrap" />
                     </StackPanel>
                     <ListBox
                         x:Name="SelectedItemVerseRenderings"
@@ -466,6 +482,22 @@
                         VerticalAlignment="Top"
                         materialDesign:ListBoxItemAssist.ShowSelection="False"
                         ItemsSource="{Binding Renderings}">
+                        <ListBox.CommandBindings>
+                            <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+                        </ListBox.CommandBindings>
+
+                        <ListBox.InputBindings>
+                            <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                        </ListBox.InputBindings>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem
+                                    Command="{Binding ClearFilterCommand}"
+                                    CommandParameter="{Binding}"
+                                    Header="{helpers:Localization Pins_ClearFilter}" />
+                                <MenuItem Click="CopyText_OnClick" Header="{helpers:Localization Copy}" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
@@ -490,6 +522,24 @@
                     VerticalAlignment="Top"
                     ItemsSource="{Binding SelectedItemVerses}"
                     ScrollViewer.CanContentScroll="False">
+
+                    <ListView.CommandBindings>
+                        <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+                    </ListView.CommandBindings>
+
+                    <ListView.InputBindings>
+                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                    </ListView.InputBindings>
+
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem
+                                Command="{Binding ClearFilterCommand}"
+                                CommandParameter="{Binding}"
+                                Header="{helpers:Localization Pins_ClearFilter}" />
+                            <MenuItem Click="CopyText_OnClick" Header="{helpers:Localization Copy}" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -526,8 +576,16 @@
                                     Foreground="{StaticResource BlueMidBrush}"
                                     Text="{Binding VerseId}" />
 
-                                <ScrollViewer Grid.Column="2" MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                <ScrollViewer Name="ContentScroller" Grid.Column="2" MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                    <ScrollViewer.CommandBindings>
+                                        <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+                                        </ScrollViewer.CommandBindings>
+
+                                    <ScrollViewer.InputBindings>
+                                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                                    </ScrollViewer.InputBindings>
                                     <helpers:BindableTextBlock
+                                        Name="VerseTextBlock"
                                         Width="Auto"
                                         Margin="0,0,10,0"
                                         FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"

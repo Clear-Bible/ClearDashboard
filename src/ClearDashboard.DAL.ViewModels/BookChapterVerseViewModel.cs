@@ -6,7 +6,12 @@ namespace ClearDashboard.DAL.ViewModels
 {
     public class BookChapterVerseViewModel : ViewModelBase<BookChapterVerse>
     {
-        #nullable disable
+        public bool VerseChangeInProgress { get; set; }
+        public bool ChapterChangeInProgress { get; set; }
+        public bool BookChangeInProgress { get; set; }
+
+
+#nullable disable
         public BookChapterVerseViewModel() : base()
         {
 
@@ -210,14 +215,37 @@ namespace ClearDashboard.DAL.ViewModels
                 return false;
             }
 
-            if (verseId == BBBCCCVVV)
+            // Convert the number into a string we can parse.
+            var verseLocationId = verseId.PadLeft(9, '0');
+
+            var bookNumStr = verseLocationId.Substring(0, 3);
+            var chapterIdText = verseLocationId.Substring(3, 3);
+            var verseIdText = verseLocationId.Substring(6, 3);
+
+            if (verseIdText == "000")
+            {
+                verseIdText = "001";
+                verseLocationId = bookNumStr + chapterIdText + verseIdText;
+            }
+
+            if (verseLocationId == BBBCCCVVV)
             {
                 return false;
             }
+            
+            if (verseIdText != "001")
+            {
+                VerseChangeInProgress = true;
+            }
+            else if (chapterIdText != "001")
+            {
+                ChapterChangeInProgress = true;
+            }
+            else
+            {
+                BookChangeInProgress = true;
+            }
 
-            // Convert the number into a string we can parse.
-            var verseLocationId = verseId.PadLeft(9, '0');
-            var bookNumStr = verseLocationId.Substring(0, 3);
             // Test each parse, and only return a TRUE if they all are parsed.
             if (int.TryParse(bookNumStr, out var bookNum))
             {
@@ -225,23 +253,23 @@ namespace ClearDashboard.DAL.ViewModels
                 BookNum = bookNum;
                 BookName = GetShortBookNameFromBookNum(bookNumStr);
                 BookAbbr = BookName;
+                BookChangeInProgress = false;
             }
             else
             {
                 return false;
             }
 
-            string chapterIdText = verseLocationId.Substring(3, 3);
             if (int.TryParse(chapterIdText, out Int32 chapterNum))
             {
                 Chapter = chapterNum;
+                ChapterChangeInProgress = false;
             }
             else
             {
                 return false;
             }
 
-            var verseIdText = verseLocationId.Substring(6, 3);
             if (int.TryParse(verseIdText, out int verseNum))
             {
                 Verse = verseNum;
@@ -250,6 +278,8 @@ namespace ClearDashboard.DAL.ViewModels
                 {
                     Verse = 1;
                 }
+
+                VerseChangeInProgress = false;
             }
             else
             {

@@ -21,7 +21,24 @@
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
- 
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="OemPlus"
+            Command="{Binding IncreaseTextSizeCommand}"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="OemMinus"
+            Command="{Binding DecreaseTextSizeCommand}"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="D0"
+            Command="{Binding ResetTextSizeCommand}"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="N"
+            Command="{Binding InsertNoteCommand}"
+            Modifiers="Control+Shift" />
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
@@ -144,7 +161,7 @@
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
-                            Content="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                            Content="{Binding ElementName=SourceTokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="1"

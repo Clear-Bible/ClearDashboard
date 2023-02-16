@@ -1,9 +1,15 @@
-﻿using ClearDashboard.DataAccessLayer.Models;
+﻿using System;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using SIL.IO.FileLock;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
@@ -47,43 +53,63 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 
         private void CopyText_OnClick(object sender, RoutedEventArgs e)
         {
-            var menuItem = (MenuItem)sender;
-            var parent = menuItem.Parent;
-            var contextMenu = (ContextMenu)parent;
-            var target = contextMenu.PlacementTarget;
-            var item = (DataGrid)target;
+            string copyText=String.Empty;
 
-            var columnIndex = item.CurrentColumn.DisplayIndex;
-
-            var cells = item.SelectedCells;
-            var selectedItem = cells[0].Item;
-            var BiblicalTermsItem = (BiblicalTermsData)selectedItem;
-            string copyText;
-            switch (columnIndex)
+            if (sender is MenuItem menuItem)
             {
-                case (1):
-                    copyText = BiblicalTermsItem.Id;
-                    break;
-                case (2):
-                    copyText = BiblicalTermsItem.SemanticDomain;
-                    break;
-                case (3):
-                    copyText = BiblicalTermsItem.Gloss;
-                    break;
-                case (4):
-                    copyText = BiblicalTermsItem.RenderingCount.ToString();
-                    break;
-                case (5):
-                    copyText = BiblicalTermsItem.References.Count.ToString();
-                    break;
-                case (6):
-                    copyText = BiblicalTermsItem.RenderingString;
-                    break;
-                default:
-                    copyText = BiblicalTermsItem.Gloss;
-                    break;
+                var parent = menuItem.Parent;
+                var contextMenu = (ContextMenu)parent;
+                sender = contextMenu.PlacementTarget;
             }
+            
+            if (sender is DataGrid grid)
+            {
+                var columnIndex = grid.CurrentColumn!=null? grid.CurrentColumn.DisplayIndex : 6;
+
+                var cells = grid.SelectedCells;
+                var selectedItem = cells[0].Item;
+                var BiblicalTermsItem = (BiblicalTermsData)selectedItem;
+
+                switch (columnIndex)
+                {
+                    case (1):
+                        copyText = BiblicalTermsItem.Id;
+                        break;
+                    case (2):
+                        copyText = BiblicalTermsItem.SemanticDomain;
+                        break;
+                    case (3):
+                        copyText = BiblicalTermsItem.Gloss;
+                        break;
+                    case (4):
+                        copyText = BiblicalTermsItem.RenderingCount.ToString();
+                        break;
+                    case (5):
+                        copyText = BiblicalTermsItem.References.Count.ToString();
+                        break;
+                    case (6):
+                        copyText = BiblicalTermsItem.RenderingString;
+                        break;
+                    default:
+                        copyText = BiblicalTermsItem.Gloss;
+                        break;
+                }
+            }
+            else if (sender is ListBox listBox && listBox == SelectedItemVerseRenderings)
+            {
+                copyText = listBox.SelectedItem.ToString();
+            }
+            else if (sender is ListView listView && listView == SelectedItemVerses && listView.SelectedItem is VerseViewModel verse)
+            {
+                copyText = verse.VerseText;
+            }
+
             Clipboard.SetText(copyText);
+        }
+
+        private void FindText_OnClick(object sender, ExecutedRoutedEventArgs e)
+        {
+            FilterText.Focus();
         }
     }
 }
