@@ -6,10 +6,12 @@
     xmlns:dashboardSettings="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.DashboardSettings"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
     xmlns:helpers1="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.DashboardSettings"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:cm="http://caliburnmicro.com"
     Title="DashboardSettingsView"
     Width="800"
     Height="450"
@@ -31,11 +33,105 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Vertical">
-            <GroupBox Margin="16" Header="Power Modes" IsEnabled="{Binding IsPowerModesBoxEnabled}">
-                <CheckBox Content="Allow Dashboard to Change Power Modes During High Computational Events" IsChecked="{Binding IsPowerModesEnabled}"/>
+        <TabControl
+            materialDesign:ColorZoneAssist.Mode="Standard"
+            materialDesign:NavigationRailAssist.ShowSelectionBackground="True"
+            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+            BorderBrush="Transparent"
+            BorderThickness="0"
+            SnapsToDevicePixels="True"
+            Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+            TabStripPlacement="Left">
+            <!--<materialDesign:NavigationRailAssist.FloatingContent>
+                <Button
+                    Margin="8"
+                    Content="{materialDesign:PackIcon Kind=Plus}"
+                    Style="{StaticResource MaterialDesignFloatingActionAccentButton}" />
+            </materialDesign:NavigationRailAssist.FloatingContent>-->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconModern
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="Gauge75" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Text="Power Modes"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel Orientation="Vertical">
+                    <GroupBox
+                        Margin="16"
+                        Header="Power Modes"
+                        IsEnabled="{Binding IsPowerModesBoxEnabled}">
+                        <CheckBox Content="Allow Dashboard to Change Power Modes During High Computational Events" IsChecked="{Binding IsPowerModesEnabled}" cm:Message.Attach="PowerModeCheckBox($datacontext)" />
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconUnicons
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="TrafficBarrier" />
+                        <TextBlock HorizontalAlignment="Center" Text="Reserved" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Run Text="Reserved For Future Expansion" />
+                    <LineBreak />
+                    <LineBreak />
+                </TextBlock>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconUnicons
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="TrafficBarrier" />
+                        <TextBlock HorizontalAlignment="Center" Text="Reserved" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Run Text="Reserved For Future Expansion" />
+                    <LineBreak />
+                    <LineBreak />
+                </TextBlock>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Width="auto" Height="auto">
+                        <iconPacks:PackIconUnicons
+                            Width="24"
+                            Height="24"
+                            HorizontalAlignment="Center"
+                            Kind="TrafficBarrier" />
+                        <TextBlock HorizontalAlignment="Center" Text="Reserved" />
+                    </StackPanel>
+                </TabItem.Header>
+                <TextBlock>
+                    <Run Text="Reserved For Future Expansion" />
+                    <LineBreak />
+                    <LineBreak />
+                </TextBlock>
+            </TabItem>
+        </TabControl>
+
+        <!--<StackPanel Orientation="Vertical">
+            <GroupBox
+                Margin="16"
+                Header="Power Modes"
+                IsEnabled="{Binding IsPowerModesBoxEnabled}">
+                <CheckBox Content="Allow Dashboard to Change Power Modes During High Computational Events" IsChecked="{Binding IsPowerModesEnabled}" />
             </GroupBox>
-        </StackPanel>
+        </StackPanel>-->
 
         <Button
             x:Name="Close"

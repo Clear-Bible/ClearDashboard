@@ -1,4 +1,7 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Properties;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -17,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         #region Observable Properties
 
-        private bool _isPowerModesEnabled;
+        private bool _isPowerModesEnabled = true;
         public bool IsPowerModesEnabled
         {
             get => _isPowerModesEnabled;
@@ -30,7 +33,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
 
         // controls the group box IsEnabled
-        private bool _isPowerModesBoxEnabled;
+        private bool _isPowerModesBoxEnabled = true;
         public bool IsPowerModesBoxEnabled
         {
             get => _isPowerModesBoxEnabled;
@@ -56,7 +59,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
         protected override void OnViewReady(object view)
         {
+            // determine if this computer is a laptop or not
+            SystemPowerModes systemPowerModes = new SystemPowerModes();
+            var isLaptop = systemPowerModes.IsLaptop;
+            IsPowerModesBoxEnabled = isLaptop;
+            if (isLaptop == false)
+            {
+                Settings.Default.EnablePowerModes = false;
+                Settings.Default.Save();
+            }
 
+            IsPowerModesEnabled = Settings.Default.EnablePowerModes;
 
             base.OnViewReady(view);
         }
@@ -65,6 +78,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 
 
         #region Methods
+
+        public void Close()
+        {
+            TryCloseAsync();
+        }
+
+        public void PowerModeCheckBox(bool value)
+        {
+            Settings.Default.EnablePowerModes = IsPowerModesEnabled;
+            Settings.Default.Save();
+        }
+
 
         #endregion // Methods
 

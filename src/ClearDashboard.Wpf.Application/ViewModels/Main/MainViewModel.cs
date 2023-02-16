@@ -41,9 +41,10 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
-
+using MahApps.Metro.Controls;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -182,6 +183,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 else if (value == "GatherLogsID")
                 {
                     GatherLogs();
+                }
+                else if (value == "SettingsID")
+                {
+                    this.WindowManager.ShowWindowAsync(new DashboardSettingsViewModel(), null, null);
                 }
                 else if (value == "AboutID")
                 {
@@ -1106,6 +1111,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     }
                 },
                 
+                // SETTINGS
+                new()
+                {
+                    Header = _localizationService!.Get("MainView_Settings"), Id =  "SettingsID", ViewModel = this,
+                    //MenuItems = new BindableCollection<MenuItemViewModel>
+                    //{
+                    //    // Gather Logs
+                    //    new() { Header = _localizationService!.Get("MainView_ProgramPreferences"), Id = "PreferencesID", ViewModel = this, },
+                    //}
+                },
+
                 // HELP
                 new()
                 {
