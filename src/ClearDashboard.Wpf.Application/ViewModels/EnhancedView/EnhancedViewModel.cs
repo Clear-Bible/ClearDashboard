@@ -64,10 +64,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private void ResetTextSize(object commandParameter)
         {
-            SourceFontSizeValue = 14;
-            TargetFontSizeValue = 14;
-            TitleFontSizeValue = 14;
-            TranslationsFontSizeValue = 16;
+            SourceFontSizeValue = _originalSourceFontSizeValue;
+            TargetFontSizeValue = _originalTargetFontSizeValue;
+            TitleFontSizeValue = _originalTitleFontSizeValue;
+            TranslationsFontSizeValue = _originalTranslationsFontSizeValue;
         }
 
         public ICommand InsertNoteCommand => new RelayCommand(InsertNote);
@@ -90,6 +90,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
+        private int _originalSourceFontSizeValue = 14;
+        private int _originalTargetFontSizeValue = 14;
+        private int _originalTitleFontSizeValue = 14;
+        private int _originalTranslationsFontSizeValue = 16;
+        
         #endregion //Member Variables
 
         #region Public Properties
