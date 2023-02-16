@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
@@ -22,6 +23,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using static ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog.ParallelCorpusDialogViewModel;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -271,7 +273,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
    
         public async Task RequestClose(object obj)
         {
+            var taskName = "Close EnhancedView";
+
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            {
+                Name = taskName,
+                Description = "Closing...",
+                EndTime = DateTime.Now,
+                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
+            }), CancellationToken.None);
+
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
+
+            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            {
+                Name = taskName,
+                Description = "Closed.",
+                EndTime = DateTime.Now,
+                TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
+            }), CancellationToken.None);
         }
         #endregion
 
