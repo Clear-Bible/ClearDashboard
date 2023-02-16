@@ -18,6 +18,8 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public bool IsLaptop => CheckIfLaptop();
 
+        public bool IsHighPerformanceEnabled = false;
+
         /// <summary>
         /// Grabs the system powerstate to determine if batteries are
         /// present or not.
@@ -84,27 +86,39 @@ namespace ClearDashboard.Wpf.Application.Services
 
             }
 
-            var highPerformancePlan = _powerModes.FirstOrDefault(x => x.PowerModeGuid == HighPerformancePlan);
+            var highPerformancePlan = _powerModes.FirstOrDefault(x => x.PowerModeGuid == HighPerformancePlan || x.Name == "Clear High Performance");
 
             // check to see if the high performance plan exists or not
             if (highPerformancePlan is null)
             {
-                // create a new plane based off the highperformance plan
-                var res = PowerManager.DuplicatePlan(HighPerformancePlan);
-                PowerManager.SetPlanName(res, "Clear High Performance");
+                try
+                {
+                    // create a new plane based off the high performance plan
+                    var res = PowerManager.DuplicatePlan(HighPerformancePlan);
+                    PowerManager.SetPlanName(res, "Clear High Performance");
 
-                // set as the active plan
-                PowerManager.SetActivePlan(res);
+                    // set as the active plan
+                    PowerManager.SetActivePlan(res);
+                    IsHighPerformanceEnabled = true;
+                    return;
+                }
+                catch (Exception e)
+                {
+                    PowerManager.SetActivePlan(_activePlanGuid);
+                    return;
+                }
             }
 
             // set as the active plan
             PowerManager.SetActivePlan(highPerformancePlan.PowerModeGuid);
+            IsHighPerformanceEnabled = true;
         }
 
         public void TurnOffHighPerformanceMode()
         {
             // set as the active plan
             PowerManager.SetActivePlan(_activePlanGuid);
+            IsHighPerformanceEnabled = false;
         }
 
     }

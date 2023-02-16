@@ -45,6 +45,7 @@ using TopLevelProjectIds = ClearDashboard.DAL.Alignment.TopLevelProjectIds;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using ControlzEx.Standard;
 using System.Xml.Linq;
+using ClearDashboard.Wpf.Application.Properties;
 
 
 // ReSharper disable once CheckNamespace
@@ -62,6 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         private readonly IWindowManager? _windowManager;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
+        private readonly SystemPowerModes _systemPowerModes = new();
         #endregion //Member Variables
 
         #region Observable Properties
@@ -852,6 +854,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                 if (result)
                 {
+                    // check to see if we want to run this in High Performance mode
+                    if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+                    {
+                        _systemPowerModes.TurnOnHighPerformanceMode();
+                    }
+
+
+
                     var selectedProject = dialogViewModel.SelectedProject;
                     var bookIds = dialogViewModel.BookIds;
                     var taskName = $"{selectedProject!.Name}";
@@ -991,6 +1001,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             else
                             {
                                 PlaySound.PlaySoundFromResource(soundType);
+                            }
+
+                            if (_systemPowerModes.IsHighPerformanceEnabled)
+                            {
+                                _systemPowerModes.TurnOffHighPerformanceMode();
                             }
 
                         }
