@@ -45,13 +45,13 @@
             Command="{Binding SendReceiveProjectCommand}"
             Modifiers="Control+Shift" />
         <KeyBinding
-            Key="Up"
+            Key="OemMinus"
             Command="{Binding PreviousVerseCommand}"
-            Modifiers="Control" />
+            Modifiers="Control+Shift" />
         <KeyBinding
-            Key="Down"
+            Key="OemPlus"
             Command="{Binding NextVerseCommand}"
-            Modifiers="Control" />
+            Modifiers="Control+Shift" />
         <KeyBinding Key="F8" Command="{Binding NextChapterCommand}" />
         <KeyBinding Key="F9" Command="{Binding NextBookCommand}" />
         <KeyBinding
