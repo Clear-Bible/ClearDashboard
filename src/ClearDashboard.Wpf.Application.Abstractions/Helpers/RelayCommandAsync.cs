@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
-    public class RelayCommandAsync:ICommand
+    public class RelayCommandAsync : ICommand
     {
         private readonly Func<object, Task> execute;
         private readonly Func<object, bool> canExecute;

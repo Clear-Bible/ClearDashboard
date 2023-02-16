@@ -6,24 +6,30 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:enhancedView1="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Application.Abstractions"
-    d:DataContext="{d:DesignInstance Type=enhancedView1:VerseAwareEnhancedViewItemViewModel}"
+    xmlns:input="clr-namespace:ClearDashboard.Wpf.Application.Input;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    d:DataContext="{d:DesignInstance Type=enhancedView:VerseAwareEnhancedViewItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
     <UserControl.Resources>
         <ResourceDictionary>
+
+           
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
+
+    <!--<UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static input:Commands.Secret}" Executed="_secretCommand_Executed"/>
+    </UserControl.CommandBindings>-->
 
     <Grid>
 
@@ -38,7 +44,14 @@
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.IsDeferredScrollingEnabled="True"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling">
+            VirtualizingStackPanel.VirtualizationMode="Recycling"
+            input:EnhancedFocusScope.IsEnhancedFocusScope="True">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="MouseDown">
+                    <cm:ActionMessage MethodName="SetFocus"></cm:ActionMessage>
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Height" Value="Auto" />
@@ -81,6 +94,7 @@
                         TranslationFontSize="{Binding DataContext.TranslationsFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         TranslationVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
+                        <!--cm:Message.Attach="[Key Enter] = [EnterPressed]; [Gesture Ctrl+Enter] = [CtrlEnterPressed]; [Gesture Alt+Enter] = [AltEnterPressed]">-->
                         <!--  cm:Message.Attach="[Event TranslationClicked] = [Action TranslationClicked($this, $eventArgs)]"  -->
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="TokenClicked">

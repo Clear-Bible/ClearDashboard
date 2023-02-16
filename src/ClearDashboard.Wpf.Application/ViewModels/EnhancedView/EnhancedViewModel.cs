@@ -27,7 +27,7 @@ using Uri = System.Uri;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
 
-    public class EnhancedViewModel : VerseAwareConductorAllActive, IEnhancedViewModel, IPaneViewModel,
+    public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
@@ -40,6 +40,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand MoveCorpusDownRowCommand { get; set; }
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
+
+
+        public ICommand TestCommand => new RelayCommand(ExecuteTestCommand, CanExecuteTestCommand);
+
+        private bool CanExecuteTestCommand(object obj)
+        {
+            return true;
+        }
+
+        private void ExecuteTestCommand(object obj)
+        {
+            MessageBox.Show("Ha! TestCommand is working.");
+            // your code to delete here.
+            // YourCollection.Remove(YourSelectedItem);
+        }
+
+        private void CanExecute()
+        {
+            // logic to check if the delete command can execute.
+           // return YourSelectedItem != null;
+        }
 
         #endregion
 
@@ -308,6 +329,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             PaneId = Guid.NewGuid();
+
+            
         }
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout, EnhancedViewItemMetadatum? metadatum, CancellationToken cancellationToken)
@@ -352,6 +375,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            Logger?.LogInformation($"{nameof(EnhancedViewModel)} OnActivateAsync called.");
+            await base.OnActivateAsync(cancellationToken);
+
+            if (Items.Count > 0 && !Items.Any(item=>item.HasFocus))
+            {
+                Items[0].HasFocus = true;
+            }
+           
+        }
+
         public override async Task LoadData(CancellationToken token)
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
@@ -378,6 +413,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); 
                 //EnableBcvControl = false;
                 await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
+
+                
                
             });
         }

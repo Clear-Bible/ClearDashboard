@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core.Lifetime;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Views.Shell;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -26,10 +27,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using ClearDashboard.Wpf.Application.Input;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using ClearDashboard.Wpf.Application.Helpers;
 
 // ReSharper disable InconsistentNaming
 
@@ -40,7 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
         public IWindowManager WindowManager { get; }
 
-        public VerseAwareConductorAllActive ParentViewModel => (VerseAwareConductorAllActive)Parent;
+        public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
 
         //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 
@@ -164,6 +168,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
         }
+
+
 
         public async  void TranslationClicked(object sender, TranslationEventArgs args)
         {
@@ -580,7 +586,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private static Brush GetCorpusBrushColor(CorpusType corpusType)
         {
-            Brush brush = Brushes.Blue;
+            Brush brush;
             switch (corpusType)
             {
                 case CorpusType.Standard:
@@ -674,5 +680,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             await Task.CompletedTask;
         }
+
+        public ICommand KDCommand => new RelayCommand(ExecuteKDCommand, CanExecuteKDCommand);
+
+        private bool CanExecuteKDCommand(object obj)
+        {
+            return true;
+        }
+
+        private void ExecuteKDCommand(object obj)
+        {
+            MessageBox.Show("Ha! KDCommand is working.");
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            var verseAwareEnhancedViewItem = (UserControl)view;
+
+            verseAwareEnhancedViewItem.InputBindings.Add(new KeyBinding(KDCommand,new MultiKeyGesture(new[] {Key.K, Key.D}, ModifierKeys.Control)));
+            base.OnViewReady(view);
+        }
+
+   
     }
 }

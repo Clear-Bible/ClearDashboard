@@ -81,47 +81,47 @@ namespace ClearDashboard.Wpf.Application
 
         protected override void Configure()
         {
-            ConfigureKeyTriggerBindings();
+            //ConfigureKeyTriggerBindings();
 
             base.Configure();
         }
 
-        private static void ConfigureKeyTriggerBindings()
-        {
-            var defaultCreateTrigger = Parser.CreateTrigger;
+        //private static void ConfigureKeyTriggerBindings()
+        //{
+        //    var defaultCreateTrigger = Parser.CreateTrigger;
 
-            Parser.CreateTrigger = (target, triggerText) =>
-            {
-                if (triggerText == null)
-                {
-                    return defaultCreateTrigger(target, null);
-                }
+        //    Parser.CreateTrigger = (target, triggerText) =>
+        //    {
+        //        if (triggerText == null)
+        //        {
+        //            return defaultCreateTrigger(target, null);
+        //        }
 
-                var triggerDetail = triggerText
-                    .Replace("[", string.Empty)
-                    .Replace("]", string.Empty);
+        //        var triggerDetail = triggerText
+        //            .Replace("[", string.Empty)
+        //            .Replace("]", string.Empty);
 
-                var splits = triggerDetail.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+        //        var splits = triggerDetail.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
 
-                switch (splits[0])
-                {
-                    case "Key":
-                        var key = (Key)Enum.Parse(typeof(Key), splits[1], true);
-                        return new KeyTrigger { Key = key };
+        //        switch (splits[0])
+        //        {
+        //            case "Key":
+        //                var key = (Key)Enum.Parse(typeof(Key), splits[1], true);
+        //                return new KeyTrigger { Key = key };
 
-                    case "Gesture":
-                        if (splits.Length == 2)
-                        {
-                            var mkg = (MultiKeyGesture)new MultiKeyGestureConverter().ConvertFrom(splits[1])!;
-                            return new KeyTrigger { Modifiers = mkg.KeySequences[0].Modifiers, Key = mkg.KeySequences[0].Keys[0] };
-                        }
+        //            case "Gesture":
+        //                if (splits.Length == 2)
+        //                {
+        //                    var mkg = (MultiKeyGesture)new MultiKeyGestureConverter().ConvertFrom(splits[1])!;
+        //                    return new KeyTrigger { Modifiers = mkg.KeySequences[0].Modifiers, Key = mkg.KeySequences[0].Keys[0] };
+        //                }
 
-                        return defaultCreateTrigger(target, triggerText);
-                }
+        //                return defaultCreateTrigger(target, triggerText);
+        //        }
 
-                return defaultCreateTrigger(target, triggerText);
-            };
-        }
+        //        return defaultCreateTrigger(target, triggerText);
+        //    };
+        //}
 
         protected override void PreInitialize()
         {

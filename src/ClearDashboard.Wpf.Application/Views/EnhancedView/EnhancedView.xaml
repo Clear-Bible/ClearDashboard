@@ -15,14 +15,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Input;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
-
+ 
     <UserControl.Resources>
         <ResourceDictionary>
+            <Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsFocused}" Value="True">
+                        <Setter Property="FocusManager.FocusedElement" 
+                                Value="{Binding RelativeSource={RelativeSource Self}}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->
@@ -30,6 +39,10 @@
 
 
     </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding TestCommand }"/>
+    </UserControl.InputBindings> 
 
     <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignBackground}">
         <Grid.RowDefinitions>
@@ -459,6 +472,10 @@
                             <Trigger Property="IsSelected" Value="true">
                                 <Setter Property="Background" Value="LightCoral" />
                             </Trigger>
+                            <DataTrigger Binding="{Binding HasFocus}" Value="True">
+                                <Setter Property="FocusManager.FocusedElement" 
+                                        Value="{Binding RelativeSource={RelativeSource Self}}" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
