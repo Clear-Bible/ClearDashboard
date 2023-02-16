@@ -317,7 +317,11 @@
                 </Button>
             </StatusBarItem>
             <Separator Grid.Column="1" />
-            <StatusBarItem Grid.Column="2" />
+            <StatusBarItem Grid.Column="2" >
+                <materialDesign:PackIcon Kind="GaugeFull" Visibility="{Binding ShowHighPerformanceMode}" Height="20" Width="20" Foreground="{StaticResource GreenLightBrush}" />
+                
+            </StatusBarItem>
+
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
                 <!--<StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">

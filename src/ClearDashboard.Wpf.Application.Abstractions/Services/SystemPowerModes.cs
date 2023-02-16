@@ -1,14 +1,21 @@
-﻿using ClearDashboard.Wpf.Application.Helpers;
+﻿using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using PowerManagerAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Autofac.Core.Lifetime;
 using PowerModes = ClearDashboard.Wpf.Application.Models.PowerModes;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
     public class SystemPowerModes
     {
+        private readonly IEventAggregator? _eventAggregator;
         private Guid PowerSaverPlan = Guid.Parse("a1841308-3541-4fab-bc81-f71556f20b4a");
         private Guid BalancedPlan = Guid.Parse("381b4222-f694-41f0-9685-ff5bb260df2e");
         private Guid HighPerformancePlan = Guid.Parse("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c");
@@ -20,8 +27,13 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public bool IsHighPerformanceEnabled = false;
 
+        public SystemPowerModes()
+        {
+            _eventAggregator = IoC.Get<EventAggregator>(); 
+        }
+
         /// <summary>
-        /// Grabs the system powerstate to determine if batteries are
+        /// Grabs the system power state to determine if batteries are
         /// present or not.
         /// </summary>
         /// <returns></returns>
@@ -114,11 +126,14 @@ namespace ClearDashboard.Wpf.Application.Services
             IsHighPerformanceEnabled = true;
         }
 
-        public void TurnOffHighPerformanceMode()
+        public async Task TurnOffHighPerformanceMode()
         {
             // set as the active plan
             PowerManager.SetActivePlan(_activePlanGuid);
             IsHighPerformanceEnabled = false;
+
+            await _eventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
+
         }
 
     }
