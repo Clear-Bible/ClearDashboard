@@ -221,7 +221,7 @@
           .x {
           display: none;
           width: calc(98vw - 35px);
-          background: #fff;
+          background: #ffffd4;
           border-radius: 6px;
           padding: 5px 5px;
           left: 10px;
@@ -260,7 +260,7 @@
           .f {
           display: none;
           width: calc(98vw - 35px);
-          background: #fff;
+          background: #ffffd4;
           border-radius: 6px;
           padding: 5px 5px;
           left: 10px;
@@ -720,7 +720,7 @@
           font-style: normal;}
 
           .vh {
-          background-color:#f5f571;}
+          background-color:#ffffd4;}
 
           .res {
           font-weight: bold;
