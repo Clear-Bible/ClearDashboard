@@ -328,6 +328,7 @@
                         Visibility="{Binding ShowHighPerformanceMode}" />
                     <TextBlock
                         Margin="5,0,0,0"
+                        VerticalAlignment="Center"
                         FontSize="18"
                         Foreground="{StaticResource GreenMidBrush}"
                         Text="{Binding ElapsedTime}" />

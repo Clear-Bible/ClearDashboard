@@ -1,14 +1,10 @@
 ﻿using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Helpers;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using PowerManagerAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Core.Lifetime;
 using PowerModes = ClearDashboard.Wpf.Application.Models.PowerModes;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -16,9 +12,9 @@ namespace ClearDashboard.Wpf.Application.Services
     public class SystemPowerModes
     {
         private readonly IEventAggregator? _eventAggregator;
-        private Guid PowerSaverPlan = Guid.Parse("a1841308-3541-4fab-bc81-f71556f20b4a");
-        private Guid BalancedPlan = Guid.Parse("381b4222-f694-41f0-9685-ff5bb260df2e");
-        private Guid HighPerformancePlan = Guid.Parse("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c");
+        //private readonly Guid _powerSaverPlan = Guid.Parse("a1841308-3541-4fab-bc81-f71556f20b4a");
+        //private readonly Guid _balancedPlan = Guid.Parse("381b4222-f694-41f0-9685-ff5bb260df2e");
+        private readonly Guid _highPerformancePlan = Guid.Parse("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c");
 
         private Guid _activePlanGuid;
         private List<PowerModes> _powerModes = new();
@@ -50,11 +46,17 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public async Task TurnOnHighPerformanceMode()
         {
+            if (IsHighPerformanceEnabled)
+            {
+                return;
+            }
+
+
             // get the active plan
             _activePlanGuid = PowerManager.GetActivePlan();
 
 
-            if (_activePlanGuid == HighPerformancePlan ||
+            if (_activePlanGuid == _highPerformancePlan ||
                 PowerManager.GetPlanName(_activePlanGuid) == "Clear High Performance")
             {
                 // we are already running the high performance plan
@@ -99,7 +101,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
             }
 
-            var highPerformancePlan = _powerModes.FirstOrDefault(x => x.PowerModeGuid == HighPerformancePlan || x.Name == "Clear High Performance");
+            var highPerformancePlan = _powerModes.FirstOrDefault(x => x.PowerModeGuid == _highPerformancePlan || x.Name == "Clear High Performance");
 
             // check to see if the high performance plan exists or not
             if (highPerformancePlan is null)
@@ -107,14 +109,14 @@ namespace ClearDashboard.Wpf.Application.Services
                 try
                 {
                     // create a new plane based off the high performance plan
-                    var res = PowerManager.DuplicatePlan(HighPerformancePlan);
+                    var res = PowerManager.DuplicatePlan(_highPerformancePlan);
                     PowerManager.SetPlanName(res, "Clear High Performance");
 
                     // set as the active plan
                     PowerManager.SetActivePlan(res);
 
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     PowerManager.SetActivePlan(_activePlanGuid);
                     IsHighPerformanceEnabled = false;
