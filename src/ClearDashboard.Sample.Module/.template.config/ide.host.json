@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "symbolInfo": [
+    {
+      "id": "Prefix",
+      "name": {
+        "text": "Class prefix"
+      },
+      "isVisible": true
+    }
+  ]
+
+  }
+}

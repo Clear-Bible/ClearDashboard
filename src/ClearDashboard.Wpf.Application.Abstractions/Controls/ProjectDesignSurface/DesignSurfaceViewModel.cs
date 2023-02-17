@@ -426,6 +426,22 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddMenuSeparator(connectionMenuItems);
 
             parallelCorpusConnection.MenuItems = connectionMenuItems;
+
+
+            try
+            {
+                // PLUG-IN REVIEW
+                var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
+
+                foreach (var menuBuilder in menuBuilders)
+                {
+                    menuBuilder.CreateParallelCorpusConnectionMenu(parallelCorpusConnection, topLevelProjectIds);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger!.LogError(ex, "An unexpected error occurred while creating plug-in menus.");
+            }
         }
 
         private static void AddMenuSeparator(BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)

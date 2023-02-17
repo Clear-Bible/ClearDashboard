@@ -8,6 +8,8 @@
     <PackageProjectUrl>https://github.com/Clear-Bible/ClearEngine</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Clear-Bible/ClearEngine</RepositoryUrl>
     <Platforms>AnyCPU</Platforms>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.0-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
