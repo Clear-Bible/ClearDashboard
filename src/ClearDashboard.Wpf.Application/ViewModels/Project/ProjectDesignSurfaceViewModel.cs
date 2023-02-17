@@ -46,6 +46,7 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 using ControlzEx.Standard;
 using System.Xml.Linq;
 using ClearDashboard.Wpf.Application.Properties;
+using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 
 
 // ReSharper disable once CheckNamespace
@@ -62,6 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly IWindowManager? _windowManager;
+        private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly SystemPowerModes _systemPowerModes = new();
         #endregion //Member Variables
@@ -140,12 +142,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         }
 
         public ProjectDesignSurfaceViewModel(INavigationService navigationService, IWindowManager windowManager,
-            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager,
+            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager, BackgroundTasksViewModel backgroundTasksViewModel,
             IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService, IEnhancedViewManager enhancedViewManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
             _windowManager = windowManager;
+            _backgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
 
             EventAggregator.SubscribeOnUIThread(this);
@@ -426,6 +429,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         // ReSharper disable once UnusedMember.Global
         public async void AddManuscriptHebrewCorpus()
         {
+            // check to see if we want to run this in High Performance mode
+            if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+            {
+                _systemPowerModes.TurnOnHighPerformanceMode();
+            }
+
+
             Logger!.LogInformation("AddManuscriptHebrewCorpus called.");
 
             var taskName = "HebrewCorpus";
@@ -436,7 +446,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var cancellationToken = task.CancellationTokenSource!.Token;
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Transforming syntax trees...", cancellationToken: cancellationToken);
+                description: $"Transforming syntax trees...", cancellationToken: cancellationToken, 
+                backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
             var syntaxTree = new SyntaxTrees();
             var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
@@ -457,6 +468,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 AvailableBooks = books,
             };
 
+            
             _ = Task.Run(async () =>
             // _ = await Task.Factory.StartNew(async () =>
             {
@@ -468,7 +480,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                        description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
+                        description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken, 
+                        backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
@@ -486,7 +499,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                     description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
@@ -497,7 +510,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
-                        cancellationToken: cancellationToken);
+                        cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
                     await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
 
@@ -526,7 +539,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
-                           exception: ex, cancellationToken: cancellationToken);
+                           exception: ex, cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
                     }
                 }
@@ -545,6 +558,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         PlaySound.PlaySoundFromResource(soundType);
                     }
 
+                    // check to see if there are still High Performance Tasks still out there
+                    var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                    if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                    {
+                        // shut down high performance mode
+                        _systemPowerModes.TurnOffHighPerformanceMode();
+                    }
+
                 }
             }, cancellationToken);
 
@@ -553,6 +574,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void AddManuscriptGreekCorpus()
         {
+            // check to see if we want to run this in High Performance mode
+            if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+            {
+                _systemPowerModes.TurnOnHighPerformanceMode();
+            }
+
+
             Logger!.LogInformation("AddGreekCorpus called.");
 
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = false;
@@ -563,7 +591,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                description: $"Transforming syntax trees...", cancellationToken: cancellationToken);
+                description: $"Transforming syntax trees...", cancellationToken: cancellationToken, 
+                backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
 
             var syntaxTree = new SyntaxTrees();
@@ -595,7 +624,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 try
                 {
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                        description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
+                        description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken, 
+                        backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
@@ -609,7 +639,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     corpus.CorpusId.FontFamily = FontNames.GreekFontFamily;
                     corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                        description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", cancellationToken: cancellationToken);
+                        description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", 
+                        cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
@@ -619,7 +650,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         true);
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                        description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", cancellationToken: cancellationToken);
+                        description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", 
+                        cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
                     await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
 
                 }
@@ -646,7 +678,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
-                            exception: ex, cancellationToken: cancellationToken);
+                            exception: ex, cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
                     }
                 }
                 finally
@@ -662,6 +694,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         PlaySound.PlaySoundFromResource(soundType);
                     }
+
+                    // check to see if there are still High Performance Tasks still out there
+                    var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                    if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                    {
+                        // shut down high performance mode
+                        _systemPowerModes.TurnOffHighPerformanceMode();
+                    }
                 }
             }, cancellationToken);
         }
@@ -675,6 +715,210 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async Task AddParatextCorpus()
         {
             await AddParatextCorpus("");
+        }
+
+        public async Task AddParatextCorpus(string selectedParatextProjectId)
+        {
+            Logger!.LogInformation("AddParatextCorpus called.");
+
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("dialogMode", DialogMode.Add),
+                new NamedParameter("initialParatextProjectId", selectedParatextProjectId)
+            };
+
+            var dialogViewModel = LifetimeScope?.Resolve<ParatextCorpusDialogViewModel>(parameters);
+
+            try
+            {
+                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
+                    DialogSettings.AddParatextCorpusDialogSettings);
+
+                if (result)
+                {
+                    // check to see if we want to run this in High Performance mode
+                    if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+                    {
+                        _systemPowerModes.TurnOnHighPerformanceMode();
+                    }
+
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+
+                    var selectedProject = dialogViewModel.SelectedProject;
+                    var bookIds = dialogViewModel.BookIds;
+                    var taskName = $"{selectedProject!.Name}";
+                    _busyState.Add(taskName, true);
+
+                    var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
+                    var cancellationToken = task.CancellationTokenSource!.Token;
+
+                    _ = Task.Run(async () =>
+                        //_ = await Task.Factory.StartNew(async () =>
+                    {
+                        CorpusNodeViewModel node = new()
+                        {
+                            TranslationFontFamily = selectedProject.FontFamily
+                        };
+
+                        if (DesignSurfaceViewModel!.CorpusNodes.Any(cn => cn.ParatextProjectId == selectedProject.Id))
+                        {
+                            node = DesignSurfaceViewModel!.CorpusNodes.Single(cn => cn.ParatextProjectId == selectedProject.Id);
+                        }
+
+                        var soundType = SoundType.Success;
+                        
+                        try
+                        {
+                            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                            var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.ParatextGuid == selectedProject.Id);
+                            var corpus = corpusId != null ? await Corpus.Get(Mediator!, corpusId) : null;
+
+                            // first time for this corpus
+                            if (corpus is null)
+                            {
+                                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                                    description: $"Creating corpus '{selectedProject.Name}'...", cancellationToken: cancellationToken, 
+                                    backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+#pragma warning disable CS8604
+                                corpus = await Corpus.Create(
+                                    mediator: Mediator,
+                                    IsRtl: selectedProject.IsRtl,
+                                    FontFamily: selectedProject.FontFamily,
+                                    Name: selectedProject.Name,
+                                    Language: selectedProject.LanguageName,
+                                    CorpusType: selectedProject.CorpusTypeDisplay,
+                                    ParatextId: selectedProject.Id,
+                                    token: cancellationToken);
+
+                                corpus.CorpusId.FontFamily = selectedProject.FontFamily;
+
+                                node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
+#pragma warning restore CS8604
+                            }
+
+
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                                description: $"Tokenizing and transforming '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken, 
+                                backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+
+                            var textCorpus = dialogViewModel.SelectedTokenizer switch
+                            {
+                                Tokenizers.LatinWordTokenizer =>
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                    .Tokenize<LatinWordTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>(),
+                                Tokenizers.WhitespaceTokenizer =>
+                                    (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                    .Tokenize<WhitespaceTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>(),
+                                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
+                                    .Tokenize<ZwspWordTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>(),
+                                _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
+                                    .Tokenize<WhitespaceTokenizer>()
+                                    .Transform<IntoTokensTextRowProcessor>()
+                                    .Transform<SetTrainingBySurfaceLowercase>()
+                            };
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
+                                description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...", 
+                                cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+
+#pragma warning disable CS8604
+                            // ReSharper disable once UnusedVariable
+                            var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
+                                selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
+#pragma warning restore CS8604
+
+
+                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
+                                description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...Completed", 
+                                cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+
+                            await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
+
+                            _longRunningTaskManager.TaskComplete(taskName);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            Logger!.LogInformation("AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                        }
+                        catch (MediatorErrorEngineException ex)
+                        {
+                            if (ex.Message.Contains("The operation was canceled"))
+                            {
+                                Logger!.LogInformation($"AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
+                            }
+                            else
+                            {
+                                Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
+                                if (!cancellationToken.IsCancellationRequested)
+                                {
+                                    soundType = SoundType.Error;
+                                    await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
+                                        exception: ex, cancellationToken: cancellationToken, 
+                                        backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                                }
+                            }
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
+                            if (!cancellationToken.IsCancellationRequested)
+                            {
+                                soundType = SoundType.Error;
+                                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
+                                    exception: ex, cancellationToken: cancellationToken, 
+                                    backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                            }
+                        }
+                        finally
+                        {
+                            _longRunningTaskManager.TaskComplete(taskName);
+                            _busyState.Remove(taskName);
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                            }
+                            else
+                            {
+
+                                sw.Stop();
+
+#if DEBUG
+                                await EventAggregator.PublishOnUIThreadAsync(
+                                    new ShowElapsedTime($"{sw.ElapsedMilliseconds} ms"));
+#endif
+                                PlaySound.PlaySoundFromResource(soundType);
+                            }
+
+                            // check to see if there are still High Performance Tasks still out there
+                            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                            if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                            {
+                                // shut down high performance mode
+                                _systemPowerModes.TurnOffHighPerformanceMode();
+                            }
+
+                        }
+                    }, cancellationToken);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+            finally
+            {
+                await SaveDesignSurfaceData();
+            }
         }
 
         public async Task UpdateParatextCorpus(string selectedParatextProjectId, string? selectedTokenizer)
@@ -835,202 +1079,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             return textCorpus;
         }
 
-        public async Task AddParatextCorpus(string selectedParatextProjectId)
-        {
-            Logger!.LogInformation("AddParatextCorpus called.");
-
-            var parameters = new List<Autofac.Core.Parameter>
-            {
-                new NamedParameter("dialogMode", DialogMode.Add),
-                new NamedParameter("initialParatextProjectId", selectedParatextProjectId)
-            };
-
-            var dialogViewModel = LifetimeScope?.Resolve<ParatextCorpusDialogViewModel>(parameters);
-
-            try
-            {
-                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null,
-                    DialogSettings.AddParatextCorpusDialogSettings);
-
-                if (result)
-                {
-                    // check to see if we want to run this in High Performance mode
-                    if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
-                    {
-                        _systemPowerModes.TurnOnHighPerformanceMode();
-                    }
-
-                    Stopwatch sw = new Stopwatch();
-                    sw.Start();
-
-                    var selectedProject = dialogViewModel.SelectedProject;
-                    var bookIds = dialogViewModel.BookIds;
-                    var taskName = $"{selectedProject!.Name}";
-                    _busyState.Add(taskName, true);
-
-                    var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
-                    var cancellationToken = task.CancellationTokenSource!.Token;
-
-                    _ = Task.Run(async () =>
-                    //_ = await Task.Factory.StartNew(async () =>
-                    {
-                        CorpusNodeViewModel node = new()
-                        {
-                            TranslationFontFamily = selectedProject.FontFamily
-                        };
-
-                        if (DesignSurfaceViewModel!.CorpusNodes.Any(cn => cn.ParatextProjectId == selectedProject.Id))
-                        {
-                            node = DesignSurfaceViewModel!.CorpusNodes.Single(cn => cn.ParatextProjectId == selectedProject.Id);
-                        }
-
-                        var soundType = SoundType.Success;
-                        
-                        try
-                        {
-                            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                            var corpusId = topLevelProjectIds.CorpusIds.FirstOrDefault(c => c.ParatextGuid == selectedProject.Id);
-                            var corpus = corpusId != null ? await Corpus.Get(Mediator!, corpusId) : null;
-
-                            // first time for this corpus
-                            if (corpus is null)
-                            {
-                                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                                   description: $"Creating corpus '{selectedProject.Name}'...", cancellationToken: cancellationToken);
-#pragma warning disable CS8604
-                                corpus = await Corpus.Create(
-                                      mediator: Mediator,
-                                      IsRtl: selectedProject.IsRtl,
-                                      FontFamily: selectedProject.FontFamily,
-                                      Name: selectedProject.Name,
-                                      Language: selectedProject.LanguageName,
-                                      CorpusType: selectedProject.CorpusTypeDisplay,
-                                      ParatextId: selectedProject.Id,
-                                      token: cancellationToken);
-
-                                corpus.CorpusId.FontFamily = selectedProject.FontFamily;
-
-                                node = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
-#pragma warning restore CS8604
-                            }
-
-
-
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                               description: $"Tokenizing and transforming '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
-
-                            var textCorpus = dialogViewModel.SelectedTokenizer switch
-                            {
-                                Tokenizers.LatinWordTokenizer =>
-                                   (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
-                                   .Tokenize<LatinWordTokenizer>()
-                                   .Transform<IntoTokensTextRowProcessor>()
-                                   .Transform<SetTrainingBySurfaceLowercase>(),
-                                Tokenizers.WhitespaceTokenizer =>
-                                   (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
-                                   .Tokenize<WhitespaceTokenizer>()
-                                   .Transform<IntoTokensTextRowProcessor>()
-                                   .Transform<SetTrainingBySurfaceLowercase>(),
-                                Tokenizers.ZwspWordTokenizer => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, bookIds, cancellationToken))
-                                   .Tokenize<ZwspWordTokenizer>()
-                                   .Transform<IntoTokensTextRowProcessor>()
-                                   .Transform<SetTrainingBySurfaceLowercase>(),
-                                _ => (await ParatextProjectTextCorpus.Get(Mediator!, selectedProject.Id!, null, cancellationToken))
-                                   .Tokenize<WhitespaceTokenizer>()
-                                   .Transform<IntoTokensTextRowProcessor>()
-                                   .Transform<SetTrainingBySurfaceLowercase>()
-                            };
-
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
-                               description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken);
-
-#pragma warning disable CS8604
-                            // ReSharper disable once UnusedVariable
-                            var tokenizedTextCorpus = await textCorpus.Create(Mediator, corpus.CorpusId,
-                               selectedProject.Name, dialogViewModel.SelectedTokenizer.ToString(), cancellationToken);
-#pragma warning restore CS8604
-
-
-                            await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
-                               description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...Completed", cancellationToken: cancellationToken);
-
-                            await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
-
-                            _longRunningTaskManager.TaskComplete(taskName);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            Logger!.LogInformation("AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
-                        }
-                        catch (MediatorErrorEngineException ex)
-                        {
-                            if (ex.Message.Contains("The operation was canceled"))
-                            {
-                                Logger!.LogInformation($"AddParatextCorpus() - OperationCanceledException was thrown -> cancellation was requested.");
-                            }
-                            else
-                            {
-                                Logger!.LogError(ex, "an unexpected Engine exception was thrown.");
-                                if (!cancellationToken.IsCancellationRequested)
-                                {
-                                    soundType = SoundType.Error;
-                                    await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
-                                        exception: ex, cancellationToken: cancellationToken);
-                                }
-                            }
-
-
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger!.LogError(ex, $"An unexpected error occurred while creating the the corpus for {selectedProject.Name} ");
-                            if (!cancellationToken.IsCancellationRequested)
-                            {
-                                soundType = SoundType.Error;
-                                await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
-                                   exception: ex, cancellationToken: cancellationToken);
-                            }
-                        }
-                        finally
-                        {
-                            _longRunningTaskManager.TaskComplete(taskName);
-                            _busyState.Remove(taskName);
-                            if (cancellationToken.IsCancellationRequested)
-                            {
-                                DesignSurfaceViewModel!.DeleteCorpusNode(node);
-                            }
-                            else
-                            {
-
-                                sw.Stop();
-
-#if DEBUG
-                                await EventAggregator.PublishOnUIThreadAsync(
-                                    new ShowElapsedTime($"{sw.ElapsedMilliseconds} ms"));
-#endif
-                                PlaySound.PlaySoundFromResource(soundType);
-                            }
-
-                            if (_systemPowerModes.IsHighPerformanceEnabled)
-                            {
-                                _systemPowerModes.TurnOffHighPerformanceMode();
-                            }
-
-                        }
-                    }, cancellationToken);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
-            finally
-            {
-                await SaveDesignSurfaceData();
-            }
-        }
-
-        public async Task SendBackgroundStatus(string name, LongRunningTaskStatus status, CancellationToken cancellationToken, string? description = null, Exception? exception = null)
+        public async Task SendBackgroundStatus(string name, LongRunningTaskStatus status,
+            CancellationToken cancellationToken, string? description = null, Exception? exception = null,
+            BackgroundTaskTypeEnum backgroundTaskTypeEnum = BackgroundTaskTypeEnum.Normal)
         {
             var backgroundTaskStatus = new BackgroundTaskStatus
             {
@@ -1038,7 +1089,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 EndTime = DateTime.Now,
                 Description = !string.IsNullOrEmpty(description) ? description : null,
                 ErrorMessage = exception != null ? $"{exception}" : null,
-                TaskLongRunningProcessStatus = status
+                TaskLongRunningProcessStatus = status,
+                BackgroundTaskType= backgroundTaskTypeEnum,
             };
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }

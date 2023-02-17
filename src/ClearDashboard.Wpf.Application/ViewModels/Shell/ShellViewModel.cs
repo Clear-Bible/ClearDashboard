@@ -81,7 +81,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region ObservableProps
 
-        private string _elapsedTime = "something";
+        private string _elapsedTime = "";
         public string ElapsedTime
         {
             get => _elapsedTime;
