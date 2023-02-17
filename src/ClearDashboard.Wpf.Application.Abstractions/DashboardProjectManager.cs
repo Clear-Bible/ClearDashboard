@@ -152,11 +152,11 @@ public class DashboardProjectManager : ProjectManager
             {
                 UpdatingCurrentVerse = true;
               
-                if (verse.PadLeft(9,'0') != CurrentVerse)
-                {
-                    CurrentVerse = verse;
+                //if (verse.PadLeft(9,'0') != CurrentVerse)
+                //{
+                    CurrentVerse = verse.PadLeft(9, '0');
                     await EventAggregator.PublishOnUIThreadAsync(new VerseChangedMessage(verse));
-                }
+                //}
                 
                 UpdatingCurrentVerse = false;
 

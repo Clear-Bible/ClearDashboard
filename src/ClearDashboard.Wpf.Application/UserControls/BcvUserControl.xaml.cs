@@ -10,7 +10,10 @@ using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Messages;
 using System.Threading.Tasks;
 using System.Threading;
+using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -24,6 +27,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private bool _verseChangeInProgress; 
         private bool _chapterChangeInProgress;
         private bool _bookChangeInProgress;
+
+        private string _currentProjectName;
 
         #endregion
 
@@ -271,6 +276,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
         #region Constructor
         public BcvUserControl()
         {
+            var model = IoC.Get<ProjectDesignSurfaceViewModel>();
+            _currentProjectName = model.ProjectName;
+
             InitializeComponent();
             LayoutRoot.DataContext = this;
 
@@ -304,7 +312,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             BtnVerseRight.IsEnabled = true;
 
             IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
-            eventAggregator.Subscribe(this);
+            eventAggregator.Subscribe(this); 
         }
 
         #endregion
@@ -478,7 +486,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void CboBook_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             _bookChangeInProgress = true;
-            if (CurrentBcv.GetVerseId() != VerseChange)
+            if (CurrentBcv.GetVerseId() != VerseChange&& IoC.Get<ProjectDesignSurfaceViewModel>().ProjectName == _currentProjectName)
             {
                 bool somethingChanged = false;
 
@@ -508,13 +516,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void CboChapter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             _chapterChangeInProgress = true;
-            if (CurrentBcv.BBBCCCVVV != VerseChange)
+            if (CurrentBcv.BBBCCCVVV != VerseChange && IoC.Get<ProjectDesignSurfaceViewModel>().ProjectName == _currentProjectName)
             {
                 bool somethingChanged = false;
                 var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
 
                 // chapter switch so find the first verse for that book and chapter
-                var verseId = BBBCCC+"001";
+                var verseId = BBBCCC+"007";
                 if (verseId != "")
                 {
 
@@ -538,7 +546,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void CboVerse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             _verseChangeInProgress = true;
-            if (CurrentBcv.BBBCCCVVV != VerseChange)
+            if (CurrentBcv.BBBCCCVVV != VerseChange&& IoC.Get<ProjectDesignSurfaceViewModel>().ProjectName == _currentProjectName)
             {
                 
                 if (!_bookChangeInProgress && !_chapterChangeInProgress && !CurrentBcv.BookChangeInProgress && !CurrentBcv.ChapterChangeInProgress)
