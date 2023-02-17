@@ -11,22 +11,38 @@ namespace ClearDashboard.Wpf.Application.Services
 {
     public class SystemPowerModes
     {
-        private readonly IEventAggregator? _eventAggregator;
-        //private readonly Guid _powerSaverPlan = Guid.Parse("a1841308-3541-4fab-bc81-f71556f20b4a");
-        //private readonly Guid _balancedPlan = Guid.Parse("381b4222-f694-41f0-9685-ff5bb260df2e");
+        #region Member Variables
+
         private readonly Guid _highPerformancePlan = Guid.Parse("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c");
 
+
+        private readonly IEventAggregator? _eventAggregator;
         private Guid _activePlanGuid;
         private List<PowerModes> _powerModes = new();
+
+        #endregion //Member Variables
+
+
+        #region Public Properties
 
         public bool IsLaptop => CheckIfLaptop();
 
         public bool IsHighPerformanceEnabled = false;
 
+        #endregion //Public Properties
+
+
+        #region Constructor
+
         public SystemPowerModes()
         {
             _eventAggregator = IoC.Get<IEventAggregator>(); 
         }
+
+        #endregion //Constructor
+
+
+        #region Methods
 
         /// <summary>
         /// Grabs the system power state to determine if batteries are
@@ -140,9 +156,13 @@ namespace ClearDashboard.Wpf.Application.Services
             IsHighPerformanceEnabled = false;
 
             await _eventAggregator.PublishOnUIThreadAsync(new PerformanceModeMessage(false));
-
         }
 
+        #endregion // Methods
+
+
+        //private readonly Guid _powerSaverPlan = Guid.Parse("a1841308-3541-4fab-bc81-f71556f20b4a");
+        //private readonly Guid _balancedPlan = Guid.Parse("381b4222-f694-41f0-9685-ff5bb260df2e");
     }
 
 

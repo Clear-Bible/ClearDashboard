@@ -432,7 +432,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // check to see if we want to run this in High Performance mode
             if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
             {
-                _systemPowerModes.TurnOnHighPerformanceMode();
+                await _systemPowerModes.TurnOnHighPerformanceMode();
             }
 
 
@@ -539,7 +539,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
-                           exception: ex, cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                           exception: ex, cancellationToken: cancellationToken,
+                           backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
 
                     }
                 }
@@ -563,7 +564,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                     {
                         // shut down high performance mode
-                        _systemPowerModes.TurnOffHighPerformanceMode();
+                        await _systemPowerModes.TurnOffHighPerformanceMode();
                     }
 
                 }
@@ -577,7 +578,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             // check to see if we want to run this in High Performance mode
             if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
             {
-                _systemPowerModes.TurnOnHighPerformanceMode();
+                await _systemPowerModes.TurnOnHighPerformanceMode();
             }
 
 
@@ -700,7 +701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                     {
                         // shut down high performance mode
-                        _systemPowerModes.TurnOffHighPerformanceMode();
+                        await _systemPowerModes.TurnOffHighPerformanceMode();
                     }
                 }
             }, cancellationToken);
@@ -739,7 +740,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     // check to see if we want to run this in High Performance mode
                     if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
                     {
-                        _systemPowerModes.TurnOnHighPerformanceMode();
+                        await _systemPowerModes.TurnOnHighPerformanceMode();
                     }
 
                     Stopwatch sw = new Stopwatch();
@@ -889,13 +890,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
                             else
                             {
-
                                 sw.Stop();
 
-#if DEBUG
-                                await EventAggregator.PublishOnUIThreadAsync(
-                                    new ShowElapsedTime($"{sw.ElapsedMilliseconds} ms"));
-#endif
                                 PlaySound.PlaySoundFromResource(soundType);
                             }
 
@@ -904,7 +900,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                             {
                                 // shut down high performance mode
-                                _systemPowerModes.TurnOffHighPerformanceMode();
+                                await _systemPowerModes.TurnOffHighPerformanceMode();
                             }
 
                         }

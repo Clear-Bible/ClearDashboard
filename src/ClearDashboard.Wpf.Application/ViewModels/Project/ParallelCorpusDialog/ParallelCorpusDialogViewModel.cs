@@ -239,7 +239,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             // check to see if we want to run this in High Performance mode
             if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
             {
-                _systemPowerModes.TurnOnHighPerformanceMode();
+                await _systemPowerModes.TurnOnHighPerformanceMode();
             }
 
             var taskName = TaskNames.ParallelCorpus;
@@ -339,7 +339,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                 {
                     // shut down high performance mode
-                    _systemPowerModes.TurnOffHighPerformanceMode();
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
                 }
 
                 IsBusy = false;
@@ -361,7 +361,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             // check to see if we want to run this in High Performance mode
             if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
             {
-                _systemPowerModes.TurnOnHighPerformanceMode();
+                await _systemPowerModes.TurnOnHighPerformanceMode();
             }
 
             var soundType = SoundType.Success;
@@ -444,7 +444,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                 {
                     // shut down high performance mode
-                    _systemPowerModes.TurnOffHighPerformanceMode();
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
                 }
             }
 
@@ -461,7 +461,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             // check to see if we want to run this in High Performance mode
             if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
             {
-                _systemPowerModes.TurnOnHighPerformanceMode();
+                await _systemPowerModes.TurnOnHighPerformanceMode();
             }
 
             var soundType = SoundType.Success;
@@ -543,7 +543,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                 {
                     // shut down high performance mode
-                    _systemPowerModes.TurnOffHighPerformanceMode();
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
                 }
             }
 
@@ -562,7 +562,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             // check to see if we want to run this in High Performance mode
             if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
             {
-                _systemPowerModes.TurnOnHighPerformanceMode();
+                await _systemPowerModes.TurnOnHighPerformanceMode();
             }
 
             var soundType = SoundType.Success;
@@ -655,7 +655,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                 {
                     // shut down high performance mode
-                    _systemPowerModes.TurnOffHighPerformanceMode();
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
                 }
             }
 

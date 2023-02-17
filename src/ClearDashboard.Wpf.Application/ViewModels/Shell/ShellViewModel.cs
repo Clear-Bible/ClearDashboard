@@ -31,8 +31,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<UserMessage>,
         IHandle<GetApplicationWindowSettings>,
         IHandle<UiLanguageChangedMessage>,
-        IHandle<PerformanceModeMessage>,
-        IHandle<ShowElapsedTime>
+        IHandle<PerformanceModeMessage>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -487,11 +486,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             return Task.CompletedTask;
         }
 
-        public Task HandleAsync(ShowElapsedTime message, CancellationToken cancellationToken)
-        {
-            ElapsedTime =  message.ElapsedTime;
-
-            return Task.CompletedTask;
-        }
     }
 }

@@ -11,7 +11,6 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record GetApplicationWindowSettings();
     public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
-    public record ShowElapsedTime(string ElapsedTime);
     public record UiLanguageChangedMessage(string LanguageCode);
 
     public record VerseChangedMessage(string Verse);
