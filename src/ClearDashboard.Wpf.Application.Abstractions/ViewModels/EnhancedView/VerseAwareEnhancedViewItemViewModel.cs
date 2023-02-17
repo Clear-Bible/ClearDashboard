@@ -29,11 +29,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Input;
+using ClearApplicationFoundation.Framework.Input;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
-using ClearDashboard.Wpf.Application.Helpers;
 
 // ReSharper disable InconsistentNaming
 
@@ -698,6 +697,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             var verseAwareEnhancedViewItem = (UserControl)view;
 
+            // TODO:  remove
             verseAwareEnhancedViewItem.InputBindings.Add(new KeyBinding(KDCommand,new MultiKeyGesture(new[] {Key.K, Key.D}, ModifierKeys.Control)));
             base.OnViewReady(view);
         }

@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -42,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand DeleteCorpusRowCommand { get; set; }
         public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
 
-        private void IncreaseTextSize(object commandParameter)
+        private void IncreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue += 1;
             TargetFontSizeValue += 1;
@@ -52,7 +53,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public ICommand DecreaseTextSizeCommand => new RelayCommand(DecreaseTextSize);
 
-        private void DecreaseTextSize(object commandParameter)
+        private void DecreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue -= 1;
             TargetFontSizeValue -= 1;
@@ -62,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public ICommand ResetTextSizeCommand => new RelayCommand(ResetTextSize);
 
-        private void ResetTextSize(object commandParameter)
+        private void ResetTextSize(object? commandParameter)
         {
             SourceFontSizeValue = _originalSourceFontSizeValue;
             TargetFontSizeValue = _originalTargetFontSizeValue;
@@ -72,33 +73,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public ICommand InsertNoteCommand => new RelayCommand(InsertNote);
 
-        private void InsertNote(object commandParameter)
+        private void InsertNote(object? commandParameter)
         {
             if (SelectionManager.SelectedEntityIds.Count != 0)
             {
                 NoteCreate(null, null);
             }
-        }
-
-
-        public ICommand TestCommand => new RelayCommand(ExecuteTestCommand, CanExecuteTestCommand);
-
-        private bool CanExecuteTestCommand(object obj)
-        {
-            return true;
-        }
-
-        private void ExecuteTestCommand(object obj)
-        {
-            MessageBox.Show("Ha! TestCommand is working.");
-            // your code to delete here.
-            // YourCollection.Remove(YourSelectedItem);
-        }
-
-        private void CanExecute()
-        {
-            // logic to check if the delete command can execute.
-           // return YourSelectedItem != null;
         }
 
         #endregion
@@ -334,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
    
-        public async Task RequestClose(object obj)
+        public async Task RequestClose(object? obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }
@@ -534,7 +514,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
-        private void MoveCorpusUp(object obj)
+        private void MoveCorpusUp(object? obj)
         {
             var row = obj as EnhancedViewItemViewModel;
             var index = MoveableItems.Select((element, index) => new { element, index })
@@ -549,7 +529,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EnhancedViewLayout!.EnhancedViewItems.Move(index, index - 1);
         }
 
-        private void MoveCorpusDown(object obj)
+        private void MoveCorpusDown(object? obj)
         {
             var row = obj as EnhancedViewItemViewModel;
             var index = MoveableItems.Select((element, index) => new { element, index })
@@ -564,9 +544,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        private void DeleteCorpusRow(object obj)
+        private void DeleteCorpusRow(object? obj)
         {
-            var item = (EnhancedViewItemViewModel)obj;
+            var item = (EnhancedViewItemViewModel)obj!;
             
             var index = Items.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(item))?.index ?? -1;
@@ -742,12 +722,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Message = string.Empty;
         }
 
-        public void NoteCreate(object sender, NoteEventArgs e)
+        public void NoteCreate(object? sender, NoteEventArgs? e)
         {
             NoteControlVisibility = Visibility.Visible;
         }
     
-        public void FilterPins(object sender, NoteEventArgs e)
+        public void FilterPins(object? sender, NoteEventArgs e)
         {
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }

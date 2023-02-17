@@ -24,6 +24,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.DataAccessLayer.Models;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
@@ -160,7 +161,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         
         public ICommand HelpCommand => new RelayCommand(Help);
 
-        private void Help(object commandParameter)
+        private void Help(object? commandParameter)
         {
             var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
             var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
@@ -181,38 +182,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         
         public ICommand PreviousVerseCommand => new RelayCommand(PreviousVerse);
 
-        private async void PreviousVerse(object commandParameter)
+        private async void PreviousVerse(object? commandParameter)
         {
             await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.PreviousVerse));
         }
         
         public ICommand NextVerseCommand => new RelayCommand(NextVerse);
 
-        private async void NextVerse(object commandParameter)
+        private async void NextVerse(object? commandParameter)
         {
             await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.NextVerse));
         }
         
         public ICommand NextChapterCommand => new RelayCommand(NextChapter);
 
-        private async void NextChapter(object commandParameter)
+        private async void NextChapter(object? commandParameter)
         {
             await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.NextChapter));
         }
         
         public ICommand NextBookCommand => new RelayCommand(NextBook);
 
-        private async void NextBook(object commandParameter)
+        private async void NextBook(object? commandParameter)
         {
             await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.NextBook));
         }
         
         public ICommand OpenBiblicalTermsCommand => new RelayCommand(OpenBiblicalTerms);
 
-        private void OpenBiblicalTerms(object commandParameter)
+        private void OpenBiblicalTerms(object? commandParameter)
         {
-            var mainViewModel = LifetimeScope.Resolve<MainViewModel>();
-            mainViewModel.MenuItems[2].MenuItems[2].Command.Execute(null);
+            var mainViewModel = LifetimeScope?.Resolve<MainViewModel>();
+            mainViewModel!.MenuItems[2].MenuItems[2].Command.Execute(null);
         }
 
         #endregion

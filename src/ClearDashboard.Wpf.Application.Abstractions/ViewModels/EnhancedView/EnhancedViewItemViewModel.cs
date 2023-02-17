@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Input;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;

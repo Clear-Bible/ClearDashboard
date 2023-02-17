@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Framework.Input;
 
 namespace ClearDashboard.Sample.Module.ViewModels.SampleDialog
 {

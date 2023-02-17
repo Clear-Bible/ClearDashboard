@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Helpers;

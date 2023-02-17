@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Services;
 

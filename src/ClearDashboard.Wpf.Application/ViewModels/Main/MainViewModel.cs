@@ -43,6 +43,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearApplicationFoundation.Framework.Input;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 

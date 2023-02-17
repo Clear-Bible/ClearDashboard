@@ -10,6 +10,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 {
@@ -89,7 +90,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
         #region Methods
 
-        public async Task RequestClose(object obj)
+        public async Task RequestClose(object? obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }
