@@ -547,5 +547,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             return Task.CompletedTask;
         }
 
+        #endregion
     }
 }

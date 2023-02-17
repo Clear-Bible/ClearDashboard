@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		..\NuGet-Configuration.md = ..\NuGet-Configuration.md
 		..\Paratext-Installation.md = ..\Paratext-Installation.md
 		..\Paratext_SendReceive_Documentation.md = ..\Paratext_SendReceive_Documentation.md
+		PerformanceMode.md = PerformanceMode.md
 		..\Setting_Background-Tasks-In-UI.md = ..\Setting_Background-Tasks-In-UI.md
 	EndProjectSection
 EndProject
@@ -82,7 +83,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{391E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Aqua.Module", "ClearDashboard.Aqua.Module\ClearDashboard.Aqua.Module.csproj", "{AB081F7B-C4B6-46EB-86EA-DA6B7AE5B6BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearDashboard.Aqua.Module.Tests", "ClearDashboard.Aqua.Module.Tests\ClearDashboard.Aqua.Module.Tests.csproj", "{5C74BBE6-D14E-4C16-AEC4-6817045FD206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClearDashboard.Aqua.Module.Tests", "ClearDashboard.Aqua.Module.Tests\ClearDashboard.Aqua.Module.Tests.csproj", "{5C74BBE6-D14E-4C16-AEC4-6817045FD206}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
