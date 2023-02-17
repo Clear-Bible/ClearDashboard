@@ -1150,7 +1150,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         CorpusType = corpusNodeViewModel.CorpusType,
                         //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
                         IsRtl = corpusNodeViewModel.IsRtl,
-                        IsNewWindow = corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView
+                        IsNewWindow = corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView,
+                        DisplayName = corpusNodeViewModel.Name + " (" + corpusNodeMenuItem.Tokenizer! +")"
                     }, CancellationToken.None);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowCorpusNodeProperties:

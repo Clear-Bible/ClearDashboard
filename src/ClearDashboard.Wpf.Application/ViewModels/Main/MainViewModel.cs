@@ -1606,12 +1606,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
                 startupDialogViewModel.MimicParatextConnection = true;
 
-                await OnDeactivateAsync(false, CancellationToken.None);
+               
 
                 var result = await WindowManager!.ShowDialogAsync(startupDialogViewModel);
 
                 if (result == true)
                 {
+                    await OnDeactivateAsync(false, CancellationToken.None);
                     NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
                     await OnInitializeAsync(CancellationToken.None);
                     await OnActivateAsync(CancellationToken.None);
@@ -1650,8 +1651,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
                 await viewModel.Initialize(new EnhancedViewLayout
                 {
-                    ParatextSync = false,
-                    Title = $"{metadatum.DisplayName}",
+                    ParatextSync = false,//should this be true?
+                    Title = metadatum.DisplayName,
                     VerseOffset = 0
                 }, metadatum, cancellationToken);
 
