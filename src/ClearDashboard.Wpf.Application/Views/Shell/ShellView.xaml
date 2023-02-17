@@ -317,9 +317,21 @@
                 </Button>
             </StatusBarItem>
             <Separator Grid.Column="1" />
-            <StatusBarItem Grid.Column="2" >
-                <materialDesign:PackIcon Kind="GaugeFull" Visibility="{Binding ShowHighPerformanceMode}" Height="20" Width="20" Foreground="{StaticResource GreenLightBrush}" />
-                
+            <StatusBarItem Grid.Column="2">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon
+                        Width="36"
+                        Height="36"
+                        Margin="30,0,0,0"
+                        Foreground="{StaticResource GreenLightBrush}"
+                        Kind="GaugeFull"
+                        Visibility="{Binding ShowHighPerformanceMode}" />
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        FontSize="18"
+                        Foreground="{StaticResource GreenMidBrush}"
+                        Text="{Binding ElapsedTime}" />
+                </StackPanel>
             </StatusBarItem>
 
             <Separator Grid.Column="3" />

@@ -31,7 +31,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         IHandle<UserMessage>,
         IHandle<GetApplicationWindowSettings>,
         IHandle<UiLanguageChangedMessage>,
-        IHandle<PerformanceModeMessage>
+        IHandle<PerformanceModeMessage>,
+        IHandle<ShowElapsedTime>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -79,6 +80,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         #endregion
 
         #region ObservableProps
+
+        private string _elapsedTime = "something";
+        public string ElapsedTime
+        {
+            get => _elapsedTime;
+            set
+            {
+                _elapsedTime = value;
+                NotifyOfPropertyChange(() => ElapsedTime);
+            }
+        }
+
+
 
         private Visibility _showHighPerformanceMode = Visibility.Collapsed;
         public Visibility ShowHighPerformanceMode
@@ -469,6 +483,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             {
                 ShowHighPerformanceMode = Visibility.Collapsed;
             }
+
+            return Task.CompletedTask;
+        }
+
+        public Task HandleAsync(ShowElapsedTime message, CancellationToken cancellationToken)
+        {
+            ElapsedTime =  message.ElapsedTime;
 
             return Task.CompletedTask;
         }

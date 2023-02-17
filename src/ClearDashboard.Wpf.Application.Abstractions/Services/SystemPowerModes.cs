@@ -29,7 +29,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public SystemPowerModes()
         {
-            _eventAggregator = IoC.Get<EventAggregator>(); 
+            _eventAggregator = IoC.Get<IEventAggregator>(); 
         }
 
         /// <summary>
@@ -48,13 +48,14 @@ namespace ClearDashboard.Wpf.Application.Services
             return true;
         }
 
-        public void TurnOnHighPerformanceMode()
+        public async Task TurnOnHighPerformanceMode()
         {
             // get the active plan
             _activePlanGuid = PowerManager.GetActivePlan();
 
 
-            if (_activePlanGuid == HighPerformancePlan)
+            if (_activePlanGuid == HighPerformancePlan ||
+                PowerManager.GetPlanName(_activePlanGuid) == "Clear High Performance")
             {
                 // we are already running the high performance plan
                 return;
@@ -111,19 +112,23 @@ namespace ClearDashboard.Wpf.Application.Services
 
                     // set as the active plan
                     PowerManager.SetActivePlan(res);
-                    IsHighPerformanceEnabled = true;
-                    return;
+
                 }
                 catch (Exception e)
                 {
                     PowerManager.SetActivePlan(_activePlanGuid);
+                    IsHighPerformanceEnabled = false;
+                    await _eventAggregator.PublishOnUIThreadAsync(new PerformanceModeMessage(false));
                     return;
                 }
             }
-
-            // set as the active plan
-            PowerManager.SetActivePlan(highPerformancePlan.PowerModeGuid);
+            else
+            {
+                // set as the active plan
+                PowerManager.SetActivePlan(highPerformancePlan.PowerModeGuid);
+            }
             IsHighPerformanceEnabled = true;
+            await _eventAggregator.PublishOnUIThreadAsync(new PerformanceModeMessage(true));
         }
 
         public async Task TurnOffHighPerformanceMode()
@@ -132,7 +137,7 @@ namespace ClearDashboard.Wpf.Application.Services
             PowerManager.SetActivePlan(_activePlanGuid);
             IsHighPerformanceEnabled = false;
 
-            await _eventAggregator.PublishOnUIThreadAsync(new TokenizedCorpusUpdatedMessage(tokenizedTextCorpusId), cancellationToken);
+            await _eventAggregator.PublishOnUIThreadAsync(new PerformanceModeMessage(false));
 
         }
 

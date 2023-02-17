@@ -860,7 +860,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         _systemPowerModes.TurnOnHighPerformanceMode();
                     }
 
-
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
 
                     var selectedProject = dialogViewModel.SelectedProject;
                     var bookIds = dialogViewModel.BookIds;
@@ -1000,6 +1001,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
                             else
                             {
+
+                                sw.Stop();
+
+#if DEBUG
+                                await EventAggregator.PublishOnUIThreadAsync(
+                                    new ShowElapsedTime($"{sw.ElapsedMilliseconds} ms"));
+#endif
                                 PlaySound.PlaySoundFromResource(soundType);
                             }
 
