@@ -11,6 +11,7 @@ using ClearDashboard.DataAccessLayer.Models.Common;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Exceptions;
+using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
@@ -41,6 +42,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 
@@ -758,6 +760,78 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         #endregion //Constructor
 
         #region Methods
+
+        //public enum Direction
+        //{
+        //    Up,
+        //    Down
+        //}
+
+        public ICommand NavigateToNextDocumentForwards => new RelayCommand(param => CycleNextDocuments(Direction.Forwards));
+        public ICommand NavigateToNextDocumentBackwards => new RelayCommand(param => CycleNextDocuments(Direction.Backwards));
+        private void CycleNextDocuments(Direction direction)
+        {
+            var documentPane = _dockingManager.Layout.Descendents().OfType<LayoutDocumentPane>().FirstOrDefault();
+            var documents = documentPane?.Children;
+
+            // Only one or no document -> nothing to cycle through
+            if (documents.Count < 2)
+            {
+                return;
+            }
+
+            var currentlySelectedDocument = documents.FirstOrDefault(document => document.IsSelected);
+            int currentDocumentIndex = currentlySelectedDocument == null ? 0 : documents.IndexOf(currentlySelectedDocument);
+
+            if (currentlySelectedDocument != null)
+            {
+                currentlySelectedDocument.IsSelected = false;
+            }
+
+            switch (direction)
+            {
+                case Direction.Forwards:
+                {
+                    if (currentDocumentIndex == documents.Count - 1)
+                    {
+                        documents.First().IsSelected = true;
+                        return;
+                    }
+
+                    var nextDocument = documents
+                        .Skip(currentDocumentIndex + 1)
+                        .Take(1)
+                        .FirstOrDefault();
+
+                    if (nextDocument != null)
+                    {
+                        nextDocument.IsSelected = true;
+                    } 
+                    break;
+                }
+
+                case Direction.Backwards:
+                {
+                    // If first document reached, show last again
+                    if (currentDocumentIndex == 0)
+                    {
+                        documents.Last().IsSelected = true;
+                        return;
+                    }
+
+                    var nextDocument = documents
+                        .Skip(currentDocumentIndex - 1)
+                        .Take(1)
+                        .FirstOrDefault();
+
+                    if (nextDocument != null)
+                    {
+                        nextDocument.IsSelected = true;
+                    }
+                    break;
+                }
+            }
+        }
 
         private void ShowLogs()
         {

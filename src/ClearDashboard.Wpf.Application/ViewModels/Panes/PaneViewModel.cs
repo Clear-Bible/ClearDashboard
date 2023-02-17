@@ -39,27 +39,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         public string? ContentId
         {
             get => _contentId;
-            set
-            {
-                if (_contentId != value)
-                {
-                    _contentId = value;
-                    NotifyOfPropertyChange(() => ContentId);
-                }
-            }
+            set => Set(ref _contentId, value);
         }
 
         public bool IsSelected
         {
             get => _isSelected;
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    NotifyOfPropertyChange(() => IsSelected);
-                }
-            }
+            set => Set(ref _isSelected, value);
         }
 
         public new bool IsActive

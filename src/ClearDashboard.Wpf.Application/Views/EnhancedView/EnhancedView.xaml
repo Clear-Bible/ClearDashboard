@@ -38,6 +38,11 @@
             Key="N"
             Command="{Binding InsertNoteCommand}"
             Modifiers="Control+Shift" />
+
+        <KeyBinding 
+            Key="S" 
+            Command="{Binding TestCommand }" 
+            Modifiers="Ctrl" />
     </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
@@ -56,10 +61,6 @@
 
 
     </UserControl.Resources>
-
-    <UserControl.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding TestCommand }"/>
-    </UserControl.InputBindings> 
 
     <Grid x:Name="MainGrid" Background="{DynamicResource MaterialDesignBackground}">
         <Grid.RowDefinitions>
