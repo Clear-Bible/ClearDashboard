@@ -188,52 +188,96 @@
           .va:after {
           content: ")" !important; }
 
-          .x {
-          <!-- font-size: 16px; -->
-          box-sizing: border-box;
-          display: inline-block;
-          position: relative;
-          padding: 0 0.4em;
-          margin: 0 0.1em;
-          text-indent: 0;
-          text-align: left;
-          border-radius: 4px;
-          border: 1px solid #dcdcdc; }
-
-          .xo {
-          font-weight: bold; }
-
-          .xk {
-          font-style: italic; }
-
-          .xq {
-          font-style: italic; }
-
           .notelink {
           text-decoration: underline;
-          padding: 0.1em; }
-          .notelink, .notelink:hover, .notelink:active, .notelink:visited {
-          color: #6a6a6a; }
+          padding: 0.1em;
+          }
+
+          .notelink,
+          .notelink:hover,
+          .notelink:active,
+          .notelink:visited {
+          color: #6a6a6a;
+          }
+
           .notelink sup {
           font-size: 0.7em;
           letter-spacing: -0.03em;
           vertical-align: 0.25em;
           line-height: 0;
           font-family: sans-serif;
-          font-weight: bold; }
-          .notelink + sup:before {
-          content: "\a0"; }
+          font-weight: bold;
+          }
+
+          .notelink+sup:before {
+          content: "\a0";
+          }
+
+          .xhead {
+          font-size: 11px;
+          color: #008fff;
+          }
+
+          .x {
+          display: none;
+          width: calc(98vw - 35px);
+          background: #ffffd4;
+          border-radius: 6px;
+          padding: 5px 5px;
+          left: 10px;
+          border: 2px solid grey;
+          line-height: normal;
+          text-decoration: none;
+          position: absolute;
+          z-index: 1;
+
+          font-size: 16px;
+          color: #000;
+          text-align: center;
+          }
+
+          .xhead:hover .x {
+          display: block;
+          }
+
+          .xo {
+          font-weight: bold;
+          }
+
+          .xk {
+          font-style: italic;
+          }
+
+          .xq {
+          font-style: italic;
+          }
+
+          .fhead {
+          font-size: 11px;
+          color: #008fff;
+          }
 
           .f {
+          display: none;
+          width: calc(98vw - 35px);
+          background: #ffffd4;
+          border-radius: 6px;
+          padding: 5px 5px;
+          left: 10px;
+          border: 2px solid grey;
+          line-height: normal;
+          text-decoration: none;
+          position: absolute;
+          z-index: 1;
+
           font-size: 16px;
-          display: inline-block;
-          box-sizing: border-box;
-          padding: 0 0.4em;
-          margin: 0 0.1em;
-          text-indent: 0;
-          text-align: left;
-          border-radius: 4px;
-          border: 1px solid #7c7c7c;}
+          color: #000;
+          text-align: center;
+          }
+
+          .fhead:hover .f {
+          display: block;
+          }
 
           .fr {
           font-weight: bold; }
@@ -676,7 +720,7 @@
           font-style: normal;}
 
           .vh {
-          background-color:#f5f571;}
+          background-color:#ffffd4;}
 
           .res {
           font-weight: bold;
@@ -804,12 +848,28 @@
 
   <xsl:template match="node()[count(preceding::verse[@style='vh'])>=1 and count(following::verse[@style='vh'])>=1]">
     <span class="vh">
-
       <xsl:copy>
         <xsl:apply-templates select="@*|node()" />
       </xsl:copy>
-
     </span>
+  </xsl:template>
+
+  <xsl:template match="node()[@style='f']">
+    <sup class="fhead">
+      fnote_ 
+      <xsl:copy>
+        <xsl:apply-templates select="@*|node()" />
+      </xsl:copy>
+    </sup>
+  </xsl:template>
+
+  <xsl:template match="node()[@style='x']">
+    <sup class="xhead">
+      xref_
+      <xsl:copy>
+        <xsl:apply-templates select="@*|node()" />
+      </xsl:copy>
+    </sup>
   </xsl:template>
 
 </xsl:stylesheet>

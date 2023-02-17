@@ -6,19 +6,24 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Messages;
+using System.Threading.Tasks;
+using System.Threading;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
     /// <summary>
     /// Interaction logic for BookChapterVerse.xaml
     /// </summary>
-    public partial class BcvUserControl : INotifyPropertyChanged
+    public partial class BcvUserControl : INotifyPropertyChanged, IHandle<BcvArrowMessage>
     {
         #region Member Variables
 
-        private bool _verseChangeInProgress { get; set; }
-        private bool _chapterChangeInProgress { get; set; }
-        private bool _bookChangeInProgress { get; set; }
+        private bool _verseChangeInProgress; 
+        private bool _chapterChangeInProgress;
+        private bool _bookChangeInProgress;
 
         #endregion
 
@@ -297,6 +302,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
             BtnVerseLeft.IsEnabled = true;
             BtnVerseRight.IsEnabled = true;
+
+            IEventAggregator eventAggregator = IoC.Get<IEventAggregator>();
+            eventAggregator.Subscribe(this);
         }
 
         #endregion
@@ -324,10 +332,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void ChapterUpArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (CboChapter.SelectedIndex != 0)
-            {
-                _chapterChangeInProgress = true;
-            }
+            _chapterChangeInProgress = true;
 
             if (CboChapter.SelectedIndex > 0)
             {
@@ -343,10 +348,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void ChapterDownArrow_Click(object sender, RoutedEventArgs e)
         {
-            if (CboChapter.SelectedIndex != 0)
-            {
-                _chapterChangeInProgress = true;
-            }
+            _chapterChangeInProgress = true;
             
             if (CboChapter.SelectedIndex < CboChapter.Items.Count - 1)
             {
@@ -484,16 +486,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var verseId = CurrentBcv.BBBCCCVVV;
                 if (verseId != "")
                 {
-                    CboVerse.SelectedIndex = 0;
-                    CboChapter.SelectedIndex = 0;
-                    CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
 
                     CalculateChapters();
                     CalculateVerses();
+
+                    CboVerse.SelectedIndex = 0;
+                    CboChapter.SelectedIndex = 0;
+
                     somethingChanged = true;
                 }
 
-                if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress)
+                if (somethingChanged && !_chapterChangeInProgress && !_verseChangeInProgress && !CurrentBcv.ChapterChangeInProgress && !CurrentBcv.VerseChangeInProgress)
                 {
                     VerseChange = CurrentBcv.GetVerseId();
                 }
@@ -505,7 +508,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void CboChapter_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             _chapterChangeInProgress = true;
-            if (CurrentBcv.GetVerseId() != VerseChange)
+            if (CurrentBcv.BBBCCCVVV != VerseChange)
             {
                 bool somethingChanged = false;
                 var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
@@ -514,16 +517,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var verseId = BBBCCC+"001";
                 if (verseId != "")
                 {
-                    CboVerse.SelectedIndex = 0;
-                    CurrentBcv.SetVerseFromId(verseId);
 
                     CalculateVerses();
+
+                    CboVerse.SelectedIndex = 0;
+
                     somethingChanged = true;
                 }
 
-                if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress)
+                if (somethingChanged && !_verseChangeInProgress && !_bookChangeInProgress && !CurrentBcv.BookChangeInProgress && !CurrentBcv.VerseChangeInProgress)
                 {
-                    VerseChange = CurrentBcv.GetVerseId();
+                    VerseChange = CurrentBcv.BBBCCCVVV;
                 }
             }
 
@@ -534,12 +538,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void CboVerse_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             _verseChangeInProgress = true;
-            if (CurrentBcv.GetVerseId() != VerseChange)
+            if (CurrentBcv.BBBCCCVVV != VerseChange)
             {
-                CurrentBcv.SetVerseFromId(CurrentBcv.BBBCCCVVV);
-                if (!_bookChangeInProgress && !_chapterChangeInProgress)
+                
+                if (!_bookChangeInProgress && !_chapterChangeInProgress && !CurrentBcv.BookChangeInProgress && !CurrentBcv.ChapterChangeInProgress)
                 {
-                    VerseChange = CurrentBcv.GetVerseId();
+                    VerseChange = CurrentBcv.BBBCCCVVV;
                 }
             }
 
@@ -559,6 +563,34 @@ namespace ClearDashboard.Wpf.Application.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        public Task HandleAsync(BcvArrowMessage message, CancellationToken cancellationToken)
+        {
+            if (IsControlEnabled)
+            {
+                switch (message.Arrow)
+                {
+                    case BcvArrow.PreviousVerse:
+                        VerseUpArrow_Click(null, null);
+                        break;
+                    case BcvArrow.NextVerse:
+                        VerseDownArrow_Click(null, null);
+                        break;
+                    case BcvArrow.PreviousChapter:
+                        ChapterUpArrow_Click(null, null);
+                        break;
+                    case BcvArrow.NextChapter:
+                        ChapterDownArrow_Click(null, null);
+                        break;
+                    case BcvArrow.PreviousBook:
+                        BookUpArrow_Click(null, null);
+                        break;
+                    case BcvArrow.NextBook:
+                        BookDownArrow_Click(null, null);
+                        break;
+                }
+            }
+            return Task.CompletedTask;
+        }
 
 
         #endregion

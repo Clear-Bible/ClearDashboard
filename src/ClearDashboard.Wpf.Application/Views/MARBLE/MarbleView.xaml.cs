@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,11 @@ namespace ClearDashboard.Wpf.Application.Views.Marble
         {
             MarbleScrollViewer.ScrollToVerticalOffset(MarbleScrollViewer.VerticalOffset - e.Delta / 3);
             e.Handled = true;
+        }
+
+        private void FindText_OnClick(object sender, RoutedEventArgs e)
+        {
+            DrawerHost.OpenDrawerCommand.Execute(Dock.Top, null);
         }
     }
 }
