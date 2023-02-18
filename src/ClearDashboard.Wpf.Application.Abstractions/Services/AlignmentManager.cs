@@ -10,6 +10,7 @@ using Autofac;
 using System.Diagnostics;
 using System;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -25,6 +26,8 @@ namespace ClearDashboard.Wpf.Application.Services
         private IEventAggregator EventAggregator { get; }
         private ILogger<AlignmentManager> Logger { get; }
         private IMediator Mediator { get; }
+        private ILifetimeScope LifetimeScope { get; }
+        private IWindowManager WindowManager { get; }
 
         private async Task GetAlignmentSetAsync()
         {
@@ -90,14 +93,18 @@ namespace ClearDashboard.Wpf.Application.Services
                                 AlignmentSetId alignmentSetId, 
                                 IEventAggregator eventAggregator, 
                                 ILogger<AlignmentManager> logger, 
-                                IMediator mediator)
+                                ILifetimeScope lifetimeScope,
+                                IMediator mediator, 
+                                IWindowManager windowManager)
         {
             ParallelTextRow = parallelTextRow;
             AlignmentSetId = alignmentSetId;
 
             EventAggregator = eventAggregator;
             Logger = logger;
+            LifetimeScope = lifetimeScope;
             Mediator = mediator;
+            WindowManager = windowManager;
         }
 
         /// <summary>
@@ -117,8 +124,23 @@ namespace ClearDashboard.Wpf.Application.Services
             return manager;
         }
 
-        public void AddAlignment(TokenDisplayViewModel sourceTokenDisplay, TokenDisplayViewModel targetTokenDisplay)
+        public async Task AddAlignment(TokenDisplayViewModel sourceTokenDisplay, TokenDisplayViewModel targetTokenDisplay)
         {
+
+            var alignmentPopupViewModel = LifetimeScope?.Resolve<AlignmentPopupViewModel>();
+            alignmentPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.Add;
+            alignmentPopupViewModel.SourceTokenDisplay = sourceTokenDisplay;
+            alignmentPopupViewModel.TargetTokenDisplay = targetTokenDisplay;
+            //alignmentPopupViewModel.DisplayName = 
+
+            var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+            if (result == true)
+            {
+                // STOPPED here...
+                //var alignmentDisplayViewModel = (AlignmentDisplayViewModel)e.TokenDisplay.VerseDisplay;
+                //alignmentDisplayViewModel.AlignmentManager!.AddAlignment(alignmentPopupViewModel.SourceTokenDisplay,
+                //    alignmentPopupViewModel.TargetTokenDisplay);
+            }
             Logger.LogInformation("AddAlignment called.");
         }
     }

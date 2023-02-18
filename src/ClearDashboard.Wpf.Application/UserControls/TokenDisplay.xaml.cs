@@ -474,6 +474,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent CopyEvent = EventManager.RegisterRoutedEvent
             ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
+
+        /// <summary>
+        /// Identifies the CopyEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent DeleteAlignmentEvent = EventManager.RegisterRoutedEvent
+            ("DeleteAlignment", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
         /// <summary>
         /// Identifies the TranslateQuickEvent routed event.
         /// </summary>
@@ -826,6 +833,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
             JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
             UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
+            DeleteAlignmentMenuItem.Visibility = AllSelectedTokens.CanDeleteAlignment ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
@@ -1007,6 +1015,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnCopy(object sender, RoutedEventArgs e)
         {
             RaiseNoteEvent(CopyEvent, e);
+        }
+
+        private void DeleteAlignment(object sender, RoutedEventArgs e)
+        {
+            RaiseNoteEvent(DeleteAlignmentEvent, e);
         }
 
         private void OnTranslateQuick(object sender, RoutedEventArgs e)

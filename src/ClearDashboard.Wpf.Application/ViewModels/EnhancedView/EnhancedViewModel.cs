@@ -668,33 +668,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenClicked(object sender, TokenEventArgs e)
         {
-            //e.TokenDisplay.IsSource - top box
-            // e.TokenDisplay.IsTarget - bottom (needs to be added )
-            if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel)
+            if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
-               
-              
-                dynamic settings = new ExpandoObject();
-                settings.PopupAnimation = PopupAnimation.Fade;
-                //settings.Placement = PlacementMode.Center;
-                settings.Placement = PlacementMode.Absolute;
-                settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
-                settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
-
-
-                var alignmentPopupViewModel = LifetimeScope?.Resolve<AlignmentPopupViewModel>();
-                alignmentPopupViewModel.AlignmentPopupMode = AlignmentPopupMode.Add;
-                alignmentPopupViewModel.SourceTokenDisplay = e.SelectedTokens.First();
-                alignmentPopupViewModel.TargetTokenDisplay = e.TokenDisplay;
-                
-                var result = await _windowManager.ShowDialogAsync(alignmentPopupViewModel, null, settings);
-                if (result == true)
-                {
-                    var alignmentDisplayViewModel = (AlignmentDisplayViewModel)e.TokenDisplay.VerseDisplay;
-                    alignmentDisplayViewModel.AlignmentManager!.AddAlignment(alignmentPopupViewModel.SourceTokenDisplay,
-                        alignmentPopupViewModel.TargetTokenDisplay);
-                }
-
+                await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.SelectedTokens.First(), e.TokenDisplay);
             }
             else
             {

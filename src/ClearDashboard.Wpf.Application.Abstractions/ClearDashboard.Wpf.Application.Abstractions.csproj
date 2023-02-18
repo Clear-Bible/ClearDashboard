@@ -41,4 +41,14 @@
     <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\Popups\AlignmentPopupView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\EnhancedView\" />
+  </ItemGroup>
+
 </Project>
