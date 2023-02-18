@@ -184,7 +184,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        /// <summary>
+      /// <summary>
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
         /// <remarks>

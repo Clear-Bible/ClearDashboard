@@ -124,7 +124,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _showTranslation, value);
         }
 
-        private bool _isRtl;
+       private bool _isRtl;
 
         public bool IsRtl
         {

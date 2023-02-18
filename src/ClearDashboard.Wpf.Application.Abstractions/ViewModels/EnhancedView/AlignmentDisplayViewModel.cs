@@ -11,7 +11,6 @@ using MediatR;
 using ClearDashboard.Wpf.Application.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -22,7 +21,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
         private EngineParallelTextRow ParallelTextRow { get; }
         private AlignmentSetId AlignmentSetId { get; }
-        private AlignmentManager? AlignmentManager { get; set; }
+
+        public AlignmentManager? AlignmentManager { get; set; }
 
         /// <summary>
         /// Gets the collection of alignments for the verse.

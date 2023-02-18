@@ -15,11 +15,13 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
@@ -36,6 +38,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ReloadDataMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>
     {
+        private readonly IWindowManager _windowManager;
+
         #region Commands
 
         public ICommand MoveCorpusDownRowCommand { get; set; }
@@ -327,6 +331,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public EnhancedViewModel(INavigationService navigationService, 
             ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, 
+            IWindowManager windowManager,
             NoteManager noteManager, 
             VerseManager verseManager, 
             SelectionManager selectionManager, 
@@ -336,7 +341,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
-      
+            _windowManager = windowManager;
+
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
@@ -660,10 +666,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region VerseDisplayControl
 
-        public void TokenClicked(object sender, TokenEventArgs e)
+        public async void TokenClicked(object sender, TokenEventArgs e)
         {
-            SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
-            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            //e.TokenDisplay.IsSource - top box
+            // e.TokenDisplay.IsTarget - bottom (needs to be added )
+            if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel)
+            {
+               
+              
+                dynamic settings = new ExpandoObject();
+                settings.PopupAnimation = PopupAnimation.Fade;
+                //settings.Placement = PlacementMode.Center;
+                settings.Placement = PlacementMode.Absolute;
+                settings.HorizontalOffset = SystemParameters.FullPrimaryScreenWidth / 2 - 100;
+                settings.VerticalOffset = SystemParameters.FullPrimaryScreenHeight / 2 - 50;
+
+
+                var alignmentPopupViewModel = LifetimeScope?.Resolve<AlignmentPopupViewModel>();
+                alignmentPopupViewModel.AlignmentPopupMode = AlignmentPopupMode.Add;
+                alignmentPopupViewModel.SourceTokenDisplay = e.SelectedTokens.First();
+                alignmentPopupViewModel.TargetTokenDisplay = e.TokenDisplay;
+                
+                var result = await _windowManager.ShowDialogAsync(alignmentPopupViewModel, null, settings);
+                if (result == true)
+                {
+                    var alignmentDisplayViewModel = (AlignmentDisplayViewModel)e.TokenDisplay.VerseDisplay;
+                    alignmentDisplayViewModel.AlignmentManager!.AddAlignment(alignmentPopupViewModel.SourceTokenDisplay,
+                        alignmentPopupViewModel.TargetTokenDisplay);
+                }
+
+            }
+            else
+            {
+                SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+                NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            }
         }
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)

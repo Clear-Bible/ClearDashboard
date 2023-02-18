@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Caliburn.Micro;
-using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;

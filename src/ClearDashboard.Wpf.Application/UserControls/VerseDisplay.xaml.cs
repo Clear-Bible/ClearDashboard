@@ -29,14 +29,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        //protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        //{
-        //    if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        //    field = value;
-        //    OnPropertyChanged(propertyName);
-        //    return true;
-        //}
-
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -500,12 +492,19 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
             var args = e as TokenEventArgs;
-            UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
+
+
+            // If shift is pressed, then leave any selected tokens selected.
+            if (!args.IsShiftPressed)
+            {
+                UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
+            }
+           
 
             RaiseTokenEvent(TokenClickedEvent, args);
         }
 
-        private void UpdateVerseSelection(TokenDisplayViewModel token, bool addToSelection)
+        private void UpdateVerseSelection(TokenDisplayViewModel? token, bool addToSelection)
         {
             var tokenIsSelected = token.IsTokenSelected;
             if (!addToSelection)

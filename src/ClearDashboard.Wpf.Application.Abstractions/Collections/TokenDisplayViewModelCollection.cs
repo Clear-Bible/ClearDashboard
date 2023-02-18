@@ -8,7 +8,6 @@ using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 
 namespace ClearDashboard.Wpf.Application.Collections
 {
@@ -37,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.Collections
         {
         }
 
-        public TokenDisplayViewModelCollection(TokenDisplayViewModel token) : this()
+        public TokenDisplayViewModelCollection(TokenDisplayViewModel? token) : this()
         {
             Add(token);
         }

@@ -140,7 +140,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <ProgressBar
+       <ProgressBar
             Width="76"
             Height="75"
             HorizontalAlignment="Center"

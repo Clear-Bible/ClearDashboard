@@ -9,6 +9,7 @@ using ClearDashboard.Wpf.Application.Collections;
 using Autofac;
 using System.Diagnostics;
 using System;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -114,6 +115,11 @@ namespace ClearDashboard.Wpf.Application.Services
                                                                     new NamedParameter("alignmentSetId", alignmentSetId));
             await manager.InitializeAsync();
             return manager;
+        }
+
+        public void AddAlignment(TokenDisplayViewModel sourceTokenDisplay, TokenDisplayViewModel targetTokenDisplay)
+        {
+            Logger.LogInformation("AddAlignment called.");
         }
     }
 }

@@ -32,7 +32,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <remarks>
         /// If true, this is a source token; if false, this is a target token (alignment).
         /// </remarks>
-        public bool IsSource { get; set; } = true;
+        public bool IsSource
+        {
+            get => _isSource;
+            set
+            {
+                Set(ref _isSource, value);
+                NotifyOfPropertyChange(nameof(IsTarget));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether this is a source token.
+        /// </summary>
+        public bool IsTarget => !IsSource;
 
         private CompositeToken? _compositeToken;
         /// <summary>
@@ -163,6 +176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private bool _isNoteHovered;
         private Translation? _translation1;
+        private bool _isSource = true;
 
         /// <summary>
         /// Gets or sets whether a note to which the token is associated is hovered by the mouse.
