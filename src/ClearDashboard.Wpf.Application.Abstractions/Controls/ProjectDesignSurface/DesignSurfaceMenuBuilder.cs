@@ -52,7 +52,9 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             };
         }
 
-        public abstract void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds);
+        public virtual void CreateParallelCorpusConnectionMenu(ParallelCorpusConnectionViewModel parallelCorpusConnection, TopLevelProjectIds topLevelProjectIds)
+        {
+        }
 
         public virtual void CreateCorpusNodeChildMenu(CorpusNodeMenuItemViewModel corpusNodeMenuItemViewModel, TokenizedTextCorpusId tokenizedCorpus)
         {
