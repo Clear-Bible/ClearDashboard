@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using MediatR;
@@ -16,7 +17,6 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
@@ -62,23 +62,40 @@ namespace ClearDashboard.Aqua.Module.Services
             eventAggregator_.SubscribeOnUIThread(this);
         }
 
+        public async Task<IAquaManager.Version> GetVersion(
+            string versionId,
+            CancellationToken cancellationToken = default)
+        {
+            var versions = await ListVersions(cancellationToken);
+            return versions?
+                .Where(v => v.abbreviation == versionId)
+                .First()
+                ?? throw new InvalidDataEngineException(name: "versions", value: "null", message: $"ListVersions returned a list that didn't contain {versionId}");
+        }
         public async Task<string> AddVersion(
-            TokenizedTextCorpusId tokenizedTextCorpusId,
             IAquaManager.Version version,
             CancellationToken cancellationToken = default
         )
         {
+
+            return await PostJsonAsync(
+                httpClient_,
+                assessmentPath_,
+                version,
+                cancellationToken);
+
             //ex: https://6pu6b82gdk.us-east-1.awsapprunner.com/version?name=foo&isoLanguage=blah&isoScript=bing&abbreviation=www&machineTranslation=false
 
-            string versionJson = JsonSerializer.Serialize(version, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
-            var versionDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(versionJson);
+            //string versionJson = JsonSerializer.Serialize(version, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
+            //var versionDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(versionJson);
 
-            return await PostKeyValueDataAsQueryStringAsync(
-                httpClient_,
-                versionPath_,
-                versionDictionary,
-                cancellationToken
-                );
+            //return await PostKeyValueDataAsQueryStringAsync(
+            //    httpClient_,
+            //    versionPath_,
+            //    versionDictionary,
+            //    cancellationToken
+            //    );
+
             //await SlowTask("AddVersion", 10, cancellationToken, progress);
             //return "versionId";
         }
@@ -105,8 +122,6 @@ namespace ClearDashboard.Aqua.Module.Services
                 cancellationToken);
             return;
         }
-
-
         public async Task<string> AddRevision(
             TokenizedTextCorpusId tokenizedTextCorpusId,
             string versionId,
@@ -151,7 +166,7 @@ namespace ClearDashboard.Aqua.Module.Services
         }
 
         public async Task DeleteRevision(
-            int revisionId,
+            string revisionId,
             CancellationToken cancellationToken = default)
         {
             //https://6pu6b82gdk.us-east-1.awsapprunner.com/revision?revision=6
@@ -159,7 +174,7 @@ namespace ClearDashboard.Aqua.Module.Services
             await DeleteAsync(
                 httpClient_,
                 revisionPath_,
-                new Dictionary<string, string>() { { "revision", revisionId.ToString() } },
+                new Dictionary<string, string>() { { "revision", revisionId } },
                 cancellationToken);
             return;
         }

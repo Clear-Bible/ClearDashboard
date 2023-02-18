@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Threading;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
@@ -9,11 +12,15 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
         Visibility StatusBarVisibility { get; set; }
         string? DialogTitle { get; set; }
 
-        string? AquaId { get; set; }
+        TokenizedTextCorpusId? TokenizedTextCorpusId { get; set; }
+        AquaTokenizedTextCorpusMetadata AquaTokenizedTextCorpusMetadata { get; set; }
+
         void Ok();
         void Cancel();
-        Task<LongRunningTaskStatus> AddVersion();
 
-        Task<LongRunningTaskStatus> AddRevision();
+        public Task<LongRunningTaskStatus> RunLongRunningTask<TResult>(
+            string taskName,
+            Func<CancellationToken, Task<TResult>> awaitableFunction,
+            Action<TResult> ProcessResult);
     }
 }

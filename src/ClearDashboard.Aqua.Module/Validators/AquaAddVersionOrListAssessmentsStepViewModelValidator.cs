@@ -21,6 +21,30 @@ namespace ClearDashboard.Aqua.Module.Validators
         {
             _localizationService = localizationService;
 
+            RuleFor(x => x.Name).NotNull().NotEmpty();
+            RuleFor(x => x.IsoLanguage).NotNull().NotEmpty();
+            RuleFor(x => x.IsoScript).NotNull().NotEmpty();
+            RuleFor(x => x.Abbreviation).NotNull().NotEmpty();
+            //RuleFor(x => x.Rights).NotNull().NotEmpty();
+            RuleFor(x => x.ForwardTranslationToVersionId)
+                .Custom((x, context) =>
+                {
+                    if (x != null && x != string.Empty && (!(int.TryParse(x, out int value)) || value <= 0))
+                    {
+                        var messageFormat = _localizationService["NumericTextValidationMessage"];
+                        context.AddFailure(string.Format(messageFormat, x));
+                    }
+                });
+            RuleFor(x => x.BackTranslationToVersionId)
+                .Custom((x, context) =>
+                {
+                    if (x != null && x != string.Empty && (!(int.TryParse(x, out int value)) || value <= 0))
+                    {
+                        var messageFormat = _localizationService["NumericTextValidationMessage"];
+                        context.AddFailure(string.Format(messageFormat, x));
+                    }
+                });
+            /*
             RuleFor(x => x.ValidatedText).NotNull().NotEmpty();
 
             RuleFor(x => x.LengthText).MinimumLength(1).MaximumLength(6);
@@ -34,6 +58,7 @@ namespace ClearDashboard.Aqua.Module.Validators
                     context.AddFailure(string.Format(messageFormat, x));
                 }
             });
+            */
         }
     }
 }

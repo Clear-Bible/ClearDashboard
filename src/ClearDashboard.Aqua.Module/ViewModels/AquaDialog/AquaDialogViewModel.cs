@@ -3,9 +3,7 @@ using Caliburn.Micro;
 using ClearApplicationFoundation.Exceptions;
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
-using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Exceptions;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
@@ -27,34 +25,36 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 {
     public class AquaDialogViewModel : DashboardApplicationWorkflowShellViewModel, IAquaDialogViewModel
     {
-        internal class TaskNames
-        {
-            public const string AddVersion = "AddVersion";
-            public const string AddRevision = "AddRevision";
-            public const string GetRevisions = "GetRevisions";
-            public const string GetAssessmentStatuses = "GetAssessmentStatuses";
-            public const string GetAssessmentResult = "GetAssessmentResult";
-        }
-
-        private readonly TokenizedTextCorpusId tokenizedTextCorpusId_;
-
         #region Member Variables   
 
         private readonly ILogger<AquaDialogViewModel>? logger_;
         private readonly DashboardProjectManager? projectManager_;
-        private readonly ILifetimeScope? lifetimeScope_;
         private readonly IAquaManager? aquaManager_;
-        private readonly ILocalizationService _localization;
         private readonly LongRunningTaskManager? longRunningTaskManager_;
         private LongRunningTask? currentLongRunningTask_;
-
 
         #endregion //Member Variables
 
 
         #region Public Properties
 
-        public string? AquaId { get; set; }
+        private TokenizedTextCorpusId? tokenizedTextCorpusId_;
+        public TokenizedTextCorpusId? TokenizedTextCorpusId
+        {
+            get => tokenizedTextCorpusId_;
+            set
+            {
+                tokenizedTextCorpusId_ = value;
+            }
+        }
+
+
+        private AquaTokenizedTextCorpusMetadata? aquaTokenizedTextCorpusMetadata_;
+        public AquaTokenizedTextCorpusMetadata? AquaTokenizedTextCorpusMetadata
+        {
+            get => aquaTokenizedTextCorpusMetadata_;
+            set => aquaTokenizedTextCorpusMetadata_ = value;
+        }
 
         #endregion //Public Properties
 
@@ -83,17 +83,6 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             }
         }
     
-
-        private ParatextProjectMetadata? _selectedProject;
-        public ParatextProjectMetadata? SelectedProject
-        {
-            get => _selectedProject;
-            set
-            {
-                Set(ref _selectedProject, value);
-            }
-        }
-
         private bool _canOk;
         public bool CanOk
         {
@@ -124,7 +113,6 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             ILifetimeScope lifetimeScope,
             INavigationService navigationService,
             IMediator mediator,
-            ILocalizationService localization,
             LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
@@ -134,34 +122,24 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             CanOk = true;
             logger_ = logger;
             projectManager_ = projectManager;
-            lifetimeScope_ = lifetimeScope;
             aquaManager_ = aquaManager;
-            _localization = localization;
             longRunningTaskManager_ = longRunningTaskManager;
 
-            DisplayName = _localization.Get("AquaDialog_DisplayName");
+            DisplayName = LocalizationService!.Get("AquaDialog_DisplayName");
 
-            DialogTitle = "Aqua dialog title";
+            DialogTitle = LocalizationService!.Get("AquaDialog_DialogTitle");
 
             tokenizedTextCorpusId_ = tokenizedTextCorpusId;
         }
-
-        private string? ObtainAquaId(TokenizedTextCorpusId tokenizedTextCorpusId)
-        {
-            //look in TokenizedTextCorpus.Metadata for an AquaId, and if there return else null.
-            return "AQUAID";
-        }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-            AquaId = ObtainAquaId(tokenizedTextCorpusId_);
 
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode),
-                new NamedParameter("aquaId", AquaId),
             };
 
-            var views = lifetimeScope_?.ResolveKeyedOrdered<IWorkflowStepViewModel>("AquaDialog", parameters, "Order").ToArray();
+            var views = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("AquaDialog", parameters, "Order").ToArray();
 
             if (views == null || !views.Any())
             {
@@ -218,10 +196,13 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
         }
         public bool CanCancel => true /* can always cancel */;
 
-        public async Task<LongRunningTaskStatus> AddVersion()
+        //FIXME: should the following be put in a base class?
+        public async Task<LongRunningTaskStatus> RunLongRunningTask<TResult>(
+            string taskName, 
+            Func<CancellationToken, Task<TResult>> awaitableFunction,
+            Action<TResult> ProcessResult)
         {
             IsBusy = true;
-            var taskName = TaskNames.AddVersion;
             currentLongRunningTask_ = longRunningTaskManager_!.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = currentLongRunningTask_!.CancellationTokenSource?.Token
                 ?? throw new Exception("Cancellation source is not set.");
@@ -233,51 +214,37 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
                     taskName,
                     LongRunningTaskStatus.Running,
                     cancellationToken,
-                    $"Adding version.");
-                Logger!.LogInformation($"Adding version.");
+                    $"{taskName} running");
+                Logger!.LogInformation(taskName);
 
-                await aquaManager_!.AddVersion(
-                    tokenizedTextCorpusId_,
-                    new IAquaManager.Version("name", "isoLanguage", "isoScript", "versionAbbreviation"),
-                    cancellationToken /*,
-                    new DelegateProgress(async status =>
-                    {
-                        var message =
-                            $"Adding version: {status.PercentCompleted:P}";
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
-                        message);
-                        Logger!.LogInformation(message);
-
-                    })*/);
+                ProcessResult(await awaitableFunction(cancellationToken));
 
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
                     cancellationToken,
-                    $"Adding version complete.");
+                    $"{taskName} complete");
 
-                Logger!.LogInformation($"Adding version complete.");
-
-
+                Logger!.LogInformation($"{taskName} complete.");
             }
             catch (OperationCanceledException)
             {
-                Logger!.LogInformation($"Adding version - operation canceled.");
+                Logger!.LogInformation($"{taskName}: operation cancelled.");
             }
             catch (MediatorErrorEngineException ex)
             {
                 if (ex.Message.Contains("The operation was canceled."))
                 {
-                    Logger!.LogInformation($"Adding version - operation canceled.");
+                    Logger!.LogInformation($"{taskName}: operation cancelled.");
                 }
                 else
                 {
-                    Logger!.LogError(ex, "An unexpected exception was thrown.");
+                    Logger!.LogError(ex, $"{taskName}: unexpected error.");
                 }
 
             }
             catch (Exception ex)
             {
-                Logger!.LogError(ex, $"An unexpected error occurred while adding version.");
+                Logger!.LogError(ex, $"{taskName}: unexpected error.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
                     await SendBackgroundStatus(taskName,
@@ -297,95 +264,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Completed,
                         cancellationToken,
-                        $"Adding version was canceled.");
-                }
-                IsBusy = false;
-                Message = string.Empty;
-                StatusBarVisibility = Visibility.Hidden;
-            }
-            return currentLongRunningTask_.Status;
-        }
-
-        public async Task<LongRunningTaskStatus> AddRevision()
-        {
-            IsBusy = true;
-            var taskName = TaskNames.AddRevision;
-            currentLongRunningTask_ = longRunningTaskManager_!.Create(taskName, LongRunningTaskStatus.Running);
-            var cancellationToken = currentLongRunningTask_!.CancellationTokenSource?.Token 
-                ?? throw new Exception("Cancellation source is not set.");
-            try
-            {
-                StatusBarVisibility = Visibility.Visible;
-                currentLongRunningTask_.Status = LongRunningTaskStatus.Running;
-                await SendBackgroundStatus(
-                    taskName,
-                    LongRunningTaskStatus.Running,
-                    cancellationToken,
-                    $"Adding revision.");
-                Logger!.LogInformation($"Adding revision.");
-
-                await aquaManager_!.AddRevision(
-                    tokenizedTextCorpusId_,
-                    "",
-                    cancellationToken,
-                    new DelegateProgress(async status =>
-                    {
-                        var message =
-                            $"Adding revision: {status.PercentCompleted:P}";
-                        await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
-                        message);
-                        Logger!.LogInformation(message);
-
-                    }));
-
-                await SendBackgroundStatus(taskName,
-                    LongRunningTaskStatus.Completed,
-                    cancellationToken,
-                    $"Adding revision complete.");
-
-                Logger!.LogInformation($"Adding revision complete.");
-
-
-            }
-            catch (OperationCanceledException)
-            {
-                Logger!.LogInformation($"Adding revision - operation canceled.");
-            }
-            catch (MediatorErrorEngineException ex)
-            {
-                if (ex.Message.Contains("The operation was canceled."))
-                {
-                    Logger!.LogInformation($"Adding revision - operation canceled.");
-                }
-                else
-                {
-                    Logger!.LogError(ex, "An unexpected exception was thrown.");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Logger!.LogError(ex, $"An unexpected error occurred while adding revision.");
-                if (!cancellationToken.IsCancellationRequested)
-                {
-                    await SendBackgroundStatus(taskName,
-                        LongRunningTaskStatus.Failed,
-                        cancellationToken,
-                        exception: ex);
-                }
-
-                currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
-            }
-            finally
-            {
-                longRunningTaskManager_.TaskComplete(taskName);
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
-                    await SendBackgroundStatus(taskName,
-                        LongRunningTaskStatus.Completed,
-                        cancellationToken,
-                        $"Adding revision was canceled.");
+                        $"{taskName} canceled.");
                 }
                 IsBusy = false;
                 Message = string.Empty;

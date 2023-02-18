@@ -35,8 +35,11 @@ namespace ClearDashboard.Aqua.Module.Services
             int? backTranslationToVersionId = null,
             bool machineTranslation = false 
         );
+
+        public Task<Version> GetVersion(
+            string versionId,
+            CancellationToken cancellationToken = default);
         public Task<string> AddVersion(
-            TokenizedTextCorpusId tokenizedTextCorpusId,
             Version versionInfo,
             CancellationToken cancellationToken = default);
         public Task<IEnumerable<Version>?> ListVersions(
@@ -52,7 +55,7 @@ namespace ClearDashboard.Aqua.Module.Services
             string versionId,
             CancellationToken cancellationToken = default);
 
-        public record Revision(string info);
+        public record Revision(string revisionId, string info);
 
         /// <summary>
         /// 
@@ -78,7 +81,7 @@ namespace ClearDashboard.Aqua.Module.Services
             string versionId,
             CancellationToken cancellationToken = default);
         public Task DeleteRevision(
-            int revisionId,
+            string revisionId,
             CancellationToken cancellationToken = default);
 
         public record Assessment(

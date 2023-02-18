@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application;
@@ -12,11 +13,12 @@ using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
 public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaDialogViewModel>
 {
+    private readonly IAquaManager? aquaManager_;
+
     public AquaAddRevisionStepViewModel()
     {
     }
@@ -33,13 +35,14 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
         ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
+        aquaManager_ = aquaManager;
         DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
 
-        BodyTitle = "Add Revision Body Title";
-        BodyText = "Add Revision Body Text";
+        BodyTitle = LocalizationService!.Get("AquaAddRevisionStepViewModel_BodyTitle");
+        BodyText = LocalizationService!.Get("AquaAddRevisionStepViewModel_BodyText"); ;
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
@@ -51,6 +54,16 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
         return base.OnActivateAsync(cancellationToken);
     }
 
+    private string? revisionId_;
+    public string? RevisionId
+    {
+        get => revisionId_;
+        set
+        {
+            Set(ref revisionId_, value);
+            //ValidationResult = Validate();
+        }
+    }
 
     private DialogMode _dialogMode;
     public DialogMode DialogMode
@@ -71,6 +84,7 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
     }
 
     private string? bodyText_;
+
     public string? BodyText
     {
         get => bodyText_;
@@ -102,7 +116,16 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
     {
         try
         {
-            var processStatus = await ParentViewModel!.AddRevision();
+            //var processStatus = await ParentViewModel!.AddRevision();
+            var processStatus = await ParentViewModel!.RunLongRunningTask(
+                "Adding corpus revision to AQuA",
+                (cancellationToken) => aquaManager_!.AddRevision(
+                    ParentViewModel!.TokenizedTextCorpusId 
+                        ?? throw new InvalidStateEngineException(name: "ParentViewModel!.TokenizedTextCorpus", value: "null"),
+                    ParentViewModel!.AquaTokenizedTextCorpusMetadata.VersionId
+                        ?? throw new InvalidStateEngineException(name: "ParentViewModel!.AquaTokenizedTextCorpusMetadata.VersionId", value: "null"),
+                    cancellationToken),
+                (revisionId) => RevisionId = revisionId);
 
             switch (processStatus)
             {
@@ -125,7 +148,7 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
         }
         catch (Exception)
         {
-            ParentViewModel!.Cancel();
+            //ParentViewModel!.Cancel();
         }
     }
 }

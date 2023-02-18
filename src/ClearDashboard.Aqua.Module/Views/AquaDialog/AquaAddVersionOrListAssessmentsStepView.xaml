@@ -39,214 +39,474 @@
         </Style>
 
     </UserControl.Resources>
-    <Grid Margin="30" Name="StepGrid" Width="Auto">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height=".10*" />
-            <RowDefinition Height=".10*" />
-            <RowDefinition Height=".10*" />
-            <RowDefinition Height=".10*" />
-            <RowDefinition Height=".40*" />
-            <RowDefinition Height=".10*" />
-        </Grid.RowDefinitions>
+    <Grid  Width="Auto">
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel
-            Grid.Row="0"
-            VerticalAlignment="Top"
-            Orientation="Vertical">
-            <Label Content="{Binding BodyText}" />
+        <Grid Margin="30" Name="StepGrid" Width="Auto" Grid.Column="0" IsEnabled="{Binding DoesntHaveVersionId}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+                <RowDefinition Height=".10*" />
+            </Grid.RowDefinitions>
 
-           
+            <StackPanel
+                Grid.Row="0"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
+                <Label Content="{Binding BodyText}" />
 
-        </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Vertical" >
 
-            <TextBox x:Name="UnvalidatedText"
-                     materialDesign:HintAssist.FloatingScale="0.60"
-                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                     materialDesign:HintAssist.Hint="{helpers:Localization UnvalidatedText}"
-                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                     Foreground="{DynamicResource MaterialDesignBody}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <TextBox.Text>
-                    <Binding
+
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Vertical" >
+                <TextBox x:Name="Name"
+                         materialDesign:HintAssist.FloatingScale="0.60"
+                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                         materialDesign:HintAssist.Hint="{helpers:Localization Name}"
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                         Foreground="{DynamicResource MaterialDesignBody}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                            Mode="TwoWay"
+                            Path="Name"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                    MaxWidth="400"
+                                    Margin="10"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                    Text="{Binding [0].ErrorContent}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>
+                <!--<TextBox x:Name="UnvalidatedText"
+                         materialDesign:HintAssist.FloatingScale="0.60"
+                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                         materialDesign:HintAssist.Hint="{helpers:Localization UnvalidatedText}"
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                         Foreground="{DynamicResource MaterialDesignBody}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                            Mode="TwoWay"
+                            Path="UnvalidatedText"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="false" />
+                    </TextBox.Text>
+                </TextBox>
+            -->
+            </StackPanel>
+            <StackPanel Grid.Row="2"  Orientation="Vertical" VerticalAlignment="Top">
+                <TextBox x:Name="IsoLanguage"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization ISO_Language}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
                         Mode="TwoWay"
-                        Path="UnvalidatedText"
-                        UpdateSourceTrigger="PropertyChanged"
-                        ValidatesOnDataErrors="false" />
-                </TextBox.Text>
-            </TextBox>
-        </StackPanel>
-
-        <StackPanel Grid.Row="2"  Orientation="Vertical" VerticalAlignment="Top">
-            <TextBox x:Name="ValidatedText"
-                     materialDesign:HintAssist.FloatingScale="0.60"
-                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                     materialDesign:HintAssist.Hint="{helpers:Localization ValidatedText}"
-                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                     Foreground="{DynamicResource MaterialDesignBody}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <TextBox.Text>
-                    <Binding
-                        Mode="TwoWay"
-                        Path="ValidatedText"
+                        Path="IsoLanguage"
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
-                </TextBox.Text>
-                <Validation.ErrorTemplate>
-                    <ControlTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <AdornedElementPlaceholder />
-                            <TextBlock
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ControlTemplate>
-                </Validation.ErrorTemplate>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
 
-            </TextBox>
-        </StackPanel>
-        <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Top">
-            <TextBox x:Name="LengthText"
-                     materialDesign:HintAssist.FloatingScale="0.60"
-                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                     materialDesign:HintAssist.Hint="{helpers:Localization LengthText}"
-                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                     Foreground="{DynamicResource MaterialDesignBody}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <TextBox.Text>
-                    <Binding
+                </TextBox>
+                <!--<TextBox x:Name="ValidatedText"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization ValidatedText}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                            Mode="TwoWay"
+                            Path="ValidatedText"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                    MaxWidth="400"
+                                    Margin="10"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                    Text="{Binding [0].ErrorContent}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>-->
+            </StackPanel>
+            <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Top">
+                <TextBox x:Name="IsoScript"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization ISO Script}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
                         Mode="TwoWay"
-                        Path="LengthText"
+                        Path="IsoScript"
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
-                </TextBox.Text>
-                <Validation.ErrorTemplate>
-                    <ControlTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <AdornedElementPlaceholder />
-                            <TextBlock
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ControlTemplate>
-                </Validation.ErrorTemplate>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
 
-            </TextBox>
-        </StackPanel>
+                </TextBox>
+
+                <!--<TextBox x:Name="LengthText"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization LengthText}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                            Mode="TwoWay"
+                            Path="LengthText"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                    MaxWidth="400"
+                                    Margin="10"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                    Text="{Binding [0].ErrorContent}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>-->
+            </StackPanel>
 
 
-        <StackPanel Grid.Row="4" Orientation="Vertical" VerticalAlignment="Top">
-            <TextBox x:Name="NumericText"
-                     materialDesign:HintAssist.FloatingScale="0.60"
-                     materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                     materialDesign:HintAssist.Hint="{helpers:Localization NumericText}"
-                     materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                     Foreground="{DynamicResource MaterialDesignBody}"
-                     Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <TextBox.Text>
-                    <Binding
+            <StackPanel Grid.Row="4" Orientation="Vertical" VerticalAlignment="Top">
+                <TextBox x:Name="Abbreviation"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization Abbreviation}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
                         Mode="TwoWay"
-                        Path="NumericText"
+                        Path="Abbreviation"
                         UpdateSourceTrigger="PropertyChanged"
                         ValidatesOnDataErrors="True" />
-                </TextBox.Text>
-                <Validation.ErrorTemplate>
-                    <ControlTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <AdornedElementPlaceholder />
-                            <TextBlock
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
                                 MaxWidth="400"
                                 Margin="10"
                                 FontSize="16"
                                 Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
                                 Text="{Binding [0].ErrorContent}"
                                 TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ControlTemplate>
-                </Validation.ErrorTemplate>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
 
-            </TextBox>
-        </StackPanel>
-        <ListView Grid.Row="5"
-                x:Name="ListView"
-                Margin="5, 30"
-                ItemsSource="{Binding Items}"
-                ScrollViewer.CanContentScroll="False"
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                ScrollViewer.IsDeferredScrollingEnabled="True"
-                VirtualizingStackPanel.IsVirtualizing="True"
-                VirtualizingStackPanel.VirtualizationMode="Recycling">
+                </TextBox>
+                <!--<TextBox x:Name="NumericText"
+                         materialDesign:HintAssist.FloatingScale="0.60"
+                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                         materialDesign:HintAssist.Hint="{helpers:Localization NumericText}"
+                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                         Foreground="{DynamicResource MaterialDesignBody}"
+                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                            Mode="TwoWay"
+                            Path="NumericText"
+                            UpdateSourceTrigger="PropertyChanged"
+                            ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                    MaxWidth="400"
+                                    Margin="10"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                    Text="{Binding [0].ErrorContent}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
 
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Height" Value="Auto" />
-                    <Setter Property="Width" Value="Auto"></Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" Value="LightGreen" />
-                            <Setter Property="IsSelected" Value="True" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="true">
-                            <Setter Property="Background" Value="LightCoral" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid ShowGridLines="True" HorizontalAlignment="Stretch">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                            Margin="8,0,5,0"
-                            VerticalAlignment="Center"
-                            FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                            FontWeight="Bold"
-                            Text="{Binding Name}" />
-                        <Button Grid.Column="1" 
-                                cm:Message.Attach="AddItemToEnhancedView($dataContext)"
-                                Style="{StaticResource TransparentStyle}">+</Button>
-                        <Button Grid.Column="2" 
-                                cm:Message.Attach="DeleteItem($dataContext)"
-                                Style="{StaticResource TransparentStyle}">X</Button>
-                    </Grid>
+                </TextBox>-->
+            </StackPanel>
+            <StackPanel Grid.Row="5">
+                <TextBox x:Name="Rights"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization Rights}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="Rights"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
 
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel
-            Grid.Row="6"
-            Grid.Column="0"
-            Margin="5"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Orientation="Horizontal">
-            <Button
-                x:Name="AddVersion"
-                Content="Add Version"
-                IsDefault="True"
-                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                Style="{StaticResource TransparentStyle}" />
-            <Button
-                x:Name="MoveForwards"
-                Content="Add Revision"
-                IsDefault="True"
-                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                Style="{StaticResource TransparentStyle}"   />
-        </StackPanel>
-      
+                </TextBox>
 
+            </StackPanel>
+            <StackPanel Grid.Row="6">
+                <TextBox x:Name="ForwardTranslationToVersionId"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization This_is_forward_translation_to_abbreviation}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="ForwardTranslationToVersionId"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>
+
+            </StackPanel>
+            <StackPanel Grid.Row="7">
+                <TextBox x:Name="BackTranslationToVersionId"
+                        materialDesign:HintAssist.FloatingScale="0.60"
+                        materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization This_is_back_translation_to_abbreviation}"
+                        materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                        Foreground="{DynamicResource MaterialDesignBody}"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <TextBox.Text>
+                        <Binding
+                        Mode="TwoWay"
+                        Path="BackTranslationToVersionId"
+                        UpdateSourceTrigger="PropertyChanged"
+                        ValidatesOnDataErrors="True" />
+                    </TextBox.Text>
+                    <Validation.ErrorTemplate>
+                        <ControlTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <AdornedElementPlaceholder />
+                                <TextBlock
+                                MaxWidth="400"
+                                Margin="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
+                                Text="{Binding [0].ErrorContent}"
+                                TextWrapping="Wrap" />
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Validation.ErrorTemplate>
+
+                </TextBox>
+
+            </StackPanel>
+            <StackPanel Grid.Row="8">
+                <CheckBox
+                    Name="MachineTranslation"
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    IsChecked="false"
+                    >
+                    Is this a machine translation?
+                </CheckBox>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="9"
+                Margin="5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="AddVersion"
+                    Content="Add Corpus Information to AQuA"
+                    IsDefault="True"
+                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource TransparentStyle}" />
+            </StackPanel>
+        </Grid>
+        <Grid  Margin="30" Width="Auto"  Grid.Column="1" IsEnabled="{Binding HasVersionId}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel
+                VerticalAlignment="Top"
+                Orientation="Vertical">
+                <ListView 
+                    x:Name="ListView"
+                    Margin="5, 30"
+                    ItemsSource="{Binding Items}"
+                    ScrollViewer.CanContentScroll="False"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.IsDeferredScrollingEnabled="True"
+                    VirtualizingStackPanel.IsVirtualizing="True"
+                    VirtualizingStackPanel.VirtualizationMode="Recycling">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Width" Value="Auto"></Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="LightGreen" />
+                                    <Setter Property="IsSelected" Value="True" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Background" Value="LightCoral" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ShowGridLines="True" HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0"
+                                Margin="8,0,5,0"
+                                VerticalAlignment="Center"
+                                FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                FontWeight="Bold"
+                                Text="{Binding Info}" />
+                                <Button Grid.Column="1" 
+                                    cm:Message.Attach="AddItemToEnhancedView($dataContext)"
+                                    Style="{StaticResource TransparentStyle}">+</Button>
+                                <Button Grid.Column="2" 
+                                    cm:Message.Attach="DeleteItem($dataContext)"
+                                    Style="{StaticResource TransparentStyle}">X</Button>
+                            </Grid>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <StackPanel
+                Grid.Row="10"
+                Grid.Column="1"
+                Margin="5"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Orientation="Horizontal">
+                    <Button
+                    x:Name="MoveForwards"
+                    IsDefault="True"
+                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource TransparentStyle}">Add Revision</Button>
+                    <Button
+                    x:Name="GetRevisions"
+                    IsDefault="True"    
+                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource TransparentStyle}">Reload Revisions</Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
