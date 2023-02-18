@@ -2,7 +2,6 @@
 using Caliburn.Micro;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Features.MarbleDataRequests;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Models.ViewModels.WordMeanings;
@@ -27,6 +26,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.Wpf.Application.Services;
 using wpfKeyBoard;
 
@@ -594,7 +594,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             return string.Format(@"U+{0:x4}", (int)c);
         }
 
-        private void GotoSourceWord(object obj)
+        private void GotoSourceWord(object? obj)
         {
             if (obj is Button button)
             {
@@ -678,7 +678,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         }
 
 
-        private void ShowDrawer(object obj)
+        private void ShowDrawer(object? obj)
         {
             DrawerVisibility = Visibility.Visible;
         }
@@ -718,7 +718,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private async Task GetVerseDetail(object arg)
+        private async Task GetVerseDetail(object? arg)
         {
             if (arg is CoupleOfStrings coupleOfStrings)
             {
@@ -911,7 +911,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private Task SetContext(object arg)
+        private Task SetContext(object? arg)
         {
             if (arg.ToString() == "All")
             {
@@ -936,7 +936,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
 
 
 
-        private async Task SearchSense(object obj)
+        private async Task SearchSense(object? obj)
         {
             if (obj is RelatedLemma lemma)
             {
@@ -946,7 +946,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         }
 
 
-        private void LaunchLogos(object obj)
+        private void LaunchLogos(object? obj)
         {
             if (obj is null)
             {
@@ -971,7 +971,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             }
         }
 
-        private void LaunchLogosStrongNumber(object obj)
+        private void LaunchLogosStrongNumber(object? obj)
         {
             if (SelectedWord == "")
             {

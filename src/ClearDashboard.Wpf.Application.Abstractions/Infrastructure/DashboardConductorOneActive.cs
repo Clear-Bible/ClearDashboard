@@ -26,4 +26,6 @@ public abstract class DashboardConductorOneActive<T> : ApplicationConductorOneAc
     public DashboardProjectManager? ProjectManager { get; private set; }
     protected ILocalizationService? LocalizationService { get; }
 
+    protected BindableCollection<T> MoveableItems => (BindableCollection<T>)Items;
+
 }

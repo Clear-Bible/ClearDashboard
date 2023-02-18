@@ -2,10 +2,14 @@
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using SIL.IO.FileLock;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
@@ -51,12 +55,14 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
         {
             string copyText=String.Empty;
 
-            var menuItem = (MenuItem)sender;
-            var parent = menuItem.Parent;
-            var contextMenu = (ContextMenu)parent;
-            var target = contextMenu.PlacementTarget;
-
-            if (target is DataGrid grid)
+            if (sender is MenuItem menuItem)
+            {
+                var parent = menuItem.Parent;
+                var contextMenu = (ContextMenu)parent;
+                sender = contextMenu.PlacementTarget;
+            }
+            
+            if (sender is DataGrid grid)
             {
                 var columnIndex = grid.CurrentColumn!=null? grid.CurrentColumn.DisplayIndex : 6;
 
@@ -89,16 +95,21 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
                         break;
                 }
             }
-            else if (target is ListBox listBox && listBox == SelectedItemVerseRenderings)
+            else if (sender is ListBox listBox && listBox == SelectedItemVerseRenderings)
             {
                 copyText = listBox.SelectedItem.ToString();
             }
-            else if (target is ListView listView && listView == SelectedItemVerses && listView.SelectedItem is VerseViewModel verse)
+            else if (sender is ListView listView && listView == SelectedItemVerses && listView.SelectedItem is VerseViewModel verse)
             {
                 copyText = verse.VerseText;
             }
-                
+
             Clipboard.SetText(copyText);
+        }
+
+        private void FindText_OnClick(object sender, ExecutedRoutedEventArgs e)
+        {
+            FilterText.Focus();
         }
     }
 }

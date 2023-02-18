@@ -197,6 +197,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 var s= ex.ToString();
             }
 
+            ProjectName = ProjectManager.CurrentProject.ProjectName!;
+
             await DrawDesignSurface();
 
             _busyState.CollectionChanged += BusyStateOnCollectionChanged;
@@ -295,7 +297,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task DrawDesignSurface()
         {
-            Logger!.LogInformation($"Drawing design surface for project '{ProjectName}.");
+           
+            Logger!.LogInformation($"Drawing design surface for project '{ProjectName}'.");
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
             LoadingDesignSurface = true;
@@ -389,9 +392,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 return null;
             }
-
-            ProjectName = ProjectManager.CurrentProject.ProjectName!;
-
             if (ProjectManager?.CurrentProject.DesignSurfaceLayout == "")
             {
                 return null;

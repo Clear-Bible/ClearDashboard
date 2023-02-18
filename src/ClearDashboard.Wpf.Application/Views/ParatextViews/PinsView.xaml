@@ -46,6 +46,14 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid.CommandBindings>
+            <CommandBinding Command="Find" Executed="FindText_OnClick" />
+        </Grid.CommandBindings>
+
+        <Grid.InputBindings>
+            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+        </Grid.InputBindings>
+
         <StackPanel
             Grid.Row="0"
             Grid.Column="0"
@@ -87,6 +95,7 @@
                 Content="{helpers:Localization Pins_Filter}"
                 Style="{StaticResource MaterialDesignLabel}" />
             <TextBox
+                Name="FilterBox"
                 Width="200"
                 Height="25"
                 Margin="15,0,0,0"
@@ -131,6 +140,14 @@
             SelectionMode="Single"
             SelectionUnit="Cell"
             VerticalGridLinesBrush="{StaticResource GridBrush}">
+
+            <DataGrid.CommandBindings>
+                <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+            </DataGrid.CommandBindings>
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+            </DataGrid.InputBindings>
 
             <DataGrid.ContextMenu>
                 <ContextMenu>

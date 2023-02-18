@@ -7,6 +7,10 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU</Platforms>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.0-alpha</Version>
+    <PackageProjectUrl>https://github.com/Clear-Bible/ClearDashboard</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Clear-Bible/ClearDashboard</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

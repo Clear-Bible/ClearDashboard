@@ -95,7 +95,12 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(tr => tr.SourceTokenComponent!.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id ||
                              tr.TargetTokenComponent!.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id);
 
-            ProjectDbContext!.Remove(alignmentsToRemove);
+            var currentDateTime = Models.TimestampedEntity.GetUtcNowRoundedToMillisecond();
+
+            foreach (var e in alignmentsToRemove)
+            {
+                e.Deleted = currentDateTime;
+            }
 
             var alignment = new Models.Alignment
             {

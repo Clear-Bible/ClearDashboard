@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core.Lifetime;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Views.Shell;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -26,7 +27,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -40,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
         public IWindowManager WindowManager { get; }
 
-        public VerseAwareConductorAllActive ParentViewModel => (VerseAwareConductorAllActive)Parent;
+        public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
 
         //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 
@@ -164,6 +167,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 }
             }
         }
+
+
 
         public async  void TranslationClicked(object sender, TranslationEventArgs args)
         {
@@ -412,7 +417,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
                 }
-
+                Verses.Clear();
                 foreach (var row in rows)
                 {
                     Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
@@ -437,6 +442,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
                 }
+                Verses.Clear();
                 foreach (var row in rows)
                 {
                     Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
@@ -580,7 +586,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private static Brush GetCorpusBrushColor(CorpusType corpusType)
         {
-            Brush brush = Brushes.Blue;
+            Brush brush;
             switch (corpusType)
             {
                 case CorpusType.Standard:
@@ -674,5 +680,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
             await Task.CompletedTask;
         }
+
+        public ICommand KDCommand => new RelayCommand(ExecuteKDCommand, CanExecuteKDCommand);
+
+        private bool CanExecuteKDCommand(object obj)
+        {
+            return true;
+        }
+
+        private void ExecuteKDCommand(object obj)
+        {
+            MessageBox.Show("Ha! KDCommand is working.");
+        }
+
+        protected override void OnViewReady(object view)
+        {
+            var verseAwareEnhancedViewItem = (UserControl)view;
+
+            // TODO:  remove
+            verseAwareEnhancedViewItem.InputBindings.Add(new KeyBinding(KDCommand,new MultiKeyGesture(new[] {Key.K, Key.D}, ModifierKeys.Control)));
+            base.OnViewReady(view);
+        }
+
+   
     }
 }

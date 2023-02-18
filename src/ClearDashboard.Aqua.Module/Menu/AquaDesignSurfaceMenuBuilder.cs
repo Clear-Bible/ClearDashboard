@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.ViewModels.Menus;
+using ClearDashboard.DAL.Alignment;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
