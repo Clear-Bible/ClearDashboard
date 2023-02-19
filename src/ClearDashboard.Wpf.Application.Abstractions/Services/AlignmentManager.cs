@@ -143,5 +143,24 @@ namespace ClearDashboard.Wpf.Application.Services
             }
             Logger.LogInformation("AddAlignment called.");
         }
+
+        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay)
+        {
+            var alignmentPopupViewModel = LifetimeScope?.Resolve<AlignmentPopupViewModel>();
+            alignmentPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.Delete;
+            //alignmentPopupViewModel.SourceTokenDisplay = sourceTokenDisplay;
+            //alignmentPopupViewModel.TargetTokenDisplay = targetTokenDisplay;
+            //alignmentPopupViewModel.DisplayName = 
+
+            var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+            if (result == true)
+            {
+                // STOPPED here...
+                //var alignmentDisplayViewModel = (AlignmentDisplayViewModel)e.TokenDisplay.VerseDisplay;
+                //alignmentDisplayViewModel.AlignmentManager!.AddAlignment(alignmentPopupViewModel.SourceTokenDisplay,
+                //    alignmentPopupViewModel.TargetTokenDisplay);
+            }
+            Logger.LogInformation("DeleteAlignment called.");
+        }
     }
 }

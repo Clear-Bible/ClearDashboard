@@ -47,6 +47,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public bool IsTarget => !IsSource;
 
+        public bool IsAligned => VerseDisplay.Alignments != null && 
+                                 VerseDisplay.Alignments.Any(a => a.AlignedTokenPair.SourceToken.TokenId.Id == Token.TokenId.Id 
+                                                                  || a.AlignedTokenPair.TargetToken.TokenId.Id == Token.TokenId.Id);
+
         private CompositeToken? _compositeToken;
         /// <summary>
         /// Gets or sets the parent <see cref="CompositeToken"/> of this token, if any.

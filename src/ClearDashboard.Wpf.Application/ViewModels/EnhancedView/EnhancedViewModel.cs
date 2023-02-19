@@ -679,6 +679,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        //TokenDeleteAlignment
+        public async void TokenDeleteAlignment(object sender, TokenEventArgs e)
+        {
+            if (e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
+            {
+                await alignmentDisplayViewModel.AlignmentManager!.DeleteAlignment(e.TokenDisplay);
+            }
+          
+        }
+
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
         {
             SelectionManager.UpdateRightClickSelection(e.TokenDisplay);

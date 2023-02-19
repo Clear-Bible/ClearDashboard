@@ -73,7 +73,7 @@
                         Header="{helpers:Localization EnhancedView_UnjoinTokens}" />
                     <MenuItem Click="OnFilterPins" Header="{helpers:Localization EnhancedView_FilterPins}" />
                     <MenuItem Click="OnCopy" Header="{helpers:Localization Copy}" />
-                    <MenuItem x:Name="DeleteAlignmentMenuItem" Click="DeleteAlignment" Header="{helpers:Localization EnhancedView_DeleteAlignment}" />
+                    <MenuItem x:Name="DeleteAlignmentMenuItem" Click="OnTokenDeleteAlignment" Header="{helpers:Localization EnhancedView_DeleteAlignment}" />
                 </ContextMenu>
             </Button.ContextMenu>
             <TextBlock

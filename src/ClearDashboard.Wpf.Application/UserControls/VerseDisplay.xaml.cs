@@ -217,11 +217,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenDeleteAlignment routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenDeleteAlignmentEvent = EventManager.RegisterRoutedEvent
+            ("TokenDeleteAlignment", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TranslateQuickEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslateQuickEvent = EventManager.RegisterRoutedEvent
             ("TranslateQuick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
         #endregion
+
         #region Static DependencyProperties
 
         /// <summary>
@@ -504,6 +511,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenClickedEvent, args);
         }
 
+        //OnTokenDeleteAlignment
+        private void OnTokenDeleteAlignment(object sender, RoutedEventArgs e)
+        {
+            var args = e as TokenEventArgs;
+            
+            RaiseTokenEvent(TokenDeleteAlignmentEvent, args);
+        }
+
         private void UpdateVerseSelection(TokenDisplayViewModel? token, bool addToSelection)
         {
             var tokenIsSelected = token.IsTokenSelected;
@@ -779,6 +794,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenClickedEvent, value);
             remove => RemoveHandler(TokenClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual token is clicked.
+        /// </summary>
+        public event RoutedEventHandler TokenDeleteAlignment
+        {
+            add => AddHandler(TokenDeleteAlignmentEvent, value);
+            remove => RemoveHandler(TokenDeleteAlignmentEvent, value);
         }
 
         /// <summary>

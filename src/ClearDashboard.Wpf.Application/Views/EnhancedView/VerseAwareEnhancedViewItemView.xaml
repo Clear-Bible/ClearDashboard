@@ -92,6 +92,9 @@
                         <!--cm:Message.Attach="[Key Enter] = [EnterPressed]; [Gesture Ctrl+Enter] = [CtrlEnterPressed]; [Gesture Alt+Enter] = [AltEnterPressed]">-->
                         <!--  cm:Message.Attach="[Event TranslationClicked] = [Action TranslationClicked($this, $eventArgs)]"  -->
                         <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="TokenDeleteAlignment">
+                                <b:CallMethodAction MethodName="TokenDeleteAlignment" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
+                            </b:EventTrigger>
                             <b:EventTrigger EventName="TokenClicked">
                                 <b:CallMethodAction MethodName="TokenClicked" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:EnhancedView}}, Path=DataContext}" />
                             </b:EventTrigger>
