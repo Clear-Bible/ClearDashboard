@@ -1055,7 +1055,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // initiate the menu system
-            var tasksRunning = _longRunningTaskManager.HasTasks();
+            var tasksRunning = !_longRunningTaskManager.HasTasks();
             MenuItems.Clear();
             MenuItems = new BindableCollection<MenuItemViewModel>
             {
