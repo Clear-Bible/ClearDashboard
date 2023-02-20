@@ -7,7 +7,10 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -17,13 +20,22 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
     protected ILocalizationService LocalizationService { get; }
 
     private Brush _borderColor = Brushes.Blue;
+
+
     public Brush BorderColor
     {
         get => _borderColor;
         set => Set(ref _borderColor, value);
     }
 
-   // public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
+    private bool _hasFocus;
+    public bool HasFocus
+    {
+        get => _hasFocus;
+        set => Set(ref _hasFocus, value);
+    }
+
+    // public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
     public virtual Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
     {
@@ -38,4 +50,21 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
         // no-op
     }
 
+    protected override Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        //HasFocus = true;
+        return base.OnActivateAsync(cancellationToken);
+    }
+
+    protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+    {
+        //HasFocus = false;
+        return base.OnDeactivateAsync(close, cancellationToken);
+    }
+
+    public void SetFocus(object sender, MouseButtonEventArgs e)
+    {
+        var element = (UIElement)sender;
+        EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
+    }
 }

@@ -26,6 +26,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using AvalonDock.Properties;
+using ClearApplicationFoundation.Framework.Input;
 using HtmlAgilityPack;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
@@ -321,7 +322,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             }
         }
 
-        public async void Refresh(object obj)
+        public async void Refresh(object? obj)
         {
             await CallGetTextCollections();
         }
