@@ -11,11 +11,11 @@ namespace ClearDashboard.Wpf.Application.Services
     public sealed class SelectionManager : PropertyChangedBase
     {
         private IEventAggregator EventAggregator { get; }
-        private ILogger<VerseManager> Logger { get; }
+        private ILogger<SelectionManager> Logger { get; }
         private IMediator Mediator { get; }
 
         private TokenDisplayViewModelCollection _selectedTokens = new();
-        private TokenDisplayViewModelCollection SelectedTokens
+        public TokenDisplayViewModelCollection SelectedTokens
         {
             get => _selectedTokens;
             set
@@ -25,6 +25,10 @@ namespace ClearDashboard.Wpf.Application.Services
                 NotifyOfPropertyChange(nameof(SelectedNoteIds));
             }
         }
+
+        public bool AnySourceTokens => SelectedTokens.Any(t => t.IsTokenSelected);
+
+        public TokenDisplayViewModelCollection SelectedSourceTokens => new(SelectedTokens.Where(t=> t.IsSource && t.IsTokenSelected));
 
         public EntityIdCollection SelectedEntityIds => SelectedTokens.EntityIds;
         public NoteIdCollection SelectedNoteIds => SelectedTokens.NoteIds;
@@ -70,7 +74,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public SelectionManager(IEventAggregator eventAggregator, ILogger<VerseManager> logger, IMediator mediator)
+        public SelectionManager(IEventAggregator eventAggregator, ILogger<SelectionManager> logger, IMediator mediator)
         {
             EventAggregator = eventAggregator;
             Logger = logger;

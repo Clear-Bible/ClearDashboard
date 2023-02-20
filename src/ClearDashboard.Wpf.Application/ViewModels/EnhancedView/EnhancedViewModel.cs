@@ -670,7 +670,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
-                await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.SelectedTokens.First(), e.TokenDisplay);
+                if (SelectionManager.AnySourceTokens)
+                {
+                    var selectedTokens = SelectionManager.SelectedSourceTokens;
+                    await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(selectedTokens.First(), e.TokenDisplay);
+                }
+                
             }
             else
             {
