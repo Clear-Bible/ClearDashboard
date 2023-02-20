@@ -56,7 +56,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ActiveDocumentMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
-                IHandle<FilterPinsMessage>
+                IHandle<FilterPinsMessage>, 
+                IHandle<BackgroundTaskChangedMessage>
     {
         #region Member Variables
 
@@ -1054,13 +1055,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // initiate the menu system
+            var tasksRunning = _longRunningTaskManager.HasTasks();
             MenuItems.Clear();
             MenuItems = new BindableCollection<MenuItemViewModel>
             {
                 // File
                 new()
                 {
-                    Header =_localizationService!.Get("MainView_File"), Id = "FileID", ViewModel = this,
+                    Header =_localizationService!.Get("MainView_File"), Id = "FileID", ViewModel = this, IsEnabled = tasksRunning,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // New
@@ -1606,8 +1608,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
                 startupDialogViewModel.MimicParatextConnection = true;
 
-               
-
                 var result = await WindowManager!.ShowDialogAsync(startupDialogViewModel);
 
                 if (result == true)
@@ -1704,6 +1704,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
-      
+        public Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            bool enable;
+            if (_longRunningTaskManager.Tasks.Count<=1 && message.Status.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
+            {
+                enable = true;
+            }
+            else
+            {
+                enable = false;
+            }
+            foreach (var item in MenuItems)
+            {
+                if (item.Id == "FileID")
+                {
+                    item.IsEnabled = enable;
+                    break;
+                }
+            }
+            return Task.CompletedTask;
+        }
+
     }
 }
