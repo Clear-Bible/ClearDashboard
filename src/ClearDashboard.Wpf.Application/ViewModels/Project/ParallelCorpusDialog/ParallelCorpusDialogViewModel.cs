@@ -46,7 +46,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         private readonly IEnumerable<TokenizedTextCorpusId> _tokenizedCorpora;
         private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
-        private readonly SystemPowerModes _systemPowerModes = new();
+        private readonly SystemPowerModes _systemPowerModes;
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private CorpusNodeViewModel _sourceCorpusNodeViewModel;
         private CorpusNodeViewModel _targetCorpusNodeViewModel;
@@ -132,11 +132,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             ILogger<ParallelCorpusDialogViewModel> logger,
             BackgroundTasksViewModel backgroundTasksViewModel,
             IEventAggregator eventAggregator,
+            SystemPowerModes systemPowerModes,
             IMediator mediator,
             ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
+            _systemPowerModes = systemPowerModes;
             _tokenizedCorpora = tokenizedCorpora;
             _backgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;

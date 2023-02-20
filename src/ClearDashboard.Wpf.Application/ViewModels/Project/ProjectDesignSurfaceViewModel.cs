@@ -65,7 +65,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         private readonly IWindowManager? _windowManager;
         private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
-        private readonly SystemPowerModes _systemPowerModes = new();
+        private readonly SystemPowerModes _systemPowerModes;
         #endregion //Member Variables
 
         #region Observable Properties
@@ -141,12 +141,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             //no-op
         }
 
-        public ProjectDesignSurfaceViewModel(INavigationService navigationService, IWindowManager windowManager,
-            ILogger<ProjectDesignSurfaceViewModel> logger, DashboardProjectManager? projectManager, BackgroundTasksViewModel backgroundTasksViewModel,
-            IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService, IEnhancedViewManager enhancedViewManager)
+        public ProjectDesignSurfaceViewModel(INavigationService navigationService, 
+            IWindowManager windowManager,
+            ILogger<ProjectDesignSurfaceViewModel> logger, 
+            DashboardProjectManager? projectManager, 
+            BackgroundTasksViewModel backgroundTasksViewModel,
+            IEventAggregator? eventAggregator,
+            SystemPowerModes systemPowerModes,
+            IMediator mediator, 
+            ILifetimeScope lifetimeScope, 
+            LongRunningTaskManager longRunningTaskManager, 
+            ILocalizationService localizationService, 
+            IEnhancedViewManager enhancedViewManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             EnhancedViewManager = enhancedViewManager;
+            _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
             _backgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
