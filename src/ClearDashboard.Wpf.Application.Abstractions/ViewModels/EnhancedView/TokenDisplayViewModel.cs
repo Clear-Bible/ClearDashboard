@@ -21,6 +21,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public Token TokenForTranslation => IsCompositeTokenMember ? CompositeToken! : Token;
 
+        public Token AlignmentToken=> IsCompositeTokenMember ? CompositeToken! : Token;
+
         /// <summary>
         /// The <see cref="VerseDisplayViewModel"/> that this token is part of.
         /// </summary>
