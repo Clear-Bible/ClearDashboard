@@ -2,6 +2,7 @@
     x:Class="ClearDashboard.Wpf.Application.Views.DashboardSettings.DashboardSettingsView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cm="http://caliburnmicro.com"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dashboardSettings="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.DashboardSettings"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
@@ -11,8 +12,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:cm="http://caliburnmicro.com"
-    Title="DashboardSettingsView"
+    Title="{helpers1:Localization Settings_Settings}"
     Width="800"
     Height="450"
     d:DataContext="{d:DesignInstance Type=dashboardSettings:DashboardSettingsViewModel,
@@ -27,6 +27,7 @@
     TextOptions.TextFormattingMode="Ideal"
     TextOptions.TextRenderingMode="Auto"
     mc:Ignorable="d">
+
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -58,7 +59,7 @@
                             Kind="Gauge75" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="Power Modes"
+                            Text="{helpers1:Localization Settings_PowerModes}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
@@ -67,7 +68,10 @@
                         Margin="16"
                         Header="Power Modes"
                         IsEnabled="{Binding IsPowerModesBoxEnabled}">
-                        <CheckBox Content="Allow Dashboard to Change Power Modes During High Computational Events" IsChecked="{Binding IsPowerModesEnabled}" cm:Message.Attach="PowerModeCheckBox($datacontext)" />
+                        <CheckBox
+                            cm:Message.Attach="PowerModeCheckBox($datacontext)"
+                            Content="{helpers1:Localization Settings_PowerModesDescription}"
+                            IsChecked="{Binding IsPowerModesEnabled}" />
                     </GroupBox>
                 </StackPanel>
             </TabItem>
@@ -79,11 +83,14 @@
                             Height="24"
                             HorizontalAlignment="Center"
                             Kind="TrafficBarrier" />
-                        <TextBlock HorizontalAlignment="Center" Text="Reserved" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Text="{helpers1:Localization Settings_Reserved}"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <TextBlock>
-                    <Run Text="Reserved For Future Expansion" />
+                <TextBlock TextWrapping="Wrap">
+                    <Run Text="{helpers1:Localization Settings_ReservedCaption}" />
                     <LineBreak />
                     <LineBreak />
                 </TextBlock>
@@ -96,11 +103,14 @@
                             Height="24"
                             HorizontalAlignment="Center"
                             Kind="TrafficBarrier" />
-                        <TextBlock HorizontalAlignment="Center" Text="Reserved" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Text="{helpers1:Localization Settings_Reserved}"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <TextBlock>
-                    <Run Text="Reserved For Future Expansion" />
+                <TextBlock TextWrapping="Wrap">
+                    <Run Text="{helpers1:Localization Settings_ReservedCaption}" />
                     <LineBreak />
                     <LineBreak />
                 </TextBlock>
@@ -113,11 +123,14 @@
                             Height="24"
                             HorizontalAlignment="Center"
                             Kind="TrafficBarrier" />
-                        <TextBlock HorizontalAlignment="Center" Text="Reserved" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Text="{helpers1:Localization Settings_Reserved}"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <TextBlock>
-                    <Run Text="Reserved For Future Expansion" />
+                <TextBlock TextWrapping="Wrap">
+                    <Run Text="{helpers1:Localization Settings_ReservedCaption}" />
                     <LineBreak />
                     <LineBreak />
                 </TextBlock>
