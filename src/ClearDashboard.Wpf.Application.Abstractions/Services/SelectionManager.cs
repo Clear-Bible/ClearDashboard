@@ -26,7 +26,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public bool AnySourceTokens => SelectedTokens.Any(t => t.IsTokenSelected);
+        public bool AnySourceTokens => SelectedTokens.Any(t => t.IsSource && t.IsTokenSelected);
 
         public TokenDisplayViewModelCollection SelectedSourceTokens => new(SelectedTokens.Where(t=> t.IsSource && t.IsTokenSelected));
 
