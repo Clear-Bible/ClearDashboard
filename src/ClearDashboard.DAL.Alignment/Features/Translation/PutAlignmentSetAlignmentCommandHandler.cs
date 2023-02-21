@@ -20,7 +20,7 @@ using ClearDashboard.DAL.Alignment.Translation;
 namespace ClearDashboard.DAL.Alignment.Features.Translation
 {
     public class PutAlignmentSetAlignmentCommandHandler : ProjectDbContextCommandHandler<PutAlignmentSetAlignmentCommand,
-        RequestResult<object>, object>
+        RequestResult<Alignment.Translation.AlignmentId>, Alignment.Translation.AlignmentId>
     {
         private readonly IMediator _mediator;
 
@@ -32,7 +32,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             _mediator = mediator;
         }
 
-        protected override async Task<RequestResult<object>> SaveDataAsync(PutAlignmentSetAlignmentCommand request,
+        protected override async Task<RequestResult<Alignment.Translation.AlignmentId>> SaveDataAsync(PutAlignmentSetAlignmentCommand request,
             CancellationToken cancellationToken)
         {
             var alignmentSet = ProjectDbContext!.AlignmentSets
@@ -41,7 +41,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             if (alignmentSet == null)
             {
-                return new RequestResult<object>
+                return new RequestResult<Alignment.Translation.AlignmentId>
                 (
                     success: false,
                     message: $"Invalid AlignmentSetId '{request.AlignmentSetId.Id}' found in request"
@@ -50,7 +50,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             if (!Enum.TryParse(request.Alignment.Verification, out ModelVerificationType verificationType))
             {
-                return new RequestResult<object>
+                return new RequestResult<Alignment.Translation.AlignmentId>
                 (
                     success: false,
                     message: $"Invalid alignment verification type '{request.Alignment.Verification}' found in request"
@@ -59,7 +59,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             if (!Enum.TryParse(request.Alignment.OriginatedFrom, out ModelOriginatedType originatedType))
             {
-                return new RequestResult<object>
+                return new RequestResult<Alignment.Translation.AlignmentId>
                 (
                     success: false,
                     message: $"Invalid alignment originated from type '{request.Alignment.OriginatedFrom}' found in request"
@@ -71,7 +71,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.SourceTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id))
             {
-                return new RequestResult<object>
+                return new RequestResult<Alignment.Translation.AlignmentId>
                 (
                     success: false,
                     message: $"Request alignment token pair source token id '{request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id}' not found in alignment set parallel corpus"
@@ -83,7 +83,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 .Where(tc => tc.TokenizedCorpusId == alignmentSet!.ParallelCorpus!.TargetTokenizedCorpusId)
                 .Any(tc => tc.Id == request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id))
             {
-                return new RequestResult<object>
+                return new RequestResult<Alignment.Translation.AlignmentId>
                 (
                     success: false,
                     message: $"Request alignment token pair target token id '{request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id}' not found in alignment set parallel corpus"
@@ -104,6 +104,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var alignment = new Models.Alignment
             {
+                Id = Guid.NewGuid(),
                 SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id,
                 TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id,
                 Score = request.Alignment.AlignedTokenPair.Score,
@@ -118,11 +119,18 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignment, ProjectDbContext));
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                transaction.Commit();
+                await transaction.CommitAsync(cancellationToken);
             }
 
             await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment), cancellationToken);
-            return new RequestResult<object>(null);
+
+            // Querying the database so we can return a fully formed AlignmentId:
+            var alignmentId = ModelHelper.AddIdIncludesAlignmentsQuery(ProjectDbContext!)
+                .Where(al => al.Id == alignment.Id)
+                .Select(a => ModelHelper.BuildAlignmentId(a))
+                .First();
+
+            return new RequestResult<Alignment.Translation.AlignmentId>(alignmentId);
         }
     }
 }

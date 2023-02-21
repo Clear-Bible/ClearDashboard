@@ -243,7 +243,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     await _mediator.Publish(new AlignmentAddingRemovingEvent(alignmentsRemoving, null, ProjectDbContext), cancellationToken);
                     _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                    transaction.Commit();
+                    await transaction.CommitAsync(cancellationToken);
                 }
 
                 await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsRemoving, null), cancellationToken);
