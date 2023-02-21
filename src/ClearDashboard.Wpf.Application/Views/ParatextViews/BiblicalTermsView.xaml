@@ -414,6 +414,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Text="{Binding RenderingString}"
+                                ToolTip="{Binding RenderingStringHover}"
                                 TextWrapping="Wrap">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">

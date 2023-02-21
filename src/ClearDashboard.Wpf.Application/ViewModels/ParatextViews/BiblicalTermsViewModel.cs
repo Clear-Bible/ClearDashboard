@@ -1111,18 +1111,50 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                 {
                                     _biblicalTerms.Add(biblicalTermsList[i]);
 
-                                    foreach (var rendering in biblicalTermsList[i].Renderings)
+                                    var renderings = biblicalTermsList[i].Renderings.Distinct().OrderBy(x => x).ToList();
+                                    // group similar words if the list is long
+                                    if (renderings.Count > 6)
                                     {
-                                        if (rendering != biblicalTermsList[i].Renderings.Last())
+
+                                        renderings = SortByLength(renderings);
+                                        int shortest = renderings[0].Length;
+
+                                        // group by shortest length of string
+                                        var renderingGroups = renderings
+                                            .GroupBy(x => x.Substring(0, shortest));
+
+                                        string sTemp = "";
+                                        foreach (var renderingGroup in renderingGroups)
                                         {
-                                            _biblicalTerms[i].RenderingString += rendering + "\n";
-                                        }
-                                        else
-                                        {
-                                            _biblicalTerms[i].RenderingString += rendering;
+                                            sTemp += renderingGroup.Key + "*\n";
                                         }
 
+                                        // remove the last \n
+                                        if (sTemp.Length > 0)
+                                        {
+                                            sTemp = sTemp[..^1];
+                                        }
+
+                                        _biblicalTerms[i].RenderingString = sTemp;
+                                        _biblicalTerms[i].RenderingStringHover = String.Join("\n", renderings);
+
                                         cancellationToken.ThrowIfCancellationRequested();
+                                    }
+                                    else
+                                    {
+                                        foreach (var rendering in renderings)
+                                        {
+                                            if (rendering != renderings.Last())
+                                            {
+                                                _biblicalTerms[i].RenderingString += rendering + "\n";
+                                            }
+                                            else
+                                            {
+                                                _biblicalTerms[i].RenderingString += rendering;
+                                            }
+
+                                            cancellationToken.ThrowIfCancellationRequested();
+                                        }
                                     }
 
                                     // check to see if every verse has been accounted for

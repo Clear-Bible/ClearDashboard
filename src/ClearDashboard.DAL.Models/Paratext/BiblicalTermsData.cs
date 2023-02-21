@@ -25,7 +25,9 @@
         public List<string> Renderings { get; set; } = new List<string>();
         
         public string? RenderingString { get; set; }
-        
+
+        public string? RenderingStringHover { get; set; }
+
         public int RenderingCount { get; set; }
 
         public string Counts
