@@ -258,7 +258,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         public int GetNumberOfPerformanceTasksRemaining()
         {
            return BackgroundTaskStatuses
-               .Where(x => x.BackgroundTaskType == BackgroundTaskStatus.BackgroundTaskTypeEnum.PerformanceMode
+               .Where(x => x.BackgroundTaskType == BackgroundTaskStatus.BackgroundTaskMode.PerformanceMode
                && x.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running)
                .ToList().Count;
         }

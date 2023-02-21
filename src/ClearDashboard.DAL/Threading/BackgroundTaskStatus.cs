@@ -14,7 +14,7 @@ namespace ClearDashboard.DataAccessLayer.Threading
         ///  Normal - don't do anything
         ///  PerformanceMode - turn on the High Performance CPU settings for this type
         /// </summary>
-        public enum BackgroundTaskTypeEnum
+        public enum BackgroundTaskMode
         {
             Normal,
             PerformanceMode
@@ -43,8 +43,8 @@ namespace ClearDashboard.DataAccessLayer.Threading
             }
         }
 
-        private BackgroundTaskTypeEnum _backgroundTaskType = BackgroundTaskTypeEnum.Normal;
-        public BackgroundTaskTypeEnum BackgroundTaskType
+        private BackgroundTaskMode _backgroundTaskType = BackgroundTaskMode.Normal;
+        public BackgroundTaskMode BackgroundTaskType
         {
             get => _backgroundTaskType;
             set

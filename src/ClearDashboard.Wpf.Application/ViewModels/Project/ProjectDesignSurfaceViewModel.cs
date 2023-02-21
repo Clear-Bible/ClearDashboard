@@ -457,7 +457,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                 description: $"Transforming syntax trees...", cancellationToken: cancellationToken, 
-                backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
             var syntaxTree = new SyntaxTrees();
             var sourceCorpus = new SyntaxTreeFileTextCorpus(syntaxTree, ClearBible.Engine.Persistence.FileGetBookIds.LanguageCodeEnum.H)
@@ -491,7 +491,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                         description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken, 
-                        backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                        backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
@@ -509,7 +509,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                     description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...",
-                    cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                    cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
@@ -520,7 +520,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed",
-                        cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                        cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                     await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
 
@@ -550,7 +550,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                            exception: ex, cancellationToken: cancellationToken,
-                           backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                           backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                     }
                 }
@@ -603,7 +603,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                 description: $"Transforming syntax trees...", cancellationToken: cancellationToken, 
-                backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
 
             var syntaxTree = new SyntaxTrees();
@@ -636,7 +636,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 {
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                         description: $"Creating '{metadata.Name}' corpus...", cancellationToken: cancellationToken, 
-                        backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                        backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
@@ -651,7 +651,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     corpusNode = DesignSurfaceViewModel!.CreateCorpusNode(corpus, new Point());
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...", 
-                        cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                        cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
@@ -662,7 +662,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                         description: $"Creating tokenized text corpus for '{metadata.Name}' corpus...Completed", 
-                        cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                        cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
                     await DesignSurfaceViewModel!.UpdateNodeTokenization(corpusNode);
 
                 }
@@ -689,7 +689,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     {
                         soundType = SoundType.Error;
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
-                            exception: ex, cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                            exception: ex, cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
                     }
                 }
                 finally
@@ -790,7 +790,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             {
                                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                                     description: $"Creating corpus '{selectedProject.Name}'...", cancellationToken: cancellationToken, 
-                                    backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                                    backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 #pragma warning disable CS8604
                                 corpus = await Corpus.Create(
                                     mediator: Mediator,
@@ -812,7 +812,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                                 description: $"Tokenizing and transforming '{selectedProject.Name}' corpus...", cancellationToken: cancellationToken, 
-                                backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                                backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                             var textCorpus = dialogViewModel.SelectedTokenizer switch
                             {
@@ -838,7 +838,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running,
                                 description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...", 
-                                cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                                cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
 #pragma warning disable CS8604
                             // ReSharper disable once UnusedVariable
@@ -849,7 +849,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                             await SendBackgroundStatus(taskName, LongRunningTaskStatus.Completed,
                                 description: $"Creating tokenized text corpus for '{selectedProject.Name}' corpus...Completed", 
-                                cancellationToken: cancellationToken, backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                                cancellationToken: cancellationToken, backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
 
                             await DesignSurfaceViewModel!.UpdateNodeTokenization(node);
 
@@ -873,7 +873,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                     soundType = SoundType.Error;
                                     await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                         exception: ex, cancellationToken: cancellationToken, 
-                                        backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                                        backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
                                 }
                             }
 
@@ -887,7 +887,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                                 soundType = SoundType.Error;
                                 await SendBackgroundStatus(taskName, LongRunningTaskStatus.Failed,
                                     exception: ex, cancellationToken: cancellationToken, 
-                                    backgroundTaskTypeEnum: BackgroundTaskTypeEnum.PerformanceMode);
+                                    backgroundTaskMode: BackgroundTaskMode.PerformanceMode);
                             }
                         }
                         finally
@@ -1087,7 +1087,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async Task SendBackgroundStatus(string name, LongRunningTaskStatus status,
             CancellationToken cancellationToken, string? description = null, Exception? exception = null,
-            BackgroundTaskTypeEnum backgroundTaskTypeEnum = BackgroundTaskTypeEnum.Normal)
+            BackgroundTaskMode backgroundTaskMode = BackgroundTaskMode.Normal)
         {
             var backgroundTaskStatus = new BackgroundTaskStatus
             {
@@ -1096,7 +1096,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 Description = !string.IsNullOrEmpty(description) ? description : null,
                 ErrorMessage = exception != null ? $"{exception}" : null,
                 TaskLongRunningProcessStatus = status,
-                BackgroundTaskType= backgroundTaskTypeEnum,
+                BackgroundTaskType= backgroundTaskMode,
             };
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(backgroundTaskStatus), cancellationToken);
         }
