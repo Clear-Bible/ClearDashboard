@@ -45,9 +45,9 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
             switch (SimpleMessagePopupMode)
             {
                 case SimpleMessagePopupMode.Add:
-                    return "Add Alignment?";
+                    return LocalizationService!["EnhancedView_AddAlignment"];
                 case SimpleMessagePopupMode.Delete:
-                    return "Delete Alignment?";
+                    return LocalizationService!["EnhancedView_DeleteAlignment"]; ;
                 default:
                     return string.Empty;
             }
@@ -74,8 +74,8 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
         }
     }
 
-    public override string? OkLabel => "Yes";
-    public override string? CancelLabel => "No";
+    public override string? OkLabel => LocalizationService!["Yes"];
+    public override string? CancelLabel => LocalizationService!["No"];
 
     protected override string? CreateMessage()
     {
@@ -88,12 +88,13 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
                     return "Please set 'TargetTokenDisplay and SourceTokenDisplay";
                 }
 
-                return
-                    $"Align '{TargetTokenDisplay!.Token.SurfaceText}' with '{SourceTokenDisplay!.Token.SurfaceText}'?";
+                return string.Format(LocalizationService!["EnhancedView_AddAlignmentTemplate"],
+                    TargetTokenDisplay!.Token.SurfaceText, SourceTokenDisplay!.Token.SurfaceText);
+                //$"Align '{TargetTokenDisplay!.Token.SurfaceText}' with '{SourceTokenDisplay!.Token.SurfaceText}'?";
             }
             case SimpleMessagePopupMode.Delete:
             {
-                return "TODO!";
+                return LocalizationService!["EnhancedView_DeleteAlignment"];
             }
             default:
                 return null;
