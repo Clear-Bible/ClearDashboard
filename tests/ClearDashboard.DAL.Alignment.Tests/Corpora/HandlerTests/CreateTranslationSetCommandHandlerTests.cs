@@ -441,12 +441,16 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var alignment = someAlignments.First();
             Assert.NotNull(alignment);
             Assert.NotNull(alignment.AlignmentId);
+            Assert.Equal(Models.AlignmentVerification.Unverified.ToString(), alignment.Verification);
+            Assert.Equal(Models.AlignmentOriginatedFrom.FromAlignmentModel.ToString(), alignment.OriginatedFrom);
 
             var alignmentDbBefore = ProjectDbContext!.Alignments
                 .Where(e => e.Id == alignment.AlignmentId.Id)
                 .FirstOrDefault();
 
             Assert.NotNull(alignmentDbBefore);
+            Assert.Equal(Models.AlignmentVerification.Unverified, alignmentDbBefore.AlignmentVerification);
+            Assert.Equal(Models.AlignmentOriginatedFrom.FromAlignmentModel, alignmentDbBefore.AlignmentOriginatedFrom);
             Assert.Null(alignmentDbBefore.Deleted);
 
             ProjectDbContext.ChangeTracker.Clear();
@@ -462,7 +466,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
         finally
         {
-            await DeleteDatabaseContext();
+//            await DeleteDatabaseContext();
         }
     }
 

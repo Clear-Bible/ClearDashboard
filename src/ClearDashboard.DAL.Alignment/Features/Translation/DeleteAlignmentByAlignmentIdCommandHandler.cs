@@ -62,7 +62,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
                     _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                    transaction.Commit();
+                    await transaction.CommitAsync(cancellationToken);
                 }
 
                 await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment), cancellationToken);
