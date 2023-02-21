@@ -15,6 +15,7 @@
     x:Name="BiblicalTermsViewWindow"
     d:DataContext="{d:DesignInstance Type=paratextviews:BiblicalTermsViewModel}"
     d:Height="400"
+    d:Width="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     Loaded="UserControl_Loaded"

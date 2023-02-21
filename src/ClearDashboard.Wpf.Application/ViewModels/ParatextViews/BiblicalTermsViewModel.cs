@@ -748,7 +748,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 // create a list of all the matches within the verse
                 var points = new List<Point>();
                 var words = new List<string>();
-                foreach (var render in selectedBiblicalTermsData.Renderings)
+
+                // get only the distinct renderings otherwise we end up having errors
+                var renderings = selectedBiblicalTermsData.Renderings.Distinct().ToList();
+                foreach (var render in renderings)
                 {
                     // do the same for the target word that we are trying to test against
                     var puncLessWord = render;
@@ -791,7 +794,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 verseText = verse.VerseText;
 
                 // organize the points in lowest to highest
-                points = points.OrderBy(o => o.X).ToList();
+                points = points.OrderBy(o => o.X).Distinct().ToList();
 
                 // iterate through in reverse
                 for (var i = points.Count - 1; i >= 0; i--)
@@ -818,7 +821,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                     catch (Exception e)
                     {
                         Logger.LogError(e, "Unexpected error occurred while updating the selected term.");
-                        throw;
                     }
                 }
 
