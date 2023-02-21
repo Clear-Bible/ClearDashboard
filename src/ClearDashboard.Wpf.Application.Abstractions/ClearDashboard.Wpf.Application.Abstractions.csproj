@@ -32,6 +32,7 @@
     <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.2" />
+    <PackageReference Include="PowerManagerAPI" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -251,5 +251,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
            await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Get the number of running tasks that are flagged as high performance mode
+        /// </summary>
+        /// <returns></returns>
+        public int GetNumberOfPerformanceTasksRemaining()
+        {
+           return BackgroundTaskStatuses
+               .Where(x => x.BackgroundTaskType == BackgroundTaskStatus.BackgroundTaskMode.PerformanceMode
+               && x.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running)
+               .ToList().Count;
+        }
     }
 }
