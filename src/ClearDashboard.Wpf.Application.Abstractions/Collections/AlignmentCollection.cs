@@ -28,9 +28,9 @@ namespace ClearDashboard.Wpf.Application.Collections
         }
 
 
-        public Alignment? FindAlignment(Guid alignmentId)
+        public Alignment? FindAlignmentByTokenId(Guid tokenId)
         {
-            return this.FirstOrDefault(a => a.AlignedTokenPair.SourceToken.TokenId.Id == alignmentId  || a.AlignedTokenPair.TargetToken.TokenId.Id == alignmentId);
+            return this.FirstOrDefault(a => a.AlignedTokenPair.SourceToken.TokenId.Id == tokenId  || a.AlignedTokenPair.TargetToken.TokenId.Id == tokenId);
         }
     }
 }

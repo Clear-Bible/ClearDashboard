@@ -218,7 +218,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private AlignmentId? FindAlignmentId(TokenDisplayViewModel tokenDisplay)
         {
            // var a = AlignmentSet.
-           var alignment =  Alignments!.FindAlignment(tokenDisplay.AlignmentToken.TokenId.Id);
+           var alignment =  Alignments!.FindAlignmentByTokenId(tokenDisplay.AlignmentToken.TokenId.Id);
            return alignment?.AlignmentId;
           
         }
