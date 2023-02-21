@@ -466,7 +466,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
         }
         finally
         {
-//            await DeleteDatabaseContext();
+            await DeleteDatabaseContext();
         }
     }
 
