@@ -104,7 +104,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
 
             var alignment = new Models.Alignment
             {
-                Id = Guid.NewGuid(),
                 SourceTokenComponentId = request.Alignment.AlignedTokenPair.SourceToken.TokenId.Id,
                 TargetTokenComponentId = request.Alignment.AlignedTokenPair.TargetToken.TokenId.Id,
                 Score = request.Alignment.AlignedTokenPair.Score,
@@ -112,14 +111,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 AlignmentOriginatedFrom = originatedType
             };
 
+
             alignmentSet.Alignments.Add(alignment);
 
-            using (var transaction = ProjectDbContext.Database.BeginTransaction())
+            using (var transaction =  ProjectDbContext.Database.BeginTransaction())
             {
                 alignmentSet.AddDomainEvent(new AlignmentAddingRemovingEvent(alignmentsToRemove, alignment, ProjectDbContext));
                 _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);
 
-                await transaction.CommitAsync(cancellationToken);
+                transaction.Commit();
             }
 
             await _mediator.Publish(new AlignmentAddedRemovedEvent(alignmentsToRemove, alignment), cancellationToken);

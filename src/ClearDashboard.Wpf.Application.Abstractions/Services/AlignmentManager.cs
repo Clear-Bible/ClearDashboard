@@ -151,6 +151,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     {
                         await AlignmentSet!.PutAlignment(alignment);
 
+                        Debug.Assert(alignment.AlignmentId != null);
+
                         Alignments!.Add(alignment);
 
                         await EventAggregator.PublishOnUIThreadAsync(new AlignmentAddedMessage(alignment));
