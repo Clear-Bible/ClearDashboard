@@ -23,6 +23,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -44,6 +45,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         #region Member Variables   
 
         private readonly IEnumerable<TokenizedTextCorpusId> _tokenizedCorpora;
+        private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
+        private readonly SystemPowerModes _systemPowerModes;
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private CorpusNodeViewModel _sourceCorpusNodeViewModel;
         private CorpusNodeViewModel _targetCorpusNodeViewModel;
@@ -127,13 +130,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             DashboardProjectManager? projectManager,
             INavigationService navigationService,
             ILogger<ParallelCorpusDialogViewModel> logger,
+            BackgroundTasksViewModel backgroundTasksViewModel,
             IEventAggregator eventAggregator,
+            SystemPowerModes systemPowerModes,
             IMediator mediator,
             ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
+            _systemPowerModes = systemPowerModes;
             _tokenizedCorpora = tokenizedCorpora;
+            _backgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
             CanOk = true;
 
@@ -231,6 +238,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
             IsBusy = true;
 
+            // check to see if we want to run this in High Performance mode
+            if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+            {
+                await _systemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             var taskName = TaskNames.ParallelCorpus;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = CurrentTask!.CancellationTokenSource!.Token;
@@ -323,6 +336,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         $"Parallelization was canceled.'{parallelCorpusDisplayName}'.");
                 }
 
+                // check to see if there are still High Performance Tasks still out there
+                var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                {
+                    // shut down high performance mode
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
+                }
+
                 IsBusy = false;
                 Message = string.Empty;
             }
@@ -338,6 +359,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName)
         {
             IsBusy = true;
+
+            // check to see if we want to run this in High Performance mode
+            if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+            {
+                await _systemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             var soundType = SoundType.Success;
             var taskName = TaskNames.TranslationSet;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
@@ -412,6 +440,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 }
                 IsBusy = false;
                 Message = string.Empty;
+
+                // check to see if there are still High Performance Tasks still out there
+                var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                {
+                    // shut down high performance mode
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
+                }
             }
 
             PlaySound.PlaySoundFromResource(soundType);
@@ -423,6 +459,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName)
         {
             IsBusy = true;
+
+            // check to see if we want to run this in High Performance mode
+            if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+            {
+                await _systemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             var soundType = SoundType.Success;
             var taskName = TaskNames.AlignmentSet;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
@@ -496,6 +539,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 }
                 IsBusy = false;
                 Message = string.Empty;
+
+                // check to see if there are still High Performance Tasks still out there
+                var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                {
+                    // shut down high performance mode
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
+                }
             }
 
             if (UseDefaults == false)
@@ -509,6 +560,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         public async Task<LongRunningTaskStatus> TrainSmtModel()
         {
             IsBusy = true;
+
+            // check to see if we want to run this in High Performance mode
+            if (Settings.Default.EnablePowerModes && _systemPowerModes.IsLaptop)
+            {
+                await _systemPowerModes.TurnOnHighPerformanceMode();
+            }
+
             var soundType = SoundType.Success;
             var taskName = TaskNames.TrainingSmtModel;
             CurrentTask = _longRunningTaskManager.Create(taskName, LongRunningTaskStatus.Running);
@@ -593,6 +651,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 }
                 IsBusy = false;
                 Message = string.Empty;
+
+                // check to see if there are still High Performance Tasks still out there
+                var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
+                {
+                    // shut down high performance mode
+                    await _systemPowerModes.TurnOffHighPerformanceMode();
+                }
             }
 
             if (UseDefaults == false)
