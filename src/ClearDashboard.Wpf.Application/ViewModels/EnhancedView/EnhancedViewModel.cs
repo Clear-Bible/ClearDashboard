@@ -11,6 +11,7 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,12 +23,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
 
-    public class EnhancedViewModel : VerseAwareConductorAllActive, IEnhancedViewModel, IPaneViewModel,
+    public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
@@ -35,6 +37,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ReloadDataMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>
     {
+        
         #region Commands
 
         public ICommand MoveCorpusDownRowCommand { get; set; }
@@ -42,7 +45,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand DeleteCorpusRowCommand { get; set; }
         public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
 
-        private void IncreaseTextSize(object commandParameter)
+        private void IncreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue += 1;
             TargetFontSizeValue += 1;
@@ -52,7 +55,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public ICommand DecreaseTextSizeCommand => new RelayCommand(DecreaseTextSize);
 
-        private void DecreaseTextSize(object commandParameter)
+        private void DecreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue -= 1;
             TargetFontSizeValue -= 1;
@@ -62,7 +65,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public ICommand ResetTextSizeCommand => new RelayCommand(ResetTextSize);
 
-        private void ResetTextSize(object commandParameter)
+        private void ResetTextSize(object? commandParameter)
         {
             SourceFontSizeValue = _originalSourceFontSizeValue;
             TargetFontSizeValue = _originalTargetFontSizeValue;
@@ -72,7 +75,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public ICommand InsertNoteCommand => new RelayCommand(InsertNote);
 
-        private void InsertNote(object commandParameter)
+        private void InsertNote(object? commandParameter)
         {
             if (SelectionManager.SelectedEntityIds.Count != 0)
             {
@@ -313,7 +316,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
    
-        public async Task RequestClose(object obj)
+        public async Task RequestClose(object? obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }
@@ -329,13 +332,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager noteManager, 
             VerseManager verseManager, 
             SelectionManager selectionManager, 
-            IEventAggregator? eventAggregator, 
+            IEventAggregator? eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
-      
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
@@ -352,6 +354,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             PaneId = Guid.NewGuid();
+
+            
         }
 
         public async Task Initialize(EnhancedViewLayout enhancedViewLayout, EnhancedViewItemMetadatum? metadatum, CancellationToken cancellationToken)
@@ -396,6 +400,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            Logger?.LogInformation($"{nameof(EnhancedViewModel)} OnActivateAsync called.");
+            await base.OnActivateAsync(cancellationToken);
+
+            if (Items.Count > 0 && !Items.Any(item=>item.HasFocus))
+            {
+                Items[0].HasFocus = true;
+            }
+           
+        }
+
         public override async Task LoadData(CancellationToken token)
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
@@ -422,6 +438,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); 
                 //EnableBcvControl = false;
                 await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
+
+                
                
             });
         }
@@ -497,7 +515,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
-        private void MoveCorpusUp(object obj)
+        private void MoveCorpusUp(object? obj)
         {
             var row = obj as EnhancedViewItemViewModel;
             var index = MoveableItems.Select((element, index) => new { element, index })
@@ -512,7 +530,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EnhancedViewLayout!.EnhancedViewItems.Move(index, index - 1);
         }
 
-        private void MoveCorpusDown(object obj)
+        private void MoveCorpusDown(object? obj)
         {
             var row = obj as EnhancedViewItemViewModel;
             var index = MoveableItems.Select((element, index) => new { element, index })
@@ -527,9 +545,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        private void DeleteCorpusRow(object obj)
+        private void DeleteCorpusRow(object? obj)
         {
-            var item = (EnhancedViewItemViewModel)obj;
+            var item = (EnhancedViewItemViewModel)obj!;
             
             var index = Items.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(item))?.index ?? -1;
@@ -705,12 +723,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Message = string.Empty;
         }
 
-        public void NoteCreate(object sender, NoteEventArgs e)
+        public void NoteCreate(object? sender, NoteEventArgs? e)
         {
             NoteControlVisibility = Visibility.Visible;
         }
     
-        public void FilterPins(object sender, NoteEventArgs e)
+        public void FilterPins(object? sender, NoteEventArgs e)
         {
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
         }

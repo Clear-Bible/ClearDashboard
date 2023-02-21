@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Clear Bible",
+  "classifications": [ "Library" ],
+  "identity": "ClearBible.ClearDashboard.Module",
+  "name": "ClearDashboard.Module Project",
+  "shortName": "dashboard-module",
+  "tags": {
+    "type": "project",
+    "language": "C#"
+  },
+  "sourceName": "ClearDashboard.Sample.Module",
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net7.0",
+          "description": "Target net7.0"
+        }
+      ],
+      "replaces": "net7.0",
+      "defaultValue": "net7.0"
+    },
+    "Prefix": {
+      "type": "parameter",
+      "defaultValue": "(insert class name prefix)",
+      "replaces": "Sample",
+      "fileRename": "Sample",
+      "datatype": "text",
+      "description": "Class prefix"
+    }
+  }
+
+}

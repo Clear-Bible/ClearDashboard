@@ -9,6 +9,18 @@ namespace ClearDashboard.DataAccessLayer.Threading
 
     public class BackgroundTaskStatus : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Type of Task:
+        ///  Normal - don't do anything
+        ///  PerformanceMode - turn on the High Performance CPU settings for this type
+        /// </summary>
+        public enum BackgroundTaskMode
+        {
+            Normal,
+            PerformanceMode
+        }
+
+
         private bool _cancelTaskRequest = false;
         public bool CancelTaskRequest
         {
@@ -30,7 +42,20 @@ namespace ClearDashboard.DataAccessLayer.Threading
                 OnPropertyChanged();
             }
         }
-        
+
+        private BackgroundTaskMode _backgroundTaskType = BackgroundTaskMode.Normal;
+        public BackgroundTaskMode BackgroundTaskType
+        {
+            get => _backgroundTaskType;
+            set
+            {
+                _backgroundTaskType = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
         private string _name = "";
         public string Name
         {

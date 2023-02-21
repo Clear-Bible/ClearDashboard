@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json;
+using System.Collections.Generic;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer;
@@ -8,8 +10,10 @@ using ClearDashboard.DataAccessLayer.Paratext;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace ClearDashboard.Wpf.Application.Extensions
 {
+  
     public static class ServiceCollectionExtensions
     {
         public static void AddClearDashboardDataAccessLayer(this IServiceCollection serviceCollection)
