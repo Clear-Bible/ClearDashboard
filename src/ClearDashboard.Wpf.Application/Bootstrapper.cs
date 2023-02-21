@@ -17,10 +17,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Extensions;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
 using DashboardApplication = System.Windows.Application;
@@ -232,14 +236,14 @@ namespace ClearDashboard.Wpf.Application
             base.RestoreMainWindowState();
         }
 
-        //protected override IEnumerable<Assembly> SelectAssemblies()
-        //{
-        //    var assemblies = base.SelectAssemblies().ToList();
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            var assemblies = base.SelectAssemblies().ToList();
 
-        //    assemblies.Add(Assembly.GetAssembly(typeof(FoundationBootstrapper)));
+            assemblies.Add(typeof(AbstractionsModule).Assembly);
 
-        //    return assemblies.LoadModuleAssemblies();
-        //}
+            return assemblies.LoadModuleAssemblies();
+        }
 
         protected override void SaveMainWindowState()
         {

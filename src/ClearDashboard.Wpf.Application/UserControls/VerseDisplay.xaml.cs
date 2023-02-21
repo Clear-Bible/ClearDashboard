@@ -29,14 +29,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        //protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        //{
-        //    if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        //    field = value;
-        //    OnPropertyChanged(propertyName);
-        //    return true;
-        //}
-
         #region Static RoutedEvents
         /// <summary>
         /// Identifies the TokenClickedEvent routed event.
@@ -225,11 +217,18 @@ namespace ClearDashboard.Wpf.Application.UserControls
             ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
 
         /// <summary>
+        /// Identifies the TokenDeleteAlignment routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenDeleteAlignmentEvent = EventManager.RegisterRoutedEvent
+            ("TokenDeleteAlignment", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
+
+        /// <summary>
         /// Identifies the TranslateQuickEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslateQuickEvent = EventManager.RegisterRoutedEvent
             ("TranslateQuick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VerseDisplay));
         #endregion
+
         #region Static DependencyProperties
 
         /// <summary>
@@ -500,12 +499,27 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
             var args = e as TokenEventArgs;
-            UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
+
+
+            // If shift is pressed, then leave any selected tokens selected.
+            if (!args.IsShiftPressed)
+            {
+                UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
+            }
+           
 
             RaiseTokenEvent(TokenClickedEvent, args);
         }
 
-        private void UpdateVerseSelection(TokenDisplayViewModel token, bool addToSelection)
+        //OnTokenDeleteAlignment
+        private void OnTokenDeleteAlignment(object sender, RoutedEventArgs e)
+        {
+            var args = e as TokenEventArgs;
+            
+            RaiseTokenEvent(TokenDeleteAlignmentEvent, args);
+        }
+
+        private void UpdateVerseSelection(TokenDisplayViewModel? token, bool addToSelection)
         {
             var tokenIsSelected = token.IsTokenSelected;
             if (!addToSelection)
@@ -601,7 +615,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }
 
-        private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
+        private async void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
             var args = (TokenEventArgs)e;
             var tokenDisplayViewModel = args.TokenDisplay;
@@ -612,7 +626,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     if (verseDisplayViewModel.Alignments != null)
                     {
-                        verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.Token.TokenId);
+                        await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.Token.TokenId);
                     }
                 }
                 
@@ -780,6 +794,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenClickedEvent, value);
             remove => RemoveHandler(TokenClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual token is clicked.
+        /// </summary>
+        public event RoutedEventHandler TokenDeleteAlignment
+        {
+            add => AddHandler(TokenDeleteAlignmentEvent, value);
+            remove => RemoveHandler(TokenDeleteAlignmentEvent, value);
         }
 
         /// <summary>
