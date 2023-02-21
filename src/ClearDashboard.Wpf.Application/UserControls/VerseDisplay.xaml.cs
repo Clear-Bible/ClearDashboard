@@ -615,7 +615,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenRightButtonUpEvent, e);
         }
 
-        private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
+        private async void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
             var args = (TokenEventArgs)e;
             var tokenDisplayViewModel = args.TokenDisplay;
@@ -626,7 +626,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     if (verseDisplayViewModel.Alignments != null)
                     {
-                        verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.Token.TokenId);
+                        await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.Token.TokenId);
                     }
                 }
                 

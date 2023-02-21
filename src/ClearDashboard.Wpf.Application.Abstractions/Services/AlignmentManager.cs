@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System;
 using System.Linq;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.Application.Services
@@ -151,6 +152,8 @@ namespace ClearDashboard.Wpf.Application.Services
                         await AlignmentSet!.PutAlignment(alignment);
 
                         Alignments!.Add(alignment);
+
+                        await EventAggregator.PublishOnUIThreadAsync(new AlignmentAddedMessage(alignment));
                     }
                     catch (Exception ex)
                     {
@@ -195,6 +198,7 @@ namespace ClearDashboard.Wpf.Application.Services
                         if (alignment != null)
                         {
                             Alignments!.Remove(alignment);
+                            await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
                         }
                     }
                     catch (Exception ex)
@@ -211,6 +215,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         private AlignmentId? FindAlignmentId(TokenDisplayViewModel tokenDisplay)
         {
+           // var a = AlignmentSet.
            var alignment =  Alignments!.FindAlignment(tokenDisplay.AlignmentToken.TokenId.Id);
            return alignment?.AlignmentId;
           

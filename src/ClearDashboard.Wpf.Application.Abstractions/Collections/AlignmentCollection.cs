@@ -30,7 +30,7 @@ namespace ClearDashboard.Wpf.Application.Collections
 
         public Alignment? FindAlignment(Guid alignmentId)
         {
-            return this.FirstOrDefault(a => a.AlignedTokenPair.SourceToken.TokenId.Id == alignmentId);
+            return this.FirstOrDefault(a => a.AlignedTokenPair.SourceToken.TokenId.Id == alignmentId  || a.AlignedTokenPair.TargetToken.TokenId.Id == alignmentId);
         }
     }
 }

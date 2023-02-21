@@ -11,13 +11,17 @@ using MediatR;
 using ClearDashboard.Wpf.Application.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     /// <summary>
     /// A specialization of <see cref="VerseDisplayViewModel"/> for displaying alignments.
     /// </summary>
-    public class AlignmentDisplayViewModel : VerseDisplayViewModel
+    public class AlignmentDisplayViewModel : VerseDisplayViewModel,
+            IHandle<AlignmentAddedMessage>,
+            IHandle<AlignmentDeletedMessage>
     {
         private EngineParallelTextRow ParallelTextRow { get; }
         private AlignmentSetId AlignmentSetId { get; }
@@ -144,6 +148,65 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             AlignmentSetId = alignmentSetId;
         }
 
+        public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        {
+            var alignment = message.Alignment;
+            var alignedTokenPair = alignment.AlignedTokenPair;
 
+            if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+            {
+                if (AlignmentManager!.Alignments!.All(a => a.AlignmentId!.Id != alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Add(alignment);
+                }
+                
+                Alignments!.Add(alignment);
+            }
+
+            if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+            {
+                if (AlignmentManager!.Alignments!.All(a => a.AlignmentId!.Id != alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Add(alignment);
+                }
+
+                Alignments!.Add(alignment);
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        {
+            var alignment = message.Alignment;
+            var alignedTokenPair = alignment.AlignedTokenPair;
+
+            var unhighlightTokens = false;
+
+            if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+            {
+                unhighlightTokens = true;
+                if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Remove(alignment);
+                }
+                Alignments!.Remove(alignment);
+            }
+
+            if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+            {
+                unhighlightTokens = true;
+                if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Remove(alignment);
+                }
+                Alignments!.Remove(alignment);
+            }
+
+            if (unhighlightTokens)
+            {
+                await UnhighlightTokens();
+            }
+        }
     }
 }
