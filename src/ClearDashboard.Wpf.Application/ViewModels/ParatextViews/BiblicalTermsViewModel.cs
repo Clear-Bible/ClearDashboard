@@ -751,6 +751,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
                 // get only the distinct renderings otherwise we end up having errors
                 var renderings = selectedBiblicalTermsData.Renderings.Distinct().ToList();
+                renderings = SortByLength(renderings);
+
                 foreach (var render in renderings)
                 {
                     // do the same for the target word that we are trying to test against
@@ -834,6 +836,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             NotifyOfPropertyChange(() => Renderings);
             NotifyOfPropertyChange(() => RenderingsText);
         }
+
+        private List<string> SortByLength(List<string> e)
+        {
+            // Use LINQ to sort the array received and return a copy.
+            var sorted = from s in e
+                orderby s.Length ascending
+                select s;
+            return sorted.ToList();
+        }
+
 
         private void TriggerFilterTermsByWord()
         {
