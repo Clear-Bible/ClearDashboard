@@ -36,18 +36,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
     /// <summary>
     /// 
     /// </summary>
-    public class BiblicalTermsViewModel : ToolViewModel 
+    public class BiblicalTermsViewModel : ToolViewModel
     {
         private readonly LongRunningTaskManager _longRunningTaskManager;
 
         #region Member Variables
 
         BiblicalTermsView _view;
-    
+
         private bool _getBiblicalTermsRunning = false;
         private const string TaskName = "BiblicalTerms";
 
-     
+
         public enum SelectedBtEnum
         {
             // ReSharper disable once UnusedMember.Local
@@ -306,7 +306,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             {
                 _selectedDomain = value;
                 NotifyOfPropertyChange(() => SelectedDomain);
-                
+
                 //refresh the biblicalterms collection so the filter runs
                 if (BiblicalTermsCollectionView is not null)
                 {
@@ -503,33 +503,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 
         public BiblicalTermsViewModel(INavigationService navigationService, ILogger<BiblicalTermsViewModel> logger,
             DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
-            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope,localizationService)
+            : base(navigationService, logger, projectManager, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _longRunningTaskManager = longRunningTaskManager;
             Title = "🕮 " + LocalizationService!.Get("Windows_BiblicalTerms");
             ContentId = "BIBLICALTERMS";
             DockSide = DockSide.Bottom;
-           ClearFilterCommand = new RelayCommand(ClearFilter);
+
+            // wire up the commands
+            ClearFilterCommand = new RelayCommand(ClearFilter);
+            NotesCommand = new RelayCommand(ShowNotes);
+            VerseClickCommand = new RelayCommand(VerseClick);
         }
 
-        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-        {
-            await base.OnActivateAsync(cancellationToken);
-
-            // await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
-        }
         protected override void OnViewAttached(object view, object context)
         {
 
             _view = (BiblicalTermsView)view;
             Logger!.LogInformation("OnViewAttached");
             base.OnViewAttached(view, context);
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            Logger!.LogInformation("OnViewLoaded");
-            base.OnViewLoaded(view);
         }
 
         protected override async void OnViewReady(object view)
@@ -563,13 +555,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 // setup the method that we go to for filtering
                 BiblicalTermsCollectionView.Filter = FilterGridItems;
             });
-            
+
 
             NotifyOfPropertyChange(() => BiblicalTermsCollectionView);
 
-            // wire up the commands
-            NotesCommand = new RelayCommand(ShowNotes);
-            VerseClickCommand = new RelayCommand(VerseClick);
+
 
             if (ProjectManager.CurrentParatextProject != null)
             {
@@ -585,7 +575,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             base.OnViewReady(view);
         }
 
-        protected override async  Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             //we need to cancel this process here
             //check a bool to see if it already cancelled or already completed
@@ -642,7 +632,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 IWindowManager manager = new WindowManager();
                 manager.ShowWindowAsync(
                     new VersePopUpViewModel(NavigationService, logger, ProjectManager, EventAggregator, Mediator,
-                        verses[0], LifetimeScope, LocalizationService) ,null, null);
+                        verses[0], LifetimeScope, LocalizationService), null, null);
             }
         }
 
@@ -654,13 +644,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             if (_lastSelectedBtEnum != _selectedBiblicalTermsType)
             {
-                
+
                 //try
                 //{
-                    OnUIThread(() =>
-                    {
-                        BiblicalTerms.Clear();
-                    });
+                OnUIThread(() =>
+                {
+                    BiblicalTerms.Clear();
+                });
                 //}
                 //catch (Exception ex)
                 //{
@@ -1060,7 +1050,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private async Task GetBiblicalTerms(BiblicalTermsType type = BiblicalTermsType.Project)
         {
             _getBiblicalTermsRunning = true;
-          
+
             var task = _longRunningTaskManager.Create(TaskName, LongRunningTaskStatus.Running);
             var cancellationToken = task.CancellationTokenSource!.Token;
 
@@ -1117,9 +1107,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                         {
                                             _biblicalTerms[i].RenderingString += rendering;
                                         }
-                                       
+
                                         cancellationToken.ThrowIfCancellationRequested();
                                     }
+
+                                    // check to see if every verse has been accounted for
+                                    if (_biblicalTerms[i].RenderingCount == _biblicalTerms[i].ReferencesLong.Count)
+                                    {
+                                        _biblicalTerms[i].Found = true;
+                                    }
+
                                 }
 
                                 NotifyOfPropertyChange(() => BiblicalTerms);

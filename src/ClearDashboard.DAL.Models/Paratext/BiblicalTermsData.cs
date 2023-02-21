@@ -27,7 +27,14 @@
         public string? RenderingString { get; set; }
         
         public int RenderingCount { get; set; }
-        
+
+        public string Counts
+        {
+            get => $"{RenderingCount}/{ReferencesLong.Count}";
+        }
+
+        public bool Found { get; set; }
+
     }
 
 }
