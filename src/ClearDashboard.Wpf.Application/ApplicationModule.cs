@@ -144,7 +144,8 @@ namespace ClearDashboard.Wpf.Application
         {
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
             builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
-          
+            builder.RegisterType<SystemPowerModes>().AsSelf().SingleInstance();
+
             builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
 
             builder.RegisterDatabaseDependencies();

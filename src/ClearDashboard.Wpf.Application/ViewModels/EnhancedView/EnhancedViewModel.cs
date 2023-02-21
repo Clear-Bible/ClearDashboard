@@ -11,6 +11,7 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -335,7 +336,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager noteManager, 
             VerseManager verseManager, 
             SelectionManager selectionManager, 
-            IEventAggregator? eventAggregator, 
+            IEventAggregator? eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
