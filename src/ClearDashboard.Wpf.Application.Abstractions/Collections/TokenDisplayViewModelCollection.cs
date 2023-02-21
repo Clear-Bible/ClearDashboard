@@ -36,7 +36,7 @@ namespace ClearDashboard.Wpf.Application.Collections
         {
         }
 
-        public TokenDisplayViewModelCollection(TokenDisplayViewModel? token) : this()
+        public TokenDisplayViewModelCollection(TokenDisplayViewModel token) : this()
         {
             Add(token);
         }
