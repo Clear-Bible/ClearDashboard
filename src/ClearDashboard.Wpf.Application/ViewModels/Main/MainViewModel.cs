@@ -485,6 +485,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 if (item is EnhancedViewModel enhancedViewModel)
                 {
+                    var id = enhancedViewModel.PaneId;
+                    var title = enhancedViewModel.Title;
+                    var windowsDockable = _dockingManager.Layout.Descendents()
+                        .OfType<LayoutDocument>()
+                        .FirstOrDefault(a =>
+                        {
+                            if (a.Content is not null)
+                            {
+                                if (a.Content is EnhancedViewModel)
+                                {
+                                    var vm = (EnhancedViewModel)a.Content;
+                                    if (vm.PaneId == id)
+                                    {
+                                    return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        });
+
+                    if (windowsDockable is not null)
+                    {
+                        title = windowsDockable.Title;
+                        enhancedViewModel.EnhancedViewLayout.Title = title;
+                    }
+
                     enhancedViewLayouts.Add(enhancedViewModel.EnhancedViewLayout);
                 }
             }
