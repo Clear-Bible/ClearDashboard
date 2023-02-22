@@ -628,6 +628,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                     if (verseDisplayViewModel.AlignmentManager is { Alignments: { } })
                     {
                         await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.AlignmentToken.TokenId);
+                        await Task.Delay(50);
                         var element = (UIElement)sender;
                         EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                     }
@@ -636,6 +637,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (args.IsAltPressed)
                 {
                     await verseDisplayViewModel.UnhighlightTokens();
+
+                    await Task.Delay(50);
                     var element = (UIElement)sender;
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
