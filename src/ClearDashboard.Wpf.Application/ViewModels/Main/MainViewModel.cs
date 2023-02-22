@@ -1768,8 +1768,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 var viewModel = await ActivateItemAsync<EnhancedViewModel>(cancellationToken);
                 await viewModel.Initialize(new EnhancedViewLayout
                 {
-                    ParatextSync = false,//should this be true?
-                    Title = metadatum.DisplayName,
+                    ParatextSync = false,
+                    Title = $"{metadatum.DisplayName}",
                     VerseOffset = 0
                 }, metadatum, cancellationToken);
 

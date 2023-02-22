@@ -10,9 +10,7 @@ using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Messages;
 using System.Threading.Tasks;
 using System.Threading;
-using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
-using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
 
 namespace ClearDashboard.Wpf.Application.UserControls
@@ -522,7 +520,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 var BBBCCC = CurrentBcv.Book + CurrentBcv.ChapterIdText;
 
                 // chapter switch so find the first verse for that book and chapter
-                var verseId = BBBCCC+"007";
+                var verseId = BBBCCC+"001";
                 if (verseId != "")
                 {
 
