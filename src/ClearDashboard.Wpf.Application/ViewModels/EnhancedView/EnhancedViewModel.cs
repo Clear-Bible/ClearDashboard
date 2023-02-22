@@ -96,7 +96,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteManager NoteManager { get; }
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
-        private IWindowManager WindowManager { get; }
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
@@ -328,7 +327,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var confirmationDialogViewModel = LifetimeScope!.Resolve<ConfirmationDialogViewModel>();
             confirmationDialogViewModel.ConfirmationText = "Are you sure you want to delete this EnhancedView?  There will be no way to undo this.";
 
-            var result = await WindowManager!.ShowDialogAsync(confirmationDialogViewModel);
+            var result = await _windowManager!.ShowDialogAsync(confirmationDialogViewModel);
 
             if (result == true)
             {
@@ -352,9 +351,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IEventAggregator? eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, 
-            ILocalizationService localizationService, 
-            IWindowManager windowManager) :
-            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService, windowManager)
+            ILocalizationService localizationService) :
+            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
             _windowManager = windowManager;
@@ -362,7 +360,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
-            WindowManager = windowManager;
             
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 
