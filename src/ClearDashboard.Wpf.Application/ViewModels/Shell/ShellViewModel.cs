@@ -469,7 +469,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 }
                 // strip out any "-" characters so the string can be properly parsed into the target enum
                 //SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
-                _selectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
+                SelectedLanguage = (LanguageTypeValue)Enum.Parse(typeof(LanguageTypeValue), culture.Replace("-", string.Empty));
 
                 var languageFlowDirection = SelectedLanguage.GetAttribute<RTLAttribute>();
                 if (languageFlowDirection.isRTL)
@@ -525,7 +525,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
-            if (!SettingLanguage)
+            if (!SettingLanguage && SelectedLanguage.ToString()!=message.LanguageCode)
             {
                 SetLanguage();
             }

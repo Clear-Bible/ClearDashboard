@@ -6,6 +6,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,6 +15,7 @@
     x:Name="BiblicalTermsViewWindow"
     d:DataContext="{d:DesignInstance Type=paratextviews:BiblicalTermsViewModel}"
     d:Height="400"
+    d:Width="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     FlowDirection="{Binding WindowFlowDirection}"
     Loaded="UserControl_Loaded"
@@ -57,7 +59,10 @@
         </Grid.CommandBindings>
 
         <Grid.InputBindings>
-            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+            <KeyBinding
+                Key="F"
+                Command="Find"
+                Modifiers="Control" />
         </Grid.InputBindings>
 
         <StackPanel
@@ -287,7 +292,10 @@
             </DataGrid.CommandBindings>
 
             <DataGrid.InputBindings>
-                <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                <KeyBinding
+                    Key="C"
+                    Command="Copy"
+                    Modifiers="Control" />
             </DataGrid.InputBindings>
 
             <DataGrid.ColumnHeaderStyle>
@@ -300,7 +308,7 @@
 
             <DataGrid.Columns>
                 <!--  rendering note button  -->
-                <DataGridTemplateColumn Width="2*" Header="">
+                <!--<DataGridTemplateColumn Width="2*" Header="">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -320,9 +328,9 @@
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
 
-                <DataGridTemplateColumn Width="8*" Header="{helpers:Localization BiblicalTermsForm_Term}">
+                <DataGridTemplateColumn Width="10*" Header="{helpers:Localization BiblicalTermsForm_Term}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
@@ -362,14 +370,14 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="4*" Header="{helpers:Localization BiblicalTermsForm_Counts}">
+                <DataGridTemplateColumn Width="6*" Header="{helpers:Localization BiblicalTermsForm_Counts}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock
-                                Margin="-18,0,-6,0"
+                                Margin="-14,0,-14,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Text="{Binding RenderingCount}"
+                                Text="{Binding Counts}"
                                 TextWrapping="Wrap" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -377,38 +385,69 @@
                 <DataGridTemplateColumn Width="4*" Header="{helpers:Localization BiblicalTermsForm_Found}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
+                            <iconPacks:PackIconRadixIcons
                                 Margin="-18,0,-6,0"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Text="{Binding References.Count}"
-                                TextWrapping="Wrap" />
+                                VerticalAlignment="Center">
+                                <iconPacks:PackIconRadixIcons.Style>
+                                    <Style TargetType="iconPacks:PackIconRadixIcons">
+                                        <Setter Property="Kind" Value="Box" />
+                                        <Setter Property="Foreground" Value="Orange" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Found}" Value="True">
+                                                <Setter Property="Kind" Value="CheckBox" />
+                                                <Setter Property="Foreground" Value="Green" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </iconPacks:PackIconRadixIcons.Style>
+                            </iconPacks:PackIconRadixIcons>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
                 <DataGridTemplateColumn Width="20*" Header="{helpers:Localization BiblicalTermsForm_RenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
-                                Margin="-8"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Text="{Binding RenderingString}"
-                                TextWrapping="Wrap">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
-                                        <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
-                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
+
+                            <ListBox
+                                Name="ListTwo"
+                                ItemsSource="{Binding RenderingString}"
+                                PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+                                <ListBox.Style>
+                                    <Style TargetType="ListBox">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RenderingString}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding Renderings.Count}" Value="0">
                                                 <Setter Property="Background" Value="{DynamicResource OrangeDarkBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                </ListBox.Style>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Width="{Binding ActualWidth, ElementName=ListTwo, Converter={converters:WidthSubtraction}, ConverterParameter='5'}"
+                                            Margin="-8"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding RenderingString}"
+                                            TextWrapping="Wrap"
+                                            ToolTip="{Binding RenderingStringHover}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                                    <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+
+
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -487,7 +526,10 @@
                         </ListBox.CommandBindings>
 
                         <ListBox.InputBindings>
-                            <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                            <KeyBinding
+                                Key="C"
+                                Command="Copy"
+                                Modifiers="Control" />
                         </ListBox.InputBindings>
                         <ListBox.ContextMenu>
                             <ContextMenu>
@@ -521,14 +563,18 @@
                     Margin="5"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding SelectedItemVerses}"
-                    ScrollViewer.CanContentScroll="False">
+                    ScrollViewer.CanContentScroll="False"
+                    PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
 
                     <ListView.CommandBindings>
                         <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
                     </ListView.CommandBindings>
 
                     <ListView.InputBindings>
-                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                        <KeyBinding
+                            Key="C"
+                            Command="Copy"
+                            Modifiers="Control" />
                     </ListView.InputBindings>
 
                     <ListView.ContextMenu>
@@ -576,13 +622,16 @@
                                     Foreground="{StaticResource BlueMidBrush}"
                                     Text="{Binding VerseId}" />
 
-                                <ScrollViewer Name="ContentScroller" Grid.Column="2" MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                <ScrollViewer x:Name="ContentScroller" Grid.Column="2">
                                     <ScrollViewer.CommandBindings>
                                         <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
-                                        </ScrollViewer.CommandBindings>
+                                    </ScrollViewer.CommandBindings>
 
                                     <ScrollViewer.InputBindings>
-                                        <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                                        <KeyBinding
+                                            Key="C"
+                                            Command="Copy"
+                                            Modifiers="Control" />
                                     </ScrollViewer.InputBindings>
                                     <helpers:BindableTextBlock
                                         Name="VerseTextBlock"
@@ -590,6 +639,7 @@
                                         Margin="0,0,10,0"
                                         FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
                                         FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
+                                        
                                         TextWrapping="Wrap">
                                         <TextBlock.Style>
                                             <Style TargetType="helpers:BindableTextBlock">

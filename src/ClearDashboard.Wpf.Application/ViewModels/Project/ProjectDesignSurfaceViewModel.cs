@@ -1231,7 +1231,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                         CorpusType = corpusNodeViewModel.CorpusType,
                         //FIXME:new EngineStringDetokenizer(new LatinWordDetokenizer()),
                         IsRtl = corpusNodeViewModel.IsRtl,
-                        IsNewWindow = corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView
+                        IsNewWindow = corpusNodeMenuItem.Id == DesignSurfaceViewModel.DesignSurfaceMenuIds.AddTokenizedCorpusToNewEnhancedView,
+                        DisplayName = corpusNodeViewModel.Name + " (" + corpusNodeMenuItem.Tokenizer! +")"
                     }, CancellationToken.None);
                     break;
                 case DesignSurfaceViewModel.DesignSurfaceMenuIds.ShowCorpusNodeProperties:
@@ -1405,6 +1406,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
+            // check to see if is in the middle of working or not by tokenizing
+            var isCorpusProcessing = _backgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgress(node.Name);
+            if (isCorpusProcessing)
+            {
+                return;
+            }
+
+
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
                 Name = "Deleting Corpus Node",
