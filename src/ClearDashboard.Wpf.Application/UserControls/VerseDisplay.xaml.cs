@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 
 namespace ClearDashboard.Wpf.Application.UserControls
 {
@@ -624,16 +625,25 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 if (args.IsShiftPressed)
                 {
-                    if (verseDisplayViewModel.Alignments != null)
+                    if (verseDisplayViewModel.AlignmentManager is { Alignments: { } })
                     {
                         await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.AlignmentToken.TokenId);
+                        await Task.Delay(50);
+                        var element = (UIElement)sender;
+                        EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                     }
                 }
                 
                 if (args.IsAltPressed)
                 {
                     await verseDisplayViewModel.UnhighlightTokens();
+
+                    await Task.Delay(50);
+                    var element = (UIElement)sender;
+                    EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
+
+
             }
 
             RaiseTokenEvent(TokenMouseEnterEvent, e);
