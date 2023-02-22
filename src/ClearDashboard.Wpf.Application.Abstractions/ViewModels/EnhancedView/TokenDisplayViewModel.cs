@@ -49,9 +49,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public bool IsTarget => !IsSource;
 
-        public bool IsAligned => VerseDisplay.Alignments != null && 
-                                 VerseDisplay.Alignments.Any(a => a.AlignedTokenPair.SourceToken.TokenId.Id == Token.TokenId.Id 
-                                                                  || a.AlignedTokenPair.TargetToken.TokenId.Id == Token.TokenId.Id);
+        public bool IsAligned => VerseDisplay.AlignmentManager is { Alignments: { } } &&
+                                 VerseDisplay.AlignmentManager.Alignments.Any(a => a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id 
+                                     || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id);
 
         private CompositeToken? _compositeToken;
         /// <summary>
