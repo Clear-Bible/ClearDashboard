@@ -37,8 +37,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
         IHandle<TokenUnjoinedMessage>,
-       // IHandle<AlignmentAddedMessage>,
-       // IHandle<AlignmentDeletedMessage>,
         IHandle<HighlightTokensMessage>,
         IHandle<UnhighlightTokensMessage>
     {
@@ -86,13 +84,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
 
-        /// <summary>
-        /// Gets a collection of alignments to be rendered.
-        /// </summary>
-        /// <remarks>
-        /// Alignment information is only available when this is a <see cref="AlignmentDisplayViewModel"/> derived type.
-        /// </remarks>
-        public virtual AlignmentCollection? Alignments => null;
+       
+        public AlignmentManager? AlignmentManager { get; set; } = null;
 
         /// <summary>
         /// Gets a enumerable of source tokens.
