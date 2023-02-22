@@ -17,13 +17,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Extensions;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
 using DashboardApplication = System.Windows.Application;
+using KeyTrigger = Microsoft.Xaml.Behaviors.Input.KeyTrigger;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -76,6 +81,50 @@ namespace ClearDashboard.Wpf.Application
                 .Build();
         }
 
+        protected override void Configure()
+        {
+            //ConfigureKeyTriggerBindings();
+
+            base.Configure();
+        }
+
+        //private static void ConfigureKeyTriggerBindings()
+        //{
+        //    var defaultCreateTrigger = Parser.CreateTrigger;
+
+        //    Parser.CreateTrigger = (target, triggerText) =>
+        //    {
+        //        if (triggerText == null)
+        //        {
+        //            return defaultCreateTrigger(target, null);
+        //        }
+
+        //        var triggerDetail = triggerText
+        //            .Replace("[", string.Empty)
+        //            .Replace("]", string.Empty);
+
+        //        var splits = triggerDetail.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+
+        //        switch (splits[0])
+        //        {
+        //            case "Key":
+        //                var key = (Key)Enum.Parse(typeof(Key), splits[1], true);
+        //                return new KeyTrigger { Key = key };
+
+        //            case "Gesture":
+        //                if (splits.Length == 2)
+        //                {
+        //                    var mkg = (MultiKeyGesture)new MultiKeyGestureConverter().ConvertFrom(splits[1])!;
+        //                    return new KeyTrigger { Modifiers = mkg.KeySequences[0].Modifiers, Key = mkg.KeySequences[0].Keys[0] };
+        //                }
+
+        //                return defaultCreateTrigger(target, triggerText);
+        //        }
+
+        //        return defaultCreateTrigger(target, triggerText);
+        //    };
+        //}
+
         protected override void PreInitialize()
         {
             DashboardApplication.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
@@ -91,12 +140,21 @@ namespace ClearDashboard.Wpf.Application
             LogDependencyInjectionRegistrations();
             SetupLanguage();
 
+#if DEBUG
+            if (DependencyInjectionLogging)
+            {
+                DependencyInjectionLogging = false;
+            }
+#endif
+
             base.PostInitialize();
         }
 
         protected override void SetupLogging()
         {
-            SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ClearDashboard_Projects\\Logs\\ClearDashboard.log"));
+            SetupLogging(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), 
+                "ClearDashboard_Projects\\Logs\\ClearDashboard.log"), 
+                namespacesToExclude: new [] { "ClearDashboard.Wpf.Application.Services.NoteManager", "ClearDashboard.DAL.Alignment.BackgroundServices.AlignmentTargetTextDenormalizer" });
         }
 
         private void SetupLanguage()
@@ -178,14 +236,14 @@ namespace ClearDashboard.Wpf.Application
             base.RestoreMainWindowState();
         }
 
-        //protected override IEnumerable<Assembly> SelectAssemblies()
-        //{
-        //    var assemblies = base.SelectAssemblies().ToList();
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            var assemblies = base.SelectAssemblies().ToList();
 
-        //    assemblies.Add(Assembly.GetAssembly(typeof(FoundationBootstrapper)));
+            assemblies.Add(typeof(AbstractionsModule).Assembly);
 
-        //    return assemblies.LoadModuleAssemblies();
-        //}
+            return assemblies.LoadModuleAssemblies();
+        }
 
         protected override void SaveMainWindowState()
         {

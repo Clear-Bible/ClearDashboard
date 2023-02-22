@@ -30,6 +30,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
+using ClearApplicationFoundation.Framework.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
 {

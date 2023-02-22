@@ -26,6 +26,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 using Point = System.Windows.Point;
 
 // ReSharper disable InconsistentNaming

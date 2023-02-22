@@ -9,22 +9,77 @@ using Autofac;
 using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
 using ClearDashboard.Wpf.Application.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using System.Threading;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     /// <summary>
     /// A specialization of <see cref="VerseDisplayViewModel"/> for displaying alignments.
     /// </summary>
-    public class AlignmentDisplayViewModel : VerseDisplayViewModel
+    public class AlignmentDisplayViewModel : VerseDisplayViewModel,
+            IHandle<AlignmentAddedMessage>,
+            IHandle<AlignmentDeletedMessage>
     {
         private EngineParallelTextRow ParallelTextRow { get; }
         private AlignmentSetId AlignmentSetId { get; }
-        private AlignmentManager? AlignmentManager { get; set; }
+
+        public AlignmentManager? AlignmentManager { get; set; }
 
         /// <summary>
         /// Gets the collection of alignments for the verse.
         /// </summary>
         public override AlignmentCollection? Alignments => AlignmentManager?.Alignments;
+
+
+        protected override IEnumerable<Token>? GetTargetTokens(bool isSource, TokenId tokenId)
+        {
+
+            switch (isSource)
+            {
+                case true:
+                    {
+                        var tokens = Alignments?
+                            .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
+                            .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken targetToken ? new List<Token>() { a.AlignedTokenPair.TargetToken } : targetToken.Tokens);
+                        return tokens;
+                    }
+                case false:
+                    {
+                        var tokens = Alignments?
+                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
+                            .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.TargetToken } : token.Tokens);
+
+                        return tokens;
+                    }
+            }
+
+        }
+
+        protected override IEnumerable<Token>? GetSourceTokens(bool isSource, TokenId tokenId)
+        {
+
+            switch (isSource)
+            {
+                case true:
+                    {
+                        var tokens = Alignments?
+                             .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
+                             .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                        return tokens;
+                    }
+                case false:
+                    {
+                        var tokens = Alignments?
+                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
+                            .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                        return tokens;
+                    }
+            }
+
+        }
 
         /// <summary>
         /// Initializes the view model with the alignments for the verse.
@@ -98,6 +153,65 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             AlignmentSetId = alignmentSetId;
         }
 
+        public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        {
+            var alignment = message.Alignment;
+            var alignedTokenPair = alignment.AlignedTokenPair;
 
+            if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+            {
+                if (AlignmentManager!.Alignments!.All(a => a.AlignmentId!.Id != alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Add(alignment);
+                }
+
+                Alignments!.Add(alignment);
+            }
+
+            if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+            {
+                if (AlignmentManager!.Alignments!.All(a => a.AlignmentId!.Id != alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Add(alignment);
+                }
+
+                Alignments!.Add(alignment);
+            }
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        {
+            var alignment = message.Alignment;
+            var alignedTokenPair = alignment.AlignedTokenPair;
+
+            var unhighlightTokens = false;
+
+            if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+            {
+                unhighlightTokens = true;
+                if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Remove(alignment);
+                }
+                Alignments!.Remove(alignment);
+            }
+
+            if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+            {
+                unhighlightTokens = true;
+                if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == alignment.AlignmentId!.Id))
+                {
+                    AlignmentManager!.Alignments!.Remove(alignment);
+                }
+                Alignments!.Remove(alignment);
+            }
+
+            if (unhighlightTokens)
+            {
+                await UnhighlightTokens();
+            }
+        }
     }
 }

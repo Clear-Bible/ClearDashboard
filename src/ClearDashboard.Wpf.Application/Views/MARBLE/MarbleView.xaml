@@ -64,6 +64,13 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid.CommandBindings>
+            <CommandBinding Command="Find" Executed="FindText_OnClick" />
+        </Grid.CommandBindings>
+
+        <Grid.InputBindings>
+            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+        </Grid.InputBindings>
 
         <!--  ROW 0  -->
         <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -265,6 +272,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button
+                        Name="SearchButton"
                         Grid.Column="0"
                         Width="25"
                         Height="25"

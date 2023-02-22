@@ -14,6 +14,8 @@ using ClearDashboard.Wpf.Application.Views.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +24,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Windows.Threading;
+using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.DataAccessLayer.Models;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -29,7 +34,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public class ShellViewModel : DashboardApplicationScreen, IShellViewModel,
         IHandle<ParatextConnectedMessage>,
         IHandle<UserMessage>,
-        IHandle<GetApplicationWindowSettings>, IHandle<UiLanguageChangedMessage>
+        IHandle<GetApplicationWindowSettings>,
+        IHandle<UiLanguageChangedMessage>,
+        IHandle<PerformanceModeMessage>
     {
 
         //[DllImport("gdi32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = true)]
@@ -50,6 +57,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private UpdateFormat? _updateData;
 
+        private bool _verseChangeInProgress;
 
         private string? _paratextUserName;
         public string? ParatextUserName
@@ -78,6 +86,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region ObservableProps
 
+        private string _elapsedTime = "";
+        public string ElapsedTime
+        {
+            get => _elapsedTime;
+            set
+            {
+                _elapsedTime = value;
+                NotifyOfPropertyChange(() => ElapsedTime);
+            }
+        }
+
+
+
+        private Visibility _showHighPerformanceMode = Visibility.Collapsed;
+        public Visibility ShowHighPerformanceMode
+        {
+            get => _showHighPerformanceMode;
+            set
+            {
+                _showHighPerformanceMode = value;
+                NotifyOfPropertyChange(() => ShowHighPerformanceMode);
+            }
+        }
+
+
+
         private WindowSettings _windowSettings;
         public WindowSettings WindowSettings
         {
@@ -95,7 +129,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         public Visibility ShowSpinner
         {
             get => _showSpinner;
-            set => Set(ref _showSpinner,value);
+            set => Set(ref _showSpinner, value);
         }
 
         private Visibility _showTaskView = Visibility.Collapsed;
@@ -152,6 +186,63 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                 _colorStylesCommand = value;
             }
         }
+        
+        public ICommand HelpCommand => new RelayCommand(Help);
+
+        private void Help(object? commandParameter)
+        {
+            var programFiles = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            var path = Path.Combine(programFiles, "Clear Dashboard", "Dashboard_Instructions.pdf");
+            if (File.Exists(path))
+            {
+                var p = new Process();
+                p.StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true
+                };
+                p.Start();
+            }
+            else
+            {
+                Logger?.LogInformation("Dashboard_Instructions.pdf missing.");
+            }
+        }
+        
+        public ICommand PreviousVerseCommand => new RelayCommand(PreviousVerse);
+
+        private async void PreviousVerse(object? commandParameter)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.PreviousVerse));
+        }
+        
+        public ICommand NextVerseCommand => new RelayCommand(NextVerse);
+
+        private async void NextVerse(object? commandParameter)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.NextVerse));
+        }
+        
+        public ICommand NextChapterCommand => new RelayCommand(NextChapter);
+
+        private async void NextChapter(object? commandParameter)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.NextChapter));
+        }
+        
+        public ICommand NextBookCommand => new RelayCommand(NextBook);
+
+        private async void NextBook(object? commandParameter)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new BcvArrowMessage(BcvArrow.NextBook));
+        }
+        
+        public ICommand OpenBiblicalTermsCommand => new RelayCommand(OpenBiblicalTerms);
+
+        private void OpenBiblicalTerms(object? commandParameter)
+        {
+            var mainViewModel = LifetimeScope?.Resolve<MainViewModel>();
+            mainViewModel!.MenuItems[2].MenuItems[2].Command.Execute(null);
+        }
 
         #endregion
 
@@ -170,7 +261,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         public ShellViewModel(TranslationSource? translationSource, INavigationService navigationService,
             ILogger<ShellViewModel> logger, DashboardProjectManager? projectManager, IEventAggregator eventAggregator,
             IWindowManager windowManager, IMediator mediator, ILifetimeScope lifetimeScope, BackgroundTasksViewModel backgroundTasksViewModel, ILocalizationService localizationService)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             BackgroundTasksViewModel = backgroundTasksViewModel;
             _translationSource = translationSource;
@@ -186,10 +277,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             NavigationService!.Navigated += NavigationServiceOnNavigated;
         }
 
-     
+
 
         private bool _loadingApplication;
-     
+
 
         public bool LoadingApplication
         {
@@ -319,7 +410,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         #region Caliburn.Micro overrides
 
-        protected override async  Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             NavigationService!.Navigated -= NavigationServiceOnNavigated;
             Logger!.LogInformation($"{nameof(ShellViewModel)} is deactivating.");
@@ -343,7 +434,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         /// </summary>
         public async void BackgroundTasks()
         {
-           await EventAggregator!.PublishOnUIThreadAsync(new ToggleBackgroundTasksVisibilityMessage());
+            await EventAggregator!.PublishOnUIThreadAsync(new ToggleBackgroundTasksVisibilityMessage());
         }
 
 
@@ -394,9 +485,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
             finally
             {
-               SettingLanguage = false;
+                SettingLanguage = false;
             }
-          
+
         }
 
 
@@ -431,16 +522,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             await EventAggregator.PublishOnUIThreadAsync(new ApplicationWindowSettings(_windowSettings), cancellationToken);
         }
 
-        #endregion
 
-        public async  Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
             if (!SettingLanguage)
             {
-                 SetLanguage();
+                SetLanguage();
             }
-           
+
             await Task.CompletedTask;
         }
+
+
+        public Task HandleAsync(PerformanceModeMessage message, CancellationToken cancellationToken)
+        {
+            if (message.IsActive)
+            {
+                ShowHighPerformanceMode = Visibility.Visible;
+            }
+            else
+            {
+                ShowHighPerformanceMode = Visibility.Collapsed;
+            }
+
+            return Task.CompletedTask;
+        }
+
+        #endregion
     }
 }
