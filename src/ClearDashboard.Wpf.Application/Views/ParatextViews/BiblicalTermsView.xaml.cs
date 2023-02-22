@@ -88,7 +88,7 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
                         copyText = BiblicalTermsItem.References.Count.ToString();
                         break;
                     case (6):
-                        copyText = BiblicalTermsItem.RenderingString;
+                        //copyText = BiblicalTermsItem.RenderingString;
                         break;
                     default:
                         copyText = BiblicalTermsItem.Gloss;

@@ -405,30 +405,46 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+
                 <DataGridTemplateColumn Width="20*" Header="{helpers:Localization BiblicalTermsForm_RenderingsLower}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock
-                                Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
-                                Margin="-8"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Text="{Binding RenderingString}"
-                                TextWrapping="Wrap"
-                                ToolTip="{Binding RenderingStringHover}">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
-                                        <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
-                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
+
+                            <ListBox Name="ListTwo" ItemsSource="{Binding RenderingString}">
+                                <ListBox.Style>
+                                    <Style TargetType="ListBox">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RenderingString}" Value="{x:Null}">
+                                            <DataTrigger Binding="{Binding RenderingCount}" Value="0">
                                                 <Setter Property="Background" Value="{DynamicResource OrangeDarkBrush}" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
+                                </ListBox.Style>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
+                                            Margin="-8"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding RenderingString}"
+                                            TextWrapping="Wrap"
+                                            ToolTip="{Binding RenderingStringHover}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
+                                                    <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
+                                                    <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}" />
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+
+
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

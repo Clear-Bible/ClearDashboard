@@ -1123,38 +1123,64 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                         var renderingGroups = renderings
                                             .GroupBy(x => x.Substring(0, shortest));
 
-                                        string sTemp = "";
+                                        List<RenderingStringParts> sTemp = new();
                                         foreach (var renderingGroup in renderingGroups)
                                         {
-                                            sTemp += renderingGroup.Key + "*\n";
-                                        }
+                                            if (renderingGroup.Count() == 1)
+                                            {
+                                                var term = renderings.FirstOrDefault(x => x.StartsWith(renderingGroup.Key));
 
-                                        // remove the last \n
-                                        if (sTemp.Length > 0)
-                                        {
-                                            sTemp = sTemp[..^1];
+                                                if (term is not null)
+                                                {
+                                                    sTemp.Add(new RenderingStringParts { RenderingString = term });
+                                                }
+                                                else
+                                                {
+                                                    sTemp.Add(new RenderingStringParts { RenderingString = renderingGroup.Key });
+                                                }
+                                                
+                                            }
+                                            else
+                                            {
+                                                var terms = renderings.Where(x => x.StartsWith(renderingGroup.Key));
+
+                                                if (terms is not null)
+                                                {
+                                                    var termsString = String.Join("\n", terms);
+
+                                                    sTemp.Add(new RenderingStringParts
+                                                    {
+                                                        RenderingString = renderingGroup.Key + "*",
+                                                        RenderingStringHover = termsString
+                                                    });
+                                                }
+                                                else
+                                                {
+                                                    sTemp.Add(new RenderingStringParts
+                                                    {
+                                                        RenderingString = renderingGroup.Key + "*"
+                                                    });
+                                                }
+                                                
+                                            }
                                         }
 
                                         _biblicalTerms[i].RenderingString = sTemp;
-                                        _biblicalTerms[i].RenderingStringHover = String.Join("\n", renderings);
 
                                         cancellationToken.ThrowIfCancellationRequested();
                                     }
                                     else
                                     {
+                                        List<RenderingStringParts> sTemp = new();
                                         foreach (var rendering in renderings)
                                         {
-                                            if (rendering != renderings.Last())
+                                            sTemp.Add(new RenderingStringParts
                                             {
-                                                _biblicalTerms[i].RenderingString += rendering + "\n";
-                                            }
-                                            else
-                                            {
-                                                _biblicalTerms[i].RenderingString += rendering;
-                                            }
-
-                                            cancellationToken.ThrowIfCancellationRequested();
+                                                RenderingString = rendering
+                                            });
                                         }
+
+                                        _biblicalTerms[i].RenderingString.AddRange(sTemp);
                                     }
 
                                     // check to see if every verse has been accounted for

@@ -23,10 +23,10 @@
         public List<string> ReferencesListText { get; set; } = new List<string>();
         
         public List<string> Renderings { get; set; } = new List<string>();
-        
-        public string? RenderingString { get; set; }
 
-        public string? RenderingStringHover { get; set; }
+        public List<RenderingStringParts>? RenderingString { get; set; } = new();
+
+        //public List<string>? RenderingStringHover { get; set; } = new();
 
         public int RenderingCount { get; set; }
 
@@ -37,6 +37,12 @@
 
         public bool Found { get; set; }
 
+    }
+
+    public class RenderingStringParts
+    {
+        public string RenderingString { get; set; }
+        public string RenderingStringHover { get; set; }
     }
 
 }
