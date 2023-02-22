@@ -60,7 +60,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 IHandle<ActiveDocumentMessage>,
                 IHandle<CloseDockingPane>,
                 IHandle<ApplicationWindowSettings>,
-                IHandle<FilterPinsMessage>
+                IHandle<FilterPinsMessage>, 
+                IHandle<BackgroundTaskChangedMessage>
     {
         #region Member Variables
 
@@ -492,6 +493,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             {
                 if (item is EnhancedViewModel enhancedViewModel)
                 {
+                    var id = enhancedViewModel.PaneId;
+                    var title = enhancedViewModel.Title;
+                    var windowsDockable = _dockingManager.Layout.Descendents()
+                        .OfType<LayoutDocument>()
+                        .FirstOrDefault(a =>
+                        {
+                            if (a.Content is not null)
+                            {
+                                if (a.Content is EnhancedViewModel)
+                                {
+                                    var vm = (EnhancedViewModel)a.Content;
+                                    if (vm.PaneId == id)
+                                    {
+                                    return true;
+                                    }
+                                }
+                            }
+                            return false;
+                        });
+
+                    if (windowsDockable is not null)
+                    {
+                        title = windowsDockable.Title;
+                        enhancedViewModel.EnhancedViewLayout.Title = title;
+                    }
+
                     enhancedViewLayouts.Add(enhancedViewModel.EnhancedViewLayout);
                 }
             }
@@ -690,7 +717,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private List<EnhancedViewLayout> LoadEnhancedViewTabLayout()
         {
-            if (ProjectManager.CurrentProject?.WindowTabLayout is null)
+            if (ProjectManager.CurrentProject?.WindowTabLayout is null ||ProjectManager.CurrentProject?.WindowTabLayout == "[null]")
             {
                 var newLayouts = new List<EnhancedViewLayout>
                 {
@@ -1134,18 +1161,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             }
 
             // initiate the menu system
+            var tasksRunning = !_longRunningTaskManager.HasTasks();
             MenuItems.Clear();
             MenuItems = new BindableCollection<MenuItemViewModel>
             {
                 // File
                 new()
                 {
-                    Header =_localizationService!.Get("MainView_File"), Id = "FileID", ViewModel = this,
+                    Header =_localizationService!.Get("MainView_File"), Id = "FileID", ViewModel = this, IsEnabled = tasksRunning,
                     MenuItems = new BindableCollection<MenuItemViewModel>
                     {
                         // New
-                        new() { Header =_localizationService!.Get("MainView_FileNew"), Id = "NewID", ViewModel = this, IsEnabled = false },
-                        new() { Header = _localizationService!.Get("MainView_FileOpen"), Id = "OpenID", ViewModel = this, IsEnabled = false }
+                        new() { Header =_localizationService!.Get("MainView_FileNew"), Id = "NewID", ViewModel = this, IsEnabled = true },
+                        new() { Header = _localizationService!.Get("MainView_FileOpen"), Id = "OpenID", ViewModel = this, IsEnabled = true }
                     }
                 },
                 new()
@@ -1697,12 +1725,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 var startupDialogViewModel = LifetimeScope!.Resolve<StartupDialogViewModel>();
                 startupDialogViewModel.MimicParatextConnection = true;
 
-                await OnDeactivateAsync(false, CancellationToken.None);
-
                 var result = await WindowManager!.ShowDialogAsync(startupDialogViewModel);
 
                 if (result == true)
                 {
+                    await OnDeactivateAsync(false, CancellationToken.None);
                     NavigationService?.NavigateToViewModel<MainViewModel>(startupDialogViewModel.ExtraData);
                     await OnInitializeAsync(CancellationToken.None);
                     await OnActivateAsync(CancellationToken.None);
@@ -1794,6 +1821,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             return Task.CompletedTask;
         }
 
-      
+        public Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
+        {
+            bool enable;
+            if (_longRunningTaskManager.Tasks.Count<=1 && message.Status.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
+            {
+                enable = true;
+            }
+            else
+            {
+                enable = false;
+            }
+            foreach (var item in MenuItems)
+            {
+                if (item.Id == "FileID")
+                {
+                    item.IsEnabled = enable;
+                    break;
+                }
+            }
+            return Task.CompletedTask;
+        }
+
     }
 }

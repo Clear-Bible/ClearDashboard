@@ -221,7 +221,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             if (IsParatextRunning && !Connected)
             {
-                ParatextUserName = "unavailable.  Paratext is on but not connected.";
+
             }
         }
 
@@ -242,10 +242,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (IsParatextRunning)
             {
                 Connected = true;
+                if (ParatextUserName == null)
+                {
+                    ParatextUserName = ProjectManager.CurrentUser.FullName;
+                }
             }
             else
             {
                 Connected = false;
+                ParatextUserName = "unavailable.  Paratext is on but not connected.";
             }
             if (!IsParatextInstalled)
             {
