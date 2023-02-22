@@ -18,9 +18,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     /// <summary>
     /// A specialization of <see cref="VerseDisplayViewModel"/> for displaying alignments.
     /// </summary>
-    public class AlignmentDisplayViewModel : VerseDisplayViewModel,
-            IHandle<AlignmentAddedMessage>,
-            IHandle<AlignmentDeletedMessage>
+    public class AlignmentDisplayViewModel : VerseDisplayViewModel
     {
         private EngineParallelTextRow ParallelTextRow { get; }
         private AlignmentSetId AlignmentSetId { get; }
@@ -144,7 +142,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             AlignmentSetId = alignmentSetId;
         }
 
-        public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAlignmentAddedAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
         {
             var alignment = message.Alignment;
             var alignedTokenPair = alignment.AlignedTokenPair;
@@ -160,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        public async Task HandleAlignmentDeletedAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
         {
 
             if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == message.Alignment.AlignmentId!.Id))
