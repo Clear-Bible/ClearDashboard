@@ -145,8 +145,8 @@ Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_Hbrw.ttf"; DestDir:
 Source: "..\src\ClearDashboard.Wpf.Application\Resources\SBL_grk.ttf"; DestDir: "{fonts}"; Flags: onlyifdoesntexist uninsneveruninstall; FontInstall: "SBL Greek"
 
 ; Install Paratext Plugin
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppName}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\{#MyAppName}"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\*"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\ClearDashboard.WebApiParatextPlugin\bin\Release\net48\ClearDashboard.WebApiParatextPlugin.dll"; DestDir: "{code:GetParatextInstallationPath}\plugins\ClearDashboardWebApiPlugin"; DestName: "ClearDashboard.WebApiParatextPlugin.ptxplg"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 
 [Registry]
