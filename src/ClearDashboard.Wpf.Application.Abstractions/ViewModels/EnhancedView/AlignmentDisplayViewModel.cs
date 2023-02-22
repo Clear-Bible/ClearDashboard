@@ -40,17 +40,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             switch (isSource)
             {
                 case true:
-                {
-                    return Alignments?
-                        .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
-                        .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken targetToken? new List<Token>() { a.AlignedTokenPair.TargetToken } : targetToken.Tokens);
-                }
+                    {
+                        var tokens = Alignments?
+                            .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
+                            .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken targetToken ? new List<Token>() { a.AlignedTokenPair.TargetToken } : targetToken.Tokens);
+                        return tokens;
+                    }
                 case false:
-                {
-                    return Alignments?
-                        .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
-                        .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.TargetToken } : token.Tokens);
-                }
+                    {
+                        var tokens = Alignments?
+                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
+                            .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.TargetToken } : token.Tokens);
+
+                        return tokens;
+                    }
             }
 
         }
@@ -61,16 +64,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             switch (isSource)
             {
                 case true:
-                {
-                    return Alignments?
-                        .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
-                        .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                    {
+                        var tokens = Alignments?
+                             .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
+                             .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                        return tokens;
                     }
                 case false:
-                {
-                    return Alignments?
-                        .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
-                        .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                    {
+                        var tokens = Alignments?
+                            .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
+                            .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
+                        return tokens;
                     }
             }
 
@@ -159,7 +164,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 {
                     AlignmentManager!.Alignments!.Add(alignment);
                 }
-                
+
                 Alignments!.Add(alignment);
             }
 
