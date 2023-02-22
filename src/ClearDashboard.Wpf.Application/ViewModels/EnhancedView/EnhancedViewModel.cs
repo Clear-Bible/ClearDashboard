@@ -475,8 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = "Enhanced View";
             await base.OnInitializeAsync(cancellationToken);
         }
-
-      
+        
         protected override void OnViewAttached(object view, object context)
         {
             // grab the dictionary of all the verse lookups
@@ -674,6 +673,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 if (SelectionManager.AnySourceTokens)
                 {
                     await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.TokenDisplay);
+                    var element = (UIElement)sender;
+                    EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
                 }
                 else
                 {
