@@ -626,13 +626,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     if (verseDisplayViewModel.Alignments != null)
                     {
-                        await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.Token.TokenId);
+                        await verseDisplayViewModel.HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.AlignmentToken.TokenId);
                     }
                 }
                 
                 if (args.IsAltPressed)
                 {
-                    verseDisplayViewModel.UnhighlightTokens();
+                    await verseDisplayViewModel.UnhighlightTokens();
                 }
             }
 
