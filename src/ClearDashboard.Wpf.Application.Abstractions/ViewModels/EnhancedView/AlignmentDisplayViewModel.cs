@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Autofac;
 using ClearDashboard.DAL.Alignment.Corpora;
 using MediatR;
-using ClearDashboard.Wpf.Application.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -26,14 +25,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private EngineParallelTextRow ParallelTextRow { get; }
         private AlignmentSetId AlignmentSetId { get; }
 
-        public AlignmentManager? AlignmentManager { get; set; }
-
-        /// <summary>
-        /// Gets the collection of alignments for the verse.
-        /// </summary>
-        public override AlignmentCollection? Alignments => AlignmentManager?.Alignments;
-
-
         protected override IEnumerable<Token>? GetTargetTokens(bool isSource, TokenId tokenId)
         {
 
@@ -41,14 +32,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 case true:
                     {
-                        var tokens = Alignments?
+                        var tokens = AlignmentManager?.Alignments?
                             .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
                             .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken targetToken ? new List<Token>() { a.AlignedTokenPair.TargetToken } : targetToken.Tokens);
                         return tokens;
                     }
                 case false:
                     {
-                        var tokens = Alignments?
+                        var tokens = AlignmentManager?.Alignments?
                             .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
                             .SelectMany(a => a.AlignedTokenPair.TargetToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.TargetToken } : token.Tokens);
 
@@ -65,14 +56,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 case true:
                     {
-                        var tokens = Alignments?
+                        var tokens = AlignmentManager?.Alignments?
                              .Where(a => a.AlignedTokenPair.SourceToken.TokenId.IdEquals(tokenId))
                              .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
                         return tokens;
                     }
                 case false:
                     {
-                        var tokens = Alignments?
+                        var tokens = AlignmentManager?.Alignments?
                             .Where(a => a.AlignedTokenPair.TargetToken.TokenId.IdEquals(tokenId))
                             .SelectMany(a => a.AlignedTokenPair.SourceToken is not CompositeToken token ? new List<Token>() { a.AlignedTokenPair.SourceToken } : token.Tokens);
                         return tokens;
@@ -158,58 +149,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var alignment = message.Alignment;
             var alignedTokenPair = alignment.AlignedTokenPair;
 
-            if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+            if (AlignmentManager!.Alignments!.All(a => a.AlignmentId!.Id != alignment.AlignmentId!.Id))
             {
-                if (AlignmentManager!.Alignments!.All(a => a.AlignmentId!.Id != alignment.AlignmentId!.Id))
-                {
-                    AlignmentManager!.Alignments!.Add(alignment);
-                }
-
-                Alignments!.Add(alignment);
+                AlignmentManager!.Alignments!.Add(alignment);
             }
 
-            if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
-            {
-                if (AlignmentManager!.Alignments!.All(a => a.AlignmentId!.Id != alignment.AlignmentId!.Id))
-                {
-                    AlignmentManager!.Alignments!.Add(alignment);
-                }
-
-                Alignments!.Add(alignment);
-            }
+            var tokenDisplayViewModel = message.TokenDisplayViewModel;
+            await HighlightTokens(tokenDisplayViewModel.IsSource, tokenDisplayViewModel.AlignmentToken.TokenId);
 
             await Task.CompletedTask;
         }
 
         public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
         {
-            var alignment = message.Alignment;
-            var alignedTokenPair = alignment.AlignedTokenPair;
 
-            var unhighlightTokens = false;
-
-            if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+            if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == message.Alignment.AlignmentId!.Id))
             {
-                unhighlightTokens = true;
-                if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == alignment.AlignmentId!.Id))
+                var alignment = AlignmentManager!.Alignments!.FirstOrDefault(a => a.AlignmentId == message.Alignment.AlignmentId);
+                if (alignment != null)
                 {
-                    AlignmentManager!.Alignments!.Remove(alignment);
+                    var alignmentRemoved = AlignmentManager!.Alignments!.Remove(alignment);
+                    Logger!.LogInformation(alignmentRemoved ? 
+                        $"Found and removed alignment with Id - '{message.Alignment.AlignmentId}'" : 
+                        $"Did not find an alignment with Id - '{message.Alignment.AlignmentId}'");
                 }
-                Alignments!.Remove(alignment);
-            }
-
-            if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
-            {
-                unhighlightTokens = true;
-                if (AlignmentManager!.Alignments!.Any(a => a.AlignmentId!.Id == alignment.AlignmentId!.Id))
-                {
-                    AlignmentManager!.Alignments!.Remove(alignment);
-                }
-                Alignments!.Remove(alignment);
-            }
-
-            if (unhighlightTokens)
-            {
+                
                 await UnhighlightTokens();
             }
         }
