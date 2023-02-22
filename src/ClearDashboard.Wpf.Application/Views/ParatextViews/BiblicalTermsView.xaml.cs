@@ -107,6 +107,13 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
             Clipboard.SetText(copyText);
         }
 
+        private void AllowScrolling_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(gridVerses);
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/40);
+            e.Handled = true;
+        }
+
         private void FindText_OnClick(object sender, ExecutedRoutedEventArgs e)
         {
             FilterText.Focus();

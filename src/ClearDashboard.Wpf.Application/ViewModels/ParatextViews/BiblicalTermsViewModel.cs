@@ -1180,7 +1180,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                             });
                                         }
 
-                                        _biblicalTerms[i].RenderingString.AddRange(sTemp);
+                                        if (_biblicalTerms[i].RenderingString != null)
+                                        {
+                                            _biblicalTerms[i].RenderingString.AddRange(sTemp);
+                                        }
+                                        else
+                                        {
+                                            _biblicalTerms[i].RenderingString = sTemp;
+                                        }
+                                        
                                     }
 
                                     // check to see if every verse has been accounted for
