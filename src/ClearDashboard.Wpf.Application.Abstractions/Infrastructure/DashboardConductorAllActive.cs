@@ -16,7 +16,8 @@ public abstract class DashboardConductorAllActive<T> : ApplicationConductorAllAc
 
     protected DashboardConductorAllActive(DashboardProjectManager? projectManager,
         INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator,
-        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
+        IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService,
+        IWindowManager? windowManager) :
         base(navigationService,logger, eventAggregator, mediator, lifetimeScope)
     {
         ProjectManager = projectManager;

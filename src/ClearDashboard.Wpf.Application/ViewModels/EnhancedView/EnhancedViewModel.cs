@@ -24,6 +24,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using static ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog.ParallelCorpusDialogViewModel;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -50,6 +51,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteManager NoteManager { get; }
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
+        private IWindowManager WindowManager { get; }
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
@@ -273,25 +275,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
    
         public async Task RequestClose(object obj)
         {
-            var taskName = "Close EnhancedView";
+            var confirmationDialogViewModel = LifetimeScope!.Resolve<ConfirmationDialogViewModel>();
+            confirmationDialogViewModel.ConfirmationText = "Are you sure you want to delete this EnhancedView?  There will be no way to undo this.";
 
-            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+            var result = await WindowManager!.ShowDialogAsync(confirmationDialogViewModel);
+
+            if (result == true)
             {
-                Name = taskName,
-                Description = "Closing...",
-                EndTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
-            }), CancellationToken.None);
-
-            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
-
-            await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
-            {
-                Name = taskName,
-                Description = "Closed.",
-                EndTime = DateTime.Now,
-                TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
-            }), CancellationToken.None);
+                await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
+            }
+            
         }
         #endregion
 
@@ -307,14 +300,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager selectionManager, 
             IEventAggregator? eventAggregator, 
             IMediator mediator,
-            ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
-            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
+            ILifetimeScope? lifetimeScope, 
+            ILocalizationService localizationService, 
+            IWindowManager windowManager) :
+            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService, windowManager)
 #pragma warning restore CS8618
         {
       
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
+            WindowManager = windowManager;
             
             Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 

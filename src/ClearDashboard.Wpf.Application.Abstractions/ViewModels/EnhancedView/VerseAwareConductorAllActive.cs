@@ -30,8 +30,8 @@ public abstract class VerseAwareConductorAllActive : DashboardConductorAllActive
     private bool _enableBcvControl;
     private EnhancedViewLayout? _enhancedViewLayout;
 
-    protected VerseAwareConductorAllActive(DashboardProjectManager? projectManager, INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) : 
-        base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+    protected VerseAwareConductorAllActive(DashboardProjectManager? projectManager, INavigationService? navigationService, ILogger? logger, IEventAggregator? eventAggregator, IMediator? mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService,  IWindowManager windowManager) : 
+        base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService, windowManager)
     {
     }
 
