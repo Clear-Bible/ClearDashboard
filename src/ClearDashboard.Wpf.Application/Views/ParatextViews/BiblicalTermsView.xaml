@@ -410,7 +410,10 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
 
-                            <ListBox Name="ListTwo" ItemsSource="{Binding RenderingString}" PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+                            <ListBox
+                                Name="ListTwo"
+                                ItemsSource="{Binding RenderingString}"
+                                PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
                                 <ListBox.Style>
                                     <Style TargetType="ListBox">
                                         <Style.Triggers>
@@ -420,9 +423,6 @@
                                         </Style.Triggers>
                                     </Style>
                                 </ListBox.Style>
-                                <!--
-                                    Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Grid}}"
-                                -->
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock
@@ -563,7 +563,8 @@
                     Margin="5"
                     VerticalAlignment="Top"
                     ItemsSource="{Binding SelectedItemVerses}"
-                    ScrollViewer.CanContentScroll="False">
+                    ScrollViewer.CanContentScroll="False"
+                    PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
 
                     <ListView.CommandBindings>
                         <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
@@ -621,10 +622,7 @@
                                     Foreground="{StaticResource BlueMidBrush}"
                                     Text="{Binding VerseId}" />
 
-                                <ScrollViewer
-                                    Name="ContentScroller"
-                                    Grid.Column="2"
-                                    MaxHeight="{Binding Path=ActualHeight, ElementName=LowerBorder, Converter={converters:WidthSubtraction}, ConverterParameter='20'}">
+                                <ScrollViewer x:Name="ContentScroller" Grid.Column="2">
                                     <ScrollViewer.CommandBindings>
                                         <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
                                     </ScrollViewer.CommandBindings>
@@ -641,6 +639,7 @@
                                         Margin="0,0,10,0"
                                         FontFamily="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}"
                                         FontSize="{Binding ElementName=MainGrid, Path=DataContext.FontSize}"
+                                        
                                         TextWrapping="Wrap">
                                         <TextBlock.Style>
                                             <Style TargetType="helpers:BindableTextBlock">

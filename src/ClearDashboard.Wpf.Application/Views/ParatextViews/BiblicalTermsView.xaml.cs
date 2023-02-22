@@ -109,8 +109,17 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 
         private void AllowScrolling_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(gridVerses);
-            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/40);
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(sender as DependencyObject);
+            if (sender == gridVerses)
+            {
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/40);
+            }
+
+            if (sender == SelectedItemVerses)
+            {
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
+            }
+
             e.Handled = true;
         }
 
