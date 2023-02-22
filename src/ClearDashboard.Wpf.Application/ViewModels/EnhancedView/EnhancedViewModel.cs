@@ -324,16 +324,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
    
         public async Task RequestClose(object? obj)
         {
-            var confirmationDialogViewModel = LifetimeScope!.Resolve<ConfirmationDialogViewModel>();
-            confirmationDialogViewModel.ConfirmationText = "Are you sure you want to delete this EnhancedView?  There will be no way to undo this.";
-
-            var result = await _windowManager!.ShowDialogAsync(confirmationDialogViewModel);
-
-            if (result == true)
-            {
-                await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
-            }
-            
+            await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }
         #endregion
 
