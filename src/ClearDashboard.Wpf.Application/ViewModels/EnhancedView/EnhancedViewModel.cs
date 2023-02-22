@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
@@ -26,8 +25,6 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using static ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog.ParallelCorpusDialogViewModel;
-using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using ClearApplicationFoundation.Framework.Input;
 using Uri = System.Uri;
 
@@ -341,8 +338,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectionManager selectionManager, 
             IEventAggregator? eventAggregator,
             IMediator mediator,
-            ILifetimeScope? lifetimeScope, 
-            ILocalizationService localizationService) :
+            ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
