@@ -167,14 +167,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 .ToList();
         }
 
+
         public virtual async Task HighlightTokens(bool isSource, TokenId tokenId)
         {
+            // Notify all of the verse display view models to highlight tokens
+            // NB:  Should refactor to limit to just the verse displays for the currently active EnhancedView
             await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(isSource, tokenId));
-
-
-            // NB: Highlighting tokens is now handled in the message handler method below.
-            //HighlightSourceTokens(isSource, tokenId);
-            //HighlightTargetTokens(isSource, tokenId);
         }
 
         public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
@@ -186,6 +184,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public virtual async Task UnhighlightTokens()
         {
+            //Ask all of the verse displays to unhighlight their tokens.
+            // NB:  Should refactor to limit to just the verse displays for the currently active EnhancedView
             await EventAggregator.PublishOnUIThreadAsync(new UnhighlightTokensMessage());
         }
 
