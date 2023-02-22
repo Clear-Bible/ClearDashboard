@@ -385,7 +385,7 @@
                 <DataGridTemplateColumn Width="4*" Header="{helpers:Localization BiblicalTermsForm_Found}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <iconPacks:PackIconRadixIcons 
+                            <iconPacks:PackIconRadixIcons
                                 Margin="-18,0,-6,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
@@ -414,8 +414,8 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Text="{Binding RenderingString}"
-                                ToolTip="{Binding RenderingStringHover}"
-                                TextWrapping="Wrap">
+                                TextWrapping="Wrap"
+                                ToolTip="{Binding RenderingStringHover}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
