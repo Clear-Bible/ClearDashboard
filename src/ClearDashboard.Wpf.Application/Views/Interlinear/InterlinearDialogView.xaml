@@ -103,7 +103,7 @@
             <Button 
                 x:Name="Cancel"
                 Margin="5"
-                Content="{helpers:Localization Create}" 
+                Content="{helpers:Localization Cancel}" 
                 IsDefault="false"
                 Style="{StaticResource TransparentStyle}"/>
         </StackPanel>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
@@ -14,9 +9,15 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 // These need to be specified explicitly to resolve ambiguity with ClearDashboard.DataAccessLayer.Models.
 using Token = ClearBible.Engine.Corpora.Token;
+using TokenId = ClearBible.Engine.Corpora.TokenId;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -35,7 +36,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<NoteMouseEnterMessage>,
         IHandle<NoteMouseLeaveMessage>,
         IHandle<TokensJoinedMessage>,
-        IHandle<TokenUnjoinedMessage>
+        IHandle<TokenUnjoinedMessage>,
+       // IHandle<AlignmentAddedMessage>,
+       // IHandle<AlignmentDeletedMessage>,
+        IHandle<HighlightTokensMessage>,
+        IHandle<UnhighlightTokensMessage>
     {
         protected NoteManager NoteManager { get; }
         protected IMediator Mediator { get; }
@@ -57,7 +62,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private TokenMap? _targetTokenMap;
         protected TokenMap? TargetTokenMap
         {
-            private get { return _targetTokenMap; }
+            get { return _targetTokenMap; }
             set
             {
                 Set(ref _targetTokenMap, value);
@@ -113,6 +118,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
         {
             var sourceTokens = GetSourceTokens(isSource, tokenId);
+            if (sourceTokens == null)
+            {
+                return;
+            }
             _ = SourceTokenDisplayViewModels
                 .Select(tdm =>
                 {
@@ -135,7 +144,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected virtual void HighlightTargetTokens(bool isSource, TokenId tokenId)
         {
              var targetTokens = GetTargetTokens(isSource, tokenId);
-              _ =  TargetTokenDisplayViewModels
+             if (targetTokens == null)
+             {
+                 return;
+             }
+             _ =  TargetTokenDisplayViewModels
                 .Select(tdm =>
                 {
                     if (targetTokens
@@ -154,14 +167,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 .ToList();
         }
 
-        public virtual void HighlightTokens(bool isSource, TokenId tokenId)
+
+        public virtual async Task HighlightTokens(bool isSource, TokenId tokenId)
         {
-            HighlightSourceTokens(isSource, tokenId);
-            HighlightTargetTokens(isSource, tokenId);
+            // Notify all of the verse display view models to highlight tokens
+            // NB:  Should refactor to limit to just the verse displays for the currently active EnhancedView
+            await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(isSource, tokenId));
         }
 
-        public virtual void UnhighlightTokens()
+        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
         {
+            HighlightSourceTokens(message.IsSource, message.TokenId);
+            HighlightTargetTokens(message.IsSource, message.TokenId);
+            await Task.CompletedTask;
+        }
+
+        public virtual async Task UnhighlightTokens()
+        {
+            //Ask all of the verse displays to unhighlight their tokens.
+            // NB:  Should refactor to limit to just the verse displays for the currently active EnhancedView
+            await EventAggregator.PublishOnUIThreadAsync(new UnhighlightTokensMessage());
+        }
+
+        public virtual async Task InternalUnhighlightTokens()
+        {
+
             _ = SourceTokenDisplayViewModels
                 .Select(tdm =>
                 {
@@ -177,6 +207,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     return tdm;
                 })
                 .ToList();
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            await InternalUnhighlightTokens();
         }
 
         public bool IsSourceRtl => SourceTokenMap?.IsRtl ?? false;
@@ -184,7 +221,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        /// <summary>
+      /// <summary>
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
         /// <remarks>
@@ -319,6 +356,48 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-       
+
+        //public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        //{
+        //    var alignment = message.Alignment;
+        //    var alignedTokenPair = alignment.AlignedTokenPair;
+          
+        //    if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+        //    {
+        //        Alignments!.Add(alignment);
+        //    }
+
+        //    if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+        //    {
+        //        Alignments!.Add(alignment);
+        //    }
+
+        //    await Task.CompletedTask;
+        //}
+
+        //public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        //{
+        //    var alignment = message.Alignment;
+        //    var alignedTokenPair = alignment.AlignedTokenPair;
+
+        //    var unhighlightTokens = false;
+
+        //    if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+        //    {
+        //        unhighlightTokens = true;
+        //        Alignments!.Remove(alignment);
+        //    }
+
+        //    if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+        //    {
+        //        unhighlightTokens = true;
+        //        Alignments!.Remove(alignment);
+        //    }
+
+        //    if (unhighlightTokens)
+        //    {
+        //        await UnhighlightTokens();
+        //    }
+        //}
     }
 }

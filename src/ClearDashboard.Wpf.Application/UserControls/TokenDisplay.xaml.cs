@@ -294,6 +294,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent TokenClickedEvent = EventManager.RegisterRoutedEvent
             ("TokenClicked", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
+
+        /// <summary>
+        /// Identifies the TokenDeleteAlignment routed event.
+        /// </summary>
+        public static readonly RoutedEvent TokenDeleteAlignmentEvent = EventManager.RegisterRoutedEvent
+            ("TokenDeleteAlignment", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
+
         /// <summary>
         /// Identifies the TokenDoubleClickedEvent routed event.
         /// </summary>
@@ -474,6 +481,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         public static readonly RoutedEvent CopyEvent = EventManager.RegisterRoutedEvent
             ("Copy", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TokenDisplay));
 
+
+
         /// <summary>
         /// Identifies the TranslateQuickEvent routed event.
         /// </summary>
@@ -491,6 +500,15 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             add => AddHandler(TokenClickedEvent, value);
             remove => RemoveHandler(TokenClickedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when an individual token is clicked.
+        /// </summary>
+        public event RoutedEventHandler TokenDeleteAlignment
+        {
+            add => AddHandler(TokenDeleteAlignmentEvent, value);
+            remove => RemoveHandler(TokenDeleteAlignmentEvent, value);
         }
 
         /// <summary>
@@ -826,6 +844,14 @@ namespace ClearDashboard.Wpf.Application.UserControls
             JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
             JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
             UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
+
+            var tokenDisplay = (TokenDisplayViewModel) DataContext;
+            DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void OnTokenDeleteAlignment(object sender, RoutedEventArgs e)
+        {
+            RaiseTokenEvent(TokenDeleteAlignmentEvent, e);
         }
 
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
