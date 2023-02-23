@@ -16,8 +16,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Popups
     public enum SimpleMessagePopupMode
     {
         Add,
-        Delete,
-        ClosingEnhancedView
+        Delete
     }
 
     public abstract class SimpleMessagePopupViewModel : DashboardApplicationScreen

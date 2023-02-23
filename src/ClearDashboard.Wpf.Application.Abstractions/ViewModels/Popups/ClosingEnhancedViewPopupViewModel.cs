@@ -37,14 +37,8 @@ public class ClosingEnhancedViewPopupViewModel : SimpleMessagePopupViewModel
     public new string Title 
     {
         get
-        {
-            switch (SimpleMessagePopupMode)
-            {
-                case SimpleMessagePopupMode.ClosingEnhancedView:
-                    return LocalizationService!["EnhancedView_ClosingEnhancedView"];
-                default:
-                    return string.Empty;
-            }
+        { 
+            return LocalizationService!["EnhancedView_ClosingEnhancedView"];
         }
     }
 
@@ -53,12 +47,6 @@ public class ClosingEnhancedViewPopupViewModel : SimpleMessagePopupViewModel
 
     protected override string? CreateMessage()
     {
-        switch (SimpleMessagePopupMode)
-        {
-            case SimpleMessagePopupMode.ClosingEnhancedView:
-                return LocalizationService!["EnhancedView_ClosingEnhancedView"];
-            default:
-                return null;
-        }
+            return LocalizationService!["EnhancedView_ClosingEnhancedView"];
     }
 }
