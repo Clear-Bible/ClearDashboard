@@ -166,6 +166,9 @@ Name: "{autodesktop}\{#MyAppHelpDocsName}"; Filename: "{app}\{#MyAppHelpDocsName
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+[InstallDelete]
+Type: filesandordirs; Name: "{code:GetParatextInstallationPath}\plugins\Clear Dashboard"
+
 [Code]
 var
     ParatextInstallationPath: string;
