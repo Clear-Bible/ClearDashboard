@@ -52,10 +52,16 @@ namespace ClearDashboard.Wpf.Application.Services
         /// <param name="compositeToken">The CompositeToken to unjoin.</param>
         /// <param name="parallelCorpusId">An optional <see cref="ParallelCorpusId"/> for the CompositeToken.</param>
         /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task UnjoinTokenAsync(CompositeToken compositeToken, ParallelCorpusId? parallelCorpusId)
+        public async Task UnjoinTokenAsync(CompositeToken? compositeToken, ParallelCorpusId? parallelCorpusId)
         {
             try
             {
+                if (compositeToken == null)
+                {
+                    Logger.LogCritical($"Cannot un-join tokens - the '{nameof(compositeToken)}' parameter cannot be null.");
+                    return;
+                }
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -70,7 +76,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.LogError(e, "An unexpected error occurred while un-joining tokens.");
                 throw;
             }
         }
