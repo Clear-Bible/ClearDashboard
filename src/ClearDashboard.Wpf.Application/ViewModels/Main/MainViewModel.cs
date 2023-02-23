@@ -45,6 +45,7 @@ using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using System.Windows.Input;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using MahApps.Metro.Controls;
@@ -1784,7 +1785,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         /// <param name="message"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public Task HandleAsync(CloseDockingPane message, CancellationToken cancellationToken)
+        public async Task HandleAsync(CloseDockingPane message, CancellationToken cancellationToken)
         {
             var windowGuid = message.Guid;
 
@@ -1799,13 +1800,19 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     // ReSharper disable once PossibleNullReferenceException
                     if (content.PaneId == windowGuid)
                     {
-                        pane.Close();
+                        var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
+
+                        var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
+
+                        if (result == true)
+                        {
+                            pane.Close();
+                        }
                         break;
                     }
                 }
             }
-
-            return Task.CompletedTask;
         }
 
         // capture the window settings for if we do a screenshot
