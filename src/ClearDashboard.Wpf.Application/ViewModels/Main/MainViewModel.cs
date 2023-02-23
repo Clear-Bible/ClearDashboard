@@ -49,7 +49,6 @@ using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using MahApps.Metro.Controls;
-using ClearDashboard.Wpf.Application.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
