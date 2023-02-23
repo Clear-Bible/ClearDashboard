@@ -10,13 +10,13 @@ namespace ClearDashboard.DataAccessLayer.Threading
     public class LongRunningTaskManager : IDisposable
     {
         private readonly CancellationTokenSource _cancellationTokenSource;
-        private readonly ConcurrentDictionary<string, LongRunningTask?> _tasks;
+        public readonly ConcurrentDictionary<string, LongRunningTask?> Tasks;
         private readonly ILogger<LongRunningTaskManager> _logger;
 
         public LongRunningTaskManager(ILogger<LongRunningTaskManager> logger)
         {
             _logger = logger;
-            _tasks = new ConcurrentDictionary<string, LongRunningTask?>();
+            Tasks = new ConcurrentDictionary<string, LongRunningTask?>();
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
@@ -48,12 +48,12 @@ namespace ClearDashboard.DataAccessLayer.Threading
         public bool CancelTask(string taskName)
         {
             _logger.LogInformation($"Attempting to cancel task named: {taskName}");
-            var result = _tasks.ContainsKey(taskName);
+            var result = Tasks.ContainsKey(taskName);
 
             if (result)
             {
                 _logger.LogInformation($"Found task named: {taskName}");
-                result = _tasks.TryGetValue(taskName, out var task);
+                result = Tasks.TryGetValue(taskName, out var task);
 
                 if (result)
                 {
@@ -82,15 +82,15 @@ namespace ClearDashboard.DataAccessLayer.Threading
 
         private void DisposeTasks()
         {
-            if (!_tasks.IsEmpty)
+            if (!Tasks.IsEmpty)
             {
-                _logger.LogInformation($"Removing the following {_tasks.Count} tasks:");
-                foreach (var task in _tasks)
+                _logger.LogInformation($"Removing the following {Tasks.Count} tasks:");
+                foreach (var task in Tasks)
                 {
                     _logger.LogInformation($"\tDisposing {task.Key}");
                     task.Value!.Dispose();
                 }
-                _tasks.Clear();
+                Tasks.Clear();
 
             }
             else
@@ -106,7 +106,7 @@ namespace ClearDashboard.DataAccessLayer.Threading
                 var longRunningTask = new LongRunningTask(taskName, CancellationTokenSource.CreateLinkedTokenSource(_cancellationTokenSource.Token), status);
                 try
                 {
-                    _tasks[taskName] = longRunningTask;
+                    Tasks[taskName] = longRunningTask;
                     return longRunningTask;
                 }
                 catch (Exception ex)
@@ -127,7 +127,7 @@ namespace ClearDashboard.DataAccessLayer.Threading
 
         private bool TryRemove(string taskName, out LongRunningTask? value)
         {
-            var result = _tasks.TryRemove(taskName, out value);
+            var result = Tasks.TryRemove(taskName, out value);
             value!.Dispose();
             return result;
 
@@ -135,24 +135,24 @@ namespace ClearDashboard.DataAccessLayer.Threading
 
         public bool HasTask(string taskName)
         {
-            return _tasks.ContainsKey(taskName);
+            return Tasks.ContainsKey(taskName);
         }
 
         public bool HasTasks()
         {
-            return _tasks.Any();
+            return Tasks.Any();
         }
 
         public LongRunningTask GetTask(string taskName)
         {
-            return (_tasks[taskName] ?? default)!;
+            return (Tasks[taskName] ?? default)!;
         }
 
         public bool TaskComplete(string taskName)
         {
             if (HasTask(taskName))
             {
-                var result = _tasks.TryRemove(taskName, out var task);
+                var result = Tasks.TryRemove(taskName, out var task);
                 if (result)
                 {
                     task!.Complete();

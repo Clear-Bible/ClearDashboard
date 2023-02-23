@@ -13,6 +13,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using ClearDashboard.Wpf.Application.ViewModels.Startup;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using ClearDashboard.Wpf.Application.Views.EnhancedView;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
 
@@ -143,7 +144,8 @@ namespace ClearDashboard.Wpf.Application
         {
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
             builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
-          
+            builder.RegisterType<SystemPowerModes>().AsSelf().SingleInstance();
+
             builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
 
             builder.RegisterDatabaseDependencies();
@@ -155,10 +157,8 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterParallelCorpusDialogDependencies();
             builder.RegisterParatextDialogDependencies();
 
-            //builder.RegisterSmtModelDialogDependencies();
-
-
-            //builder.RegisterAquaDependencies();
+            //builder.RegisterType<AlignmentPopupView>().AsSelf();
+           
         }
     }
 }

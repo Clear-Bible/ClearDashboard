@@ -9,6 +9,10 @@ using ClearDashboard.Wpf.Application.Collections;
 using Autofac;
 using System.Diagnostics;
 using System;
+using System.Linq;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -24,6 +28,9 @@ namespace ClearDashboard.Wpf.Application.Services
         private IEventAggregator EventAggregator { get; }
         private ILogger<AlignmentManager> Logger { get; }
         private IMediator Mediator { get; }
+        private ILifetimeScope LifetimeScope { get; }
+        private IWindowManager WindowManager { get; }
+        private SelectionManager SelectionManager { get; }
 
         private async Task GetAlignmentSetAsync()
         {
@@ -89,14 +96,19 @@ namespace ClearDashboard.Wpf.Application.Services
                                 AlignmentSetId alignmentSetId, 
                                 IEventAggregator eventAggregator, 
                                 ILogger<AlignmentManager> logger, 
-                                IMediator mediator)
+                                ILifetimeScope lifetimeScope,
+                                IMediator mediator, 
+                                IWindowManager windowManager, SelectionManager selectionManager)
         {
             ParallelTextRow = parallelTextRow;
             AlignmentSetId = alignmentSetId;
 
             EventAggregator = eventAggregator;
             Logger = logger;
+            LifetimeScope = lifetimeScope;
             Mediator = mediator;
+            WindowManager = windowManager;
+            SelectionManager = selectionManager;
         }
 
         /// <summary>
@@ -114,6 +126,101 @@ namespace ClearDashboard.Wpf.Application.Services
                                                                     new NamedParameter("alignmentSetId", alignmentSetId));
             await manager.InitializeAsync();
             return manager;
+        }
+
+        public async Task AddAlignment(TokenDisplayViewModel targetTokenDisplay)
+        {
+
+            if (SelectionManager.AnySourceTokens)
+            {
+                // We have at least one source token, so we can display the dialog to ask if the user 
+                // wants to create an alignment.
+                var selectedTokens = SelectionManager.SelectedSourceTokens;
+                var sourceTokenDisplay = selectedTokens.First();
+                
+                var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Add, targetTokenDisplay, sourceTokenDisplay);
+
+                var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null,
+                    SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+                if (result == true)
+                {
+                    var alignment = new Alignment(new AlignedTokenPairs(sourceTokenDisplay.CompositeToken ?? sourceTokenDisplay.Token, 
+                                                                        targetTokenDisplay.CompositeToken ?? targetTokenDisplay.Token, 1d),
+                                                                        "Verified");
+                    try
+                    {
+                        await AlignmentSet!.PutAlignment(alignment);
+
+                        Debug.Assert(alignment.AlignmentId != null);
+
+                        Alignments!.Add(alignment);
+
+                        await EventAggregator.PublishOnUIThreadAsync(new AlignmentAddedMessage(alignment, targetTokenDisplay));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "An unexpected error occurred while creating an alignment");
+                        //throw;
+                    }
+                   
+                }
+            }
+        }
+
+        private AlignmentPopupViewModel GetAlignmentPopupViewModel(SimpleMessagePopupMode mode, TokenDisplayViewModel? targetTokenDisplay = null,
+            TokenDisplayViewModel? sourceTokenDisplay = null)
+        {
+            var alignmentPopupViewModel = LifetimeScope?.Resolve<AlignmentPopupViewModel>();
+
+            if (alignmentPopupViewModel == null)
+            {
+                throw new ArgumentNullException(nameof(alignmentPopupViewModel), "AlignmentPopupViewModel needs to be registered with the DI container.");
+            }
+            alignmentPopupViewModel.SimpleMessagePopupMode = mode;
+            alignmentPopupViewModel.SourceTokenDisplay = sourceTokenDisplay;
+            alignmentPopupViewModel.TargetTokenDisplay = targetTokenDisplay;
+            return alignmentPopupViewModel;
+        }
+
+        public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay)
+        {
+            var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Delete);
+
+            var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
+            if (result == true)
+            {
+                var alignmentId = FindAlignmentId(tokenDisplay);
+
+                if (alignmentId != null)
+                {
+                    try
+                    {
+                        await AlignmentSet!.DeleteAlignment(alignmentId);
+                        var alignment = Alignments!.FirstOrDefault(a => a.AlignmentId == alignmentId);
+                        if (alignment != null)
+                        {
+                            Alignments!.Remove(alignment);
+                            await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "An unexpected error occurred while deleting an alignment.");
+                        //throw;
+                    }
+                   
+                }
+                
+            }
+            
+        }
+
+        private AlignmentId? FindAlignmentId(TokenDisplayViewModel tokenDisplay)
+        {
+           // var a = AlignmentSet.
+           var alignment =  Alignments!.FindAlignmentByTokenId(tokenDisplay.AlignmentToken.TokenId.Id);
+           return alignment?.AlignmentId;
+          
         }
     }
 }

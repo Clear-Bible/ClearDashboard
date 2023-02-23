@@ -1,7 +1,6 @@
 ﻿using Autofac;
-using Autofac.Core.Lifetime;
 using Caliburn.Micro;
-using ClearApplicationFoundation.Views.Shell;
+using ClearApplicationFoundation.Framework.Input;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Translation;
@@ -29,7 +28,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearApplicationFoundation.Framework.Input;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using ParallelCorpus = ClearDashboard.DAL.Alignment.Corpora.ParallelCorpus;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
@@ -39,7 +37,13 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel,
-            IHandle<VerseChangedMessage>, IHandle<TokensJoinedMessage>, IHandle<TokenUnjoinedMessage>
+            IHandle<VerseChangedMessage>, 
+            IHandle<TokensJoinedMessage>, 
+            IHandle<TokenUnjoinedMessage>,
+            IHandle<HighlightTokensMessage>,
+            IHandle<UnhighlightTokensMessage>,
+            IHandle<AlignmentAddedMessage>,
+            IHandle<AlignmentDeletedMessage>
     {
         public IWindowManager WindowManager { get; }
 
@@ -124,7 +128,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _showTranslation, value);
         }
 
-        private bool _isRtl;
+       private bool _isRtl;
 
         public bool IsRtl
         {
@@ -172,7 +176,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async  void TranslationClicked(object sender, TranslationEventArgs args)
         {
-           var s = await WindowManager.ShowDialogAsync(new TranslationSelectionDialog(args.TokenDisplay!,
+           _ = await WindowManager.ShowDialogAsync(new TranslationSelectionDialog(args.TokenDisplay!,
                 args.InterlinearDisplay!));
         }
 
@@ -696,12 +700,44 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected override void OnViewReady(object view)
         {
             var verseAwareEnhancedViewItem = (UserControl)view;
-
-            // TODO:  remove
-            verseAwareEnhancedViewItem.InputBindings.Add(new KeyBinding(KDCommand,new MultiKeyGesture(new[] {Key.K, Key.D}, ModifierKeys.Control)));
             base.OnViewReady(view);
         }
 
-   
+
+        public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        {
+            foreach(var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleAlignmentAddedAsync(message, cancellationToken);
+            }
+        }
+
+
+        private IEnumerable<AlignmentDisplayViewModel> AlignedVerses =>
+
+            Verses.Where(v => v.AlignmentManager != null).Cast<AlignmentDisplayViewModel>();
+        public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleAlignmentDeletedAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleHighlightTokensAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleUnhighlightTokensAsync(message, cancellationToken);
+            }
+        }
     }
 }

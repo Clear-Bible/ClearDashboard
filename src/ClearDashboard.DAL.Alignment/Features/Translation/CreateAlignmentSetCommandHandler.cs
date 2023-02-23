@@ -272,8 +272,8 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             alignmentCommand.Parameters["@Id"].Value = (Guid.Empty != alignment.Id) ? alignment.Id : Guid.NewGuid();
             alignmentCommand.Parameters["@SourceTokenComponentId"].Value = alignment.SourceTokenComponentId;
             alignmentCommand.Parameters["@TargetTokenComponentId"].Value = alignment.TargetTokenComponentId;
-            alignmentCommand.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification.ToString();
-            alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom.ToString();
+            alignmentCommand.Parameters["@AlignmentVerification"].Value = alignment.AlignmentVerification;
+            alignmentCommand.Parameters["@AlignmentOriginatedFrom"].Value = alignment.AlignmentOriginatedFrom;
             alignmentCommand.Parameters["@Score"].Value = alignment.Score;
             alignmentCommand.Parameters["@AlignmentSetId"].Value = alignmentSetId;
             alignmentCommand.Parameters["@UserId"].Value = Guid.Empty != alignment.UserId ? alignment.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;

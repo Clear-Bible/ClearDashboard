@@ -251,5 +251,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
            await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Get the number of running tasks that are flagged as high performance mode
+        /// </summary>
+        /// <returns></returns>
+        public int GetNumberOfPerformanceTasksRemaining()
+        {
+           return BackgroundTaskStatuses
+               .Where(x => x.BackgroundTaskType == BackgroundTaskStatus.BackgroundTaskMode.PerformanceMode
+               && x.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running)
+               .ToList().Count;
+        }
+
+
+
+        /// <summary>
+        /// Check to see if there is a background task for tokenization already in progress
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool CheckBackgroundProcessForTokenizationInProgress(string nodeName)
+        {
+            var tasks = BackgroundTaskStatuses.Where(x =>
+            {
+                if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
+                {
+                    if (x.Description!.Contains("Macula Hebrew"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+                
+                if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
+                {
+                    if (x.Description!.Contains("Macula Greek"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                return x.Name == nodeName;
+
+            }).ToList();
+
+            if (tasks.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

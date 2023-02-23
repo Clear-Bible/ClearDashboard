@@ -17,10 +17,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using ClearApplicationFoundation.Extensions;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
 using DashboardApplication = System.Windows.Application;
@@ -232,14 +236,14 @@ namespace ClearDashboard.Wpf.Application
             base.RestoreMainWindowState();
         }
 
-        //protected override IEnumerable<Assembly> SelectAssemblies()
-        //{
-        //    var assemblies = base.SelectAssemblies().ToList();
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            var assemblies = base.SelectAssemblies().ToList();
 
-        //    assemblies.Add(Assembly.GetAssembly(typeof(FoundationBootstrapper)));
+            assemblies.Add(typeof(AbstractionsModule).Assembly);
 
-        //    return assemblies.LoadModuleAssemblies();
-        //}
+            return assemblies.LoadModuleAssemblies();
+        }
 
         protected override void SaveMainWindowState()
         {
@@ -261,10 +265,40 @@ namespace ClearDashboard.Wpf.Application
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            // remove extra Paratext Plugin for beta users
+            RemoveExtraParatextPluginInstance();
+
             _host.StartAsync();
 
             Logger?.LogInformation("ClearDashboard application is starting.");
             base.OnStartup(sender, e);
+        }
+
+        /// <summary>
+        /// For beta users starting with ver 0.4.7, a second entry was accidentally made in the
+        /// installer that has the plugin directory name of "Clear Suite" instead of "ClearDashboardWebApiPlugin"
+        /// This removes that previous instance
+        /// </summary>
+        private void RemoveExtraParatextPluginInstance()
+        {
+            ParatextProxy paratextUtils = new ParatextProxy(null);
+            if (paratextUtils.IsParatextInstalled())
+            {
+                var paratextInstallPath = paratextUtils.ParatextInstallPath;
+                paratextInstallPath = Path.Combine(paratextInstallPath, "plugins", "Clear Dashboard");
+                if (Directory.Exists(paratextInstallPath))
+                {
+                    try
+                    {
+                        var dir = new DirectoryInfo(paratextInstallPath);
+                        dir.Delete(true);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogError("Old Paratext Plugin Found: " + e.Message);
+                    }
+                }
+            }
         }
 
         #region Application exit

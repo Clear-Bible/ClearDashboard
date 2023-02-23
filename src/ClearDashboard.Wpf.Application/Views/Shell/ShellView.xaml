@@ -328,10 +328,11 @@
                             Foreground="{StaticResource BlueMidBrush}"
                             Kind="TooltipOutline" />
                         <ProgressBar
-                            Width="15"
-                            Height="15"
+                            Width="14"
+                            Height="16"
+                            Margin="0,0,0,8"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
+                            VerticalAlignment="Bottom"
                             Foreground="{StaticResource GreenMidBrush}"
                             IsIndeterminate="True"
                             Style="{StaticResource MaterialDesignCircularProgressBar}"
@@ -341,7 +342,25 @@
                 </Button>
             </StatusBarItem>
             <Separator Grid.Column="1" />
-            <StatusBarItem Grid.Column="2" />
+            <StatusBarItem Grid.Column="2">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconUnicons
+                        Width="32"
+                        Height="32"
+                        Margin="30,0,0,0"
+                        Foreground="{StaticResource GreenMidBrush}"
+                        Kind="TachometerFast"
+                        Visibility="{Binding ShowHighPerformanceMode}" />
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Foreground="{StaticResource GreenMidBrush}"
+                        Text="{helpers:Localization ShellView_PowerModeEnabled}"
+                        Visibility="{Binding ShowHighPerformanceMode}" />
+                </StackPanel>
+            </StatusBarItem>
+
             <Separator Grid.Column="3" />
             <StatusBarItem Grid.Column="4">
                 <!--<StackPanel Orientation="Horizontal" Visibility="{Binding ShowUpdateLink}">

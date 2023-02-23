@@ -11,15 +11,18 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using ClearApplicationFoundation.Framework.Input;
@@ -36,6 +39,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ReloadDataMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>
     {
+        private readonly IWindowManager _windowManager;
+
         #region Commands
 
         public ICommand MoveCorpusDownRowCommand { get; set; }
@@ -327,16 +332,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public EnhancedViewModel(INavigationService navigationService, 
             ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, 
+            IWindowManager windowManager,
             NoteManager noteManager, 
             VerseManager verseManager, 
             SelectionManager selectionManager, 
-            IEventAggregator? eventAggregator, 
+            IEventAggregator? eventAggregator,
             IMediator mediator,
             ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
-      
+            _windowManager = windowManager;
+
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
@@ -468,8 +475,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = "Enhanced View";
             await base.OnInitializeAsync(cancellationToken);
         }
-
-      
+        
         protected override void OnViewAttached(object view, object context)
         {
             // grab the dictionary of all the verse lookups
@@ -660,10 +666,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region VerseDisplayControl
 
-        public void TokenClicked(object sender, TokenEventArgs e)
+        public async void TokenClicked(object sender, TokenEventArgs e)
         {
-            SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
-            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            if (e.IsShiftPressed && e.TokenDisplay.IsTarget && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
+            {
+                if (SelectionManager.AnySourceTokens)
+                {
+                    await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.TokenDisplay);
+                    var element = (UIElement)sender;
+                    EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
+                }
+                else
+                {
+                    Logger!.LogInformation("There are no source tokens, so skipping the call to add an alignment.");
+                }
+                
+            }
+            else
+            {
+                SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+                NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        //TokenDeleteAlignment
+        public async void TokenDeleteAlignment(object sender, TokenEventArgs e)
+        {
+            if (e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
+            {
+                await alignmentDisplayViewModel.AlignmentManager!.DeleteAlignment(e.TokenDisplay);
+            }
+          
         }
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)

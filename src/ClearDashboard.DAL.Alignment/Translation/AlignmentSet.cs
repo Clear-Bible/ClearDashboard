@@ -28,6 +28,9 @@ namespace ClearDashboard.DAL.Alignment.Translation
         {
             var result = await mediator_.Send(new PutAlignmentSetAlignmentCommand(AlignmentSetId, alignment), token);
             result.ThrowIfCanceledOrFailed();
+
+            var alignmentId = result.Data!;
+            alignment.AlignmentId = alignmentId;
         }
 
         public async Task DeleteAlignment(AlignmentId alignmentId, CancellationToken token = default)
