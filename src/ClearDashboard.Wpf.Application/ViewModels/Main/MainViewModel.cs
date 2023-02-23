@@ -1776,7 +1776,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
                         closingEnhancedViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.ClosingEnhancedView;
 
-                        var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel);
+                        var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel, null,
+                            SimpleMessagePopupViewModel.CreateDialogSettings(closingEnhancedViewPopupViewModel.Title));
 
                         if (result == true)
                         {
