@@ -550,10 +550,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (token.IsCompositeTokenMember)
                 {
                     var selectedCompositeTokenMembers = VerseSelectedTokens.MatchingTokens(token.CompositeTokenMembers.TokenIds);
-                    foreach (var selectedToken in selectedCompositeTokenMembers)
-                    {
-                        VerseSelectedTokens.Remove(selectedToken);
-                    }
+                    VerseSelectedTokens.RemoveAll(t=>selectedCompositeTokenMembers.Contains(t));
                 }
                 else
                 {
