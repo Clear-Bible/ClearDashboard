@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Aqua.Module.Validators
 {
-    internal class AquaAddVersionOrListAssessmentsStepViewModelValidator : AbstractValidator<AquaAddVersionOrListAssessmentsStepViewModel>
+    internal class AquaAddVersionOrListAssessmentsStepViewModelValidator : AbstractValidator<AquaVersionStepViewModel>
     {
         private readonly ILocalizationService _localizationService;
 

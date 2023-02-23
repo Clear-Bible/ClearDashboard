@@ -20,6 +20,7 @@ using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 {
@@ -48,6 +49,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             }
         }
 
+        public Revision? ActiveRevision { get; set; } = null;
+        public Assessment? ActiveAssessment { get; set; } = null;
 
         private AquaTokenizedTextCorpusMetadata? aquaTokenizedTextCorpusMetadata_;
         public AquaTokenizedTextCorpusMetadata? AquaTokenizedTextCorpusMetadata
@@ -209,66 +212,92 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             try
             {
                 StatusBarVisibility = Visibility.Visible;
+
                 currentLongRunningTask_.Status = LongRunningTaskStatus.Running;
                 await SendBackgroundStatus(
                     taskName,
-                    LongRunningTaskStatus.Running,
+                    currentLongRunningTask_.Status,
                     cancellationToken,
                     $"{taskName} running");
-                Logger!.LogInformation(taskName);
+                Logger!.LogDebug($"{taskName} started");
 
                 ProcessResult(await awaitableFunction(cancellationToken));
 
-                await SendBackgroundStatus(taskName,
-                    LongRunningTaskStatus.Completed,
-                    cancellationToken,
-                    $"{taskName} complete");
-
-                Logger!.LogInformation($"{taskName} complete.");
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                    await SendBackgroundStatus(taskName,
+                        currentLongRunningTask_.Status,
+                        cancellationToken,
+                        $"{taskName} canceled.");
+                    Logger!.LogDebug($"{taskName} cancelled.");
+                }
+                else
+                {
+                    currentLongRunningTask_.Status = LongRunningTaskStatus.Completed;
+                    await SendBackgroundStatus(
+                        taskName,
+                        currentLongRunningTask_.Status,
+                        cancellationToken,
+                        $"{taskName} complete");
+                    Logger!.LogDebug($"{taskName} complete.");
+                }
             }
             catch (OperationCanceledException)
             {
-                Logger!.LogInformation($"{taskName}: operation cancelled.");
+                currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                await SendBackgroundStatus(
+                    taskName,
+                    currentLongRunningTask_.Status,
+                    cancellationToken,
+                    $"{taskName} cancelled.");
+                Logger!.LogDebug($"{taskName}: cancelled.");
             }
             catch (MediatorErrorEngineException ex)
             {
                 if (ex.Message.Contains("The operation was canceled."))
                 {
-                    Logger!.LogInformation($"{taskName}: operation cancelled.");
+                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                    await SendBackgroundStatus(
+                        taskName,
+                        currentLongRunningTask_.Status,
+                        cancellationToken,
+                        $"{taskName} cancelled.");
+                    Logger!.LogDebug($"{taskName}: cancelled.");
+
                 }
                 else
                 {
-                    Logger!.LogError(ex, $"{taskName}: unexpected error.");
+                    currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
+                    await SendBackgroundStatus(
+                       taskName,
+                       currentLongRunningTask_.Status,
+                       cancellationToken,
+                       $"{taskName} failed: {ex.Message}.",
+                       ex);
+                    Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
                 }
-
             }
             catch (Exception ex)
             {
-                Logger!.LogError(ex, $"{taskName}: unexpected error.");
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    await SendBackgroundStatus(taskName,
-                        LongRunningTaskStatus.Failed,
+                    currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
+                    await SendBackgroundStatus(
+                        taskName,
+                        currentLongRunningTask_.Status,
                         cancellationToken,
-                        exception: ex);
+                        $"{taskName} failed: {ex.Message}.",
+                        ex);
+                    Logger!.LogError(ex, $"{taskName}: failed: {ex}.");
                 }
-
-                currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
             }
             finally
             {
                 longRunningTaskManager_.TaskComplete(taskName);
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
-                    await SendBackgroundStatus(taskName,
-                        LongRunningTaskStatus.Completed,
-                        cancellationToken,
-                        $"{taskName} canceled.");
-                }
+
                 IsBusy = false;
-                Message = string.Empty;
-                StatusBarVisibility = Visibility.Hidden;
+                //StatusBarVisibility = Visibility.Hidden;
             }
             return currentLongRunningTask_.Status;
         }

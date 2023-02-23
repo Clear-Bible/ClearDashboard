@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.Aqua.Module.Converters;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using MediatR;
@@ -26,12 +27,17 @@ namespace ClearDashboard.Aqua.Module.Services
     public class AquaManager : IAquaManager
     {
         protected string BaseAddressString { get; set; } = "https://6pu6b82gdk.us-east-1.awsapprunner.com/";
+        //protected string BaseAddressString { get; set; } = "https://webhook.site/";
         protected string BearerAuthenticationKey { get; set; } = "7cf43ae52dw8948ddb663f9cae24488a4";
 
-        private readonly string versionPath_ = "version/";
-        private readonly string revisionPath_ = "revision/";
-        private readonly string assessmentPath_ = "assessment/";
-        private readonly string resultPath_ = "result/";
+        //private readonly string versionPath_ = "7360d221-dc02-4a58-bb72-41641b92c6ca";
+        private readonly string versionPath_ = "version";
+        private readonly string languagePath_ = "language";
+        private readonly string scriptPath_ = "script";
+
+        private readonly string revisionPath_ = "revision";
+        private readonly string assessmentPath_ = "assessment";
+        private readonly string resultPath_ = "result";
 
         private readonly string revisionVersionIdKey = "version_abbreviation";
 
@@ -62,17 +68,17 @@ namespace ClearDashboard.Aqua.Module.Services
             eventAggregator_.SubscribeOnUIThread(this);
         }
 
-        public async Task<IAquaManager.Version> GetVersion(
-            string versionId,
+        public async Task<IAquaManager.Version?> GetVersion(
+            int id,
             CancellationToken cancellationToken = default)
         {
             var versions = await ListVersions(cancellationToken);
             return versions?
-                .Where(v => v.abbreviation == versionId)
+                .Where(v => v.id == id)
                 .First()
-                ?? throw new InvalidDataEngineException(name: "versions", value: "null", message: $"ListVersions returned a list that didn't contain {versionId}");
+                ?? null;
         }
-        public async Task<string> AddVersion(
+        public async Task<IAquaManager.Version?> AddVersion(
             IAquaManager.Version version,
             CancellationToken cancellationToken = default
         )
@@ -80,7 +86,7 @@ namespace ClearDashboard.Aqua.Module.Services
 
             return await PostJsonAsync(
                 httpClient_,
-                assessmentPath_,
+                versionPath_,
                 version,
                 cancellationToken);
 
@@ -110,7 +116,7 @@ namespace ClearDashboard.Aqua.Module.Services
                 cancellationToken);
         }
         public async Task DeleteVersion(
-            string versionId,
+            string abbreviation,
             CancellationToken cancellationToken = default)
         {
             // https://6pu6b82gdk.us-east-1.awsapprunner.com/version?version_abbreviation=lkj
@@ -118,13 +124,41 @@ namespace ClearDashboard.Aqua.Module.Services
             await DeleteAsync(
                 httpClient_,
                 versionPath_,
-                new Dictionary<string, string>() { { revisionVersionIdKey, versionId } },
+                new Dictionary<string, string>() { { revisionVersionIdKey, abbreviation } },
                 cancellationToken);
             return;
         }
-        public async Task<string> AddRevision(
+
+        public async Task<IEnumerable<Language>?> ListLanguages(
+            CancellationToken cancellationToken = default)
+        {
+            return await GetFromJsonAsync<IEnumerable<Language>>(
+                httpClient_,
+                languagePath_,
+                new Dictionary<string, string>(),
+                cancellationToken);
+        }
+        public async Task<IEnumerable<Script>?> ListScripts(
+            CancellationToken cancellationToken = default)
+        {
+            return await GetFromJsonAsync<IEnumerable<Script>>(
+                httpClient_,
+                scriptPath_,
+                new Dictionary<string, string>(),
+                cancellationToken);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tokenizedTextCorpusId"></param>
+        /// <param name="revision"></param>
+        /// <param name="cancellationToken"></param>
+        /// <param name="progressReporter"></param>
+        /// <returns>note that aqua returns "Revision ID" for now so the returned revision will still be empty.</returns>
+        public async Task<Revision?> AddRevision(
             TokenizedTextCorpusId tokenizedTextCorpusId,
-            string versionId,
+            Revision revision,
             CancellationToken cancellationToken = default,
             IProgress<ProgressStatus>? progressReporter = null)
         {
@@ -135,25 +169,40 @@ namespace ClearDashboard.Aqua.Module.Services
 
             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(mediator_, tokenizedTextCorpusId);
 
-            var corpusInBibleNLPFormatInVrefsOrder = CorpusInBibleNLPFormatInVrefsOrder(tokenizedTextCorpus);
-            return await PostStringAsFile
+            var corpusInRevisionFormat = CorpusInBibleNLPFormatInVrefsOrder(tokenizedTextCorpus);
+
+            var queryDict = new Dictionary<string, string>()
+                    {
+                        {revisionVersionIdKey, revision.version_abbreviation! },
+                        {"published", revision.published.ToString() }
+                    };
+            if (revision.name != null)
+                queryDict.Add("name", revision.name);
+
+            var returnedRevision = await PostStringAsFile<Revision>
             (
                 httpClient_, 
                 QueryHelpers.AddQueryString
                 (
                     revisionPath_,
-                    new Dictionary<string, string>()
-                    {
-                        {revisionVersionIdKey, versionId }
-                    }
+                    queryDict
                 ),
-                corpusInBibleNLPFormatInVrefsOrder,
+                corpusInRevisionFormat,
                 cancellationToken: cancellationToken,
                 progressReporter: progressReporter
             );
+
+            var revisions = await ListRevisions(
+                revision?.version_abbreviation 
+                    ?? throw new InvalidStateEngineException(name:"revision.version_abbreviation", value: "null"), 
+                cancellationToken);
+            return revisions?
+                .Where(r => r.id == returnedRevision?.RevisionId)
+                .First()
+                ?? null;
         }
         public async Task<IEnumerable<Revision>?> ListRevisions(
-            string versionId,
+            string versionAbbreviation,
             CancellationToken cancellationToken = default)
         {
             // https://6pu6b82gdk.us-east-1.awsapprunner.com/revision?version_abbreviation=kjh%27
@@ -161,12 +210,12 @@ namespace ClearDashboard.Aqua.Module.Services
             return await GetFromJsonAsync<IEnumerable<Revision>>(
                 httpClient_,
                 revisionPath_,
-                new Dictionary<string, string>() { { revisionVersionIdKey, versionId} },
+                new Dictionary<string, string>() { { revisionVersionIdKey, versionAbbreviation} },
                 cancellationToken);
         }
 
         public async Task DeleteRevision(
-            string revisionId,
+            int revisionId,
             CancellationToken cancellationToken = default)
         {
             //https://6pu6b82gdk.us-east-1.awsapprunner.com/revision?revision=6
@@ -174,12 +223,12 @@ namespace ClearDashboard.Aqua.Module.Services
             await DeleteAsync(
                 httpClient_,
                 revisionPath_,
-                new Dictionary<string, string>() { { "revision", revisionId } },
+                new Dictionary<string, string>() { { "revision", revisionId.ToString() } },
                 cancellationToken);
             return;
         }
 
-        public async Task<string> AddAssessment(
+        public async Task<Assessment?> AddAssessment(
             Assessment assessment,
             CancellationToken cancellationToken = default)
         {
@@ -200,17 +249,28 @@ namespace ClearDashboard.Aqua.Module.Services
                 assessment,
                 cancellationToken);
         }
+
+        private class AssessmentsEnumeration
+        {
+            public IEnumerable<Assessment>? Assessments { get; set; }
+        }
         public async Task<IEnumerable<Assessment>?> ListAssessments(
-            //string revisionId,
+            int revisionId,
             CancellationToken cancellationToken = default)
         {
             //'https://6pu6b82gdk.us-east-1.awsapprunner.com/assessment
 
-            return await GetFromJsonAsync<IEnumerable<Assessment>>(
+            var assessmentsEnumeration = await GetFromJsonAsync<AssessmentsEnumeration>(
                     httpClient_,
                     assessmentPath_,
                     new Dictionary<string, string>(),
                     cancellationToken);
+            var assessments = assessmentsEnumeration?.Assessments 
+                ?? throw new InvalidStateEngineException(name: "assessmentsEnumeration", value: "null");
+
+            return assessments?
+                .Where(a => a.revision == revisionId)
+                ?? throw new InvalidDataEngineException(name: "versions", value: "null", message: $"ListVersions returned a list that didn't contain {revisionId}");
         }
         public async Task DeleteAssessment(
             int assessmentId,
@@ -257,21 +317,26 @@ namespace ClearDashboard.Aqua.Module.Services
             return await httpClient.GetFromJsonAsync<T>(uri, cancellationToken);
         }
 
-        public static async Task<string> PostJsonAsync<T>(
+        public static async Task<T?> PostJsonAsync<T>(
             HttpClient httpClient,
             string protocolHostPortFileString,
             T obj,
             CancellationToken cancellationToken = default)
         {
-            string serializedObj = JsonSerializer.Serialize(obj);
+            string serializedObj = JsonSerializer.Serialize(obj,new JsonSerializerOptions() 
+            { 
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            });
 
             var content = new System.Net.Http.StringContent(serializedObj, Encoding.UTF8, MediaTypeHeaderValue.Parse("application/json"));
             using HttpResponseMessage response = await httpClient.PostAsync(protocolHostPortFileString, content, cancellationToken);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsStringAsync();
+            var contentString = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<T>(contentString);
         }
 
-        public static async Task DeleteAsync(HttpClient httpClient,
+        public static async Task DeleteAsync(
+            HttpClient httpClient,
             string protocolHostPortFileString,
             Dictionary<string, string>? query,
             CancellationToken cancellationToken)
@@ -303,7 +368,7 @@ namespace ClearDashboard.Aqua.Module.Services
             return await response.Content.ReadAsStringAsync();
         }
 
-        public static async Task<string> PostStringAsFile(
+        public static async Task<T?> PostStringAsFile<T>(
             HttpClient httpClient,
             string uriString,
             string stringContent,
@@ -314,11 +379,6 @@ namespace ClearDashboard.Aqua.Module.Services
             string fileName = "corpus.txt",
             string mediaTypeHeaderValueString = "text/plain")
         {
-            if (timeout == null)
-                httpClient.Timeout = Timeout.InfiniteTimeSpan;
-            else
-                httpClient.Timeout = (TimeSpan) timeout;
-
             using (var multipartFormContent = new MultipartFormDataContent())
             {
                 var streamContent = new BufferedStringHttpContent(stringContent, progressReporter);
@@ -332,7 +392,9 @@ namespace ClearDashboard.Aqua.Module.Services
                     response = await httpClient.PostAsync(uriString, multipartFormContent);
 
                 response.EnsureSuccessStatusCode();
-                return await response.Content.ReadAsStringAsync();
+                var returnString = await response.Content.ReadAsStringAsync();
+                var returnJson = JsonSerializer.Deserialize<T>(returnString);
+                return returnJson;
             }
         }
 

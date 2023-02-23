@@ -2,6 +2,7 @@
 using SIL.Machine.Utils;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,23 +27,33 @@ namespace ClearDashboard.Aqua.Module.Services
         /// <param name="backTranslationToVersionId">identifies this version as a 
         /// backtranslation of another version in our database.</param>
         public record Version(
-            string name,
-            string isoLanguage,
-            string isoScript,
-            string abbreviation,
+            int? id,
+            string? name,
+            string? isoLanguage,
+            string? isoScript,
+            string? abbreviation,
             string? rights = null,
             int? forwardTranslationToVersionId = null,
             int? backTranslationToVersionId = null,
-            bool machineTranslation = false 
+            bool machineTranslation = false,
+            string? language = null
         );
 
-        public Task<Version> GetVersion(
-            string versionId,
+        public Task<Version?> GetVersion(
+            int id,
             CancellationToken cancellationToken = default);
-        public Task<string> AddVersion(
-            Version versionInfo,
+        public Task<Version?> AddVersion(
+            Version version,
             CancellationToken cancellationToken = default);
         public Task<IEnumerable<Version>?> ListVersions(
+            CancellationToken cancellationToken = default);
+        
+        public record Language(string iso693, string name);
+        public Task<IEnumerable<Language>?> ListLanguages(
+            CancellationToken cancellationToken = default);
+
+        public record Script(string iso15924, string name);
+        public Task<IEnumerable<Script>?> ListScripts(
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -52,22 +63,23 @@ namespace ClearDashboard.Aqua.Module.Services
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task DeleteVersion(
-            string versionId,
+            string abbreviation,
             CancellationToken cancellationToken = default);
 
-        public record Revision(string revisionId, string info);
+        public record Revision(
+            int? id, 
+            string? version_abbreviation,
+            string? name,
+            bool published = false)
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tokenizedTextCorpusId"></param>
-        /// <param name="versionId">version.abbreviation</param>
-        /// <param name="cancellationToken"></param>
-        /// <param name="progressReporter"></param>
-        /// <returns></returns>
-        public Task<string> AddRevision(
+        {
+            [JsonPropertyName("Revision ID")]
+            public int? RevisionId { get; set; }
+        };
+
+        public Task<Revision?> AddRevision(
             TokenizedTextCorpusId tokenizedTextCorpusId,
-            string versionId, 
+            Revision revision, 
             CancellationToken cancellationToken = default,
             IProgress<ProgressStatus>? progressReporter = null);
 
@@ -81,26 +93,34 @@ namespace ClearDashboard.Aqua.Module.Services
             string versionId,
             CancellationToken cancellationToken = default);
         public Task DeleteRevision(
-            string revisionId,
+            int revisionId,
             CancellationToken cancellationToken = default);
-
+        
         public record Assessment(
-            string id, string? type, string? Revision, string? Version, string? status, //used in Create
-            string? reference, string? metric) // additional properties provided in List
-        {
-            public static class Type
-            {
-                public const string WordAlignment = "word-alignment";
-                public const string SentenceLength = "sentence-length";
-                public const string SemanticSimilarity = "semantic-similarity";
-                public const string Dummy = "dummy";
-            }
-        }
-        public Task<string> AddAssessment(
+            int? id, 
+            int? revision, 
+            int? reference,
+            string? type, 
+            string? requested_time,
+            string? start_time,
+            string? end_time,
+            //string? metric,
+            string? status //used in Create
+            ); // additional properties provided in List
+        //{
+        //    public static class Type
+        //    {
+        //        public const string WordAlignment = "word-alignment";
+        //        public const string SentenceLength = "sentence-length";
+        //        public const string SemanticSimilarity = "semantic-similarity";
+        //        public const string Dummy = "dummy";
+        //    }
+        //}
+        public Task<Assessment> AddAssessment(
             Assessment assessment,
             CancellationToken cancellationToken = default);
         public Task<IEnumerable<Assessment>?> ListAssessments(
-            //string revisionId, 
+            int revisionId, 
             CancellationToken cancellationToken = default);
         public Task DeleteAssessment(
             int assessmentId,

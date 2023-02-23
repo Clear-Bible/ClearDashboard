@@ -10,7 +10,17 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
 public class AquaTokenizedTextCorpusMetadata
 {
-    public string? VersionId;
+    //used to determine if version has been added to aqua
+    public int? id { get; set; }
+
+    //properties set on AddVersion but not returned in ListVersion.
+
+    public string? abbreviation { get; set; }
+    public string? isoLanguage { get; set; }
+    public string? isoScript { get; set; }
+    public int? forwardTranslationToVersionId { get; set; } = null;
+    public int? backTranslationToVersionId { get; set; } = null;
+    public bool machineTranslation { get; set; } = false;
 
 
     private static readonly string TokenizedCorpusMetadataKey = "ClearDashboardAquaModule";

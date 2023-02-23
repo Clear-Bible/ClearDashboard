@@ -2,9 +2,9 @@
 
 namespace ClearDashboard.Aqua.Module.Views.AquaDialog
 {
-    public partial class AquaAddVersionOrListAssessmentsStepView : UserControl
+    public partial class AquaVersionStepView : UserControl
     {
-        public AquaAddVersionOrListAssessmentsStepView()
+        public AquaVersionStepView()
         {
             InitializeComponent();
         }

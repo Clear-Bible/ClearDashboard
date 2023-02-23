@@ -12,23 +12,24 @@ using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
-public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaDialogViewModel>
+public class AquaAssessmentStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaDialogViewModel>
 {
     private readonly IAquaManager? aquaManager_;
 
-    public AquaAddRevisionStepViewModel()
+    public AquaAssessmentStepViewModel()
     {
     }
-    public AquaAddRevisionStepViewModel(
+    public AquaAssessmentStepViewModel(
         IAquaManager aquaManager,
 
         DialogMode dialogMode,  
         DashboardProjectManager projectManager,
         INavigationService navigationService, 
-        ILogger<AquaAddRevisionStepViewModel> logger, 
+        ILogger<AquaAssessmentStepViewModel> logger, 
         IEventAggregator eventAggregator,
         IMediator mediator, 
         ILifetimeScope? lifetimeScope,
@@ -41,8 +42,8 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
         CanMoveBackwards = true;
         EnableControls = true;
 
-        BodyTitle = LocalizationService!.Get("AquaAddRevisionStepViewModel_BodyTitle");
-        BodyText = LocalizationService!.Get("AquaAddRevisionStepViewModel_BodyText"); ;
+        BodyTitle = LocalizationService!.Get("Aqua_AssessmentStep_BodyTitle");
+        BodyText = LocalizationService!.Get("Aqua_AssessmentStep_BodyText"); ;
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
@@ -54,16 +55,16 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
         return base.OnActivateAsync(cancellationToken);
     }
 
-    private string? revisionId_;
-    public string? RevisionId
-    {
-        get => revisionId_;
-        set
-        {
-            Set(ref revisionId_, value);
-            //ValidationResult = Validate();
-        }
-    }
+    //private string? revisionId_;
+    //public string? RevisionId
+    //{
+    //    get => revisionId_;
+    //    set
+    //    {
+    //        Set(ref revisionId_, value);
+    //        //ValidationResult = Validate();
+    //    }
+    //}
 
     private DialogMode _dialogMode;
     public DialogMode DialogMode
@@ -95,7 +96,37 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
         }
     }
 
+    private int? id_ = null;
+    //public int? Id
+    //{
+    //    get => id_;
+    //    set
+    //    {
+    //        Set(ref id_, value);
+    //        //ValidationResult = Validate();
+    //    }
+    //}
 
+    private string? name_ = null;
+    public string? Name
+    {
+        get => name_;
+        set
+        {
+            Set(ref name_, value == "" ? null : value);
+            //ValidationResult = Validate();
+        }
+    }
+
+    private bool published_ = false;
+    public bool Published
+    {
+        get => published_;
+        set
+        {
+            Set(ref published_, value);
+        }
+    }
     public void Ok(object obj)
     {
         ParentViewModel!.Ok();
@@ -112,20 +143,22 @@ public class AquaAddRevisionStepViewModel : DashboardApplicationWorkflowStepView
     {
         await MoveBackwards();
     }
-    public async void AddRevision()
+    public async void AddAssessment()
     {
         try
         {
-            //var processStatus = await ParentViewModel!.AddRevision();
             var processStatus = await ParentViewModel!.RunLongRunningTask(
-                "Adding corpus revision to AQuA",
-                (cancellationToken) => aquaManager_!.AddRevision(
-                    ParentViewModel!.TokenizedTextCorpusId 
-                        ?? throw new InvalidStateEngineException(name: "ParentViewModel!.TokenizedTextCorpus", value: "null"),
-                    ParentViewModel!.AquaTokenizedTextCorpusMetadata.VersionId
-                        ?? throw new InvalidStateEngineException(name: "ParentViewModel!.AquaTokenizedTextCorpusMetadata.VersionId", value: "null"),
+                "AQuA-Add_Assessment",
+                (cancellationToken) => aquaManager_!.AddAssessment(
+                    new Assessment(1,null,null,null,null,null,null,null), //fixme
                     cancellationToken),
-                (revisionId) => RevisionId = revisionId);
+                (assessment) => {
+                    if (assessment == null)
+                        throw new InvalidParameterEngineException(name: "assessment", value: "null", message: "AddAssessment was successful but returned null");
+                    //Name = revision.name;
+                    //Published= revision.published;
+                    //id_ = 
+                });
 
             switch (processStatus)
             {

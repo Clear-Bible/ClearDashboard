@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Threading;
+using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 {
@@ -15,8 +16,13 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
         TokenizedTextCorpusId? TokenizedTextCorpusId { get; set; }
         AquaTokenizedTextCorpusMetadata AquaTokenizedTextCorpusMetadata { get; set; }
 
+        Revision? ActiveRevision { get; set; }
+        Assessment? ActiveAssessment { get; set; }
+
         void Ok();
         void Cancel();
+
+        bool IsBusy { get; set; }
 
         public Task<LongRunningTaskStatus> RunLongRunningTask<TResult>(
             string taskName,

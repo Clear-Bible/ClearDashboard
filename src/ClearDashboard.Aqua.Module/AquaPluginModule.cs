@@ -40,7 +40,9 @@ namespace ClearDashboard.Aqua.Module
 
             //Validation
             builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModelValidator>()
-                .As<IValidator<AquaAddVersionOrListAssessmentsStepViewModel>>();
+                .As<IValidator<AquaVersionStepViewModel>>();
+            builder.RegisterType<AquaRevisionStepViewModelValidator>()
+                .As<IValidator<AquaRevisionStepViewModel>>();
 
             //menus and localization
 
@@ -50,13 +52,13 @@ namespace ClearDashboard.Aqua.Module
 
             //AquaDialog
 
-            builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
+            builder.RegisterType<AquaVersionStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 1);
-            builder.RegisterType<AquaAddRevisionStepViewModel>().As<IWorkflowStepViewModel>()
+            builder.RegisterType<AquaRevisionStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 2);
-            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
+            builder.RegisterType<AquaAssessmentStepViewModel>().As<IWorkflowStepViewModel>()
                 .Keyed<IWorkflowStepViewModel>("AquaDialog")
                 .WithMetadata("Order", 3);
 
