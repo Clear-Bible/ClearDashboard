@@ -40,8 +40,8 @@ public class ClosingEnhancedViewPopupViewModel : SimpleMessagePopupViewModel
         {
             switch (SimpleMessagePopupMode)
             {
-                case SimpleMessagePopupMode.Delete:
-                    return "Delete this EnhancedView?"; ;
+                case SimpleMessagePopupMode.ClosingEnhancedView:
+                    return LocalizationService!["EnhancedView_ClosingEnhancedView"];
                 default:
                     return string.Empty;
             }
@@ -51,4 +51,14 @@ public class ClosingEnhancedViewPopupViewModel : SimpleMessagePopupViewModel
     public override string? OkLabel => LocalizationService!["Yes"];
     public override string? CancelLabel => LocalizationService!["No"];
 
+    protected override string? CreateMessage()
+    {
+        switch (SimpleMessagePopupMode)
+        {
+            case SimpleMessagePopupMode.ClosingEnhancedView:
+                return LocalizationService!["EnhancedView_ClosingEnhancedView"];
+            default:
+                return null;
+        }
+    }
 }
