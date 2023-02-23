@@ -45,6 +45,7 @@ using System.Windows;
 using ClearDashboard.Wpf.Application.ViewModels.DashboardSettings;
 using System.Windows.Input;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using MahApps.Metro.Controls;
@@ -1773,16 +1774,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     // ReSharper disable once PossibleNullReferenceException
                     if (content.PaneId == windowGuid)
                     {
-                        var confirmationDialogViewModel = LifetimeScope!.Resolve<ConfirmationDialogViewModel>();
-                        confirmationDialogViewModel.ConfirmationText = "Are you sure you want to delete this EnhancedView?  There will be no way to undo this.";
-                        
-                        var result = await WindowManager!.ShowDialogAsync(confirmationDialogViewModel);
+                        var closingEnhancedViewPopupViewModel = LifetimeScope!.Resolve<ClosingEnhancedViewPopupViewModel>();
+                        closingEnhancedViewPopupViewModel.SimpleMessagePopupMode = SimpleMessagePopupMode.ClosingEnhancedView;
+
+                        var result = await WindowManager!.ShowDialogAsync(closingEnhancedViewPopupViewModel);
 
                         if (result == true)
                         {
                             pane.Close();
                         }
-                       
                         break;
                     }
                 }
