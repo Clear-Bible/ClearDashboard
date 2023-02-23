@@ -130,7 +130,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
 
 [Files]
-Source: "windowsdesktop-runtime-7.0.2-win-x64.exe"; Flags: dontcopy noencryption
+Source: "windowsdesktop-runtime-7.0.3-win-x64.exe"; Flags: dontcopy noencryption
 Source: "VC_redist.x64.exe"; Flags: dontcopy noencryption
 
 ;Source: "..\src\ClearDashboard.Wpf.Application\bin\Release\net6.0-windows\win-x64\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
