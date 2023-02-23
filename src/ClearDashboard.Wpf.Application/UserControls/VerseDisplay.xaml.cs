@@ -499,29 +499,36 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            var args = e as TokenEventArgs;
-
+            if (e is not TokenEventArgs args)
+            {
+                return;
+            }
 
             // If shift is pressed, then leave any selected tokens selected.
             if (!args.IsShiftPressed)
             {
-                UpdateVerseSelection(args!.TokenDisplay, args.IsControlPressed);
+                UpdateVerseSelection(args.TokenDisplay, args.IsControlPressed);
             }
            
 
             RaiseTokenEvent(TokenClickedEvent, args);
         }
 
-        //OnTokenDeleteAlignment
+  
         private void OnTokenDeleteAlignment(object sender, RoutedEventArgs e)
         {
-            var args = e as TokenEventArgs;
-            
-            RaiseTokenEvent(TokenDeleteAlignmentEvent, args);
+            if (e is TokenEventArgs args)
+            {
+                RaiseTokenEvent(TokenDeleteAlignmentEvent, args);
+            }
         }
 
         private void UpdateVerseSelection(TokenDisplayViewModel? token, bool addToSelection)
         {
+            if (token == null)
+            {
+                return;
+            }
             var tokenIsSelected = token.IsTokenSelected;
             if (!addToSelection)
             {
@@ -561,7 +568,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         public async Task HandleAsync(SelectionUpdatedMessage message, CancellationToken cancellationToken)
         {
-            //AllSelectedTokens = message.SelectedTokens;
             VerseSelectedTokens.RemoveAll(t => !message.SelectedTokens.Contains(t));
             await Task.CompletedTask;
         }
