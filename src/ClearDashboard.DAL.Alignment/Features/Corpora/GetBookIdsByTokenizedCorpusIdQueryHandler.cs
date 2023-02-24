@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using System.Linq;
 using SIL.Scripture;
+using System.Reflection.PortableExecutable;
+using SIL.Machine.FiniteState;
 
 namespace ClearDashboard.DAL.Alignment.Features.Corpora;
 
@@ -90,7 +92,10 @@ public class GetBookIdsByTokenizedCorpusIdQueryHandler : ProjectDbContextQueryHa
         ScrVers versification = new ScrVers((ScrVersType)tokenizedCorpus.ScrVersType);
         if (!string.IsNullOrEmpty(tokenizedCorpus.CustomVersData))
         {
-            // FIXME - what do I do here to pull the CustomVersData into versification?
+            using (var reader = new StringReader(tokenizedCorpus.CustomVersData))
+            { 
+                versification = Versification.Table.Implementation.Load(reader, "not a file");
+            }
         }
 
         return new RequestResult<(IEnumerable<string> bookId, TokenizedTextCorpusId tokenizedTextCorpusId, ScrVers versification)>

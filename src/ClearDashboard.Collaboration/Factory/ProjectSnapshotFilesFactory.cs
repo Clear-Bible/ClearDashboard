@@ -1,0 +1,184 @@
+﻿using System;
+using ClearDashboard.Collaboration.Model;
+using ClearDashboard.DataAccessLayer.Models;
+using Models = ClearDashboard.DataAccessLayer.Models;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using ClearDashboard.Collaboration.Builder;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using ClearDashboard.DataAccessLayer.Data;
+
+namespace ClearDashboard.Collaboration.Factory;
+
+public class ProjectSnapshotFilesFactory
+{
+    private delegate void SaveGeneralModelChildDelegate<T>(
+        string parentPath,
+        GeneralModel<T> modelSnapshot) where T : notnull;
+
+    private readonly string _path;
+    private readonly ILogger _logger;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
+
+    private readonly Dictionary<Type, string> topLevelEntityFolderNameMappings = ProjectSnapshotFactoryCommon.topLevelEntityFolderNameMappings;
+    private readonly Dictionary<Type, (string folderName, string childName)> childFolderNameMappings = ProjectSnapshotFactoryCommon.childFolderNameMappings;
+
+    public ProjectSnapshotFilesFactory(string path, ILogger logger)
+	{
+        _path = path;
+        _logger = logger;
+
+        _jsonSerializerOptions = ProjectSnapshotFactoryCommon.JsonSerializerOptions;
+    }
+
+    public ProjectSnapshotFilesFactory(string repositoryPath, Guid projectId, ILogger logger)
+    {
+        var projectFolderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(projectId);
+        _path = Path.Combine(repositoryPath, projectFolderName);
+
+        _logger = logger;
+
+        _jsonSerializerOptions = ProjectSnapshotFactoryCommon.JsonSerializerOptions;
+    }
+
+    public void SaveSnapshot(ProjectSnapshot projectSnapshot)
+    {
+        Directory.CreateDirectory(_path);
+
+        var serializedProject = JsonSerializer.Serialize(projectSnapshot.GetGeneralModelProject(), _jsonSerializerOptions);
+        File.WriteAllText(Path.Combine(_path, ProjectSnapshotFactoryCommon.PROPERTIES_FILE), serializedProject);
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Corpus>(), null);
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.TokenizedCorpus>(),
+            (string parentPath,
+            GeneralModel<Models.TokenizedCorpus> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(parentPath, modelSnapshot);
+                SaveGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(parentPath, modelSnapshot);
+            });
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.ParallelCorpus>(),
+            (string parentPath,
+            GeneralModel<Models.ParallelCorpus> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(parentPath, modelSnapshot);
+            });
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.AlignmentSet>(),
+            (string parentPath,
+            GeneralModel<Models.AlignmentSet> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.AlignmentSet, Models.Alignment>(parentPath, modelSnapshot);
+            });
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.TranslationSet>(),
+            (string parentPath,
+            GeneralModel<Models.TranslationSet> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.TranslationSet, Models.Translation>(parentPath, modelSnapshot);
+            });
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Note>(),
+            (string parentPath,
+            GeneralModel<Models.Note> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.Note, Models.Note>(parentPath, modelSnapshot);
+                SaveGeneralModelChild<Models.Note, NoteModelRef>(parentPath, modelSnapshot);
+            });
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.Label>(),
+            (string parentPath,
+            GeneralModel<Models.Label> modelSnapshot) =>
+            {
+                SaveGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(parentPath, modelSnapshot);
+            });
+    }
+
+    private void SaveTopLevelEntities<T>(
+        string parentPath,
+        IEnumerable<GeneralModel<T>> topLevelEntities,
+        SaveGeneralModelChildDelegate<T>? saveGeneralModelChildDelegate)
+        where T : notnull
+    {
+        var topLevelEntityTypePath = Path.Combine(parentPath, topLevelEntityFolderNameMappings[typeof(T)]);
+        Directory.CreateDirectory(topLevelEntityTypePath);
+
+        foreach (var topLevelEntity in topLevelEntities)
+        {
+            var topLevelEntityPath = Path.Combine(topLevelEntityTypePath, topLevelEntity.GetId()!.ToString()!);
+            Directory.CreateDirectory(topLevelEntityPath);
+
+            var serializedTopLevelEntity = JsonSerializer.Serialize(topLevelEntity, _jsonSerializerOptions);
+            File.WriteAllText(Path.Combine(topLevelEntityPath, ProjectSnapshotFactoryCommon.PROPERTIES_FILE), serializedTopLevelEntity);
+
+            if (saveGeneralModelChildDelegate is not null)
+            {
+                saveGeneralModelChildDelegate(topLevelEntityPath, topLevelEntity);
+            }
+        }
+    }
+
+    private void SaveGeneralModelChild<P,C>(string parentPath, GeneralModel<P> modelSnapshot)
+        where P : notnull
+        where C : notnull
+    {
+        var childName = childFolderNameMappings[typeof(C)].childName;
+
+        if (modelSnapshot.TryGetChildValue(childName, out var children) && children!.Any())
+        {
+            var folderName = childFolderNameMappings[typeof(C)].folderName;
+
+            var childPath = Path.Combine(parentPath, folderName);
+            Directory.CreateDirectory(childPath);
+
+            if (typeof(C).IsAssignableTo(typeof(NoteModelRef)))
+            {
+                var childModelShapshots = (GeneralListModel<NoteModelRef>?)children!;
+                SaveChildren<NoteModelRef>(childPath, childModelShapshots);
+            }
+            else if (typeof(C).IsAssignableTo(typeof(Models.VerseRow)))
+            {
+                var childModelShapshots = (GeneralListModel<GeneralModel<Models.VerseRow>>?)children!;
+                var verseRowsByBook = childModelShapshots
+                    .GroupBy(vr => ((string)vr[nameof(Models.VerseRow.BookChapterVerse)]!).Substring(0, 3))
+                    .ToDictionary(g => g.Key, g => g
+                        .Select(vr => vr)
+                        .OrderBy(vr => ((string)vr[nameof(Models.VerseRow.BookChapterVerse)]!))
+                        .ToGeneralListModel<GeneralModel<Models.VerseRow>>())
+                    .OrderBy(kvp => kvp.Key);
+
+                foreach (var verseRowsForBook in verseRowsByBook)
+                {
+                    // Instead of the more general GeneralModelJsonConverter, this will use the
+                    // more specific VerseRowModelJsonConverter:
+                    var serializedChildModelSnapshot = JsonSerializer.Serialize<GeneralListModel<GeneralModel<Models.VerseRow>>>(
+                        verseRowsForBook.Value,
+                        _jsonSerializerOptions);
+                    File.WriteAllText(
+                        Path.Combine(
+                            childPath,
+                            string.Format(ProjectSnapshotFactoryCommon.VerseRowByBookFileNameTemplate, verseRowsForBook.Key)),
+                        serializedChildModelSnapshot);
+                }
+            }
+            else
+            {
+                var childModelShapshots = (GeneralListModel<GeneralModel<C>>?)children!;
+                SaveChildren(childPath, childModelShapshots);
+            }
+
+        }
+    }
+
+    private void SaveChildren<T>(string childPath, IEnumerable<T> modelSnapshots)
+        where T : IModelSnapshot
+    {
+        foreach (var modelSnapshot in modelSnapshots)
+        {
+            var serializedModelSnapshot = JsonSerializer.Serialize(modelSnapshot, _jsonSerializerOptions);
+            File.WriteAllText(Path.Combine(childPath, modelSnapshot.GetId()!.ToString()!), serializedModelSnapshot);
+        }
+    }
+}
+

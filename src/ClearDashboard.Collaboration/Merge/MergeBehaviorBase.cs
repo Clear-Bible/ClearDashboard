@@ -1,0 +1,404 @@
+﻿using System;
+using System.Data.Common;
+using System.Data.Entity.Core.Metadata.Edm;
+using System.Reflection;
+using ClearBible.Engine.Utils;
+using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.Collaboration.DifferenceModel;
+using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.Collaboration.Model;
+using ClearDashboard.DAL.Alignment.Features.Common;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Logging;
+using Models = ClearDashboard.DataAccessLayer.Models;
+
+namespace ClearDashboard.Collaboration.Merge;
+
+public delegate Task ProjectDbContextMergeQueryAsync(ProjectDbContext projectDbContext, ILogger logger, CancellationToken cancellationToken = default);
+public delegate object? EntityValueResolver(IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger);
+
+public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
+{
+    public MergeCache MergeCache { get; private set; }
+
+    protected readonly ILogger _logger;
+    protected readonly DateTimeOffsetToBinaryConverter _dateTimeOffsetToBinary;
+
+    protected readonly Dictionary<
+        Type,
+        (Type TableEntityType, string DiscriminatorColumnName, string DiscriminatorColumnValue)
+    > _discriminatorMappings = new();
+
+    protected readonly Dictionary<(Type EntityType, string EntityPropertyName), EntityValueResolver> _entityValueResolvers = new();
+    protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _propertyNameMap = new();
+    protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _idPropertyNameMap = new();
+
+    public MergeBehaviorBase(ILogger logger)
+    {
+        MergeCache = new MergeCache();
+        _logger = logger;
+        _dateTimeOffsetToBinary = new DateTimeOffsetToBinaryConverter();
+    }
+
+    public void AddEntityTypeDiscriminatorMapping(
+        Type entityType,
+        (Type TableEntityType, string DiscriminatorColumnName, string DiscriminatorColumnValue) discriminatorMapping)
+    {
+        _discriminatorMappings.Add(entityType, discriminatorMapping);
+    }
+
+    public void AddEntityValueResolver((Type EntityType, string EntityPropertyName) key, EntityValueResolver entityValueResolver)
+    {
+        _entityValueResolvers.Add(key, entityValueResolver);
+    }
+
+    public void AddPropertyNameMapping((Type EntityType, string PropertyName) key, IEnumerable<string> entityPropertyNames)
+    {
+        _propertyNameMap.Add(key, entityPropertyNames);
+    }
+
+    public void AddIdPropertyNameMapping((Type EntityType, string PropertyName) key, IEnumerable<string> entityPropertyNames)
+    {
+        _idPropertyNameMap.Add(key, entityPropertyNames);
+    }
+
+    public virtual async Task MergeStartAsync(CancellationToken cancellationToken) { await Task.CompletedTask; }
+    public virtual async Task MergeEndAsync(CancellationToken cancellationToken) { await Task.CompletedTask; }
+    public virtual async Task MergeErrorAsync(CancellationToken cancellationToken) { await Task.CompletedTask; }
+
+    public abstract Task<Dictionary<string, object>> DeleteModelAsync(IModelSnapshot itemToDelete, Dictionary<string, object> where, CancellationToken cancellationToken);
+
+    public abstract void StartInsertModelCommand(IModelSnapshot itemToCreate);
+    public abstract Task<Guid> RunInsertModelCommand(IModelSnapshot itemToCreate, CancellationToken cancellationToken);
+    public abstract void CompleteInsertModelCommand(Type entityType);
+
+    public abstract Task<Dictionary<string, object>> ModifyModelAsync(IModelDifference modelDifference, IModelSnapshot itemToModify, Dictionary<string, object> where, CancellationToken cancellationToken);
+
+    public abstract Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default);
+    public abstract object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver entityValueResolver);
+
+    protected DbCommand CreateModelSnapshotInsertCommandNoParameters(DbConnection connection, IModelSnapshot modelSnapshot)
+    {
+        var columns = modelSnapshot.EntityType.GetProperties()
+            .Where(p => p.PropertyType.IsDatabasePrimitiveType())
+            .Select(p => p.Name)
+            .ToList();
+
+        var tableType = modelSnapshot.EntityType;
+
+        if (_discriminatorMappings.TryGetValue(modelSnapshot.EntityType, out var mapping))
+        {
+            tableType = mapping.TableEntityType;
+            columns.Add(mapping.DiscriminatorColumnName);
+        }
+
+        var command = connection.CreateCommand();
+        DataUtil.ApplyColumnsToInsertCommand(command, tableType, columns.ToArray());
+        command.Prepare();
+
+        return command;
+    }
+
+    protected Guid AddModelSnapshotParametersToInsertCommand(DbCommand command, IModelSnapshot modelSnapshot)
+    {
+        var entityType = modelSnapshot.EntityType;
+        var identityPropertyName = entityType.GetIdentityProperty()?.Name;
+        Guid identityPropertyValue = Guid.Empty;
+
+        var discriminator = (colName: string.Empty, colValue: string.Empty);
+        if (_discriminatorMappings.TryGetValue(modelSnapshot.EntityType, out var mapping))
+        {
+            discriminator = (mapping.DiscriminatorColumnName, mapping.DiscriminatorColumnValue);
+        }
+
+        foreach (DbParameter p in command.Parameters)
+        {
+            var propertyName = p.ParameterName.Substring(1);  // Skip the @ at the start of each ParameterName
+
+            if (identityPropertyName == propertyName)
+            {
+                // Were adding an entity, so not trying to resolve to some existing
+                // database id value.  If the modelSnapshot happens to have an Id
+                // already, use it.  Otherwise create a new Guid:
+                if (modelSnapshot.PropertyValues.ContainsKey(propertyName))
+                    identityPropertyValue = (Guid)modelSnapshot.PropertyValues[propertyName]!;
+                else
+                    identityPropertyValue = Guid.NewGuid();
+
+                command.Parameters[p.ParameterName].Value = identityPropertyValue;
+
+                continue;
+            }
+            else if (_entityValueResolvers.TryGetValue((entityType, propertyName), out EntityValueResolver? resolver))
+            {
+                var entityPropertyValue = RunEntityValueResolver(modelSnapshot, propertyName, resolver);
+                command.Parameters[p.ParameterName].Value = entityPropertyValue;
+
+                continue;
+            }
+
+            if (discriminator.colName == propertyName)
+            {
+                command.Parameters[discriminator.colName].Value = discriminator.colValue;
+                continue;
+            }
+
+            if (modelSnapshot.PropertyValues.ContainsKey(propertyName))
+            {
+                var propertyValue = modelSnapshot.PropertyValues[propertyName];
+                command.Parameters[p.ParameterName].Value = propertyValue.ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
+
+                continue;
+            }
+
+            throw new InvalidModelStateException($"No property or property converter found for property '{propertyName}' of entity type '{entityType.ShortDisplayName()}'");
+        }
+
+        return identityPropertyValue;
+    }
+
+    protected Dictionary<string, object> ResolveWhereClause(Dictionary<string, object> where, IModelSnapshot modelSnapshot)
+    {
+        var entityType = modelSnapshot.EntityType;
+        var resolvedValues = new Dictionary<string, object>();
+
+        var whereColumns = where.Keys
+            .SelectMany(key =>
+                _idPropertyNameMap.TryGetValue((entityType, key), out var entityPropertyNames)
+                    ? entityPropertyNames
+                    : new[] { key }
+                )
+            .ToArray();
+
+        foreach (var key in whereColumns)
+        {
+            if (_entityValueResolvers.TryGetValue((entityType, key), out var resolver))
+            {
+                var resolvedValue = RunEntityValueResolver(modelSnapshot, key, resolver);
+                resolvedValues[key] = resolvedValue ?? DBNull.Value;
+            }
+            else
+            {
+                if (!where.ContainsKey(key))
+                {
+                    // Anything mapped has to have a resolver to get its value
+                    throw new PropertyResolutionException($"Found mapped where clause key '{key}' but no resolver configured");
+                }
+
+                resolvedValues[key] = where[key].ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
+            }
+        }
+
+        return resolvedValues;
+    }
+
+    protected DbCommand CreateModelSnapshotUpdateCommand(DbConnection connection, IModelDifference modelDifference, IModelSnapshot modelSnapshot, Dictionary<string, object> resolvedWhereClause)
+    {
+        var entityType = modelSnapshot.EntityType;
+
+        // Note that if there are any matching _propertyValueConverter mappings,
+        // we output the mapped "EntityPropertyName" into columns:
+        var columns = modelDifference.PropertyDifferences
+            .SelectMany(pd =>
+                _propertyNameMap.TryGetValue((entityType, pd.PropertyName), out var entityPropertyNames)
+                    ? entityPropertyNames
+                    : new[] { pd.PropertyName }
+                )
+            .ToArray();
+
+        var command = connection.CreateCommand();
+
+        var tableType = _discriminatorMappings.TryGetValue(entityType, out var mapping)
+            ? mapping.TableEntityType
+            : entityType;
+
+        DataUtil.ApplyColumnsToUpdateCommand(command, tableType, columns, resolvedWhereClause.Keys.ToArray());
+
+        try
+        {
+            command.Prepare();
+        }
+        catch (Exception ex)
+        {
+            throw new PropertyResolutionException($"Entity type '{entityType}' had following error when trying to prepare DbCommand: {ex.Message}");
+        }
+
+        resolvedWhereClause.ToList().ForEach(kvp => command.Parameters[$"@{kvp.Key}"].Value = kvp.Value);
+
+        ApplyPropertyModelDifferencesToCommand(command, modelDifference, modelSnapshot);
+        ApplyPropertyValueDifferencesToCommand(command, modelDifference, modelSnapshot);
+
+        return command;
+    }
+
+    private void ApplyPropertyValueDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
+    {
+        var entityType = modelSnapshot.EntityType;
+
+        // Each property difference here refers to a simple value difference.
+        foreach (var vd in modelDifference.PropertyDifferences
+            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference)))
+            .Select(pd => new { pn = pd.PropertyName, vd = ((ValueDifference)pd.PropertyValueDifference) }))
+        {
+            // Grab the propertyName + 'value2' from the value difference
+            // and run it through any (optional) converter(s), and assign
+            // to DbCommand
+            var propertyName = vd.pn;
+            var propertyValue = vd.vd.Value2AsObject;
+
+            IEnumerable<string>? entityPropertyValues = null;
+            if (!_propertyNameMap.TryGetValue((entityType, propertyName), out entityPropertyValues))
+            {
+                entityPropertyValues = new List<string>() { propertyName };
+            }
+
+            foreach (var ep in entityPropertyValues)
+            {
+                if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
+                {
+                    propertyValue = RunEntityValueResolver(modelSnapshot, ep, resolver);
+                    command.Parameters[$"@{ep}"].Value = propertyValue;
+
+                    continue;
+                }
+                else
+                {
+                    propertyValue = propertyValue.ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
+                    command.Parameters[$"@{ep}"].Value = propertyValue;
+                }
+            }
+        }
+    }
+
+
+    private void ApplyPropertyModelDifferencesToCommand(DbCommand command, IModelDifference modelDifference, IModelSnapshot modelSnapshot)
+    {
+        var entityType = modelSnapshot.EntityType;
+
+        // Each property difference here refers to difference within a more complex
+        // property (e.g. NoteModelRef.ModelRef), which has to have converter(s) in
+        // order to apply to simple database column(s).
+        foreach (var propertyModelDifference in modelDifference.PropertyDifferences
+            .Where(d => d.PropertyValueDifference.GetType().IsAssignableTo(typeof(ModelDifference))))
+        {
+            // First apply the property difference to modelSnapshot (this
+            // may have to traverse down a hierarachy), and then run the
+            // converter(s) to get the DbCommand database value(s):
+            modelSnapshot.ApplyPropertyDifference(propertyModelDifference);
+
+            IEnumerable<string>? entityPropertyValues = null;
+            if (!_propertyNameMap.TryGetValue((entityType, propertyModelDifference.PropertyName), out entityPropertyValues))
+            {
+                entityPropertyValues = new List<string>() { propertyModelDifference.PropertyName };
+            }
+
+            foreach (var ep in entityPropertyValues)
+            {
+                if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
+                {
+                    var propertyValue = RunEntityValueResolver(modelSnapshot, ep, resolver);
+                    command.Parameters[$"@{ep}"].Value = propertyValue;
+                }
+                else
+                {
+                    throw new PropertyResolutionException($"Found mapped property '{propertyModelDifference.PropertyName}' ModelDifference for entity type '{entityType}' property '{ep}', but no resolver configured");
+                }
+            }
+        }
+
+    }
+
+    protected DbCommand CreateModelSnapshotDeleteCommand(DbConnection connection, IModelSnapshot modelSnapshot, Dictionary<string, object> resolvedWhereClause)
+    {
+        var entityType = modelSnapshot.EntityType;
+
+        var command = connection.CreateCommand();
+
+        var whereColumns = resolvedWhereClause.Keys;
+        var tableType = _discriminatorMappings.TryGetValue(entityType, out var mapping)
+            ? mapping.TableEntityType
+            : entityType;
+
+        // ====================================================================
+        //FIXME:  move to DataUtil.ApplyColumnsToDeleteCommand
+        command.CommandText =
+            $@"
+                DELETE FROM {tableType.Name}
+                WHERE {string.Join(", ", whereColumns.Select(c => c + " = @" + c))}
+            ";
+
+        foreach (var column in whereColumns)
+        {
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = $"@{column}";
+            command.Parameters.Add(parameter);
+        }
+        // ====================================================================
+
+        command.Prepare();
+        resolvedWhereClause.ToList().ForEach(kvp => command.Parameters[$"@{kvp.Key}"].Value = kvp.Value);
+
+        return command;
+    }
+
+    public void Dispose()
+    {
+        Dispose(disposing: true);
+        GC.SuppressFinalize(this);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await DisposeAsyncCore().ConfigureAwait(false);
+
+        Dispose(disposing: false);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+    }
+
+    protected virtual async ValueTask DisposeAsyncCore()
+    {
+        await ValueTask.CompletedTask;
+    }
+}
+
+public static class DbCommandExtensions
+{
+    public static string GetGeneratedQuery(this DbCommand dbCommand)
+    {
+        var query = dbCommand.CommandText;
+        foreach (DbParameter parameter in dbCommand.Parameters)
+        {
+            query = query.Replace(parameter.ParameterName, parameter.Value?.ToString());
+        }
+
+        return query;
+    }
+
+    public static object ToDatabaseCommandParameterValue(this object? value, DateTimeOffsetToBinaryConverter dateTimeOffsetToBinary)
+    {
+        if (value is DateTimeOffset)
+        {
+            value = dateTimeOffsetToBinary.ConvertToProvider(value);
+        }
+
+        return value != null ? value : DBNull.Value;
+    }
+
+    public static Type ToDomainEntityIdType(this string domainEntityTypeName)
+    {
+        Type entityIdType = typeof(EntityId<>);
+        Type[] typeArgs = { Type.GetType(domainEntityTypeName)! };
+        return entityIdType.MakeGenericType(typeArgs);
+    }
+}

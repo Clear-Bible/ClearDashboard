@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Text.Json;
 using System.Xml.Serialization;
 
@@ -60,6 +59,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<TokenComposite> TokenComposites => Set<TokenComposite>();
         public virtual DbSet<TokenCompositeTokenAssociation> TokenCompositeTokenAssociations => Set<TokenCompositeTokenAssociation>();
         public virtual DbSet<TokenizedCorpus> TokenizedCorpora => Set<TokenizedCorpus>();
+        public virtual DbSet<TokenVerseAssociation> TokenVerseAssociations => Set<TokenVerseAssociation>();
         public virtual DbSet<TranslationSet> TranslationSets => Set<TranslationSet>();
         public virtual DbSet<Translation> Translations => Set<Translation>();
         public virtual DbSet<TranslationModelEntry> TranslationModelEntries => Set<TranslationModelEntry>();
@@ -262,6 +262,12 @@ namespace ClearDashboard.DataAccessLayer.Data
                 .UsingEntity<TokenCompositeTokenAssociation>();
 
             modelBuilder.Entity<TokenComponent>().HasIndex(e => e.EngineTokenId);
+
+            modelBuilder.Entity<VerseRow>()
+                .HasMany(e => e.TokenComponents)
+                .WithOne(e => e.VerseRow)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Token>().HasIndex(e => e.TokenizedCorpusId);
             modelBuilder.Entity<Token>().HasIndex(e => e.BookNumber);

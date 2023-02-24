@@ -76,12 +76,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 ScrVersType = (int)request.Versification.Type
             };
 
+            tokenizedCorpus.LastTokenized = tokenizedCorpus.Created;
+
             if (request.Versification.IsCustomized)
             {
-                var writer = new StringWriter();
-                request.Versification.Save(writer.ToString());
-
-                tokenizedCorpus.CustomVersData = writer.ToString();
+                using (var writer = new StringWriter())
+                {
+                    request.Versification.Save(writer);
+                    tokenizedCorpus.CustomVersData = writer.ToString();
+                }
             }
 
             var (tokenizedTextCorpus, tokenCount) = await CreateTokenizedTextCorpus(
@@ -129,7 +132,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
 
                 foreach (var bookId in bookIds)
                 {
-                    var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(textCorpus, bookId, corpusId);
+                    var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(textCorpus, bookId, corpusId.Name!);
                     var (verseRows, btTokenCount) = TokenizedCorpusDataUtil.BuildVerseRowModel(tokensTextRows, tokenizedCorpusId);
 
                     foreach (var verseRow in verseRows)
@@ -137,7 +140,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                         cancellationToken.ThrowIfCancellationRequested();
 
                         await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                        await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+                        await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
                     }
                 }
 

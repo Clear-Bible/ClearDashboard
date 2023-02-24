@@ -60,7 +60,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                 {
                     foreach (var bookId in bookIdsToInsert)
                     {
-                        var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
+                        var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(request.TextCorpus, bookId, corpusId.Name!);
                         var (verseRows, btTokenCount) = TokenizedCorpusDataUtil.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
 
                         foreach (var verseRow in verseRows)
@@ -68,7 +68,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             cancellationToken.ThrowIfCancellationRequested();
 
                             await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
                         }
                     }
                 }
@@ -97,7 +97,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                     {
                         var bookNumberAsPaddedString = $"{ModelHelper.GetBookNumberForSILAbbreviation(bookId):000}";
 
-                        var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(request.TextCorpus, bookId, corpusId);
+                        var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(request.TextCorpus, bookId, corpusId.Name!);
                         var (verseRows, btTokenCount) = TokenizedCorpusDataUtil.BuildVerseRowModel(tokensTextRows, tokenizedCorpusGuid);
 
                         var bookVerseRowsDb = ProjectDbContext.VerseRows
@@ -173,13 +173,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     }
 
                                     await TokenizedCorpusDataUtil.UpdateVerseRowAsync(verseRow, verseRowUpdate, cancellationToken);
-                                    await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+                                    await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
                                 }
                             }
                             else
                             {
                                 await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                                await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
+                                await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
                             }
                         }
                     }
