@@ -806,11 +806,13 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
+        private bool IsCorpusView => TokenDisplayViewModel.VerseDisplay is CorpusDisplayViewModel;
+
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
-            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
-            UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
+            JoinTokensMenuItem.Visibility = AllSelectedTokens != null && AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens != null && AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
+            UnjoinTokenMenuItem.Visibility = AllSelectedTokens != null && AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
