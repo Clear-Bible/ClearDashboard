@@ -863,7 +863,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 if (e.NewValue != null && (bool)e.NewValue)
                 {
                     var keyBoardModifiers = Keyboard.Modifiers;
-                    await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
+
+                    if (keyBoardModifiers == ModifierKeys.None)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
+                    }
+                    
                 }
             }
             base.OnIsKeyboardFocusWithinChanged(e);
