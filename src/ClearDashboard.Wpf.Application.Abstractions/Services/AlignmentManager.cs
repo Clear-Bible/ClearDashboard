@@ -185,6 +185,7 @@ namespace ClearDashboard.Wpf.Application.Services
         public async Task DeleteAlignment(TokenDisplayViewModel tokenDisplay)
         {
             var alignmentPopupViewModel = GetAlignmentPopupViewModel(SimpleMessagePopupMode.Delete);
+            alignmentPopupViewModel.TargetTokenDisplay = tokenDisplay;
 
             var result = await WindowManager.ShowDialogAsync(alignmentPopupViewModel, null, SimpleMessagePopupViewModel.CreateDialogSettings(alignmentPopupViewModel.Title));
             if (result == true)

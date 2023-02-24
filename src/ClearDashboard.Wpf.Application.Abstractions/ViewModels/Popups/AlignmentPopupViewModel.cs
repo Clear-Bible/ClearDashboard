@@ -1,13 +1,43 @@
-﻿using System.Threading;
+﻿using System;
+using System.CodeDom;
+using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Caliburn.Micro;
+using ClearBible.Engine.Corpora;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Popups;
+
+public static class TokenExtensions
+{
+    public static string GetDisplayText(this Token token)
+    {
+        switch (token.GetType().Name)
+        {
+            case "Token":
+                return token.SurfaceText;
+
+            case "CompositeToken":
+                var compositeToken = (CompositeToken)token;
+                var orderedTokens = compositeToken.Tokens.OrderBy(t => t.Position).ToArray();
+                var builder = new StringBuilder(orderedTokens.First().SurfaceText);
+                foreach (var tokenMember in orderedTokens.Skip(1))
+                {
+                    builder.Append($" {tokenMember.SurfaceText}");
+                }
+                return builder.ToString();
+            default:
+                throw new NotImplementedException("Invalid switch case!");
+
+        }
+    }
+}
 
 public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
 {
@@ -77,6 +107,9 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
     public override string? OkLabel => LocalizationService!["Yes"];
     public override string? CancelLabel => LocalizationService!["No"];
 
+    public string? SecondaryMessage { get; set; } = null;
+    
+
     protected override string? CreateMessage()
     {
         switch (SimpleMessagePopupMode)
@@ -89,13 +122,26 @@ public class AlignmentPopupViewModel : SimpleMessagePopupViewModel
                 }
 
                 return string.Format(LocalizationService!["EnhancedView_AddAlignmentTemplate"],
-                    TargetTokenDisplay!.Token.SurfaceText, SourceTokenDisplay!.Token.SurfaceText);
-                //$"Align '{TargetTokenDisplay!.Token.SurfaceText}' with '{SourceTokenDisplay!.Token.SurfaceText}'?";
+                    TargetTokenDisplay!.AlignmentToken.GetDisplayText(), SourceTokenDisplay!.AlignmentToken.GetDisplayText());
+               
             }
             case SimpleMessagePopupMode.Delete:
             {
-                return LocalizationService!["EnhancedView_DeleteAlignment"];
-            }
+                if (TargetTokenDisplay != null)
+                {
+                    var alignments = TargetTokenDisplay.VerseDisplay.AlignmentManager!.Alignments!.FindAlignmentsByTokenId(TargetTokenDisplay.AlignmentToken.TokenId.Id).Where(a => a != null);
+                    if (alignments.Count() > 1)
+                    {
+                        SecondaryMessage =
+                            string.Format(LocalizationService!["EnhancedView_DeleteAllAlignmentsTemplate"], TargetTokenDisplay!.AlignmentToken.GetDisplayText(), OkLabel);
+                        return LocalizationService!["EnhancedView_DeleteAllAlignments"];
+                    }
+                }
+
+                return string.Format(LocalizationService!["EnhancedView_DeleteAlignmentTemplate"],
+                    TargetTokenDisplay!.AlignmentToken.GetDisplayText());
+
+                }
             default:
                 return null;
         }
