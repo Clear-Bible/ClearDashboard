@@ -8,7 +8,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     {
         public Translation Entity { get; }
 
-        public TranslationId? TranslationId => Entity.TranslationId;
+        public TranslationId? TranslationId
+        {
+            get => Entity.TranslationId;
+#if DEBUG
+            set => Entity.TranslationId = value;
+#endif
+        }
 
         public string? Text
         {
