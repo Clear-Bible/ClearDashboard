@@ -190,12 +190,8 @@ namespace ClearDashboard.Wpf.Application.Services
             if (result == true)
             {
                 var alignmentIds = FindAlignmentIds(tokenDisplay);
-
-                if (alignmentIds == null)
-                {
-                    return;
-                }
-
+         
+                // gather all of the alignments which can be removed and delete them form the database.
                 var alignmentsToRemove = new List<Alignment>();
                 foreach (var alignmentId in alignmentIds)
                 {
@@ -208,33 +204,27 @@ namespace ClearDashboard.Wpf.Application.Services
                             if (alignment != null)
                             {
                                 alignmentsToRemove.Add(alignment);
-                                //Alignments!.Remove(alignment);
-                                //await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
                             }
                         }
                         catch (Exception ex)
                         {
                             Logger.LogError(ex, "An unexpected error occurred while deleting an alignment.");
-                            //throw;
                         }
-
                     }
                 }
 
 
                 // Now remove all of the alignments from the AlignmentCollection.
-                Alignments!.RemoveRange(alignmentsToRemove);
-
-
-                // Message the rest of the app that the alignments have been removed.
-                foreach (var alignment in alignmentsToRemove)
+                if (alignmentsToRemove.Count > 0)
                 {
-                    await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
+                    Alignments!.RemoveRange(alignmentsToRemove);
+                    // Message the rest of the app that the alignments have been removed.
+                    foreach (var alignment in alignmentsToRemove)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new AlignmentDeletedMessage(alignment));
+                    }
                 }
-
-                
             }
-            
         }
 
         private AlignmentId? FindAlignmentId(TokenDisplayViewModel tokenDisplay)
@@ -244,10 +234,10 @@ namespace ClearDashboard.Wpf.Application.Services
           
         }
 
-        private IEnumerable<AlignmentId?>? FindAlignmentIds(TokenDisplayViewModel tokenDisplay)
+        private IEnumerable<AlignmentId?> FindAlignmentIds(TokenDisplayViewModel tokenDisplay)
         {
-            var alignments = Alignments!.FindAlignmentsByTokenId(tokenDisplay.AlignmentToken.TokenId.Id);
-            return alignments?.Select(a =>  a.AlignmentId);
+            var alignments = Alignments!.FindAlignmentsByTokenId(tokenDisplay.AlignmentToken.TokenId.Id).Where(a=>a != null);
+            return alignments.Where(a=>a?.AlignmentId != null).Select(a =>  a?.AlignmentId);
 
         }
     }
