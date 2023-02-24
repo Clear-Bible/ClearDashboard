@@ -107,17 +107,14 @@ namespace ClearDashboard.Wpf.Application.Dialogs
         {
             try
             {
-                if (!TokenDisplay.TargetTranslationText.Equals(e.Translation.TargetTranslationText))
+                OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
+
+                async Task ApplyTranslation()
                 {
-                    OnUIThread(() => ProgressBarVisibility = Visibility.Visible);
-
-                    async Task ApplyTranslation()
-                    {
-                        await InterlinearDisplay.PutTranslationAsync(e.Translation, e.TranslationActionType);
-                    }
-
-                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(ApplyTranslation);
+                    await InterlinearDisplay.PutTranslationAsync(e.Translation, e.TranslationActionType);
                 }
+
+                await System.Windows.Application.Current.Dispatcher.InvokeAsync(ApplyTranslation);
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() => DialogResult = true);
             }
