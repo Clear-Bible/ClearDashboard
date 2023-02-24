@@ -10,6 +10,7 @@ using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.Events.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 {

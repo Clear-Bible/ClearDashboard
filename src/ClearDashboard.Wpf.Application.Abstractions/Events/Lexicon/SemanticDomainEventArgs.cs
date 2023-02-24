@@ -2,7 +2,7 @@
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 
-namespace ClearDashboard.Wpf.Application.Events
+namespace ClearDashboard.Wpf.Application.Events.Lexicon
 {
     public class SemanticDomainEventArgs : RoutedEventArgs
     {
