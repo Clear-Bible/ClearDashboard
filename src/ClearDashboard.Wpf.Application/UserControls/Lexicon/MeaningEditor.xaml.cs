@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -50,6 +52,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// </summary>
         public static readonly RoutedEvent MeaningUpdatedEvent = EventManager.RegisterRoutedEvent
             (nameof(MeaningUpdated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
+
+        /// <summary>
+        /// Identifies the TranslationDroppedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationDroppedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationDropped), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -258,6 +266,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             });
         }
 
+        private void RaiseTranslationDroppedEvent(RoutedEvent routedEvent, TranslationViewModel translation)
+        {
+            RaiseEvent(new TranslationDroppedEventArgs()
+            {
+                RoutedEvent = routedEvent,
+                Lexeme = Lexeme,
+                Meaning = Meaning,
+                TranslationId = translation.TranslationId!,
+                TranslationText = translation.Text!
+            });
+        }
+
         #endregion
         #region Private Event Handlers
 
@@ -325,6 +345,46 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         private void DeleteMeaningCancelled(object sender, RoutedEventArgs e)
         {
             ConfirmDeletePopup.IsOpen = false;
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if (Meaning.Text == "New Meaning")
+            {
+                BeginEdit();
+                MeaningTextBox.SelectAll();
+                MeaningTextBox.Focus();
+            }
+
+            Loaded -= OnLoaded;
+        }
+
+        private void OnTranslationMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (sender is FrameworkElement control &&
+                    control.DataContext is TranslationViewModel translation)
+                {
+                    DragDrop.DoDragDrop(control, JsonSerializer.Serialize(translation), DragDropEffects.Copy);
+                }
+            }
+        }
+
+        private void OnMeaningEditorDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.StringFormat))
+            {
+                var dataString = (string?)e.Data.GetData(DataFormats.StringFormat);
+                if (dataString != null)
+                {
+                    var translation = JsonSerializer.Deserialize<TranslationViewModel>(dataString);
+                    if (translation != null)
+                    {
+                        RaiseTranslationDroppedEvent(TranslationDroppedEvent, translation);
+                    }
+                }
+            }
         }
 
         [NotifyPropertyChangedInvocator]
@@ -591,6 +651,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
+        /// Occurs when a translation is dropped on a meaning.
+        /// </summary>
+        public event RoutedEventHandler TranslationDropped
+        {
+            add => AddHandler(TranslationDroppedEvent, value);
+            remove => RemoveHandler(TranslationDroppedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -602,18 +671,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             InitializeComponent();
 
             Loaded += OnLoaded;
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            if (Meaning.Text == "New Meaning")
-            {
-                BeginEdit();
-                MeaningTextBox.SelectAll();
-                MeaningTextBox.Focus();
-            }
-
-            Loaded -= OnLoaded;
         }
     }
 }

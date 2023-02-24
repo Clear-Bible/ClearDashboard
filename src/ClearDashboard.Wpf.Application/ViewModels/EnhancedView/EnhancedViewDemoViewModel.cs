@@ -29,6 +29,8 @@ using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
 using TranslationCollection = ClearDashboard.Wpf.Application.Collections.Lexicon.TranslationCollection;
+using TranslationId = ClearDashboard.DAL.Alignment.Lexicon.TranslationId;
+
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -415,15 +417,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             };
             var translations1 = new TranslationViewModelCollection
             {
-                new TranslationViewModel { Text = "Translation 1", Count = 10 },
-                new TranslationViewModel { Text = "Translation 2", Count = 5 },
-                new TranslationViewModel { Text = "Translation 3", Count = 2 },
+                new TranslationViewModel { Text = "Translation 1", Count = 10, 
+                    TranslationId = TranslationId.Create(Guid.Parse("526E72D9-D72B-45F3-B59A-F8D76242519B")) },
+                new TranslationViewModel { Text = "Translation 2", Count = 5,
+                    TranslationId = TranslationId.Create(Guid.Parse("A739E80B-07B8-4A30-9572-D308218D02AC")) },
+                new TranslationViewModel { Text = "Translation 3", Count = 2,
+                    TranslationId = TranslationId.Create(Guid.Parse("D9C79904-1BE8-4B37-9B51-108DB5C5B50F")) }
             };
             var translations2 = new TranslationViewModelCollection
             {
-                new TranslationViewModel { Text = "Translation 4", Count = 8 },
-                new TranslationViewModel { Text = "Translation 5", Count = 3 },
-                new TranslationViewModel { Text = "Translation 6", Count = 1 },
+                new TranslationViewModel { Text = "Translation 4", Count = 8,
+                    TranslationId = TranslationId.Create(Guid.Parse("32F31154-601E-4110-BF6F-7C9D93554FC1")) },
+                new TranslationViewModel { Text = "Translation 5", Count = 3,
+                    TranslationId = TranslationId.Create(Guid.Parse("DC1A5DAD-1927-4AF5-AFFF-7B6A3F6A77B5")) },
+                new TranslationViewModel { Text = "Translation 6", Count = 1,
+                    TranslationId = TranslationId.Create(Guid.Parse("DE061085-A9E3-4961-B97F-273A45B31C56")) }
             };
             var meaning1 = new MeaningViewModel(new Meaning
             {
@@ -439,14 +447,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 SemanticDomains = semanticDomains2,
             })
             {
-                Translations = translations1
+                Translations = translations2
             };
-            //DemoLexeme = new LexemeViewModel
-            //{
-            //    Lemma = "Lemma",
-            //    Forms = forms,
-            //    Meanings = new MeaningViewModelCollection { meaning1, meaning2 }
-            //};
+            DemoLexeme = new LexemeViewModel
+            {
+                Lemma = "Lemma",
+                Forms = forms,
+                Meanings = new MeaningViewModelCollection { meaning1, meaning2 }
+            };
             //DemoMeaning = meaning1;
         }
         #endregion

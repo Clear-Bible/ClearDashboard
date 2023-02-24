@@ -82,6 +82,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public static readonly RoutedEvent SemanticDomainSelectedEvent = EventManager.RegisterRoutedEvent
             (nameof(SemanticDomainSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
 
+        /// <summary>
+        /// Identifies the TranslationDroppedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationDroppedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationDropped), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
+
         #endregion Static Routed Events
         #region Static Dependency Properties
 
@@ -399,6 +405,18 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             });
         }
 
+        private void RaiseTranslationDroppedEvent(RoutedEvent routedEvent, TranslationDroppedEventArgs args)
+        {
+            RaiseEvent(new TranslationDroppedEventArgs()
+            {
+                RoutedEvent = routedEvent,
+                Lexeme = args.Lexeme,
+                Meaning = args.Meaning,
+                TranslationId = args.TranslationId,
+                TranslationText = args.TranslationText
+            });
+        }
+
         #endregion
         #region Private Event Handlers
 
@@ -515,6 +533,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             OnPropertyChanged(nameof(LexemeControlsVisibility));
             
             Loaded -= OnLoaded;
+        }
+
+        private void OnTranslationDropped(object sender, RoutedEventArgs e)
+        {
+            if (e is TranslationDroppedEventArgs args)
+            RaiseTranslationDroppedEvent(TranslationDroppedEvent, args);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -943,6 +967,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
+        /// Occurs when a translation is dropped on a meaning.
+        /// </summary>
+        public event RoutedEventHandler TranslationDropped
+        {
+            add => AddHandler(TranslationDroppedEvent, value);
+            remove => RemoveHandler(TranslationDroppedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -955,5 +988,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
             Loaded += OnLoaded;
         }
+
     }
 }
