@@ -665,6 +665,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 if (SelectionManager.AnySourceTokens)
                 {
+                    await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(e.TokenDisplay.IsSource, e.TokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
                     await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.TokenDisplay);
                     var element = (UIElement)sender;
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);

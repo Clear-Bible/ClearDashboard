@@ -181,7 +181,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private bool _isNoteHovered;
-        private Translation? _translation1;
         private bool _isSource = true;
 
         /// <summary>
