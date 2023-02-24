@@ -187,11 +187,11 @@ begin
     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'VC_redist.x64.exe', '/install /passive /norestart', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     
     // install the .NET Runtime
-     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.2\') then begin
-      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.2-win-x64.exe') then begin          
-        ExtractTemporaryFile('windowsdesktop-runtime-7.0.2-win-x64.exe');
+     if not DirExists('C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\7.0.3\') then begin
+      if not FileExists(ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.3-win-x64.exe') then begin          
+        ExtractTemporaryFile('windowsdesktop-runtime-7.0.3-win-x64.exe');
       end;
-     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.2-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
+     Result := ShellExec('', ExpandConstant('{tmp}{\}') + 'windowsdesktop-runtime-7.0.3-win-x64.exe', '/passive', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
     end;
     Result := true;
   end;
