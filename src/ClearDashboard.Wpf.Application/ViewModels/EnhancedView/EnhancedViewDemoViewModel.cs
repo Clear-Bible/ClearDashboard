@@ -24,7 +24,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-
+using ClearDashboard.DAL.Alignment.Lexicon;
+using ClearDashboard.Wpf.Application.Collections.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
+using TranslationCollection = ClearDashboard.Wpf.Application.Collections.Lexicon.TranslationCollection;
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -372,13 +376,80 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectedTokens = new TokenDisplayViewModelCollection();
         }
 
+
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await base.OnActivateAsync(cancellationToken);
-            await PopulateData();
+            //await PopulateData();
+            PopulateLexicon();
         }
 
-#endregion
+        public MeaningViewModel DemoMeaning { get; set; }
+        public LexemeViewModel DemoLexeme { get; set; }
+        public SemanticDomainCollection SemanticDomainSuggestions { get; set; }
+        private void PopulateLexicon()
+        {
+            SemanticDomainSuggestions = new SemanticDomainCollection
+            {
+                new SemanticDomain { Text = "Aaa" },
+                new SemanticDomain { Text = "Bbb" },
+                new SemanticDomain { Text = "Ccc" }
+            };
+            var semanticDomains1 = new SemanticDomainCollection
+            {
+                new SemanticDomain { Text = "Semantic Domain 1" },
+                new SemanticDomain { Text = "Semantic Domain 2" },
+                new SemanticDomain { Text = "Semantic Domain 3" }
+            };
+            var semanticDomains2 = new SemanticDomainCollection
+            {
+                new SemanticDomain { Text = "Semantic Domain 4" },
+                new SemanticDomain { Text = "Semantic Domain 5" },
+                new SemanticDomain { Text = "Semantic Domain 6" }
+            };
+            var forms = new LexemeFormCollection
+            {
+                new Form { Text = "Form 1" },
+                new Form { Text = "Form 2" },
+                new Form { Text = "Form 3" },
+            };
+            var translations1 = new TranslationViewModelCollection
+            {
+                new TranslationViewModel { Text = "Translation 1", Count = 10 },
+                new TranslationViewModel { Text = "Translation 2", Count = 5 },
+                new TranslationViewModel { Text = "Translation 3", Count = 2 },
+            };
+            var translations2 = new TranslationViewModelCollection
+            {
+                new TranslationViewModel { Text = "Translation 4", Count = 8 },
+                new TranslationViewModel { Text = "Translation 5", Count = 3 },
+                new TranslationViewModel { Text = "Translation 6", Count = 1 },
+            };
+            var meaning1 = new MeaningViewModel(new Meaning
+            {
+                Text = "Meaning 1",
+                SemanticDomains = semanticDomains1,
+            })
+            {
+                Translations = translations1
+            };
+            var meaning2 = new MeaningViewModel(new Meaning
+            {
+                Text = "Meaning 2",
+                SemanticDomains = semanticDomains2,
+            })
+            {
+                Translations = translations1
+            };
+            //DemoLexeme = new LexemeViewModel
+            //{
+            //    Lemma = "Lemma",
+            //    Forms = forms,
+            //    Meanings = new MeaningViewModelCollection { meaning1, meaning2 }
+            //};
+            //DemoMeaning = meaning1;
+        }
+        #endregion
 
 #pragma warning disable CS8618
         /// <summary>
