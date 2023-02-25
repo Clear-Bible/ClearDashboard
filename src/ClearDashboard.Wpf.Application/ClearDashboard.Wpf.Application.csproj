@@ -12,6 +12,7 @@
     <FileVersion>0.5.0.0</FileVersion>
     <Version>0.5.0.0</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+	<UserSecretsId>b02febcf-d7fc-48e1-abb1-f03647ca553c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -114,6 +115,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <PackageReference Include="Autofac.Configuration" Version="6.0.0" />
 	  <PackageReference Include="CefSharp.Wpf.NETCore" Version="109.1.110" />
 	  <PackageReference Include="ClearApplicationFoundation" Version="2.0.5" />
     <PackageReference Include="Dahomey.Json" Version="1.12.2" />
@@ -130,7 +132,9 @@
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-    <PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+	<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
     <PackageReference Include="System.DirectoryServices.AccountManagement" Version="7.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.0" /><PackageReference Include="wpfKeyBoard-clear" Version="1.0.5" />
@@ -138,6 +142,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClearDashboard.Collaboration\ClearDashboard.Collaboration.csproj" />
     <ProjectReference Include="..\ClearDashboard.DAL.Alignment\ClearDashboard.DAL.Alignment.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Application.Abstractions\ClearDashboard.Wpf.Application.Abstractions.csproj" />
     <ProjectReference Include="..\ClearDashboard.Wpf.Controls\ClearDashboard.Wpf.Controls.csproj" />

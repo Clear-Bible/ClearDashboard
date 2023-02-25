@@ -43,7 +43,7 @@ public class CollaborationTests : TestBase
     {
         try
         {
-            var configuration = Container!.Resolve<CollaborationConfiguration>();
+            var collaborationManager = Container!.Resolve<CollaborationManager>();
             
         }
         finally

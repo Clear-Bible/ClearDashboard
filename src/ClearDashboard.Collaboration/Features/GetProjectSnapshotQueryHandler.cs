@@ -34,7 +34,7 @@ using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Features;
 
-internal class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
+public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
     GetProjectSnapshotQuery,
     RequestResult<ProjectSnapshot>,
     ProjectSnapshot>

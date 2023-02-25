@@ -11,37 +11,38 @@ using Microsoft.Extensions.Logging;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Merge;
+using System.Configuration;
+using System.Security.Policy;
+using Microsoft.VisualBasic;
 
 namespace ClearDashboard.Collaboration.Services;
 
 public class CollaborationManager
 {
-	private readonly ILogger _logger;
+	private readonly ILogger<CollaborationManager> _logger;
 	private readonly IMediator _mediator;
 	private readonly IUserProvider _userProvider;
 	private readonly IProjectProvider _projectProvider;
 	private readonly string _repositoryPath = FilePathTemplates.ProjectBaseDirectory;
 
-    // FIXME:  where should this come from?  User has to enter it somewhere?
-    // Or its pre-setup somehow?  Maybe it can come from the IUserProvider?
-    private readonly string _remoteUrl = "https://github.com/morleycb/snapshot_test.git";
-    private readonly string _remoteUserName = "morleycb";
-    private readonly string _remoteEmail = "chris.morley@clear.bible";
-    private readonly string _remotePassword = "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";
+    private readonly CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = true;
 
     public const string BackupsFolder = "Backups";
 
     public CollaborationManager(
-		ILogger logger,
+		ILogger<CollaborationManager> logger,
 		IMediator mediator,
         IUserProvider userProvider,
-		IProjectProvider projectProvider)
+		IProjectProvider projectProvider,
+        CollaborationConfiguration configuration)
 	{
 		_logger = logger;
 		_mediator = mediator;
 		_userProvider = userProvider;
 		_projectProvider = projectProvider;
+
+        _configuration = configuration;
     }
 
     private Models.Project EnsureCurrentProject()
@@ -79,12 +80,41 @@ public class CollaborationManager
             {
                 const string name = "origin";
 
-                repo.Network.Remotes.Add(name, _remoteUrl);
+                repo.Network.Remotes.Add(name, _configuration.RemoteUrl);
                 Remote remote = repo.Network.Remotes[name];
 
                 var refSpec = repo.Config.Get<string>("remote", remote.Name, "fetch");
             }
         }
+    }
+
+    public void FetchMergeRemote()
+    {
+        EnsureValidRepository(_repositoryPath);
+
+        string logMessage = "";
+        using (var repo = new Repository(_repositoryPath))
+        {
+            FetchOptions options = new FetchOptions();
+            options.CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) =>
+                new UsernamePasswordCredentials()
+                {
+                    Username = _configuration.RemoteUserName,
+                    Password = _configuration.RemotePassword
+                });
+
+            foreach (Remote remote in repo.Network.Remotes)
+            {
+                IEnumerable<string> refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+                Commands.Fetch(repo, remote.Name, refSpecs, options, logMessage);
+            }
+
+            var signature = new LibGit2Sharp.Signature(
+                new Identity(_configuration.RemoteUserName, _configuration.RemoteEmail), DateTimeOffset.Now);
+
+            repo.Merge(repo.Branches.First().Tip, signature);
+        }
+        Console.WriteLine(logMessage);
     }
 
     public void PullRemoteCommits()
@@ -99,12 +129,12 @@ public class CollaborationManager
                 (url, usernameFromUrl, types) =>
                     new UsernamePasswordCredentials()
                     {
-                        Username = _remoteUserName,
-                        Password = _remotePassword
+                        Username = _configuration.RemoteUserName,
+                        Password = _configuration.RemotePassword
                     });
 
             var signature = new LibGit2Sharp.Signature(
-                new Identity(_remoteUserName, _remoteEmail), DateTimeOffset.Now);
+                new Identity(_configuration.RemoteUserName, _configuration.RemoteEmail), DateTimeOffset.Now);
 
             Commands.Pull(repo, signature, options);
         }
@@ -244,8 +274,8 @@ public class CollaborationManager
         // FIXME:  check to see if there are any changes to commit
 
         var userSignature = new Signature(
-            _remoteUserName,
-            _remoteEmail,
+            _configuration.RemoteUserName,
+            _configuration.RemoteEmail,
             DateTimeOffset.UtcNow
             );
 
@@ -256,7 +286,7 @@ public class CollaborationManager
             Remote remote = repo.Network.Remotes["origin"];
             var options = new PushOptions();
             options.CredentialsProvider = (_url, _user, _cred) =>
-                new UsernamePasswordCredentials { Username = _remoteUserName, Password = _remotePassword };
+                new UsernamePasswordCredentials { Username = _configuration.RemoteUserName, Password = _configuration.RemotePassword };
             repo.Network.Push(remote, @"refs/heads/master", options);
         }
     }

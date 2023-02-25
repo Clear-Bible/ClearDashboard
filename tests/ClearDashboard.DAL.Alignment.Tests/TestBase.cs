@@ -83,6 +83,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterModule(configModule);
+            builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
 
             Container = builder.Build();
         }

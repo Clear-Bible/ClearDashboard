@@ -49,6 +49,7 @@ using ClearDashboard.Wpf.Application.ViewModels.Popups;
 using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using MahApps.Metro.Controls;
+using ClearDashboard.Collaboration.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -69,6 +70,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 #nullable disable
         private readonly LongRunningTaskManager _longRunningTaskManager;
         private readonly ILocalizationService _localizationService;
+        private readonly CollaborationManager _collaborationManager;
         private ILifetimeScope LifetimeScope { get; }
         private IWindowManager WindowManager { get; }
         private INavigationService NavigationService { get; }
@@ -196,6 +198,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 else if (value == "AboutID")
                 {
                     ShowAboutWindow();
+                }
+                else if (value == "CollaborationInitializeID")
+                {
+                    _collaborationManager.InitializeRepository();
+                }
+                else if (value == "CollaborationPullID")
+                {
+                    _collaborationManager.FetchMergeRemote();
+                }
+                else if (value == "CollaborationMergeID")
+                {
+                    _collaborationManager.MergeLatestChangesAsync(CancellationToken.None).Wait();
+                }
+                else if (value == "CollaborationStageID")
+                {
+                    _collaborationManager.StageChangesAsync(CancellationToken.None).Wait();
+                }
+                else if (value == "CollaborationCommitID")
+                {
+                    _collaborationManager.CommitPushChanges("Boy Howdy!");
                 }
                 else
                 {
@@ -353,10 +375,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                              IWindowManager windowManager,
                              ILifetimeScope lifetimeScope,
                              NoteManager noteManager,
-                             LongRunningTaskManager longRunningTaskManager, ILocalizationService localizationService)
+                             LongRunningTaskManager longRunningTaskManager, 
+                             ILocalizationService localizationService,
+                             CollaborationManager collaborationManager)
         {
             _longRunningTaskManager = longRunningTaskManager;
             _localizationService = localizationService;
+            _collaborationManager = collaborationManager;
             LifetimeScope = lifetimeScope;
             WindowManager = windowManager;
             NoteManager = noteManager;
@@ -1111,6 +1136,37 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         private async Task RebuildMainMenu()
         {
             FileLayouts = GetFileLayouts();
+            BindableCollection<MenuItemViewModel> collaborationItems = new()
+            {
+                // add in the standard menu items
+
+                // Save Current Layout
+                new MenuItemViewModel
+                {
+                    Header = "Initialize", Id = "CollaborationInitializeID",
+                    ViewModel = this
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Pull", Id = "CollaborationPullID",
+                    ViewModel = this
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Merge", Id = "CollaborationMergeID",
+                    ViewModel = this
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Stage", Id = "CollaborationStageID",
+                    ViewModel = this
+                },
+                new MenuItemViewModel
+                {
+                    Header = "Commit", Id = "CollaborationCommitID",
+                    ViewModel = this
+                }
+            };
             BindableCollection<MenuItemViewModel> layouts = new()
             {
                 // add in the standard menu items
@@ -1241,6 +1297,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_About"), Id = "AboutID", ViewModel = this, },
                     }
                 }
+#if DEBUG
+                ,
+                new()
+                {
+                    // Collaboration
+                    Header = "Collaboration", Id = "CollaborationID", ViewModel = this,
+                    MenuItems = collaborationItems,
+                }
+#endif
             };
 
             await Task.CompletedTask;

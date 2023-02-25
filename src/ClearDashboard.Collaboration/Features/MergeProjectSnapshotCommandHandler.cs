@@ -16,8 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ClearDashboard.Collaboration.Features;
-
-internal class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler<
+public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler<
     MergeProjectSnapshotCommand,
     RequestResult<Unit>,
     Unit>
