@@ -7,7 +7,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
 {
     public static class PlaySound
     {
-        public static void PlaySoundFromResource()
+        public static void PlaySoundFromResource(SoundType soundType = SoundType.Success)
         {
             var assembly = Assembly.GetExecutingAssembly();
 
@@ -16,13 +16,36 @@ namespace ClearDashboard.Wpf.Application.Helpers
                 .Where(x => x.EndsWith(".wav"))
                 .ToList();
 
-
-            using var stream =
-                assembly.GetManifestResourceStream("ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav");
+            switch(soundType)
             {
-                var player = new SoundPlayer(stream);
-                player.Play();
+                case SoundType.Success:
+                { 
+                    using var stream =
+                        assembly.GetManifestResourceStream("ClearDashboard.Wpf.Application.Resources.Crystal Click 2.wav");
+                    { 
+                        var player = new SoundPlayer(stream);
+                        player.Play();
+                    }
+                } 
+                    break;
+
+                case SoundType.Error:
+                {
+                    using var stream =
+                        assembly.GetManifestResourceStream("ClearDashboard.Wpf.Application.Resources.DashboardFailure.wav");
+                    {
+                        var player = new SoundPlayer(stream);
+                        player.Play();
+                    }
+                }
+                    break;
             }
         }
+    }
+
+    public enum SoundType
+    {
+        Success, 
+        Error
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Utils;
@@ -14,9 +9,15 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 // These need to be specified explicitly to resolve ambiguity with ClearDashboard.DataAccessLayer.Models.
 using Token = ClearBible.Engine.Corpora.Token;
+using TokenId = ClearBible.Engine.Corpora.TokenId;
 using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -57,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private TokenMap? _targetTokenMap;
         protected TokenMap? TargetTokenMap
         {
-            private get { return _targetTokenMap; }
+            get { return _targetTokenMap; }
             set
             {
                 Set(ref _targetTokenMap, value);
@@ -81,20 +82,133 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// </summary>
         public TokenDisplayViewModelCollection TargetTokenDisplayViewModels { get; private set; } = new();
 
+       
+        public AlignmentManager? AlignmentManager { get; set; } = null;
+
         /// <summary>
-        /// Gets a collection of alignments to be rendered.
+        /// Gets a enumerable of source tokens.
         /// </summary>
         /// <remarks>
         /// Alignment information is only available when this is a <see cref="AlignmentDisplayViewModel"/> derived type.
         /// </remarks>
-        public virtual AlignmentCollection? Alignments => null;
+        protected virtual IEnumerable<Token>? GetSourceTokens(bool isSource, TokenId tokenId)
+        {
+            return null;
+        }
+        /// <summary>
+        /// Gets a enumerable of target tokens.
+        /// </summary>
+        /// <remarks>
+        /// Alignment information is only available when this is a <see cref="AlignmentDisplayViewModel"/> derived type.
+        /// </remarks>
+        protected virtual IEnumerable<Token>? GetTargetTokens(bool isSource, TokenId tokenId)
+        {
+            return null;
+        }
+
+        protected virtual void HighlightSourceTokens(bool isSource, TokenId tokenId)
+        {
+            var sourceTokens = GetSourceTokens(isSource, tokenId);
+            if (sourceTokens == null)
+            {
+                return;
+            }
+            _ = SourceTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    if (sourceTokens
+                        .Select(t => t.TokenId)
+                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
+                    {
+                        tdm.IsHighlighted = true;
+                    }
+                    else
+                    {
+                        tdm.IsHighlighted = false;
+                    }
+
+                    return tdm;
+                })
+                .ToList();
+        }
+
+        protected virtual void HighlightTargetTokens(bool isSource, TokenId tokenId)
+        {
+             var targetTokens = GetTargetTokens(isSource, tokenId);
+             if (targetTokens == null)
+             {
+                 return;
+             }
+             _ =  TargetTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    if (targetTokens
+                        .Select(t => t.TokenId)
+                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
+                    {
+                        tdm.IsHighlighted = true;
+                    }
+                    else
+                    {
+                        tdm.IsHighlighted = false;
+                    }
+
+                    return tdm;
+                })
+                .ToList();
+        }
+
+
+        public virtual async Task HighlightTokens(bool isSource, TokenId tokenId)
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(isSource, tokenId));
+        }
+
+        public async Task HandleHighlightTokensAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            HighlightSourceTokens(message.IsSource, message.TokenId);
+            HighlightTargetTokens(message.IsSource, message.TokenId);
+            await Task.CompletedTask;
+        }
+
+        public virtual async Task UnhighlightTokens()
+        {
+            await EventAggregator.PublishOnUIThreadAsync(new UnhighlightTokensMessage());
+        }
+
+        public virtual async Task InternalUnhighlightTokens()
+        {
+
+            _ = SourceTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    tdm.IsHighlighted = false;
+                    return tdm;
+                })
+                .ToList();
+
+            _ = TargetTokenDisplayViewModels
+                .Select(tdm =>
+                {
+                    tdm.IsHighlighted = false;
+                    return tdm;
+                })
+                .ToList();
+
+            await Task.CompletedTask;
+        }
+
+        public async Task HandleUnhighlightTokensAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            await InternalUnhighlightTokens();
+        }
 
         public bool IsSourceRtl => SourceTokenMap?.IsRtl ?? false;
         public bool IsTargetRtl => TargetTokenMap?.IsRtl ?? false;
 
         public Guid Id { get; set; } = Guid.NewGuid();
 
-        /// <summary>
+      /// <summary>
         /// Get the <see cref="Translation"/> for a specified token.
         /// </summary>
         /// <remarks>
@@ -228,5 +342,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Task.CompletedTask;
         }
+
+
+        //public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        //{
+        //    var alignment = message.Alignment;
+        //    var alignedTokenPair = alignment.AlignedTokenPair;
+          
+        //    if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+        //    {
+        //        Alignments!.Add(alignment);
+        //    }
+
+        //    if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+        //    {
+        //        Alignments!.Add(alignment);
+        //    }
+
+        //    await Task.CompletedTask;
+        //}
+
+        //public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        //{
+        //    var alignment = message.Alignment;
+        //    var alignedTokenPair = alignment.AlignedTokenPair;
+
+        //    var unhighlightTokens = false;
+
+        //    if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
+        //    {
+        //        unhighlightTokens = true;
+        //        Alignments!.Remove(alignment);
+        //    }
+
+        //    if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
+        //    {
+        //        unhighlightTokens = true;
+        //        Alignments!.Remove(alignment);
+        //    }
+
+        //    if (unhighlightTokens)
+        //    {
+        //        await UnhighlightTokens();
+        //    }
+        //}
     }
 }

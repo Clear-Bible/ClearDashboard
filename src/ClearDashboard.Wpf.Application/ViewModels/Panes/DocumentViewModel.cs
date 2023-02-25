@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearDashboard.Wpf.Application.Helpers;
+using ClearApplicationFoundation.Framework.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 {

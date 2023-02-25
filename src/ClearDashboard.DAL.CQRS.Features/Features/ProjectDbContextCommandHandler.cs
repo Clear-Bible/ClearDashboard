@@ -47,7 +47,7 @@ public abstract class ProjectDbContextCommandHandler<TRequest, TResponse, TData>
             }
             else
             {
-                using var requestScope = ProjectNameDbContextFactory!.ServiceScope
+                await using var requestScope = ProjectNameDbContextFactory!.ServiceScope
                 .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
 
                 ProjectDbContext = await ProjectNameDbContextFactory!.GetDatabaseContext(

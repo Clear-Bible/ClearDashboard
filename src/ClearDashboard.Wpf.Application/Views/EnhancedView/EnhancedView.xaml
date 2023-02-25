@@ -8,25 +8,51 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:foundation="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
     d:DataContext="{d:DesignInstance Type=enhancedView:EnhancedViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     mc:Ignorable="d">
-
+    <UserControl.InputBindings>
+        <KeyBinding
+            Key="OemPlus"
+            Command="{Binding IncreaseTextSizeCommand}"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="OemMinus"
+            Command="{Binding DecreaseTextSizeCommand}"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="D0"
+            Command="{Binding ResetTextSizeCommand}"
+            Modifiers="Control" />
+        <KeyBinding
+            Key="N"
+            Command="{Binding InsertNoteCommand}"
+            Modifiers="Control+Shift" />
+      
+    </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
-            <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
+            <Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsFocused}" Value="True">
+                        <Setter Property="FocusManager.FocusedElement" 
+                                Value="{Binding RelativeSource={RelativeSource Self}}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
-            <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
+            <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->
         </ResourceDictionary>
 
 
@@ -132,7 +158,7 @@
                         <Label
                             Width="40"
                             VerticalAlignment="Center"
-                            Content="{Binding ElementName=TokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
+                            Content="{Binding ElementName=SourceTokenFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="1"
@@ -373,7 +399,8 @@
                 <Button
                     Grid.Row="0"
                     Grid.Column="0"
-                    Width="50"
+                    Width="36"
+                    Height="36"
                     Margin="4,4,4,4"
                     Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
                     CommandParameter="{x:Static Dock.Top}"
@@ -384,7 +411,7 @@
                 <userControls:BcvUserControl
                     Grid.Row="0"
                     Grid.Column="1"
-                    Margin="50,0,0,0"
+                    Margin="20,0,0,0"
                     BcvDictionary="{Binding Path=BcvDictionary}"
                     CurrentBcv="{Binding Path=CurrentBcv}"
                     IsControlEnabled="{Binding EnableBcvControl}"
@@ -459,6 +486,10 @@
                             <Trigger Property="IsSelected" Value="true">
                                 <Setter Property="Background" Value="LightCoral" />
                             </Trigger>
+                            <DataTrigger Binding="{Binding HasFocus}" Value="True">
+                                <Setter Property="FocusManager.FocusedElement" 
+                                        Value="{Binding RelativeSource={RelativeSource Self}}" />
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>

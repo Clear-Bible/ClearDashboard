@@ -11,10 +11,10 @@ namespace ClearDashboard.Wpf.Application.Messages
     public record GetApplicationWindowSettings();
     public record ApplicationWindowSettings(WindowSettings WindowSettings);
 
-
     public record UiLanguageChangedMessage(string LanguageCode);
 
     public record VerseChangedMessage(string Verse);
+    public record BcvArrowMessage(BcvArrow Arrow);
     public record ProjectLoadCompleteMessage(bool Loaded);
 
 

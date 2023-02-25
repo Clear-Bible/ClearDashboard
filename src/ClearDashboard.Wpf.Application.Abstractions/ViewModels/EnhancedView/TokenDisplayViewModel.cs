@@ -21,6 +21,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public Token TokenForTranslation => IsCompositeTokenMember ? CompositeToken! : Token;
 
+        public Token AlignmentToken=> IsCompositeTokenMember ? CompositeToken! : Token;
+
         /// <summary>
         /// The <see cref="VerseDisplayViewModel"/> that this token is part of.
         /// </summary>
@@ -32,7 +34,24 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <remarks>
         /// If true, this is a source token; if false, this is a target token (alignment).
         /// </remarks>
-        public bool IsSource { get; set; } = true;
+        public bool IsSource
+        {
+            get => _isSource;
+            set
+            {
+                Set(ref _isSource, value);
+                NotifyOfPropertyChange(nameof(IsTarget));
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether this is a source token.
+        /// </summary>
+        public bool IsTarget => !IsSource;
+
+        public bool IsAligned => VerseDisplay.AlignmentManager is { Alignments: { } } &&
+                                 VerseDisplay.AlignmentManager.Alignments.Any(a => a.AlignedTokenPair.SourceToken.TokenId.Id == AlignmentToken.TokenId.Id 
+                                     || a.AlignedTokenPair.TargetToken.TokenId.Id == AlignmentToken.TokenId.Id);
 
         private CompositeToken? _compositeToken;
         /// <summary>
@@ -162,7 +181,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         private bool _isNoteHovered;
-        private Translation? _translation1;
+        private bool _isSource = true;
 
         /// <summary>
         /// Gets or sets whether a note to which the token is associated is hovered by the mouse.

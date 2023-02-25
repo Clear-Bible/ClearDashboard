@@ -12,7 +12,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
     public class TokenizedTextCorpus : ScriptureTextCorpus, ICache
     {
         public TokenizedTextCorpusId TokenizedTextCorpusId { get; set; }
-        public override ScrVers Versification { get; }
+        public bool NonTokenized { get; }
 
         private bool useCache_;
 
@@ -60,16 +60,22 @@ namespace ClearDashboard.DAL.Alignment.Corpora
                 });
         }
 
-        internal TokenizedTextCorpus(TokenizedTextCorpusId tokenizedCorpusId, IMediator mediator, IEnumerable<string> bookAbbreviations, ScrVers versification, bool useCache)
+        internal TokenizedTextCorpus(
+            TokenizedTextCorpusId tokenizedCorpusId, 
+            IMediator mediator, 
+            IEnumerable<string> bookAbbreviations, 
+            ScrVers versification, 
+            bool useCache,
+            bool nonTokenized)
         {
             useCache_ = useCache;
-
+            NonTokenized = nonTokenized;
             TokenizedTextCorpusId = tokenizedCorpusId;
             Versification = versification;
 
             foreach (var bookAbbreviation in bookAbbreviations)
             {
-                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, useCache));
+                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, useCache, NonTokenized));
             }
         }
 
@@ -96,7 +102,7 @@ namespace ClearDashboard.DAL.Alignment.Corpora
 
             foreach (var bookAbbreviation in updateOrAddResult.Data!)
             {
-                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, UseCache));
+                AddText(new TokenizedText(TokenizedTextCorpusId, mediator, Versification, bookAbbreviation, UseCache, NonTokenized));
             }
         }
 
@@ -110,10 +116,12 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             await Task.FromException(new NotImplementedException());
         }
 
-        public async void Update()
+        public async Task Update(IMediator mediator, CancellationToken token = default)
         {
-            // call the update handler to update the r/w metadata on the TokenizedTextCorpusId
-            await Task.FromException(new NotImplementedException());
+            var command = new UpdateTokenizedCorpusCommand(TokenizedTextCorpusId);
+
+            var result = await mediator.Send(command, token);
+            result.ThrowIfCanceledOrFailed();
         }
 
         public static async Task<IEnumerable<TokenizedTextCorpusId>> GetAllTokenizedCorpusIds(IMediator mediator, CorpusId? corpusId)
@@ -133,7 +141,21 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             var result = await mediator.Send(command);
             result.ThrowIfCanceledOrFailed(true);
 
-            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache);
+            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache, false);
+        }
+
+        public static async Task<TokenizedTextCorpus> GetNonTokenized(
+            IMediator mediator,
+            TokenizedTextCorpusId tokenizedTextCorpusId,
+            bool useCache = false,
+            bool nonTokenized = false)
+        {
+            var command = new GetBookIdsByTokenizedCorpusIdQuery(tokenizedTextCorpusId);
+
+            var result = await mediator.Send(command);
+            result.ThrowIfCanceledOrFailed(true);
+
+            return new TokenizedTextCorpus(result.Data.tokenizedTextCorpusId, mediator, result.Data.bookIds, result.Data.versification, useCache, true);
         }
 
         /// <summary>

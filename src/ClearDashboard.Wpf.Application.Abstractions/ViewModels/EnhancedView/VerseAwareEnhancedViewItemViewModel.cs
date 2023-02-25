@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Core.Lifetime;
 using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -11,7 +10,6 @@ using ClearDashboard.ParatextPlugin.CQRS.Features.Project;
 using ClearDashboard.ParatextPlugin.CQRS.Features.Projects;
 using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
-using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
@@ -36,11 +34,16 @@ using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel,
-            IHandle<VerseChangedMessage>, IHandle<TokensJoinedMessage>, IHandle<TokenUnjoinedMessage>
+            IHandle<TokensJoinedMessage>, 
+            IHandle<TokenUnjoinedMessage>,
+            IHandle<HighlightTokensMessage>,
+            IHandle<UnhighlightTokensMessage>,
+            IHandle<AlignmentAddedMessage>,
+            IHandle<AlignmentDeletedMessage>
     {
         public IWindowManager WindowManager { get; }
 
-        public VerseAwareConductorAllActive ParentViewModel => (VerseAwareConductorAllActive)Parent;
+        public VerseAwareConductorOneActive ParentViewModel => (VerseAwareConductorOneActive)Parent;
 
         //public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
 
@@ -74,11 +77,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _translationSetId, value);
         }
 
+        private IEnumerable<AlignmentDisplayViewModel> AlignedVerses => Verses.Where(v => v.AlignmentManager != null).Cast<AlignmentDisplayViewModel>();
+
         private BindableCollection<VerseDisplayViewModel> _verses = new();
         public BindableCollection<VerseDisplayViewModel> Verses
         {
             get => _verses;
-            set => Set(ref _verses, value);
+            set
+            {
+                Set(ref _verses, value);
+                NotifyOfPropertyChange(nameof(AlignedVerses));
+            }
         }
 
         private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
@@ -121,7 +130,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _showTranslation, value);
         }
 
-        private bool _isRtl;
+       private bool _isRtl;
 
         public bool IsRtl
         {
@@ -165,9 +174,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+
+
         public async  void TranslationClicked(object sender, TranslationEventArgs args)
         {
-           var s = await WindowManager.ShowDialogAsync(new TranslationSelectionDialog(args.TokenDisplay!,
+           _ = await WindowManager.ShowDialogAsync(new TranslationSelectionDialog(args.TokenDisplay!,
                 args.InterlinearDisplay!));
         }
 
@@ -204,7 +215,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                         {
                             case AlignmentEnhancedViewItemMetadatum alignmentEnhancedViewItemMetadatum:
                                 await GetAlignmentData(alignmentEnhancedViewItemMetadatum, cancellationToken);
-                                OnUIThread(async () =>
+                                await Execute.OnUIThreadAsync(async () =>
                                 {
                                     AlignmentSetId = Guid.Parse(alignmentEnhancedViewItemMetadatum.AlignmentSetId!);
                                     ParallelCorpusId = Guid.Parse(alignmentEnhancedViewItemMetadatum.ParallelCorpusId!);
@@ -221,7 +232,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                 break;
                             case InterlinearEnhancedViewItemMetadatum interlinearEnhancedViewItemMetadatum:
                                 await GetInterlinearData(interlinearEnhancedViewItemMetadatum, cancellationToken);
-                                OnUIThread(async () =>
+                                await Execute.OnUIThreadAsync(async () =>
                                 {
                                     TranslationSetId = Guid.Parse(interlinearEnhancedViewItemMetadatum.TranslationSetId!);
                                     ParallelCorpusId = Guid.Parse(interlinearEnhancedViewItemMetadatum.ParallelCorpusId!);
@@ -239,7 +250,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                                 break;
                             case TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusEnhancedViewItemMetadatum:
                                 await GetTokenizedCorpusData(tokenizedCorpusEnhancedViewItemMetadatum, cancellationToken, reloadType);
-                                OnUIThread(async () =>
+                                await Execute.OnUIThreadAsync(async () =>
                                 {
                                     BorderColor = GetCorpusBrushColor(tokenizedCorpusEnhancedViewItemMetadatum.CorpusType);
                                     CorpusId = tokenizedCorpusEnhancedViewItemMetadatum.CorpusId ?? Guid.NewGuid();
@@ -356,13 +367,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private  string CreateNoVerseDataTitle(TokenizedCorpusEnhancedViewItemMetadatum metadatum)
         {
-            var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); ;
+            var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); 
             return $"{metadatum.ProjectName} - {metadatum.TokenizationType}    {localizedMessage}";
         }
 
         private string CreateNoVerseDataTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum)
         {
-            var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); ;
+            var localizedMessage = LocalizationService.Get("EnhancedView_NoVerseData"); 
             return $"{metadatum.ParallelCorpusDisplayName}   {localizedMessage}";
         }
 
@@ -395,12 +406,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             return title;
         }
 
-        //private async Task GetParallelCorpusData(ParallelCorpusEnhancedViewItemMetadatum parallelCorpusEnhancedViewItemMetadatum, CancellationToken cancellationToken)
-        //{
-        //    await Task.Delay(TimeSpan.FromSeconds(3), cancellationToken);
-        //    await Task.CompletedTask;
-        //}
-
         private async Task GetInterlinearData(InterlinearEnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
             try
@@ -412,7 +417,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
                 }
-
+                Verses.Clear();
                 foreach (var row in rows)
                 {
                     Verses.Add(await InterlinearDisplayViewModel.CreateAsync(LifetimeScope!, row, metadatum.ParallelCorpus.ParallelCorpusId, metadatum.ParallelCorpus.Detokenizer, metadatum.IsRtl ?? false, new TranslationSetId(Guid.Parse(metadatum.TranslationSetId))));
@@ -437,6 +442,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                     Title = CreateNoVerseDataTitle(metadatum);
                     return;
                 }
+                Verses.Clear();
                 foreach (var row in rows)
                 {
                     Verses.Add(await AlignmentDisplayViewModel.CreateAsync(LifetimeScope!, 
@@ -459,16 +465,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async Task HandleAsync(VerseChangedMessage message, CancellationToken cancellationToken)
-        {
-            // THIS IS HANDLED BY THE ENHANCED VIEW MODEL
-            // PRODUCES DOUBLE RESULTS OTHERWISE
-
-            //await GetData(ReloadType.Refresh, cancellationToken);
-            //await Task.CompletedTask;
-        }
-
-        private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
+      private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
         {
             var title = $"{metadatum.ParallelCorpusDisplayName ?? string.Empty} {LocalizationService.Get(localizationKey)}";
 
@@ -580,7 +577,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private static Brush GetCorpusBrushColor(CorpusType corpusType)
         {
-            Brush brush = Brushes.Blue;
+            Brush brush;
             switch (corpusType)
             {
                 case CorpusType.Standard:
@@ -673,6 +670,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             await Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
+        {
+            foreach(var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleAlignmentAddedAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleAlignmentDeletedAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleHighlightTokensAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var verseDisplayViewModel in AlignedVerses)
+            {
+                await verseDisplayViewModel.HandleUnhighlightTokensAsync(message, cancellationToken);
+            }
         }
     }
 }

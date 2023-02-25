@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project.SmtModelDialog"
              xmlns:cm="http://caliburnmicro.com"
-             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+             xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
              xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
              xmlns:parallelCorpusDialog="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog"
              xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"

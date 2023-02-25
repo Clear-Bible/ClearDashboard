@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using AvalonDock.Layout;
+using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using Dahomey.Json.Attributes;
 
 namespace ClearDashboard.Wpf.Application.Models.EnhancedView;
@@ -20,4 +23,15 @@ public class TokenizedCorpusEnhancedViewItemMetadatum : VerseAwareEnhancedViewIt
 
     [JsonIgnore]
     public TokenizedTextCorpus? TokenizedTextCorpus { get; set; }
+
+    public override LayoutDocument CreateLayoutDocument(IEnhancedViewModel viewModel)
+    {
+        return new LayoutDocument
+        {
+            ContentId = ParatextProjectId,
+            Content = viewModel,
+            Title = $"⳼ {ProjectName} ({TokenizationType})",
+            IsActive = true
+        };
+    }
 }

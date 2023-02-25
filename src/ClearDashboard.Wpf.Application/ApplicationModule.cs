@@ -2,24 +2,20 @@
 using ClearApplicationFoundation.Extensions;
 using ClearApplicationFoundation.ViewModels.Infrastructure;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.Main;
-using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewModels.Startup;
-using System.Reflection;
 using ClearDashboard.Wpf.Application.ViewModels.Project;
+using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
+using ClearDashboard.Wpf.Application.ViewModels.Shell;
+using ClearDashboard.Wpf.Application.ViewModels.Startup;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using ClearDashboard.Wpf.Application.Views.EnhancedView;
 using Module = Autofac.Module;
 using ShellViewModel = ClearDashboard.Wpf.Application.ViewModels.Shell.ShellViewModel;
-using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.Wpf.Application.ViewModels.Shell;
-using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
-using ClearDashboard.Wpf.Application.Models.ProjectSerialization;
-using ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDialog;
-using ClearDashboard.Wpf.Application.Views.Project.AddParatextCorpusDialog;
-using ClearDashboard.Wpf.Application.ViewModels.Project.Aqua;
 
 namespace ClearDashboard.Wpf.Application
 {
@@ -30,10 +26,17 @@ namespace ClearDashboard.Wpf.Application
         {
             // IMPORTANT!  - override the default ShellViewModel from the foundation.
             builder.RegisterType<ShellViewModel>().As<IShellViewModel>().SingleInstance();
-            builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<MainViewModel>().AsSelf().As<IEnhancedViewManager>().SingleInstance();
+
+
             builder.RegisterType<BackgroundTasksViewModel>().AsSelf().SingleInstance();
-            builder.RegisterType<ProjectDesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectDesignSurfaceViewModel>()
+                .AsSelf()
+                .As<IProjectDesignSurfaceViewModel>()
+                .SingleInstance();
             //builder.RegisterType<DesignSurfaceViewModel>().AsSelf().InstancePerLifetimeScope();
+
+           
         }
 
         public static void RegisterValidationDependencies(this ContainerBuilder builder)
@@ -54,6 +57,7 @@ namespace ClearDashboard.Wpf.Application
         public static void RegisterLocalizationDependencies(this ContainerBuilder builder)
         {
             builder.RegisterType<TranslationSource>().AsSelf().SingleInstance();
+            builder.RegisterType<LocalizationService>().As<ILocalizationService>().SingleInstance();
         }
 
         public static void RegisterDatabaseDependencies(this ContainerBuilder builder)
@@ -129,29 +133,7 @@ namespace ClearDashboard.Wpf.Application
                 .WithMetadata("Order", 4);
         }
 
-        public static void RegisterAquaDependencies(this ContainerBuilder builder)
-        {
-            //manager
-
-            builder.RegisterType<AquaManager>().As<IAquaManager>().SingleInstance();
-
-            builder.RegisterType<AquaAddVersionOrListAssessmentsStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 1);
-
-            builder.RegisterType<SelectBooksStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 2);
-
-            builder.RegisterType<AquaAddRevisionStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 3);
-
-            builder.RegisterType<AquaInfoStepViewModel>().As<IWorkflowStepViewModel>()
-                .Keyed<IWorkflowStepViewModel>("AquaDialog")
-                .WithMetadata("Order", 4);
-
-        }
+       
     }
 
     
@@ -162,7 +144,9 @@ namespace ClearDashboard.Wpf.Application
         {
             builder.RegisterType<LongRunningTaskManager>().AsSelf().SingleInstance();
             builder.RegisterType<TailBlazerProxy>().AsSelf().SingleInstance();
-            builder.RegisterType<LocalizationService>().As<ILocalizationService>().SingleInstance();
+            builder.RegisterType<SystemPowerModes>().AsSelf().SingleInstance();
+
+            builder.RegisterType<JsonDiscriminatorRegistrar>().As<IJsonDiscriminatorRegistrar>();
 
             builder.RegisterDatabaseDependencies();
             builder.OverrideFoundationDependencies();
@@ -173,10 +157,8 @@ namespace ClearDashboard.Wpf.Application
             builder.RegisterParallelCorpusDialogDependencies();
             builder.RegisterParatextDialogDependencies();
 
-            //builder.RegisterSmtModelDialogDependencies();
-
-
-            builder.RegisterAquaDependencies();
+            //builder.RegisterType<AlignmentPopupView>().AsSelf();
+           
         }
     }
 }

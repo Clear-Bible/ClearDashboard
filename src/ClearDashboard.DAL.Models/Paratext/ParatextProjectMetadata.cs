@@ -11,6 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
         public CorpusType CorpusType { get; set; }
         public string? Name { get; set; }
         public string? LongName { get; set; }
+        public string? CombinedName => string.Format("{0}, {1}", Name, LongName);
         public string? LanguageName { get; set; }
         public string? ProjectPath { get; set; }
         public bool IsRtl { get; set; }

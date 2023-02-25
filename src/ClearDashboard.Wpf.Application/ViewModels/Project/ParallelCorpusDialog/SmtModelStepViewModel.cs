@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using ClearDashboard.Wpf.Application.Services;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -22,8 +23,8 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 
     public SmtModelStepViewModel( DialogMode dialogMode,  DashboardProjectManager projectManager,
         INavigationService navigationService, ILogger<SmtModelStepViewModel> logger, IEventAggregator eventAggregator,
-        IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+        IMediator mediator, ILifetimeScope? lifetimeScope, TranslationSource translationSource, ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
     {
         DialogMode = dialogMode;
         CanMoveForwards = true;
@@ -55,7 +56,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel.CurrentStepTitle =
-            LocalizationStrings.Get("ParallelCorpusDialog_TrainSmtModel", Logger);
+            LocalizationService!.Get("ParallelCorpusDialog_TrainSmtModel");
 
         if (ParentViewModel.UseDefaults)
         {

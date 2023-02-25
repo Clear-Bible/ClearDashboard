@@ -11,6 +11,10 @@ namespace ClearDashboard.Wpf.Application
                 .Where(type => type.Name.EndsWith("ViewModel"))
                 .AsSelf()
                 .InstancePerDependency();
+            
+            builder.RegisterAssemblyTypes(assembly).Where(type => type.Name.EndsWith("View"))
+                .AsSelf()
+                .InstancePerDependency();
         }
     }
 }

@@ -24,9 +24,18 @@ namespace ClearDashboard.DAL.Alignment.Translation
             return result.Data!;
         }
 
-        public async void PutAlignment(Alignment alignment, CancellationToken token = default)
+        public async Task PutAlignment(Alignment alignment, CancellationToken token = default)
         {
             var result = await mediator_.Send(new PutAlignmentSetAlignmentCommand(AlignmentSetId, alignment), token);
+            result.ThrowIfCanceledOrFailed();
+
+            var alignmentId = result.Data!;
+            alignment.AlignmentId = alignmentId;
+        }
+
+        public async Task DeleteAlignment(AlignmentId alignmentId, CancellationToken token = default)
+        {
+            var result = await mediator_.Send(new DeleteAlignmentByAlignmentIdCommand(alignmentId), token);
             result.ThrowIfCanceledOrFailed();
         }
 

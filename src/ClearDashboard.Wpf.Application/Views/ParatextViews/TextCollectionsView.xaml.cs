@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using CefSharp;
 using CefSharp.Wpf;
 using ClearDashboard.DataAccessLayer.Annotations;
+using MaterialDesignThemes.Wpf;
 
 namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 {
@@ -31,11 +32,51 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
             InitializeComponent();
         }
 
-        private void Chromium_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void ZoomInButtonClick(object sender, EventArgs e)
+        { 
+            TextCollectionWebBrowser.ZoomInCommand.Execute(null);
+        }
+
+        private void ZoomOutButtonClick(object sender, EventArgs e)
         {
-            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(TextCollectionListView);
-            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
-            e.Handled = true;
+           TextCollectionWebBrowser.ZoomOutCommand.Execute(null);
+        }
+
+        private void ZoomResetButtonClick(object sender, EventArgs e)
+        {
+            TextCollectionWebBrowser.ZoomResetCommand.Execute(null);
+        }
+
+        private void FindNextButtonClick(object sender, EventArgs e)
+        {
+            Find(true);
+        }
+
+        private void FindPreviousButtonClick(object sender, EventArgs e)
+        {
+            Find(false);
+        }
+
+        private void Find(bool next)
+        {
+            if (!string.IsNullOrEmpty(SearchBox.Text))
+            {
+                TextCollectionWebBrowser.Find(SearchBox.Text, next, false, true);
+            }
+            else
+            {
+                TextCollectionWebBrowser.StopFinding(true);
+            }
+        }
+
+        private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            Find(true);
+        }
+
+        private void FindText_OnClick(object sender, RoutedEventArgs e)
+        {
+            SearchBox.Focus();
         }
     }
 }

@@ -7,7 +7,7 @@
     xmlns:converters="clr-namespace:ClearApplicationFoundation.Framework.Converters;assembly=ClearApplicationFoundation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.Project"
     xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
     xmlns:main="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Main"
@@ -37,6 +37,14 @@
     mc:Ignorable="d">
 
     <!--  cm:Message.Attach="[Event OnWindowSizeChanged] = [Action OnWindowSizeChanged]"  -->
+    <Page.InputBindings>
+        <KeyBinding Key="Right" 
+                    Modifiers="Control" 
+                    Command="{Binding NavigateToNextDocumentForwards}"/>
+        <KeyBinding Key="Left" 
+                    Modifiers="Control" 
+                    Command="{Binding NavigateToNextDocumentBackwards}"/>
+    </Page.InputBindings>
 
     <Page.Resources>
         <converters:ActiveDocumentConverter x:Key="ActiveDocumentConverter" />
@@ -197,7 +205,7 @@
                                 <Setter Property="Title" Value="{Binding Model.Title}" />
                                 <Setter Property="IconSource" Value="{Binding Model.IconSource}" />
                                 <Setter Property="ContentId" Value="{Binding Model.ContentId}" />
-                                <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay}" />
+                                <Setter Property="IsSelected" Value="{Binding Model.IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <!--<Setter Property="IsActive" Value="{Binding Model.IsActive, Mode=TwoWay}" />-->
                             </Style>
                         </panes:PanesStyleSelector.DocumentStyle>

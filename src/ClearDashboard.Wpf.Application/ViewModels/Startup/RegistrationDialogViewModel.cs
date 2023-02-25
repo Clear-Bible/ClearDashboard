@@ -10,6 +10,7 @@ using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Wpf;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup;
 public class RegistrationDialogViewModel : WorkflowShellViewModel
 {
     private IServiceProvider ServiceProvider { get; }
+    private ILocalizationService LocalizationService { get; }
 
     ILogger _logger;
     //private IServiceProvider serviceProvider;
@@ -35,10 +37,12 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
         IEventAggregator eventAggregator,
         IMediator mediator,
         ILifetimeScope? lifetimeScope,
-        IServiceProvider serviceProvider)
+        IServiceProvider serviceProvider,
+        ILocalizationService localizationService)
         : base(navigationService, logger, eventAggregator, mediator, lifetimeScope)
     {
         ServiceProvider = serviceProvider;
+        LocalizationService = localizationService;
     }
 
     protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -46,7 +50,7 @@ public class RegistrationDialogViewModel : WorkflowShellViewModel
         await base.OnInitializeAsync(cancellationToken);
 
 
-        MessageBox.Show(LocalizationStrings.Get("RegistrationDialogViewModel_Missing", _logger));
+        MessageBox.Show(LocalizationService!.Get("RegistrationDialogViewModel_Missing"));
 
         _registrationViewModel = ServiceProvider.GetService<RegistrationViewModel>();
 

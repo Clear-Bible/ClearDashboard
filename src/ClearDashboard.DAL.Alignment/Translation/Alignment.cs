@@ -5,7 +5,7 @@ namespace ClearDashboard.DAL.Alignment.Translation;
 
 public class Alignment
 {
-    public AlignmentId? AlignmentId { get; private set; }
+    public AlignmentId? AlignmentId { get; internal set; }
     public AlignedTokenPairs AlignedTokenPair { get; }
     /// <summary>
     /// Valid values are:  "Unverified", "Verified", "Question" only

@@ -8,7 +8,7 @@
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:enhancedViews="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
-    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
     xmlns:marble="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Marble"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -64,6 +64,13 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
+        <Grid.CommandBindings>
+            <CommandBinding Command="Find" Executed="FindText_OnClick" />
+        </Grid.CommandBindings>
+
+        <Grid.InputBindings>
+            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+        </Grid.InputBindings>
 
         <!--  ROW 0  -->
         <StackPanel Grid.Column="0" Orientation="Horizontal">
@@ -265,6 +272,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Button
+                        Name="SearchButton"
                         Grid.Column="0"
                         Width="25"
                         Height="25"
@@ -457,7 +465,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="1*" />
                                         <ColumnDefinition Width="1*" />
-                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*" />
                                     </Grid.ColumnDefinitions>
 
 

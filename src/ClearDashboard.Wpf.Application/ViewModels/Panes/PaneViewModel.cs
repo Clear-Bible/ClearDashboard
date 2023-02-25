@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Infrastructure;
+using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using ClearApplicationFoundation.Framework.Input;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 {
@@ -38,27 +40,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         public string? ContentId
         {
             get => _contentId;
-            set
-            {
-                if (_contentId != value)
-                {
-                    _contentId = value;
-                    NotifyOfPropertyChange(() => ContentId);
-                }
-            }
+            set => Set(ref _contentId, value);
         }
 
         public bool IsSelected
         {
             get => _isSelected;
-            set
-            {
-                if (_isSelected != value)
-                {
-                    _isSelected = value;
-                    NotifyOfPropertyChange(() => IsSelected);
-                }
-            }
+            set => Set(ref _isSelected, value);
         }
 
         public new bool IsActive
@@ -89,8 +77,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
         }
 
         public PaneViewModel(INavigationService navigationService, ILogger logger,
-            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope) :
-            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            DashboardProjectManager? projectManager, IEventAggregator? eventAggregator, IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
+            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
             RequestCloseCommand = new RelayCommandAsync(RequestClose);
             PaneId  = Guid.NewGuid();
@@ -102,7 +90,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Panes
 
         #region Methods
 
-        public async Task RequestClose(object obj)
+        public async Task RequestClose(object? obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }

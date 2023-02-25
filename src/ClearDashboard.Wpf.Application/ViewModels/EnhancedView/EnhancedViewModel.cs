@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Infrastructure.EnhancedView;
 using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Models.EnhancedView;
 using ClearDashboard.Wpf.Application.Properties;
@@ -10,7 +12,6 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.Views.Marble;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -26,26 +27,59 @@ using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
-    public interface IEnhancedViewModel
-    {
-        Dictionary<string, string> BcvDictionary { get; set; }
-        BookChapterVerseViewModel CurrentBcv { get; set; }
-        int VerseOffsetRange { get; set; }
-    }
 
-    public class EnhancedViewModel : VerseAwareConductorAllActive, IPaneViewModel,
+    public class EnhancedViewModel : VerseAwareConductorOneActive, IEnhancedViewModel, IPaneViewModel,
         IHandle<VerseSelectedMessage>,
         IHandle<VerseChangedMessage>,
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>,
         IHandle<ReloadDataMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>, IEnhancedViewModel
+        IHandle<TokenizedCorpusUpdatedMessage>
     {
         #region Commands
 
         public ICommand MoveCorpusDownRowCommand { get; set; }
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
+        public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
+
+        private void IncreaseTextSize(object? commandParameter)
+        {
+            SourceFontSizeValue += 1;
+            TargetFontSizeValue += 1;
+            TitleFontSizeValue += 1;
+            TranslationsFontSizeValue += 1;
+        }
+
+        public ICommand DecreaseTextSizeCommand => new RelayCommand(DecreaseTextSize);
+
+        private void DecreaseTextSize(object? commandParameter)
+        {
+            SourceFontSizeValue -= 1;
+            TargetFontSizeValue -= 1;
+            TitleFontSizeValue -= 1;
+            TranslationsFontSizeValue -= 1;
+        }
+
+        public ICommand ResetTextSizeCommand => new RelayCommand(ResetTextSize);
+
+        private void ResetTextSize(object? commandParameter)
+        {
+            SourceFontSizeValue = _originalSourceFontSizeValue;
+            TargetFontSizeValue = _originalTargetFontSizeValue;
+            TitleFontSizeValue = _originalTitleFontSizeValue;
+            TranslationsFontSizeValue = _originalTranslationsFontSizeValue;
+        }
+
+        public ICommand InsertNoteCommand => new RelayCommand(InsertNote);
+
+        private void InsertNote(object? commandParameter)
+        {
+            if (SelectionManager.SelectedEntityIds.Count != 0)
+            {
+                NoteCreate(null, null);
+            }
+        }
 
         #endregion
 
@@ -57,6 +91,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
 
+        private int _originalSourceFontSizeValue = 14;
+        private int _originalTargetFontSizeValue = 14;
+        private int _originalTitleFontSizeValue = 14;
+        private int _originalTranslationsFontSizeValue = 16;
+        
         #endregion //Member Variables
 
         #region Public Properties
@@ -275,7 +314,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
    
-        public async Task RequestClose(object obj)
+        public async Task RequestClose(object? obj)
         {
             await EventAggregator.PublishOnUIThreadAsync(new CloseDockingPane(this.PaneId));
         }
@@ -291,20 +330,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             NoteManager noteManager, 
             VerseManager verseManager, 
             SelectionManager selectionManager, 
-            IEventAggregator? eventAggregator, 
+            IEventAggregator? eventAggregator,
             IMediator mediator,
-            ILifetimeScope? lifetimeScope
-            ) :
-            base(navigationService: navigationService, logger: logger, projectManager: projectManager,
-                eventAggregator: eventAggregator, mediator: mediator, lifetimeScope: lifetimeScope)
+            ILifetimeScope? lifetimeScope, ILocalizationService localizationService) :
+            base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
-      
+        
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
-
-            Title = "⳼ " + LocalizationStrings.Get("Windows_EnhancedView", Logger!);
+            
+            Title = "⳼ " + LocalizationService!.Get("Windows_EnhancedView");
 
             ContentId = "ENHANCEDVIEW";
 
@@ -316,9 +353,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             TokenDisplay.EventAggregator = eventAggregator;
             VerseDisplay.EventAggregator = eventAggregator;
             PaneId = Guid.NewGuid();
+
+            
         }
 
-        public async Task Initialize(EnhancedViewLayout enhancedViewLayout)
+        public async Task Initialize(EnhancedViewLayout enhancedViewLayout, EnhancedViewItemMetadatum? metadatum, CancellationToken cancellationToken)
         {
 
             EnableBcvControl = true;
@@ -328,6 +367,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             VerseOffsetRange = enhancedViewLayout.VerseOffset;
             BcvDictionary = ProjectManager!.CurrentParatextProject.BcvDictionary;
             ParatextSync = enhancedViewLayout.ParatextSync;
+            CurrentBcv.SetVerseFromId(ProjectManager.CurrentVerse);
+            VerseChange = ProjectManager.CurrentVerse;
+
+            if (metadatum != null) {
+
+                if (metadatum is TokenizedCorpusEnhancedViewItemMetadatum tokenizedCorpusEnhancedViewItemMetadatum)
+                {
+                    CurrentCorpusName = tokenizedCorpusEnhancedViewItemMetadatum.ProjectName!;
+                }
+
+                await AddItem(metadatum, cancellationToken);
+            }
 
             EventAggregator.SubscribeOnPublishedThread(this);
 
@@ -340,7 +391,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EnhancedViewLayout!.EnhancedViewItems.Add(item);
             try
             {
-                await ActivateNewVerseAwareViewItem1(item, cancellationToken);
+                await ActivateNewVerseAwareViewItem(item, cancellationToken);
             }
             finally
             {
@@ -348,62 +399,52 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
+        protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+        {
+            Logger?.LogInformation($"{nameof(EnhancedViewModel)} OnActivateAsync called.");
+            await base.OnActivateAsync(cancellationToken);
+
+            if (Items.Count > 0 && !Items.Any(item=>item.HasFocus))
+            {
+                Items[0].HasFocus = true;
+            }
+           
+        }
+
         public override async Task LoadData(CancellationToken token)
         {
             await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
             {
-                await ActivateNewVerseAwareViewItem1(enhancedViewItemMetadatum, cancellationToken);
+                await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
 
             });
         }
+
+        //private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
+        //{
+        //    await Execute.OnUIThreadAsync(async () =>
+        //    {
+        //        var verseAwareEnhancedViewItemViewModel =
+        //            await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>(cancellationToken);
+        //        await verseAwareEnhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+        //    });
+        //}
 
         private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var verseAwareEnhancedViewItemViewModel =
-                    await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>(cancellationToken);
-                await verseAwareEnhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
-            });
-        }
+                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); 
+                //EnableBcvControl = false;
+                await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
 
-        private async Task ActivateNewVerseAwareViewItem1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
-        {
-            await Execute.OnUIThreadAsync(async () =>
-            {
-                var enhancedViewItemViewModel = await ActivateItemAsync1(enhancedViewItemMetadatum, cancellationToken); //FIXME: should not be named with ending "1".
-                EnableBcvControl = false;
-                await enhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
+                
                
             });
         }
 
-        //FIXME: should go in ClearApplicationFramework
-        private Type ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(EnhancedViewItemMetadatum enhancedViewItemMetadatum)
-        {
-            string? metadataAssemblyQualifiedName;
-            if (enhancedViewItemMetadatum is VerseAwareEnhancedViewItemMetadatum)
-            {
-                metadataAssemblyQualifiedName = typeof(VerseAwareEnhancedViewItemMetadatum).AssemblyQualifiedName;
-            }
-            else
-            {
-                metadataAssemblyQualifiedName =
-                    (enhancedViewItemMetadatum.GetType().BaseType != null ?
-                        enhancedViewItemMetadatum.GetType().BaseType!.AssemblyQualifiedName :
-                        enhancedViewItemMetadatum.GetType().AssemblyQualifiedName)
-                    ?? throw new Exception($"AssemblyQualifiedName is null for type name {enhancedViewItemMetadatum.GetType().Name}");
-            }
+     
 
-            var viewModelAssemblyQualifiedName = metadataAssemblyQualifiedName!
-                .Replace("EnhancedViewItemMetadatum", "EnhancedViewItemViewModel")
-                .Replace("Models", "ViewModels");
-            return Type.GetType(viewModelAssemblyQualifiedName)
-                   ?? throw new Exception($"AssemblyQualifiedName {viewModelAssemblyQualifiedName} type not found");
-
-        }
-
-        //FIXME: should go in ClearApplicationFramework
         /// <summary>
         /// Expects Metadatum to be in a 'Models.EnhancedView' namespace and looks for a ViewModel in a sibling 'ViewModels.EnhancedView' namespace by replacing
         /// EnhancedViewItemMetadatum suffix with EnhancedViewItemViewModel suffix.
@@ -411,15 +452,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         /// <param name="enhancedViewItemMetadatum"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        protected async Task<EnhancedViewItemViewModel> ActivateItemAsync1(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
+        protected async Task<EnhancedViewItemViewModel> ActivateItemFromMetadatumAsync(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var viewModelType = ConvertEnhancedViewItemMetadatumToEnhancedViewItemViewModelType(enhancedViewItemMetadatum);
+            var viewModelType = enhancedViewItemMetadatum.ConvertToEnhancedViewItemViewModelType();
             var viewModel = (EnhancedViewItemViewModel) LifetimeScope!.Resolve(viewModelType);
             viewModel.Parent = this;
             viewModel.ConductWith(this);
             var view = ViewLocator.LocateForModel(viewModel, null, null);
             ViewModelBinder.Bind(viewModel, view, null);
-            await ActivateItemAsync((EnhancedViewItemViewModel)(object)viewModel, cancellationToken);
+            await ActivateItemAsync(viewModel, cancellationToken);
             return viewModel;
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -427,8 +468,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = "Enhanced View";
             await base.OnInitializeAsync(cancellationToken);
         }
-
-      
+        
         protected override void OnViewAttached(object view, object context)
         {
             // grab the dictionary of all the verse lookups
@@ -473,7 +513,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             });
         }
 
-        private void MoveCorpusUp(object obj)
+        private void MoveCorpusUp(object? obj)
         {
             var row = obj as EnhancedViewItemViewModel;
             var index = MoveableItems.Select((element, index) => new { element, index })
@@ -488,7 +528,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             EnhancedViewLayout!.EnhancedViewItems.Move(index, index - 1);
         }
 
-        private void MoveCorpusDown(object obj)
+        private void MoveCorpusDown(object? obj)
         {
             var row = obj as EnhancedViewItemViewModel;
             var index = MoveableItems.Select((element, index) => new { element, index })
@@ -503,9 +543,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         }
 
-        private void DeleteCorpusRow(object obj)
+        private void DeleteCorpusRow(object? obj)
         {
-            var item = (EnhancedViewItemViewModel)obj;
+            var item = (EnhancedViewItemViewModel)obj!;
             
             var index = Items.Select((element, index) => new { element, index })
                 .FirstOrDefault(x => x.element.Equals(item))?.index ?? -1;
@@ -539,6 +579,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 CurrentBcv.SetVerseFromId(message.Verse);
             }
+
+            await Task.CompletedTask;
         }
 
        
@@ -563,6 +605,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 BcvDictionary = new Dictionary<string, string>();
             }
+
+            await Task.CompletedTask;
         }
 
 
@@ -615,10 +659,38 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         #region VerseDisplayControl
 
-        public void TokenClicked(object sender, TokenEventArgs e)
+        public async void TokenClicked(object sender, TokenEventArgs e)
         {
-            SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
-            NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            if (e.IsShiftPressed && e.TokenDisplay.IsTarget && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
+            {
+                if (SelectionManager.AnySourceTokens)
+                {
+                    await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(e.TokenDisplay.IsSource, e.TokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
+                    await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.TokenDisplay);
+                    var element = (UIElement)sender;
+                    EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
+                }
+                else
+                {
+                    Logger!.LogInformation("There are no source tokens, so skipping the call to add an alignment.");
+                }
+                
+            }
+            else
+            {
+                SelectionManager.UpdateSelection(e.TokenDisplay, e.SelectedTokens, e.IsControlPressed);
+                NoteControlVisibility = SelectionManager.AnySelectedNotes ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        //TokenDeleteAlignment
+        public async void TokenDeleteAlignment(object sender, TokenEventArgs e)
+        {
+            if (e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
+            {
+                await alignmentDisplayViewModel.AlignmentManager!.DeleteAlignment(e.TokenDisplay);
+            }
+          
         }
 
         public void TokenRightButtonDown(object sender, TokenEventArgs e)
@@ -629,7 +701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
+            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) hovered";
         }
 
         public void TokenMouseLeave(object sender, TokenEventArgs e)
@@ -677,14 +749,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             Message = string.Empty;
         }
 
-        public void NoteCreate(object sender, NoteEventArgs e)
+        public void NoteCreate(object? sender, NoteEventArgs? e)
         {
             NoteControlVisibility = Visibility.Visible;
         }
     
-        public void FilterPins(object sender, NoteEventArgs e)
+        public void FilterPins(object? sender, NoteEventArgs e)
         {
             EventAggregator.PublishOnUIThreadAsync(new FilterPinsMessage(e.TokenDisplayViewModel.SurfaceText));
+        }
+
+        public void Copy(object sender, NoteEventArgs e)
+        {
+            var surfaceText = e.SelectedTokens.CombinedSurfaceText.Replace(',', ' ');
+            Clipboard.SetText(surfaceText);
         }
 
         public void TranslateQuick(object sender, NoteEventArgs e)
@@ -703,10 +781,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public string TranslateText(string input)
         {
-            string url = string.Format
-            ("https://translate.googleapis.com/translate_a/single?client=gtx&sl={0}&tl={1}&dt=t&q={2}", "auto", "en", Uri.EscapeUriString(input));
-            HttpClient httpClient = new HttpClient();
-            string result = httpClient.GetStringAsync(url).Result;
+            var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={"auto"}&tl={"en"}&dt=t&q={Uri.EscapeDataString(input)}";
+            var httpClient = new HttpClient();
+            var result = httpClient.GetStringAsync(url).Result;
 
             var items = result.Split("\"");
             var translation = items[1];
@@ -724,7 +801,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task NoteAddedAsync(NoteEventArgs e)
         {
-            OnUIThread(async () =>
+            await Execute.OnUIThreadAsync(async () =>
             {
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
                 NotifyOfPropertyChange(() => Items);
@@ -771,7 +848,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (e.Note.NoteId != null)
             {
-                OnUIThread(async () =>
+                await Execute.OnUIThreadAsync(async () =>
                 {
                     await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
                     NotifyOfPropertyChange(() => Items);
@@ -871,7 +948,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         #endregion
-
-
+        
     }
 }

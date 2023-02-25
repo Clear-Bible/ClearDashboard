@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using ClearDashboard.Wpf.Application.Helpers;
+using ClearDashboard.Wpf.Application.Services;
 using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Shell
@@ -17,6 +18,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
     public class BackgroundTasksViewModel : Screen, IHandle<BackgroundTaskChangedMessage>, IHandle<ToggleBackgroundTasksVisibilityMessage>
     {
         private readonly LongRunningTaskManager? _longRunningTaskManager;
+        private readonly ILocalizationService _localizationService;
         private readonly IEventAggregator? _eventAggregator;
         private readonly ILogger<BackgroundTasksViewModel> _logger;
         private readonly TimeSpan _startTimeSpan = TimeSpan.Zero;
@@ -29,14 +31,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         public BackgroundTasksViewModel()
         {
+          
             // required for design-time
         }
 
-        public BackgroundTasksViewModel(LongRunningTaskManager? longRunningTaskManager, IEventAggregator? eventAggregator, ILogger<BackgroundTasksViewModel> logger)
+        public BackgroundTasksViewModel(LongRunningTaskManager? longRunningTaskManager, IEventAggregator? eventAggregator, ILogger<BackgroundTasksViewModel> logger, ILocalizationService localizationService)
         {
             _longRunningTaskManager = longRunningTaskManager;
             _eventAggregator = eventAggregator;
             _logger = logger;
+            _localizationService = localizationService;
 
             // setup timer to clean up old background tasks
             _timer = new Timer(TimerElapsed, null, _startTimeSpan, _periodTimeSpan);
@@ -93,7 +97,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
                 backgroundTaskStatus.EndTime = DateTime.Now;
                 backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed;
-                backgroundTaskStatus.Description = LocalizationStrings.Get("BackgroundTasks_TaskCancelled", _logger!);
+                backgroundTaskStatus.Description = _localizationService!.Get("BackgroundTasks_TaskCancelled");
                 NotifyOfPropertyChange(() => BackgroundTaskStatuses);
 
                 ToggleSpinner();
@@ -165,7 +169,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     status.Description = backgroundTaskStatus.Description;
                     if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.Failed)
                     {
-                        status.Description = backgroundTaskStatus.ErrorMessage;
+                        if (backgroundTaskStatus.ErrorMessage.Contains("InvalidParameterEngineException"))
+                        {
+                            status.Description = backgroundTaskStatus.Name+ " Failed:\n " + "An unfitting tokenizer was used for the selected corpus.  For example, the ZWSP tokenizer for the NIV84 corpus.";
+                        }
+                        else
+                        {
+                            status.Description = backgroundTaskStatus.Name+ " Failed:\n " + backgroundTaskStatus.ErrorMessage;
+                        }
+                        ShowPopup = true;
                     }
                     status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
 
@@ -239,5 +251,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
            await Task.CompletedTask;
         }
 
+        /// <summary>
+        /// Get the number of running tasks that are flagged as high performance mode
+        /// </summary>
+        /// <returns></returns>
+        public int GetNumberOfPerformanceTasksRemaining()
+        {
+           return BackgroundTaskStatuses
+               .Where(x => x.BackgroundTaskType == BackgroundTaskStatus.BackgroundTaskMode.PerformanceMode
+               && x.TaskLongRunningProcessStatus == LongRunningTaskStatus.Running)
+               .ToList().Count;
+        }
+
+
+
+        /// <summary>
+        /// Check to see if there is a background task for tokenization already in progress
+        /// </summary>
+        /// <param name="nodeName"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public bool CheckBackgroundProcessForTokenizationInProgress(string nodeName)
+        {
+            var tasks = BackgroundTaskStatuses.Where(x =>
+            {
+                if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
+                {
+                    if (x.Description!.Contains("Macula Hebrew"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+                
+                if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
+                {
+                    if (x.Description!.Contains("Macula Greek"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                return x.Name == nodeName;
+
+            }).ToList();
+
+            if (tasks.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

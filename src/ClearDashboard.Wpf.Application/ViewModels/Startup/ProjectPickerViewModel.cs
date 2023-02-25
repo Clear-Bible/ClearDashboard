@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.Wpf.Application.Messages;
+using ClearDashboard.Wpf.Application.Services;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
 
@@ -205,8 +206,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Constructor
         public ProjectPickerViewModel(TranslationSource translationSource, DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
             INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope)
+            IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
@@ -216,7 +217,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             _translationSource = translationSource;
             NoProjectVisibility = Visibility.Visible;
             SearchBlankVisibility = Visibility.Collapsed;
+
             IsParatextRunning = _paratextProxy.IsParatextRunning();
+            if (IsParatextRunning && !Connected)
+            {
+
+            }
         }
 
         public async Task StartParatext()
@@ -236,10 +242,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             if (IsParatextRunning)
             {
                 Connected = true;
+                if (ParatextUserName == null)
+                {
+                    ParatextUserName = ProjectManager.CurrentUser.FullName;
+                }
             }
             else
             {
                 Connected = false;
+                ParatextUserName = "unavailable.  Paratext is on but not connected.";
             }
             if (!IsParatextInstalled)
             {

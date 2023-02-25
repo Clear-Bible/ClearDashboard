@@ -285,5 +285,17 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["NoteIndicatorSizeValue"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnablePowerModes {
+            get {
+                return ((bool)(this["EnablePowerModes"]));
+            }
+            set {
+                this["EnablePowerModes"] = value;
+            }
+        }
     }
 }
