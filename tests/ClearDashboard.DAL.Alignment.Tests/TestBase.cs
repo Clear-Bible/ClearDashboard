@@ -4,6 +4,8 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
@@ -19,6 +21,9 @@ using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Caliburn.Micro;
+using Autofac.Configuration;
+using System.Configuration;
+using ClearDashboard.Collaboration.Services;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
@@ -55,8 +60,29 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddSingleton<IProjectProvider, ProjectProvider>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
 
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddJsonFile("appsettings.json");
+            configBuilder.AddUserSecrets<TestBase>();
+
+            var config = configBuilder.Build();
+            var configModule = new ConfigurationModule(config);
+            services.AddSingleton<IConfiguration>(config);
+            services.AddSingleton<CollaborationConfiguration>(sp =>
+            {
+                var c = sp.GetService<IConfiguration>();
+                var section = c.GetSection("Collaboration");
+                return new CollaborationConfiguration()
+                {
+                    RemoteUrl = section["RemoteUrl"],
+                    RemoteEmail = section["RemoteEmail"],
+                    RemoteUserName = section["RemoteUserName"],
+                    RemotePassword = section["RemotePassword"]
+                };
+            });
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
+            builder.RegisterModule(configModule);
 
             Container = builder.Build();
         }

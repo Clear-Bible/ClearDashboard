@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyName>ClearDashboard.Collaboration.Common</AssemblyName>
+    <AssemblyName>ClearDashboard.Collaboration</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,7 +41,6 @@
     <Folder Include="Model\" />
     <Folder Include="Serializer\" />
     <Folder Include="Util\" />
-    <Folder Include="Services\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>
