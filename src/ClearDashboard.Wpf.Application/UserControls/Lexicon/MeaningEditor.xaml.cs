@@ -54,10 +54,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             (nameof(MeaningUpdated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
 
         /// <summary>
+        /// Identifies the TranslationDeletedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationDeletedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
+
+        /// <summary>
         /// Identifies the TranslationDroppedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationDroppedEvent = EventManager.RegisterRoutedEvent
             (nameof(TranslationDropped), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
+
+        /// <summary>
+        /// Identifies the TranslationSelectedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationSelectedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
+
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -266,15 +279,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             });
         }
 
-        private void RaiseTranslationDroppedEvent(RoutedEvent routedEvent, TranslationViewModel translation)
+        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, TranslationViewModel translation)
         {
-            RaiseEvent(new TranslationDroppedEventArgs()
+            RaiseEvent(new TranslationEntryEventArgs()
             {
                 RoutedEvent = routedEvent,
                 Lexeme = Lexeme,
                 Meaning = Meaning,
-                TranslationId = translation.TranslationId!,
-                TranslationText = translation.Text!
+                Translation = translation
             });
         }
 
@@ -359,18 +371,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             Loaded -= OnLoaded;
         }
 
-        private void OnTranslationMouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                if (sender is FrameworkElement control &&
-                    control.DataContext is TranslationViewModel translation)
-                {
-                    DragDrop.DoDragDrop(control, JsonSerializer.Serialize(translation), DragDropEffects.Copy);
-                }
-            }
-        }
-
         private void OnMeaningEditorDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.StringFormat))
@@ -381,9 +381,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
                     var translation = JsonSerializer.Deserialize<TranslationViewModel>(dataString);
                     if (translation != null)
                     {
-                        RaiseTranslationDroppedEvent(TranslationDroppedEvent, translation);
+                        RaiseTranslationEntryEvent(TranslationDroppedEvent, translation);
                     }
                 }
+            }
+        }
+
+        private void OnTranslationDeleted(object sender, RoutedEventArgs e)
+        {
+            if (e is TranslationEntryEventArgs args)
+            {
+                RaiseTranslationEntryEvent(TranslationDeletedEvent, args.Translation!);
+            }
+        }
+
+        private void OnTranslationSelected(object sender, RoutedEventArgs e)
+        {
+            if (e is TranslationEntryEventArgs args)
+            {
+                RaiseTranslationEntryEvent(TranslationSelectedEvent, args.Translation!);
             }
         }
 
@@ -651,12 +667,30 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
+        /// Occurs when a translation is deleted.
+        /// </summary>
+        public event RoutedEventHandler TranslationDeleted
+        {
+            add => AddHandler(TranslationDeletedEvent, value);
+            remove => RemoveHandler(TranslationDeletedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a translation is dropped on a meaning.
         /// </summary>
         public event RoutedEventHandler TranslationDropped
         {
             add => AddHandler(TranslationDroppedEvent, value);
             remove => RemoveHandler(TranslationDroppedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a translation is selected.
+        /// </summary>
+        public event RoutedEventHandler TranslationSelected
+        {
+            add => AddHandler(TranslationSelectedEvent, value);
+            remove => RemoveHandler(TranslationSelectedEvent, value);
         }
 
         /// <summary>
@@ -672,5 +706,6 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
             Loaded += OnLoaded;
         }
+
     }
 }

@@ -42,7 +42,9 @@
                 SemanticDomainSelected="OnSemanticDomainSelected"
                 MeaningUpdated="OnMeaningUpdated"
                 MeaningDeleted="OnMeaningDeleted"
+                TranslationDeleted="OnTranslationDeleted"
                 TranslationDropped="OnTranslationDropped"
+                TranslationSelected="OnTranslationSelected"
                 />
         </DataTemplate>
         <ItemsPanelTemplate x:Key="MeaningPanelTemplate">

@@ -13,31 +13,17 @@
     Drop="OnMeaningEditorDrop">
     <UserControl.Resources>
         <DataTemplate x:Key="TranslationDisplayTemplate">
-            <Grid
-                MouseMove="OnTranslationMouseMove">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="50"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" 
-                           FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
-                           FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
-                           FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
-                           FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
-                           Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
-                           Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationPadding}"
-                           Text="{Binding Text}"/>
-                <TextBlock Grid.Column="1" 
-                           FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
-                           FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
-                           FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
-                           FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
-                           HorizontalAlignment="Right"
-                           Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
-                           Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationPadding}"
-                           Text="{Binding Count}"/>
-            </Grid>
-        </DataTemplate>
+            <lexiconControls:TranslationEntryDisplay
+                FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
+                FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
+                FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
+                Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
+                Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationPadding}"
+                TranslationDeleted="OnTranslationDeleted"
+                TranslationSelected="OnTranslationSelected"
+                />
+        </DataTemplate>        
         <ItemsPanelTemplate x:Key="TranslationPanelTemplate">
             <StackPanel Orientation="Vertical" />
         </ItemsPanelTemplate>

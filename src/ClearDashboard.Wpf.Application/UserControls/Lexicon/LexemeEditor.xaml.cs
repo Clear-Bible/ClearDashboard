@@ -83,10 +83,23 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             (nameof(SemanticDomainSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
 
         /// <summary>
+        /// Identifies the TranslationDeletedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationDeletedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
+        
+        /// <summary>
         /// Identifies the TranslationDroppedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationDroppedEvent = EventManager.RegisterRoutedEvent
             (nameof(TranslationDropped), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
+
+        /// <summary>
+        /// Identifies the TranslationSelectedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationSelectedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
+
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -405,15 +418,14 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             });
         }
 
-        private void RaiseTranslationDroppedEvent(RoutedEvent routedEvent, TranslationDroppedEventArgs args)
+        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, TranslationEntryEventArgs args)
         {
-            RaiseEvent(new TranslationDroppedEventArgs()
+            RaiseEvent(new TranslationEntryEventArgs()
             {
                 RoutedEvent = routedEvent,
                 Lexeme = args.Lexeme,
                 Meaning = args.Meaning,
-                TranslationId = args.TranslationId,
-                TranslationText = args.TranslationText
+                Translation = args.Translation
             });
         }
 
@@ -535,10 +547,26 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             Loaded -= OnLoaded;
         }
 
+        private void OnTranslationDeleted(object sender, RoutedEventArgs e)
+        {
+            if (e is TranslationEntryEventArgs args)
+            {
+                RaiseTranslationEntryEvent(TranslationDeletedEvent, args);
+            }
+        }
+
         private void OnTranslationDropped(object sender, RoutedEventArgs e)
         {
-            if (e is TranslationDroppedEventArgs args)
-            RaiseTranslationDroppedEvent(TranslationDroppedEvent, args);
+            if (e is TranslationEntryEventArgs args)
+            RaiseTranslationEntryEvent(TranslationDroppedEvent, args);
+        }
+
+        private void OnTranslationSelected(object sender, RoutedEventArgs e)
+        {
+            if (e is TranslationEntryEventArgs args)
+            {
+                RaiseTranslationEntryEvent(TranslationSelectedEvent, args);
+            }
         }
 
         [NotifyPropertyChangedInvocator]
@@ -967,12 +995,30 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
+        /// Occurs when a translation is deleted.
+        /// </summary>
+        public event RoutedEventHandler TranslationDeleted
+        {
+            add => AddHandler(TranslationDeletedEvent, value);
+            remove => RemoveHandler(TranslationDeletedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a translation is dropped on a meaning.
         /// </summary>
         public event RoutedEventHandler TranslationDropped
         {
             add => AddHandler(TranslationDroppedEvent, value);
             remove => RemoveHandler(TranslationDroppedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a translation is selected.
+        /// </summary>
+        public event RoutedEventHandler TranslationSelected
+        {
+            add => AddHandler(TranslationSelectedEvent, value);
+            remove => RemoveHandler(TranslationSelectedEvent, value);
         }
 
         /// <summary>
