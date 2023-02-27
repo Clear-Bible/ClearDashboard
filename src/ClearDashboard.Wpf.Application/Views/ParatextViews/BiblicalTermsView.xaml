@@ -414,6 +414,28 @@
                                 Name="ListTwo"
                                 ItemsSource="{Binding RenderingString}"
                                 PreviewMouseWheel="AllowScrolling_OnPreviewMouseWheel">
+
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem
+                                            Command="{Binding ClearFilterCommand}"
+                                            CommandParameter="{Binding}"
+                                            Header="{helpers:Localization Pins_ClearFilter}" />
+                                        <MenuItem Click="CopyText_OnClick" Header="{helpers:Localization Copy}" />
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+
+                                <ListBox.CommandBindings>
+                                    <CommandBinding Command="Copy" Executed="CopyText_OnClick" />
+                                </ListBox.CommandBindings>
+
+                                <ListBox.InputBindings>
+                                    <KeyBinding
+                                        Key="C"
+                                        Command="Copy"
+                                        Modifiers="Control" />
+                                </ListBox.InputBindings>
+
                                 <ListBox.Style>
                                     <Style TargetType="ListBox">
                                         <Style.Triggers>
