@@ -871,7 +871,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     var keyBoardModifiers = Keyboard.Modifiers;
 
-                    if (keyBoardModifiers == ModifierKeys.None)
+                    if (keyBoardModifiers == ModifierKeys.None || (Keyboard.IsKeyDown(Key.Tab) && keyBoardModifiers == ModifierKeys.Shift))
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
                     }
