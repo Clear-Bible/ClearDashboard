@@ -77,6 +77,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
             }
         }
 
+        public bool ContainsTranslationText(string text)
+        {
+            return Meanings.SelectMany(meaning => meaning.Translations).Any(translation => translation.Text == text);
+        }
+
         public LexemeViewModel() : this(new Lexeme())
         {
         }
