@@ -588,7 +588,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public FontStyle TranslationFontStyle
         {
             get => (FontStyle)GetValue(TranslationFontStyleProperty);
-            set => SetValue(MeaningTextFontStyleProperty, value);
+            set => SetValue(TranslationFontStyleProperty, value);
         }
 
         /// <summary>
