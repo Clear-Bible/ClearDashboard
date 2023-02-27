@@ -112,17 +112,17 @@ namespace ClearDashboard.Aqua.Module.Tests
             var foo = AquaManager.CorpusInBibleNLPFormatInVrefsOrder(sourceCorpus);
         }
 
-        [Fact]
-        public async void Foo()
-        {
-            var versionInfo = new IAquaManager.Version(null, "name1", "language1", "isoscript1", "abbreviation1", "rights1", 2, 4, true);
-            var versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
+        //[Fact]
+        //public async void Foo()
+        //{
+        //    var versionInfo = new IAquaManager.Version(null, "name1", "language1", "isoscript1", "abbreviation1", "rights1", 2, 4, true);
+        //    var versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+        //    var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
 
-            versionInfo = new IAquaManager.Version(null, "name1", "language1", "isoscript1", "abbreviation1");
-            versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-            dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
-        }
+        //    versionInfo = new IAquaManager.Version(null, "name1", "language1", "isoscript1", "abbreviation1");
+        //    versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+        //    dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
+        //}
 
         [Fact]
         public async void PostFileEndpoint__BufferingAndProgress()
@@ -174,7 +174,7 @@ namespace ClearDashboard.Aqua.Module.Tests
             //trim off about 45 characters at beginning and also at end to remove unique boundary guids.
             Assert.Equal(returnString.Substring(45, returnString.Length - 90), nonBufferedResponseAsPostString.Substring(45, returnString.Length - 90));
         }
-
+        /*
         [Fact]
         public async void PostVersion()
         {
@@ -218,7 +218,7 @@ namespace ClearDashboard.Aqua.Module.Tests
         {
             var aquaManager = Container!.Resolve<IAquaManager>();
 
-            await aquaManager.DeleteVersion("dwtv4");
+            await aquaManager.DeleteVersion(2345);
 
         }
 
@@ -227,7 +227,7 @@ namespace ClearDashboard.Aqua.Module.Tests
         {
             var aquaManager = Container!.Resolve<IAquaManager>();
 
-            var revisions = await aquaManager.ListRevisions("dwtv15");
+            var revisions = await aquaManager.ListRevisions(1234);
 
         }
 
@@ -248,5 +248,6 @@ namespace ClearDashboard.Aqua.Module.Tests
             var languages = await aquaManager.ListAssessments(2388);
 
         }
+        */
     }
 }

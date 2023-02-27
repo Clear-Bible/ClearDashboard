@@ -107,9 +107,9 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
             longRunningTaskManager_ = longRunningTaskManager;
 
-            DisplayName = LocalizationService!.Get("AquaDialog_DisplayName");
+            DisplayName = LocalizationService!.Get("Aqua_DialogTitle");
 
-            DialogTitle = LocalizationService!.Get("AquaDialog_DialogTitle");
+            DialogTitle = LocalizationService!.Get("Aqua_DialogTitle");
 
             tokenizedTextCorpusId_ = tokenizedTextCorpusId;
         }

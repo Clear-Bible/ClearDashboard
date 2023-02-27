@@ -77,7 +77,7 @@
                 <TextBox x:Name="Name"
                          materialDesign:HintAssist.FloatingScale="0.60"
                          materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                         materialDesign:HintAssist.Hint="{helpers:Localization Name}"
+                         materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Revision_Name}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                          Foreground="{DynamicResource MaterialDesignBody}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -107,7 +107,7 @@
                 <!--<TextBox x:Name="UnvalidatedText"
                          materialDesign:HintAssist.FloatingScale="0.60"
                          materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                         materialDesign:HintAssist.Hint="{helpers:Localization UnvalidatedText}"
+                         materialDesign:HintAssist.Hint="{helpers:Localization  UnvalidatedText}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                          Foreground="{DynamicResource MaterialDesignBody}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -125,8 +125,8 @@
                     Margin="5,0,0,0"
                     VerticalAlignment="Center"
                     IsChecked="false"
+                    Content="{helpers:Localization Aqua_Revision_Published}"
                     >
-                    Published?
                 </CheckBox>
             </StackPanel>
             <StackPanel
@@ -190,31 +190,7 @@
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_VersionStep_Revisions_Name}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Grid.Column="0"
-                                        Margin="8,0,5,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        FontWeight="Bold"
-                                        Text="{Binding id}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_VersionStep_Revisions_Name}">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Grid.Column="0"
-                                        Margin="8,0,5,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                        FontWeight="Bold"
-                                        Text="{Binding revision}" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_VersionStep_Revisions_Name}">
+                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Revision_Assessments_RequestedTime_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Grid.Column="0"
@@ -226,8 +202,19 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_VersionStep_Revisions_Name}">
+                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Revision_Assessments_Type_Column}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Grid.Column="0"
+                                        Margin="8,0,5,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                        FontWeight="Bold"
+                                        Text="{Binding type}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Revision_Assessments_Status_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Grid.Column="0"
@@ -240,7 +227,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Width="50">
+                        <DataGridTemplateColumn Width="50" Header="{helpers:Localization Aqua_Revision_Assessments_Add_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Grid.Column="1" 
@@ -269,12 +256,6 @@
                 VerticalAlignment="Bottom"
                 Orientation="Vertical">
                 <Button
-                    x:Name="MoveBackwards"
-                    Content="{helpers:Localization Aqua_Revision_Back}"
-                    IsDefault="True"
-                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                    Style="{StaticResource TransparentStyle}" />
-                <Button
                     x:Name="AddAssessment"
                     IsDefault="False"
                     Style="{StaticResource TransparentStyle}"
@@ -290,7 +271,7 @@
                     x:Name="GetAssessments"
                     IsDefault="False"    
                     Style="{StaticResource TransparentStyle}"
-                    Content="{helpers:Localization Aqua_Revision_ReloadAssessment}">
+                    Content="{helpers:Localization Aqua_Revision_ReloadAssessments}">
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource BooleanAndConverter}">
                             <Binding Path="HasId"/>
@@ -298,6 +279,12 @@
                         </MultiBinding>
                     </Button.IsEnabled>
                 </Button>
+                <Button
+                    x:Name="MoveBackwards"
+                    Content="{helpers:Localization Aqua_Revision_Back}"
+                    IsDefault="True"
+                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource TransparentStyle}" />
             </StackPanel>
         </Grid>
     </Grid>

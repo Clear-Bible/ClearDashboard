@@ -117,35 +117,101 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AquaAddRevisionStepViewModel_BodyText" xml:space="preserve">
-    <value>Body Text 2</value>
+  <data name="Aqua_Assessment_AddAssessment" xml:space="preserve">
+    <value>Add Assessment</value>
   </data>
-  <data name="AquaAddRevisionStepViewModel_BodyTitle" xml:space="preserve">
-    <value>Body Title 2</value>
+  <data name="Aqua_Assessment_Back" xml:space="preserve">
+    <value>Back</value>
   </data>
-  <data name="AquaAddVersionOrListAssessmentsStep_BodyText" xml:space="preserve">
-    <value>Body Text 1</value>
+  <data name="Aqua_Assessment_BodyTitle" xml:space="preserve">
+    <value>Assessment</value>
   </data>
-  <data name="AquaAddVersionOrListAssessmentsStep_BodyTitle" xml:space="preserve">
-    <value>Body Title 1</value>
+  <data name="Aqua_Assessment_RevisionId" xml:space="preserve">
+    <value>Revision Id to compare to</value>
   </data>
-  <data name="AquaDialog_DialogTitle" xml:space="preserve">
-    <value>Dialog Title 1</value>
+  <data name="Aqua_Assessment_Type" xml:space="preserve">
+    <value>Type</value>
   </data>
-  <data name="AquaDialog_DisplayName" xml:space="preserve">
-    <value>Display Name 1</value>
+  <data name="Aqua_DialogTitle" xml:space="preserve">
+    <value>AQuA</value>
   </data>
-  <data name="DisplayName" xml:space="preserve">
-    <value>DisplayName!</value>
+  <data name="Aqua_EnhancedView_GetResult" xml:space="preserve">
+    <value>Reload</value>
   </data>
-  <data name="ISO_Language" xml:space="preserve">
-    <value>ISO Language</value>
+  <data name="Aqua_Revision_AddAssessment" xml:space="preserve">
+    <value>New Assessment</value>
   </data>
-  <data name="LengthText" xml:space="preserve">
-    <value>Length Text</value>
+  <data name="Aqua_Revision_AddRevision" xml:space="preserve">
+    <value>Add Revision of Corpus</value>
   </data>
-  <data name="NumericText" xml:space="preserve">
-    <value>Numeric Text</value>
+  <data name="Aqua_Revision_Assessments_Add_Column" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Aqua_Revision_Assessments_RequestedTime_Column" xml:space="preserve">
+    <value>Assessment submitted</value>
+  </data>
+  <data name="Aqua_Revision_Assessments_Status_Column" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Aqua_Revision_Assessments_Type_Column" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Aqua_Revision_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Aqua_Revision_BodyTitle" xml:space="preserve">
+    <value>Revision</value>
+  </data>
+  <data name="Aqua_Revision_Name" xml:space="preserve">
+    <value>Revision Name</value>
+  </data>
+  <data name="Aqua_Revision_Published" xml:space="preserve">
+    <value>Published?</value>
+  </data>
+  <data name="Aqua_Revision_ReloadAssessments" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Aqua_version_Abbreviation" xml:space="preserve">
+    <value>Abbreviation</value>
+  </data>
+  <data name="Aqua_Version_AddRevision" xml:space="preserve">
+    <value>New Revision</value>
+  </data>
+  <data name="Aqua_Version_AddVersion" xml:space="preserve">
+    <value>Add Corpus Information</value>
+  </data>
+  <data name="Aqua_Version_BackTranslationToVersionId" xml:space="preserve">
+    <value>Version id of corpus this corpus is a back translation to</value>
+  </data>
+  <data name="Aqua_Version_BodyTitle" xml:space="preserve">
+    <value>Corpus</value>
+  </data>
+  <data name="Aqua_Version_ForwardTranslationToVersionId" xml:space="preserve">
+    <value>Version id of corpus this corpus is a forward translation to</value>
+  </data>
+  <data name="Aqua_Version_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Aqua_Version_Name" xml:space="preserve">
+    <value>Corpus Name</value>
+  </data>
+  <data name="Aqua_Version_ReloadRevisions" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Aqua_Version_Revisions_Add_Column" xml:space="preserve">
+    <value>Assessments</value>
+  </data>
+  <data name="Aqua_Version_Revisions_Date_Column" xml:space="preserve">
+    <value>Submitted</value>
+  </data>
+  <data name="Aqua_Version_Revisions_Name_Column" xml:space="preserve">
+    <value>Revision Name</value>
+  </data>
+  <data name="Aqua_Version_Rights" xml:space="preserve">
+    <value>Rights</value>
+  </data>
+  <data name="Aqua_Version_Script" xml:space="preserve">
+    <value>Script</value>
   </data>
   <data name="NumericTextValidationMessage" xml:space="preserve">
     <value>{0} must be empty or an integer greater than 0</value>
@@ -158,11 +224,5 @@
   </data>
   <data name="Pds_AquaDialogMenuId" xml:space="preserve">
     <value>AQuA Analysis</value>
-  </data>
-  <data name="UnvalidatedText" xml:space="preserve">
-    <value>Unvalidated Text</value>
-  </data>
-  <data name="ValidatedText" xml:space="preserve">
-    <value>Validated Text</value>
   </data>
 </root>

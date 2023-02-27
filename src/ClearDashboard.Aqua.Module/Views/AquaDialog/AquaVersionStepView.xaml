@@ -75,7 +75,7 @@
                 <TextBox x:Name="Name"
                          materialDesign:HintAssist.FloatingScale="0.60"
                          materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                         materialDesign:HintAssist.Hint="{helpers:Localization Name}"
+                         materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_Name}"
                          materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                          Foreground="{DynamicResource MaterialDesignBody}"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -126,6 +126,7 @@
                     ItemsSource="{Binding IsoLanguages}"
                     SelectedItem="{Binding IsoLanguage}"
                     Style="{StaticResource MaterialDesignFilledComboBox}"
+                    materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_Language}"
                     TextSearch.TextPath="name">
                     <controls1:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
@@ -236,6 +237,7 @@
                     ItemsSource="{Binding IsoScripts}"
                     SelectedItem="{Binding IsoScript}"
                     Style="{StaticResource MaterialDesignFilledComboBox}"
+                    materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_Script}"
                     TextSearch.TextPath="name">
                     <controls1:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
@@ -280,7 +282,7 @@
                 <TextBox x:Name="Abbreviation"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                        materialDesign:HintAssist.Hint="{helpers:Localization Abbreviation}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization Aqua_version_Abbreviation}"
                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                         Foreground="{DynamicResource MaterialDesignBody}"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -340,7 +342,7 @@
                 <TextBox x:Name="Rights"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                        materialDesign:HintAssist.Hint="{helpers:Localization Rights}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_Rights}"
                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                         Foreground="{DynamicResource MaterialDesignBody}"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -370,7 +372,7 @@
                 <TextBox x:Name="ForwardTranslationToVersionId"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                        materialDesign:HintAssist.Hint="{helpers:Localization This_is_forward_translation_to_abbreviation}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_ForwardTranslationToVersionId}"
                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                         Foreground="{DynamicResource MaterialDesignBody}"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -400,7 +402,7 @@
                 <TextBox x:Name="BackTranslationToVersionId"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                        materialDesign:HintAssist.Hint="{helpers:Localization This_is_back_translation_to_abbreviation}"
+                        materialDesign:HintAssist.Hint="{helpers:Localization Aqua_Version_BackTranslationToVersionId}"
                         materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                         Foreground="{DynamicResource MaterialDesignBody}"
                         Style="{StaticResource MaterialDesignFloatingHintTextBox}">
@@ -497,7 +499,7 @@
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_VersionStep_Revisions_Name}">
+                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Version_Revisions_Name_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Grid.Column="0"
@@ -509,7 +511,20 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="50">
+                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Version_Revisions_Date_Column}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Grid.Column="0"
+                                    Margin="8,0,5,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                    FontWeight="Bold"
+                                    Text="{Binding date}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Width="50" Header="{helpers:Localization Aqua_Version_Revisions_Add_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Grid.Column="1" 
@@ -538,15 +553,15 @@
                 VerticalAlignment="Bottom"
                 Orientation="Vertical">
                 <Button
-                x:Name="AddRevision"
-                IsDefault="True"
-                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                Style="{StaticResource TransparentStyle}" Content="{helpers:Localization Aqua_Version_AddRevision}"></Button>
+                    x:Name="AddRevision"
+                    IsDefault="False"
+                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource TransparentStyle}" Content="{helpers:Localization Aqua_Version_AddRevision}"></Button>
                 <Button
-                x:Name="GetRevisions"
-                IsDefault="True"    
-                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                Style="{StaticResource TransparentStyle}" Content="{helpers:Localization Aqua_Version_ReloadRevisions}"></Button>
+                    x:Name="GetRevisions"
+                    IsDefault="False"    
+                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource TransparentStyle}" Content="{helpers:Localization Aqua_Version_ReloadRevisions}"></Button>
             </StackPanel>
         </Grid>
     </Grid>
