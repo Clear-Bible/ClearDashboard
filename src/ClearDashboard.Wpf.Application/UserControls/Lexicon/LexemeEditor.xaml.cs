@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -10,6 +12,7 @@ using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
+using ClearDashboard.Wpf.Application.Messages.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using Brushes = System.Windows.Media.Brushes;
@@ -20,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
     /// <summary>
     /// A control that displays and edits the details of a <see cref="LexemeViewModel"/>.
     /// </summary>
-    public partial class LexemeEditor : INotifyPropertyChanged
+    public partial class LexemeEditor : INotifyPropertyChanged, IHandle<LexemeAddedMessage>
     {
         #region Static Routed Events
 
@@ -29,6 +32,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// </summary>
         public static readonly RoutedEvent LexemeAddedEvent = EventManager.RegisterRoutedEvent
             (nameof(LexemeAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
+
+        /// <summary>
+        /// Identifies the LexemeDeletedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent LexemeDeletedEvent = EventManager.RegisterRoutedEvent
+            (nameof(LexemeDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexemeEditor));
 
         /// <summary>
         /// Identifies the LemmaUpdatedEvent routed event.
@@ -384,6 +393,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
                 RoutedEvent = routedEvent,
                 Lexeme = Lexeme!,
             });
+        }        
+        
+        private void RaiseLexemeEvent(RoutedEvent routedEvent, LexemeViewModel lexeme)
+        {
+            RaiseEvent(new LexemeEventArgs
+            {
+                RoutedEvent = routedEvent,
+                Lexeme = lexeme,
+            });
         }
 
         private void RaiseLemmaEvent(RoutedEvent routedEvent)
@@ -464,13 +482,42 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnAddLexemeClicked(object sender, RoutedEventArgs e)
         {
-            Lexeme = new LexemeViewModel { Lemma = TokenDisplay.SurfaceText };
-            RaiseLexemeEvent(LexemeAddedEvent);
+            RaiseLexemeEvent(LexemeAddedEvent, new LexemeViewModel { Lemma = TokenDisplay.SurfaceText });
             
             OnPropertyChanged(nameof(AddLexemeVisibility));
             OnPropertyChanged(nameof(LexemeControlsVisibility));
 
             //BeginEdit();
+        }
+
+        public async Task HandleAsync(LexemeAddedMessage message, CancellationToken cancellationToken)
+        {
+            Lexeme = message.Lexeme;
+            OnPropertyChanged(nameof(AddLexemeVisibility));
+            OnPropertyChanged(nameof(LexemeControlsVisibility));
+
+            await Task.CompletedTask;
+        }
+
+        private void ConfirmLexemeDeletion(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = true;
+        }
+
+        private void DeleteLexemeConfirmed(object sender, RoutedEventArgs e)
+        {
+            RaiseLexemeEvent(LexemeDeletedEvent);
+
+            Lexeme = null;
+            OnPropertyChanged(nameof(AddLexemeVisibility));
+            OnPropertyChanged(nameof(LexemeControlsVisibility));
+
+            ConfirmDeletePopup.IsOpen = false;
+        }
+
+        private void DeleteLexemeCancelled(object sender, RoutedEventArgs e)
+        {
+            ConfirmDeletePopup.IsOpen = false;
         }
 
         private void OnLexemeFormAdded(object sender, RoutedEventArgs e)
@@ -933,6 +980,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
+        /// Occurs when a lexeme is deleted.
+        /// </summary>
+        public event RoutedEventHandler LexemeDeleted
+        {
+            add => AddHandler(LexemeDeletedEvent, value);
+            remove => RemoveHandler(LexemeDeletedEvent, value);
+        }
+
+        /// <summary>
         /// Occurs when a lemma is updatd.
         /// </summary>
         public event RoutedEventHandler LemmaUpdated
@@ -1052,6 +1108,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             InitializeComponent();
 
             Loaded += OnLoaded;
+
+            EventAggregator?.SubscribeOnUIThread(this);
         }
 
     }

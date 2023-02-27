@@ -65,6 +65,8 @@
                 Height="23" 
                 FontSize="11" 
                 HorizontalAlignment="Left"
+                Background="Transparent"
+
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=AddLexemeVisibility}">Add Lexeme</Button>
         <Grid Grid.Row="1"
               Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}"
@@ -83,6 +85,7 @@
                        Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaMargin}"
                        Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
                        Text="Lemma: "
+                       TextDecorations="Underline"
                        VerticalAlignment="Center"
                        ></TextBlock>
             <TextBlock x:Name="LemmaTextBlock"
@@ -138,6 +141,42 @@
                     LexemeFormAdded="OnLexemeFormAdded"
                     />
             </StackPanel>
+            <Button Grid.Column="3"
+                    Name="DeleteLexemeButton"
+                    Margin="9,-5,0,0"
+                    Padding="0,0,0,0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="ConfirmLexemeDeletion"
+                    ToolTip="Delete This Lexeme"
+                    FontSize="12"
+                    FontWeight="SemiBold">
+                X
+            </Button>
+            <Popup Grid.Column="3"
+                   Name="ConfirmDeletePopup"
+                   Width="200"
+                   Placement="Left"
+                   PlacementTarget="{Binding ElementName=DeleteLexemeButton}"
+                   StaysOpen="False"
+                   VerticalOffset="30">
+                <Border BorderThickness="2">
+                    <StackPanel Background="LightGoldenrodYellow" Orientation="Vertical" VerticalAlignment="Center">
+                        <TextBlock
+                            Padding="10"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontWeight="Bold">
+                            Delete this lexeme?
+                        </TextBlock>
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Button Margin="5" Click="DeleteLexemeConfirmed">Yes</Button>
+                            <Button Margin="5" Click="DeleteLexemeCancelled">No</Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Popup>
+
         </Grid>
         <ItemsControl Grid.Row="2" 
                       Focusable="False"
