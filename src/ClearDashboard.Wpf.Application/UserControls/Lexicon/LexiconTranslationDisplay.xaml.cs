@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             {
                 if (sender is FrameworkElement control)
                 {
-                    DragDrop.DoDragDrop(control, JsonSerializer.Serialize(Translation), DragDropEffects.Copy);
+                    DragDrop.DoDragDrop(control, JsonSerializer.Serialize(Translation), DragDropEffects.Move);
                 }
             }
         }
