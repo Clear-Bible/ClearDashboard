@@ -18,9 +18,9 @@ namespace ClearDashboard.Wpf.Application.Collections.Lexicon
         {
         }
 
-        public LexiconTranslationViewModelCollection(IEnumerable<Translation> translations)
+        public LexiconTranslationViewModelCollection(IEnumerable<Translation> translations, MeaningViewModel meaning)
         {
-            AddRange(translations.Select(t => new LexiconTranslationViewModel(t)));
+            AddRange(translations.Select(t => new LexiconTranslationViewModel(t, meaning)));
         }
 
         /// <summary>
@@ -29,6 +29,15 @@ namespace ClearDashboard.Wpf.Application.Collections.Lexicon
         /// <param name="collection">The collection from which the elements are copied.</param>
         public LexiconTranslationViewModelCollection(IEnumerable<LexiconTranslationViewModel> collection) : base(collection)
         {
+        }
+
+        public void RemoveIfExists(TranslationId translationId)
+        {
+            var existing = this.FirstOrDefault(t => t.TranslationId != null && t.TranslationId.Equals(translationId));
+            if (existing != null)
+            {
+                Remove(existing);
+            }
         }
     }
 }

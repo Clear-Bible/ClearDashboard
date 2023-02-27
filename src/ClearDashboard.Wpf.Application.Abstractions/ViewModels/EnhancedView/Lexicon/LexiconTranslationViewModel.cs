@@ -8,6 +8,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     {
         public Translation Entity { get; }
 
+        public MeaningViewModel Meaning { get; set; }
+
         public TranslationId? TranslationId
         {
             get => Entity.TranslationId;
@@ -29,13 +31,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 
         public int Count { get; set; }
 
-        public LexiconTranslationViewModel() : this(new Translation())
+        public LexiconTranslationViewModel() : this(new Translation(), new MeaningViewModel())
         {
         }
 
-        public LexiconTranslationViewModel(Translation translation)
+        public LexiconTranslationViewModel(Translation translation, MeaningViewModel meaning)
         {
             Entity = translation;
+            Meaning = meaning;
         }
     }
 }

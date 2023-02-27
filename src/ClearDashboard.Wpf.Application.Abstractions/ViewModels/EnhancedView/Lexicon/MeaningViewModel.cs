@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
@@ -10,7 +11,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     {
         public Meaning Entity { get; }
 
-        public MeaningId? MeaningId => Entity.MeaningId;
+        public MeaningId? MeaningId
+        {
+            get => Entity.MeaningId;
+            set => Entity.MeaningId = value;
+        }
 
         public string? Text
         {
@@ -35,12 +40,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         }
 
         private LexiconTranslationViewModelCollection? _translations;
+        [JsonIgnore]
         public LexiconTranslationViewModelCollection Translations
         {
-            get => _translations ??= new LexiconTranslationViewModelCollection(Entity.Translations);
+            get => _translations ??= new LexiconTranslationViewModelCollection(Entity.Translations, this);
             set
             {
                 _translations = value;
+                foreach (var translation in _translations)
+                {
+                    translation.Meaning = this;
+                }
                 Entity.Translations = new ObservableCollection<Translation>(value.Select(tvm => tvm.Entity));
                 NotifyOfPropertyChange();
             }
@@ -65,7 +75,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         public MeaningViewModel(Meaning meaning)
         {
             Entity = meaning;
-            _translations = new LexiconTranslationViewModelCollection(meaning.Translations);
+            _translations = new LexiconTranslationViewModelCollection(meaning.Translations, this);
         }
     }
 }
