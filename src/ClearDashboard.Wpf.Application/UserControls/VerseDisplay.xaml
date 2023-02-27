@@ -4,9 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-   xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -17,9 +17,9 @@
         <DataTemplate x:Key="SourceTokenDisplay">
             <local:TokenDisplay
                 HorizontalAlignment="Left"
+                Copy="OnCopy"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
-                Copy="OnCopy"
                 HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteCreate="OnNoteCreate"
@@ -77,16 +77,19 @@
                 </local:TokenDisplay.CommandBindings>
 
                 <local:TokenDisplay.InputBindings>
-                    <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                    <KeyBinding
+                        Key="C"
+                        Command="Copy"
+                        Modifiers="Control" />
                 </local:TokenDisplay.InputBindings>
             </local:TokenDisplay>
         </DataTemplate>
         <DataTemplate x:Key="TargetTokenDisplay">
             <local:TokenDisplay
                 HorizontalAlignment="Left"
+                Copy="OnCopy"
                 DataContext="{Binding}"
                 FilterPins="OnFilterPins"
-                Copy="OnCopy"
                 HighlightedTokenBackground="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HighlightedTokenBackground}"
                 HorizontalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=HorizontalSpacing}"
                 NoteCreate="OnNoteCreate"
@@ -137,13 +140,16 @@
                 TranslationMouseWheel="OnTranslationMouseWheel"
                 TranslationRightButtonDown="OnTranslationRightButtonDown"
                 TranslationRightButtonUp="OnTranslationRightButtonUp"
-                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}" >
+                TranslationVerticalSpacing="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationVerticalSpacing}">
                 <local:TokenDisplay.CommandBindings>
                     <CommandBinding Command="Copy" Executed="OnCopy" />
                 </local:TokenDisplay.CommandBindings>
 
                 <local:TokenDisplay.InputBindings>
-                    <KeyBinding Key="C" Modifiers="Control" Command="Copy" />
+                    <KeyBinding
+                        Key="C"
+                        Command="Copy"
+                        Modifiers="Control" />
                 </local:TokenDisplay.InputBindings>
             </local:TokenDisplay>
         </DataTemplate>
