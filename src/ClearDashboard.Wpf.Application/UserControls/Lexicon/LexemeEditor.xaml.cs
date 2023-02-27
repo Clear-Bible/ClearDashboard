@@ -4,11 +4,13 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
@@ -283,6 +285,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public static readonly DependencyProperty SemanticDomainSuggestionsProperty = DependencyProperty.Register(nameof(SemanticDomainSuggestions), typeof(SemanticDomainCollection), typeof(LexemeEditor));
 
         /// <summary>
+        /// Identifies the TokenDisplay dependency property.
+        /// </summary>
+        public static readonly DependencyProperty TokenDisplayProperty = DependencyProperty.Register(nameof(TokenDisplay), typeof(TokenDisplayViewModel), typeof(LexemeEditor));
+
+        /// <summary>
         /// Identifies the TranslationFontFamily dependency property.
         /// </summary>
         public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register(nameof(TranslationFontFamily), typeof(FontFamily), typeof(LexemeEditor),
@@ -457,7 +464,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnAddLexemeClicked(object sender, RoutedEventArgs e)
         {
-            Lexeme = new LexemeViewModel { Lemma = "Lemma" };
+            Lexeme = new LexemeViewModel { Lemma = TokenDisplay.SurfaceText };
             RaiseLexemeEvent(LexemeAddedEvent);
             
             OnPropertyChanged(nameof(AddLexemeVisibility));
@@ -577,6 +584,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         #endregion Private event handlers
         #region Public Properties
+
+        public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
         /// Gets or sets the lexeme associated with the editor.
@@ -848,6 +857,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
+        /// Gets or sets the <see cref="TokenDisplayViewModel"/> with which this lexeme is associated.
+        /// </summary>
+        public TokenDisplayViewModel TokenDisplay
+        {
+            get => (TokenDisplayViewModel)GetValue(TokenDisplayProperty);
+            set => SetValue(TokenDisplayProperty, value);
+        }
+
+        /// <summary>
         /// Gets or sets the font family for translations.
         /// </summary>
         public FontFamily TranslationFontFamily
@@ -855,6 +873,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             get => (FontFamily)GetValue(TranslationFontFamilyProperty);
             set => SetValue(TranslationFontFamilyProperty, value);
         }
+
         /// <summary>
         /// Gets or sets the font size for translations.
         /// </summary>

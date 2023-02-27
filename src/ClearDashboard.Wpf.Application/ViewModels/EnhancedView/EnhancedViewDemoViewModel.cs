@@ -401,8 +401,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 dialogViewModel.Lexeme = DemoLexeme;
                 dialogViewModel.SemanticDomainSuggestions = SemanticDomainSuggestions;
                 dialogViewModel.Concordance = Concordance;
+
+                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
             }
-            var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
         }
 
         public MeaningViewModel DemoMeaning { get; set; }
@@ -438,33 +439,34 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             var translations1 = new LexiconTranslationViewModelCollection
             {
                 new LexiconTranslationViewModel { Text = "Translation 1", Count = 10, 
-                    TranslationId = TranslationId.Create(Guid.Parse("526E72D9-D72B-45F3-B59A-F8D76242519B")) },
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
                 new LexiconTranslationViewModel { Text = "Translation 2", Count = 5,
-                    TranslationId = TranslationId.Create(Guid.Parse("A739E80B-07B8-4A30-9572-D308218D02AC")) },
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
                 new LexiconTranslationViewModel { Text = "Translation 3", Count = 2,
-                    TranslationId = TranslationId.Create(Guid.Parse("D9C79904-1BE8-4B37-9B51-108DB5C5B50F")) }
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
             };
             var translations2 = new LexiconTranslationViewModelCollection
             {
                 new LexiconTranslationViewModel { Text = "Translation 4", Count = 8,
-                    TranslationId = TranslationId.Create(Guid.Parse("32F31154-601E-4110-BF6F-7C9D93554FC1")) },
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
                 new LexiconTranslationViewModel { Text = "Translation 5", Count = 3,
-                    TranslationId = TranslationId.Create(Guid.Parse("DC1A5DAD-1927-4AF5-AFFF-7B6A3F6A77B5")) },
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
                 new LexiconTranslationViewModel { Text = "Translation 6", Count = 1,
-                    TranslationId = TranslationId.Create(Guid.Parse("DE061085-A9E3-4961-B97F-273A45B31C56")) }
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
             };
             Concordance = new LexiconTranslationViewModelCollection
             {
                 new LexiconTranslationViewModel { Text = "Translation 7", Count = 8,
-                    TranslationId = TranslationId.Create(Guid.Parse("32F31154-601E-4110-BF6F-7C9D93554FC1")) },
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
                 new LexiconTranslationViewModel { Text = "Translation 8", Count = 3,
-                    TranslationId = TranslationId.Create(Guid.Parse("DC1A5DAD-1927-4AF5-AFFF-7B6A3F6A77B5")) },
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
                 new LexiconTranslationViewModel { Text = "Translation 9", Count = 1,
-                    TranslationId = TranslationId.Create(Guid.Parse("DE061085-A9E3-4961-B97F-273A45B31C56")) }
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) }
             };
 
             var meaning1 = new MeaningViewModel(new Meaning
             {
+                MeaningId = MeaningId.Create(Guid.NewGuid()),
                 Text = "Meaning 1",
                 SemanticDomains = semanticDomains1,
             })
