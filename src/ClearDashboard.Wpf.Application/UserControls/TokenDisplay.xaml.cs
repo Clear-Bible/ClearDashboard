@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
@@ -808,6 +809,8 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
+
+
             CalculateLayout();
         }
 
@@ -819,6 +822,10 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void TokenDisplayViewModelPropertyChanged(object? sender,
             System.ComponentModel.PropertyChangedEventArgs e)
         {
+            //if (e.PropertyName == "ShowContextMenu")
+            //{
+            //    TokenDisplayContextMenu.IsOpen = TokenDisplayViewModel.ShowContextMenu;
+            //}
             CalculateLayout();
         }
 
@@ -901,6 +908,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
+            if (e is MouseEventArgs args)
+            {
+                
+               if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+               {
+                   TokenDisplayContextMenu.PlacementTarget = sender as UIElement;
+                   TokenDisplayContextMenu.Placement = PlacementMode.Right;
+                   TokenDisplayContextMenu.IsOpen = true;
+                   return;
+               }
+            }
             RaiseTokenEvent(TokenMouseEnterEvent, e);
         }
 
@@ -1528,6 +1546,11 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnHorizontalAlignmentChanged(object? sender, EventArgs args)
         {
             CalculateLayout();
+        }
+
+        public bool ShowContextMenu
+        {
+            get; set;
         }
     }
 }
