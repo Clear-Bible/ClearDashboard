@@ -1,6 +1,5 @@
 ﻿using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
-using ClearDashboard.Wpf.Application.Collections.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 {
@@ -8,7 +7,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
     {
         public Translation Entity { get; }
 
-        public MeaningViewModel Meaning { get; set; }
+        public MeaningViewModel? Meaning { get; set; }
 
         public TranslationId? TranslationId
         {
@@ -31,11 +30,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 
         public int Count { get; set; }
 
-        public LexiconTranslationViewModel() : this(new Translation(), new MeaningViewModel())
+        public LexiconTranslationViewModel() : this(new Translation())
         {
         }
 
-        public LexiconTranslationViewModel(Translation translation, MeaningViewModel meaning)
+        public LexiconTranslationViewModel(string text, int count) : this(new Translation { Text = text })
+        {
+            Count = count;
+        }
+
+        public LexiconTranslationViewModel(Translation translation, MeaningViewModel? meaning = null)
         {
             Entity = translation;
             Meaning = meaning;
