@@ -26,10 +26,13 @@ using System.Windows;
 using System.Windows.Input;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
+using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
 using TranslationCollection = ClearDashboard.Wpf.Application.Collections.Lexicon.TranslationCollection;
 using TranslationId = ClearDashboard.DAL.Alignment.Lexicon.TranslationId;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -137,6 +140,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteManager NoteManager { get; }
         public SelectionManager SelectionManager { get; }
         public VerseDisplayViewModel VerseDisplayViewModel { get; set; }
+        private IWindowManager WindowManager { get; }
+
 
         private string _message = string.Empty;
         public string Message
@@ -378,17 +383,32 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             SelectedTokens = new TokenDisplayViewModelCollection();
         }
 
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await base.OnActivateAsync(cancellationToken);
             //await PopulateData();
             PopulateLexicon();
+
+        }
+
+        public async void DisplayModal()
+        {
+            var tokenDisplay = new TokenDisplayViewModel(new Token(new TokenId(1, 1, 1, 1, 1), "Sample", ""));
+            var dialogViewModel = LifetimeScope?.Resolve<LexiconDialogViewModel>();
+            if (dialogViewModel != null)
+            {
+                dialogViewModel.TokenDisplay = tokenDisplay;
+                dialogViewModel.Lexeme = DemoLexeme;
+                dialogViewModel.SemanticDomainSuggestions = SemanticDomainSuggestions;
+                dialogViewModel.Concordance = Concordance;
+            }
+            var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
         }
 
         public MeaningViewModel DemoMeaning { get; set; }
         public LexemeViewModel DemoLexeme { get; set; }
         public SemanticDomainCollection SemanticDomainSuggestions { get; set; }
+        public TranslationViewModelCollection Concordance { get; set; }
         private void PopulateLexicon()
         {
             SemanticDomainSuggestions = new SemanticDomainCollection
@@ -433,6 +453,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 new TranslationViewModel { Text = "Translation 6", Count = 1,
                     TranslationId = TranslationId.Create(Guid.Parse("DE061085-A9E3-4961-B97F-273A45B31C56")) }
             };
+            Concordance = new TranslationViewModelCollection
+            {
+                new TranslationViewModel { Text = "Translation 7", Count = 8,
+                    TranslationId = TranslationId.Create(Guid.Parse("32F31154-601E-4110-BF6F-7C9D93554FC1")) },
+                new TranslationViewModel { Text = "Translation 8", Count = 3,
+                    TranslationId = TranslationId.Create(Guid.Parse("DC1A5DAD-1927-4AF5-AFFF-7B6A3F6A77B5")) },
+                new TranslationViewModel { Text = "Translation 9", Count = 1,
+                    TranslationId = TranslationId.Create(Guid.Parse("DE061085-A9E3-4961-B97F-273A45B31C56")) }
+            };
+
             var meaning1 = new MeaningViewModel(new Meaning
             {
                 Text = "Meaning 1",
@@ -451,7 +481,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             };
             DemoLexeme = new LexemeViewModel
             {
-                Lemma = "Lemma",
+                Lemma = "Sample",
                 Forms = forms,
                 Meanings = new MeaningViewModelCollection { meaning1, meaning2 }
             };
@@ -467,9 +497,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
         }
 
-        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, SelectionManager selectionManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, SelectionManager selectionManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope, ILocalizationService localizationService, IWindowManager windowManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
+            WindowManager = windowManager;
             NoteManager = noteManager;
             SelectionManager = selectionManager;
             ServiceProvider = serviceProvider;
