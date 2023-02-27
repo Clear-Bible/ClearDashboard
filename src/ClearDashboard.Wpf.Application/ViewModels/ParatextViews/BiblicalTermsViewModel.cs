@@ -528,17 +528,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         {
             await GetBiblicalTerms(BiblicalTermsType.Project).ConfigureAwait(false);
 
-
-            // populate the combo box for semantic domains
-            SetupSemanticDomains();
-            // select the first one
-            var drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
-            SelectedDomain = drv;
-
             // populate the combo box for scope
             SetupScopes();
             // select the first one
-            drv = Scopes.DefaultView[Scopes.Rows.IndexOf(Scopes.Rows[0])];
+            var drv = Scopes.DefaultView[Scopes.Rows.IndexOf(Scopes.Rows[0])];
             SelectedScope = drv;
 
             // populate the combo box for rendering filters
@@ -546,6 +539,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
             // select the first one
             drv = RenderingsFilters.DefaultView[RenderingsFilters.Rows.IndexOf(RenderingsFilters.Rows[0])];
             RenderingFilter = drv;
+
+            // populate the combo box for semantic domains
+            SetupSemanticDomains();
+            // select the first one
+            drv = Domains.DefaultView[Domains.Rows.IndexOf(Domains.Rows[0])];
+            SelectedDomain = drv;
+
+
 
             // setup the collectionview that binds to the data grid
             OnUIThread(() =>
@@ -1012,6 +1013,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var localizedString = LocalizationService!.Get(loc);
                 _scope.Rows.Add(localizedString, loc);
             }
+            NotifyOfPropertyChange(() => Scopes);   
         }
 
         /// <summary>
@@ -1030,6 +1032,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                 var localizedString = LocalizationService!.Get(loc);
                 _renderingsFilters.Rows.Add(localizedString, loc);
             }
+            NotifyOfPropertyChange(() => RenderingsFilters);
         }
 
         /// <summary>
