@@ -5,14 +5,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     d:DataContext="{d:DesignInstance Type=lexiconViewModels:LexiconDialogViewModel}"
-    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:lexiconViews="clr-namespace:ClearDashboard.Wpf.Application.Views.Lexicon"
     xmlns:lexiconViewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     mc:Ignorable="d"
-    Width="1000"
+    Width="500"
     >
     <Grid>
         <Grid.RowDefinitions>
@@ -33,7 +31,7 @@
                FontSize="18"
                FontWeight="Bold" />
         <lexiconControls:LexemeEditor x:Name="LexemeEditor" Grid.Row="2" 
-                Margin="20"
+                Margin="20,0,20,20"
                 Lexeme="{Binding Lexeme}" 
                 TokenDisplay="{Binding TokenDisplay}" 
                 LemmaFontSize="16"
@@ -53,6 +51,9 @@
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="LexemeAdded">
                     <b:CallMethodAction MethodName="OnLexemeAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                </b:EventTrigger>
+                <b:EventTrigger EventName="LexemeDeleted">
+                    <b:CallMethodAction MethodName="OnLexemeDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                 </b:EventTrigger>
                 <b:EventTrigger EventName="LexemeFormAdded">
                     <b:CallMethodAction MethodName="OnLexemeFormAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
@@ -93,6 +94,7 @@
                    FontSize="16"
                    FontWeight="Normal"
                    Text="Concordance: "
+                   TextDecorations="Underline"
                    VerticalAlignment="Center"
                    Margin="20,0,0,0"
         ></TextBlock>
@@ -102,14 +104,26 @@
                 TranslationFontSize="12"
                 TranslationFontStyle="Normal"
                 Margin="40,0,0,0"
-                />
+                >
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="TranslationAdded">
+                    <b:CallMethodAction MethodName="OnTranslationAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                </b:EventTrigger>
+                <b:EventTrigger EventName="TranslationSelected">
+                    <b:CallMethodAction MethodName="OnTranslationSelected" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                </b:EventTrigger>
+                <b:EventTrigger EventName="NewTranslationChanged">
+                    <b:CallMethodAction MethodName="OnNewTranslationChanged" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </lexiconControls:ConcordanceDisplay>
         <StackPanel Grid.Row="5"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <CheckBox x:Name="ApplyAllCheckbox"
                       Margin="10,10,0,0"
                       FontSize="13"
-                      IsChecked="True">
+                      IsChecked="{Binding ApplyToAll}">
                 Change all unset occurrences
                 <CheckBox.ToolTip>If checked, this will change all unset occurrences of this word</CheckBox.ToolTip>
             </CheckBox>
@@ -119,13 +133,14 @@
                     Orientation="Horizontal">
             <Button x:Name="ApplyTranslation" 
                     Margin="10"
+                    IsEnabled="{Binding ApplyEnabled}"
                     Style="{StaticResource TransparentStyle}">
-                Apply
+                Apply Translation
             </Button>
             <Button x:Name="CancelTranslation" 
                     Margin="10"
                     Style="{StaticResource TransparentStyle}">
-                Cancel
+                Cancel Translation
             </Button>
         </StackPanel>
         <ProgressBar Grid.Row="3"
