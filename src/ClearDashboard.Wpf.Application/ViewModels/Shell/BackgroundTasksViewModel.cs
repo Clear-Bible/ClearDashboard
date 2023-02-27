@@ -307,13 +307,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             return false;
         }
 
-        public bool CheckBackgroundProcessForTokenizationInProgressIgnoreCompleted(string nodeName)
+        public bool CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(string nodeName)
         {
             var tasks = BackgroundTaskStatuses.Where(x =>
             {
                 if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
                 {
-                    if (x.Description!.Contains("Macula Hebrew") && x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed)
+                    if (x.Description!.Contains("Macula Hebrew") && 
+                        (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&
+                         x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Failed &&
+                         x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Cancelled))
                     {
                         return true;
                     }
@@ -323,7 +326,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
                 if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
                 {
-                    if (x.Description!.Contains("Macula Greek") && x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed)
+                    if (x.Description!.Contains("Macula Greek") &&
+                        (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&
+                         x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Failed &&
+                         x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Cancelled))
                     {
                         return true;
                     }
@@ -331,7 +337,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     return false;
                 }
 
-                return x.Name == nodeName && x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed;
+                return x.Name == nodeName &&
+                       (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&
+                        x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Failed &&
+                        x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Cancelled);
 
             }).ToList();
 
