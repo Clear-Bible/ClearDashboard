@@ -1547,10 +1547,5 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CalculateLayout();
         }
-
-        public bool ShowContextMenu
-        {
-            get; set;
-        }
     }
 }
