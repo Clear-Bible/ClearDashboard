@@ -4,7 +4,7 @@ using ClearDashboard.Wpf.Application.Collections.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 {
-    public class TranslationViewModel : PropertyChangedBase
+    public class LexiconTranslationViewModel : PropertyChangedBase
     {
         public Translation Entity { get; }
 
@@ -29,11 +29,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 
         public int Count { get; set; }
 
-        public TranslationViewModel() : this(new Translation())
+        public LexiconTranslationViewModel() : this(new Translation())
         {
         }
 
-        public TranslationViewModel(Translation translation)
+        public LexiconTranslationViewModel(Translation translation)
         {
             Entity = translation;
         }

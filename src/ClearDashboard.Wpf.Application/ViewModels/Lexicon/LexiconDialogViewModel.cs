@@ -42,8 +42,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             set => Set(ref _semanticDomainSuggestions, value);
         }
 
-        private TranslationViewModelCollection _concordance = new();
-        public TranslationViewModelCollection Concordance
+        private LexiconTranslationViewModelCollection _concordance = new();
+        public LexiconTranslationViewModelCollection Concordance
         {
             get => _concordance;
             set => Set(ref _concordance, value);
@@ -189,17 +189,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         }
 
-        public async void OnTranslationDeleted(object sender, TranslationEntryEventArgs e)
+        public async void OnTranslationDeleted(object sender, LexiconTranslationEventArgs e)
         {
 
         }
 
-        public async void OnTranslationDropped(object sender, TranslationEntryEventArgs e)
+        public async void OnTranslationDropped(object sender, LexiconTranslationEventArgs e)
         {
 
         }
 
-        public async void OnTranslationSelected(object sender, TranslationEntryEventArgs e)
+        public async void OnTranslationSelected(object sender, LexiconTranslationEventArgs e)
         {
 
         }

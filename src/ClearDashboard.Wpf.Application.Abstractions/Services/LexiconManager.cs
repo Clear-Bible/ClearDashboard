@@ -151,14 +151,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task AddMeaningAsync(LexemeViewModel lexeme, Meaning meaning)
+        public async Task AddMeaningAsync(LexemeViewModel lexeme, MeaningViewModel meaning)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                await lexeme.Entity.PutMeaning(Mediator, meaning);
+                await lexeme.Entity.PutMeaning(Mediator, meaning.Entity);
 
                 stopwatch.Stop();
 
@@ -171,14 +171,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task DeleteMeaningAsync(Meaning meaning)
+        public async Task DeleteMeaningAsync(MeaningViewModel meaning)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                await meaning.Delete(Mediator);
+                await meaning.Entity.Delete(Mediator);
 
                 stopwatch.Stop();
 
@@ -191,7 +191,7 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task<SemanticDomainCollection> GetAllSemanticDomainsAsync(Meaning meaning)
+        public async Task<SemanticDomainCollection> GetAllSemanticDomainsAsync()
         {
             try
             {
@@ -212,14 +212,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task<SemanticDomain> AddNewSemanticDomainAsync(Meaning meaning, string semanticDomainText)
+        public async Task<SemanticDomain> AddNewSemanticDomainAsync(MeaningViewModel meaning, string semanticDomainText)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 
-                var result = await meaning.CreateAssociateSenanticDomain(Mediator, semanticDomainText);
+                var result = await meaning.Entity.CreateAssociateSenanticDomain(Mediator, semanticDomainText);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Added semantic domain {semanticDomainText} to meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
@@ -233,14 +233,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task AddExistingSemanticDomainAsync(Meaning meaning, SemanticDomain semanticDomain)
+        public async Task AddExistingSemanticDomainAsync(MeaningViewModel meaning, SemanticDomain semanticDomain)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 
-                await meaning.AssociateSemanticDomain(Mediator, semanticDomain);
+                await meaning.Entity.AssociateSemanticDomain(Mediator, semanticDomain);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Associated semantic domains {semanticDomain.Text} to meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
@@ -252,17 +252,37 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task RemoveSemanticDomainAsync(Meaning meaning, SemanticDomain semanticDomain)
+        public async Task RemoveSemanticDomainAsync(MeaningViewModel meaning, SemanticDomain semanticDomain)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
                 
-                await meaning.DetachSemanticDomain(Mediator, semanticDomain);
+                await meaning.Entity.DetachSemanticDomain(Mediator, semanticDomain);
 
                 stopwatch.Stop();
                 Logger.LogInformation($"Detached semantic domains {semanticDomain.Text} from meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task DeleteTranslationAsync(LexiconTranslationViewModel translation)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+
+                await translation.Entity.Delete(Mediator);
+
+                stopwatch.Stop();
+
+                Logger.LogInformation($"Deleted meaning {translation.Text} in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {

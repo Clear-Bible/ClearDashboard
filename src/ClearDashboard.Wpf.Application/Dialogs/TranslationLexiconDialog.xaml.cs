@@ -52,8 +52,8 @@ namespace ClearDashboard.Wpf.Application.Dialogs
             set => SetField(ref _semanticDomainSuggestions, value);
         }
 
-        private TranslationViewModelCollection _concordance = new();
-        public TranslationViewModelCollection Concordance
+        private LexiconTranslationViewModelCollection _concordance = new();
+        public LexiconTranslationViewModelCollection Concordance
         {
             get => _concordance;
             set => SetField(ref _concordance, value);

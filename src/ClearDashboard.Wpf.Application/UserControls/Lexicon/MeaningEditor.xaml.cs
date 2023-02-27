@@ -279,9 +279,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             });
         }
 
-        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, TranslationViewModel translation)
+        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, LexiconTranslationViewModel translation)
         {
-            RaiseEvent(new TranslationEntryEventArgs()
+            RaiseEvent(new LexiconTranslationEventArgs()
             {
                 RoutedEvent = routedEvent,
                 Lexeme = Lexeme,
@@ -378,7 +378,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
                 var dataString = (string?)e.Data.GetData(DataFormats.StringFormat);
                 if (dataString != null)
                 {
-                    var translation = JsonSerializer.Deserialize<TranslationViewModel>(dataString);
+                    var translation = JsonSerializer.Deserialize<LexiconTranslationViewModel>(dataString);
                     if (translation != null)
                     {
                         RaiseTranslationEntryEvent(TranslationDroppedEvent, translation);
@@ -389,7 +389,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnTranslationDeleted(object sender, RoutedEventArgs e)
         {
-            if (e is TranslationEntryEventArgs args)
+            if (e is LexiconTranslationEventArgs args)
             {
                 RaiseTranslationEntryEvent(TranslationDeletedEvent, args.Translation!);
             }
@@ -397,7 +397,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnTranslationSelected(object sender, RoutedEventArgs e)
         {
-            if (e is TranslationEntryEventArgs args)
+            if (e is LexiconTranslationEventArgs args)
             {
                 RaiseTranslationEntryEvent(TranslationSelectedEvent, args.Translation!);
             }

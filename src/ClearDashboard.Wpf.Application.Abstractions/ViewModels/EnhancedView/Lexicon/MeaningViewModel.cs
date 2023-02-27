@@ -34,10 +34,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
             }
         }
 
-        private TranslationViewModelCollection? _translations;
-        public TranslationViewModelCollection Translations
+        private LexiconTranslationViewModelCollection? _translations;
+        public LexiconTranslationViewModelCollection Translations
         {
-            get => _translations ??= new TranslationViewModelCollection(Entity.Translations);
+            get => _translations ??= new LexiconTranslationViewModelCollection(Entity.Translations);
             set
             {
                 _translations = value;
@@ -65,7 +65,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         public MeaningViewModel(Meaning meaning)
         {
             Entity = meaning;
-            _translations = new TranslationViewModelCollection(meaning.Translations);
+            _translations = new LexiconTranslationViewModelCollection(meaning.Translations);
         }
     }
 }

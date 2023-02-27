@@ -5,11 +5,9 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.Events.Lexicon
 {
-    public class TranslationEntryEventArgs : RoutedEventArgs
+    public class LexiconTranslationEventArgs : RoutedEventArgs
     {
-        public TranslationViewModel? Translation { get; set; } = new();
-        //public TranslationId TranslationId { get; set; } = new();
-        //public string TranslationText { get; set; } = String.Empty;
+        public LexiconTranslationViewModel? Translation { get; set; } = new();
         public MeaningViewModel Meaning { get; set; } = new();
         public LexemeViewModel Lexeme { get; set; } = new();
     }

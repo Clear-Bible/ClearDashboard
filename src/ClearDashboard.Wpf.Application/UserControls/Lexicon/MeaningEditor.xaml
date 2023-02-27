@@ -13,7 +13,7 @@
     Drop="OnMeaningEditorDrop">
     <UserControl.Resources>
         <DataTemplate x:Key="TranslationDisplayTemplate">
-            <lexiconControls:TranslationEntryDisplay
+            <lexiconControls:LexiconTranslationDisplay
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"

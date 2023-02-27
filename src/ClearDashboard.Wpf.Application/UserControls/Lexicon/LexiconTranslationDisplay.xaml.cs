@@ -12,7 +12,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
     /// <summary>
     /// A control that displays and allows selection of a single translation option and allows drag-and-drop within the meaning editor.
     /// </summary>
-    public partial class TranslationEntryDisplay : INotifyPropertyChanged
+    public partial class LexiconTranslationDisplay : INotifyPropertyChanged
     {
         #region Static Routed Events
 
@@ -20,13 +20,13 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// Identifies the TranslationDeletedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationDeletedEvent = EventManager.RegisterRoutedEvent
-            (nameof(TranslationDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationEntryDisplay));
+            (nameof(TranslationDeleted), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexiconTranslationDisplay));
 
         /// <summary>
         /// Identifies the TranslationSelectedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationSelectedEvent = EventManager.RegisterRoutedEvent
-            (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(TranslationEntryDisplay));
+            (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(LexiconTranslationDisplay));
 
         #endregion Static Routed Events
         #region Static Dependency Properties
@@ -34,17 +34,17 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// <summary>
         /// Identifies the DeleteVisibility dependency property.
         /// </summary>
-        public static readonly DependencyProperty DeleteVisibilityProperty = DependencyProperty.Register(nameof(DeleteVisibility), typeof(Visibility), typeof(TranslationEntryDisplay),
+        public static readonly DependencyProperty DeleteVisibilityProperty = DependencyProperty.Register(nameof(DeleteVisibility), typeof(Visibility), typeof(LexiconTranslationDisplay),
             new PropertyMetadata(Visibility.Visible));
 
         #endregion Static Dependency Properties
         #region Private Methods
         
-        private TranslationViewModel Translation => (DataContext as TranslationViewModel)!;
+        private LexiconTranslationViewModel Translation => (DataContext as LexiconTranslationViewModel)!;
 
-        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, TranslationViewModel translation)
+        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, LexiconTranslationViewModel translation)
         {
-            RaiseEvent(new TranslationEntryEventArgs()
+            RaiseEvent(new LexiconTranslationEventArgs()
             {
                 RoutedEvent = routedEvent,
                 Translation = translation
@@ -139,7 +139,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         #endregion Public Events
 
-        public TranslationEntryDisplay()
+        public LexiconTranslationDisplay()
         {
             InitializeComponent();
         }

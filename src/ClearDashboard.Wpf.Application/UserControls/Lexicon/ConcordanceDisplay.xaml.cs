@@ -42,7 +42,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// <summary>
         /// Identifies the Translations dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register(nameof(Translations), typeof(TranslationViewModelCollection), typeof(ConcordanceDisplay));
+        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register(nameof(Translations), typeof(LexiconTranslationViewModelCollection), typeof(ConcordanceDisplay));
 
         /// <summary>
         /// Identifies the TranslationFontFamily dependency property.
@@ -88,9 +88,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #endregion
         #region Private Methods
 
-        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, TranslationViewModel translation)
+        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, LexiconTranslationViewModel translation)
         {
-            RaiseEvent(new TranslationEntryEventArgs()
+            RaiseEvent(new LexiconTranslationEventArgs()
             {
                 RoutedEvent = routedEvent,
                 Translation = translation
@@ -101,7 +101,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             if (!String.IsNullOrWhiteSpace(NewTranslationTextBox.Text))
             {
-                RaiseTranslationEntryEvent(TranslationAddedEvent, new TranslationViewModel {Text = NewTranslationTextBox.Text});
+                RaiseTranslationEntryEvent(TranslationAddedEvent, new LexiconTranslationViewModel {Text = NewTranslationTextBox.Text});
             }
         }
 
@@ -128,7 +128,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnTranslationSelected(object sender, RoutedEventArgs e)
         {
-            if (e is TranslationEntryEventArgs args)
+            if (e is LexiconTranslationEventArgs args)
             {
                 RaiseTranslationEntryEvent(TranslationSelectedEvent, args.Translation!);
             }
@@ -166,11 +166,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         /// <summary>
-        /// Gets or sets the collection of <see cref="TranslationViewModel"/> instances in this concordance.
+        /// Gets or sets the collection of <see cref="LexiconTranslationViewModel"/> instances in this concordance.
         /// </summary>
-        public TranslationViewModelCollection Translations
+        public LexiconTranslationViewModelCollection Translations
         {
-            get => (TranslationViewModelCollection)GetValue(TranslationsProperty);
+            get => (LexiconTranslationViewModelCollection)GetValue(TranslationsProperty);
             set => SetValue(TranslationsProperty, value);
         }
 
