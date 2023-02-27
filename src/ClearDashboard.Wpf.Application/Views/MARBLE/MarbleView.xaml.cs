@@ -28,13 +28,27 @@ namespace ClearDashboard.Wpf.Application.Views.Marble
 
         private void AllowScrolling_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            MarbleScrollViewer.ScrollToVerticalOffset(MarbleScrollViewer.VerticalOffset - e.Delta / 3);
-            e.Handled = true;
+            if (e.Source is ListBox listbox && listbox == VersesListBox)
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                MarbleScrollViewer.ScrollToVerticalOffset(MarbleScrollViewer.VerticalOffset - e.Delta / 3);
+                e.Handled = true;
+            }
         }
 
         private void FindText_OnClick(object sender, RoutedEventArgs e)
         {
             DrawerHost.OpenDrawerCommand.Execute(Dock.Top, null);
+        }
+
+        private void Verses_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(VersesListBox);
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/40);
+            e.Handled = true;
         }
     }
 }
