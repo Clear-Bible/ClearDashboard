@@ -27,7 +27,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// <summary>
         /// Identifies the Lexeme dependency property.
         /// </summary>
-        public static readonly DependencyProperty LexemeProperty = DependencyProperty.Register(nameof(Lexeme), typeof(Lexeme), typeof(LexemeFormDisplay));
+        public static readonly DependencyProperty LexemeProperty = DependencyProperty.Register(nameof(Lexeme), typeof(LexemeViewModel), typeof(LexemeFormDisplay));
 
         /// <summary>
         /// Identifies the Orientation dependency property.
