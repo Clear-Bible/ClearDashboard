@@ -71,11 +71,22 @@
               >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontFamily}"
+                       FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
+                       FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontStyle}"
+                       FontWeight="Normal"
+                       Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaMargin}"
+                       Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaPadding}"
+                       Text="Lemma: "
+                       VerticalAlignment="Center"
+                       ></TextBlock>
             <TextBlock x:Name="LemmaTextBlock"
-                Grid.Column="0"
+                Grid.Column="1"
                 MouseLeftButtonDown="OnLemmaLabelClick"
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
@@ -88,7 +99,7 @@
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaTextBlockVisibility}" 
                 />
             <TextBox x:Name="LemmaTextBox"
-                Grid.Column="0"
+                Grid.Column="1"
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LemmaFontStyle}"
@@ -102,7 +113,7 @@
                 LostFocus="OnLemmaTextBoxLostFocus"
                 />
             <StackPanel
-                Grid.Column="1"
+                Grid.Column="2"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Orientation="Horizontal"
@@ -139,8 +150,8 @@
                 Width="110" 
                 Height="23" 
                 FontSize="11" 
-                HorizontalAlignment="Left"
-                Margin="20,20,0,0"
+                HorizontalAlignment="Right"
+                Margin="20,0,0,0"
                 Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=LexemeControlsVisibility}" 
                 Click="AddMeaningClicked">Add Meaning</Button>
     </Grid>

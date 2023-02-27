@@ -434,7 +434,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnLemmaLabelClick(object sender, MouseButtonEventArgs e)
         {
-            BeginEdit();
+            //BeginEdit();
         }
 
         private void OnLemmaTextBoxKeyUp(object sender, KeyEventArgs e)
@@ -463,15 +463,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             OnPropertyChanged(nameof(AddLexemeVisibility));
             OnPropertyChanged(nameof(LexemeControlsVisibility));
 
-            BeginEdit();
+            //BeginEdit();
         }
 
         private void OnLexemeFormAdded(object sender, RoutedEventArgs e)
         {
             if (Lexeme != null && e is LexemeFormEventArgs args)
             {
-                Lexeme.Forms.Add(args.Form);
                 RaiseLexemeFormEvent(LexemeFormAddedEvent, args.Form);
+                Lexeme.Forms.Add(args.Form);
             }
         }
 
