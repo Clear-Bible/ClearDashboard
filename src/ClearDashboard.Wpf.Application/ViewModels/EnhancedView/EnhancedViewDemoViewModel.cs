@@ -414,9 +414,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             SemanticDomainSuggestions = new SemanticDomainCollection
             {
-                new SemanticDomain { Text = "Aaa" },
-                new SemanticDomain { Text = "Bbb" },
-                new SemanticDomain { Text = "Ccc" }
+                new SemanticDomain { Text = "Apple" },
+                new SemanticDomain { Text = "Apricot" },
+                new SemanticDomain { Text = "Banana" },
+                new SemanticDomain { Text = "Cherry" }
             };
             var semanticDomains1 = new SemanticDomainCollection
             {
