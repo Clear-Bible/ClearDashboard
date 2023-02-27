@@ -67,41 +67,60 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
                 var columnIndex = grid.CurrentColumn!=null? grid.CurrentColumn.DisplayIndex : 6;
 
                 var cells = grid.SelectedCells;
-                var selectedItem = cells[0].Item;
-                var BiblicalTermsItem = (BiblicalTermsData)selectedItem;
-
-                switch (columnIndex)
+                if (cells.Count != 0)
                 {
-                    case (1):
-                        copyText = BiblicalTermsItem.Id;
-                        break;
-                    case (2):
-                        copyText = BiblicalTermsItem.SemanticDomain;
-                        break;
-                    case (3):
-                        copyText = BiblicalTermsItem.Gloss;
-                        break;
-                    case (4):
-                        copyText = BiblicalTermsItem.RenderingCount.ToString();
-                        break;
-                    case (5):
-                        copyText = BiblicalTermsItem.References.Count.ToString();
-                        break;
-                    case (6):
-                        //copyText = BiblicalTermsItem.RenderingString;
-                        break;
-                    default:
-                        copyText = BiblicalTermsItem.Gloss;
-                        break;
+                    var selectedItem = cells[0].Item;
+                    var BiblicalTermsItem = (BiblicalTermsData)selectedItem;
+
+                    switch (columnIndex)
+                    {
+                        case (0):
+                            copyText = BiblicalTermsItem.Id;
+                            break;
+                        case (1):
+                            copyText = BiblicalTermsItem.SemanticDomain;
+                            break;
+                        case (2):
+                            copyText = BiblicalTermsItem.Gloss;
+                            break;
+                        case (3):
+                            copyText = BiblicalTermsItem.Counts;
+                            break;
+                        case (4):
+                            copyText = BiblicalTermsItem.Found.ToString();
+                            break;
+                        case (5):
+                            sender = sender as ListBox;
+                            break;
+                        default:
+                            copyText = BiblicalTermsItem.Gloss;
+                            break;
+                    }
                 }
             }
-            else if (sender is ListBox listBox && listBox == SelectedItemVerseRenderings)
+            else if (sender is ListBox listBox && listBox == SelectedItemVerseRenderings)//upper right box
             {
                 copyText = listBox.SelectedItem.ToString();
+            }
+            else if (sender is ListBox verseListBox && verseListBox.SelectedItem is VerseViewModel)//verse text
+            {
+                var verseViewModel = verseListBox.SelectedItem as VerseViewModel;
+                copyText = verseViewModel.VerseText;
             }
             else if (sender is ListView listView && listView == SelectedItemVerses && listView.SelectedItem is VerseViewModel verse)
             {
                 copyText = verse.VerseText;
+            }
+            else if (sender is ScrollViewer scrollViewer)
+            {
+                var verseViewModel = scrollViewer.DataContext as VerseViewModel;
+                copyText = verseViewModel.VerseText;
+            }
+
+            if (sender is ListBox listTwo && listTwo.SelectedItem is RenderingStringParts)//renderings column
+            {
+                var renderingStringParts = listTwo.SelectedItem as RenderingStringParts;
+                copyText = renderingStringParts.RenderingString;
             }
 
             Clipboard.SetText(copyText);
