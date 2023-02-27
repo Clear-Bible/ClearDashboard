@@ -9,7 +9,7 @@
     <Grid VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
-            <ColumnDefinition x:Name="TranslationTextColumn" Width="Auto"/>
+            <ColumnDefinition x:Name="TranslationTextColumn" Width="100"/>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
