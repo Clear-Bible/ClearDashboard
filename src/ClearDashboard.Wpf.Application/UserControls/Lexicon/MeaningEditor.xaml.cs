@@ -13,6 +13,7 @@ using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
+using ClearDashboard.Wpf.Application.Messages.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using Brushes = System.Windows.Media.Brushes;
@@ -416,7 +417,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             {
                 if (message.Translation.TranslationId != null)
                 {
-                    Meaning.Translations.RemoveIfExists(message.Translation.TranslationId);
+                    Meaning.Translations.RemoveIfContainsId(message.Translation.TranslationId);
                 }
             }
             await Task.CompletedTask;
