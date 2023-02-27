@@ -31,9 +31,18 @@ namespace ClearDashboard.Wpf.Application.Collections.Lexicon
         {
         }
 
-        public void RemoveIfExists(TranslationId translationId)
+        public void RemoveIfContainsId(TranslationId translationId)
         {
             var existing = this.FirstOrDefault(t => t.TranslationId != null && t.TranslationId.Equals(translationId));
+            if (existing != null)
+            {
+                Remove(existing);
+            }
+        }        
+        
+        public void RemoveIfContainsText(string text)
+        {
+            var existing = this.FirstOrDefault(t => t.Text != null && t.Text.Equals(text));
             if (existing != null)
             {
                 Remove(existing);
