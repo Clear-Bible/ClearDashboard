@@ -43,6 +43,8 @@ namespace ClearDashboard.Aqua.Module
                 .As<IValidator<AquaVersionStepViewModel>>();
             builder.RegisterType<AquaRevisionStepViewModelValidator>()
                 .As<IValidator<AquaRevisionStepViewModel>>();
+            builder.RegisterType<AquaAssessmentStepViewModelValidator>()
+                .As<IValidator<AquaAssessmentStepViewModel>>();
 
             //menus and localization
 

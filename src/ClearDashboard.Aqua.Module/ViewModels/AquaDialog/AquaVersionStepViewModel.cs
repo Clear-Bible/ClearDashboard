@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using ClearDashboard.Aqua.Module.Models;
 using System.Windows;
 using System.Linq;
-using SIL.Machine.DataStructures;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
@@ -28,78 +27,11 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
 {
     private readonly IAquaManager? aquaManager_;
     private readonly IEnhancedViewManager? _enhancedViewManager;
-    public AquaVersionStepViewModel()
-    {
-        OkCommand = new RelayCommand(Ok);
-    }
-    public AquaVersionStepViewModel(
-        IAquaManager aquaManager,
-        IEnhancedViewManager enhancedViewManager,
 
-        DialogMode dialogMode,
-        DashboardProjectManager projectManager,
-        INavigationService navigationService,
-        ILogger<AquaVersionStepViewModel> logger,
-        IEventAggregator eventAggregator,
-        IMediator mediator,
-        ILifetimeScope? lifetimeScope,
-        IValidator<AquaVersionStepViewModel> validator,
-        ILocalizationService localizationService)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
-    {
-        aquaManager_ = aquaManager;
-        _enhancedViewManager = enhancedViewManager;
-        DialogMode = dialogMode;
+    public BindableCollection<Language> IsoLanguages { get; set; } = new();
 
-        CanMoveForwards = true;
-        CanMoveBackwards = true;
-        EnableControls = true;
-
-        OkCommand = new RelayCommand(Ok);
-
-        BodyTitle = LocalizationService!.Get("Aqua_VersionStep_BodyTitle");
-        BodyText = LocalizationService!.Get("Aqua_VersionStep_BodyText"); ;
-    }
-    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-    {
-        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
-        return base.OnInitializeAsync(cancellationToken);
-    }
-
-    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-    {
-        await Reload();
-        await base.OnActivateAsync(cancellationToken);
-        return;
-    }
-
-    private async Task Reload()
-    {
-        var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
-            Mediator!,
-            ParentViewModel!.TokenizedTextCorpusId
-                ?? throw new InvalidParameterEngineException(
-                    name: "tokenizedTextCorpusId_",
-                    value: "null"),
-            false);
-
-        ParentViewModel!.AquaTokenizedTextCorpusMetadata = AquaTokenizedTextCorpusMetadata.Get(tokenizedTextCorpus);
-
-        HasId = ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id == null ? false : true;
-
-        if (hasId_)
-        {
-            await LoadLanguages();
-            await LoadScripts();
-            await GetVersion(); //make sure the version is still on the server
-            await GetRevisions();
-        }
-    }
-
-    public BindableCollection<string> IsoLanguages { get; set; } = new();
-
-    public BindableCollection<string> IsoScripts { get; set; } = new();
-    public BindableCollection<Revision> Items { get; set; } = new ();
+    public BindableCollection<Script> IsoScripts { get; set; } = new();
+    public BindableCollection<Revision> Items { get; set; } = new();
 
     private bool hasId_;
     public bool HasId
@@ -107,7 +39,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         get => hasId_;
         set
         {
-            hasId_= value;
+            hasId_ = value;
             NotifyOfPropertyChange(() => HasId);
         }
     }
@@ -117,24 +49,6 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     {
         get => _dialogMode;
         set => Set(ref _dialogMode, value);
-    }
-
-    private string? bodyTitle_;
-    public string? BodyTitle
-    {
-        get => bodyTitle_;
-        set
-        {
-            bodyTitle_ = value;
-            NotifyOfPropertyChange(() => BodyTitle);
-        }
-    }
-
-    private string? bodyText_;
-    public string? BodyText
-    {
-        get => bodyText_;
-        set => Set(ref bodyText_, value);
     }
 
     private string? name_;
@@ -148,8 +62,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         }
     }
 
-    private string? isoLanguage_;
-    public string? IsoLanguage
+    private Language? isoLanguage_;
+    public Language? IsoLanguage
     {
         get => isoLanguage_;
         set
@@ -158,8 +72,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
             ValidationResult = Validate();
         }
     }
-    private string? isoScript_;
-    public string? IsoScript
+    private Script? isoScript_;
+    public Script? IsoScript
     {
         get => isoScript_;
         set
@@ -220,52 +134,86 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         }
     }
 
-    /*
-    private string? validatedText_;
-    public string? ValidatedText
-    {
-        get => validatedText_;
-        set
-        {
-            Set(ref validatedText_, value);
-            //ValidationResult = Validate();
-        }
-    }
-
-    private string? unvalidatedText_;
-    public string? UnvalidatedText
-    {
-        get => unvalidatedText_;
-        set
-        {
-            Set(ref unvalidatedText_, value);
-            //ValidationResult = Validate();
-        }
-    }
-
-    private string? numericText_;
-    public string? NumericText
-    {
-        get => numericText_;
-        set
-        {
-            Set(ref numericText_, value);
-            //ValidationResult = Validate();
-        }
-    }
-
-    private string? lengthText_;
-    public string? LengthText
-    {
-        get => lengthText_;
-        set
-        {
-            Set(ref lengthText_, value);
-            //ValidationResult = Validate();
-        }
-    }
-    */
     public RelayCommand OkCommand { get; }
+    public AquaVersionStepViewModel()
+    {
+        OkCommand = new RelayCommand(Ok);
+    }
+    public AquaVersionStepViewModel(
+        IAquaManager aquaManager,
+        IEnhancedViewManager enhancedViewManager,
+
+        DialogMode dialogMode,
+        DashboardProjectManager projectManager,
+        INavigationService navigationService,
+        ILogger<AquaVersionStepViewModel> logger,
+        IEventAggregator eventAggregator,
+        IMediator mediator,
+        ILifetimeScope? lifetimeScope,
+        IValidator<AquaVersionStepViewModel> validator,
+        ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
+    {
+        aquaManager_ = aquaManager;
+        _enhancedViewManager = enhancedViewManager;
+        DialogMode = dialogMode;
+
+        CanMoveForwards = true;
+        CanMoveBackwards = true;
+        EnableControls = true;
+
+        OkCommand = new RelayCommand(Ok);
+    }
+    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+    {
+        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
+        return base.OnInitializeAsync(cancellationToken);
+    }
+
+    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        ParentViewModel!.DialogTitle = $"{LocalizationService!.Get("Aqua_DialogTitle")} - {LocalizationService!.Get("Aqua_Version_BodyTitle")}";
+        await base.OnActivateAsync(cancellationToken);
+        return;
+    }
+
+    protected override void OnViewReady(object view)
+    {
+        _ = Reload();
+        base.OnViewReady(view);
+    }
+    private async Task Reload()
+    {
+        try
+        {
+            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
+                Mediator!,
+                ParentViewModel!.TokenizedTextCorpusId
+                    ?? throw new InvalidParameterEngineException(
+                        name: "tokenizedTextCorpusId_",
+                        value: "null"),
+                false);
+
+            ParentViewModel!.AquaTokenizedTextCorpusMetadata = AquaTokenizedTextCorpusMetadata.Get(tokenizedTextCorpus);
+
+            HasId = ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id == null ? false : true;
+
+            await LoadLanguages();
+            await LoadScripts();
+            if (hasId_)
+            {
+                await GetVersion();
+                await GetRevisions();
+            }
+        }
+        catch (Exception ex)
+        {
+            OnUIThread(() =>
+            {
+                ParentViewModel!.Message = ex.Message ?? ex.ToString();
+            });
+        }
+    }
 
     public void AddRevision()
     {
@@ -284,7 +232,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         _enhancedViewManager!.AddMetadatumEnhancedView(
             new AquaCorpusAnalysisEnhancedViewItemMetadatum() 
             { 
-                UrlString = $"RevisionId {revision.id}" 
+                AssessmentId = $"RevisionId {revision.id}" 
             }, 
             default); //FIXME: is this okay?
     }
@@ -324,8 +272,12 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
             async (version) =>
             {
                 Name = version.name;
-                IsoLanguage = version.language;
-                IsoScript = ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript;
+                IsoLanguage = IsoLanguages
+                    .Where(l => l.iso693 == version.isoLanguage)
+                    .FirstOrDefault();
+                IsoScript = IsoScripts
+                    .Where(s => s.iso15924 == ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript)
+                    .FirstOrDefault();
                 Abbreviation = version.abbreviation;
                 Rights = version.rights;
                 ForwardTranslationToVersionId = ParentViewModel!.AquaTokenizedTextCorpusMetadata.forwardTranslationToVersionId?.ToString();
@@ -364,9 +316,9 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                     null,
                     Name 
                         ?? throw new InvalidStateEngineException(name: "Name", value: "null"),
-                    IsoLanguage 
+                    IsoLanguage?.iso693 
                         ?? throw new InvalidStateEngineException(name: "IsoLanguage", value: "null"),
-                    IsoScript 
+                    IsoScript?.iso15924
                         ?? throw new InvalidStateEngineException(name: "IsoScript", value: "null"),
                     Abbreviation 
                         ?? throw new InvalidStateEngineException(name: "Abbreviation", value: "null"), 
@@ -385,8 +337,10 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 // only saves state server not providing back, otherwise version state saved on server.
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.id = version!.id;
                 //ParentViewModel!.AquaTokenizedTextCorpusMetadata.name = Name;
-                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoLanguage = IsoLanguage;
-                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript = IsoScript;
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoLanguage = IsoLanguage?.iso693
+                    ?? throw new InvalidStateEngineException(name: "IsoLanguage", value: "null");
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript = IsoScript?.iso15924
+                    ?? throw new InvalidStateEngineException(name: "IsoScript", value: "null");
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.abbreviation = version.abbreviation;
                 //ParentViewModel!.AquaTokenizedTextCorpusMetadata.rights = Rights;
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.forwardTranslationToVersionId = 
@@ -422,12 +376,6 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     private void SetRevisionsList(IEnumerable<Revision>? revisions)
     {
         Items.Clear();
-        //fixme: remove.For texting.
-        //revisions = new List<Revision>() 
-        //{
-        //    new Revision("revisionId234", "info 234"),
-        //    new Revision("revisionId888", "info 888")
-        //};
 
         if (revisions != null)
             foreach (var revision in revisions)
@@ -438,8 +386,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         var processStatus = await ParentViewModel!.RunLongRunningTask(
             "AQuA-Get_Revisions",
             (cancellationToken) => aquaManager_!.ListRevisions(
-                Abbreviation 
-                    ?? throw new InvalidStateEngineException(name: "Abbreviation", value: "null"),
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.id
+                    ?? throw new InvalidStateEngineException(name: "AquaTokenizedTextCorpusMetadata.id", value: "null"),
                 cancellationToken),
             SetRevisionsList);
 
@@ -494,46 +442,6 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         }
     }
 
-    /*
-    public async void AddRevision()
-    {
-        var processStatus = await ParentViewModel!.RunLongRunningTask(
-            "AQuA-Add_Revision",
-            (cancellationToken) => aquaManager_!.AddRevision(
-                ParentViewModel!.TokenizedTextCorpusId
-                    ?? throw new InvalidStateEngineException(name: "ParentViewModel!.TokenizedTextCorpus", value: "null"),
-                new Revision(
-                    null,
-                    Abbreviation
-                        ?? throw new InvalidStateEngineException(name: "Abbreviation", value: "null"),
-                    null,
-                    false
-                ),
-                cancellationToken),
-            (revision) => {
-                var foo = revision;
-            });
-
-        switch (processStatus)
-        {
-            case LongRunningTaskStatus.Completed:
-                break;
-            case LongRunningTaskStatus.Failed:
-                break;
-            case LongRunningTaskStatus.Cancelled:
-                ParentViewModel!.Cancel();
-                break;
-            case LongRunningTaskStatus.NotStarted:
-                break;
-            case LongRunningTaskStatus.Running:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-    */
-
-
     private async Task LoadLanguages()
     {
         var processStatus = await ParentViewModel!.RunLongRunningTask(
@@ -547,10 +455,11 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                     .OrderBy(language => language.iso693)
                     .Select(language =>
                     {
-                        IsoLanguages.Add(language.iso693);
+                        IsoLanguages.Add(language);
                         return language;
                     })
                     .ToList();
+                IsoLanguages.NotifyOfPropertyChange("IsoLanguages");
             });
 
         switch (processStatus)
@@ -580,15 +489,16 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 cancellationToken),
             (scripts) =>
             {
-                IsoLanguages.Clear();
+                IsoScripts.Clear();
                 scripts?
                     .OrderBy(script => script.iso15924)
                     .Select(script =>
                     {
-                        IsoScripts.Add(script.iso15924);
+                        IsoScripts.Add(script);
                         return script;
                     })
                     .ToList();
+                IsoScripts.NotifyOfPropertyChange("IsoScripts");
             });
 
         switch (processStatus)

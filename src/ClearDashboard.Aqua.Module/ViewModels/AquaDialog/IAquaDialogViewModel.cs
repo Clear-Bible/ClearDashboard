@@ -24,9 +24,12 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
         bool IsBusy { get; set; }
 
+        string? Message { get; set; }
         public Task<LongRunningTaskStatus> RunLongRunningTask<TResult>(
             string taskName,
             Func<CancellationToken, Task<TResult>> awaitableFunction,
-            Action<TResult> ProcessResult);
+            Action<TResult> ProcessResult,
+            Action? BeforeStart = null,
+            Action? AfterEnd = null);
     }
 }

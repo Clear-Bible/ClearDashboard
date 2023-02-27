@@ -21,25 +21,34 @@
     FontFamily="{DynamicResource MaterialDesignFont}"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <converters:BooleanAndConverter x:Key="BooleanAndConverter" />
-        <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
-            <Setter Property="Margin" Value="0,8" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+            </ResourceDictionary.MergedDictionaries>
 
-        <Style TargetType="Label">
-            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Margin" Value="20,10" />
-            <Setter Property="FontSize" Value="24" />
-        </Style>
+            <SolidColorBrush
+                x:Key="GridBrush"
+                Opacity="0.25"
+                Color="LightBlue" />
+            <converters:BooleanAndConverter x:Key="BooleanAndConverter" />
+            <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="0,8" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            </Style>
 
-        <Style BasedOn="{StaticResource MaterialDesignComboBox}" TargetType="ComboBox">
-            <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
-            <Setter Property="Foreground" Value="Black" />
-        </Style>
+            <Style TargetType="Label">
+                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Margin" Value="20,10" />
+                <Setter Property="FontSize" Value="24" />
+            </Style>
 
+            <Style BasedOn="{StaticResource MaterialDesignComboBox}" TargetType="ComboBox">
+                <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
+                <Setter Property="Foreground" Value="Black" />
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid  Width="Auto">
         <Grid.ColumnDefinitions >
@@ -55,28 +64,14 @@
                 </MultiBinding>
             </Grid.IsEnabled>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
-                <RowDefinition Height=".10*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="200" />
             </Grid.RowDefinitions>
 
             <StackPanel
                 Grid.Row="0"
                 VerticalAlignment="Top"
                 Orientation="Vertical">
-                <Label Content="{Binding BodyText}" />
-
-
-
-            </StackPanel>
-            <StackPanel Grid.Row="1" Orientation="Vertical" >
                 <TextBox x:Name="Name"
                          materialDesign:HintAssist.FloatingScale="0.60"
                          materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -123,25 +118,23 @@
                     </TextBox.Text>
                 </TextBox>
             -->
-            </StackPanel>
-            <StackPanel Grid.Row="2"  Orientation="Vertical" VerticalAlignment="Top">
+
                 <controls1:AutoCompleteComboBox
                     ScrollViewer.CanContentScroll="True"
                     FontSize="16"
+                    Margin="0,5,0,0"
                     ItemsSource="{Binding IsoLanguages}"
                     SelectedItem="{Binding IsoLanguage}"
                     Style="{StaticResource MaterialDesignFilledComboBox}"
-                    TextSearch.TextPath="IsoScript">
-                    <!--<controls1:AutoCompleteComboBox.ItemTemplate>
+                    TextSearch.TextPath="name">
+                    <controls1:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                                <TextBlock FontSize="24" Text="{Binding Name}" />
-                                <TextBlock FontSize="12" Text="{Binding LongName}" />
-                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                                <TextBlock FontSize="12" Text="{Binding iso693}" />
+                                <TextBlock FontSize="24" Text="{Binding name}" />
                             </StackPanel>
                         </DataTemplate>
-                    </controls1:AutoCompleteComboBox.ItemTemplate>-->
+                    </controls1:AutoCompleteComboBox.ItemTemplate>
                 </controls1:AutoCompleteComboBox>
 
                 
@@ -205,8 +198,6 @@
                     </Validation.ErrorTemplate>
 
                 </TextBox>-->
-            </StackPanel>
-            <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Top">
                 <!--<TextBox x:Name="IsoScript"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -240,21 +231,20 @@
                 <controls1:AutoCompleteComboBox
                     ScrollViewer.CanContentScroll="true"
                     FontSize="16"
+                    Margin="0,5,0,  0"
                     IsEnabled="{Binding IsEnabledSelectedProject}"
                     ItemsSource="{Binding IsoScripts}"
                     SelectedItem="{Binding IsoScript}"
                     Style="{StaticResource MaterialDesignFilledComboBox}"
-                    TextSearch.TextPath="IsoScript">
-                    <!--<controls1:AutoCompleteComboBox.ItemTemplate>
+                    TextSearch.TextPath="name">
+                    <controls1:AutoCompleteComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock FontSize="12" Text="{Binding CorpusTypeDisplay}" />
-                                <TextBlock FontSize="24" Text="{Binding Name}" />
-                                <TextBlock FontSize="12" Text="{Binding LongName}" />
-                                <TextBlock FontSize="10" Text="{Binding Id}" />
+                                <TextBlock FontSize="12" Text="{Binding iso15924}" />
+                                <TextBlock FontSize="24" Text="{Binding name}" />
                             </StackPanel>
                         </DataTemplate>
-                    </controls1:AutoCompleteComboBox.ItemTemplate>-->
+                    </controls1:AutoCompleteComboBox.ItemTemplate>
                 </controls1:AutoCompleteComboBox>
 
                 <!--<TextBox x:Name="LengthText"
@@ -287,10 +277,6 @@
                     </Validation.ErrorTemplate>
 
                 </TextBox>-->
-            </StackPanel>
-
-
-            <StackPanel Grid.Row="4" Orientation="Vertical" VerticalAlignment="Top">
                 <TextBox x:Name="Abbreviation"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -351,8 +337,6 @@
                     </Validation.ErrorTemplate>
 
                 </TextBox>-->
-            </StackPanel>
-            <StackPanel Grid.Row="5">
                 <TextBox x:Name="Rights"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -383,9 +367,6 @@
                     </Validation.ErrorTemplate>
 
                 </TextBox>
-
-            </StackPanel>
-            <StackPanel Grid.Row="6">
                 <TextBox x:Name="ForwardTranslationToVersionId"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -416,9 +397,6 @@
                     </Validation.ErrorTemplate>
 
                 </TextBox>
-
-            </StackPanel>
-            <StackPanel Grid.Row="7">
                 <TextBox x:Name="BackTranslationToVersionId"
                         materialDesign:HintAssist.FloatingScale="0.60"
                         materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -449,9 +427,6 @@
                     </Validation.ErrorTemplate>
 
                 </TextBox>
-
-            </StackPanel>
-            <StackPanel Grid.Row="8">
                 <CheckBox
                     Name="MachineTranslation"
                     Margin="5,0,0,0"
@@ -462,14 +437,14 @@
                 </CheckBox>
             </StackPanel>
             <StackPanel
-                Grid.Row="9"
+                Grid.Row="1"
                 Margin="5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Orientation="Horizontal">
+                Orientation="Vertical">
                 <Button
                     x:Name="AddVersion"
-                    Content="Add Corpus Information to AQuA"
+                    Content="{helpers:Localization Aqua_Version_AddVersion}"
                     IsDefault="True"
                     Style="{StaticResource TransparentStyle}">
                     <Button.IsEnabled>
@@ -490,82 +465,88 @@
                 </MultiBinding>
             </Grid.IsEnabled>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="200" />
             </Grid.RowDefinitions>
 
             <StackPanel
                 VerticalAlignment="Top"
-                Orientation="Vertical">
-                <ListView 
-                    x:Name="ListView"
-                    Margin="5, 30"
-                    ItemsSource="{Binding Items}"
-                    ScrollViewer.CanContentScroll="False"
-                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                    ScrollViewer.IsDeferredScrollingEnabled="True"
-                    VirtualizingStackPanel.IsVirtualizing="True"
-                    VirtualizingStackPanel.VirtualizationMode="Recycling">
+                Orientation="Vertical" Grid.Row="0">
 
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Height" Value="Auto" />
-                            <Setter Property="Width" Value="Auto"></Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="LightGreen" />
-                                    <Setter Property="IsSelected" Value="True" />
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="true">
-                                    <Setter Property="Background" Value="LightCoral" />
-                                </Trigger>
-                            </Style.Triggers>
+                <DataGrid
+            x:Name="gridRevisions"
+            Margin="5, 30"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            AutoGenerateColumns="False"
+            CanUserResizeColumns="True"
+            GridLinesVisibility="All"
+            HorizontalGridLinesBrush="{StaticResource GridBrush}"
+            IsReadOnly="True"
+            ItemsSource="{Binding Items}"
+            ScrollViewer.CanContentScroll="True"
+            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+            ScrollViewer.VerticalScrollBarVisibility="Auto"
+            VerticalGridLinesBrush="{StaticResource GridBrush}">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="Foreground" Value="{StaticResource PrimaryHueDarkForegroundBrush}" />
                         </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ShowGridLines="True" HorizontalAlignment="Stretch">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0"
+                    </DataGrid.ColumnHeaderStyle>
+
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_VersionStep_Revisions_Name}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Grid.Column="0"
                                     Margin="8,0,5,0"
                                     VerticalAlignment="Center"
                                     FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                     FontWeight="Bold"
                                     Text="{Binding name}" />
-                                <Button Grid.Column="1" 
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Grid.Column="1" 
                                     cm:Message.Attach="ViewRevision($dataContext)"
                                     Style="{StaticResource TransparentStyle}">+</Button>
-                                <Button Grid.Column="2" 
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Grid.Column="2" 
                                     cm:Message.Attach="DeleteItem($dataContext)"
                                     Style="{StaticResource TransparentStyle}">X</Button>
-                            </Grid>
-
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-                <StackPanel
-                Grid.Row="10"
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <StackPanel
+                Grid.Row="1"
                 Grid.Column="1"
                 Margin="5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
-                Orientation="Horizontal">
-                    <Button
-                    x:Name="AddRevision"
-                    IsDefault="True"
-                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                    Style="{StaticResource TransparentStyle}">Add Revision</Button>
-                    <Button
-                    x:Name="GetRevisions"
-                    IsDefault="True"    
-                    IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
-                    Style="{StaticResource TransparentStyle}">Reload Revisions</Button>
-                </StackPanel>
+                Orientation="Vertical">
+                <Button
+                x:Name="AddRevision"
+                IsDefault="True"
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                Style="{StaticResource TransparentStyle}" Content="{helpers:Localization Aqua_Version_AddRevision}"></Button>
+                <Button
+                x:Name="GetRevisions"
+                IsDefault="True"    
+                IsEnabled="{Binding ParentViewModel.IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                Style="{StaticResource TransparentStyle}" Content="{helpers:Localization Aqua_Version_ReloadRevisions}"></Button>
             </StackPanel>
         </Grid>
     </Grid>

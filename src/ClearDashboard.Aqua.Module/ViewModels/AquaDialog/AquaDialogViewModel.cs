@@ -26,18 +26,12 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 {
     public class AquaDialogViewModel : DashboardApplicationWorkflowShellViewModel, IAquaDialogViewModel
     {
-        #region Member Variables   
-
         private readonly ILogger<AquaDialogViewModel>? logger_;
-        private readonly DashboardProjectManager? projectManager_;
-        private readonly IAquaManager? aquaManager_;
         private readonly LongRunningTaskManager? longRunningTaskManager_;
-        private LongRunningTask? currentLongRunningTask_;
+        private List<LongRunningTask> currentLongRunningTasks_ = new();
+        private bool dontStartNewTask = false;
 
-        #endregion //Member Variables
-
-
-        #region Public Properties
+        public bool CanCancel => true;
 
         private TokenizedTextCorpusId? tokenizedTextCorpusId_;
         public TokenizedTextCorpusId? TokenizedTextCorpusId
@@ -58,11 +52,6 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             get => aquaTokenizedTextCorpusMetadata_;
             set => aquaTokenizedTextCorpusMetadata_ = value;
         }
-
-        #endregion //Public Properties
-
-
-        #region Observable Properties
 
         private string? dialogTitle_;
         public string? DialogTitle
@@ -85,7 +74,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
                 NotifyOfPropertyChange(() => StatusBarVisibility);
             }
         }
-    
+
         private bool _canOk;
         public bool CanOk
         {
@@ -93,22 +82,13 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             set => Set(ref _canOk, value);
         }
 
-        #endregion //Observable Properties
-
-
-        #region Constructors, initialization, and activation
-
         public AquaDialogViewModel()
         {
-            //_errorTitle = "";
         }
 
         public AquaDialogViewModel(
             DialogMode dialogMode,
-            CorpusNodeViewModel corpusNodeViewModel,
             TokenizedTextCorpusId tokenizedTextCorpusId,
-
-            IAquaManager aquaManager,
 
             ILogger<AquaDialogViewModel> logger,
             DashboardProjectManager projectManager,
@@ -124,8 +104,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
             CanOk = true;
             logger_ = logger;
-            projectManager_ = projectManager;
-            aquaManager_ = aquaManager;
+
             longRunningTaskManager_ = longRunningTaskManager;
 
             DisplayName = LocalizationService!.Get("AquaDialog_DisplayName");
@@ -136,7 +115,6 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode),
@@ -163,60 +141,72 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
             await base.OnInitializeAsync(cancellationToken);
         }
-
-        #endregion //Constructor
-
-
-        #region Methods
-
         public async void Cancel()
         {
-            CancelCurrentTask();
-
+            CancelCurrentTasks();
             await TryCloseAsync(false);
         }
-
-        private void CancelCurrentTask()
+        private void CancelCurrentTasks()
         {
-            if (currentLongRunningTask_ is { Status: LongRunningTaskStatus.Running })
+            foreach (var task in currentLongRunningTasks_)
             {
-                Logger!.LogInformation($"Cancelling {currentLongRunningTask_.Name}");
-                currentLongRunningTask_.Cancel();
+                if (task is { Status: LongRunningTaskStatus.Running })
+                {
+                    Logger!.LogInformation($"Cancelling {task.Name}");
+                    task.Cancel();
+                }
             }
         }
-
-        public void OnClose(CancelEventArgs args)
+        public void OnClosing(CancelEventArgs args)
         {
-            if (args.Cancel)
-            {
-                Logger!.LogInformation("OnClose() called with 'Cancel' set to true");
-                CancelCurrentTask();
-            }
+            dontStartNewTask = true;
+            CancelCurrentTasks();
         }
         public async void Ok()
         {
             await TryCloseAsync(true);
         }
-        public bool CanCancel => true /* can always cancel */;
+
+        private void BeforeStartDefault()
+        {
+            IsBusy = true;
+            StatusBarVisibility = Visibility.Visible;
+        }
+
+        private void AfterEndDefault()
+        {
+            IsBusy = false;
+            //StatusBarVisibility = Visibility.Hidden;
+        }
 
         //FIXME: should the following be put in a base class?
         public async Task<LongRunningTaskStatus> RunLongRunningTask<TResult>(
             string taskName, 
             Func<CancellationToken, Task<TResult>> awaitableFunction,
-            Action<TResult> ProcessResult)
+            Action<TResult> ProcessResult,
+            System.Action? BeforeStart = null,
+            System.Action? AfterEnd = null)
         {
-            IsBusy = true;
-            currentLongRunningTask_ = longRunningTaskManager_!.Create(taskName, LongRunningTaskStatus.Running);
-            var cancellationToken = currentLongRunningTask_!.CancellationTokenSource?.Token
+            if (BeforeStart == null)
+                BeforeStartDefault();
+
+            Random rnd = new Random();
+            int num = rnd.Next(1, 999);
+            taskName = $"{num}: {taskName}";
+
+            var longRunningTask = longRunningTaskManager_!.Create(taskName, LongRunningTaskStatus.Running);
+            currentLongRunningTasks_.Add(longRunningTask);
+            var cancellationToken = longRunningTask!.CancellationTokenSource?.Token
                 ?? throw new Exception("Cancellation source is not set.");
             try
             {
-                StatusBarVisibility = Visibility.Visible;
+                if (dontStartNewTask)
+                    throw new OperationCanceledException();
 
-                currentLongRunningTask_.Status = LongRunningTaskStatus.Running;
+                longRunningTask.Status = LongRunningTaskStatus.Running;
                 await SendBackgroundStatus(
                     taskName,
-                    currentLongRunningTask_.Status,
+                    longRunningTask.Status,
                     cancellationToken,
                     $"{taskName} running");
                 Logger!.LogDebug($"{taskName} started");
@@ -225,19 +215,19 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                    longRunningTask.Status = LongRunningTaskStatus.Cancelled;
                     await SendBackgroundStatus(taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} canceled.");
                     Logger!.LogDebug($"{taskName} cancelled.");
                 }
                 else
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Completed;
+                    longRunningTask.Status = LongRunningTaskStatus.Completed;
                     await SendBackgroundStatus(
                         taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} complete");
                     Logger!.LogDebug($"{taskName} complete.");
@@ -245,10 +235,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             }
             catch (OperationCanceledException)
             {
-                currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                longRunningTask.Status = LongRunningTaskStatus.Cancelled;
                 await SendBackgroundStatus(
                     taskName,
-                    currentLongRunningTask_.Status,
+                    longRunningTask.Status,
                     cancellationToken,
                     $"{taskName} cancelled.");
                 Logger!.LogDebug($"{taskName}: cancelled.");
@@ -257,10 +247,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             {
                 if (ex.Message.Contains("The operation was canceled."))
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Cancelled;
+                    longRunningTask.Status = LongRunningTaskStatus.Cancelled;
                     await SendBackgroundStatus(
                         taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} cancelled.");
                     Logger!.LogDebug($"{taskName}: cancelled.");
@@ -268,10 +258,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
                 }
                 else
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
+                    longRunningTask.Status = LongRunningTaskStatus.Failed;
                     await SendBackgroundStatus(
                        taskName,
-                       currentLongRunningTask_.Status,
+                       longRunningTask.Status,
                        cancellationToken,
                        $"{taskName} failed: {ex.Message}.",
                        ex);
@@ -282,10 +272,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             {
                 if (!cancellationToken.IsCancellationRequested)
                 {
-                    currentLongRunningTask_.Status = LongRunningTaskStatus.Failed;
+                    longRunningTask.Status = LongRunningTaskStatus.Failed;
                     await SendBackgroundStatus(
                         taskName,
-                        currentLongRunningTask_.Status,
+                        longRunningTask.Status,
                         cancellationToken,
                         $"{taskName} failed: {ex.Message}.",
                         ex);
@@ -295,13 +285,12 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             finally
             {
                 longRunningTaskManager_.TaskComplete(taskName);
+                currentLongRunningTasks_.Remove(longRunningTask);
 
-                IsBusy = false;
-                //StatusBarVisibility = Visibility.Hidden;
+                if (AfterEnd == null)
+                    AfterEndDefault();
             }
-            return currentLongRunningTask_.Status;
+            return longRunningTask.Status;
         }
-
-        #endregion // Methods
     }
 }

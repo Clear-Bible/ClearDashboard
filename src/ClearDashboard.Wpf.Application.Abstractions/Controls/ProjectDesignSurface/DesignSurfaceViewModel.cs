@@ -664,10 +664,12 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                         }
                     };
 
+                    var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
+
                     if (!isResource)
                     {
                         AddSeparatorMenu(corpusNodeMenuViewModel.MenuItems);
-                   
+
                         corpusNodeMenuViewModel.MenuItems.Add(new CorpusNodeMenuItemViewModel
                         {
                             // Show Verses in New Windows
@@ -679,11 +681,15 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                             Tokenizer = tokenizer.ToString(),
                         });
 
-                        var menuBuilders = LifetimeScope.Resolve<IEnumerable<IDesignSurfaceMenuBuilder>>();
                         foreach (var menuBuilder in menuBuilders)
                         {
-                            menuBuilder.CreateCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
+                            menuBuilder.CreateOnlyForNonResouceCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
                         }
+                    }
+
+                    foreach (var menuBuilder in menuBuilders)
+                    {
+                        menuBuilder.CreateCorpusNodeChildMenu(corpusNodeMenuViewModel, tokenizedCorpus);
                     }
 
                     corpusNodeViewModel.MenuItems.Add(corpusNodeMenuViewModel);

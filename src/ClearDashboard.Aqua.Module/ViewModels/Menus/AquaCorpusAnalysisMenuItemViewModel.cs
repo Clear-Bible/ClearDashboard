@@ -64,7 +64,6 @@ namespace ClearDashboard.Aqua.Module.ViewModels.Menus
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode.Edit),
-                new NamedParameter("corpusNodeViewModel", CorpusNodeViewModel),
                 new NamedParameter("tokenizedTextCorpusId", TokenizedTextCorpusId),
             };
 

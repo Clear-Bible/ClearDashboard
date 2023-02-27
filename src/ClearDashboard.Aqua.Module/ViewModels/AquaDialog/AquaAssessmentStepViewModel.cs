@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -6,19 +7,109 @@ using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.Services;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
-public class AquaAssessmentStepViewModel : DashboardApplicationWorkflowStepViewModel<IAquaDialogViewModel>
+public class AquaAssessmentStepViewModel : 
+    DashboardApplicationValidatingWorkflowStepViewModel<IAquaDialogViewModel, AquaAssessmentStepViewModel>
 {
     private readonly IAquaManager? aquaManager_;
+
+    public BindableCollection<string> Types { get; set; } = new()
+    {
+        "missing-words",
+        "semantic-similarity",
+        "sentence-length",
+        "word-alignment"
+    };
+
+    public BindableCollection<Revision> Revisions { get; set; } = new();
+
+    private Revision? revision_;
+    public Revision? Revision
+    {
+        get => revision_;
+        set
+        {
+            revision_ = value;
+            NotifyOfPropertyChange(() => Revision);
+        }
+    }
+
+    private bool revisionEnabled_ = false;
+    public bool RevisionEnabled
+    {
+        get => revisionEnabled_;
+        set => Set(ref revisionEnabled_, value);
+    }
+    private string? type_ = null;
+    public string? Type
+    {
+        get => type_;
+        set
+        {
+            type_ = value;
+            if (type_ == "sentence-length")
+            {
+                RevisionEnabled = false;
+                Revision = null;
+            }
+            else
+            {
+                RevisionEnabled = true;
+                Revision = null;
+            }
+
+            NotifyOfPropertyChange(() => Type);
+        }
+    }
+
+    private bool hasId_;
+    public bool HasId
+    {
+        get => hasId_;
+        set
+        {
+            hasId_ = value;
+            NotifyOfPropertyChange(() => HasId);
+        }
+    }
+    private DialogMode _dialogMode;
+    public DialogMode DialogMode
+    {
+        get => _dialogMode;
+        set => Set(ref _dialogMode, value);
+    }
+
+    private bool published_ = false;
+    public bool Published
+    {
+        get => published_;
+        set
+        {
+            Set(ref published_, value);
+        }
+    }
+
+    private string? modalSuffix_ = null;
+    public string? ModalSuffix
+    {
+        get => modalSuffix_;
+        set
+        {
+            Set(ref modalSuffix_, value);
+        }
+    }
 
     public AquaAssessmentStepViewModel()
     {
@@ -33,17 +124,15 @@ public class AquaAssessmentStepViewModel : DashboardApplicationWorkflowStepViewM
         IEventAggregator eventAggregator,
         IMediator mediator, 
         ILifetimeScope? lifetimeScope,
-        ILocalizationService localizationService)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
+        ILocalizationService localizationService,
+        IValidator<AquaAssessmentStepViewModel> validator)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
     {
         aquaManager_ = aquaManager;
         DialogMode = dialogMode;
         CanMoveForwards = true;
         CanMoveBackwards = true;
         EnableControls = true;
-
-        BodyTitle = LocalizationService!.Get("Aqua_AssessmentStep_BodyTitle");
-        BodyText = LocalizationService!.Get("Aqua_AssessmentStep_BodyText"); ;
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
@@ -52,81 +141,39 @@ public class AquaAssessmentStepViewModel : DashboardApplicationWorkflowStepViewM
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel!.StatusBarVisibility = Visibility.Visible;
+        ParentViewModel!.DialogTitle = $"{LocalizationService!.Get("Aqua_DialogTitle")} - {LocalizationService!.Get("Aqua_Assessment_BodyTitle")}";
         return base.OnActivateAsync(cancellationToken);
     }
-
-    //private string? revisionId_;
-    //public string? RevisionId
-    //{
-    //    get => revisionId_;
-    //    set
-    //    {
-    //        Set(ref revisionId_, value);
-    //        //ValidationResult = Validate();
-    //    }
-    //}
-
-    private DialogMode _dialogMode;
-    public DialogMode DialogMode
+    protected override void OnViewReady(object view)
     {
-        get => _dialogMode;
-        set => Set(ref _dialogMode, value);
+        _ = Reload();
+        base.OnViewReady(view);
     }
-
-    private string? bodyTitle_;
-    public string? BodyTitle
+    private async Task Reload()
     {
-        get => bodyTitle_;
-        set
+        try
         {
-            bodyTitle_ = value;
-            NotifyOfPropertyChange(() => BodyTitle);
+            HasId = ParentViewModel!.ActiveAssessment == null ? false : true;
+
+            if (hasId_)
+            {
+                throw new InvalidStateEngineException(name: "ParentViewModel!.ActiveAssessment", value: "not null", "ParentViewModel!.ActiveAssessment not null");
+                // not used to view assessment
+                //GetAssessment();
+            }
+            await GetAllProjectRevisions();
+            return;
+        }
+        catch (Exception ex)
+        {
+            OnUIThread(() =>
+            {
+                ParentViewModel!.Message = ex.Message ?? ex.ToString();
+            });
+            throw;
         }
     }
 
-    private string? bodyText_;
-
-    public string? BodyText
-    {
-        get => bodyText_;
-        set
-        {
-            bodyText_ = value;
-            NotifyOfPropertyChange(() => BodyText);
-        }
-    }
-
-    private int? id_ = null;
-    //public int? Id
-    //{
-    //    get => id_;
-    //    set
-    //    {
-    //        Set(ref id_, value);
-    //        //ValidationResult = Validate();
-    //    }
-    //}
-
-    private string? name_ = null;
-    public string? Name
-    {
-        get => name_;
-        set
-        {
-            Set(ref name_, value == "" ? null : value);
-            //ValidationResult = Validate();
-        }
-    }
-
-    private bool published_ = false;
-    public bool Published
-    {
-        get => published_;
-        set
-        {
-            Set(ref published_, value);
-        }
-    }
     public void Ok(object obj)
     {
         ParentViewModel!.Ok();
@@ -145,43 +192,119 @@ public class AquaAssessmentStepViewModel : DashboardApplicationWorkflowStepViewM
     }
     public async void AddAssessment()
     {
-        try
-        {
-            var processStatus = await ParentViewModel!.RunLongRunningTask(
-                "AQuA-Add_Assessment",
-                (cancellationToken) => aquaManager_!.AddAssessment(
-                    new Assessment(1,null,null,null,null,null,null,null), //fixme
-                    cancellationToken),
-                (assessment) => {
-                    if (assessment == null)
-                        throw new InvalidParameterEngineException(name: "assessment", value: "null", message: "AddAssessment was successful but returned null");
-                    //Name = revision.name;
-                    //Published= revision.published;
-                    //id_ = 
-                });
+        var processStatus = await ParentViewModel!.RunLongRunningTask(
+            "AQuA-Add_Assessment",
+            (cancellationToken) => aquaManager_!.AddAssessment(
+                new Assessment(
+                    null,
+                    ParentViewModel?.ActiveRevision?.id,
+                    Revision?.id ?? null,
+                    Type,
+                    ModalSuffix,
+                    null,
+                    null,
+                    null,
+                    null),
+                cancellationToken),
+            (assessment) => {
+                 MoveBackwards();
+            });
 
-            switch (processStatus)
-            {
-                case LongRunningTaskStatus.Completed:
-                    //await MoveForwards();
-                    await MoveBackwards();
-                    break;
-                case LongRunningTaskStatus.Failed:
-                    break;
-                case LongRunningTaskStatus.Cancelled:
-                    ParentViewModel!.Cancel();
-                    break;
-                case LongRunningTaskStatus.NotStarted:
-                    break;
-                case LongRunningTaskStatus.Running:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-        catch (Exception)
+        switch (processStatus)
         {
-            //ParentViewModel!.Cancel();
+            case LongRunningTaskStatus.Completed:
+                //await MoveForwards();
+                await MoveBackwards();
+                break;
+            case LongRunningTaskStatus.Failed:
+                break;
+            case LongRunningTaskStatus.Cancelled:
+                ParentViewModel!.Cancel();
+                break;
+            case LongRunningTaskStatus.NotStarted:
+                break;
+            case LongRunningTaskStatus.Running:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
+    }
+
+    private void SetRevisionsList(IEnumerable<Revision>? revisions)
+    {
+        Execute.OnUIThread(() =>
+        {
+            if (revisions != null)
+                foreach (var revision in revisions)
+                    if (revision.id != ParentViewModel!.ActiveRevision?.id)
+                        Revisions.Add(revision);
+        });
+    }
+    public async Task GetAllProjectRevisions()
+    {        
+        Revisions.Clear();
+
+        var allCorpus = await Corpus.GetAllCorpusIds(Mediator!);
+        List<TokenizedTextCorpusId> tokenizedCorpusIds = new();
+        foreach (var corpusId in allCorpus)
+        {
+            tokenizedCorpusIds.AddRange(await TokenizedTextCorpus.GetAllTokenizedCorpusIds(
+                Mediator!,
+                corpusId
+            ));
+        }
+
+        ParentViewModel!.IsBusy = true;
+        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
+
+        await Parallel.ForEachAsync(tokenizedCorpusIds, new ParallelOptions(), async (tokenizedCorpusId, cancellationToken) =>
+        {
+            var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
+                Mediator!,
+                tokenizedCorpusId,
+                false);
+
+            var aquaTokenizedTextCorpusMetadata = AquaTokenizedTextCorpusMetadata.Get(tokenizedTextCorpus);
+
+            var versionId = aquaTokenizedTextCorpusMetadata?.id ?? null;
+
+            if (versionId != null)
+                await GetRevisions((int) versionId);
+        });
+        ParentViewModel!.IsBusy = false;
+        //ParentViewModel!.StatusBarVisibility = Visibility.Visible;
+    }
+    public async Task GetRevisions(int versionId)
+    {
+        var processStatus = await ParentViewModel!.RunLongRunningTask(
+            "AQuA-Assessments-Get_Revisions",
+            (cancellationToken) => aquaManager_!.ListRevisions(
+                versionId,
+                cancellationToken),
+            SetRevisionsList,
+            () => { },
+            () => { });
+
+        switch (processStatus)
+        {
+            case LongRunningTaskStatus.Completed:
+                //await MoveForwards();
+                break;
+            case LongRunningTaskStatus.Failed:
+                break;
+            case LongRunningTaskStatus.Cancelled:
+                ParentViewModel!.Cancel();
+                break;
+            case LongRunningTaskStatus.NotStarted:
+                break;
+            case LongRunningTaskStatus.Running:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+    protected override ValidationResult? Validate()
+    {
+        return Validator!.Validate(this);
     }
 }

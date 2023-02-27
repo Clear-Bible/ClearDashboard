@@ -94,7 +94,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private VerseManager VerseManager { get; }
         public SelectionManager SelectionManager { get; }
 
-        private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item.GetType() == typeof(VerseAwareEnhancedViewItemViewModel)).Cast<VerseAwareEnhancedViewItemViewModel>();
+        private IEnumerable<VerseAwareEnhancedViewItemViewModel> VerseAwareEnhancedViewItemViewModels => Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>();
 
         private int _originalSourceFontSizeValue = 14;
         private int _originalTargetFontSizeValue = 14;

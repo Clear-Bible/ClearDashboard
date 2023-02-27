@@ -13,78 +13,22 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Aqua.Module.Services;
 using FluentValidation.Results;
 using FluentValidation;
-using ClearDashboard.DAL.Alignment.Corpora;
 using ClearBible.Engine.Exceptions;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 using System.Collections.Generic;
 using ClearDashboard.Aqua.Module.Models;
 using System.Windows;
-using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
-public class AquaRevisionStepViewModel : DashboardApplicationValidatingWorkflowStepViewModel<IAquaDialogViewModel, AquaRevisionStepViewModel>
+public class AquaRevisionStepViewModel : 
+    DashboardApplicationValidatingWorkflowStepViewModel<IAquaDialogViewModel, AquaRevisionStepViewModel>
 {
     private readonly IAquaManager? aquaManager_;
-    private readonly IEnhancedViewManager? _enhancedViewManager;
+    private readonly IEnhancedViewManager? enhancedViewManager_;
 
-    public AquaRevisionStepViewModel()
-    {
-        OkCommand = new RelayCommand(Ok);
-    }
-    public AquaRevisionStepViewModel(
-        IAquaManager aquaManager,
-        IEnhancedViewManager enhancedViewManager,
 
-        DialogMode dialogMode,
-        DashboardProjectManager projectManager,
-        INavigationService navigationService,
-        ILogger<AquaRevisionStepViewModel> logger,
-        IEventAggregator eventAggregator,
-        IMediator mediator,
-        ILifetimeScope? lifetimeScope,
-        IValidator<AquaRevisionStepViewModel> validator,
-        ILocalizationService localizationService)
-        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
-    {
-        aquaManager_ = aquaManager;
-        _enhancedViewManager = enhancedViewManager;
-        DialogMode = dialogMode;
-
-        CanMoveForwards = true;
-        CanMoveBackwards = true;
-        EnableControls = true;
-
-        OkCommand = new RelayCommand(Ok);
-
-        BodyTitle = LocalizationService!.Get("Aqua_RevisionStep_BodyTitle");
-        BodyText = LocalizationService!.Get("Aqua_RevisionStep_BodyText"); ;
-    }
-    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-    {
-        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
-        return base.OnInitializeAsync(cancellationToken);
-    }
-
-    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
-    {
-        await Reload();
-        await base.OnActivateAsync(cancellationToken);
-        return;
-    }
-
-    private async Task Reload()
-    {
-        HasId = ParentViewModel!.ActiveRevision == null ? false : true;
-
-        if (hasId_)
-        {
-            GetRevision();
-            await GetAssessments();
-        }
-    }
-
-    public BindableCollection<Assessment> Items { get; set; } = new ();
+    public BindableCollection<Assessment> Items { get; set; } = new();
 
     private bool hasId_;
     public bool HasId
@@ -92,7 +36,7 @@ public class AquaRevisionStepViewModel : DashboardApplicationValidatingWorkflowS
         get => hasId_;
         set
         {
-            hasId_= value;
+            hasId_ = value;
             NotifyOfPropertyChange(() => HasId);
         }
     }
@@ -102,24 +46,6 @@ public class AquaRevisionStepViewModel : DashboardApplicationValidatingWorkflowS
     {
         get => _dialogMode;
         set => Set(ref _dialogMode, value);
-    }
-
-    private string? bodyTitle_;
-    public string? BodyTitle
-    {
-        get => bodyTitle_;
-        set
-        {
-            bodyTitle_ = value;
-            NotifyOfPropertyChange(() => BodyTitle);
-        }
-    }
-
-    private string? bodyText_;
-    public string? BodyText
-    {
-        get => bodyText_;
-        set => Set(ref bodyText_, value);
     }
 
     private string? name_;
@@ -143,6 +69,73 @@ public class AquaRevisionStepViewModel : DashboardApplicationValidatingWorkflowS
         }
     }
 
+    public AquaRevisionStepViewModel()
+    {
+        OkCommand = new RelayCommand(Ok);
+    }
+    public AquaRevisionStepViewModel(
+        IAquaManager aquaManager,
+        IEnhancedViewManager enhancedViewManager,
+
+        DialogMode dialogMode,
+        DashboardProjectManager projectManager,
+        INavigationService navigationService,
+        ILogger<AquaRevisionStepViewModel> logger,
+        IEventAggregator eventAggregator,
+        IMediator mediator,
+        ILifetimeScope? lifetimeScope,
+        IValidator<AquaRevisionStepViewModel> validator,
+        ILocalizationService localizationService)
+        : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
+    {
+        aquaManager_ = aquaManager;
+        enhancedViewManager_ = enhancedViewManager;
+        DialogMode = dialogMode;
+
+        CanMoveForwards = true;
+        CanMoveBackwards = true;
+        EnableControls = true;
+
+        OkCommand = new RelayCommand(Ok);
+    }
+    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
+    {
+        ParentViewModel!.StatusBarVisibility = Visibility.Visible;
+        return base.OnInitializeAsync(cancellationToken);
+    }
+
+    protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+    {
+        ParentViewModel!.DialogTitle = $"{LocalizationService!.Get("Aqua_DialogTitle")} - {LocalizationService!.Get("Aqua_Revision_BodyTitle")}";
+        await Reload();
+        await base.OnActivateAsync(cancellationToken);
+        return;
+    }
+    protected override void OnViewReady(object view)
+    {
+        _ = Reload();
+        base.OnViewReady(view);
+    }
+    private async Task Reload()
+    {
+        try
+        { 
+            HasId = ParentViewModel!.ActiveRevision == null ? false : true;
+
+            if (hasId_)
+            {
+                GetRevision();
+                await GetAssessments();
+            }
+        }
+        catch (Exception ex)
+        {
+            OnUIThread(() =>
+            {
+                ParentViewModel!.Message = ex.Message ?? ex.ToString();
+            });
+        }
+    }
     public RelayCommand OkCommand { get; }
 
     public void AddAssessment()
@@ -159,12 +152,13 @@ public class AquaRevisionStepViewModel : DashboardApplicationValidatingWorkflowS
     public void AddItemToEnhancedView(Assessment assessment)
     {
         Logger!.LogInformation($"AddItemToEnhancedView - {assessment.id}");
-        _enhancedViewManager!.AddMetadatumEnhancedView(
-            new AquaCorpusAnalysisEnhancedViewItemMetadatum() 
-            { 
-                UrlString = $"AssessmentId {assessment.id}" 
-            }, 
-            default); //FIXME: is this okay?
+        enhancedViewManager_!.AddMetadatumEnhancedView(
+            new AquaCorpusAnalysisEnhancedViewItemMetadatum()
+            {
+                AssessmentId = $"{assessment.id}",
+                IsNewWindow = false
+            },
+            default); 
     }
 
     public async void DeleteItem(Assessment assessment)
@@ -273,9 +267,10 @@ public class AquaRevisionStepViewModel : DashboardApplicationValidatingWorkflowS
                     ?? throw new InvalidStateEngineException(name: "ParentViewModel!.TokenizedTextCorpus", value: "null"),
                 new Revision(
                     null,
-                    ParentViewModel!.AquaTokenizedTextCorpusMetadata.abbreviation
+                    ParentViewModel!.AquaTokenizedTextCorpusMetadata.id
                         ?? throw new InvalidStateEngineException(name: "Abbreviation", value: "null"),
                     Name,
+                    null,
                     Published
                 ),
                 cancellationToken),

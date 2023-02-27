@@ -50,6 +50,7 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            <converters:BooleanInversionConverter x:Key="BooleanInversionConverter" />
             <!--<converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />-->
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <!--<converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />-->

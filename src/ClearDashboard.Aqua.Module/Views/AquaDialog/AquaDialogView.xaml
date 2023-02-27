@@ -9,10 +9,10 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:controls="clr-namespace:ClearDashboard.Wpf.Application.Controls;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:aquaDialog="clr-namespace:ClearDashboard.Aqua.Module.ViewModels.AquaDialog"
-    Title="{helpers:Localization AquaDialog_DialogTitle}"
+    Title="{Binding Path=DialogTitle}"
     Width="800"
     Height="550"
-    cm:Message.Attach="[Event Closing] = [Action OnClose($eventArgs)]"
+    cm:Message.Attach="[Event Closing] = [Action OnClosing($eventArgs)]"
     d:DataContext="{d:DesignInstance Type=aquaDialog:AquaDialogViewModel,
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="450"
