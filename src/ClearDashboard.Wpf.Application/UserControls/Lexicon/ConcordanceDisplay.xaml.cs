@@ -6,10 +6,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using Caliburn.Micro;
-using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
+using ClearDashboard.Wpf.Application.Messages.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
@@ -31,11 +31,16 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             (nameof(TranslationAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ConcordanceDisplay));
 
         /// <summary>
+        /// Identifies the NewTranslationChangedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent NewTranslationChangedEvent = EventManager.RegisterRoutedEvent
+            (nameof(NewTranslationChanged), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ConcordanceDisplay));
+
+        /// <summary>
         /// Identifies the TranslationSelectedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationSelectedEvent = EventManager.RegisterRoutedEvent
-        (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler),
-            typeof(ConcordanceDisplay));
+        (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ConcordanceDisplay));
 
         #endregion Static Routed Events
 
@@ -156,6 +161,11 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             {
                 RaiseTranslationEntryEvent(TranslationSelectedEvent, args.Translation!);
             }
+        }        
+        
+        private void OnNewTranslationChanged(object sender, RoutedEventArgs e)
+        {
+            RaiseTranslationEntryEvent(NewTranslationChangedEvent, new LexiconTranslationViewModel { Text = NewTranslationTextBox.Text });
         }
 
         private void OnNewTranslationChecked(object sender, RoutedEventArgs e)
@@ -170,11 +180,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             NewTranslationTextBoxIsEnabled = false;
             OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
         }
+
         public async Task HandleAsync(LexiconTranslationMovedMessage message, CancellationToken cancellationToken)
         {
-            if (message.Translation.TranslationId != null)
+            if (message.Translation.Text != null)
             {
-                Translations.RemoveIfExists(message.Translation.TranslationId);
+                Translations.RemoveIfContainsText(message.Translation.Text);
             }
 
             await Task.CompletedTask;
@@ -275,6 +286,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             add => AddHandler(TranslationAddedEvent, value);
             remove => RemoveHandler(TranslationAddedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a new translation is changed.
+        /// </summary>
+        public event RoutedEventHandler NewTranslationChanged
+        {
+            add => AddHandler(NewTranslationChangedEvent, value);
+            remove => RemoveHandler(NewTranslationChangedEvent, value);
         }
 
         /// <summary>

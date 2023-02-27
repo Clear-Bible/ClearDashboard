@@ -58,6 +58,7 @@
                      VerticalAlignment="Center"
                      HorizontalAlignment="Left"
                      KeyUp="OnNewTranslationTextBoxKeyUp"
+                     TextChanged="OnNewTranslationChanged"
                      Width="150"
                      IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NewTranslationTextBoxIsEnabled}"
             />
