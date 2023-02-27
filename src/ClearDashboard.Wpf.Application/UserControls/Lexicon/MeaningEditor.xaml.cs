@@ -3,14 +3,18 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Caliburn.Micro;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 
@@ -19,7 +23,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
     /// <summary>
     /// A control that displays and edits the details of a particular meaning within a <see cref="LexemeViewModel"/>.
     /// </summary>
-    public partial class MeaningEditor : INotifyPropertyChanged
+    public partial class MeaningEditor : INotifyPropertyChanged, IHandle<LexiconTranslationMovedMessage>
     {
         #region Static Routed Events
 
@@ -279,7 +283,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             });
         }
 
-        private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, LexiconTranslationViewModel translation)
+        private void RaiseLexicalTranslationEvent(RoutedEvent routedEvent, LexiconTranslationViewModel translation)
         {
             RaiseEvent(new LexiconTranslationEventArgs()
             {
@@ -381,7 +385,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
                     var translation = JsonSerializer.Deserialize<LexiconTranslationViewModel>(dataString);
                     if (translation != null)
                     {
-                        RaiseTranslationEntryEvent(TranslationDroppedEvent, translation);
+                        RaiseLexicalTranslationEvent(TranslationDroppedEvent, translation);
+                        translation.Meaning = Meaning;
+                        Meaning.Translations.Add(translation);
                     }
                 }
             }
@@ -391,7 +397,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             if (e is LexiconTranslationEventArgs args)
             {
-                RaiseTranslationEntryEvent(TranslationDeletedEvent, args.Translation!);
+                RaiseLexicalTranslationEvent(TranslationDeletedEvent, args.Translation!);
+                Meaning.Translations.Remove(args.Translation);
             }
         }
 
@@ -399,8 +406,20 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             if (e is LexiconTranslationEventArgs args)
             {
-                RaiseTranslationEntryEvent(TranslationSelectedEvent, args.Translation!);
+                RaiseLexicalTranslationEvent(TranslationSelectedEvent, args.Translation!);
             }
+        }
+
+        public async Task HandleAsync(LexiconTranslationMovedMessage message, CancellationToken cancellationToken)
+        {
+            if (Meaning.MeaningId != message.NewMeaning.MeaningId)
+            {
+                if (message.Translation.TranslationId != null)
+                {
+                    Meaning.Translations.RemoveIfExists(message.Translation.TranslationId);
+                }
+            }
+            await Task.CompletedTask;
         }
 
         [NotifyPropertyChangedInvocator]
@@ -411,6 +430,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         #endregion Private event handlers
         #region Public Properties
+
+        public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
         /// Gets or sets the lexeme containing the meaning associated with the editor.
@@ -705,7 +726,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             InitializeComponent();
 
             Loaded += OnLoaded;
-        }
 
+            EventAggregator?.SubscribeOnUIThread(this);
+        }
     }
 }

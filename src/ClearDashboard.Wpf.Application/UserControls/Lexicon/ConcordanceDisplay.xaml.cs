@@ -1,13 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.DataAccessLayer.Annotations;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using FontFamily = System.Windows.Media.FontFamily;
 
 namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
@@ -15,7 +20,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
     /// <summary>
     /// A control that displays translation details within a concordance (translations that are not part of a lexeme).
     /// </summary>
-    public partial class ConcordanceDisplay : INotifyPropertyChanged
+    public partial class ConcordanceDisplay : INotifyPropertyChanged, IHandle<LexiconTranslationMovedMessage>
     {
         #region Static Routed Events
 
@@ -29,63 +34,80 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// Identifies the TranslationSelectedEvent routed event.
         /// </summary>
         public static readonly RoutedEvent TranslationSelectedEvent = EventManager.RegisterRoutedEvent
-            (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ConcordanceDisplay));
+        (nameof(TranslationSelected), RoutingStrategy.Bubble, typeof(RoutedEventHandler),
+            typeof(ConcordanceDisplay));
 
         #endregion Static Routed Events
+
         #region Static Dependency Properties
 
         /// <summary>
         /// Identifies the TokenDisplay dependency property.
         /// </summary>
-        public static readonly DependencyProperty TokenDisplayProperty = DependencyProperty.Register(nameof(TokenDisplay), typeof(TokenDisplayViewModel), typeof(ConcordanceDisplay));
+        public static readonly DependencyProperty TokenDisplayProperty =
+            DependencyProperty.Register(nameof(TokenDisplay), typeof(TokenDisplayViewModel),
+                typeof(ConcordanceDisplay));
 
         /// <summary>
         /// Identifies the Translations dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationsProperty = DependencyProperty.Register(nameof(Translations), typeof(LexiconTranslationViewModelCollection), typeof(ConcordanceDisplay));
+        public static readonly DependencyProperty TranslationsProperty =
+            DependencyProperty.Register(nameof(Translations), typeof(LexiconTranslationViewModelCollection),
+                typeof(ConcordanceDisplay));
 
         /// <summary>
         /// Identifies the TranslationFontFamily dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register(nameof(TranslationFontFamily), typeof(FontFamily), typeof(ConcordanceDisplay),
-            new PropertyMetadata(new FontFamily(new Uri("pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"), ".Resources/Roboto/#Roboto")));
+        public static readonly DependencyProperty TranslationFontFamilyProperty = DependencyProperty.Register(
+            nameof(TranslationFontFamily), typeof(FontFamily), typeof(ConcordanceDisplay),
+            new PropertyMetadata(new FontFamily(
+                new Uri(
+                    "pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Font.xaml"),
+                ".Resources/Roboto/#Roboto")));
 
         /// <summary>
         /// Identifies the TranslationFontSize dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register(nameof(TranslationFontSize), typeof(double), typeof(ConcordanceDisplay),
+        public static readonly DependencyProperty TranslationFontSizeProperty = DependencyProperty.Register(
+            nameof(TranslationFontSize), typeof(double), typeof(ConcordanceDisplay),
             new PropertyMetadata(11d));
 
         /// <summary>
         /// Identifies the TranslationFontStyle dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFontStyleProperty = DependencyProperty.Register(nameof(TranslationFontStyle), typeof(FontStyle), typeof(ConcordanceDisplay),
+        public static readonly DependencyProperty TranslationFontStyleProperty = DependencyProperty.Register(
+            nameof(TranslationFontStyle), typeof(FontStyle), typeof(ConcordanceDisplay),
             new PropertyMetadata(FontStyles.Normal));
 
         /// <summary>
         /// Identifies the TranslationFontWeight dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationFontWeightProperty = DependencyProperty.Register(nameof(TranslationFontWeight), typeof(FontWeight), typeof(ConcordanceDisplay),
+        public static readonly DependencyProperty TranslationFontWeightProperty = DependencyProperty.Register(
+            nameof(TranslationFontWeight), typeof(FontWeight), typeof(ConcordanceDisplay),
             new PropertyMetadata(FontWeights.Normal));
 
         /// <summary>
         /// Identifies the TranslationMargin dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register(nameof(TranslationMargin), typeof(Thickness), typeof(ConcordanceDisplay),
+        public static readonly DependencyProperty TranslationMarginProperty = DependencyProperty.Register(
+            nameof(TranslationMargin), typeof(Thickness), typeof(ConcordanceDisplay),
             new PropertyMetadata(new Thickness(3, 0, 3, 0)));
 
         /// <summary>
         /// Identifies the TranslationPadding dependency property.
         /// </summary>
-        public static readonly DependencyProperty TranslationPaddingProperty = DependencyProperty.Register(nameof(TranslationPadding), typeof(Thickness), typeof(ConcordanceDisplay),
+        public static readonly DependencyProperty TranslationPaddingProperty = DependencyProperty.Register(
+            nameof(TranslationPadding), typeof(Thickness), typeof(ConcordanceDisplay),
             new PropertyMetadata(new Thickness(3, 3, 3, 3)));
 
         #endregion
+
         #region Private Properties
 
         public bool NewTranslationTextBoxIsEnabled { get; set; }
 
         #endregion
+
         #region Private Methods
 
         private void RaiseTranslationEntryEvent(RoutedEvent routedEvent, LexiconTranslationViewModel translation)
@@ -101,7 +123,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             if (!String.IsNullOrWhiteSpace(NewTranslationTextBox.Text))
             {
-                RaiseTranslationEntryEvent(TranslationAddedEvent, new LexiconTranslationViewModel {Text = NewTranslationTextBox.Text});
+                RaiseTranslationEntryEvent(TranslationAddedEvent,
+                    new LexiconTranslationViewModel { Text = NewTranslationTextBox.Text });
             }
         }
 
@@ -111,6 +134,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         #endregion
+
         #region Private Event Handlers
 
         private void OnNewTranslationTextBoxKeyUp(object sender, KeyEventArgs e)
@@ -139,12 +163,21 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             NewTranslationTextBoxIsEnabled = true;
             OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
             NewTranslationTextBox.Focus();
-        }        
-        
+        }
+
         private void OnNewTranslationUnchecked(object sender, RoutedEventArgs e)
         {
             NewTranslationTextBoxIsEnabled = false;
             OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
+        }
+        public async Task HandleAsync(LexiconTranslationMovedMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Translation.TranslationId != null)
+            {
+                Translations.RemoveIfExists(message.Translation.TranslationId);
+            }
+
+            await Task.CompletedTask;
         }
 
         [NotifyPropertyChangedInvocator]
@@ -154,7 +187,10 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         #endregion Private event handlers
+
         #region Public Properties
+
+        public static IEventAggregator? EventAggregator { get; set; }
 
         /// <summary>
         /// Gets or sets the <see cref="TokenDisplayViewModel"/> that this concordance pertains to.
@@ -229,6 +265,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         #endregion
+
         #region Public Events
 
         /// <summary>
@@ -259,6 +296,8 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         public ConcordanceDisplay()
         {
             InitializeComponent();
+
+            EventAggregator?.SubscribeOnUIThread(this);
         }
     }
 }
