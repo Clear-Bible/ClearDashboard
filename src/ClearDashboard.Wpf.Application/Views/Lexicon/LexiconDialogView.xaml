@@ -12,6 +12,8 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     mc:Ignorable="d"
+    Width="1000"
+    Height="800"
     >
     <Grid>
         <Grid.RowDefinitions>
@@ -116,8 +118,7 @@
                     Orientation="Horizontal">
             <Button x:Name="ApplyTranslation" 
                     Margin="10"
-                    Style="{StaticResource TransparentStyle}"
-                    Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationControlsVisibility}">
+                    Style="{StaticResource TransparentStyle}">
                 Apply
             </Button>
             <Button x:Name="CancelTranslation" 

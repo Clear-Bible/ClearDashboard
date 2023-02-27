@@ -225,7 +225,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             settings.PopupAnimation = PopupAnimation.Fade;
             settings.Placement = PlacementMode.Center;
             settings.Width = 1000;
-            settings.Width = 800;
+            settings.Height = 800;
             settings.Title = DialogTitle;
             return settings;
         }
