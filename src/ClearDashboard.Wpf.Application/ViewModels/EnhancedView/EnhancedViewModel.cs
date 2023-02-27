@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Caliburn.Micro;
+using ClearApplicationFoundation.Framework.Input;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -11,21 +12,17 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.Shell;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using ClearApplicationFoundation.Framework.Input;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -39,8 +36,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ReloadDataMessage>,
         IHandle<TokenizedCorpusUpdatedMessage>
     {
-        private readonly IWindowManager _windowManager;
-
         #region Commands
 
         public ICommand MoveCorpusDownRowCommand { get; set; }
@@ -332,7 +327,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public EnhancedViewModel(INavigationService navigationService, 
             ILogger<EnhancedViewModel> logger,
             DashboardProjectManager? projectManager, 
-            IWindowManager windowManager,
             NoteManager noteManager, 
             VerseManager verseManager, 
             SelectionManager selectionManager, 
@@ -342,8 +336,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             base( projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
 #pragma warning restore CS8618
         {
-            _windowManager = windowManager;
-
+        
             NoteManager = noteManager;
             VerseManager = verseManager;
             SelectionManager = selectionManager;
@@ -672,6 +665,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 if (SelectionManager.AnySourceTokens)
                 {
+                    await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(e.TokenDisplay.IsSource, e.TokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
                     await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.TokenDisplay);
                     var element = (UIElement)sender;
                     EnhancedFocusScope.SetFocusOnActiveElementInScope(element);
@@ -707,7 +701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public void TokenMouseEnter(object sender, TokenEventArgs e)
         {
-            Message = $"'{e.TokenDisplay?.SurfaceText}' token ({e.TokenDisplay?.Token.TokenId}) hovered";
+            Message = $"'{e.TokenDisplay.SurfaceText}' token ({e.TokenDisplay.Token.TokenId}) hovered";
         }
 
         public void TokenMouseLeave(object sender, TokenEventArgs e)
@@ -787,10 +781,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public string TranslateText(string input)
         {
-            string url = string.Format
-            ("https://translate.googleapis.com/translate_a/single?client=gtx&sl={0}&tl={1}&dt=t&q={2}", "auto", "en", Uri.EscapeUriString(input));
-            HttpClient httpClient = new HttpClient();
-            string result = httpClient.GetStringAsync(url).Result;
+            var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={"auto"}&tl={"en"}&dt=t&q={Uri.EscapeDataString(input)}";
+            var httpClient = new HttpClient();
+            var result = httpClient.GetStringAsync(url).Result;
 
             var items = result.Split("\"");
             var translation = items[1];
@@ -808,7 +801,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async Task NoteAddedAsync(NoteEventArgs e)
         {
-            OnUIThread(async () =>
+            await Execute.OnUIThreadAsync(async () =>
             {
                 await NoteManager.AddNoteAsync(e.Note, e.EntityIds);
                 NotifyOfPropertyChange(() => Items);
@@ -855,7 +848,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (e.Note.NoteId != null)
             {
-                OnUIThread(async () =>
+                await Execute.OnUIThreadAsync(async () =>
                 {
                     await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
                     NotifyOfPropertyChange(() => Items);

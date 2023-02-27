@@ -854,6 +854,26 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenDeleteAlignmentEvent, e);
         }
 
+        protected override async void OnIsKeyboardFocusWithinChanged(DependencyPropertyChangedEventArgs e)
+        {
+
+            var tokenDisplay = (TokenDisplayViewModel)DataContext;
+
+            if (tokenDisplay.VerseDisplay is AlignmentDisplayViewModel) { 
+                if (e.NewValue != null && (bool)e.NewValue)
+                {
+                    var keyBoardModifiers = Keyboard.Modifiers;
+
+                    if (keyBoardModifiers == ModifierKeys.None)
+                    {
+                        await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
+                    }
+                    
+                }
+            }
+            base.OnIsKeyboardFocusWithinChanged(e);
+        }
+
         private void OnTokenDoubleClicked(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenDoubleClickedEvent, e);

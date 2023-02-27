@@ -32,5 +32,10 @@ namespace ClearDashboard.Wpf.Application.Collections
         {
             return this.FirstOrDefault(a => a.AlignedTokenPair.SourceToken.TokenId.Id == tokenId  || a.AlignedTokenPair.TargetToken.TokenId.Id == tokenId);
         }
+
+        public IEnumerable<Alignment?> FindAlignmentsByTokenId(Guid tokenId)
+        {
+            return this.Where(a => a.AlignedTokenPair.SourceToken.TokenId.Id == tokenId || a.AlignedTokenPair.TargetToken.TokenId.Id == tokenId);
+        }
     }
 }

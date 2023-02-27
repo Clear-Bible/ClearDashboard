@@ -45,6 +45,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Popups\ClosingEnhancedViewPopupView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Popups\AlignmentPopupView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
