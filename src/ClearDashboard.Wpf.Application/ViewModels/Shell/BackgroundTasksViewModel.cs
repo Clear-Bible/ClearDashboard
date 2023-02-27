@@ -306,5 +306,41 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             return false;
         }
+
+        public bool CheckBackgroundProcessForTokenizationInProgressIgnoreCompleted(string nodeName)
+        {
+            var tasks = BackgroundTaskStatuses.Where(x =>
+            {
+                if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
+                {
+                    if (x.Description!.Contains("Macula Hebrew") && x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
+                {
+                    if (x.Description!.Contains("Macula Greek") && x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                return x.Name == nodeName && x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed;
+
+            }).ToList();
+
+            if (tasks.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }
