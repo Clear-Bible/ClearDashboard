@@ -98,11 +98,11 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
                     }
                 }
             }
-            else if (sender is ListBox listBox && listBox == SelectedItemVerseRenderings)//upper right box
+            else if (sender is ListBox listBox && listBox == SelectedItemVerseRenderings)
             {
                 copyText = listBox.SelectedItem.ToString();
             }
-            else if (sender is ListBox verseListBox && verseListBox.SelectedItem is VerseViewModel)//verse text
+            else if (sender is ListBox verseListBox && verseListBox.SelectedItem is VerseViewModel)
             {
                 var verseViewModel = verseListBox.SelectedItem as VerseViewModel;
                 copyText = verseViewModel.VerseText;
@@ -117,7 +117,7 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
                 copyText = verseViewModel.VerseText;
             }
 
-            if (sender is ListBox listTwo && listTwo.SelectedItem is RenderingStringParts)//renderings column
+            if (sender is ListBox listTwo && listTwo.SelectedItem is RenderingStringParts)
             {
                 var renderingStringParts = listTwo.SelectedItem as RenderingStringParts;
                 copyText = renderingStringParts.RenderingString;
