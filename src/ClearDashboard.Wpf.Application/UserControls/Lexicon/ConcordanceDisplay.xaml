@@ -13,7 +13,7 @@
     >
     <UserControl.Resources>
         <DataTemplate x:Key="TranslationDisplayTemplate">
-            <lexiconControls:TranslationEntryDisplay
+            <lexiconControls:LexiconTranslationDisplay
                 FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
                 FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
                 FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
@@ -49,12 +49,12 @@
             <RadioButton Grid.Column="0" VerticalAlignment="Center" Checked="OnNewTranslationChecked" Unchecked="OnNewTranslationUnchecked" GroupName="SelectedTransaction"/>
             <TextBox x:Name="NewTranslationTextBox"
                      Grid.Column="1"
-                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationTextFontFamily}"
-                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationTextFontSize}"
-                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationTextFontStyle}"
-                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationTextFontWeight}"
-                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationTextMargin}"
-                     Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationTextPadding}"
+                     FontFamily="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontFamily}"
+                     FontSize="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontSize}"
+                     FontStyle="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontStyle}"
+                     FontWeight="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationFontWeight}"
+                     Margin="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationMargin}"
+                     Padding="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=TranslationPadding}"
                      VerticalAlignment="Center"
                      HorizontalAlignment="Left"
                      KeyUp="OnNewTranslationTextBoxKeyUp"
