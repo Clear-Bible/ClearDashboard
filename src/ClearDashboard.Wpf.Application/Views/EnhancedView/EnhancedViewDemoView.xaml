@@ -65,23 +65,31 @@
             FontSize="24"
             FontWeight="Bold" />
 
-        <lexiconControls:LexemeEditor 
-            Grid.Row="1" Grid.Column="0" 
-            Lexeme="{Binding DemoLexeme}" 
-            LemmaFontSize="16"
-            LemmaFontWeight="Bold"
-            LexemeFormBackground="LightGray"
-            LexemeFormCornerRadius="4"
-            LexemeFormPadding="4"
-            MeaningTextFontSize="14"
-            SemanticDomainBackground="AliceBlue"
-            SemanticDomainCornerRadius="4"
-            SemanticDomainPadding="4"
-            SemanticDomainFontStyle="Normal"
-            SemanticDomainSuggestions="{Binding SemanticDomainSuggestions}"
-            TranslationFontSize="12"
-            TranslationFontStyle="Normal"
-            />
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+            <!--<lexiconControls:LexemeEditor 
+                Lexeme="{Binding DemoLexeme}" 
+                LemmaFontSize="16"
+                LemmaFontWeight="Bold"
+                LexemeFormBackground="LightGray"
+                LexemeFormCornerRadius="4"
+                LexemeFormPadding="4"
+                MeaningTextFontSize="14"
+                SemanticDomainBackground="AliceBlue"
+                SemanticDomainCornerRadius="4"
+                SemanticDomainPadding="4"
+                SemanticDomainFontStyle="Normal"
+                SemanticDomainSuggestions="{Binding SemanticDomainSuggestions}"
+                TranslationFontSize="12"
+                TranslationFontStyle="Normal"
+                />-->
+            <Button x:Name="DisplayModal" Width="175">Display Lexeme Editor</Button>
+            <!--<lexiconControls:ConcordanceDisplay
+                Translations="{Binding Concordance}"
+                TranslationFontSize="12"
+                TranslationFontStyle="Normal"
+            />-->
+
+        </StackPanel>
         <!--<lexiconControls:MeaningEditor Grid.Row="1" Grid.Column="0" Meaning="{Binding DemoMeaning}"></lexiconControls:MeaningEditor>-->
         <!--<userControls:VerseDisplay
             Title="Word translation (interlinear gloss)"
