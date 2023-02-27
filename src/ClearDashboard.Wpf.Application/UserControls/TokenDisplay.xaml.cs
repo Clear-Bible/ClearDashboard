@@ -822,10 +822,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void TokenDisplayViewModelPropertyChanged(object? sender,
             System.ComponentModel.PropertyChangedEventArgs e)
         {
-            //if (e.PropertyName == "ShowContextMenu")
-            //{
-            //    TokenDisplayContextMenu.IsOpen = TokenDisplayViewModel.ShowContextMenu;
-            //}
             CalculateLayout();
         }
 
