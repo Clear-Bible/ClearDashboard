@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DEMO
+
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Threading;
@@ -8,20 +10,25 @@ using System.Windows.Controls.Primitives;
 using Autofac;
 using Caliburn.Micro;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
-using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.Infrastructure;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.UserControls.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.Views.Lexicon;
 using MediatR;
 using Microsoft.Extensions.Logging;
+// ReSharper disable UnusedMember.Global
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 {
     public class LexiconDialogViewModel : DashboardApplicationScreen
     {
-        private LexiconManager? LexiconManager { get; }
+        private readonly LexiconManager? _lexiconManager;
+        // ReSharper disable once ConvertToAutoProperty
+        private LexiconManager LexiconManager => _lexiconManager!;
+
         public string DialogTitle => $"Translation/Lexeme: {TokenDisplay?.TranslationSurfaceText}";
 
         public TokenDisplayViewModel? TokenDisplay { get; set; }
@@ -54,13 +61,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         {
             get => _translationOptions;
             private set => Set(ref _translationOptions, value);
-        }
-
-        private TranslationOption? _currentTranslationOption;
-        public TranslationOption? CurrentTranslationOption
-        {
-            get => _currentTranslationOption;
-            private set => Set(ref _currentTranslationOption, value);
         }
 
         private Visibility _progressBarVisibility = Visibility.Visible;
@@ -129,79 +129,99 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void OnLexemeAdded(object sender, LexemeEventArgs e)
         {
-            if (LexiconManager != null && ! string.IsNullOrWhiteSpace(e.Lexeme.Lemma))
+#if !DEMO
+            if (e.Lexeme.LexemeId == null)
             {
-                if (e.Lexeme.LexemeId == null)
+                if (!string.IsNullOrWhiteSpace(e.Lexeme.Lemma))
                 {
-                    if (!string.IsNullOrWhiteSpace(e.Lexeme.Lemma))
-                    {
-                        Lexeme = await LexiconManager.CreateLexemeAsync(e.Lexeme.Lemma, e.Lexeme.Language, e.Lexeme.Type);
-                    }
-                }
-                else
-                {
-                    Logger?.LogError($"Cannot create new lexeme because {e.Lexeme.Lemma} already has a LexemeId.");
+                    Lexeme = await LexiconManager.CreateLexemeAsync(e.Lexeme.Lemma, e.Lexeme.Language, e.Lexeme.Type);
                 }
             }
             else
             {
-                Logger?.LogCritical("Cannot create lexeme because LexiconManager is null.");
+                Logger?.LogError($"Cannot create new lexeme because {e.Lexeme.Lemma} already has a LexemeId.");
             }
+#endif
         }
 
         public async void OnLexemeFormAdded(object sender, LexemeFormEventArgs e)
         {
-
+#if !DEMO
+            await LexiconManager.AddLexemeFormAsync(e.Lexeme, e.Form);
+#endif
         }
 
         public async void OnLexemeFormRemoved(object sender, LexemeFormEventArgs e)
         {
-
+#if !DEMO
+            await LexiconManager.DeleteLexemeFormAsync(e.Form);
+#endif
         }
 
         public async void OnMeaningAdded(object sender, MeaningEventArgs e)
         {
-
+#if !DEMO
+            await LexiconManager.AddMeaningAsync(e.Lexeme, e.Meaning);
+#endif
         }
 
         public async void OnMeaningDeleted(object sender, MeaningEventArgs e)
         {
-
+#if !DEMO
+            await LexiconManager.DeleteMeaningAsync(e.Meaning);
+#endif
         }
 
         public async void OnMeaningUpdated(object sender, MeaningEventArgs e)
         {
+#if !DEMO
+#endif
 
         }
 
         public async void OnSemanticDomainAdded(object sender, SemanticDomainEventArgs e)
         {
-
+#if !DEMO
+            if (!string.IsNullOrWhiteSpace(e.SemanticDomain.Text))
+            {
+                await LexiconManager.AddNewSemanticDomainAsync(e.Meaning, e.SemanticDomain.Text);
+            }
+#endif
         }
 
         public async void OnSemanticDomainSelected(object sender, SemanticDomainEventArgs e)
         {
-
+#if !DEMO
+            await LexiconManager.AddExistingSemanticDomainAsync(e.Meaning, e.SemanticDomain);
+#endif
         }
 
         public async void OnSemanticDomainRemoved(object sender, SemanticDomainEventArgs e)
         {
-
+#if !DEMO
+            await LexiconManager.RemoveSemanticDomainAsync(e.Meaning, e.SemanticDomain);
+#endif
         }
 
         public async void OnTranslationDeleted(object sender, LexiconTranslationEventArgs e)
         {
-
+#if !DEMO
+            await LexiconManager.DeleteTranslationAsync(e.Translation);
+#endif
         }
 
         public async void OnTranslationDropped(object sender, LexiconTranslationEventArgs e)
         {
+            await EventAggregator.PublishOnUIThreadAsync(new LexiconTranslationMovedMessage(e.Translation, e.Meaning));
+#if !DEMO
+#endif
 
         }
 
+        private LexiconTranslationViewModel? SelectedTranslation { get; set; }
         public async void OnTranslationSelected(object sender, LexiconTranslationEventArgs e)
         {
-
+            SelectedTranslation = e.Translation;
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
@@ -246,7 +266,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
-            LexiconManager = lexiconManager;
+            _lexiconManager = lexiconManager;
+
+            ConcordanceDisplay.EventAggregator = eventAggregator;
+            MeaningEditor.EventAggregator = eventAggregator;
         }
     }
 }

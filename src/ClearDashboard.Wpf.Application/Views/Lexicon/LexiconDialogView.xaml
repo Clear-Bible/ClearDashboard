@@ -13,7 +13,6 @@
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     mc:Ignorable="d"
     Width="1000"
-    Height="800"
     >
     <Grid>
         <Grid.RowDefinitions>
@@ -33,8 +32,10 @@
                Content="{Binding TokenDisplay.TranslationSurfaceText}"
                FontSize="18"
                FontWeight="Bold" />
-        <lexiconControls:LexemeEditor Grid.Row="2" Margin="20"
+        <lexiconControls:LexemeEditor x:Name="LexemeEditor" Grid.Row="2" 
+                Margin="20"
                 Lexeme="{Binding Lexeme}" 
+                TokenDisplay="{Binding TokenDisplay}" 
                 LemmaFontSize="16"
                 LemmaFontWeight="Bold"
                 LexemeFormBackground="LightGray"
@@ -96,7 +97,7 @@
                    Margin="20,0,0,0"
         ></TextBlock>
 
-        <lexiconControls:ConcordanceDisplay Grid.Row="4"
+        <lexiconControls:ConcordanceDisplay x:Name="ConcordanceDisplay" Grid.Row="4"
                 Translations="{Binding Concordance}"
                 TranslationFontSize="12"
                 TranslationFontStyle="Normal"
