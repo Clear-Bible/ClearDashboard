@@ -91,14 +91,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task DeleteLexemeAsync(Lexeme lexeme)
+        public async Task DeleteLexemeAsync(LexemeViewModel lexeme)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                await lexeme.Delete(Mediator);
+                await lexeme.Entity.Delete(Mediator);
 
                 stopwatch.Stop();
 
