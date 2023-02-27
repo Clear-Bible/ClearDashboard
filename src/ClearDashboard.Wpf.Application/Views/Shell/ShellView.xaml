@@ -58,6 +58,10 @@
             Key="B"
             Command="{Binding OpenBiblicalTermsCommand}"
             Modifiers="Control+Shift" />
+        <KeyBinding
+            Key="O"
+            Command="{Binding OpenProjectPickerCommand}"
+            Modifiers="Control" />
     </Window.InputBindings>
 
 
