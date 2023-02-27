@@ -809,8 +809,6 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             TokenDisplayViewModel.PropertyChanged += TokenDisplayViewModelPropertyChanged;
-
-
             CalculateLayout();
         }
 
