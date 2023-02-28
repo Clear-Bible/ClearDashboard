@@ -739,6 +739,34 @@
           font-weight: bold;
           font-style: normal;}
 
+          .tc1 {
+          border: 2px solid black;
+          padding: 5px;
+          font-weight: bold;
+          font-style: normal;
+          }
+
+          .sl1 {
+          font-weight: bold;
+          }
+
+          .mlor {
+          font-style: italic;
+          font-variant: small-caps;
+          }
+
+          .imp {
+          font-style: normal;
+          color:gray;
+          }
+
+          .brk {
+          color:gray;
+          font-style: normal;
+          vertical-align: sub;
+          font-size: smaller;
+          }
+
           .navbar {
           overflow: hidden;
           background-color: #333;

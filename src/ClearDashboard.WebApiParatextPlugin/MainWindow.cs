@@ -444,6 +444,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         xDoc.LoadXml(usxString);
                                         List<XmlNode> verseNodeList = new();
 
+                                        bool nextStartMarkerFound = false;
                                         bool startMarkerFound = false;
                                         bool endMarkerFound = false;
                                         var count = 0;
@@ -451,9 +452,14 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         {
                                             endMarkerFound = false;
 
-                                            if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                            if (startMarkerFound && node.OuterXml.Contains("sid="))
                                             {
                                                 startMarkerFound = false;
+                                                nextStartMarkerFound = true;
+                                            }
+
+                                            if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                            {
                                                 endMarkerFound = true;
 
                                                 
@@ -539,7 +545,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 }
                                             }
 
-                                            if (startMarkerFound || endMarkerFound)
+                                            if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
                                             {
                                                 verseNodeList.Add(node);
                                             }
