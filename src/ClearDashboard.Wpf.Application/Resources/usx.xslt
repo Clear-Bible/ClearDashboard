@@ -818,7 +818,7 @@
         </style>
       </head>
       <body>
-        <main>
+        <main dir="auto">
           <xsl:apply-templates />
         </main>
       </body>
@@ -835,7 +835,7 @@
   <xsl:template match="para[@style='rem']|para[@style='ide']|verse[@eid]"></xsl:template>
 
   <xsl:template match="para">
-    <p>
+    <p dir="auto">
       <xsl:apply-templates select="@*|node()" />
     </p>
   </xsl:template>
