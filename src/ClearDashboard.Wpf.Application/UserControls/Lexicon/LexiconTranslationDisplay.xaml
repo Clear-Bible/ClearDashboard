@@ -16,7 +16,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <RadioButton Grid.Column="0" VerticalAlignment="Center" Click="OnSelectTranslationEntry" GroupName="SelectedTransaction"/>
+        <RadioButton Grid.Column="0" 
+                     VerticalAlignment="Center"
+                     IsChecked="{Binding IsSelected}"
+                     Click="OnSelectTranslationEntry" 
+                     GroupName="SelectedTransaction"/>
         <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Text}"/>
         <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="{Binding Count}"/>
         <Button Grid.Column="3"
