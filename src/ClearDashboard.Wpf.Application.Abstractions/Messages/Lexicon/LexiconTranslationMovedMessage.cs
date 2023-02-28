@@ -2,5 +2,9 @@
 
 namespace ClearDashboard.Wpf.Application.Messages.Lexicon
 {
-    public record LexiconTranslationMovedMessage(LexiconTranslationViewModel Translation, MeaningViewModel NewMeaning);
+    public record LexiconTranslationMovedMessage(
+        LexiconTranslationViewModel SourceTranslation, 
+        MeaningViewModel? SourceMeaning,
+        LexiconTranslationViewModel TargetTranslation,
+        MeaningViewModel TargetMeaning);
 }

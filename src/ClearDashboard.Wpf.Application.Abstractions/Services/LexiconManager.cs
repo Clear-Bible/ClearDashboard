@@ -279,23 +279,38 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public async Task MoveTranslationAsync(LexiconTranslationViewModel translation, MeaningViewModel targetMeaning)
+        public async Task MoveTranslationAsync(LexiconTranslationViewModel sourceTranslation, MeaningViewModel targetMeaning)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-#if !DEMO
-                if (translation.TranslationId != null)
-                {
-                    await translation.Entity.Delete(Mediator);
-                }
-                await targetMeaning.Entity.PutTranslation(Mediator, translation.Entity);
-#endif
-                stopwatch.Stop();
-                await EventAggregator.PublishOnUIThreadAsync(new LexiconTranslationMovedMessage(translation, targetMeaning));
 
-                Logger.LogInformation($"Moved translation {translation.Text} in {stopwatch.ElapsedMilliseconds} ms");
+                var sourceMeaning = sourceTranslation.Meaning;
+                if (sourceTranslation.TranslationId != null)
+                {
+#if !DEMO
+                    await sourceTranslation.Entity.Delete(Mediator);
+#endif
+                }
+
+                var targetTranslationEntity = new Translation { Text = sourceTranslation.Text };
+#if !DEMO
+                await targetMeaning.Entity.PutTranslation(Mediator, targetTranslationEntity);
+#endif
+                var targetTranslation = new LexiconTranslationViewModel(targetTranslationEntity) 
+                    { 
+                        Count = sourceTranslation.Count,
+                        Meaning = targetMeaning
+                    };
+                await EventAggregator.PublishOnUIThreadAsync(new LexiconTranslationMovedMessage(
+                    sourceTranslation, 
+                    sourceMeaning, 
+                    targetTranslation, 
+                    targetMeaning));
+
+                stopwatch.Stop();
+                Logger.LogInformation($"Moved translation {sourceTranslation.Text} to meaning {targetMeaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {

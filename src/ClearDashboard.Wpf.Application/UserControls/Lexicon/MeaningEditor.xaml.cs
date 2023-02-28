@@ -413,12 +413,24 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         public async Task HandleAsync(LexiconTranslationMovedMessage message, CancellationToken cancellationToken)
         {
-            if (Meaning.MeaningId != message.NewMeaning.MeaningId)
+            if (message.SourceMeaning != null)
             {
-                if (message.Translation.TranslationId != null)
+                if (Meaning.MeaningId != null && Meaning.MeaningId.IdEquals(message.SourceMeaning.MeaningId))
                 {
-                    Meaning.Translations.RemoveIfContainsId(message.Translation.TranslationId);
+                    if (!string.IsNullOrWhiteSpace(message.SourceTranslation.Text))
+                    {
+                        Meaning.Translations.RemoveIfContainsText(message.SourceTranslation.Text);
+                    }
                 }
+            }
+
+            if (Meaning.MeaningId != null && Meaning.MeaningId.IdEquals(message.TargetMeaning.MeaningId))
+            {
+                if (!string.IsNullOrWhiteSpace(message.SourceTranslation.Text))
+                {
+                    Meaning.Translations.RemoveIfContainsText(message.SourceTranslation.Text);
+                }
+                Meaning.Translations.Add(message.TargetTranslation);
             }
             await Task.CompletedTask;
         }

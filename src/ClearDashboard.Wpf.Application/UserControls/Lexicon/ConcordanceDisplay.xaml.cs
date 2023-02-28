@@ -183,9 +183,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         public async Task HandleAsync(LexiconTranslationMovedMessage message, CancellationToken cancellationToken)
         {
-            if (message.Translation.Text != null)
+            if (message.SourceTranslation.Text != null)
             {
-                Translations.RemoveIfContainsText(message.Translation.Text);
+                Translations.RemoveIfContainsText(message.SourceTranslation.Text);
             }
 
             await Task.CompletedTask;
