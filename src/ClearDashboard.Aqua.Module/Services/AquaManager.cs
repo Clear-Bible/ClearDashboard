@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using ClearDashboard.Aqua.Module.Converters;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Interfaces;
 using MediatR;
@@ -37,6 +38,7 @@ namespace ClearDashboard.Aqua.Module.Services
 
         // authentication
         protected string BearerAuthenticationKey { get; set; } = "7cf43ae52dw8948ddb663f9cae24488a4";
+        //protected string BearerAuthenticationKey { get; set; } = "s0797991642eee4c09b70dcceff897h136da";
 
         // endpoints
         private readonly string versionPath_ = "version";
@@ -361,11 +363,14 @@ namespace ClearDashboard.Aqua.Module.Services
             T obj,
             CancellationToken cancellationToken)
         {
-            string versionJson = JsonSerializer.Serialize(obj, new JsonSerializerOptions 
-            { 
+            var jsonSerializerOptions = new JsonSerializerOptions
+            {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                NumberHandling = JsonNumberHandling.WriteAsString
-            });
+                NumberHandling = JsonNumberHandling.WriteAsString,
+            };
+            jsonSerializerOptions.Converters.Add(new BoolToStringJsonConverter());
+
+            string versionJson = JsonSerializer.Serialize(obj, jsonSerializerOptions);
             var keyValueData = JsonSerializer.Deserialize<Dictionary<string, string>>(versionJson);
 
             var contentString = await PostKeyValueDataAsQueryStringAsync(

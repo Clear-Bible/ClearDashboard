@@ -171,7 +171,7 @@
   <data name="Aqua_Revision_ReloadAssessments" xml:space="preserve">
     <value>Refresh</value>
   </data>
-  <data name="Aqua_version_Abbreviation" xml:space="preserve">
+  <data name="Aqua_Version_Abbreviation" xml:space="preserve">
     <value>Abbreviation</value>
   </data>
   <data name="Aqua_Version_AddRevision" xml:space="preserve">
