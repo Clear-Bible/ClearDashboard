@@ -30,6 +30,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 
         public int Count { get; set; }
 
+        public bool IsSelected { get; set; }
         public LexiconTranslationViewModel() : this(new Translation())
         {
         }
