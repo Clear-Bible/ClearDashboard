@@ -1,6 +1,9 @@
-﻿using System;
+﻿//#define DEMO
+
+using System;
 using System.Dynamic;
 using System.Linq;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -238,11 +241,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             }
         }
 
+        private bool ContainsTranslationText(string translationText)
+        {
+            return (Lexeme != null && Lexeme.ContainsTranslationText(translationText)) || Concordance.ContainsText(translationText);
+        }
+
         private void SelectCurrentTranslation()
         {
             SelectedTranslation = Lexeme?.SelectTranslationText(TokenDisplay.TargetTranslationText);
             var concordanceSelection = Concordance.SelectIfContainsText(TokenDisplay.TargetTranslationText);
             SelectedTranslation ??= concordanceSelection;
+
+            if (SelectedTranslation == null)
+            {
+                SelectedTranslation = new LexiconTranslationViewModel { Text = TokenDisplay.TargetTranslationText, IsSelected = true};
+                Concordance.Insert(0, SelectedTranslation);
+            }
+
             ApplyEnabled = SelectedTranslation != null;
         }
 
@@ -250,7 +265,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
         {
             await base.OnInitializeAsync(cancellationToken);
             Lexeme ??= await LexiconManager.GetLexemeAsync(TokenDisplay.TranslationSurfaceText);
-            await BuildConcordance();
+            if (Concordance.Count == 0)
+            {
+                await BuildConcordance();
+            }
             SelectCurrentTranslation();
 
             if (SemanticDomainSuggestions.Count == 0)
