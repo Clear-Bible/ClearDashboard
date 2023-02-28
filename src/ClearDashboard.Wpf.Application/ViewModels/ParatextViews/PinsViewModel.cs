@@ -47,7 +47,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
         private BiblicalTermsList _biblicalTermsList = new();
         private BiblicalTermsList _allBiblicalTermsList = new();
         private SpellingStatus _spellingStatus = new();
-        private Lexicon _lexicon = new();
+        private DataAccessLayer.Models.Lexicon _lexicon = new();
         private string _paratextInstallPath = "";
 
         private bool _generateDataRunning = false;

@@ -24,6 +24,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ClearDashboard.DAL.Alignment.Lexicon;
+using ClearDashboard.Wpf.Application.Collections.Lexicon;
+using ClearDashboard.Wpf.Application.Dialogs;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
+using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
+using TranslationCollection = ClearDashboard.Wpf.Application.Collections.Lexicon.TranslationCollection;
+using TranslationId = ClearDashboard.DAL.Alignment.Lexicon.TranslationId;
+using ClearDashboard.Wpf.Application.ViewModels.Popups;
 
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralTypo
@@ -131,6 +140,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public NoteManager NoteManager { get; }
         public SelectionManager SelectionManager { get; }
         public VerseDisplayViewModel VerseDisplayViewModel { get; set; }
+        private IWindowManager WindowManager { get; }
+
 
         private string _message = string.Empty;
         public string Message
@@ -375,10 +386,111 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             await base.OnActivateAsync(cancellationToken);
-            await PopulateData();
+            //await PopulateData();
+            PopulateLexicon();
+
         }
 
-#endregion
+        public async void DisplayModal()
+        {
+            var tokenDisplay = new TokenDisplayViewModel(new Token(new TokenId(1, 1, 1, 1, 1), "Sample", ""));
+            var dialogViewModel = LifetimeScope?.Resolve<LexiconDialogViewModel>();
+            if (dialogViewModel != null)
+            {
+                dialogViewModel.TokenDisplay = tokenDisplay;
+                dialogViewModel.Lexeme = DemoLexeme;
+                dialogViewModel.SemanticDomainSuggestions = SemanticDomainSuggestions;
+                dialogViewModel.Concordance = Concordance;
+
+                var result = await WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+            }
+        }
+
+        public MeaningViewModel DemoMeaning { get; set; }
+        public LexemeViewModel DemoLexeme { get; set; }
+        public SemanticDomainCollection SemanticDomainSuggestions { get; set; }
+        public LexiconTranslationViewModelCollection Concordance { get; set; }
+        private void PopulateLexicon()
+        {
+            SemanticDomainSuggestions = new SemanticDomainCollection
+            {
+                new SemanticDomain { Text = "Apple" },
+                new SemanticDomain { Text = "Apricot" },
+                new SemanticDomain { Text = "Banana" },
+                new SemanticDomain { Text = "Cherry" }
+            };
+            var semanticDomains1 = new SemanticDomainCollection
+            {
+                new SemanticDomain { Text = "Semantic Domain 1" },
+                new SemanticDomain { Text = "Semantic Domain 2" },
+                new SemanticDomain { Text = "Semantic Domain 3" }
+            };
+            var semanticDomains2 = new SemanticDomainCollection
+            {
+                new SemanticDomain { Text = "Semantic Domain 4" },
+                new SemanticDomain { Text = "Semantic Domain 5" },
+                new SemanticDomain { Text = "Semantic Domain 6" }
+            };
+            var forms = new LexemeFormCollection
+            {
+                new Form { Text = "Form 1" },
+                new Form { Text = "Form 2" },
+                new Form { Text = "Form 3" },
+            };
+            var translations1 = new LexiconTranslationViewModelCollection
+            {
+                new LexiconTranslationViewModel { Text = "Translation 1", Count = 10, 
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+                new LexiconTranslationViewModel { Text = "Translation 2", Count = 5,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+                new LexiconTranslationViewModel { Text = "Translation 3", Count = 2,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+            };
+            var translations2 = new LexiconTranslationViewModelCollection
+            {
+                new LexiconTranslationViewModel { Text = "Translation 4", Count = 8,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+                new LexiconTranslationViewModel { Text = "Translation 5", Count = 3,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+                new LexiconTranslationViewModel { Text = "Translation 6", Count = 1,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+            };
+            Concordance = new LexiconTranslationViewModelCollection
+            {
+                new LexiconTranslationViewModel { Text = "Translation 7", Count = 8,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+                new LexiconTranslationViewModel { Text = "Translation 8", Count = 3,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) },
+                new LexiconTranslationViewModel { Text = "Translation 9", Count = 1,
+                    TranslationId = TranslationId.Create(Guid.NewGuid()) }
+            };
+
+            var meaning1 = new MeaningViewModel(new Meaning
+            {
+                MeaningId = MeaningId.Create(Guid.NewGuid()),
+                Text = "Meaning 1",
+                SemanticDomains = semanticDomains1,
+            })
+            {
+                Translations = translations1
+            };
+            var meaning2 = new MeaningViewModel(new Meaning
+            {
+                Text = "Meaning 2",
+                SemanticDomains = semanticDomains2,
+            })
+            {
+                Translations = translations2
+            };
+            DemoLexeme = new LexemeViewModel
+            {
+                Lemma = "Sample",
+                Forms = forms,
+                Meanings = new MeaningViewModelCollection { meaning1, meaning2 }
+            };
+            //DemoMeaning = meaning1;
+        }
+        #endregion
 
 #pragma warning disable CS8618
         /// <summary>
@@ -388,9 +500,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
         }
 
-        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, SelectionManager selectionManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope, ILocalizationService localizationService)
+        public EnhancedViewDemoViewModel(INavigationService navigationService, ILogger<EnhancedViewDemoViewModel> logger, DashboardProjectManager projectManager, NoteManager noteManager, SelectionManager selectionManager, IEventAggregator eventAggregator, IMediator mediator, IServiceProvider serviceProvider, ILifetimeScope? lifetimeScope, ILocalizationService localizationService, IWindowManager windowManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
         {
+            WindowManager = windowManager;
             NoteManager = noteManager;
             SelectionManager = selectionManager;
             ServiceProvider = serviceProvider;

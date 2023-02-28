@@ -13,7 +13,7 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
         {
             get;
 #if DEBUG
-            internal set;
+            set;
 #else 
             // RELEASE MODIFIED
             //internal set;
