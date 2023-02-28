@@ -1,55 +1,31 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
-using ClearBible.Engine.SyntaxTree.Aligner.Legacy;
-using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
-using ClearDashboard.DAL.ViewModels;
-using ClearDashboard.DataAccessLayer;
-using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
-using ClearDashboard.ParatextPlugin.CQRS.Features.BiblicalTerms;
-using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
-using ClearDashboard.Wpf.Application.UserControls;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using ClearDashboard.Wpf.Application.ViewModels.Panes;
-using ClearDashboard.Wpf.Application.ViewModels.PopUps;
 using ClearDashboard.Wpf.Application.Views.Notes;
-using ClearDashboard.Wpf.Application.Views.ParatextViews;
-using ControlzEx.Standard;
 using FuzzyString;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Nito.AsyncEx;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Xml.Linq;
-using static ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog.ParallelCorpusDialogViewModel;
-using Point = System.Windows.Point;
-
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class NotesViewModel : 
         ToolViewModel, 
         IHandle<NoteAddedMessage>,
@@ -62,9 +38,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         private const int ToleranceContainsFuzzyAssociationsDescriptions = 1;
         private const int ToleranceContainsFuzzyNoteText = 1;
 
-
-        #region Member Variables
-
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private readonly NoteManager? noteManager_;
         private NotesView view_;
@@ -76,10 +49,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             Open,
             Resolved
         }
-
-        #endregion //Member Variables
-
-        #region Public Properties
 
         private Visibility _progressBarVisibility = Visibility.Visible;
         public Visibility ProgressBarVisibility
@@ -158,10 +127,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             get => message_;
             set => Set(ref message_, value);
         }
-
-        #endregion //Public Properties
-
-        #region Observable Properties
 
         private ICollectionView notesCollectionView_;
         public ICollectionView NotesCollectionView
@@ -257,15 +222,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             }
         }
 
-
-        #endregion //Observable Properties
-
-        #region Commands
-
-        #endregion
-
-        #region Constructor and startup
-
         public NotesViewModel()
         {
             // used by Caliburn Micro for design time    
@@ -293,6 +249,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
 
             NotesCollectionView = CollectionViewSource.GetDefaultView(noteViewModels_);
             NotesCollectionView.Filter = FilterNotesCollectionView;
+            NotesCollectionView.SortDescriptions.Clear();
+            NotesCollectionView.SortDescriptions.Add(new SortDescription("Created", ListSortDirection.Ascending));
         }
 
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
@@ -324,11 +282,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             await base.OnDeactivateAsync(close, cancellationToken);
         }
-
-
-        #endregion //Constructor
-
-        #region Methods
 
         private bool FilterNotesCollectionView(object obj)
         {
@@ -605,8 +558,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
         {
             await GetAllNotesAndSetNoteViewModelsAsync();
         }
-
-        #endregion // Methods
     }
 
     public static class Extensions

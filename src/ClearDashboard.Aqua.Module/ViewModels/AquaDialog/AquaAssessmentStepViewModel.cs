@@ -25,6 +25,9 @@ public class AquaAssessmentStepViewModel :
 {
     private readonly IAquaManager? aquaManager_;
 
+    private bool isValidValuesLoaded = false;
+    private int? DataLoadedForId_ = null;
+
     public BindableCollection<string> Types { get; set; } = new()
     {
         "missing-words",
@@ -136,6 +139,8 @@ public class AquaAssessmentStepViewModel :
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
+        isValidValuesLoaded = false;
+        DataLoadedForId_ = null;
         return base.OnInitializeAsync(cancellationToken);
     }
     protected override Task OnActivateAsync(CancellationToken cancellationToken)
@@ -153,16 +158,22 @@ public class AquaAssessmentStepViewModel :
     {
         try
         {
-            HasId = ParentViewModel!.ActiveAssessment == null ? false : true;
+            await LoadValidValues();
 
-            if (hasId_)
+            var activeId = ParentViewModel!.ActiveAssessment?.id;
+            HasId = activeId == null ? false : true;
+
+            if (!HasId)
             {
-                throw new InvalidStateEngineException(name: "ParentViewModel!.ActiveAssessment", value: "not null", "ParentViewModel!.ActiveAssessment not null");
-                // not used to view assessment
-                //GetAssessment();
+                DataLoadedForId_ = null;
+                ClearIdData();
             }
-            await GetAllProjectRevisions();
-            return;
+            else
+            {
+                //GetAssessment();  not used to view assessment
+                DataLoadedForId_ = activeId;
+                throw new InvalidStateEngineException(name: "ParentViewModel!.ActiveAssessment", value: "not null", "ParentViewModel!.ActiveAssessment not null");
+            }
         }
         catch (Exception ex)
         {
@@ -174,6 +185,19 @@ public class AquaAssessmentStepViewModel :
         }
     }
 
+    private void ClearIdData()
+    {
+        Type = null;
+        Revision = null;
+    }
+    private async Task LoadValidValues()
+    {
+        if (isValidValuesLoaded)
+            return;
+
+        await GetAllProjectRevisions();
+        isValidValuesLoaded = true;
+    }
     public void Ok(object obj)
     {
         ParentViewModel!.Ok();

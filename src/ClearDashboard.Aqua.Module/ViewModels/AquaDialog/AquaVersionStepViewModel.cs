@@ -28,6 +28,9 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     private readonly IAquaManager? aquaManager_;
     private readonly IEnhancedViewManager? _enhancedViewManager;
 
+    private bool isValidValuesLoaded = false;
+    private int? dataLoadedForId_ = null;
+
     public BindableCollection<Language> IsoLanguages { get; set; } = new();
 
     public BindableCollection<Script> IsoScripts { get; set; } = new();
@@ -166,6 +169,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
+        isValidValuesLoaded = false;
+        dataLoadedForId_ = null;
         ParentViewModel!.StatusBarVisibility = Visibility.Visible;
         return base.OnInitializeAsync(cancellationToken);
     }
@@ -186,6 +191,8 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     {
         try
         {
+            await LoadValidValues();
+
             var tokenizedTextCorpus = await TokenizedTextCorpus.Get(
                 Mediator!,
                 ParentViewModel!.TokenizedTextCorpusId
@@ -196,13 +203,22 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
 
             ParentViewModel!.AquaTokenizedTextCorpusMetadata = AquaTokenizedTextCorpusMetadata.Get(tokenizedTextCorpus);
 
-            HasId = ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id == null ? false : true;
+            var activeId = ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id;
+            HasId = activeId == null ? false : true;
 
-            await LoadLanguages();
-            await LoadScripts();
-            if (hasId_)
+            if (!HasId)
             {
-                await GetVersion();
+                dataLoadedForId_ = null;
+                ClearIdData();
+            }
+            else
+            {
+                if (dataLoadedForId_ == null || dataLoadedForId_ != activeId)
+                {
+                    ClearIdData();
+                    await GetVersion();
+                    dataLoadedForId_ = activeId;
+                }
                 await GetRevisions();
             }
         }
@@ -213,6 +229,28 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 ParentViewModel!.Message = ex.Message ?? ex.ToString();
             });
         }
+    }
+
+    private void ClearIdData()
+    {
+        Name = "";
+        IsoLanguage = null;
+        IsoScript = null;
+        Abbreviation = "";
+        Rights = "";
+        ForwardTranslationToVersionId = "";
+        BackTranslationToVersionId = "";
+        MachineTranslation = false;
+        Items.Clear();
+    }
+    private async Task LoadValidValues()
+    {
+        if (isValidValuesLoaded)
+            return;
+
+        await LoadLanguages();
+        await LoadScripts();
+        isValidValuesLoaded = true;
     }
 
     public void AddRevision()
@@ -376,7 +414,6 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     private void SetRevisionsList(IEnumerable<Revision>? revisions)
     {
         Items.Clear();
-
         if (revisions != null)
             foreach (var revision in revisions)
                 Items.Add(revision);

@@ -27,7 +27,8 @@ public class AquaRevisionStepViewModel :
     private readonly IAquaManager? aquaManager_;
     private readonly IEnhancedViewManager? enhancedViewManager_;
 
-
+    private bool isValidValuesLoaded = false;
+    private int? dataLoadedForId_ = null;
     public BindableCollection<Assessment> Items { get; set; } = new();
 
     private bool hasId_;
@@ -100,6 +101,8 @@ public class AquaRevisionStepViewModel :
     }
     protected override Task OnInitializeAsync(CancellationToken cancellationToken)
     {
+        isValidValuesLoaded = false;
+        dataLoadedForId_ = null;
         ParentViewModel!.StatusBarVisibility = Visibility.Visible;
         return base.OnInitializeAsync(cancellationToken);
     }
@@ -107,7 +110,6 @@ public class AquaRevisionStepViewModel :
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel!.DialogTitle = $"{LocalizationService!.Get("Aqua_DialogTitle")} - {LocalizationService!.Get("Aqua_Revision_BodyTitle")}";
-        await Reload();
         await base.OnActivateAsync(cancellationToken);
         return;
     }
@@ -119,14 +121,27 @@ public class AquaRevisionStepViewModel :
     private async Task Reload()
     {
         try
-        { 
+        {
+            await LoadValidValues();
+
+            var activeId = ParentViewModel!.ActiveRevision?.id;
             HasId = ParentViewModel!.ActiveRevision == null ? false : true;
 
-            if (hasId_)
+            if (!HasId) //new
             {
-                GetRevision();
-                await GetAssessments();
+                dataLoadedForId_ = null;
+                ClearIdData();
             }
+            else
+            {
+                if (dataLoadedForId_ == null || dataLoadedForId_ != activeId)
+                {
+                    ClearIdData();
+                    GetRevision();
+                    dataLoadedForId_ = activeId;
+                }
+                await GetAssessments();
+             }
         }
         catch (Exception ex)
         {
@@ -135,6 +150,22 @@ public class AquaRevisionStepViewModel :
                 ParentViewModel!.Message = ex.Message ?? ex.ToString();
             });
         }
+    }
+
+    private void ClearIdData()
+    {
+        Name = "";
+        Published= false;
+        Items.Clear();
+    }
+    private Task LoadValidValues()
+    {
+        if (isValidValuesLoaded)
+            return Task.CompletedTask;
+
+        //load valid values
+        isValidValuesLoaded = true;
+        return Task.CompletedTask;
     }
     public RelayCommand OkCommand { get; }
 
