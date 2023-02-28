@@ -710,7 +710,9 @@
           .ver {
           font-family: "Courier";
           font-weight: bold;
-          font-style: normal;}
+          font-style: italic;
+          color:blue;
+          }
 
           .v {
           background-color:#e3e3e3;
