@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Dynamic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -179,6 +180,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             if (!string.IsNullOrWhiteSpace(e.SemanticDomain.Text))
             {
                 await LexiconManager.AddNewSemanticDomainAsync(e.Meaning, e.SemanticDomain.Text);
+                if (SemanticDomainSuggestions.All(sd => sd.Text != e.SemanticDomain.Text))
+                {
+                    SemanticDomainSuggestions.Add(e.SemanticDomain);
+                }
             }
         }
 
