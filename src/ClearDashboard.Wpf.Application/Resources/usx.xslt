@@ -748,6 +748,13 @@
           font-style: normal;
           }
 
+          .tc2 {
+          border: 1px solid black;
+          padding: 5px;
+          font-weight: bold;
+          font-style: normal;
+          }
+
           .sl1 {
           font-weight: bold;
           }
