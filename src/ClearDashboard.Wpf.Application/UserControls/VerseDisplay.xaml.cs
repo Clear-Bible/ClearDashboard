@@ -499,7 +499,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            if (e is not TokenEventArgs args)
+            if (e is not TokenEventArgs args || args is { TokenDisplay: null } )
             {
                 return;
             }
