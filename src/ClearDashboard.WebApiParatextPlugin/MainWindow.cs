@@ -444,6 +444,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         xDoc.LoadXml(usxString);
                                         List<XmlNode> verseNodeList = new();
 
+                                        bool nextStartMarkerFound = false;
                                         bool startMarkerFound = false;
                                         bool endMarkerFound = false;
                                         var count = 0;
@@ -451,9 +452,19 @@ namespace ClearDashboard.WebApiParatextPlugin
                                         {
                                             endMarkerFound = false;
 
-                                            if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                            if (startMarkerFound && node.OuterXml.Contains("sid="))
                                             {
                                                 startMarkerFound = false;
+                                                nextStartMarkerFound = true;
+                                            }
+
+                                            if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                                            {
+                                                startMarkerFound = true;
+                                            }
+
+                                            if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
+                                            {
                                                 endMarkerFound = true;
 
                                                 
@@ -483,10 +494,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                     Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
                                                 }
                                                
-                                            }
-                                            else if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
-                                            {
-                                                startMarkerFound = true;
                                             }
                                             else if(node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") || 
                                                     node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
@@ -539,7 +546,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 }
                                             }
 
-                                            if (startMarkerFound || endMarkerFound)
+                                            if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
                                             {
                                                 verseNodeList.Add(node);
                                             }

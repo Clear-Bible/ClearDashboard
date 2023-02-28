@@ -67,41 +67,60 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
                 var columnIndex = grid.CurrentColumn!=null? grid.CurrentColumn.DisplayIndex : 6;
 
                 var cells = grid.SelectedCells;
-                var selectedItem = cells[0].Item;
-                var BiblicalTermsItem = (BiblicalTermsData)selectedItem;
-
-                switch (columnIndex)
+                if (cells.Count != 0)
                 {
-                    case (1):
-                        copyText = BiblicalTermsItem.Id;
-                        break;
-                    case (2):
-                        copyText = BiblicalTermsItem.SemanticDomain;
-                        break;
-                    case (3):
-                        copyText = BiblicalTermsItem.Gloss;
-                        break;
-                    case (4):
-                        copyText = BiblicalTermsItem.RenderingCount.ToString();
-                        break;
-                    case (5):
-                        copyText = BiblicalTermsItem.References.Count.ToString();
-                        break;
-                    case (6):
-                        //copyText = BiblicalTermsItem.RenderingString;
-                        break;
-                    default:
-                        copyText = BiblicalTermsItem.Gloss;
-                        break;
+                    var selectedItem = cells[0].Item;
+                    var BiblicalTermsItem = (BiblicalTermsData)selectedItem;
+
+                    switch (columnIndex)
+                    {
+                        case (0):
+                            copyText = BiblicalTermsItem.Id;
+                            break;
+                        case (1):
+                            copyText = BiblicalTermsItem.SemanticDomain;
+                            break;
+                        case (2):
+                            copyText = BiblicalTermsItem.Gloss;
+                            break;
+                        case (3):
+                            copyText = BiblicalTermsItem.Counts;
+                            break;
+                        case (4):
+                            copyText = BiblicalTermsItem.Found.ToString();
+                            break;
+                        case (5):
+                            sender = sender as ListBox;
+                            break;
+                        default:
+                            copyText = BiblicalTermsItem.Gloss;
+                            break;
+                    }
                 }
             }
             else if (sender is ListBox listBox && listBox == SelectedItemVerseRenderings)
             {
                 copyText = listBox.SelectedItem.ToString();
             }
+            else if (sender is ListBox verseListBox && verseListBox.SelectedItem is VerseViewModel)
+            {
+                var verseViewModel = verseListBox.SelectedItem as VerseViewModel;
+                copyText = verseViewModel.VerseText;
+            }
             else if (sender is ListView listView && listView == SelectedItemVerses && listView.SelectedItem is VerseViewModel verse)
             {
                 copyText = verse.VerseText;
+            }
+            else if (sender is ScrollViewer scrollViewer)
+            {
+                var verseViewModel = scrollViewer.DataContext as VerseViewModel;
+                copyText = verseViewModel.VerseText;
+            }
+
+            if (sender is ListBox listTwo && listTwo.SelectedItem is RenderingStringParts)
+            {
+                var renderingStringParts = listTwo.SelectedItem as RenderingStringParts;
+                copyText = renderingStringParts.RenderingString;
             }
 
             Clipboard.SetText(copyText);
@@ -109,15 +128,17 @@ namespace ClearDashboard.Wpf.Application.Views.ParatextViews
 
         private void AllowScrolling_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(sender as DependencyObject);
-            if (sender == gridVerses)
-            {
-                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/40);
-            }
-
+            
             if (sender == SelectedItemVerses)
             {
+                ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(SelectedItemVerses);
                 scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
+            }
+
+            else if (sender == gridVerses || sender is ListBox)
+            {
+                ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(gridVerses);
+                scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/40);
             }
 
             e.Handled = true;

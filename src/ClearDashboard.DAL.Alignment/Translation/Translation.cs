@@ -11,6 +11,7 @@ public class Translation
     public class OriginatedFromValues
     {
         public const string Assigned = "Assigned";
+        public const string FromLexicon = "FromLexicon";
         public const string FromAlignmentModel = "FromAlignmentModel";
         public const string FromTranslationModel = "FromTranslationModel";
         public const string FromOther = "FromOther";

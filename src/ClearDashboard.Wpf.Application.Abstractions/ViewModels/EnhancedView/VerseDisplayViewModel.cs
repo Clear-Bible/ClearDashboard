@@ -58,7 +58,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         private TokenMap? _targetTokenMap;
         protected TokenMap? TargetTokenMap
         {
-            get { return _targetTokenMap; }
+            get => _targetTokenMap;
             set
             {
                 Set(ref _targetTokenMap, value);
@@ -116,16 +116,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             _ = SourceTokenDisplayViewModels
                 .Select(tdm =>
                 {
-                    if (sourceTokens
+                    tdm.IsHighlighted = sourceTokens
                         .Select(t => t.TokenId)
-                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
-                    {
-                        tdm.IsHighlighted = true;
-                    }
-                    else
-                    {
-                        tdm.IsHighlighted = false;
-                    }
+                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer());
 
                     return tdm;
                 })
@@ -142,16 +135,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
              _ =  TargetTokenDisplayViewModels
                 .Select(tdm =>
                 {
-                    if (targetTokens
+                    tdm.IsHighlighted = targetTokens
                         .Select(t => t.TokenId)
-                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer()))
-                    {
-                        tdm.IsHighlighted = true;
-                    }
-                    else
-                    {
-                        tdm.IsHighlighted = false;
-                    }
+                        .Contains(tdm.Token.TokenId, new IIdEqualityComparer());
 
                     return tdm;
                 })
@@ -342,49 +328,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             await Task.CompletedTask;
         }
-
-
-        //public async Task HandleAsync(AlignmentAddedMessage message, CancellationToken cancellationToken)
-        //{
-        //    var alignment = message.Alignment;
-        //    var alignedTokenPair = alignment.AlignedTokenPair;
-          
-        //    if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
-        //    {
-        //        Alignments!.Add(alignment);
-        //    }
-
-        //    if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
-        //    {
-        //        Alignments!.Add(alignment);
-        //    }
-
-        //    await Task.CompletedTask;
-        //}
-
-        //public async Task HandleAsync(AlignmentDeletedMessage message, CancellationToken cancellationToken)
-        //{
-        //    var alignment = message.Alignment;
-        //    var alignedTokenPair = alignment.AlignedTokenPair;
-
-        //    var unhighlightTokens = false;
-
-        //    if (SourceTokenMap != null && SourceTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.SourceToken.TokenId.Id))
-        //    {
-        //        unhighlightTokens = true;
-        //        Alignments!.Remove(alignment);
-        //    }
-
-        //    if (TargetTokenMap != null && TargetTokenMap.Tokens.Any(token => token.TokenId.Id == alignedTokenPair.TargetToken.TokenId.Id))
-        //    {
-        //        unhighlightTokens = true;
-        //        Alignments!.Remove(alignment);
-        //    }
-
-        //    if (unhighlightTokens)
-        //    {
-        //        await UnhighlightTokens();
-        //    }
-        //}
     }
 }

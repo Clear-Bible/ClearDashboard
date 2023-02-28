@@ -710,7 +710,9 @@
           .ver {
           font-family: "Courier";
           font-weight: bold;
-          font-style: normal;}
+          font-style: italic;
+          color:blue;
+          }
 
           .v {
           background-color:#e3e3e3;
@@ -738,6 +740,45 @@
           font-color: #030ffc
           font-weight: bold;
           font-style: normal;}
+
+          .tc1 {
+          border: 2px solid black;
+          padding: 5px;
+          font-weight: bold;
+          font-style: normal;
+          }
+
+          .tc2 {
+          border: 1px solid black;
+          padding: 5px;
+          font-weight: bold;
+          font-style: normal;
+          }
+
+          .sl1 {
+          font-weight: bold;
+          }
+
+          .mlor {
+          font-style: italic;
+          font-variant: small-caps;
+          }
+
+          .imp {
+          font-style: normal;
+          color:gray;
+          }
+
+          .brk {
+          font-style: normal;
+          vertical-align: sub;
+          font-size: smaller;
+          }
+
+          .rgm{
+          vertical-align: super;
+          font-size: smaller;
+          }
 
           .navbar {
           overflow: hidden;
@@ -777,7 +818,7 @@
         </style>
       </head>
       <body>
-        <main>
+        <main dir="auto">
           <xsl:apply-templates />
         </main>
       </body>
@@ -794,7 +835,7 @@
   <xsl:template match="para[@style='rem']|para[@style='ide']|verse[@eid]"></xsl:template>
 
   <xsl:template match="para">
-    <p>
+    <p dir="auto">
       <xsl:apply-templates select="@*|node()" />
     </p>
   </xsl:template>

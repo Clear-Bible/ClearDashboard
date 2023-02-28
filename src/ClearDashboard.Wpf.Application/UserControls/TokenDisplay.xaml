@@ -57,7 +57,7 @@
             PreviewMouseLeftButtonDown="OnTokenLeftButtonDown"
             ToolTipOpening="OnToolTipOpening">
             <Button.ContextMenu>
-                <ContextMenu FlowDirection="LeftToRight">
+                <ContextMenu x:Name="TokenDisplayContextMenu" FlowDirection="LeftToRight">
                     <MenuItem Click="OnCreateNote" Header="{helpers:Localization EnhancedView_CreateNote}" />
                     <MenuItem
                         x:Name="JoinTokensMenuItem"
