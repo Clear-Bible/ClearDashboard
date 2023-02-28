@@ -80,6 +80,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         public bool ContainsTranslationText(string text)
         {
             return Meanings.SelectMany(meaning => meaning.Translations).Any(translation => translation.Text == text);
+        }        
+        
+        public LexiconTranslationViewModel? SelectTranslationText(string text)
+        {
+            var match = Meanings.SelectMany(meaning => meaning.Translations).FirstOrDefault(translation => translation.Text == text);
+            if (match != null)
+            {
+                match.IsSelected = true;
+                return match;
+            }
+
+            return null;
         }
 
         public LexemeViewModel() : this(new Lexeme())
