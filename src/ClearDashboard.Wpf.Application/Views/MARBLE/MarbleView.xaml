@@ -69,7 +69,10 @@
         </Grid.CommandBindings>
 
         <Grid.InputBindings>
-            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+            <KeyBinding
+                Key="F"
+                Command="Find"
+                Modifiers="Control" />
         </Grid.InputBindings>
 
         <!--  ROW 0  -->
@@ -1034,7 +1037,11 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <ListBox Name="VersesListBox" MaxHeight="300" ItemsSource="{Binding Verses}"  PreviewMouseWheel="Verses_OnPreviewMouseWheel">
+                                        <ListBox
+                                            Name="VersesListBox"
+                                            MaxHeight="300"
+                                            ItemsSource="{Binding Verses}"
+                                            PreviewMouseWheel="Verses_OnPreviewMouseWheel">
                                             <ListBox.ItemContainerStyle>
                                                 <Style TargetType="ListBoxItem">
                                                     <Setter Property="Padding" Value="0" />
