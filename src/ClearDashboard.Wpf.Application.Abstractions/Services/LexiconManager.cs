@@ -2,37 +2,21 @@
 using Autofac;
 using MediatR;
 using Caliburn.Micro;
-using ClearBible.Engine.Corpora;
-using ClearDashboard.DAL.Alignment.Translation;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System;
 using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
+using ClearDashboard.Wpf.Application.Messages.Lexicon;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
     /// <summary>
-    /// A class that manages the lexicons for a specified <see cref="EngineParallelTextRow"/> and <see cref="TranslationSet"/>.
+    /// A class that bridges the lexicon API with the user interface.
     /// </summary>
     public sealed class LexiconManager : PropertyChangedBase
     {
-        //private EngineParallelTextRow? _parallelTextRow;
-        //private EngineParallelTextRow? ParallelTextRow
-        //{
-        //    get => _parallelTextRow;
-        //    set
-        //    {
-        //        _parallelTextRow = value;
-        //        if (_parallelTextRow is { SourceTokens: { } })
-        //        {
-        //            SourceTokenIds = _parallelTextRow.SourceTokens.Select(t => t.TokenId).ToList();
-        //        }
-        //    }
-        //}
-        //private List<TokenId> SourceTokenIds { get; set; } = new();
-
         private IEventAggregator EventAggregator { get; }
         private ILogger<LexiconManager> Logger { get; }
         private IMediator Mediator { get; }
@@ -50,12 +34,16 @@ namespace ClearDashboard.Wpf.Application.Services
                     Language = language,
                     Type = type
                 };
+#if !DEMO
                 var result = await lexeme.Create(Mediator);
-
+#endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Created lexeme for lemma {lemma} in {stopwatch.ElapsedMilliseconds} ms");
 
-                return new LexemeViewModel(result);
+                var resultViewModel = new LexemeViewModel(result);
+                await EventAggregator.PublishOnUIThreadAsync(new LexemeAddedMessage(resultViewModel));
+
+                return resultViewModel;
             }
             catch (Exception e)
             {
@@ -70,9 +58,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
+#if !DEMO
                 var result = await Lexeme.Get(Mediator, lemma, language, meaningLanguage);
-
+#endif
                 stopwatch.Stop();
 
                 if (result == null)
@@ -80,8 +68,8 @@ namespace ClearDashboard.Wpf.Application.Services
                     Logger.LogInformation($"Could not find lexeme for {lemma} in {stopwatch.ElapsedMilliseconds} ms");
                     return null;
                 }
-
                 Logger.LogInformation($"Retrieved lexeme for {lemma} in {stopwatch.ElapsedMilliseconds} ms");
+
                 return new LexemeViewModel(result);
             }
             catch (Exception e)
@@ -97,9 +85,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
+#if !DEMO
                 await lexeme.Entity.Delete(Mediator);
-
+#endif
                 stopwatch.Stop();
 
                 Logger.LogInformation($"Deleted lexeme for {lexeme.Lemma} in {stopwatch.ElapsedMilliseconds} ms");
@@ -117,9 +105,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
+#if !DEMO
                 await lexeme.Entity.PutForm(Mediator, form);
-
+#endif
                 stopwatch.Stop();
 
                 Logger.LogInformation($"Added form {form.Text} to lexeme for {lexeme.Lemma} in {stopwatch.ElapsedMilliseconds} ms");
@@ -137,9 +125,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
+#if !DEMO
                 await form.Delete(Mediator);
-
+#endif
                 stopwatch.Stop();
 
                 Logger.LogInformation($"Deleted form {form.Text} in {stopwatch.ElapsedMilliseconds} ms");
@@ -157,12 +145,32 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
+#if !DEMO
                 await lexeme.Entity.PutMeaning(Mediator, meaning.Entity);
-
+#endif
                 stopwatch.Stop();
 
                 Logger.LogInformation($"Added meaning {meaning.Text} to lexeme for {lexeme.Lemma} in {stopwatch.ElapsedMilliseconds} ms");
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+        }
+        
+        public async Task UpdateMeaningAsync(LexemeViewModel lexeme, MeaningViewModel meaning)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#if !DEMO
+                await lexeme.Entity.PutMeaning(Mediator, meaning.Entity);
+#endif
+                stopwatch.Stop();
+
+                Logger.LogInformation($"Updated meaning {meaning.Text} to lexeme for {lexeme.Lemma} in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
@@ -177,9 +185,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
+#if !DEMO
                 await meaning.Entity.Delete(Mediator);
-
+#endif
                 stopwatch.Stop();
 
                 Logger.LogInformation($"Deleted meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
@@ -197,9 +205,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-
+#if !DEMO
                 var result = await SemanticDomain.GetAll(Mediator);
-
+#endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Retrieved semantic domains in {stopwatch.ElapsedMilliseconds} ms");
                 
@@ -218,9 +226,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                
+#if !DEMO
                 var result = await meaning.Entity.CreateAssociateSenanticDomain(Mediator, semanticDomainText);
-
+#endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Added semantic domain {semanticDomainText} to meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
 
@@ -239,9 +247,9 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                
+#if !DEMO
                 await meaning.Entity.AssociateSemanticDomain(Mediator, semanticDomain);
-
+#endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Associated semantic domains {semanticDomain.Text} to meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
             }
@@ -258,11 +266,36 @@ namespace ClearDashboard.Wpf.Application.Services
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
-                
+#if !DEMO
                 await meaning.Entity.DetachSemanticDomain(Mediator, semanticDomain);
-
+#endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Detached semantic domains {semanticDomain.Text} from meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
+            }
+            catch (Exception e)
+            {
+                Logger.LogCritical(e.ToString());
+                throw;
+            }
+        }
+
+        public async Task MoveTranslationAsync(LexiconTranslationViewModel translation, MeaningViewModel targetMeaning)
+        {
+            try
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+#if !DEMO
+                if (translation.TranslationId != null)
+                {
+                    await translation.Entity.Delete(Mediator);
+                }
+                await targetMeaning.Entity.PutTranslation(Mediator, translation.Entity);
+#endif
+                stopwatch.Stop();
+                await EventAggregator.PublishOnUIThreadAsync(new LexiconTranslationMovedMessage(translation, targetMeaning));
+
+                Logger.LogInformation($"Moved translation {translation.Text} in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
@@ -282,7 +315,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 stopwatch.Stop();
 
-                Logger.LogInformation($"Deleted meaning {translation.Text} in {stopwatch.ElapsedMilliseconds} ms");
+                Logger.LogInformation($"Deleted translation {translation.Text} in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
@@ -292,39 +325,16 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         /// <summary>
-        /// Initializes the manager with the lexicon data for the row.
-        /// </summary>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task InitializeAsync()
-        {
-        }
-
-        /// <summary>
         /// Creates an <see cref="LexiconManager"/> instance using the specified DI container.
         /// </summary>
         /// <param name="componentContext">A <see cref="IComponentContext"/> (i.e. LifetimeScope) with which to resolve dependencies.</param>
-        /// <param name="parallelTextRow">The <see cref="EngineParallelTextRow"/> containing the tokens to align.</param>
         /// <returns>The constructed LexiconManager.</returns>
         public static async Task<LexiconManager> CreateAsync(IComponentContext componentContext)
-//                                                             EngineParallelTextRow parallelTextRow)
         {
             var manager = componentContext.Resolve<LexiconManager>();
-            //var manager = componentContext.Resolve<LexiconManager>(new NamedParameter("parallelTextRow", parallelTextRow));
-            await manager.InitializeAsync();
             return manager;
         }
 
-        //public LexiconManager(EngineParallelTextRow parallelTextRow,
-        //                            IEventAggregator eventAggregator,
-        //                            ILogger<LexiconManager> logger,
-        //                            IMediator mediator)
-        //{
-        //    ParallelTextRow = parallelTextRow;
-
-        //    EventAggregator = eventAggregator;
-        //    Logger = logger;
-        //    Mediator = mediator;
-        //}
         public LexiconManager(IEventAggregator eventAggregator,
                               ILogger<LexiconManager> logger,
                               IMediator mediator)

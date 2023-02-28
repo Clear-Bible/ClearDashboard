@@ -1,6 +1,4 @@
-﻿//#define DEMO
-
-using System;
+﻿using System;
 using System.Dynamic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +10,6 @@ using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.Infrastructure;
-using ClearDashboard.Wpf.Application.Messages.Lexicon;
 using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.UserControls.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
@@ -89,7 +86,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             private set => Set(ref _progressBarVisibility, value);
         }
 
-        private bool _applyEnabled = false;
+        private bool _applyEnabled;
         public bool ApplyEnabled
         {
             get => _applyEnabled;
@@ -114,10 +111,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(SaveTranslation);
 #endif
             }
-            catch (Exception ex)
-            {
-                var exception = ex;
-            }
             finally
             {
                 OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
@@ -132,24 +125,20 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
 
         public async void OnLexemeAdded(object sender, LexemeEventArgs e)
         {
-#if !DEMO
             if (e.Lexeme.LexemeId == null)
             {
                 if (!string.IsNullOrWhiteSpace(e.Lexeme.Lemma))
                 {
                     Lexeme = await LexiconManager.CreateLexemeAsync(e.Lexeme.Lemma, e.Lexeme.Language, e.Lexeme.Type);
-                    await EventAggregator.PublishOnUIThreadAsync(new LexemeAddedMessage(Lexeme));
                 }
             }
             else
             {
                 Logger?.LogError($"Cannot create new lexeme because {e.Lexeme.Lemma} already has a LexemeId.");
             }
-#endif
         }
         public async void OnLexemeDeleted(object sender, LexemeEventArgs e)
         {
-#if !DEMO
             if (e.Lexeme.LexemeId != null)
             {
                 await LexiconManager.DeleteLexemeAsync(e.Lexeme);
@@ -158,79 +147,59 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             {
                 Logger?.LogError($"Cannot delete lexeme because {e.Lexeme.Lemma} does not have a LexemeId.");
             }
-#endif 
         }
 
         public async void OnLexemeFormAdded(object sender, LexemeFormEventArgs e)
         {
-#if !DEMO
             await LexiconManager.AddLexemeFormAsync(e.Lexeme, e.Form);
-#endif
         }
 
         public async void OnLexemeFormRemoved(object sender, LexemeFormEventArgs e)
         {
-#if !DEMO
             await LexiconManager.DeleteLexemeFormAsync(e.Form);
-#endif
         }
 
         public async void OnMeaningAdded(object sender, MeaningEventArgs e)
         {
-#if !DEMO
             await LexiconManager.AddMeaningAsync(e.Lexeme, e.Meaning);
-#endif
         }
 
         public async void OnMeaningDeleted(object sender, MeaningEventArgs e)
         {
-#if !DEMO
             await LexiconManager.DeleteMeaningAsync(e.Meaning);
-#endif
         }
 
         public async void OnMeaningUpdated(object sender, MeaningEventArgs e)
         {
-#if !DEMO
-#endif
+            await LexiconManager.UpdateMeaningAsync(e.Lexeme, e.Meaning);
         }
 
         public async void OnSemanticDomainAdded(object sender, SemanticDomainEventArgs e)
         {
-#if !DEMO
             if (!string.IsNullOrWhiteSpace(e.SemanticDomain.Text))
             {
                 await LexiconManager.AddNewSemanticDomainAsync(e.Meaning, e.SemanticDomain.Text);
             }
-#endif
         }
 
         public async void OnSemanticDomainSelected(object sender, SemanticDomainEventArgs e)
         {
-#if !DEMO
             await LexiconManager.AddExistingSemanticDomainAsync(e.Meaning, e.SemanticDomain);
-#endif
         }
 
         public async void OnSemanticDomainRemoved(object sender, SemanticDomainEventArgs e)
         {
-#if !DEMO
             await LexiconManager.RemoveSemanticDomainAsync(e.Meaning, e.SemanticDomain);
-#endif
         }
 
         public async void OnTranslationDeleted(object sender, LexiconTranslationEventArgs e)
         {
-#if !DEMO
             await LexiconManager.DeleteTranslationAsync(e.Translation);
-#endif
         }
 
         public async void OnTranslationDropped(object sender, LexiconTranslationEventArgs e)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new LexiconTranslationMovedMessage(e.Translation, e.Meaning));
-#if !DEMO
-#endif
+            await LexiconManager.MoveTranslationAsync(e.Translation, e.Meaning);
         }
 
         private LexiconTranslationViewModel? SelectedTranslation { get; set; }
@@ -264,12 +233,25 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Lexicon
             }
         }
 
+        private void SelectCurrentTranslation()
+        {
+            SelectedTranslation = Lexeme?.SelectTranslationText(TokenDisplay.TargetTranslationText);
+            var concordanceSelection = Concordance.SelectIfContainsText(TokenDisplay.TargetTranslationText);
+            SelectedTranslation ??= concordanceSelection;
+            ApplyEnabled = SelectedTranslation != null;
+        }
+
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
             await base.OnInitializeAsync(cancellationToken);
-
-            Lexeme ??= await LexiconManager!.GetLexemeAsync(TokenDisplay.TranslationSurfaceText);
+            Lexeme ??= await LexiconManager.GetLexemeAsync(TokenDisplay.TranslationSurfaceText);
             await BuildConcordance();
+            SelectCurrentTranslation();
+
+            if (SemanticDomainSuggestions.Count == 0)
+            {
+                SemanticDomainSuggestions = await LexiconManager.GetAllSemanticDomainsAsync();
+            }
 
             OnUIThread(() => ProgressBarVisibility = Visibility.Collapsed);
         }
