@@ -40,6 +40,11 @@ namespace ClearDashboard.Wpf.Application.Collections.Lexicon
             }
         }        
         
+        public bool ContainsText(string text)
+        {
+            return this.Any(t => t.Text != null && t.Text.Equals(text));
+        }
+
         public void RemoveIfContainsText(string text)
         {
             var existing = this.FirstOrDefault(t => t.Text != null && t.Text.Equals(text));
