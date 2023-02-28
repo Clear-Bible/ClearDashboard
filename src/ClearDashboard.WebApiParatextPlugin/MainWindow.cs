@@ -499,56 +499,82 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                     node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
                                             {
                                                 var nodeVerseElementList = node.SelectNodes("verse");
-
-                                                if (nodeVerseElementList.Count > 0)
+                                                try
                                                 {
-                                                    var nodeVerseElement = nodeVerseElementList.Item(0);
-
-                                                    var nodeSidValue = nodeVerseElement.Attributes["sid"];
-                                                    if (nodeSidValue != null)
+                                                    if (nodeVerseElementList.Count > 0)
                                                     {
-                                                        //is _verseRef in verseValue?
-                                                        var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
-                                                        var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
-                                                        if (SidVerseNumberIsRange)
+                                                        var nodeVerseElement = nodeVerseElementList.Item(0);
+
+                                                        var nodeSidValue = nodeVerseElement.Attributes["sid"];
+                                                        if (nodeSidValue != null)
                                                         {
-                                                            var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
-                                                            if (int.Parse(nodeSidVerseRange[0]) <= _verseRef.VerseNum &&
-                                                                _verseRef.VerseNum <= int.Parse(nodeSidVerseRange[1]))
+                                                            //is _verseRef in verseValue?
+                                                            var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
+                                                            var SidVerseNumberIsRange =
+                                                                nodeSidVerseNumber.Contains("-");
+                                                            if (SidVerseNumberIsRange)
                                                             {
-                                                                startMarkerFound = true;
+                                                                var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
+
+                                                                Int32.TryParse(nodeSidVerseRange[0], out var lowerSid);
+                                                                Int32.TryParse(nodeSidVerseRange[1], out var upperSid);
+
+                                                                if (lowerSid <=
+                                                                    _verseRef.VerseNum && _verseRef.VerseNum <=
+                                                                    upperSid)
+                                                                {
+                                                                    startMarkerFound = true;
+                                                                }
                                                             }
                                                         }
-                                                    }
 
-                                                    else
-                                                    {
-                                                        var nodeEidValue = nodeVerseElement.Attributes["eid"];
-                                                        //is _verseRef in verseValue?
-                                                        if (nodeEidValue != null)
+                                                        else
                                                         {
-                                                            var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
-                                                            var EidVerseNumberIsRange =
-                                                                nodeEidVerseNumber.Contains("-");
-                                                            if (EidVerseNumberIsRange)
+                                                            var nodeEidValue = nodeVerseElement.Attributes["eid"];
+                                                            //is _verseRef in verseValue?
+                                                            if (nodeEidValue != null)
                                                             {
-                                                                var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
-                                                                if (int.Parse(nodeEidVerseRange[0]) <=
-                                                                    _verseRef.VerseNum && _verseRef.VerseNum <=
-                                                                    int.Parse(nodeEidVerseRange[1]))
+                                                                var nodeEidVerseNumber =
+                                                                    nodeEidValue.Value.Split(':')[1];
+                                                                var EidVerseNumberIsRange =
+                                                                    nodeEidVerseNumber.Contains("-");
+                                                                if (EidVerseNumberIsRange)
                                                                 {
-                                                                    startMarkerFound = false;
-                                                                    endMarkerFound = true;
+                                                                    var nodeEidVerseRange =
+                                                                        nodeEidVerseNumber.Split('-');
+
+                                                                    Int32.TryParse(nodeEidVerseRange[0], out var lowerEid);
+                                                                    Int32.TryParse(nodeEidVerseRange[1], out var upperEid);
+
+                                                                    if (lowerEid<=
+                                                                        _verseRef.VerseNum && _verseRef.VerseNum <=
+                                                                        upperEid)
+                                                                    {
+                                                                        endMarkerFound = true;
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
+                                                catch (Exception ex)
+                                                {
+                                                    Log.Error(ex, "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
+                                                }
                                             }
 
                                             if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
                                             {
-                                                verseNodeList.Add(node);
+                                                try
+                                                {
+                                                    verseNodeList.Add(node);
+
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    Log.Error(ex, "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
+                                                }
+
                                             }
                                         }
 
