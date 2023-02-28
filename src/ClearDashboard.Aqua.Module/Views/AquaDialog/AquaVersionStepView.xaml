@@ -64,8 +64,8 @@
                 </MultiBinding>
             </Grid.IsEnabled>
             <Grid.RowDefinitions>
+                <RowDefinition Height="10*" />
                 <RowDefinition Height="*" />
-                <RowDefinition Height="200" />
             </Grid.RowDefinitions>
 
             <StackPanel
@@ -440,8 +440,6 @@
             </StackPanel>
             <StackPanel
                 Grid.Row="1"
-                Margin="5"
-                HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Orientation="Vertical">
                 <Button
