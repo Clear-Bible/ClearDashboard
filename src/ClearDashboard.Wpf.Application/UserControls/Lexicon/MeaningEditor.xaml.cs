@@ -384,7 +384,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
                 if (dataString != null)
                 {
                     var translation = JsonSerializer.Deserialize<LexiconTranslationViewModel>(dataString);
-                    if (translation != null)
+                    if (translation != null && !translation.MeaningEquals(Meaning))
                     {
                         RaiseLexicalTranslationEvent(TranslationDroppedEvent, translation);
                         translation.Meaning = Meaning;
