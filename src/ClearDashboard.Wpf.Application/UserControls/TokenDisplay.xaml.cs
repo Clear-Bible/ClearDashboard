@@ -1499,6 +1499,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 Translation.OriginatedFromValues.FromTranslationModel => Brushes.Red,
                 Translation.OriginatedFromValues.FromAlignmentModel => Brushes.Red,
+                Translation.OriginatedFromValues.FromLexicon => Brushes.Red,
                 Translation.OriginatedFromValues.None => Brushes.Red,
                 Translation.OriginatedFromValues.FromOther => Brushes.Blue,
                 _ => Brushes.Black
