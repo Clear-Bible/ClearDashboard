@@ -9,6 +9,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
 
         public MeaningViewModel? Meaning { get; set; }
 
+        public bool MeaningEquals(MeaningViewModel meaning)
+        {
+            return Meaning != null && Meaning.MeaningId != null && Meaning.MeaningId.IdEquals(meaning.MeaningId);
+        }
+
         public TranslationId? TranslationId
         {
             get => Entity.TranslationId;
