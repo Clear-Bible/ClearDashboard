@@ -32,6 +32,10 @@ namespace ClearDashboard.Wpf.Application.Views.Marble
             {
                 e.Handled = false;
             }
+            else if (e.Source is ListBox relatedLemmas && relatedLemmas == RelatedLemmas)
+            {
+                e.Handled = false;
+            }
             else
             {
                 MarbleScrollViewer.ScrollToVerticalOffset(MarbleScrollViewer.VerticalOffset - e.Delta / 3);
@@ -48,6 +52,13 @@ namespace ClearDashboard.Wpf.Application.Views.Marble
         {
             ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(VersesListBox);
             scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/40);
+            e.Handled = true;
+        }
+
+        private void RelatedLemmas_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(RelatedLemmas);
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta / 40);
             e.Handled = true;
         }
     }

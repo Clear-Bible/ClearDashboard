@@ -655,8 +655,10 @@
                                             TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
                                             <ListBox
+                                                x:Name="RelatedLemmas"
                                                 MaxHeight="300"
                                                 ItemsSource="{Binding SelectedSense.RelatedLemmaList}"
+                                                PreviewMouseWheel="RelatedLemmas_OnPreviewMouseWheel"
                                                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
                                                 <ListBox.ItemContainerStyle>
                                                     <Style TargetType="ListBoxItem">
