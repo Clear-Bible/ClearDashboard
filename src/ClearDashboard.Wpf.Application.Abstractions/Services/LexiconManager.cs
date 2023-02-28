@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿//#define DEMO
+
+using System.Threading.Tasks;
 using Autofac;
 using MediatR;
 using Caliburn.Micro;
@@ -9,6 +11,9 @@ using ClearDashboard.DAL.Alignment.Lexicon;
 using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
 using ClearDashboard.Wpf.Application.Messages.Lexicon;
+using ClearDashboard.DataAccessLayer.Models;
+using Lexeme = ClearDashboard.DAL.Alignment.Lexicon.Lexeme;
+using Translation = ClearDashboard.DAL.Alignment.Lexicon.Translation;
 
 namespace ClearDashboard.Wpf.Application.Services
 {
@@ -36,6 +41,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 };
 #if !DEMO
                 var result = await lexeme.Create(Mediator);
+#else
+                var result = lexeme;
 #endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Created lexeme for lemma {lemma} in {stopwatch.ElapsedMilliseconds} ms");
@@ -60,6 +67,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 #if !DEMO
                 var result = await Lexeme.Get(Mediator, lemma, language, meaningLanguage);
+#else
+                var result = new Lexeme { Lemma = lemma, Language = language };
 #endif
                 stopwatch.Stop();
 
@@ -207,6 +216,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 #if !DEMO
                 var result = await SemanticDomain.GetAll(Mediator);
+#else
+                var result = new SemanticDomainCollection();
 #endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Retrieved semantic domains in {stopwatch.ElapsedMilliseconds} ms");
@@ -228,6 +239,9 @@ namespace ClearDashboard.Wpf.Application.Services
                 stopwatch.Start();
 #if !DEMO
                 var result = await meaning.Entity.CreateAssociateSenanticDomain(Mediator, semanticDomainText);
+#else
+                var result = new SemanticDomain { Text = semanticDomainText };
+                meaning.SemanticDomains.Add(result);
 #endif
                 stopwatch.Stop();
                 Logger.LogInformation($"Added semantic domain {semanticDomainText} to meaning {meaning.Text} in {stopwatch.ElapsedMilliseconds} ms");
@@ -301,7 +315,8 @@ namespace ClearDashboard.Wpf.Application.Services
                 var targetTranslation = new LexiconTranslationViewModel(targetTranslationEntity) 
                     { 
                         Count = sourceTranslation.Count,
-                        Meaning = targetMeaning
+                        Meaning = targetMeaning,
+                        IsSelected = sourceTranslation.IsSelected
                     };
                 await EventAggregator.PublishOnUIThreadAsync(new LexiconTranslationMovedMessage(
                     sourceTranslation, 
