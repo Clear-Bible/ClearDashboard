@@ -10,7 +10,6 @@
     xmlns:lexiconViewModels="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Lexicon"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     mc:Ignorable="d"
-    Width="500"
     >
     <Grid>
         <Grid.RowDefinitions>
