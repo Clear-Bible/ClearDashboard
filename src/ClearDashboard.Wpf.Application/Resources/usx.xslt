@@ -761,9 +761,13 @@
           }
 
           .brk {
-          color:gray;
           font-style: normal;
           vertical-align: sub;
+          font-size: smaller;
+          }
+
+          .rgm{
+          vertical-align: super;
           font-size: smaller;
           }
 

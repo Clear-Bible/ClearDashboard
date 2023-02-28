@@ -458,6 +458,11 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 nextStartMarkerFound = true;
                                             }
 
+                                            if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
+                                            {
+                                                startMarkerFound = true;
+                                            }
+
                                             if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                             {
                                                 endMarkerFound = true;
@@ -489,10 +494,6 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                     Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
                                                 }
                                                
-                                            }
-                                            else if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
-                                            {
-                                                startMarkerFound = true;
                                             }
                                             else if(node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") || 
                                                     node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
