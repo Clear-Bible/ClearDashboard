@@ -47,6 +47,18 @@ namespace ClearDashboard.Wpf.Application.Collections.Lexicon
             {
                 Remove(existing);
             }
+        }        
+        
+        public LexiconTranslationViewModel? SelectIfContainsText(string text)
+        {
+            var existing = this.FirstOrDefault(t => t.Text != null && t.Text.Equals(text));
+            if (existing != null)
+            {
+                existing.IsSelected = true;
+                return existing;
+            }
+
+            return null;
         }
     }
 }
