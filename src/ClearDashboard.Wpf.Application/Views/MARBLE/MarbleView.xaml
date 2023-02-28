@@ -69,7 +69,10 @@
         </Grid.CommandBindings>
 
         <Grid.InputBindings>
-            <KeyBinding Key="F" Modifiers="Control" Command="Find" />
+            <KeyBinding
+                Key="F"
+                Command="Find"
+                Modifiers="Control" />
         </Grid.InputBindings>
 
         <!--  ROW 0  -->
@@ -655,8 +658,10 @@
                                             TextBlock.Foreground="{StaticResource MaterialDesignBody}">
 
                                             <ListBox
+                                                x:Name="RelatedLemmas"
                                                 MaxHeight="300"
                                                 ItemsSource="{Binding SelectedSense.RelatedLemmaList}"
+                                                PreviewMouseWheel="RelatedLemmas_OnPreviewMouseWheel"
                                                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
                                                 <ListBox.ItemContainerStyle>
                                                     <Style TargetType="ListBoxItem">
@@ -1032,7 +1037,11 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <ListBox MaxHeight="300" ItemsSource="{Binding Verses}">
+                                        <ListBox
+                                            Name="VersesListBox"
+                                            MaxHeight="300"
+                                            ItemsSource="{Binding Verses}"
+                                            PreviewMouseWheel="Verses_OnPreviewMouseWheel">
                                             <ListBox.ItemContainerStyle>
                                                 <Style TargetType="ListBoxItem">
                                                     <Setter Property="Padding" Value="0" />

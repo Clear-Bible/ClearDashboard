@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
@@ -866,7 +867,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     var keyBoardModifiers = Keyboard.Modifiers;
 
-                    if (keyBoardModifiers == ModifierKeys.None)
+                    if (keyBoardModifiers == ModifierKeys.None || (Keyboard.IsKeyDown(Key.Tab) && keyBoardModifiers == ModifierKeys.Shift))
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
                     }
@@ -903,6 +904,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
+            if (e is MouseEventArgs args)
+            {
+                
+               if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+               {
+                   TokenDisplayContextMenu.PlacementTarget = sender as UIElement;
+                   TokenDisplayContextMenu.Placement = PlacementMode.Right;
+                   TokenDisplayContextMenu.IsOpen = true;
+                   return;
+               }
+            }
             RaiseTokenEvent(TokenMouseEnterEvent, e);
         }
 
