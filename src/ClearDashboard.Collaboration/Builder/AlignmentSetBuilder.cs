@@ -4,6 +4,7 @@ using System.Text.Json;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -11,12 +12,22 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
 {
-    public static IEnumerable<GeneralModel<Models.AlignmentSet>> BuildModelSnapshots(BuilderContext builderContext)
+    public const string SOURCE_TOKENIZED_CORPUS = "SourceTokenizedCorpus";
+    public const string TARGET_TOKENIZED_CORPUS = "TargetTokenizedCorpus";
+
+    public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
+        new Dictionary<string, Type>()
+        {
+            { SOURCE_TOKENIZED_CORPUS, typeof(TokenizedCorpusExtra) },
+            { TARGET_TOKENIZED_CORPUS, typeof(TokenizedCorpusExtra) },
+        };
+
+    public override IEnumerable<GeneralModel<Models.AlignmentSet>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.AlignmentSet>>();
 
-        var dbModels = GetAlignmentSets(builderContext.ProjectDbContext);
-        foreach (var dbModel in dbModels)
+        var alignmentSets = GetAlignmentSets(builderContext.ProjectDbContext);
+        foreach (var dbModel in alignmentSets)
         {
             modelSnapshots.Add(BuildModelSnapshot(dbModel, builderContext));
         }
@@ -24,45 +35,33 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
         return modelSnapshots;
     }
 
-    public static GeneralModel<Models.AlignmentSet> BuildModelSnapshot(Models.AlignmentSet dbModel, BuilderContext builderContext)
+    public static GeneralModel<Models.AlignmentSet> BuildModelSnapshot(Models.AlignmentSet alignmentSet, BuilderContext builderContext)
     {
-        var modelSnapshot = ExtractUsingModelIds(dbModel, builderContext.CommonIgnoreProperties);
+        var modelSnapshot = ExtractUsingModelIds(alignmentSet, builderContext.CommonIgnoreProperties);
 
-        if (dbModel.Alignments.Any())
+        var sourceTokenizedCorpus = alignmentSet.ParallelCorpus!.SourceTokenizedCorpus!;
+        var targetTokenizedCorpus = alignmentSet.ParallelCorpus!.TargetTokenizedCorpus!;
+
+        var sourceTokenizedCorpusExtra = new TokenizedCorpusExtra
         {
-            var alignmentModelSnapshots = new GeneralListModel<GeneralModel<Models.Alignment>>();
-            foreach (var alignment in dbModel.Alignments)
-            {
-                var modelProperties = GeneralModelBuilder<Models.Alignment>.ExtractUsingModelRefs(alignment, builderContext, new List<string>() { "Id" });
+            Id = sourceTokenizedCorpus!.Id,
+            Language = sourceTokenizedCorpus!.Corpus!.Language!,
+            Tokenization = sourceTokenizedCorpus!.TokenizationFunction!,
+            LastTokenized = sourceTokenizedCorpus!.LastTokenized,
+        };
 
-                // FIXME:  enhance GeneralModelBuilder to use propertyConverter delegates
-                // so that it produce "SourceTokenLocation", "TargetTokenLocation" itself
-                // (it has no way of knowing that AlignmentSet already specifies (via
-                // parallel corpus) which is the SourceTokenizedCorpusId and which is
-                // the TargetTokenizedCorpusId).  
-                var sourceTokenComponentRef = modelProperties["SourceTokenComponentRef"];
-                var targetTokenComponentRef = modelProperties["TargetTokenComponentRef"];
+        var targetTokenizedCorpusExtra = new TokenizedCorpusExtra
+        {
+            Id = targetTokenizedCorpus!.Id,
+            Language = targetTokenizedCorpus!.Corpus!.Language!,
+            Tokenization = targetTokenizedCorpus!.TokenizationFunction!,
+            LastTokenized = targetTokenizedCorpus!.LastTokenized,
+        };
 
-                modelProperties.Remove("SourceTokenComponentRef");
-                modelProperties.Remove("TargetTokenComponentRef");
+        modelSnapshot.Add(SOURCE_TOKENIZED_CORPUS, sourceTokenizedCorpusExtra);
+        modelSnapshot.Add(TARGET_TOKENIZED_CORPUS, targetTokenizedCorpusExtra);
 
-                modelProperties.Add("SourceTokenComponentLocation",
-                    (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
-                modelProperties.Add("TargetTokenComponentLocation",
-                    (typeof(string), ((TokenRef)targetTokenComponentRef.value!).TokenLocation));
-
-                var identityPropertyValue = (
-                    alignment.AlignmentSetId.ToString() +
-                    modelProperties["SourceTokenComponentLocation"]
-                ).ToMD5String();
-
-                var alignmentModelSnapshot = new GeneralModel<Models.Alignment>(BuildPropertyRefName(), $"Alignment_{identityPropertyValue}");
-                GeneralModelBuilder<Models.Alignment>.AddPropertyValuesToGenericModel(alignmentModelSnapshot, modelProperties);
-
-                alignmentModelSnapshots.Add(alignmentModelSnapshot);
-            }
-            modelSnapshot.AddChild("Alignments", alignmentModelSnapshots.AsModelSnapshotChildrenList());
-        }
+        modelSnapshot.AddChild("Alignments", AlignmentBuilder.BuildModelSnapshots(alignmentSet.Id, builderContext).AsModelSnapshotChildrenList());
 
         return modelSnapshot;
     }
@@ -72,8 +71,12 @@ public class AlignmentSetBuilder : GeneralModelBuilder<Models.AlignmentSet>
         // The only thing we can do with Alignments at present is auto-create them
         // and possibly soft-delete them, grab any manually deleted ones:
         return projectDbContext.AlignmentSets
-            .Include(ast => ast.Alignments.Where(a => a.Deleted != null)).ThenInclude(a => a.SourceTokenComponent)
-            .Include(ast => ast.Alignments.Where(a => a.Deleted != null)).ThenInclude(a => a.TargetTokenComponent)
+            .Include(e => e.ParallelCorpus)
+                .ThenInclude(e => e!.SourceTokenizedCorpus)
+                    .ThenInclude(e => e!.Corpus)
+            .Include(e => e.ParallelCorpus)
+                .ThenInclude(e => e!.TargetTokenizedCorpus)
+                    .ThenInclude(e => e!.Corpus)
             .OrderBy(c => c.Created)
             .ToList();
     }

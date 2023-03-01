@@ -27,6 +27,9 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     /// </summary>
     string IdentityKey { get; }
 
+    // FIXME:  This might not be needed anymore since in the Merge handlers
+    // we are supplying property mappings and resolvers to get real entity
+    // properties/values
     /// <summary>
     /// Property values (keyed by property name)
     /// </summary>

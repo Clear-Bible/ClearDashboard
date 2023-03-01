@@ -8,9 +8,9 @@ namespace ClearDashboard.Collaboration.Services
 {
     public class CollaborationConfiguration
     {
-        public string RemoteUrl { get; set; }
-        public string RemoteUserName { get; set; }
-        public string RemoteEmail { get; set; }
-        public string RemotePassword { get; set; }
+        public string RemoteUrl { get; set; } = string.Empty;
+        public string RemoteUserName { get; set; } = string.Empty;
+        public string RemoteEmail { get; set; } = string.Empty;
+        public string RemotePassword { get; set; } = string.Empty;
     }
 }

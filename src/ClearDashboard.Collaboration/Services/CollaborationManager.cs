@@ -28,6 +28,7 @@ public class CollaborationManager
     private readonly CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = true;
 
+    public const string RemoteOrigin = "origin";
     public const string BackupsFolder = "Backups";
 
     public CollaborationManager(
@@ -78,10 +79,8 @@ public class CollaborationManager
 
             using (var repo = new Repository(_repositoryPath))
             {
-                const string name = "origin";
-
-                repo.Network.Remotes.Add(name, _configuration.RemoteUrl);
-                Remote remote = repo.Network.Remotes[name];
+                repo.Network.Remotes.Add(RemoteOrigin, _configuration.RemoteUrl);
+                Remote remote = repo.Network.Remotes[RemoteOrigin];
 
                 var refSpec = repo.Config.Get<string>("remote", remote.Name, "fetch");
             }
@@ -196,10 +195,12 @@ public class CollaborationManager
 
     public async Task CreateBackupAsync(CancellationToken cancellationToken)
     {
+        var project = EnsureCurrentProject();
+
         var backupsPath = Path.Combine(_repositoryPath, BackupsFolder);
         Directory.CreateDirectory(backupsPath);
 
-        var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(EnsureCurrentProject().Id) +
+        var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) +
             DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
 
         // Extract the latest from the project database:
@@ -215,8 +216,9 @@ public class CollaborationManager
     public async Task StageChangesAsync(CancellationToken cancellationToken)
     {
         EnsureValidRepository(_repositoryPath);
+        var project = EnsureCurrentProject();
 
-        var projectFolderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(EnsureCurrentProject().Id);
+        var projectFolderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id);
 
         // Extract the latest from the project database:
         var command = new GetProjectSnapshotQuery();
@@ -283,7 +285,7 @@ public class CollaborationManager
         {
             repo.Commit(commitMessage, userSignature, userSignature);
 
-            Remote remote = repo.Network.Remotes["origin"];
+            Remote remote = repo.Network.Remotes[RemoteOrigin];
             var options = new PushOptions();
             options.CredentialsProvider = (_url, _user, _cred) =>
                 new UsernamePasswordCredentials { Username = _configuration.RemoteUserName, Password = _configuration.RemotePassword };

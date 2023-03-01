@@ -9,7 +9,7 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class LabelBuilder : GeneralModelBuilder<Models.Label>
 { 
-    public static IEnumerable<GeneralModel<Models.Label>> BuildModelSnapshot(BuilderContext builderContext)
+    public override IEnumerable<GeneralModel<Models.Label>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.Label>>();
 
@@ -24,7 +24,7 @@ public class LabelBuilder : GeneralModelBuilder<Models.Label>
                 var labelNoteAssociationModelSnapshots = new GeneralListModel<GeneralModel<Models.LabelNoteAssociation>>();
                 foreach (var ln in lns)
                 {
-                    labelNoteAssociationModelSnapshots.Add(GeneralModelBuilder<Models.LabelNoteAssociation>.ExtractUsingModelIds(ln, new List<string>() { "LabelId" }));
+                    labelNoteAssociationModelSnapshots.Add(GeneralModelBuilder<Models.LabelNoteAssociation>.ExtractUsingModelIds(ln));
                 }
                 modelSnapshot.AddChild("LabelNoteAssociations", labelNoteAssociationModelSnapshots.AsModelSnapshotChildrenList());
             }

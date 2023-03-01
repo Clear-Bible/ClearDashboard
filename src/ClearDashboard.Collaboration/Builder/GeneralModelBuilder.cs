@@ -1,9 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Core;
 using System.Reflection;
 using System.Text;
 using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.Collaboration.Model;
+using ClearDashboard.DataAccessLayer.Data;
+using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -16,8 +20,15 @@ namespace ClearDashboard.Collaboration.Builder;
 ///     - Serialize/deserialize transferable form
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class GeneralModelBuilder<T> where T: Models.IdentifiableEntity
+public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> where T: Models.IdentifiableEntity
 {
+    public override string IdentityKey => typeof(T).GetIdentityProperty()!.Name;
+    public override IEnumerable<PropertyInfo> PropertyInfos => typeof(T).GetProperties();
+    public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes => new Dictionary<string, Type>();
+
+    public virtual IEnumerable<GeneralModel<T>> BuildModelSnapshots(BuilderContext builderContext) =>
+        throw new NotImplementedException($"{nameof(BuildModelSnapshots)} for model type {typeof(T).ShortDisplayName()}");
+
     protected static GeneralModel<T> ExtractUsingModelIds(object modelInstance, IEnumerable<String>? ignorePropertyNames = null)
     {
         var identityPropertyName = string.Empty;
@@ -67,7 +78,7 @@ public class GeneralModelBuilder<T> where T: Models.IdentifiableEntity
         }
 
         var generalModel = new GeneralModel<T>(identityPropertyName, identityPropertyValue);
-        AddPropertyValuesToGenericModel(generalModel, modelProperties);
+        AddPropertyValuesToGeneralModel(generalModel, modelProperties);
 
         return generalModel;
     }
@@ -149,25 +160,29 @@ public class GeneralModelBuilder<T> where T: Models.IdentifiableEntity
         return modelProperties;
     }
 
-    protected static void AddPropertyValuesToGenericModel(GeneralModel<T> genericModel, Dictionary<string, (Type type, object? value)> modelProperties)
+    internal static void AddPropertyValuesToGeneralModel(GeneralModel<T> generalModel, IReadOnlyDictionary<string, (Type type, object? value)> modelPropertiesTypes)
     {
-        foreach (var kvp in modelProperties)
+        foreach (var kvp in modelPropertiesTypes)
         {
             if (kvp.Value.type == typeof(string))
             {
-                genericModel.Add(kvp.Key, (string?)kvp.Value.value);
+                generalModel.Add(kvp.Key, (string?)kvp.Value.value);
             }
             else if (kvp.Value.type.IsValueType)
             {
-                genericModel.Add(kvp.Key, (ValueType?)kvp.Value.value);
+                generalModel.Add(kvp.Key, (ValueType?)kvp.Value.value);
             }
             else if (kvp.Value.type.IsAssignableTo(typeof(ModelRef)))
             {
-                genericModel.Add(kvp.Key, (ModelRef)kvp.Value.value!);
+                generalModel.Add(kvp.Key, (ModelRef)kvp.Value.value!);
+            }
+            else if (kvp.Value.type.IsAssignableTo(typeof(ModelExtra)))
+            {
+                generalModel.Add(kvp.Key, (ModelExtra)kvp.Value.value!);
             }
             else if (kvp.Value.type.IsAssignableTo(typeof(IEnumerable<string>)))
             {
-                genericModel.Add(kvp.Key, (IEnumerable<string>)kvp.Value.value!);
+                generalModel.Add(kvp.Key, (IEnumerable<string>)kvp.Value.value!);
             }
             else
             {
@@ -177,7 +192,89 @@ public class GeneralModelBuilder<T> where T: Models.IdentifiableEntity
         }
     }
 
-    protected static string BuildPropertyRefName(string propertyName = "") => $"{propertyName}Ref";
-    protected static string BuildPropertyRefValue(string modelName, int index) => $"{modelName}_{index}";
+    internal static string BuildPropertyRefName(string propertyName = "") => $"{propertyName}Ref";
+    internal static string BuildPropertyRefValue(string modelName, int index) => $"{modelName}_{index}";
+
+    public static IModelBuilder<T> GetModelBuilder()
+    {
+        return GetModelBuilder<T>();
+    }
+
+    public override GeneralModel<T> BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes)
+    {
+        if (modelPropertiesTypes.TryGetValue(IdentityKey, out var identityPropertyValue))
+        {
+            if (identityPropertyValue.value is null)
+            {
+                throw new ArgumentException($"Invalid - GeneralModel identity key '{IdentityKey}' has a null value");
+            }
+
+            GeneralModel<T>? generalModel = null;
+
+            if (identityPropertyValue.type == typeof(string))
+                generalModel = new GeneralModel<T>(IdentityKey, (string)identityPropertyValue.value!);
+            else if (identityPropertyValue.type.IsValueType)
+                generalModel = new GeneralModel<T>(IdentityKey, (ValueType)identityPropertyValue.value!);
+            else
+                throw new ArgumentException($"Invalid GeneralModel identity key value type: '{identityPropertyValue.GetType().ShortDisplayName()}'");
+
+            modelPropertiesTypes.Remove(IdentityKey);
+
+            AddPropertyValuesToGeneralModel(generalModel, modelPropertiesTypes);
+            return generalModel;
+        }
+
+        throw new ArgumentException($"Unable to build GeneralModel<{typeof(T).ShortDisplayName()}> due to missing value for IdentityKey '{IdentityKey}'");
+    }
 }
 
+public abstract class GeneralModelBuilder : IModelBuilder
+{
+    public abstract string IdentityKey { get; }
+    public abstract IEnumerable<PropertyInfo> PropertyInfos { get; }
+    public abstract IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes { get; }
+
+    public abstract GeneralModel BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes);
+
+    public static IModelBuilder<T> GetModelBuilder<T>() where T : Models.IdentifiableEntity
+    {
+        return (IModelBuilder<T>)GetGeneralModelBuilder(typeof(GeneralModel<T>));
+    }
+
+    public static IModelBuilder GetGeneralModelBuilder(Type generalModelType)
+    {
+        return generalModelType switch
+        {
+            //Type modelType when modelType == typeof(GeneralModel<Models.Project>) => new ProjectBuilder(),
+            //Type modelType when modelType == typeof(GeneralModel<Models.AlignmentSet>) => new AlignmentSetBuilder(),
+            //Type modelType when modelType == typeof(GeneralModel<Models.Alignment>) => new AlignmentBuilder(),
+            //Type modelType when modelType == typeof(GeneralModel<Models.Corpus>) => new CorpusBuilder(),
+            //Type modelType when modelType == typeof(GeneralModel<Models.Label>) => new LabelBuilder(),
+            //Type modelType when modelType == typeof(GeneralModel<Models.ParallelCorpus>) => new ParallelCorpusBuilder(),
+            //Type modelType when modelType == typeof(GeneralModel<Models.TokenizedCorpus>) => new TokenizedCorpusBuilder(),
+            //Type modelType when modelType == typeof(GeneralModel<Models.TranslationSet>) => new TranslationSetBuilder(),
+            Type modelType when modelType == typeof(GeneralModel<Models.TokenComposite>) => new TokenBuilder(),
+            _ => BuildDefaultModelBuilder(generalModelType)
+//            _ => throw new ArgumentOutOfRangeException(generalModelType.ShortDisplayName(), $"No IModelBuilder found for type argument")
+
+        };
+    }
+
+    protected static IModelBuilder BuildDefaultModelBuilder(Type generalModelType)
+    {
+        var modelType = generalModelType.GetGenericArguments()[0];
+
+        var candidate = modelType.Name + "Builder";
+        var assembly = typeof(GeneralModelBuilder).Assembly;
+        var builderType = assembly.GetType($"{typeof(GeneralModelBuilder).Namespace}.{candidate}");
+
+        if (builderType is null || !builderType.IsAssignableTo(typeof(IModelBuilder)))
+        {
+            Type[] typeArgs = { modelType };
+            builderType = typeof(GeneralModelBuilder<>).MakeGenericType(typeArgs);
+        }
+
+        object?[] constructorArgs = { };
+        return (IModelBuilder)Activator.CreateInstance(builderType, constructorArgs)!;
+    }
+}

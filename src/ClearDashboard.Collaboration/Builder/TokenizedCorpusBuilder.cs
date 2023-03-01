@@ -9,7 +9,15 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus>
 {
-    public static IEnumerable<GeneralModel<Models.TokenizedCorpus>> BuildModelSnapshot(BuilderContext builderContext)
+    public const string BOOK_NUMBERS = "BookNumbers";
+
+    public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
+        new Dictionary<string, Type>()
+        {
+            { BOOK_NUMBERS, typeof(GeneralListModel<string>) }
+        };
+
+    public override IEnumerable<GeneralModel<Models.TokenizedCorpus>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.TokenizedCorpus>>();
 
@@ -22,19 +30,14 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
         return modelSnapshot;
     }
 
-
     public static GeneralModel<Models.TokenizedCorpus> BuildModelSnapshot(Models.TokenizedCorpus tokenizedCorpus, BuilderContext builderContext)
     {
-        //builderContext.IncrementModelNameIndexValue(nameof(Models.TokenizedCorpus));
-
         var modelSnapshot = ExtractUsingModelIds(tokenizedCorpus, builderContext.CommonIgnoreProperties);
 
         if (tokenizedCorpus.Corpus!.CorpusType != Models.CorpusType.ManuscriptHebrew &&
             tokenizedCorpus.Corpus!.CorpusType != Models.CorpusType.ManuscriptGreek)
         {
             modelSnapshot.Add("BookNumbers", GetBookNumbers(builderContext.ProjectDbContext, tokenizedCorpus.Id));
-
-            //tokenizedCorpusExternalData.AddChild("VerseRowsByBook", GetVerseRowFieldsByBook(builderContext.ProjectDbContext, tokenizedCorpus.Id));
             modelSnapshot.AddChild("VerseRows", VerseRowBuilder.BuildModelSnapshots(tokenizedCorpus.Id, builderContext).AsModelSnapshotChildrenList());
         }
 
@@ -67,17 +70,5 @@ public class TokenizedCorpusBuilder : GeneralModelBuilder<Models.TokenizedCorpus
             .Distinct()
             .OrderBy(b => b)
             .ToGeneralListModel();
-    }
-
-    public static Dictionary<string, Dictionary<string, string>> GetVerseRowFieldsByBook(ProjectDbContext projectDbContext, Guid tokenizedCorpusId)
-    {
-        return projectDbContext.VerseRows
-            .Where(vr => vr.TokenizedCorpusId == tokenizedCorpusId)
-            .Select(vr => new { bcv = vr.BookChapterVerse!, originalText = vr.OriginalText ?? "", vr.IsSentenceStart, vr.IsInRange, vr.IsRangeStart, vr.IsEmpty })
-            .ToList()
-            .GroupBy(bcvo => bcvo.bcv.Substring(0, 3))
-            .ToDictionary(
-                g => g.Key,
-                g => g.ToDictionary(bcvo => bcvo.bcv, bcvo => bcvo.originalText + ", " + bcvo.IsSentenceStart + ", " + bcvo.IsInRange + ", " + bcvo.IsRangeStart + ", " + bcvo.IsEmpty));
     }
 }

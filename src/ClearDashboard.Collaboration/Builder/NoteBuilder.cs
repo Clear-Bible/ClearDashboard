@@ -14,21 +14,10 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class NoteBuilder : GeneralModelBuilder<Models.Note>
 {
-    private readonly Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>> _ndaByNoteId;
-    private readonly Dictionary<Guid, IEnumerable<Models.Note>> _repliesByThreadId;
+    private Dictionary<Guid, Dictionary<string, IEnumerable<Models.NoteDomainEntityAssociation>>>? _ndaByNoteId = null;
+    private Dictionary<Guid, IEnumerable<Models.Note>>? _repliesByThreadId = null;
 
-    public NoteBuilder(ProjectDbContext projectDbContext)
-    {
-        _ndaByNoteId = GetNoteDomainEntityAssociationsByNoteId(projectDbContext);
-        _repliesByThreadId = GetRepliesByThreadId(projectDbContext);
-    }
-
-    public GeneralModel<Models.Note> BuildModelSnapshot(Models.Note note, BuilderContext builderContext)
-    {
-        return BuildModelSnapshotInternal(note, builderContext, _ndaByNoteId, _repliesByThreadId);
-    }
-
-    public static IEnumerable<GeneralModel<Models.Note>> BuildModelSnapshot(BuilderContext builderContext)
+    public override IEnumerable<GeneralModel<Models.Note>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.Note>>();
 
@@ -42,6 +31,14 @@ public class NoteBuilder : GeneralModelBuilder<Models.Note>
         });
 
         return modelSnapshot;
+    }
+
+    public GeneralModel<Models.Note> BuildModelSnapshot(Models.Note note, BuilderContext builderContext)
+    {
+        if (_ndaByNoteId is null) _ndaByNoteId = GetNoteDomainEntityAssociationsByNoteId(builderContext.ProjectDbContext);
+        if (_repliesByThreadId is null) _repliesByThreadId = GetRepliesByThreadId(builderContext.ProjectDbContext);
+
+        return BuildModelSnapshotInternal(note, builderContext, _ndaByNoteId, _repliesByThreadId);
     }
 
     private static GeneralModel<Models.Note> BuildModelSnapshotInternal(

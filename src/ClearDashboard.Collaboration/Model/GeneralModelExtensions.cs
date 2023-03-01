@@ -163,6 +163,12 @@ internal static class GeneralModelExtensions
                 throw new InvalidModelStateException($"IModelSnapshot type {typeof(T).Name} has property name {key} for which a property type cannot be determined");
             }
 
+            if (propertyType.IsAssignableTo(typeof(ModelExtra)))
+            {
+                // Ignore
+                continue;
+            }
+
             thisPropertyValues.TryGetValue(key, out object? value);
             otherPropertyValues.TryGetValue(key, out object? valueOther);
 

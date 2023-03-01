@@ -15,6 +15,7 @@ public class ProjectSnapshotFactoryCommon
     public const string PROPERTIES_FILE = "_Properties";
     public static readonly string ProjectFolderNameTemplate = $"Project_{{0}}";
     public static readonly string VerseRowByBookFileNameTemplate = $"VerseRow_{{0}}";
+    public static readonly string AlignmentsByLocationFileNameTemplate = $"Alignments_{{0}}_{{1}}";
 
     public static string ToProjectFolderName(Guid projectId) =>
         string.Format(ProjectFolderNameTemplate, projectId);
@@ -51,7 +52,8 @@ public class ProjectSnapshotFactoryCommon
         Converters = {
                     new JsonStringEnumConverter(),
                     new GeneralModelJsonConverter(),
-                    new VerseRowModelListJsonConverter()
+                    new VerseRowModelListJsonConverter(),
+                    new AlignmentGroupJsonConverter()
                 }
     };
 
@@ -66,7 +68,8 @@ public class ProjectSnapshotFactoryCommon
                     new JsonStringEnumConverter(),
                     new GeneralModelJsonConverter(),
                     new VerseRowModelListJsonConverter(),
-                    new NoteModelRefJsonConverter()
+                    new NoteModelRefJsonConverter(),
+                    new AlignmentGroupJsonConverter()
                 }
     };
 

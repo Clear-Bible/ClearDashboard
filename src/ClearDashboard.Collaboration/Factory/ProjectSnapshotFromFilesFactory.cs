@@ -209,6 +209,29 @@ public class ProjectSnapshotFromFilesFactory
                 var childName = childFolderNameMappings[typeof(C)].childName;
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
+            else if (typeof(C).IsAssignableTo(typeof(Models.Alignment)))
+            {
+                var childModelShapshots = new GeneralListModel<GeneralModel<Models.Alignment>>();
+
+                foreach (var item in Directory.GetFiles(childEntityEntry).OrderBy(n => n))
+                {
+                    var serializedChildModelSnapshot = File.ReadAllText(item);
+
+                    var childModelSnapshotGroup = JsonSerializer.Deserialize<AlignmentGroup>(
+                        serializedChildModelSnapshot,
+                        _jsonDeserializerOptions)!;
+
+                    if (childModelSnapshotGroup is null)
+                    {
+                        throw new SerializedDataException($"Unable to deserialize type 'AlignmentGroup' properties at path {item}");
+                    }
+
+                    childModelShapshots.AddRange(childModelSnapshotGroup.Alignments);
+                }
+
+                var childName = childFolderNameMappings[typeof(C)].childName;
+                modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
+            }
             else
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;

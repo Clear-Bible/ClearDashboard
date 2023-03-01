@@ -64,16 +64,16 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
 
             var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(builderContext));
 
-            projectSnapshot.AddGeneralModelList(CorpusBuilder.BuildModelSnapshot(builderContext));
-            projectSnapshot.AddGeneralModelList(TokenizedCorpusBuilder.BuildModelSnapshot(builderContext));
-            projectSnapshot.AddGeneralModelList(ParallelCorpusBuilder.BuildModelSnapshot(builderContext));
-            projectSnapshot.AddGeneralModelList(AlignmentSetBuilder.BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(TranslationSetBuilder.BuildModelSnapshot(builderContext));
+            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Corpus>().BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TokenizedCorpus>().BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.ParallelCorpus>().BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.AlignmentSet>().BuildModelSnapshots(builderContext));
+            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TranslationSet>().BuildModelSnapshots(builderContext));
 
             // Notes has to come after any other model type
             // it might reference:
             var notes = new List<GeneralModel<Models.Note>>();
-            var noteBuilder = new NoteBuilder(ProjectDbContext);
+            var noteBuilder = (NoteBuilder)GeneralModelBuilder.GetModelBuilder<Models.Note>();
 
             NoteBuilder.GetNotes(ProjectDbContext).ToList().ForEach(n =>
             {
@@ -81,7 +81,7 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
             });
 
             projectSnapshot.AddGeneralModelList(notes);
-            projectSnapshot.AddGeneralModelList(LabelBuilder.BuildModelSnapshot(builderContext));
+            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Label>().BuildModelSnapshots(builderContext));
 
             return new RequestResult<ProjectSnapshot>(projectSnapshot);
 

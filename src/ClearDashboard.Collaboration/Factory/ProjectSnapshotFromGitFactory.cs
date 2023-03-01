@@ -10,6 +10,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.Collaboration.Exceptions;
 using Paratext.PluginInterfaces;
+using SIL.Extensions;
 
 namespace ClearDashboard.Collaboration.Factory;
 
@@ -257,6 +258,35 @@ public class ProjectSnapshotFromGitFactory
                     }
 
                     childModelShapshots.AddRange(childModelSnapshot);
+                }
+
+                var childName = childFolderNameMappings[typeof(C)].childName;
+                modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
+            }
+            else if (typeof(C).IsAssignableTo(typeof(Models.Alignment)))
+            {
+                var childModelShapshots = new GeneralListModel<GeneralModel<Models.Alignment>>();
+
+                var items = repo.Lookup<Tree>($"{commitSha}:{childEntityEntry.Path}");
+                if (items is null)
+                {
+                    throw new CommitObjectNotFoundException($"{commitSha}:{childEntityEntry.Path}");
+                }
+
+                foreach (var item in items.Where(te => te.TargetType == TreeEntryTargetType.Blob).OrderBy(te => te.Name))
+                {
+                    var serializedChildModelSnapshot = ((Blob)item.Target).GetContentText();
+
+                    var childModelSnapshotGroup = JsonSerializer.Deserialize<AlignmentGroup>(
+                        serializedChildModelSnapshot,
+                        _jsonDeserializerOptions)!;
+
+                    if (childModelSnapshotGroup is null)
+                    {
+                        throw new SerializedDataException($"Unable to deserialize type 'AlignmentGroup' properties at path {item.Path}");
+                    }
+
+                    childModelShapshots.AddRange(childModelSnapshotGroup.Alignments);
                 }
 
                 var childName = childFolderNameMappings[typeof(C)].childName;

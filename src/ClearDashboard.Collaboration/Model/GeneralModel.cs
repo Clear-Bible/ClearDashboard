@@ -207,6 +207,7 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
     public void Add(string key, string? value, Type? nullValueValueType = null) { AddProperty(key, value, nullValueValueType); }
     public void Add(string key, ValueType? value, Type? nullValueValueType = null) { AddProperty(key, value, nullValueValueType); }
     public void Add(string key, ModelRef value) { AddProperty(key, value); }
+    public void Add(string key, ModelExtra value) { AddProperty(key, value); }
     public void Add(string key, IEnumerable<string> value) { AddProperty(key, value); }
     //public void Add(string key, GeneralDictionaryModel<string, object> value) { AddProperty(key, value); }
 

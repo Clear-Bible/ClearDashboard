@@ -211,6 +211,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                     ? entityPropertyNames
                     : new[] { pd.PropertyName }
                 )
+            .Where(c => !string.IsNullOrEmpty(c))
             .ToArray();
 
         var command = connection.CreateCommand();
@@ -259,6 +260,12 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 entityPropertyValues = new List<string>() { propertyName };
             }
 
+            entityPropertyValues = entityPropertyValues.Where(e => !string.IsNullOrEmpty(e)).ToList();
+            if (!entityPropertyValues.Any())
+            {
+                continue;
+            }
+
             foreach (var ep in entityPropertyValues)
             {
                 if (_entityValueResolvers.TryGetValue((entityType, ep), out var resolver))
@@ -297,6 +304,12 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
             if (!_propertyNameMap.TryGetValue((entityType, propertyModelDifference.PropertyName), out entityPropertyValues))
             {
                 entityPropertyValues = new List<string>() { propertyModelDifference.PropertyName };
+            }
+
+            entityPropertyValues = entityPropertyValues.Where(e => !string.IsNullOrEmpty(e)).ToList();
+            if (!entityPropertyValues.Any())
+            {
+                continue;
             }
 
             foreach (var ep in entityPropertyValues)

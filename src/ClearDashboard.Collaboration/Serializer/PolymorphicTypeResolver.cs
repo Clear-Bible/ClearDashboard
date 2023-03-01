@@ -29,6 +29,20 @@ public class PolymorphicTypeResolver : DefaultJsonTypeInfoResolver
             };
         }
 
+        if (jsonTypeInfo.Type == typeof(ModelExtra))
+        {
+            jsonTypeInfo.PolymorphismOptions = new JsonPolymorphismOptions
+            {
+                TypeDiscriminatorPropertyName = "$type",
+                IgnoreUnrecognizedTypeDiscriminators = true,
+                UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization,
+                DerivedTypes =
+                        {
+                            new JsonDerivedType(typeof(TokenizedCorpusExtra), nameof(TokenizedCorpusExtra))
+                        }
+            };
+        }
+
         return jsonTypeInfo;
     }
 }

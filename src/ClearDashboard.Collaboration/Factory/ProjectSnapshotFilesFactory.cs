@@ -139,27 +139,18 @@ public class ProjectSnapshotFilesFactory
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.VerseRow)))
             {
-                var childModelShapshots = (GeneralListModel<GeneralModel<Models.VerseRow>>?)children!;
-                var verseRowsByBook = childModelShapshots
-                    .GroupBy(vr => ((string)vr[nameof(Models.VerseRow.BookChapterVerse)]!).Substring(0, 3))
-                    .ToDictionary(g => g.Key, g => g
-                        .Select(vr => vr)
-                        .OrderBy(vr => ((string)vr[nameof(Models.VerseRow.BookChapterVerse)]!))
-                        .ToGeneralListModel<GeneralModel<Models.VerseRow>>())
-                    .OrderBy(kvp => kvp.Key);
-
-                foreach (var verseRowsForBook in verseRowsByBook)
+                var childModelShapshots = (GeneralListModel<GeneralModel<Models.VerseRow>>?)children;
+                if (childModelShapshots is not null && childModelShapshots.Any())
                 {
-                    // Instead of the more general GeneralModelJsonConverter, this will use the
-                    // more specific VerseRowModelJsonConverter:
-                    var serializedChildModelSnapshot = JsonSerializer.Serialize<GeneralListModel<GeneralModel<Models.VerseRow>>>(
-                        verseRowsForBook.Value,
-                        _jsonSerializerOptions);
-                    File.WriteAllText(
-                        Path.Combine(
-                            childPath,
-                            string.Format(ProjectSnapshotFactoryCommon.VerseRowByBookFileNameTemplate, verseRowsForBook.Key)),
-                        serializedChildModelSnapshot);
+                    VerseRowBuilder.SaveVerseRows(childModelShapshots, childPath, _jsonSerializerOptions);
+                }
+            }
+            else if (typeof(C).IsAssignableTo(typeof(Models.Alignment)))
+            {
+                var childModelShapshots = (GeneralListModel<GeneralModel<Models.Alignment>>?)children;
+                if (childModelShapshots is not null && childModelShapshots.Any())
+                {
+                    AlignmentBuilder.SaveAlignments(modelSnapshot, childModelShapshots, childPath, _jsonSerializerOptions);
                 }
             }
             else

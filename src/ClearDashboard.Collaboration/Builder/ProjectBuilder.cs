@@ -9,6 +9,12 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class ProjectBuilder : GeneralModelBuilder<Models.Project>
 {
+    //public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
+    //    new Dictionary<string, Type>()
+    //    {
+
+    //    };
+
     public static GeneralModel<Models.Project> BuildModelSnapshot(BuilderContext builderContext)
     {
         var project = GetProject(builderContext.ProjectDbContext);

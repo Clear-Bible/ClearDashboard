@@ -9,6 +9,16 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class TokenBuilder : GeneralModelBuilder<Models.TokenComposite>
 {
+    public const string VERSE_ROW_LOCATION = "VerseRowLocation";
+    public const string TOKEN_LOCATIONS = "TokenLocations";
+
+    public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
+        new Dictionary<string, Type>()
+        {
+            { VERSE_ROW_LOCATION, typeof(string) },
+            { TOKEN_LOCATIONS, typeof(GeneralListModel<string>) }
+        };
+
     public static GeneralModel<Models.TokenComposite> BuildModelSnapshot(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> childTokens, BuilderContext builderContext)
     {
         var modelSnapshot = ExtractUsingModelIds(

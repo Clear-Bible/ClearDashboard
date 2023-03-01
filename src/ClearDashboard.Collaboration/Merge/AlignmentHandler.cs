@@ -160,6 +160,12 @@ public class AlignmentHandler : DefaultMergeHandler
         mergeContext.MergeBehavior.AddPropertyNameMapping(
             (typeof(Models.Alignment), "TargetTokenComponentLocation"),
             new[] { nameof(Models.Alignment.TargetTokenComponentId) });
+
+        // By mapping Location to an empty property name string, we effectively
+        // leave it out of the inserting/updating part of Merge:
+        mergeContext.MergeBehavior.AddPropertyNameMapping(
+            (typeof(Models.Alignment), "Location"),
+            Enumerable.Empty<string>());
     }
 }
 

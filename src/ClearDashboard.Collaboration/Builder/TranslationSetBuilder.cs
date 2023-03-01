@@ -9,7 +9,7 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
 {
-    public static IEnumerable<GeneralModel<Models.TranslationSet>> BuildModelSnapshot(BuilderContext builderContext)
+    public override IEnumerable<GeneralModel<Models.TranslationSet>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.TranslationSet>>();
 
@@ -25,37 +25,9 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
     public static GeneralModel<Models.TranslationSet> BuildModelSnapshot(Models.TranslationSet translationSet, BuilderContext builderContext)
     {
         var modelSnapshot = ExtractUsingModelIds(translationSet, builderContext.CommonIgnoreProperties);
+        var sourceTokenizedCorpusId = translationSet.ParallelCorpus!.SourceTokenizedCorpus!.Id;
 
-        if (translationSet.Translations.Any())
-        {
-            var translationModelSnapshots = new GeneralListModel<GeneralModel<Models.Translation>>();
-            foreach (var translation in translationSet.Translations)
-            {
-                var modelProperties = GeneralModelBuilder<Models.Translation>.ExtractUsingModelRefs(translation, builderContext, new List<string>() { "Id" });
-
-                // FIXME:  enhance GeneralModelBuilder to use propertyConverter delegates
-                // so that it produce "SourceTokenLocation" itself
-                // (it has no way of knowing that TranslationSet already specifies (via
-                // parallel corpus) which is the real SourceTokenizedCorpusId).  
-                var sourceTokenComponentRef = modelProperties["SourceTokenComponentRef"];
-
-                modelProperties.Remove("SourceTokenComponentRef");
-
-                modelProperties.Add("SourceTokenComponentLocation",
-                    (typeof(string), ((TokenRef)sourceTokenComponentRef.value!).TokenLocation));
-
-                var identityPropertyValue = (
-                    translation.TranslationSetId.ToString() +
-                    modelProperties["SourceTokenComponentLocation"]
-                ).ToMD5String();
-
-                var translationModelSnapshot = new GeneralModel<Models.Translation>(BuildPropertyRefName(), $"Translation_{identityPropertyValue}");
-                GeneralModelBuilder<Models.Translation>.AddPropertyValuesToGenericModel(translationModelSnapshot, modelProperties);
-
-                translationModelSnapshots.Add(translationModelSnapshot);
-            }
-            modelSnapshot.AddChild("Translations", translationModelSnapshots.AsModelSnapshotChildrenList());
-        }
+        modelSnapshot.AddChild("Translations", TranslationBuilder.BuildModelSnapshots(translationSet.Id, builderContext).AsModelSnapshotChildrenList());
 
         return modelSnapshot;
     }
@@ -63,7 +35,8 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
     public static IEnumerable<Models.TranslationSet> GetTranslationSets(ProjectDbContext projectDbContext)
     {
         return projectDbContext.TranslationSets
-            .Include(ts => ts.Translations.OrderBy(t => t.Created)).ThenInclude(a => a.SourceTokenComponent)
+            .Include(e => e.ParallelCorpus)
+                .ThenInclude(e => e!.SourceTokenizedCorpus)
             .OrderBy(c => c.Created)
             .ToList();
     }

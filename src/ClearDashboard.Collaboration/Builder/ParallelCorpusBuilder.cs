@@ -8,7 +8,7 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class ParallelCorpusBuilder : GeneralModelBuilder<Models.ParallelCorpus>
 {
-    public static IEnumerable<GeneralModel<Models.ParallelCorpus>> BuildModelSnapshot(BuilderContext builderContext)
+    public override IEnumerable<GeneralModel<Models.ParallelCorpus>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.ParallelCorpus>>();
 
