@@ -459,35 +459,95 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 {
                                                     startMarkerFound = false;
                                                     nextStartMarkerFound = true;
+
+                                                    //add vh to node here
+                                                    //try
+                                                    //{
+                                                    //    XmlAttribute attr = xDoc.CreateAttribute("style");
+                                                    //    attr.Value = "vhend";
+
+                                                    //    node.Attributes.Append(attr);
+                                                    //}
+                                                    //catch (Exception ex)
+                                                    //{
+                                                    //    Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
+                                                    //}
                                                 }
 
                                                 if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
                                                 {
                                                     startMarkerFound = true;
+
+                                                    if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                    {
+                                                        node.Attributes["style"].Value="vh";
+                                                    }
+                                                    //add vh to node here
+                                                    //try
+                                                    //{
+                                                    //    XmlAttribute attr = xDoc.CreateAttribute("style");
+                                                    //    attr.Value = "vh";
+
+                                                    //    node.Attributes.Append(attr);
+                                                    //}
+                                                    //catch (Exception ex)
+                                                    //{
+                                                    //    Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
+                                                    //}
+
                                                 }
 
                                                 if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                                 {
                                                     endMarkerFound = true;
 
+                                                    //try
+                                                    //{
+                                                    //    XmlAttribute attr = xDoc.CreateAttribute("style");
+                                                    //    attr.Value = "vh";
+
+                                                    //    node.Attributes.Append(attr);
+                                                    //}
+                                                    //catch (Exception ex)
+                                                    //{
+                                                    //    Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
+                                                    //}
 
                                                     try
                                                     {
                                                         if (node.ChildNodes != null)
                                                         {
-                                                            foreach (XmlNode child in node.ChildNodes)
+                                                            if (node.ChildNodes.Count > 0)
                                                             {
-                                                                if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                                foreach (XmlNode child in node.ChildNodes)
                                                                 {
-                                                                    child.Attributes["style"].Value="vh";
+                                                                    if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                                    {
+                                                                        child.Attributes["style"].Value="vh";
+                                                                    }
+
+                                                                    if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                                    {
+                                                                        XmlAttribute attr = xDoc.CreateAttribute("style");
+                                                                        attr.Value = "vh";
+
+                                                                        child.Attributes.Append(attr);
+                                                                    }
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                                {
+                                                                    node.Attributes["style"].Value="vh";
                                                                 }
 
-                                                                if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                                if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
                                                                 {
                                                                     XmlAttribute attr = xDoc.CreateAttribute("style");
                                                                     attr.Value = "vh";
 
-                                                                    child.Attributes.Append(attr);
+                                                                    node.Attributes.Append(attr);
                                                                 }
                                                             }
                                                         }
