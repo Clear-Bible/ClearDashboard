@@ -465,7 +465,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 {
                                                     startMarkerFound = true;
 
-                                                    if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                    if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
                                                     {
                                                         node.Attributes["style"].Value="vh";
                                                     }
@@ -482,12 +482,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                         {
                                                             foreach (XmlNode child in node.ChildNodes)
                                                             {
-                                                                if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                                if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString())
                                                                 {
                                                                     child.Attributes["style"].Value="vh";
                                                                 }
 
-                                                                if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                                if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString())
                                                                 {
                                                                     XmlAttribute attr = xDoc.CreateAttribute("style");
                                                                     attr.Value = "vh";
@@ -498,12 +498,12 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                         }
                                                         else
                                                         {
-                                                            if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                            if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
                                                             {
                                                                 node.Attributes["style"].Value="vh";
                                                             }
 
-                                                            if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
+                                                            if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString())
                                                             {
                                                                 XmlAttribute attr = xDoc.CreateAttribute("style");
                                                                 attr.Value = "vh";

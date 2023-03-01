@@ -887,7 +887,7 @@
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="node()[count(preceding::node()[@style='vh'])>=1 and count(following::node()[@style='vh'])>=1]">
+  <xsl:template match="node()[count(preceding::verse[@style='vh'])>=1 and count(following::verse[@style='vh'])>=1]">
     <span class="vh">
       <xsl:copy>
         <xsl:apply-templates select="@*|node()" />
