@@ -85,7 +85,7 @@ public class TokenCompositeHandler : DefaultMergeHandler
         }
     }
 
-    public static ProjectDbContextMergeQueryAsync GetDeleteCompositesByVerseRowIdQuery(Guid verseRowId)
+    public static ProjectDbContextMergeQueryAsync GetDeleteCompositesByVerseRowIdQueryAsync(Guid verseRowId)
     {
         /*
          * Query to run before deleting a VerseRow (and using its real Id):
@@ -110,7 +110,7 @@ DELETE FROM TokenComponent WHERE Id IN
             };
     }
 
-    public static ProjectDbContextMergeQueryAsync GetDeleteTokenComponentsByVerseRowIdQuery(Guid verseRowId)
+    public static ProjectDbContextMergeQueryAsync GetDeleteTokenComponentsByVerseRowIdQueryAsync(Guid verseRowId)
     {
         return
             async (ProjectDbContext projectDbContext, ILogger logger, CancellationToken cancellationToken) => {
@@ -186,7 +186,8 @@ DELETE FROM TokenComponent WHERE Id IN
                         .ToList();
 
                     projectDbContext.TokenCompositeTokenAssociations.AddRange(tokenAssocationsToAdd);
-            });
+                    await Task.CompletedTask;
+                });
         }
         else
         {

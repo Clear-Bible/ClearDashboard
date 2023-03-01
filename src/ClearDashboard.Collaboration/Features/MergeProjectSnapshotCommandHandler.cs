@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Merge;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
@@ -31,23 +32,54 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
         MergeProjectSnapshotCommand request,
         CancellationToken cancellationToken)
     {
+        var projectId = (Guid)request.ProjectSnapshotToMerge.Project.GetId();
+        var projectInDatabase = ProjectDbContext.Projects.Where(e => e.Id == projectId).FirstOrDefault();
 
-        var projectDifferences = new ProjectDifferences(request.ProjectSnapshotLastMerged, request.ProjectSnapshotToMerge);
-
-        if (request.UseLogOnlyMergeBehavior)
+        if (projectInDatabase is null)
         {
-            var backupPath = Path.Combine(FilePathTemplates.ProjectBaseDirectory, CollaborationManager.BackupsFolder);
-            projectDifferences.Serialize(backupPath);
+            return new RequestResult<Unit>
+            (
+                success: false,
+                message: $"Unable to apply differences - project '{projectId}' not found in local database"
+            );
         }
 
-        MergeBehaviorBase mergeBehavior = request.UseLogOnlyMergeBehavior
-            ? new MergeBehaviorLogOnly(Logger!)
-            : new MergeBehaviorApply(Logger, ProjectDbContext!);
-
-        await using (var mergeContext = new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior))
+        await using (MergeBehaviorBase mergeBehavior = request.UseLogOnlyMergeBehavior
+            ? new MergeBehaviorLogOnly(Logger!, new MergeCache())
+            : new MergeBehaviorApply(Logger, ProjectDbContext!, new MergeCache()))
         {
-            var merger = new Merger(mergeContext);
-            await merger.MergeAsync(projectDifferences, request.ProjectSnapshotLastMerged, request.ProjectSnapshotToMerge, cancellationToken);
+            await mergeBehavior.MergeStartAsync(cancellationToken);
+            try
+            {
+                var projectDifferences = new ProjectDifferences(request.ProjectSnapshotLastMerged, request.ProjectSnapshotToMerge);
+
+                if (!request.UseLogOnlyMergeBehavior)
+                {
+                    projectInDatabase.LastMergedCommitSha = request.CommitShaToMerge;
+                }
+                else
+                {
+                    var backupPath = Path.Combine(FilePathTemplates.ProjectBaseDirectory, CollaborationManager.BackupsFolder);
+                    projectDifferences.Serialize(backupPath);
+                }
+
+                var merger = new Merger(new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior));
+                await merger.MergeAsync(projectDifferences, request.ProjectSnapshotLastMerged, request.ProjectSnapshotToMerge, cancellationToken);
+
+                await mergeBehavior.MergeEndAsync(cancellationToken);
+                // FIXME:  temporary, for testing:
+                //await MergeContext.MergeBehavior.MergeErrorAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                await mergeBehavior.MergeErrorAsync(cancellationToken);
+
+                return new RequestResult<Unit>
+                (
+                    success: false,
+                    message: $"Unable to apply differences due to exception of type '{ex.GetType().Name}':  {ex.Message}"
+                );
+            }
         }
 
         // Return some sort of merge results?  The differences?  

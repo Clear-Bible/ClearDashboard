@@ -8,16 +8,8 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public sealed class MergeContext : IDisposable, IAsyncDisposable
+public sealed class MergeContext
 {
-    /// <summary>
-    ///
-    /// MergeContext(MergeBehavior)
-    ///     anytime it or one of its handlers needs to actually do something, it uses mergeBehavior
-    ///     when processing an individual Create, Modify or Delete item, the specific (or default) handler is used
-    ///
-    /// 
-    /// </summary>
     public bool RemoteOverridesLocal => true;
     public MergeBehaviorBase MergeBehavior { get; private set; }
 
@@ -26,11 +18,6 @@ public sealed class MergeContext : IDisposable, IAsyncDisposable
     public DefaultMergeHandler DefaultMergeHandler { get; private set; }
     private readonly Dictionary<Type, DefaultMergeHandler> _mergeHandlerRegistry = new();
 
-    // For the moment, MergeContext is acting as the MergeBehavior factory.
-    // If null is passed in for ProjectDbContext, creates the MergeBehavior
-    // that only logs (no database interaction).  If we end up making a
-    // MergeBehavior that does the querying part (as a validation) but no
-    // updates, then obviously 
     public MergeContext(IUserProvider userProvider, ILogger logger, MergeBehaviorBase mergeBehavior)
 	{
         UserProvider = userProvider;
@@ -55,8 +42,5 @@ public sealed class MergeContext : IDisposable, IAsyncDisposable
 
         return DefaultMergeHandler;
     }
-
-    public void Dispose() => MergeBehavior.Dispose();
-    public async ValueTask DisposeAsync() => await MergeBehavior.DisposeAsync();
 }
 

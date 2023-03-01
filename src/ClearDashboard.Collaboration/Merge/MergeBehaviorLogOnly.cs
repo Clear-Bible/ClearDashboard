@@ -11,7 +11,7 @@ namespace ClearDashboard.Collaboration.Merge;
 
 public class MergeBehaviorLogOnly : MergeBehaviorBase
 {
-	public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger): base(logger)
+	public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger, MergeCache mergeCache) : base(logger, mergeCache)
 	{
 	}
 

@@ -99,7 +99,7 @@ public class VerseRowHandler : DefaultMergeHandler
             // TokenComposite would no longer be valid):
             await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
                 $"Deleting any TokenComposites related by Token to VerseRow '{itemToDelete.GetId()}'",
-                TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQuery((Guid)itemToDelete.GetId()),
+                TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync((Guid)itemToDelete.GetId()),
                 cancellationToken);
         }
 
@@ -142,12 +142,12 @@ public class VerseRowHandler : DefaultMergeHandler
 
                     await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
                         $"Deleting any TokenComposites related by Token to VerseRow '{modelSnapshotToModify.GetId()}'",
-                        TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQuery(verseRowId),
+                        TokenCompositeHandler.GetDeleteCompositesByVerseRowIdQueryAsync(verseRowId),
                         cancellationToken);
 
                     await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
                         $"Deleting any TokenComponents related by VerseRow '{modelSnapshotToModify.GetId()}'",
-                        TokenCompositeHandler.GetDeleteTokenComponentsByVerseRowIdQuery(verseRowId),
+                        TokenCompositeHandler.GetDeleteTokenComponentsByVerseRowIdQueryAsync(verseRowId),
                         cancellationToken);
 
                     AddVerseRowForTokenization(verseRowId, modelSnapshotToModify, modelSnapshotDifference);

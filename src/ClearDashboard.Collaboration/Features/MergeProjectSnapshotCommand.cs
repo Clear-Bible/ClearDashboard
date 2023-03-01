@@ -11,4 +11,8 @@ using System.Threading.Tasks;
 
 namespace ClearDashboard.Collaboration.Features;
 
-public record MergeProjectSnapshotCommand(ProjectSnapshot ProjectSnapshotLastMerged, ProjectSnapshot ProjectSnapshotToMerge, bool UseLogOnlyMergeBehavior) : ProjectRequestCommand<Unit>;
+public record MergeProjectSnapshotCommand(
+    string CommitShaToMerge,
+    ProjectSnapshot ProjectSnapshotLastMerged,
+    ProjectSnapshot ProjectSnapshotToMerge,
+    bool UseLogOnlyMergeBehavior) : ProjectRequestCommand<Unit>;

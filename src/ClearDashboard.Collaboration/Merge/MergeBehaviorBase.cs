@@ -40,9 +40,9 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _propertyNameMap = new();
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _idPropertyNameMap = new();
 
-    public MergeBehaviorBase(ILogger logger)
+    public MergeBehaviorBase(ILogger logger, MergeCache mergeCache)
     {
-        MergeCache = new MergeCache();
+        MergeCache = mergeCache;
         _logger = logger;
         _dateTimeOffsetToBinary = new DateTimeOffsetToBinaryConverter();
     }

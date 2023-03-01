@@ -24,7 +24,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
     private readonly Dictionary<Type, DbCommand> _insertCommandsByType = new();
     private bool _connectionOpen = false;
 
-    public MergeBehaviorApply(/* pass in configuration */ILogger logger, ProjectDbContext projectDbContext): base(logger)
+    public MergeBehaviorApply(/* pass in configuration */ILogger logger, ProjectDbContext projectDbContext, MergeCache mergeCache) : base(logger, mergeCache)
     {
         _projectDbContext = projectDbContext;
     }

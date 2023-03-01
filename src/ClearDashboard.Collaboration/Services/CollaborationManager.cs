@@ -188,7 +188,7 @@ public class CollaborationManager
         await CreateBackupAsync(cancellationToken);
 
         // Merge into the project database:
-        var command = new MergeProjectSnapshotCommand(projectSnapshotLastMerged, projectSnapshotToMerge, _logMergeOnly);
+        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, _logMergeOnly);
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
     }
