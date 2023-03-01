@@ -465,91 +465,16 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                 {
                                                     startMarkerFound = true;
 
-                                                    //if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
-                                                    //{
-                                                    //    node.Attributes["style"].Value="vh";
-                                                    //}
-
-                                                    if (node.ChildNodes != null && !ProjectIsKnownCommentary(project))
-                                                    {
-                                                        if (node.ChildNodes.Count > 0)
-                                                        {
-                                                            foreach (XmlNode child in node.ChildNodes)
-                                                            {
-                                                                if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString())
-                                                                {
-                                                                    child.Attributes["style"].Value="vh";
-                                                                }
-
-                                                                if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString())
-                                                                {
-                                                                    XmlAttribute attr = xDoc.CreateAttribute("style");
-                                                                    attr.Value = "vh";
-
-                                                                    child.Attributes.Append(attr);
-                                                                }
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
-                                                            {
-                                                                node.Attributes["style"].Value="vh";
-                                                            }
-
-                                                            if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString())
-                                                            {
-                                                                XmlAttribute attr = xDoc.CreateAttribute("style");
-                                                                attr.Value = "vh";
-
-                                                                node.Attributes.Append(attr);
-                                                            }
-                                                        }
-                                                    }
-
+                                                    TryAddHighlightAttributeToNode(project, xDoc, node);
                                                 }
 
                                                 if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                                 {
                                                     endMarkerFound = true;
 
-                                                    if (node.ChildNodes != null && !ProjectIsKnownCommentary(project))
-                                                    {
-                                                        if (node.ChildNodes.Count > 0)
-                                                        {
-                                                            foreach (XmlNode child in node.ChildNodes)
-                                                            {
-                                                                if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString())
-                                                                {
-                                                                    child.Attributes["style"].Value="vh";
-                                                                }
-
-                                                                if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString())
-                                                                {
-                                                                    XmlAttribute attr = xDoc.CreateAttribute("style");
-                                                                    attr.Value = "vh";
-
-                                                                    child.Attributes.Append(attr);
-                                                                }
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
-                                                            {
-                                                                node.Attributes["style"].Value="vh";
-                                                            }
-
-                                                            if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString())
-                                                            {
-                                                                XmlAttribute attr = xDoc.CreateAttribute("style");
-                                                                attr.Value = "vh";
-
-                                                                node.Attributes.Append(attr);
-                                                            }
-                                                        }
-                                                    }
+                                                    TryAddHighlightAttributeToNode(project, xDoc, node);
                                                 }
+
                                                 else if (node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") ||
                                                         node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
                                                 {
@@ -558,6 +483,7 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                     if (nodeVerseElementList.Count > 0)
                                                     {
                                                         var nodeVerseElement = nodeVerseElementList.Item(0);
+
                                                         var nodeSidValue = nodeVerseElement.Attributes["sid"];
 
                                                         if (nodeSidValue != null)
@@ -723,6 +649,46 @@ namespace ClearDashboard.WebApiParatextPlugin
             return textCollections;
         }
 
+        private void TryAddHighlightAttributeToNode(IProject project, XmlDocument xDoc, XmlNode node)
+        {
+            if (node.ChildNodes != null && !ProjectIsKnownCommentary(project))
+            {
+                if (node.ChildNodes.Count > 0)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString())
+                        {
+                            child.Attributes["style"].Value="vh";
+                        }
+
+                        if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString())
+                        {
+                            XmlAttribute attr = xDoc.CreateAttribute("style");
+                            attr.Value = "vh";
+
+                            child.Attributes.Append(attr);
+                        }
+                    }
+                }
+                else
+                {
+                    if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
+                    {
+                        node.Attributes["style"].Value="vh";
+                    }
+
+                    if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString())
+                    {
+                        XmlAttribute attr = xDoc.CreateAttribute("style");
+                        attr.Value = "vh";
+
+                        node.Attributes.Append(attr);
+                    }
+                }
+            }
+        }
+
         private bool ProjectIsKnownCommentary(IProject project)
         {
             switch (project.ShortName)
@@ -734,17 +700,17 @@ namespace ClearDashboard.WebApiParatextPlugin
                 case "TNN":
                     return true;
                 default:
-                    return false; 
+                    return false;
             }
         }
 
 
         /// <summary>
-            /// Append colored text to the rich text box
-            /// </summary>
-            /// <param name="message"></param>
-            /// <param name="color"></param>
-            public void AppendText(Color color, string message)
+        /// Append colored text to the rich text box
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="color"></param>
+        public void AppendText(Color color, string message)
         {
             //check for threading issues
             if (this.InvokeRequired)
