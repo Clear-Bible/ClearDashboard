@@ -155,53 +155,57 @@
                             BorderBrush="{StaticResource PrimaryHueDarkBrush}"
                             BorderThickness="1" >
                             <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Vertical">
-                                    <Label
-                                        Margin="10,5,5,5"
-                                        VerticalAlignment="Center"
-                                        Content="{helpers:Localization Notes_FilterLabels}" />
-                                    <ListBox
-                                        x:Name="LabelsFilter"
-                                        SelectionMode="Multiple"
-                                        MaxHeight="200"
-                                        Margin="10,0,0,10"
-                                        ItemsSource="{Binding FilterLabelsChoices}"
-                                        SelectionChanged="SelectionLabelsChanged"
-                                        IsEnabled="True" 
-                                        HorizontalAlignment="Left" 
-                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Auto">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <ContentControl Content="{Binding Text}"/>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-
-                                    <Label
-                                        Margin="10,5,5,5"
-                                        VerticalAlignment="Center"
-                                        Content="{helpers:Localization Notes_FilterUsers}" />
-                                    <ListBox
-                                        x:Name="UsersFilter"
-                                        MaxHeight="200"
-                                        Margin="10,0,0,10"
-                                        HorizontalAlignment="Left"
-                                        SelectionMode="Multiple"
-                                        ItemsSource="{Binding FilterUsersChoices}"
-                                        SelectionChanged="SelectionUsersChanged"
-                                        BorderBrush="{DynamicResource PurpleDarkBrush}" 
-                                        IsEnabled="True"
-                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                    >
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <ContentControl Content="{Binding}"/>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </StackPanel>
+                                <Label
+                                    Margin="10,5,5,5"
+                                    VerticalAlignment="Center"
+                                    Content="{helpers:Localization Notes_FilterLabels}" />
+                                <ListBox
+                                    x:Name="LabelsFilter"
+                                    SelectionMode="Multiple"
+                                    MaxHeight="200"
+                                    Margin="10,0,0,10"
+                                    ItemsSource="{Binding FilterLabelsChoices}"
+                                    SelectionChanged="SelectionLabelsChanged"
+                                    IsEnabled="True" 
+                                    HorizontalAlignment="Left" 
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <ContentControl Content="{Binding Text}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                        </Border>
+                        <Border
+                            Margin="5,5,0,2"
+                            BorderBrush="{StaticResource PrimaryHueDarkBrush}"
+                            BorderThickness="1" >
+                            <StackPanel Orientation="Vertical">
+                                <Label
+                                    Margin="10,5,5,5"
+                                    VerticalAlignment="Center"
+                                    Content="{helpers:Localization Notes_FilterUsers}" />
+                                <ListBox
+                                    x:Name="UsersFilter"
+                                    MaxHeight="200"
+                                    Margin="10,0,0,10"
+                                    HorizontalAlignment="Left"
+                                    SelectionMode="Multiple"
+                                    ItemsSource="{Binding FilterUsersChoices}"
+                                    SelectionChanged="SelectionUsersChanged"
+                                    BorderBrush="{DynamicResource PurpleDarkBrush}" 
+                                    IsEnabled="True"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                >
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <ContentControl Content="{Binding}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </StackPanel>
                         </Border>
                         <Border
@@ -307,22 +311,17 @@
                                 <RadioButton
                                     Content="{helpers:Localization Notes_Note_NoteStatus_Open}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                                    GroupName="{Binding NoteId}"
-                                    IsChecked="{Binding NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
+                                    GroupName="{Binding NoteId}" 
+                                    Checked="RadioButton_Open_Checked"
+                                    IsChecked="{Binding Path=NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
                                     Style="{StaticResource MaterialDesignLightRadioButton}" />
                                 <RadioButton
                                     Content="{helpers:Localization Notes_Note_NoteStatus_Resolved}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                    Checked="RadioButton_Resolved_Checked"
                                     GroupName="{Binding NoteId}"
-                                    IsChecked="{Binding NoteStatus, Mode=TwoWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
+                                    IsChecked="{Binding Path=NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
                                     Style="{StaticResource MaterialDesignLightRadioButton}" />
-                                <TextBlock
-                                    Width="Auto"
-                                    Height="Auto"
-                                    Margin="-8"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding NoteStatus}"
-                                    TextWrapping="Wrap" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

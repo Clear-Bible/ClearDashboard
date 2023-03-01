@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using SIL.IO.FileLock;
 using ClearDashboard.DAL.ViewModels;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
 namespace ClearDashboard.Wpf.Application.Views.Notes
 {
@@ -82,6 +83,33 @@ namespace ClearDashboard.Wpf.Application.Views.Notes
             FiltersExpander.Width = FiltersColumn.ActualWidth;
             FiltersScrollViewer.Width = FiltersColumn.ActualWidth;
 
+        }
+
+        private async void RadioButton_Open_Checked(object sender, RoutedEventArgs e)
+        {
+            var radioButton = e.Source as RadioButton;
+            var noteViewModel = radioButton?.DataContext as NoteViewModel;
+            if (noteViewModel != null)
+            {
+                if (noteViewModel.NoteStatus != NoteStatus.Open.ToString())
+                {
+                    noteViewModel.NoteStatus = NoteStatus.Open.ToString();
+                    await _vm.UpdateNote(noteViewModel);
+                }
+            }
+        }
+        private async void RadioButton_Resolved_Checked(object sender, RoutedEventArgs e)
+        {
+            var radioButton = e.Source as RadioButton;
+            var noteViewModel = radioButton?.DataContext as NoteViewModel;
+            if (noteViewModel != null)
+            {
+                if (noteViewModel.NoteStatus != NoteStatus.Resolved.ToString())
+                {
+                    noteViewModel.NoteStatus = NoteStatus.Resolved.ToString();
+                    await _vm.UpdateNote(noteViewModel);
+                }
+            }
         }
     }
 }

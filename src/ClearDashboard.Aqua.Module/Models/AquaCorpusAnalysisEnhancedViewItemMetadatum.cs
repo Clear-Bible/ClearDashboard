@@ -8,13 +8,15 @@ namespace ClearDashboard.Aqua.Module.Models;
 [JsonDiscriminator(nameof(AquaCorpusAnalysisEnhancedViewItemMetadatum))]
 public class AquaCorpusAnalysisEnhancedViewItemMetadatum : EnhancedViewItemMetadatum
 {
-    public string? AssessmentId { get; set; }
+    public int? AssessmentId { get; set; }
+
+    public int? VersionId { get; set; }
 
     public override LayoutDocument CreateLayoutDocument(IEnhancedViewModel viewModel)
     {
         return new LayoutDocument
         {
-            ContentId = AssessmentId,
+            ContentId = $"{AssessmentId}",
             Content = viewModel,
             Title = $"⳼ {viewModel.Title}",
             IsActive = true

@@ -27,6 +27,9 @@
     <Grid>
         <StackPanel Orientation="Vertical">
             <Label Content="{Binding Verse}"/>
+            <Label Content="{Binding Assessment.type}"/>
+            <Label Content="{Binding Revision.name }"/>
+            <Label Content="{Binding ReferenceRevision.name }"/>
             <!--<Label Content="{Binding BodyText}"/>-->
             <lvc:CartesianChart
                 Height="200"

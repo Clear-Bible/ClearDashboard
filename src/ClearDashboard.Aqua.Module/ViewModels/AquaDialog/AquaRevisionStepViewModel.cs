@@ -154,7 +154,7 @@ public class AquaRevisionStepViewModel :
 
     private void ClearIdData()
     {
-        Name = "";
+        Name = null;
         Published= false;
         Items.Clear();
     }
@@ -186,7 +186,8 @@ public class AquaRevisionStepViewModel :
         enhancedViewManager_!.AddMetadatumEnhancedView(
             new AquaCorpusAnalysisEnhancedViewItemMetadatum()
             {
-                AssessmentId = $"{assessment.id}",
+                AssessmentId = assessment.id,
+                VersionId = ParentViewModel!.AquaTokenizedTextCorpusMetadata!.id,
                 IsNewWindow = false
             },
             default); 
