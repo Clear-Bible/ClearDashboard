@@ -21,6 +21,7 @@ using ClearDashboard.Wpf.Application;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 using static ClearDashboard.Aqua.Module.Services.IAquaManager;
+using Autofac.Features.AttributeFilters;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 {
@@ -97,7 +98,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
             INavigationService navigationService,
             IMediator mediator,
             LongRunningTaskManager longRunningTaskManager,
-            ILocalizationService localizationService)
+            [KeyFilter("Aqua")] ILocalizationService localizationService)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             DialogMode = dialogMode;
