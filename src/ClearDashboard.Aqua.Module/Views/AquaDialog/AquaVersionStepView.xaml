@@ -551,7 +551,6 @@
                                             <materialDesign:PackIcon
                                                 Width="30"
                                                 Height="30"
-                                               
                                                 Foreground="{StaticResource BlueMidBrush}"
                                                 Kind="AddCircleOutline" />
                                         </Button>
