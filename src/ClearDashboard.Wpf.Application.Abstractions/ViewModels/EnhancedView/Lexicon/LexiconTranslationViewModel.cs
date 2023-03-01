@@ -17,9 +17,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon
         public TranslationId? TranslationId
         {
             get => Entity.TranslationId;
-#if DEBUG
+//#if DEBUG
             set => Entity.TranslationId = value;
-#endif
+//#endif
         }
 
         public string? Text
