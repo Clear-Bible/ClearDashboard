@@ -311,14 +311,16 @@
                                 <RadioButton
                                     Content="{helpers:Localization Notes_Note_NoteStatus_Open}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
-                                    GroupName="{Binding NoteId}"
-                                    IsChecked="{Binding Path=NoteStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
+                                    GroupName="{Binding NoteId}" 
+                                    Checked="RadioButton_Open_Checked"
+                                    IsChecked="{Binding Path=NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Open}"
                                     Style="{StaticResource MaterialDesignLightRadioButton}" />
                                 <RadioButton
                                     Content="{helpers:Localization Notes_Note_NoteStatus_Resolved}"
                                     Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                                    Checked="RadioButton_Resolved_Checked"
                                     GroupName="{Binding NoteId}"
-                                    IsChecked="{Binding Path=NoteStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
+                                    IsChecked="{Binding Path=NoteStatus, Mode=OneWay, Converter={StaticResource StringToBoolConverter}, ConverterParameter=Resolved}"
                                     Style="{StaticResource MaterialDesignLightRadioButton}" />
                             </StackPanel>
                         </DataTemplate>

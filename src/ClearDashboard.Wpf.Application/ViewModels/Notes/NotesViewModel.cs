@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Notes;
+using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application.Helpers;
 using ClearDashboard.Wpf.Application.Services;
@@ -533,6 +534,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             return currentLongRunningTask_.Status;
         }
 
+        public async Task UpdateNote(NoteViewModel noteViewModel)
+        {
+            await noteManager_!.UpdateNoteAsync(noteViewModel);
+        }
         public async Task HandleAsync(NoteAddedMessage message, CancellationToken cancellationToken)
         {
             var noteViewModelWithDetails = await noteManager_!.GetNoteDetailsAsync(message.Note.NoteId!);
