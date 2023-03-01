@@ -1407,7 +1407,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
             // check to see if is in the middle of working or not by tokenizing
-            var isCorpusProcessing = _backgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgress(node.Name);
+            var isCorpusProcessing = _backgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
             {
                 return;

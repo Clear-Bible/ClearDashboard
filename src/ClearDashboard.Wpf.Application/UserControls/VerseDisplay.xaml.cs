@@ -499,7 +499,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenClicked(object sender, RoutedEventArgs e)
         {
-            if (e is not TokenEventArgs args)
+            if (e is not TokenEventArgs args || args is { TokenDisplay: null } )
             {
                 return;
             }
@@ -1235,7 +1235,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         /// <summary>
         /// Gets the collection of <see cref="TokenDisplayViewModel"/> source objects to display in the control.
         /// </summary>
-        public IEnumerable SourceTokens => VerseDisplayViewModel.SourceTokenDisplayViewModels;
+        public IEnumerable SourceTokens => VerseDisplayViewModel?.SourceTokenDisplayViewModels;
 
         /// <summary>
         /// Gets or sets the <see cref="FontFamily"/> to use for displaying the target tokens.

@@ -91,12 +91,6 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
 
         public async Task PutMeaning(IMediator mediator, Meaning meaning, CancellationToken token = default)
         {
-            if (meaning.MeaningId is not null && 
-                meanings_.Any(s => s.MeaningId == meaning.MeaningId))
-            {
-                return;
-            }
-
             if (LexemeId is null)
             {
                 throw new MediatorErrorEngineException("Create Lexeme before associating with given Meaning");
@@ -105,8 +99,13 @@ namespace ClearDashboard.DAL.Alignment.Lexicon
             var result = await mediator.Send(new PutMeaningCommand(LexemeId, meaning), token);
             result.ThrowIfCanceledOrFailed();
 
-            meaning.MeaningId = result.Data!;
+            if (meaning.MeaningId is not null &&
+                meanings_.Any(s => s.MeaningId == meaning.MeaningId))
+            {
+                return;
+            }
 
+            meaning.MeaningId = result.Data!;
             meanings_.Add(meaning);
         }
 

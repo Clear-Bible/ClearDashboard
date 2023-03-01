@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using Caliburn.Micro;
@@ -839,10 +840,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
+        private bool IsCorpusView => TokenDisplayViewModel.VerseDisplay is CorpusDisplayViewModel;
+
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
-            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
             UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
 
             var tokenDisplay = (TokenDisplayViewModel) DataContext;
@@ -864,7 +867,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
                 {
                     var keyBoardModifiers = Keyboard.Modifiers;
 
-                    if (keyBoardModifiers == ModifierKeys.None)
+                    if (keyBoardModifiers == ModifierKeys.None || (Keyboard.IsKeyDown(Key.Tab) && keyBoardModifiers == ModifierKeys.Shift))
                     {
                         await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(tokenDisplay.IsSource, tokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
                     }
@@ -901,6 +904,17 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenMouseEnter(object sender, RoutedEventArgs e)
         {
+            if (e is MouseEventArgs args)
+            {
+                
+               if (Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
+               {
+                   TokenDisplayContextMenu.PlacementTarget = sender as UIElement;
+                   TokenDisplayContextMenu.Placement = PlacementMode.Right;
+                   TokenDisplayContextMenu.IsOpen = true;
+                   return;
+               }
+            }
             RaiseTokenEvent(TokenMouseEnterEvent, e);
         }
 
@@ -1497,6 +1511,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 Translation.OriginatedFromValues.FromTranslationModel => Brushes.Red,
                 Translation.OriginatedFromValues.FromAlignmentModel => Brushes.Red,
+                Translation.OriginatedFromValues.FromLexicon => Brushes.Red,
                 Translation.OriginatedFromValues.None => Brushes.Red,
                 Translation.OriginatedFromValues.FromOther => Brushes.Blue,
                 _ => Brushes.Black
