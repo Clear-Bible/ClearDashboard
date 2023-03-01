@@ -8,6 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView"
     Title="AlignmentSample"
@@ -39,7 +40,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="50" />
             <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
@@ -60,11 +61,37 @@
             Grid.ColumnSpan="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Content="Enhanced View demo"
+            Content="Lexicon demo"
             FontSize="24"
             FontWeight="Bold" />
 
-        <userControls:VerseDisplay
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+            <!--<lexiconControls:LexemeEditor 
+                Lexeme="{Binding DemoLexeme}" 
+                LemmaFontSize="16"
+                LemmaFontWeight="Bold"
+                LexemeFormBackground="LightGray"
+                LexemeFormCornerRadius="4"
+                LexemeFormPadding="4"
+                MeaningTextFontSize="14"
+                SemanticDomainBackground="AliceBlue"
+                SemanticDomainCornerRadius="4"
+                SemanticDomainPadding="4"
+                SemanticDomainFontStyle="Normal"
+                SemanticDomainSuggestions="{Binding SemanticDomainSuggestions}"
+                TranslationFontSize="12"
+                TranslationFontStyle="Normal"
+                />-->
+            <Button x:Name="DisplayModal" Width="175">Display Lexeme Editor</Button>
+            <!--<lexiconControls:ConcordanceDisplay
+                Translations="{Binding Concordance}"
+                TranslationFontSize="12"
+                TranslationFontStyle="Normal"
+            />-->
+
+        </StackPanel>
+        <!--<lexiconControls:MeaningEditor Grid.Row="1" Grid.Column="0" Meaning="{Binding DemoMeaning}"></lexiconControls:MeaningEditor>-->
+        <!--<userControls:VerseDisplay
             Title="Word translation (interlinear gloss)"
             Grid.Row="1"
             Grid.Column="0"
@@ -97,7 +124,7 @@
             Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}"
             TranslationClicked="TranslationClicked"
             >
-        </userControls:VerseDisplay>
+        </userControls:VerseDisplay>-->
 
         <Label
             Grid.Column="0"

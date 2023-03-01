@@ -840,10 +840,12 @@ namespace ClearDashboard.Wpf.Application.UserControls
             RaiseTokenEvent(TokenClickedEvent, e);
         }
 
+        private bool IsCorpusView => TokenDisplayViewModel.VerseDisplay is CorpusDisplayViewModel;
+
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
-            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
             UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
 
             var tokenDisplay = (TokenDisplayViewModel) DataContext;
@@ -1509,6 +1511,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             {
                 Translation.OriginatedFromValues.FromTranslationModel => Brushes.Red,
                 Translation.OriginatedFromValues.FromAlignmentModel => Brushes.Red,
+                Translation.OriginatedFromValues.FromLexicon => Brushes.Red,
                 Translation.OriginatedFromValues.None => Brushes.Red,
                 Translation.OriginatedFromValues.FromOther => Brushes.Blue,
                 _ => Brushes.Black

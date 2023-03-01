@@ -440,88 +440,67 @@ namespace ClearDashboard.WebApiParatextPlugin
                                     
                                     try
                                     {
-                                        XmlDocument xDoc = new();
-                                        xDoc.LoadXml(usxString);
+
                                         List<XmlNode> verseNodeList = new();
-
-                                        bool nextStartMarkerFound = false;
-                                        bool startMarkerFound = false;
-                                        bool endMarkerFound = false;
-                                        var count = 0;
-                                        foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
+                                        XmlDocument xDoc = new();
+                                        if (usxString != null)
                                         {
-                                            endMarkerFound = false;
+                                            xDoc.LoadXml(usxString);
 
-                                            if (startMarkerFound && node.OuterXml.Contains("sid="))
+                                            bool nextStartMarkerFound = false;
+                                            bool startMarkerFound = false;
+                                            bool endMarkerFound = false;
+                                            var count = 0;
+                                            foreach (XmlNode node in xDoc.DocumentElement.ChildNodes)
                                             {
-                                                startMarkerFound = false;
-                                                nextStartMarkerFound = true;
-                                            }
+                                                endMarkerFound = false;
 
-                                            if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
-                                            {
-                                                startMarkerFound = true;
-                                            }
-
-                                            if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
-                                            {
-                                                endMarkerFound = true;
-
-                                                
-                                                try
+                                                if (startMarkerFound && node.OuterXml.Contains("sid="))
                                                 {
-                                                    if (node.ChildNodes != null)
-                                                    {
-                                                        foreach (XmlNode child in node.ChildNodes)
-                                                        {
-                                                            if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
-                                                            {
-                                                                child.Attributes["style"].Value="vh";
-                                                            }
-
-                                                            if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString()) //&&  && child.GetAttribute("sid") == _verseRef.ToString())
-                                                            {
-                                                                XmlAttribute attr = xDoc.CreateAttribute("style");
-                                                                attr.Value = "vh";
-
-                                                                child.Attributes.Append(attr);
-                                                            }
-                                                        }
-                                                    }
+                                                    startMarkerFound = false;
+                                                    nextStartMarkerFound = true;
                                                 }
-                                                catch (Exception ex)
+
+                                                if (node.OuterXml.Contains("sid=\"" + _verseRef + "\""))
                                                 {
-                                                    Log.Warning(ex, "Highlighting a verse in TextCollections failed.");
+                                                    startMarkerFound = true;
+
+                                                    TryAddHighlightAttributeToNode(project, xDoc, node);
                                                 }
-                                               
-                                            }
-                                            else if(node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") || 
-                                                    node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
-                                            {
-                                                var nodeVerseElementList = node.SelectNodes("verse");
-                                                try
+
+                                                if (node.OuterXml.Contains("eid=\"" + _verseRef + "\""))
                                                 {
+                                                    endMarkerFound = true;
+
+                                                    TryAddHighlightAttributeToNode(project, xDoc, node);
+                                                }
+
+                                                else if (node.OuterXml.Contains("sid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum+":") ||
+                                                        node.OuterXml.Contains("eid=\""+_verseRef.BookCode+" "+_verseRef.ChapterNum + ":"))
+                                                {
+                                                    var nodeVerseElementList = node.SelectNodes("verse");
+
                                                     if (nodeVerseElementList.Count > 0)
                                                     {
                                                         var nodeVerseElement = nodeVerseElementList.Item(0);
 
                                                         var nodeSidValue = nodeVerseElement.Attributes["sid"];
+
                                                         if (nodeSidValue != null)
                                                         {
-                                                            //is _verseRef in verseValue?
                                                             var nodeSidVerseNumber = nodeSidValue.Value.Split(':')[1];
-                                                            var SidVerseNumberIsRange =
-                                                                nodeSidVerseNumber.Contains("-");
+                                                            var SidVerseNumberIsRange = nodeSidVerseNumber.Contains("-");
+                                                            
                                                             if (SidVerseNumberIsRange)
                                                             {
                                                                 var nodeSidVerseRange = nodeSidVerseNumber.Split('-');
 
-                                                                Int32.TryParse(nodeSidVerseRange[0], out var lowerSid);
-                                                                Int32.TryParse(nodeSidVerseRange[1], out var upperSid);
+                                                                int.TryParse(nodeSidVerseRange[0], out var lowerSid);
+                                                                int.TryParse(nodeSidVerseRange[1], out var upperSid);
 
                                                                 if (lowerSid <=
-                                                                    _verseRef.VerseNum && _verseRef.VerseNum <=
-                                                                    upperSid)
+                                                                    _verseRef.VerseNum && _verseRef.VerseNum
+                                                                    <= upperSid)
                                                                 {
                                                                     startMarkerFound = true;
                                                                 }
@@ -531,24 +510,22 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                         else
                                                         {
                                                             var nodeEidValue = nodeVerseElement.Attributes["eid"];
-                                                            //is _verseRef in verseValue?
+
                                                             if (nodeEidValue != null)
                                                             {
-                                                                var nodeEidVerseNumber =
-                                                                    nodeEidValue.Value.Split(':')[1];
-                                                                var EidVerseNumberIsRange =
-                                                                    nodeEidVerseNumber.Contains("-");
+                                                                var nodeEidVerseNumber = nodeEidValue.Value.Split(':')[1];
+                                                                var EidVerseNumberIsRange = nodeEidVerseNumber.Contains("-");
+                                                                
                                                                 if (EidVerseNumberIsRange)
                                                                 {
-                                                                    var nodeEidVerseRange =
-                                                                        nodeEidVerseNumber.Split('-');
+                                                                    var nodeEidVerseRange = nodeEidVerseNumber.Split('-');
 
-                                                                    Int32.TryParse(nodeEidVerseRange[0], out var lowerEid);
-                                                                    Int32.TryParse(nodeEidVerseRange[1], out var upperEid);
+                                                                    int.TryParse(nodeEidVerseRange[0], out var lowerEid);
+                                                                    int.TryParse(nodeEidVerseRange[1], out var upperEid);
 
-                                                                    if (lowerEid<=
-                                                                        _verseRef.VerseNum && _verseRef.VerseNum <=
-                                                                        upperEid)
+                                                                    if (lowerEid <=
+                                                                        _verseRef.VerseNum && _verseRef.VerseNum 
+                                                                        <= upperEid)
                                                                     {
                                                                         endMarkerFound = true;
                                                                     }
@@ -556,32 +533,19 @@ namespace ClearDashboard.WebApiParatextPlugin
                                                             }
                                                         }
                                                     }
+                                                    
                                                 }
-                                                catch (Exception ex)
-                                                {
-                                                    Log.Error(ex, "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
-                                                }
-                                            }
 
-                                            if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
-                                            {
-                                                try
-                                                {
+                                                if ((startMarkerFound || endMarkerFound) && !nextStartMarkerFound)
+                                                { 
                                                     verseNodeList.Add(node);
-
                                                 }
-                                                catch (Exception ex)
-                                                {
-                                                    Log.Error(ex, "There was an issue while parsing the USX for a text collection.  A text collection might not have been found.");
-                                                }
-
                                             }
                                         }
-
+                                        
                                         if (verseNodeList.Count == 0)
                                         {
-                                            textCollections = UsfmToTextCollection(project, textCollection,
-                                                textCollections);
+                                            textCollections = UsfmToTextCollection(project, textCollection, textCollections);
                                         }
                                         else
                                         {
@@ -683,6 +647,61 @@ namespace ClearDashboard.WebApiParatextPlugin
                 textCollections.Add(textCollection);
             }
             return textCollections;
+        }
+
+        private void TryAddHighlightAttributeToNode(IProject project, XmlDocument xDoc, XmlNode node)
+        {
+            if (node.ChildNodes != null && !ProjectIsKnownCommentary(project))
+            {
+                if (node.ChildNodes.Count > 0)
+                {
+                    foreach (XmlNode child in node.ChildNodes)
+                    {
+                        if (child.LocalName == "verse" && child.Attributes["style"] != null && child.Attributes["sid"] != null && child.Attributes["sid"].Value == _verseRef.ToString())
+                        {
+                            child.Attributes["style"].Value="vh";
+                        }
+
+                        if (child.LocalName == "verse" && child.Attributes["eid"] != null && child.Attributes["eid"].Value == _verseRef.ToString())
+                        {
+                            XmlAttribute attr = xDoc.CreateAttribute("style");
+                            attr.Value = "vh";
+
+                            child.Attributes.Append(attr);
+                        }
+                    }
+                }
+                else
+                {
+                    if (node.LocalName == "verse" && node.Attributes["style"] != null && node.Attributes["sid"] != null && node.Attributes["sid"].Value == _verseRef.ToString())
+                    {
+                        node.Attributes["style"].Value="vh";
+                    }
+
+                    if (node.LocalName == "verse" && node.Attributes["eid"] != null && node.Attributes["eid"].Value == _verseRef.ToString())
+                    {
+                        XmlAttribute attr = xDoc.CreateAttribute("style");
+                        attr.Value = "vh";
+
+                        node.Attributes.Append(attr);
+                    }
+                }
+            }
+        }
+
+        private bool ProjectIsKnownCommentary(IProject project)
+        {
+            switch (project.ShortName)
+            {
+                case "HBKENG":
+                    return true;
+                case "TND":
+                    return true;
+                case "TNN":
+                    return true;
+                default:
+                    return false;
+            }
         }
 
 
