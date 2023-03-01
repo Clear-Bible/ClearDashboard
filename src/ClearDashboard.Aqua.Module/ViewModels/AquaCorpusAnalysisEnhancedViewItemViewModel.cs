@@ -34,7 +34,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         private readonly IAquaManager aquaManager_;
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private LongRunningTask? currentLongRunningTask_;
-        private string? assessmentId_;
+        private int? assessmentId_;
+        private int? versionId_;
 
         private Visibility? _progressBarVisibility = Visibility.Hidden;
         public Visibility? ProgressBarVisibility
@@ -42,6 +43,29 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             get => _progressBarVisibility;
             set => Set(ref _progressBarVisibility, value);
         }
+
+        private Assessment? assessment_ = null;
+        public Assessment? Assessment
+        {
+            get => assessment_;
+            set => Set(ref assessment_, value);
+        }
+
+
+        private Revision? referenceRevision_ = null;
+        public Revision? ReferenceRevision
+        {
+            get => referenceRevision_;
+            set => Set(ref referenceRevision_, value);
+        }
+
+        private Revision? revision_ = null;
+        public Revision? Revision
+        {
+            get => revision_;
+            set => Set(ref revision_, value);
+        }
+
 
         private string? message_ = "";
         public string? Message
@@ -82,7 +106,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         public AquaCorpusAnalysisEnhancedViewItemViewModel(
             DashboardProjectManager? projectManager,
             INavigationService? navigationService,
-            ILogger<VerseAwareEnhancedViewItemViewModel>? logger,
+            ILogger<AquaCorpusAnalysisEnhancedViewItemViewModel>? logger,
             IEventAggregator? eventAggregator,
             IMediator? mediator,
             ILifetimeScope? lifetimeScope,
@@ -98,7 +122,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels
 
         public override Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
         {
-            assessmentId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)metadatum).AssessmentId;
+            assessmentId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)metadatum)?.AssessmentId;
+            versionId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)metadatum)?.VersionId;
             return Task.CompletedTask; //return base.GetData(metadatum, cancellationToken);
         }
         protected override void OnViewReady(object view)
@@ -110,7 +135,12 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         {
             try
             {
-                await GetResult();
+                await GetAssessment(assessmentId_
+                    ?? throw new InvalidStateEngineException(name:"assessmentId_", value: "null"));
+                await GetRevisions(Assessment
+                    ?? throw new InvalidStateEngineException(name: "Assessment", value: "null"));
+                await GetResults(Assessment?.id
+                    ?? throw new InvalidStateEngineException(name: "Assessment", value: "null"));
             }
             catch (Exception ex)
             {
@@ -158,23 +188,81 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 })
                 .OrderBy(r => new VerseRef(r.vref));
         }
-        public void SetResults(IEnumerable<Result>? results)
+        public async Task GetRevisions(Assessment assessment)
         {
-            allResults_ = results;
-            RefreshData();
+            var processStatus = await RunLongRunningTask(
+                "AQuA-List_Revisions",
+                (cancellationToken) => aquaManager_!.ListRevisions(
+                    versionId_,
+                    cancellationToken),
+                (revisions) => 
+                {
+                    Revision = revisions?
+                        .Where(r => r.id == assessment.revision_id)
+                        .FirstOrDefault();
+                    ReferenceRevision = revisions?
+                        .Where(r => r.id == assessment.reference_id)
+                        .FirstOrDefault();
+                });
 
-            BodyText = JsonSerializer.Serialize(results);
-
-
+            switch (processStatus)
+            {
+                case LongRunningTaskStatus.Completed:
+                    //await MoveForwards();
+                    break;
+                case LongRunningTaskStatus.Failed:
+                    break;
+                case LongRunningTaskStatus.Cancelled:
+                    break;
+                case LongRunningTaskStatus.NotStarted:
+                    break;
+                case LongRunningTaskStatus.Running:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
-        public async Task GetResult()
+
+        public async Task GetAssessment(int assessmentId)
+        {
+            var processStatus = await RunLongRunningTask(
+                "AQuA-Get_Assessment",
+                (cancellationToken) => aquaManager_!.GetAssessment(
+                    assessmentId,
+                    cancellationToken),
+                (assessment) => Assessment = assessment);
+
+            switch (processStatus)
+            {
+                case LongRunningTaskStatus.Completed:
+                    //await MoveForwards();
+                    break;
+                case LongRunningTaskStatus.Failed:
+                    break;
+                case LongRunningTaskStatus.Cancelled:
+                    break;
+                case LongRunningTaskStatus.NotStarted:
+                    break;
+                case LongRunningTaskStatus.Running:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        public async Task GetResults(int assessmentId)
         {
             var processStatus = await RunLongRunningTask(
                 "AQuA-Get_Results",
                 (cancellationToken) => aquaManager_!.ListResults(
-                    int.Parse(assessmentId_ ?? throw new InvalidStateEngineException(name: "assessmentId", value: "null")),
+                    assessmentId,
                     cancellationToken),
-                SetResults);
+                (results) =>
+                {
+                    allResults_ = results;
+                    RefreshData();
+
+                    BodyText = JsonSerializer.Serialize(results);
+                });
 
             switch (processStatus)
             {

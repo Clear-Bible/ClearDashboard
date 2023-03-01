@@ -196,18 +196,21 @@ namespace ClearDashboard.Aqua.Module.Services
             );
         }
         public async Task<IEnumerable<Revision>?> ListRevisions(
-            int versionId,
+            int? versionId,
             CancellationToken cancellationToken = default)
         {
             // https://6pu6b82gdk.us-east-1.awsapprunner.com/revision?version_id=kjh%27
 
+            Dictionary<string, string> query = new Dictionary<string, string>();
+            if (versionId != null)
+                query.Add("version_id", versionId?.ToString() ?? "");
+
             return await GetFromJsonAsync<IEnumerable<Revision>>(
                 httpClient_,
                 revisionPath_,
-                new Dictionary<string, string>() { { "version_id", versionId.ToString()} },
+                query,
                 cancellationToken);
         }
-
         public async Task DeleteRevision(
             int revisionId,
             CancellationToken cancellationToken = default)
@@ -265,7 +268,7 @@ namespace ClearDashboard.Aqua.Module.Services
                 .Where(a => a.revision_id == revisionId)
                 ?? throw new InvalidDataEngineException(name: "assessments", value: "null", message: $"ListAssessments returned a list that didn't contain {revisionId}");
         }
-        public async Task<IEnumerable<Assessment>?> GetAssessment(
+        public async Task<Assessment?> GetAssessment(
             int assessmentId,
             CancellationToken cancellationToken = default)
         {
@@ -277,6 +280,7 @@ namespace ClearDashboard.Aqua.Module.Services
 
             return assessments?
                 .Where(a => a.id == assessmentId)
+                .FirstOrDefault()
                 ?? throw new InvalidDataEngineException(name: "assessments", value: "null", message: $"ListAssessments returned a list that didn't contain {assessmentId}");
         }
         public async Task DeleteAssessment(
@@ -366,7 +370,7 @@ namespace ClearDashboard.Aqua.Module.Services
             var jsonSerializerOptions = new JsonSerializerOptions
             {
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                NumberHandling = JsonNumberHandling.WriteAsString,
+                NumberHandling = JsonNumberHandling.WriteAsString
             };
             jsonSerializerOptions.Converters.Add(new BoolToStringJsonConverter());
 

@@ -233,13 +233,13 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
 
     private void ClearIdData()
     {
-        Name = "";
+        Name = null;
         IsoLanguage = null;
         IsoScript = null;
-        Abbreviation = "";
-        Rights = "";
-        ForwardTranslationToVersionId = "";
-        BackTranslationToVersionId = "";
+        Abbreviation = null;
+        Rights = null;
+        ForwardTranslationToVersionId = null;
+        BackTranslationToVersionId = null;
         MachineTranslation = false;
         Items.Clear();
     }
@@ -263,16 +263,6 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
     {
         ParentViewModel!.ActiveRevision = revision;
         MoveForwards();
-    }
-    public void AddItemToEnhancedView(Revision revision)
-    {
-        Logger!.LogInformation($"AddItemToEnhancedView - {revision.id}");
-        _enhancedViewManager!.AddMetadatumEnhancedView(
-            new AquaCorpusAnalysisEnhancedViewItemMetadatum() 
-            { 
-                AssessmentId = $"RevisionId {revision.id}" 
-            }, 
-            default); //FIXME: is this okay?
     }
 
     public async void DeleteItem(Revision revision)

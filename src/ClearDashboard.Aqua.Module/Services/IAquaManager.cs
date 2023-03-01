@@ -85,8 +85,9 @@ namespace ClearDashboard.Aqua.Module.Services
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<IEnumerable<Revision>?> ListRevisions(
-            int versionId,
+            int? versionId,
             CancellationToken cancellationToken = default);
+
         public Task DeleteRevision(
             int revisionId,
             CancellationToken cancellationToken = default);
@@ -127,7 +128,7 @@ namespace ClearDashboard.Aqua.Module.Services
             int revisionId, 
             CancellationToken cancellationToken = default);
 
-        public Task<IEnumerable<Assessment>?> GetAssessment(
+        public Task<Assessment?> GetAssessment(
             int assessmentId,
         CancellationToken cancellationToken = default);
 
