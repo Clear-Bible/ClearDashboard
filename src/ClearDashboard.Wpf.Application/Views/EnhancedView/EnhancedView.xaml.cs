@@ -25,15 +25,15 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 
         public async Task TranslationClickedAsync(TranslationEventArgs args)
         {
-            void ShowTranslationSelectionDialog()
-            {
-                var dialog = new TranslationSelectionDialog(args.TokenDisplay!, args.InterlinearDisplay!)
-                {
-                    Owner = Window.GetWindow(this),
-                };
-                dialog.ShowDialog();
-            }
-            await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowTranslationSelectionDialog);
+            //void ShowTranslationSelectionDialog()
+            //{
+            //    var dialog = new TranslationSelectionDialog(args.TokenDisplay!, args.InterlinearDisplay!)
+            //    {
+            //        Owner = Window.GetWindow(this),
+            //    };
+            //    dialog.ShowDialog();
+            //}
+            //await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowTranslationSelectionDialog);
         }
 
         public EnhancedView()

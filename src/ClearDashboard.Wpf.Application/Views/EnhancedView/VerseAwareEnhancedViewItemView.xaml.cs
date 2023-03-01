@@ -1,5 +1,9 @@
-﻿using ClearDashboard.Wpf.Application.Dialogs;
+﻿using Autofac.Core.Lifetime;
+using Caliburn.Micro;
+using ClearDashboard.Wpf.Application.Dialogs;
 using ClearDashboard.Wpf.Application.Events;
+using ClearDashboard.Wpf.Application.UserControls;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,13 +29,15 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 
         public async Task TranslationClickedAsync(TranslationEventArgs args)
         {
-            void ShowTranslationSelectionDialog()
+            async Task ShowTranslationSelectionDialog()
             {
-                var dialog = new TranslationSelectionDialog(args.TokenDisplay!, args.InterlinearDisplay!)
+                if (args.InterlinearDisplay != null)
                 {
-                    Owner = Window.GetWindow(this),
-                };
-                dialog.ShowDialog();
+                    var dialogViewModel = args.InterlinearDisplay.Resolve<LexiconDialogViewModel>();
+                    dialogViewModel.TokenDisplay = args.TokenDisplay;
+                    dialogViewModel.InterlinearDisplay = args.InterlinearDisplay;
+                    _ = await args.InterlinearDisplay.WindowManager.ShowDialogAsync(dialogViewModel, null, dialogViewModel.DialogSettings());
+                }
             }
             await System.Windows.Application.Current.Dispatcher.InvokeAsync(ShowTranslationSelectionDialog);
         }

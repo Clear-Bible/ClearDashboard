@@ -27,6 +27,7 @@ using System.Windows;
 using ClearApplicationFoundation.Extensions;
 using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using DashboardApplication = System.Windows.Application;
 using KeyTrigger = Microsoft.Xaml.Behaviors.Input.KeyTrigger;
 

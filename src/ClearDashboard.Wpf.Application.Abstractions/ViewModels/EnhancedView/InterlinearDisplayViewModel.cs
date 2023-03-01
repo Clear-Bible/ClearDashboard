@@ -22,6 +22,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     {
         private EngineParallelTextRow ParallelTextRow { get; }
         private TranslationSetId TranslationSetId { get; }
+        public IWindowManager WindowManager { get; }
         private TranslationManager? TranslationManager { get; set; }
 
         /// <summary>
@@ -90,6 +91,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await EventAggregator.PublishOnUIThreadAsync(new TokensUpdatedMessage());
         }
 
+        public TViewModel Resolve<TViewModel>() where TViewModel : notnull
+        {
+            return LifetimeScope.Resolve<TViewModel>();
+        }
+
         /// <summary>
         /// Initializes the view model with the translations for the verse.
         /// </summary>
@@ -139,7 +145,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             IMediator mediator,
             IEventAggregator eventAggregator,
             ILifetimeScope lifetimeScope,
-            ILogger<InterlinearDisplayViewModel> logger)
+            ILogger<InterlinearDisplayViewModel> logger,
+            IWindowManager windowManager)
             : base(noteManager, mediator, eventAggregator, lifetimeScope, logger)
         {
             ParallelTextRow = parallelTextRow;
@@ -150,6 +157,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
 
             TranslationSetId = translationSetId;
+            WindowManager = windowManager;
         }
     }
 }
