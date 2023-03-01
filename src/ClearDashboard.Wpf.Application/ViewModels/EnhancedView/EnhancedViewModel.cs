@@ -21,8 +21,10 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -42,7 +44,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         public ICommand MoveCorpusUpRowCommand { get; set; }
         public ICommand DeleteCorpusRowCommand { get; set; }
         public ICommand IncreaseTextSizeCommand => new RelayCommand(IncreaseTextSize);
-
+      
         private void IncreaseTextSize(object? commandParameter)
         {
             SourceFontSizeValue += 1;
@@ -468,7 +470,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             DisplayName = "Enhanced View";
             await base.OnInitializeAsync(cancellationToken);
         }
-        
+   
+
+
         protected override void OnViewAttached(object view, object context)
         {
             // grab the dictionary of all the verse lookups
@@ -493,10 +497,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             CurrentBcv.SetVerseFromId(ProjectManager!.CurrentVerse);
             NotifyOfPropertyChange(() => CurrentBcv);
             VerseChange = ProjectManager.CurrentVerse;
-
+ 
             base.OnViewAttached(view, context);
         }
 
+    private ListView EnhancedViewListView { get; set; }
         #endregion //Constructor
 
         #region Methods

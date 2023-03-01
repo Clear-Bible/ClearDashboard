@@ -43,7 +43,7 @@ namespace ClearDashboard.Wpf.Application.Views.EnhancedView
 
         private void VerseContentControl_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(OuterListView);
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(ItemsListView);
             scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
             e.Handled = true;
         }
