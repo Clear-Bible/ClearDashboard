@@ -96,7 +96,8 @@
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Stretch"
-                    ItemsSource="{Binding Updates}">
+                    ItemsSource="{Binding Updates}"
+                    ScrollViewer.CanContentScroll="False">
                     <ListView.Style>
                         <Style TargetType="{x:Type ListView}">
                             <Setter Property="Visibility" Value="Visible" />
@@ -119,7 +120,8 @@
                                     VerticalAlignment="Top"
                                     HorizontalContentAlignment="Stretch"
                                     VerticalContentAlignment="Stretch"
-                                    ItemsSource="{Binding ReleaseNotes}">
+                                    ItemsSource="{Binding ReleaseNotes}"
+                                    PreviewMouseWheel="NotesList_OnPreviewMouseWheel">
                                     <ListView.Style>
                                         <Style TargetType="{x:Type ListView}">
                                             <Setter Property="Visibility" Value="Visible" />
@@ -208,7 +210,7 @@
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
 
-                                            <GridViewColumn Width="{Binding ElementName=NotesList, Path=ActualWidth, Converter={converters:WidthSubtraction}, ConverterParameter='170'}">
+                                            <GridViewColumn Width="551">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock

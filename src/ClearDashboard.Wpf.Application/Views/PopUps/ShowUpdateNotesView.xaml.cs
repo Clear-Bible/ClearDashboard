@@ -23,5 +23,12 @@ namespace ClearDashboard.Wpf.Application.Views.PopUps
         {
             InitializeComponent();
         }
+
+        private void NotesList_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = Helpers.Helpers.GetChildOfType<ScrollViewer>(UpdateList);
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta/3);
+            e.Handled = true;
+        }
     }
 }
