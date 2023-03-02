@@ -211,25 +211,14 @@ public class ProjectSnapshotFromFilesFactory
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.Alignment)))
             {
-                var childModelShapshots = new GeneralListModel<GeneralModel<Models.Alignment>>();
-
-                foreach (var item in Directory.GetFiles(childEntityEntry).OrderBy(n => n))
-                {
-                    var serializedChildModelSnapshot = File.ReadAllText(item);
-
-                    var childModelSnapshotGroup = JsonSerializer.Deserialize<AlignmentGroup>(
-                        serializedChildModelSnapshot,
-                        _jsonDeserializerOptions)!;
-
-                    if (childModelSnapshotGroup is null)
-                    {
-                        throw new SerializedDataException($"Unable to deserialize type 'AlignmentGroup' properties at path {item}");
-                    }
-
-                    childModelShapshots.AddRange(childModelSnapshotGroup.Alignments);
-                }
-
                 var childName = childFolderNameMappings[typeof(C)].childName;
+                var childModelShapshots = LoadChildrenByGroup<Models.Alignment, AlignmentGroup>(childEntityEntry);
+                modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
+            }
+            else if (typeof(C).IsAssignableTo(typeof(Models.Translation)))
+            {
+                var childName = childFolderNameMappings[typeof(C)].childName;
+                var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else
@@ -239,6 +228,31 @@ public class ProjectSnapshotFromFilesFactory
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
         }
+    }
+
+    private GeneralListModel<GeneralModel<M>> LoadChildrenByGroup<M,G>(string childEntry)
+        where M:notnull
+        where G:ModelGroup<M>
+    {
+        var childModelShapshots = new GeneralListModel<GeneralModel<M>>();
+
+        foreach (var item in Directory.GetFiles(childEntry).OrderBy(n => n))
+        {
+            var serializedChildModelSnapshot = File.ReadAllText(item);
+
+            var childModelSnapshotGroup = JsonSerializer.Deserialize<G>(
+                serializedChildModelSnapshot,
+                _jsonDeserializerOptions)!;
+
+            if (childModelSnapshotGroup is null)
+            {
+                throw new SerializedDataException($"Unable to deserialize type '{typeof(G).ShortDisplayName()}' properties at path {item}");
+            }
+
+            childModelShapshots.AddRange(childModelSnapshotGroup.Items);
+        }
+
+        return childModelShapshots;
     }
 
     private IEnumerable<T> LoadChildren<T>(string childEntry)

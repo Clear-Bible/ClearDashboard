@@ -5,6 +5,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using System.Text.Json;
 using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.Collaboration.Factory;
 
 namespace ClearDashboard.Collaboration.Builder;
 
@@ -21,6 +22,9 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
             { SOURCE_TOKEN_LOCATION, typeof(string) },
             { BOOK_CHAPTER_LOCATION, typeof(string) }
         };
+
+    // We serialize this in groups where the AlignmentSetId is in the heading, so don't include it here:
+    public override IEnumerable<string> NoSerializePropertyNames => new[] { nameof(Models.Translation.TranslationSetId) };
 
     public static GeneralListModel<GeneralModel<Models.Translation>> BuildModelSnapshots(Guid translationSetId, BuilderContext builderContext)
     {
@@ -82,5 +86,43 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         // as its SourceTokenComponent, we can pull book and chapter numbers for
         // grouping during serialization
         return translations;
+    }
+
+    public static void SaveTranslations(
+        GeneralModel translationSet,
+        GeneralListModel<GeneralModel<Models.Translation>> translationSnapshots,
+        string childPath,
+        JsonSerializerOptions options)
+    {
+        var translationsByLocation = translationSnapshots
+            .GroupBy(e => (string)e[TranslationBuilder.BOOK_CHAPTER_LOCATION]!)
+            .ToDictionary(g => g.Key, g => g
+                .Select(e => e)
+                .OrderBy(e => (string)e[TranslationBuilder.SOURCE_TOKEN_LOCATION]!)
+                .ToGeneralListModel<GeneralModel<Models.Translation>>())
+            .OrderBy(kvp => kvp.Key);
+
+        foreach (var translationsForLocation in translationsByLocation)
+        {
+            // Instead of the more general GeneralModelJsonConverter, this will use the
+            // more specific TranslationGroupJsonConverter:
+            var translationGroup = new TranslationGroup()
+            {
+                TranslationSetId = (Guid)translationSet.GetId(),
+                SourceTokenizedCorpus = (TokenizedCorpusExtra)translationSet[TranslationSetBuilder.SOURCE_TOKENIZED_CORPUS]!,
+                Location = translationsForLocation.Key,
+                Items = translationsForLocation.Value
+            };
+            var serializedChildModelSnapshot = JsonSerializer.Serialize<TranslationGroup>(
+                translationGroup,
+                options);
+            File.WriteAllText(
+                Path.Combine(
+                    childPath,
+                    string.Format(ProjectSnapshotFactoryCommon.TranslationsByLocationFileNameTemplate,
+                        translationSet.GetId(),
+                        translationsForLocation.Key)),
+                serializedChildModelSnapshot);
+        }
     }
 }

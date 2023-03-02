@@ -233,6 +233,7 @@ public abstract class GeneralModelBuilder : IModelBuilder
     public abstract string IdentityKey { get; }
     public abstract IEnumerable<PropertyInfo> PropertyInfos { get; }
     public abstract IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes { get; }
+    public virtual IEnumerable<string> NoSerializePropertyNames => Enumerable.Empty<string>();
 
     public abstract GeneralModel BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes);
 

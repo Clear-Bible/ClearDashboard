@@ -153,6 +153,14 @@ public class ProjectSnapshotFilesFactory
                     AlignmentBuilder.SaveAlignments(modelSnapshot, childModelShapshots, childPath, _jsonSerializerOptions);
                 }
             }
+            else if (typeof(C).IsAssignableTo(typeof(Models.Translation)))
+            {
+                var childModelShapshots = (GeneralListModel<GeneralModel<Models.Translation>>?)children;
+                if (childModelShapshots is not null && childModelShapshots.Any())
+                {
+                    TranslationBuilder.SaveTranslations(modelSnapshot, childModelShapshots, childPath, _jsonSerializerOptions);
+                }
+            }
             else
             {
                 var childModelShapshots = (GeneralListModel<GeneralModel<C>>?)children!;

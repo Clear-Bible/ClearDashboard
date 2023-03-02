@@ -15,6 +15,7 @@ public interface IModelBuilder
     string IdentityKey { get; }
     IEnumerable<PropertyInfo> PropertyInfos { get; }
     IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes { get; }
+    IEnumerable<string> NoSerializePropertyNames { get;  }
 
     GeneralModel BuildGeneralModel(Dictionary<string, (Type type, object? value)> modelPropertiesTypes);
 }

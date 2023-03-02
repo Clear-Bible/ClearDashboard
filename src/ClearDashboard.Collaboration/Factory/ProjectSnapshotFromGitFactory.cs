@@ -265,31 +265,14 @@ public class ProjectSnapshotFromGitFactory
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.Alignment)))
             {
-                var childModelShapshots = new GeneralListModel<GeneralModel<Models.Alignment>>();
-
-                var items = repo.Lookup<Tree>($"{commitSha}:{childEntityEntry.Path}");
-                if (items is null)
-                {
-                    throw new CommitObjectNotFoundException($"{commitSha}:{childEntityEntry.Path}");
-                }
-
-                foreach (var item in items.Where(te => te.TargetType == TreeEntryTargetType.Blob).OrderBy(te => te.Name))
-                {
-                    var serializedChildModelSnapshot = ((Blob)item.Target).GetContentText();
-
-                    var childModelSnapshotGroup = JsonSerializer.Deserialize<AlignmentGroup>(
-                        serializedChildModelSnapshot,
-                        _jsonDeserializerOptions)!;
-
-                    if (childModelSnapshotGroup is null)
-                    {
-                        throw new SerializedDataException($"Unable to deserialize type 'AlignmentGroup' properties at path {item.Path}");
-                    }
-
-                    childModelShapshots.AddRange(childModelSnapshotGroup.Alignments);
-                }
-
                 var childName = childFolderNameMappings[typeof(C)].childName;
+                var childModelShapshots = LoadChildrenByGroup<Models.Alignment, AlignmentGroup>(childEntityEntry, repo, commitSha);
+                modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
+            }
+            else if (typeof(C).IsAssignableTo(typeof(Models.Translation)))
+            {
+                var childName = childFolderNameMappings[typeof(C)].childName;
+                var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry, repo, commitSha);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else
@@ -299,6 +282,37 @@ public class ProjectSnapshotFromGitFactory
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
         }
+    }
+
+    private GeneralListModel<GeneralModel<M>> LoadChildrenByGroup<M, G>(TreeEntry childEntry, Repository repo, string commitSha)
+        where M : notnull
+        where G : ModelGroup<M>
+    {
+        var childModelShapshots = new GeneralListModel<GeneralModel<M>>();
+
+        var items = repo.Lookup<Tree>($"{commitSha}:{childEntry.Path}");
+        if (items is null)
+        {
+            throw new CommitObjectNotFoundException($"{commitSha}:{childEntry.Path}");
+        }
+
+        foreach (var item in items.Where(te => te.TargetType == TreeEntryTargetType.Blob).OrderBy(te => te.Name))
+        {
+            var serializedChildModelSnapshot = ((Blob)item.Target).GetContentText();
+
+            var childModelSnapshotGroup = JsonSerializer.Deserialize<G>(
+                serializedChildModelSnapshot,
+                _jsonDeserializerOptions)!;
+
+            if (childModelSnapshotGroup is null)
+            {
+                throw new SerializedDataException($"Unable to deserialize type 'AlignmentGroup' properties at path {item.Path}");
+            }
+
+            childModelShapshots.AddRange(childModelSnapshotGroup.Items);
+        }
+
+        return childModelShapshots;
     }
 
     private IEnumerable<T> LoadChildren<T>(TreeEntry childEntry, Repository repo, string commitSha)

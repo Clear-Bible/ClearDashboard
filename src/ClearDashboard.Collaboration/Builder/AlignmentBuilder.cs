@@ -24,6 +24,9 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
             { BOOK_CHAPTER_LOCATION, typeof(string) }
         };
 
+    // We serialize this in groups where the AlignmentSetId is in the heading, so don't include it here:
+    public override IEnumerable<string> NoSerializePropertyNames => new[] { nameof(Models.Alignment.AlignmentSetId) };
+
     public static GeneralListModel<GeneralModel<Models.Alignment>> BuildModelSnapshots(Guid alignmentSetId, BuilderContext builderContext)
     {
         var modelSnapshots = new GeneralListModel<GeneralModel<Models.Alignment>>();
@@ -116,7 +119,7 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
                 SourceTokenizedCorpus = (TokenizedCorpusExtra)alignmentSet[AlignmentSetBuilder.SOURCE_TOKENIZED_CORPUS]!,
                 TargetTokenizedCorpus = (TokenizedCorpusExtra)alignmentSet[AlignmentSetBuilder.TARGET_TOKENIZED_CORPUS]!,
                 Location = alignmentsForLocation.Key,
-                Alignments = alignmentsForLocation.Value
+                Items = alignmentsForLocation.Value
             };
             var serializedChildModelSnapshot = JsonSerializer.Serialize<AlignmentGroup>(
                 alignmentGroup,

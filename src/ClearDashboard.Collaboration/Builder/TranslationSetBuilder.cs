@@ -3,12 +3,21 @@ using ClearDashboard.Collaboration.Model;
 using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
+using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Builder;
 
 public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
 {
+    public const string SOURCE_TOKENIZED_CORPUS = "SourceTokenizedCorpus";
+
+    public override IReadOnlyDictionary<string, Type> AddedPropertyNamesTypes =>
+        new Dictionary<string, Type>()
+        {
+            { SOURCE_TOKENIZED_CORPUS, typeof(TokenizedCorpusExtra) }
+        };
+
     public override IEnumerable<GeneralModel<Models.TranslationSet>> BuildModelSnapshots(BuilderContext builderContext)
     {
         var modelSnapshot = new GeneralListModel<GeneralModel<Models.TranslationSet>>();
@@ -25,7 +34,18 @@ public class TranslationSetBuilder : GeneralModelBuilder<Models.TranslationSet>
     public static GeneralModel<Models.TranslationSet> BuildModelSnapshot(Models.TranslationSet translationSet, BuilderContext builderContext)
     {
         var modelSnapshot = ExtractUsingModelIds(translationSet, builderContext.CommonIgnoreProperties);
-        var sourceTokenizedCorpusId = translationSet.ParallelCorpus!.SourceTokenizedCorpus!.Id;
+
+        var sourceTokenizedCorpus = translationSet.ParallelCorpus!.SourceTokenizedCorpus!;
+
+        var sourceTokenizedCorpusExtra = new TokenizedCorpusExtra
+        {
+            Id = sourceTokenizedCorpus!.Id,
+            Language = sourceTokenizedCorpus!.Corpus!.Language!,
+            Tokenization = sourceTokenizedCorpus!.TokenizationFunction!,
+            LastTokenized = sourceTokenizedCorpus!.LastTokenized,
+        };
+
+        modelSnapshot.Add(SOURCE_TOKENIZED_CORPUS, sourceTokenizedCorpusExtra);
 
         modelSnapshot.AddChild("Translations", TranslationBuilder.BuildModelSnapshots(translationSet.Id, builderContext).AsModelSnapshotChildrenList());
 

@@ -4,11 +4,9 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Model;
 
-public class AlignmentGroup : ModelGroup<Models.Alignment>
+public class TranslationGroup : ModelGroup<Models.Translation>
 {
-    public Guid AlignmentSetId { get; set; }
+    public Guid TranslationSetId { get; set; }
     public TokenizedCorpusExtra SourceTokenizedCorpus { get; set; } = new();
-    public TokenizedCorpusExtra TargetTokenizedCorpus { get; set; } = new();
     public string Location { get; set; } = string.Empty;
 }
-
