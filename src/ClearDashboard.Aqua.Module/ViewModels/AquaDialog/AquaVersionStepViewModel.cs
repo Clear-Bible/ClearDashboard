@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using ClearDashboard.Aqua.Module.Models;
 using System.Windows;
 using System.Linq;
+using Autofac.Features.AttributeFilters;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
@@ -154,7 +155,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
         IMediator mediator,
         ILifetimeScope? lifetimeScope,
         IValidator<AquaVersionStepViewModel> validator,
-        ILocalizationService localizationService)
+        [KeyFilter("Aqua")] ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
     {
         aquaManager_ = aquaManager;

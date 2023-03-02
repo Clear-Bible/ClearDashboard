@@ -18,6 +18,7 @@ using static ClearDashboard.Aqua.Module.Services.IAquaManager;
 using System.Collections.Generic;
 using ClearDashboard.Aqua.Module.Models;
 using System.Windows;
+using Autofac.Features.AttributeFilters;
 
 namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog;
 
@@ -86,7 +87,7 @@ public class AquaRevisionStepViewModel :
         IMediator mediator,
         ILifetimeScope? lifetimeScope,
         IValidator<AquaRevisionStepViewModel> validator,
-        ILocalizationService localizationService)
+        [KeyFilter("Aqua")] ILocalizationService localizationService)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
     {
         aquaManager_ = aquaManager;

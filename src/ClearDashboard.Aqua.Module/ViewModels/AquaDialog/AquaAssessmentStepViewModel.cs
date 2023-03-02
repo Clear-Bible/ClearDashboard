@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Autofac;
+using Autofac.Features.AttributeFilters;
 using Caliburn.Micro;
 using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.Services;
@@ -127,7 +128,7 @@ public class AquaAssessmentStepViewModel :
         IEventAggregator eventAggregator,
         IMediator mediator, 
         ILifetimeScope? lifetimeScope,
-        ILocalizationService localizationService,
+        [KeyFilter("Aqua")] ILocalizationService localizationService,
         IValidator<AquaAssessmentStepViewModel> validator)
         : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, validator, localizationService)
     {

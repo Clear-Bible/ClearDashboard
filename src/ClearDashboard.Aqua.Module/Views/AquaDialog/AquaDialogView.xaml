@@ -37,22 +37,22 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <!--<RowDefinition Height="25" />-->
             <RowDefinition Height="*" />
             <RowDefinition Height="40" />
         </Grid.RowDefinitions>
 
-        <TextBlock
+        <!--<TextBlock Grid.Row="0"
             Margin="0,0,10,0"
             VerticalAlignment="Top"
             FontSize="18"
             Foreground="{StaticResource PrimaryHueMidBrush}"
             Text="{Binding BodyTitle}"
-            TextAlignment="Right" />
+            TextAlignment="Center" />-->
 
-        <ContentControl Grid.Row="1" cm:View.Model="{Binding ActiveItem}" />
+        <ContentControl Grid.Row="0" cm:View.Model="{Binding ActiveItem}" />
         <StatusBar
-            Grid.Row="2"
+            Grid.Row="1"
             Background="{DynamicResource MaterialDesignPaper}"
             Foreground="{DynamicResource MaterialDesignDarkForeground}"
             Visibility="{Binding StatusBarVisibility}">

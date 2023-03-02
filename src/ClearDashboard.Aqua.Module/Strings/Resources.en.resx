@@ -195,6 +195,9 @@
   <data name="Aqua_Version_BodyTitle" xml:space="preserve">
     <value>Corpus</value>
   </data>
+  <data name="Aqua_Version_CorpusInformation" xml:space="preserve">
+    <value>Corpus Information</value>
+  </data>
   <data name="Aqua_Version_ForwardTranslationToVersionId" xml:space="preserve">
     <value>Version id of corpus this corpus is a forward translation to</value>
   </data>
@@ -207,6 +210,9 @@
   <data name="Aqua_Version_ReloadRevisions" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="Aqua_Version_Revisions" xml:space="preserve">
+    <value>Revisions</value>
+  </data>
   <data name="Aqua_Version_Revisions_Add_Column" xml:space="preserve">
     <value>Assessments</value>
   </data>
@@ -214,7 +220,7 @@
     <value>Submitted</value>
   </data>
   <data name="Aqua_Version_Revisions_Name_Column" xml:space="preserve">
-    <value>Revision Name</value>
+    <value>Name</value>
   </data>
   <data name="Aqua_Version_Rights" xml:space="preserve">
     <value>Rights</value>
