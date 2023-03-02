@@ -33,6 +33,7 @@ namespace ClearDashboard.Aqua.Module.ViewModels
     public class AquaCorpusAnalysisEnhancedViewItemViewModel : 
         VerseAwareEnhancedViewItemViewModel
     {
+        public readonly string RandomString = Guid.NewGuid().ToString();
         public record TypeAnalysisConfiguration(
             string name,
             IEnumerable<VisualizationEnum> visualizations,
