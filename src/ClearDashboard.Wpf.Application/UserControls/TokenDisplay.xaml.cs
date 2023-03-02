@@ -844,18 +844,9 @@ namespace ClearDashboard.Wpf.Application.UserControls
 
         private void OnTokenContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            if (AllSelectedTokens != null)
-            {
-                JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
-                JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
-                UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
-            }
-            else
-            {
-                JoinTokensMenuItem.Visibility = Visibility.Collapsed;
-                JoinTokensLanguagePairMenuItem.Visibility =  Visibility.Collapsed;
-                UnjoinTokenMenuItem.Visibility =  Visibility.Visible;
-            }
+            JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
+            JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
+            UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
             
             var tokenDisplay = (TokenDisplayViewModel) DataContext;
             DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned ? Visibility.Visible : Visibility.Collapsed;
