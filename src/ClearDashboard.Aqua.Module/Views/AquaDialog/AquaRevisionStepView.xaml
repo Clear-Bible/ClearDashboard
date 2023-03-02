@@ -23,45 +23,15 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+                <ResourceDictionary Source="../../Style/AquaStyles.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-            <converters:AquaAssessmentStatusToBooleanConverter x:Key="AquaAssessmentStatusToBooleanConverter" />
-            <SolidColorBrush
-                x:Key="GridBrush"
-                Opacity="0.25"
-                Color="LightBlue" />
-
-            <converters:BooleanAndConverter x:Key="BooleanAndConverter" />
-            <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="0,8" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-            </Style>
-
-            <Style TargetType="Label">
-                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-              
-                <Setter Property="Margin" Value="20,10" />
-                <Setter Property="FontSize" Value="24" />
-            </Style>
-
-            <Style BasedOn="{StaticResource MaterialDesignComboBox}" TargetType="ComboBox">
-                <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
-                <Setter Property="Foreground" Value="Black" />
-            </Style>
-
-            <Style x:Key="CardStyle" TargetType="{x:Type materialDesign:Card}">
-                <!--<Setter Property="Height" Value="450"></Setter>-->
-               
-                <Setter Property="Padding" Value="10, 5"></Setter>
-            </Style>
-
             <Style x:Key="TopCardStyle" BasedOn="{StaticResource CardStyle}" TargetType="{x:Type materialDesign:Card}">
-                <Setter Property="Height" Value="160"></Setter>
+                <Setter Property="Height" Value="180"></Setter>
                 <Setter Property="Margin" Value="15,10,15,7.5"></Setter>
             </Style>
 
             <Style x:Key="BottomCardStyle" BasedOn="{StaticResource CardStyle}" TargetType="{x:Type materialDesign:Card}">
-                <Setter Property="Height" Value="340"></Setter>
+                <Setter Property="Height" Value="320"></Setter>
                 <Setter Property="Margin" Value="15,7.5,15 0"></Setter>
             </Style>
         </ResourceDictionary>
@@ -94,7 +64,7 @@
                 Grid.Row="0"
                 Orientation="Vertical"
                 VerticalAlignment="Top">
-                <Label Content="{Binding BodyText}" />
+                    <Label Content="{helpers:Localization Aqua_Revision_AddRevision}" />
                 <TextBox x:Name="Name"
                          materialDesign:HintAssist.FloatingScale="0.60"
                          materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
@@ -214,11 +184,11 @@
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Revision_Assessments_RequestedTime_Column}">
+                        <DataGridTemplateColumn Width="250" Header="{helpers:Localization Aqua_Revision_Assessments_RequestedTime_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Grid.Column="0"
-                                        Margin="8,0,5,0"
+                                        Margin="4,0,0,0"
                                         VerticalAlignment="Center"
                                         FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                         FontWeight="Bold"
@@ -226,11 +196,11 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Revision_Assessments_Type_Column}">
+                        <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Type_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Grid.Column="0"
-                                        Margin="8,0,5,0"
+                                        Margin="4,0,0,0"
                                         VerticalAlignment="Center"
                                         FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                         FontWeight="Bold"
@@ -238,11 +208,11 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="*" Header="{helpers:Localization Aqua_Revision_Assessments_Status_Column}">
+                        <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Status_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Grid.Column="0"
-                                        Margin="8,0,5,0"
+                                        Margin="4,0,0,0"
                                         VerticalAlignment="Center"
                                         FontSize="{Binding ElementName=TitleFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                         FontWeight="Bold"
@@ -251,7 +221,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Width="50" Header="{helpers:Localization Aqua_Revision_Assessments_Add_Column}">
+                        <DataGridTemplateColumn Width="100" Header="{helpers:Localization Aqua_Revision_Assessments_Add_Column}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                         <Button Width="40"
@@ -267,7 +237,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="50">
+                        <DataGridTemplateColumn Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                         <Button Width="40" 
@@ -277,7 +247,8 @@
                                             Width="30"
                                             Height="30"
                                             Foreground="{StaticResource BlueMidBrush}"
-                                            Kind="CloseCircleOutline" /></Button>
+                                            Kind="CloseCircleOutline" />
+                                        </Button>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

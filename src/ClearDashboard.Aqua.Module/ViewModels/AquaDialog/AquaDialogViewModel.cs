@@ -110,12 +110,14 @@ namespace ClearDashboard.Aqua.Module.ViewModels.AquaDialog
 
             DisplayName = LocalizationService!.Get("Aqua_DialogTitle");
 
-            DialogTitle = LocalizationService!.Get("Aqua_DialogTitle");
+          
 
             tokenizedTextCorpusId_ = tokenizedTextCorpusId;
         }
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
+            DialogTitle = LocalizationService!.Get("Aqua_DialogTitle");
+
             var parameters = new List<Autofac.Core.Parameter>
             {
                 new NamedParameter("dialogMode", DialogMode),

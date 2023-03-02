@@ -24,43 +24,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+                <ResourceDictionary Source="../../Style/AquaStyles.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-
-            <SolidColorBrush
-                x:Key="GridBrush"
-                Opacity="0.25"
-                Color="LightBlue" />
-            <converters:BooleanAndConverter x:Key="BooleanAndConverter" />
-            <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="0,8" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-            </Style>
-
-            <Style x:Key="CardStyle" TargetType="{x:Type materialDesign:Card}">
-                <Setter Property="Height" Value="450"></Setter>
-                <Setter Property="Padding" Value="10, 5"></Setter>
-            </Style>
-
-            <Style x:Key="LeftCardStyle" BasedOn="{StaticResource CardStyle}" TargetType="{x:Type materialDesign:Card}">
-                <Setter Property="Margin" Value="15,0,7.5,0"></Setter>
-            </Style>
-
-            <Style x:Key="RightCardStyle" BasedOn="{StaticResource CardStyle}" TargetType="{x:Type materialDesign:Card}">
-                <Setter Property="Margin" Value="7.5,0,15 0"></Setter>
-            </Style>
-
-            <Style TargetType="Label">
-                <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Margin" Value="5,10" />
-                <Setter Property="FontSize" Value="24" />
-            </Style>
-
-            <Style BasedOn="{StaticResource MaterialDesignComboBox}" TargetType="ComboBox">
-                <!--<Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkBrush}" />-->
-                <Setter Property="Foreground" Value="Black" />
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid >
