@@ -13,9 +13,11 @@ using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using LiveChartsCore;
 using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SIL.Scripture;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +33,63 @@ namespace ClearDashboard.Aqua.Module.ViewModels
     public class AquaCorpusAnalysisEnhancedViewItemViewModel : 
         VerseAwareEnhancedViewItemViewModel
     {
+        public record TypeAnalysisConfiguration(
+            string name,
+            IEnumerable<VisualizationEnum> visualizations,
+            int defaultVisualizationsIndex = 0,
+            decimal? lowLimit = null,
+            decimal? highLimit = null);
+
+        public enum VisualizationEnum
+        {
+            CartesianChart,
+            BarChart,
+            MissingWords
+        }
+
+        public readonly List<string> Types = new()
+        {
+            "missing-words",
+            "semantic-similarity",
+            "sentence-length",
+            "word-alignment"
+        };
+
+        private Dictionary<string, TypeAnalysisConfiguration> typeToTypeAnalysisConfigurations_ = new()
+        {
+            { "missing-words",  new TypeAnalysisConfiguration(
+                "missing-words",
+                new List<VisualizationEnum>(){
+                    VisualizationEnum.MissingWords })},
+            { "semantic-similarity", new TypeAnalysisConfiguration(
+                "semantic-similarity",
+                new List<VisualizationEnum>(){
+                    VisualizationEnum.MissingWords },
+                0,
+                0M,
+                1M) },
+            {
+                "sentence-length",
+                new TypeAnalysisConfiguration(
+                "sentence-length",
+                new List<VisualizationEnum>(){
+                    VisualizationEnum.BarChart,
+                    VisualizationEnum.CartesianChart },
+                1,
+                15M,
+                65M) },
+            {
+                "word-alignment",
+                new TypeAnalysisConfiguration(
+                "word-alignment",
+                new List<VisualizationEnum>(){
+                    VisualizationEnum.BarChart,
+                    VisualizationEnum.CartesianChart },
+                0,
+                0.0M,
+                0.9M) },
+        };
+        
         private readonly IAquaManager aquaManager_;
         private readonly LongRunningTaskManager longRunningTaskManager_;
         private LongRunningTask? currentLongRunningTask_;
@@ -42,6 +101,24 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         {
             get => _progressBarVisibility;
             set => Set(ref _progressBarVisibility, value);
+        }
+
+        private TypeAnalysisConfiguration? typeAnalsysis_ = null;
+        public TypeAnalysisConfiguration? TypeAnalysis
+        {
+            get => typeAnalsysis_;
+            set => Set(ref typeAnalsysis_, value);
+        }
+
+        public VisualizationEnum visualization_;
+        public VisualizationEnum Visualization
+        {
+            get => visualization_;
+            set 
+            {
+                Set(ref visualization_, value);
+                RefreshData();
+            }
         }
 
         private Assessment? assessment_ = null;
@@ -92,11 +169,19 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         private int verseNum_ = -1;
         private int offset_ = -1;
 
-        private ISeries[] seriesCollection_;
-        public ISeries[] SeriesCollection
+        private BindableCollection<ISeries> seriesCollection_ = new();
+        public BindableCollection<ISeries> SeriesCollection
         {
             get => seriesCollection_;
-            set => Set(ref seriesCollection_, value);
+            //set => Set(ref seriesCollection_, value);
+            set => seriesCollection_ = value;    
+        }
+        private BindableCollection<Axis> yAxis_ = new();
+        public BindableCollection<Axis> YAxis
+        {
+            get => yAxis_;
+            //set => Set(ref yAxis_, value);
+            set => yAxis_ = value;
         }
 
         private IEnumerable<Result> sortedResultsForChapter_ = new List<Result>();
@@ -136,18 +221,68 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             try
             {
                 await GetAssessment(assessmentId_
-                    ?? throw new InvalidStateEngineException(name:"assessmentId_", value: "null"));
+                    ?? throw new InvalidStateEngineException(name: "assessmentId_", value: "null"));
                 await GetRevisions(Assessment
                     ?? throw new InvalidStateEngineException(name: "Assessment", value: "null"));
-                await GetResults(Assessment?.id
-                    ?? throw new InvalidStateEngineException(name: "Assessment", value: "null"));
+                await GetResults();
             }
             catch (Exception ex)
             {
+                Logger!.LogError(ex, ex.Message);
                 OnUIThread(() =>
                 {
                     Message = ex.Message ?? ex.ToString();
                 });
+            }
+        }
+
+
+        private void SetSeries(TypeAnalysisConfiguration typeAnalysis, VisualizationEnum visualization, IEnumerable<Result> results)
+        {
+            if (visualization == VisualizationEnum.CartesianChart)
+            {
+                SeriesCollection.Clear();
+                SeriesCollection.AddRange(new ISeries[]
+                {
+                    new LineSeries<Result>
+                    {
+                        Values = results.ToList(),
+                        Mapping = (result, point) =>
+                        {
+                            point.PrimaryValue = result.score ?? 0;
+                            point.SecondaryValue = (new VerseRef(result.vref)).VerseNum;
+                        }
+                    }
+                });
+            }
+            else //if (visualization == VisualizationEnum.BarChart)
+            {
+                SeriesCollection.Clear();
+                SeriesCollection.AddRange(new ISeries[]
+                {
+                    //new ColumnSeries<double>
+                    //{
+                    //    IsHoverable = false, // disables the series from the tooltips 
+                    //    Values = new double[] { 1, 1, 1, 1, 1, 1, 1 },
+                    //    Stroke = null,
+                    //    Fill = new SolidColorPaint(new SKColor(30, 30, 30, 30)),
+                    //    IgnoresBarPosition = true
+                    //},
+                    new ColumnSeries<Result>
+                    {
+                        Values = sortedResultsForChapter_.ToList(),
+                        //Stroke = null,
+                        Fill = new SolidColorPaint(SKColors.CornflowerBlue),
+                        //IgnoresBarPosition = true,
+                        Mapping = (result, point) =>
+                        {
+                            point.PrimaryValue = result.score ?? 0;
+                            point.SecondaryValue = (new VerseRef(result.vref)).VerseNum;
+                        }
+                    }
+                });
+                YAxis.Clear();
+                YAxis.AddRange(new Axis[]{ new Axis { MinLimit = 0, MaxLimit = 1 }});
             }
         }
         public override Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
@@ -157,24 +292,19 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             offset_ = ParentViewModel.VerseOffsetRange;
             verseNum_ = currentVerseRef.VerseNum;
             Verse = currentVerseRef.ToString();
-            if (chapterNum != chapterNum_)
-            {
+            //if (chapterNum != chapterNum_ && allResults_ != null && allResults_.Count() > 0)
+            //{
                 sortedResultsForChapter_ = SortedResultsForCurrentChapter(
                     allResults_,
                     currentVerseRef) ?? new List<Result>();
-                SeriesCollection = new ISeries[]
-                {
-                    new LineSeries<Result>
-                    {
-                        Values = sortedResultsForChapter_.ToList(),
-                        Mapping = (result, point) =>
-                        {
-                            point.PrimaryValue = result.score ?? 0;
-                            point.SecondaryValue = (new VerseRef(result.vref)).VerseNum;
-                        }
-                    }
-                };
-            }            
+                chapterNum_ = chapterNum;
+            //}
+            //if (
+            //    (sortedResultsForChapter_ != null && sortedResultsForChapter_.Count() > 0) ||
+            //    reloadType== ReloadType.Force)
+            //{
+                SetSeries(TypeAnalysis!, Visualization, sortedResultsForChapter_);
+            //}
             return Task.CompletedTask;
         }
         private IEnumerable<Result>? SortedResultsForCurrentChapter(IEnumerable<Result>? results, VerseRef currentVerseRef)
@@ -230,7 +360,44 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 (cancellationToken) => aquaManager_!.GetAssessment(
                     assessmentId,
                     cancellationToken),
-                (assessment) => Assessment = assessment);
+                (assessment) => {
+                    Assessment = assessment;
+                    try
+                    {
+                        TypeAnalysisConfiguration? typeAnalysisConfiguration;
+                        var succeeded = typeToTypeAnalysisConfigurations_.TryGetValue(Assessment?.type ?? "", out typeAnalysisConfiguration);
+                        if (succeeded)
+                        {
+                            TypeAnalysis = typeAnalysisConfiguration
+                                ?? throw new InvalidStateEngineException(
+                                name: "typeAnalysisConfiguration",
+                                value: "null");
+                        }
+                        else
+                            throw new InvalidStateEngineException(
+                                name: "Assessment.type",
+                                value: $"{Assessment?.type}");
+                        try
+                        {
+                            Visualization = TypeAnalysis!.visualizations.ToArray()[TypeAnalysis.defaultVisualizationsIndex];
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            throw new InvalidStateEngineException(
+                                name: "TypeAnalysis.visualizations[TypeAnalysis.defaultVisualizationsIndex]",
+                                value: $"index not found");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger!.LogError(ex, ex.Message);
+                        OnUIThread(() =>
+                        {
+                            Message = ex.Message ?? ex.ToString();
+                        });
+                        throw;
+                    }
+                });
 
             switch (processStatus)
             {
@@ -249,12 +416,13 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                     throw new ArgumentOutOfRangeException();
             }
         }
-        public async Task GetResults(int assessmentId)
+        public async Task GetResults()
         {
             var processStatus = await RunLongRunningTask(
                 "AQuA-Get_Results",
                 (cancellationToken) => aquaManager_!.ListResults(
-                    assessmentId,
+                    Assessment!?.id ?? 
+                        throw new InvalidStateEngineException(name: "Assessment", value: "null"),
                     cancellationToken),
                 (results) =>
                 {

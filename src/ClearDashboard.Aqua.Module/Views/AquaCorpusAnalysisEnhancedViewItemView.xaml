@@ -21,6 +21,11 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:BoolTrueToVisibilityCollapsedConverter x:Key="BoolTrueToVisibilityCollapsedConverter" />
+            <converters:BooleanAndConverter x:Key="BooleanAndConverter" />
+            <converters:AquaTypeHasVisualizationVisibilityConverter x:Key="AquaTypeHasVisualizationVisibilityConverter" />
+            <converters:AquaVisualizationToVisibilityConverter x:Key="AquaVisualizationToVisibilityConverter" />
+            <converters:AquaVisualizationToBooleanConverter x:Key="AquaVisualizationToBooleanConverter" />
+            <converters:AquaVisibilityAndFalseCollapsedConverter x:Key="AquaVisibilityAndFalseCollapsedConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -31,17 +36,67 @@
             <Label Content="{Binding Revision.name }"/>
             <Label Content="{Binding ReferenceRevision.name }"/>
             <!--<Label Content="{Binding BodyText}"/>-->
+            <StackPanel
+                Margin="5,0,0,5"
+                VerticalAlignment="Center"
+                Orientation="Vertical">
+                <RadioButton
+                    Content="{helpers:Localization Aqua_EnhancedView_VisualizationSelection_CartesianChart}"
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                    GroupName="visualization" 
+                    IsChecked="{Binding Path=Visualization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AquaVisualizationToBooleanConverter}, ConverterParameter=CartesianChart}"
+                    Visibility="{Binding Path=TypeAnalysis, Mode=OneWay, Converter={StaticResource AquaTypeHasVisualizationVisibilityConverter}, ConverterParameter=CartesianChart}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                <RadioButton
+                    Content="{helpers:Localization Aqua_EnhancedView_VisualizationSelection_BarChart}"
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                    GroupName="visualization" 
+                    IsChecked="{Binding Path=Visualization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AquaVisualizationToBooleanConverter}, ConverterParameter=BarChart}"
+                    Visibility="{Binding Path=TypeAnalysis, Mode=OneWay, Converter={StaticResource AquaTypeHasVisualizationVisibilityConverter}, ConverterParameter=BarChart}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+                <RadioButton
+                    Content="{helpers:Localization Aqua_EnhancedView_VisualizationSelection_MissingWords}"
+                    Foreground="{DynamicResource PrimaryHueDarkBrush}"
+                    GroupName="visualization" 
+                    IsChecked="{Binding Path=Visualization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource AquaVisualizationToBooleanConverter}, ConverterParameter=MissingWords}"
+                    Visibility="{Binding Path=TypeAnalysis, Mode=OneWay, Converter={StaticResource AquaTypeHasVisualizationVisibilityConverter}, ConverterParameter=MissingWords}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource BooleanInversionConverter}}"
+                    Style="{StaticResource MaterialDesignLightRadioButton}" />
+            </StackPanel>
+
             <lvc:CartesianChart
+                x:Name="Line"
                 Height="200"
                 Width="1000"
                 Series="{Binding SeriesCollection}"
-                Visibility="{Binding IsBusy, Converter={StaticResource BoolTrueToVisibilityCollapsedConverter}}"
                 TooltipPosition="Hidden"
                 ZoomMode="X">
+                <lvc:CartesianChart.Visibility>
+                    <MultiBinding Converter="{StaticResource AquaVisibilityAndFalseCollapsedConverter}">
+                        <Binding Path="IsBusy" Converter="{StaticResource BoolTrueToVisibilityCollapsedConverter}"/>
+                        <Binding Path="Visualization" Converter="{StaticResource AquaVisualizationToVisibilityConverter}" ConverterParameter="CartesianChart,BarChart"/>
+                    </MultiBinding>
+                </lvc:CartesianChart.Visibility>
             </lvc:CartesianChart>
+            <!--<lvc:CartesianChart
+                x:Name="Bar"
+                Height="200"
+                Width="1000"
+                Series="{Binding SeriesCollection}"
+                TooltipPosition="Hidden"
+                ZoomMode="X">
+                <lvc:CartesianChart.Visibility>
+                    <MultiBinding Converter="{StaticResource AquaVisibilityAndFalseCollapsedConverter}">
+                        <Binding Path="IsBusy" Converter="{StaticResource BoolTrueToVisibilityCollapsedConverter}"/>
+                        <Binding Path="Visualization" Converter="{StaticResource AquaVisualizationToVisibilityConverter}" ConverterParameter="BarChart"/>
+                    </MultiBinding>
+                </lvc:CartesianChart.Visibility>
+            </lvc:CartesianChart>-->
             <Label Content="{Binding Message}"/>
             <Button
-                x:Name="GetResult"
+                x:Name="GetResults"
                 Content="{helpers:Localization Aqua_EnhancedView_GetResult}"
                 IsDefault="True"
                 Style="{StaticResource TransparentStyle}"
