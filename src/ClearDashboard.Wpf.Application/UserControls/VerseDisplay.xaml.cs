@@ -480,7 +480,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         {
             CalculateItemsPanelTemplate(Wrap);
         }
-
+        
         private void RaiseTokenEvent(RoutedEvent routedEvent, TokenEventArgs args)
         {
             RaiseEvent(new TokenEventArgs
@@ -665,6 +665,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
         private void OnTokenUnjoin(object sender, RoutedEventArgs e)
         {
             RaiseTokenEvent(TokenUnjoinEvent, e);
+            VerseSelectedTokens.Clear();
         }
 
         private void RaiseTranslationEvent(RoutedEvent routedEvent, RoutedEventArgs e)
