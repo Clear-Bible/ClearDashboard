@@ -36,8 +36,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
     public class VerseAwareEnhancedViewItemViewModel : EnhancedViewItemViewModel,
             IHandle<TokensJoinedMessage>, 
             IHandle<TokenUnjoinedMessage>,
-            IHandle<HighlightTokensMessage>,
-            IHandle<UnhighlightTokensMessage>,
             IHandle<AlignmentAddedMessage>,
             IHandle<AlignmentDeletedMessage>
     {
@@ -688,7 +686,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+
+        public async Task HandleHighlightTokensAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
         {
             foreach (var verseDisplayViewModel in AlignedVerses)
             {
@@ -696,7 +695,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+       
+        public override bool IsActive => base.IsActive;
+
+        public async Task HandleUnhighlightTokensAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
         {
             foreach (var verseDisplayViewModel in AlignedVerses)
             {
