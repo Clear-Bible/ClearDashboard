@@ -150,7 +150,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(isSource, tokenId));
         }
 
-        public async Task HandleHighlightTokensAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        public async Task HighlightTokensAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
         {
             HighlightSourceTokens(message.IsSource, message.TokenId);
             HighlightTargetTokens(message.IsSource, message.TokenId);
@@ -184,7 +184,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await Task.CompletedTask;
         }
 
-        public async Task HandleUnhighlightTokensAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        public async Task UnhighlightTokensAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
         {
             await InternalUnhighlightTokens();
         }
