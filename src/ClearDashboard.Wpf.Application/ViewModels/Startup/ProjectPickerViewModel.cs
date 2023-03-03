@@ -219,15 +219,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             SearchBlankVisibility = Visibility.Collapsed;
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
-            if (IsParatextRunning && !Connected)
-            {
-
-            }
         }
 
         public async Task StartParatext()
         {
-            await _paratextProxy.StartParatextAsync();
+            if (!_paratextProxy.IsParatextRunning())
+            {
+                await _paratextProxy.StartParatextAsync();
+            }
 
             IsParatextRunning = _paratextProxy.IsParatextRunning();
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
@@ -241,16 +240,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
             if (IsParatextRunning)
             {
-                Connected = true;
-                if (ParatextUserName == null)
+                if (!Connected)
                 {
-                    ParatextUserName = ProjectManager.CurrentUser.FullName;
+                    ParatextUserName = "unavailable.  Paratext is running but not connected.";
+                }
+                else
+                {
+                    ParatextUserName = ProjectManager.CurrentUser.ParatextUserName ?? ProjectManager.CurrentUser.FullName;
                 }
             }
             else
             {
-                Connected = false;
-                ParatextUserName = "unavailable.  Paratext is on but not connected.";
+                ParatextUserName = "unavailable.  Paratext is not running.";
             }
             if (!IsParatextInstalled)
             {
