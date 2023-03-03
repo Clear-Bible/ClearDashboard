@@ -685,8 +685,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 await verseDisplayViewModel.HandleAlignmentDeletedAsync(message, cancellationToken);
             }
         }
-
-
+        
         public async Task HighlightTokensAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
         {
             foreach (var verseDisplayViewModel in AlignedVerses)
@@ -694,9 +693,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 await verseDisplayViewModel.HighlightTokensAsync(message, cancellationToken);
             }
         }
-
-       
-        public override bool IsActive => base.IsActive;
 
         public async Task UnhighlightTokensAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
         {
