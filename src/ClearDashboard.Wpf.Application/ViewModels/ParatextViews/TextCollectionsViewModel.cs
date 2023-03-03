@@ -292,7 +292,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.ParatextViews
                                             "<a/>"+
                                             startPart+":" +
                                         "</summary>"
-                                        +endPart+
+                                        +"<span class=\"vh\">"
+                                            +endPart+
+                                        "</p>"+
                                     "</details>" +
                                 "</div>" +
                                 "<hr>";
