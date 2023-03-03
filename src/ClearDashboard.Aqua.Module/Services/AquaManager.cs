@@ -72,8 +72,8 @@ namespace ClearDashboard.Aqua.Module.Services
                 BaseAddress = new Uri(BaseAddressString),
             };
 
-            httpClient_.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", BearerAuthenticationKey);
-
+            //httpClient_.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("api_key", BearerAuthenticationKey);
+            httpClient_.DefaultRequestHeaders.Add("api_key", BearerAuthenticationKey);
             eventAggregator_.SubscribeOnUIThread(this);
         }
 
