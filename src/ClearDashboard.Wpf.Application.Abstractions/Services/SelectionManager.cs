@@ -27,6 +27,7 @@ namespace ClearDashboard.Wpf.Application.Services
         }
 
         public bool AnySourceTokens => SelectedTokens.Any(t => t.IsSource && t.IsTokenSelected);
+        public bool AnyTargetTokens => SelectedTokens.Any(t => t.IsTarget && t.IsTokenSelected);
 
         public TokenDisplayViewModelCollection SelectedSourceTokens => new(SelectedTokens.Where(t=> t.IsSource && t.IsTokenSelected));
 
@@ -67,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public void UpdateRightClickSelection(TokenDisplayViewModel token)
         {
-            if (!SelectedTokens.Contains(token))
+            if (!SelectedTokens.Contains(token) || token.CompositeToken !=null)
             {
                 SelectedTokens = new TokenDisplayViewModelCollection(token);
                 SelectionUpdated();

@@ -243,6 +243,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             var mainViewModel = LifetimeScope?.Resolve<MainViewModel>();
             mainViewModel!.MenuItems[2].MenuItems[2].Command.Execute(null);
         }
+        
+        public ICommand OpenProjectPickerCommand => new RelayCommand(OpenProjectPicker);
+
+        private void OpenProjectPicker(object commandParameter)
+        {
+            var mainViewModel = LifetimeScope?.Resolve<MainViewModel>();
+            mainViewModel!.MenuItems[0].MenuItems[1].Command.Execute(null);
+        }
 
         #endregion
 

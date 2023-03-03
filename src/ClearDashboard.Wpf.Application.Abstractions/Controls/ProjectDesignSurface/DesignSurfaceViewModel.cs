@@ -461,7 +461,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
         {
 
             var alignmentSetCount = topLevelProjectIds.AlignmentSetIds.Count(alignmentSet =>
-                alignmentSet.ParallelCorpusId!.Id == parallelCorpusConnection.ParallelCorpusId!.Id);
+                alignmentSet.ParallelCorpusId!.IdEquals(parallelCorpusConnection.ParallelCorpusId!));
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
                 Header = LocalizationService.Get("Pds_CreateNewInterlinear"),
@@ -476,7 +476,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             AddMenuSeparator(connectionMenuItems);
 
             var translationSets = topLevelProjectIds.TranslationSetIds.Where(translationSet =>
-                translationSet.ParallelCorpusId == parallelCorpusConnection.ParallelCorpusId);
+                translationSet.ParallelCorpusId!.IdEquals(parallelCorpusConnection.ParallelCorpusId));
             foreach (var translationSet in translationSets)
             {
                 connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
@@ -545,7 +545,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
 
             AddMenuSeparator(connectionMenuItems);
             var alignmentSets = topLevelProjectIds.AlignmentSetIds.Where(alignmentSet =>
-                alignmentSet.ParallelCorpusId == parallelCorpusConnection.ParallelCorpusId);
+                alignmentSet.ParallelCorpusId!.IdEquals(parallelCorpusConnection.ParallelCorpusId));
             // ALIGNMENT SETS
             foreach (var alignmentSetInfo in alignmentSets)
             {

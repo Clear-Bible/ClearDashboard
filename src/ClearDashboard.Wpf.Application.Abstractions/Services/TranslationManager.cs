@@ -12,6 +12,9 @@ using System.Linq;
 using ClearDashboard.Wpf.Application.Collections;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using SIL.Extensions;
+using ClearDashboard.Wpf.Application.Collections.Lexicon;
+using Translation = ClearDashboard.DAL.Alignment.Translation.Translation;
+using TranslationCollection = ClearDashboard.Wpf.Application.Collections.TranslationCollection;
 
 namespace ClearDashboard.Wpf.Application.Services
 {

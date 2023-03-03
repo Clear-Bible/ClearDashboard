@@ -34,7 +34,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         IHandle<ProjectChangedMessage>,
         IHandle<BCVLoadedMessage>,
         IHandle<ReloadDataMessage>,
-        IHandle<TokenizedCorpusUpdatedMessage>
+        IHandle<TokenizedCorpusUpdatedMessage>,
+        IHandle<HighlightTokensMessage>,
+        IHandle<UnhighlightTokensMessage>
     {
         #region Commands
 
@@ -661,9 +663,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 
         public async void TokenClicked(object sender, TokenEventArgs e)
         {
-            if (e.IsShiftPressed && e.TokenDisplay.IsTarget && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
+            if (e.IsShiftPressed && e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
             {
-                if (SelectionManager.AnySourceTokens)
+                if (SelectionManager.AnySourceTokens && SelectionManager.AnyTargetTokens)
                 {
                     await EventAggregator.PublishOnUIThreadAsync(new HighlightTokensMessage(e.TokenDisplay.IsSource, e.TokenDisplay.AlignmentToken.TokenId), CancellationToken.None);
                     await alignmentDisplayViewModel.AlignmentManager!.AddAlignment(e.TokenDisplay);
@@ -686,7 +688,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         //TokenDeleteAlignment
         public async void TokenDeleteAlignment(object sender, TokenEventArgs e)
         {
-            if (e.TokenDisplay.VerseDisplay is AlignmentDisplayViewModel alignmentDisplayViewModel)
+            if (e is { TokenDisplay.VerseDisplay: AlignmentDisplayViewModel alignmentDisplayViewModel })
             {
                 await alignmentDisplayViewModel.AlignmentManager!.DeleteAlignment(e.TokenDisplay);
             }
@@ -948,6 +950,21 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         #endregion
-        
+
+        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item=> item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.HighlightTokensAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.UnhighlightTokensAsync(message, cancellationToken);
+            }
+        }
     }
 }
