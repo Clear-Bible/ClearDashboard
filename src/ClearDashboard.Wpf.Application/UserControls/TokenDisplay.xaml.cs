@@ -847,7 +847,7 @@ namespace ClearDashboard.Wpf.Application.UserControls
             JoinTokensMenuItem.Visibility = AllSelectedTokens.CanJoinTokens ? Visibility.Visible : Visibility.Collapsed;
             JoinTokensLanguagePairMenuItem.Visibility = AllSelectedTokens.CanJoinTokens && !IsCorpusView ? Visibility.Visible : Visibility.Collapsed;
             UnjoinTokenMenuItem.Visibility = AllSelectedTokens.CanUnjoinToken ? Visibility.Visible : Visibility.Collapsed;
-
+            
             var tokenDisplay = (TokenDisplayViewModel) DataContext;
             DeleteAlignmentMenuItem.Visibility = tokenDisplay.IsAligned ? Visibility.Visible : Visibility.Collapsed;
         }

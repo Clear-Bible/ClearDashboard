@@ -68,7 +68,7 @@ namespace ClearDashboard.Wpf.Application.Services
 
         public void UpdateRightClickSelection(TokenDisplayViewModel token)
         {
-            if (!SelectedTokens.Contains(token))
+            if (!SelectedTokens.Contains(token) || token.CompositeToken !=null)
             {
                 SelectedTokens = new TokenDisplayViewModelCollection(token);
                 SelectionUpdated();
