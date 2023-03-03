@@ -687,22 +687,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
 
-        public async Task HandleHighlightTokensAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        public async Task HighlightTokensAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
         {
             foreach (var verseDisplayViewModel in AlignedVerses)
             {
-                await verseDisplayViewModel.HandleHighlightTokensAsync(message, cancellationToken);
+                await verseDisplayViewModel.HighlightTokensAsync(message, cancellationToken);
             }
         }
 
        
         public override bool IsActive => base.IsActive;
 
-        public async Task HandleUnhighlightTokensAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        public async Task UnhighlightTokensAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
         {
             foreach (var verseDisplayViewModel in AlignedVerses)
             {
-                await verseDisplayViewModel.HandleUnhighlightTokensAsync(message, cancellationToken);
+                await verseDisplayViewModel.UnhighlightTokensAsync(message, cancellationToken);
             }
         }
     }

@@ -955,7 +955,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             foreach (var enhancedViewItemViewModel in Items.Where(item=> item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
             {
-                await enhancedViewItemViewModel.HandleHighlightTokensAsync(message, cancellationToken);
+                await enhancedViewItemViewModel.HighlightTokensAsync(message, cancellationToken);
             }
         }
 
@@ -963,7 +963,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
             {
-                await enhancedViewItemViewModel.HandleUnhighlightTokensAsync(message, cancellationToken);
+                await enhancedViewItemViewModel.UnhighlightTokensAsync(message, cancellationToken);
             }
         }
     }
