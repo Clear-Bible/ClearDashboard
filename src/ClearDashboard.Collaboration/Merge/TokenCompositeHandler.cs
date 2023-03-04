@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Collaboration.Exceptions;
+using ClearDashboard.DAL.CQRS;
+using MediatR;
+using ClearDashboard.DAL.Alignment.Corpora;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -38,7 +41,7 @@ public class TokenCompositeHandler : DefaultMergeHandler
                         .Select(e => e.Id)
                         .FirstOrDefault();
 
-                    logger.LogInformation($"Converted TokenComposite TokenizedCorpusId ('{tokenizedCorpusId}') / VerseRowLocation ('{verseRowLocation}') to VerseRowId ('{verseRowId}')");
+                    logger.LogDebug($"Converted TokenComposite TokenizedCorpusId ('{tokenizedCorpusId}') / VerseRowLocation ('{verseRowLocation}') to VerseRowId ('{verseRowId}')");
                     return verseRowId;
                 }
                 else
@@ -57,34 +60,6 @@ public class TokenCompositeHandler : DefaultMergeHandler
             Enumerable.Empty<string>());
     }
 
-    // FIXME:  need to talk out this logic with someone.  I think what I need to do
-    // is approach this at a low level - no business logic - and assume that the
-    // snapshot carries across changes to affected Translations and Alignments.
-
-    protected override async Task HandleDeleteAsync<T>(T itemToDelete, CancellationToken cancellationToken)
-    {
-        await base.HandleDeleteAsync(itemToDelete, cancellationToken);
-    }
-
-    protected override async Task<Guid> HandleCreateAsync<T>(T itemToCreate, CancellationToken cancellationToken)
-    {
-        await base.HandleCreateAsync(itemToCreate, cancellationToken);
-
-        if (typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
-        {
-            // FIXME:
-            // Not only do we need to create the TokenComposite record itself,
-            // but we also need to find all TokenLocation tokens and set their
-            // TokenCompositeId.
-
-            throw new NotImplementedException($"FIXME:  Need to add assigning Tokens to TokenComposite as part of HandleCreate");
-        }
-        else
-        {
-            throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
-        }
-    }
-
     public static ProjectDbContextMergeQueryAsync GetDeleteCompositesByVerseRowIdQueryAsync(Guid verseRowId)
     {
         /*
@@ -100,7 +75,7 @@ DELETE FROM TokenComponent WHERE Id IN
 )
          */
         return
-            async (ProjectDbContext projectDbContext, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
 
                 await projectDbContext.TokenComposites
                     .Where(tc => tc.TokenCompositeTokenAssociations
@@ -113,7 +88,7 @@ DELETE FROM TokenComponent WHERE Id IN
     public static ProjectDbContextMergeQueryAsync GetDeleteTokenComponentsByVerseRowIdQueryAsync(Guid verseRowId)
     {
         return
-            async (ProjectDbContext projectDbContext, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
 
                 await projectDbContext.TokenComponents
                     .Where(tc => tc.VerseRowId == verseRowId)
@@ -122,77 +97,148 @@ DELETE FROM TokenComponent WHERE Id IN
             };
     }
 
+    // FIXME:  need to talk out this logic with someone.  I think what I need to do
+    // is approach this at a low level - no business logic - and assume that the
+    // snapshot carries across changes to affected Translations and Alignments.
+
+    protected override async Task HandleDeleteAsync<T>(T itemToDelete, CancellationToken cancellationToken)
+    {
+        await base.HandleDeleteAsync(itemToDelete, cancellationToken);
+    }
+
+    protected override async void HandleCreateComplete<T>(T itemToCreate)
+    {
+        base.HandleCreateComplete(itemToCreate);
+
+        if (!typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
+        {
+            throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
+        }
+
+        // Not only do we need to create the TokenComposite record itself,
+        // but we also need to find all TokenLocation tokens and set their
+        // TokenCompositeId.
+
+        await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+            $"In HandleCreateAsync associating new TokenComposite with child Tokens",
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+
+                var tokenCompositeId = (Guid)itemToCreate.PropertyValues["Id"]!;
+                var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues["TokenizedCorpusId"]!;
+                var parallelCorpusId = (Guid?)itemToCreate.PropertyValues["ParallelCorpusId"];
+                var tokenLocations = (IEnumerable<string>)itemToCreate.PropertyValues["TokenLocations"]!;
+
+                var tokenLocationMap = projectDbContext.Tokens
+                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                    .Where(e => tokenLocations.Contains(e.EngineTokenId))
+                    .ToDictionary(e => e.EngineTokenId!, e => e);
+
+                var leftover = tokenLocationMap.Keys.Except(tokenLocations);
+                if (leftover.Any())
+                {
+                    throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain tokens: {string.Join(", ", leftover)}");
+                }
+
+                if (tokenLocationMap.Values
+                    .SelectMany(t => t.TokenCompositeTokenAssociations
+                        .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId }))
+                    .Any(tap => tap.TokenCompositeId != tokenCompositeId && tap.ParallelCorpusId == parallelCorpusId))
+                {
+                    throw new PropertyResolutionException($"Merge conflict:  CompositeToken '{tokenCompositeId}' snapshot contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches '{parallelCorpusId}'.");
+                }
+
+                // Add the tokens to the composite:
+                var tokenAssocationsToAdd = tokenLocationMap
+                    .Select(l => new Models.TokenCompositeTokenAssociation
+                    {
+                        TokenId = l.Value.Id,
+                        TokenCompositeId = tokenCompositeId
+                    })
+                    .ToList();
+
+                projectDbContext.TokenCompositeTokenAssociations.AddRange(tokenAssocationsToAdd);
+                await Task.CompletedTask;
+            });
+    }
+
     public override async Task HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
     {
         await base.HandleModifyPropertiesAsync<T>(modelDifference, itemToModify, cancellationToken);
 
-        if (typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
-        {
-            // If the modifications included changes to which tokens were part of
-            // the composite, we need to do two things:
-            //  - remove the previous child tokens
-            //  - add the new child tokens
-
-            var tokenLocationDifference = modelDifference.PropertyDifferences
-                .Where(pd => pd.PropertyName == "TokenLocations")
-                .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ListDifference<string>)))
-                .FirstOrDefault();
-            if (tokenLocationDifference is null)
-            {
-                return;
-            }
-
-            var snapshot = (IModelSnapshot<Models.TokenComposite>)itemToModify;
-            var valueListDifference = (ListDifference<string>)tokenLocationDifference.PropertyValueDifference;
-            var tokenLocationsOnlyIn1 = valueListDifference.ListMembershipDifference.OnlyIn1;
-            var tokenLocationsOnlyIn2 = valueListDifference.ListMembershipDifference.OnlyIn2;
-
-            await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-                $"Applying TokenComposite 'TokenLocations' property ListMembershipDifference (OnlyIn1: {string.Join(", ", tokenLocationsOnlyIn1)}, OnlyIn2: {string.Join(", ", tokenLocationsOnlyIn2)})", 
-                async (ProjectDbContext projectDbContext, ILogger logger, CancellationToken cancellationToken) => {
-
-                    var tokenCompositeId = (Guid)snapshot.EntityPropertyValues["Id"]!;
-                    var tokenizedCorpusId = (Guid)snapshot.EntityPropertyValues["TokenizedCorpusId"]!;
-
-                    var tokenLocationMap = projectDbContext.Tokens
-                        .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
-                        .Where(e => tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2).Contains(e.EngineTokenId))
-                        .ToDictionary(e => e.EngineTokenId!, e => e.Id);
-
-                    var leftover = tokenLocationMap.Keys.Except(tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2));
-                    if (leftover.Any())
-                    {
-                        throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain tokens: {string.Join(", ", leftover)}");
-                    }
-
-                    // Remove the OnlyIn1 tokens from the composite:
-                    var tokenIdsOnlyIn1 = tokenLocationMap
-                                .Where(l => tokenLocationsOnlyIn1.Contains(l.Key))
-                                .Select(l => l.Value)
-                                .ToList();
-                    var tokenAssocationsToRemove = projectDbContext.TokenCompositeTokenAssociations
-                            .Where(a => tokenIdsOnlyIn1.Contains(a.TokenId));
-
-                    projectDbContext.RemoveRange(tokenAssocationsToRemove);
-
-                    // Add the OnlyIn2 tokens to the composite:
-                    var tokenAssocationsToAdd = tokenLocationMap
-                        .Where(l => tokenLocationsOnlyIn2.Contains(l.Key)).ToList()
-                        .Select(l => new Models.TokenCompositeTokenAssociation
-                        {
-                            TokenId = l.Value,
-                            TokenCompositeId = tokenCompositeId
-                        })
-                        .ToList();
-
-                    projectDbContext.TokenCompositeTokenAssociations.AddRange(tokenAssocationsToAdd);
-                    await Task.CompletedTask;
-                });
-        }
-        else
+        if (!typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
         {
             throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
         }
+
+        // If the modifications included changes to which tokens were part of
+        // the composite, we need to do two things:
+        //  - remove the previous child tokens
+        //  - add the new child tokens
+
+        var tokenLocationDifference = modelDifference.PropertyDifferences
+            .Where(pd => pd.PropertyName == "TokenLocations")
+            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ListDifference<string>)))
+            .FirstOrDefault();
+        if (tokenLocationDifference is null)
+        {
+            return;
+        }
+
+        var snapshot = (IModelSnapshot<Models.TokenComposite>)itemToModify;
+        var valueListDifference = (ListDifference<string>)tokenLocationDifference.PropertyValueDifference;
+        var tokenLocationsOnlyIn1 = valueListDifference.ListMembershipDifference.OnlyIn1;
+        var tokenLocationsOnlyIn2 = valueListDifference.ListMembershipDifference.OnlyIn2;
+
+        await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
+            $"Applying TokenComposite 'TokenLocations' property ListMembershipDifference (OnlyIn1: {string.Join(", ", tokenLocationsOnlyIn1)}, OnlyIn2: {string.Join(", ", tokenLocationsOnlyIn2)})", 
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+
+                var tokenCompositeId = (Guid)snapshot.PropertyValues["Id"]!;
+                var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;
+                var parallelCorpusId = (Guid?)snapshot.PropertyValues["ParallelCorpusId"];
+
+                var tokenLocationMap = projectDbContext.Tokens
+                    .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
+                    .Where(e => tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2).Contains(e.EngineTokenId))
+                    .ToDictionary(e => e.EngineTokenId!, e => e);
+
+                var leftover = tokenLocationMap.Keys.Except(tokenLocationsOnlyIn1.Union(tokenLocationsOnlyIn2));
+                if (leftover.Any())
+                {
+                    throw new PropertyResolutionException($"Tokenized corpus {tokenizedCorpusId} does not contain tokens: {string.Join(", ", leftover)}");
+                }
+
+                // Remove the OnlyIn1 tokens from the composite:
+                var tokenIdsOnlyIn1 = tokenLocationMap
+                            .Where(l => tokenLocationsOnlyIn1.Contains(l.Key))
+                            .Select(l => l.Value.Id)
+                            .ToList();
+                var tokenAssocationsToRemove = projectDbContext.TokenCompositeTokenAssociations
+                        .Where(a => tokenIdsOnlyIn1.Contains(a.TokenId));
+
+                projectDbContext.RemoveRange(tokenAssocationsToRemove);
+
+                if (tokenLocationMap.Values
+                    .SelectMany(t => t.TokenCompositeTokenAssociations
+                        .Select(ta => new { ta.TokenCompositeId, ta.TokenComposite!.ParallelCorpusId }))
+                    .Any(tap => tap.TokenCompositeId != tokenCompositeId && tap.ParallelCorpusId == parallelCorpusId))
+                {
+                    throw new PropertyResolutionException($"Merge conflict:  CompositeToken '{tokenCompositeId}' snapshot contains tokens already part of a composite having a ParallelCorpusId (null or non-null) that matches '{parallelCorpusId}'.");
+                }
+
+                // Add the OnlyIn2 tokens to the composite:
+                var tokenAssocationsToAdd = tokenLocationMap
+                    .Where(l => tokenLocationsOnlyIn2.Contains(l.Key)).ToList()
+                    .Select(l => new Models.TokenCompositeTokenAssociation
+                    {
+                        TokenId = l.Value.Id,
+                        TokenCompositeId = tokenCompositeId
+                    })
+                    .ToList();
+
+                projectDbContext.TokenCompositeTokenAssociations.AddRange(tokenAssocationsToAdd);
+                await Task.CompletedTask;
+            });
     }
 
     public Expression<Func<Models.TokenComposite, bool>> BuildTokenChildWhereExpression(IModelSnapshot<Models.TokenComposite> snapshot, Guid tokenizedCorpusId, IEnumerable<string> tokenLocations)

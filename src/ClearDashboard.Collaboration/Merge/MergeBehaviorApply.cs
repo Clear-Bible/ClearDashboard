@@ -94,7 +94,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
             throw new Exception($"Insert model command for type {itemToCreate.EntityType.ShortDisplayName()} is already in progress");
         }
 
-        _logger.LogInformation($"Creating insert command for model type {itemToCreate.EntityType.ShortDisplayName()}");
+        _logger.LogDebug($"Creating insert command for model type {itemToCreate.EntityType.ShortDisplayName()}");
 
         var command = CreateModelSnapshotInsertCommandNoParameters(_connection, itemToCreate);
         _insertCommandsByType.Add(itemToCreate.EntityType, command);
@@ -107,15 +107,10 @@ public class MergeBehaviorApply : MergeBehaviorBase
             throw new Exception($"Insert model command for type {itemToCreate.EntityType.ShortDisplayName()} has not been created yet");
         }
 
-        _logger.LogInformation($"Running insert command for model type:  '{itemToCreate.EntityType.ShortDisplayName()}' having id '{itemToCreate.GetId()}'");
+        _logger.LogDebug($"Running insert command for model type:  '{itemToCreate.EntityType.ShortDisplayName()}' having id '{itemToCreate.GetId()}'");
 
         var command = _insertCommandsByType[itemToCreate.EntityType];
         var id = AddModelSnapshotParametersToInsertCommand(command, itemToCreate);
-
-        foreach (DbParameter p in command.Parameters)
-        {
-            _logger.LogInformation($"Parameter name {p.ParameterName}, value {p.Value}");
-        }
 
         await Task.CompletedTask;
         _ = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
@@ -130,7 +125,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
             throw new Exception($"Insert model command for type {modelType.ShortDisplayName()} has not been created yet");
         }
 
-        _logger.LogInformation($"Completing (disposing) insert command for model type:  '{modelType.ShortDisplayName()}'");
+        _logger.LogDebug($"Completing (disposing) insert command for model type:  '{modelType.ShortDisplayName()}'");
 
         _insertCommandsByType[modelType].Dispose();
         _insertCommandsByType.Remove(modelType);
@@ -144,11 +139,11 @@ public class MergeBehaviorApply : MergeBehaviorBase
         var resolvedWhereClause = ResolveWhereClause(where, itemToModify);
         var command = CreateModelSnapshotUpdateCommand(_connection, modelDifference, itemToModify, resolvedWhereClause);
 
-        _logger.LogInformation($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having id '{id}'");
+        _logger.LogDebug($"Running update command for model type: '{itemToModify.EntityType.ShortDisplayName()}' having id '{id}'");
 
         foreach (DbParameter p in command.Parameters)
         {
-            _logger.LogInformation($"Parameter name {p.ParameterName}, value {p.Value}");
+            _logger.LogDebug($"Parameter name {p.ParameterName}, value {p.Value}");
         }
 
         await Task.CompletedTask;
@@ -162,8 +157,8 @@ public class MergeBehaviorApply : MergeBehaviorBase
 
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
-        _logger.LogInformation($"Running handler '{GetType().Name}' specific query:  '{description}'");
-        await query.Invoke(_projectDbContext, _logger, cancellationToken);
+        _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
+        await query.Invoke(_projectDbContext, MergeCache, _logger, cancellationToken);
     }
 
     public override object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver propertyValueConverter)

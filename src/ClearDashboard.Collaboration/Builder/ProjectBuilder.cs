@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.Collaboration.Serializer;
@@ -32,6 +33,21 @@ public class ProjectBuilder : GeneralModelBuilder<Models.Project>
             });
 
         return modelSnapshot;
+    }
+
+    public static Models.Project BuildModel(GeneralModel<Models.Project> modelSnapshot)
+    {
+        var project = new Models.Project();
+
+        foreach (var propertyInfo in typeof(Models.Project).GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (propertyInfo.CanWrite && modelSnapshot.PropertyValues.TryGetValue(propertyInfo.Name, out var value))
+            {
+                propertyInfo.SetValue(project, value);
+            }
+        }
+
+        return project;
     }
 
     public static Models.Project GetProject(ProjectDbContext projectDbContext)

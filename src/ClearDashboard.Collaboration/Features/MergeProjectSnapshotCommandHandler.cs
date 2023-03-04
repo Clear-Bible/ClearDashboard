@@ -1,4 +1,5 @@
-﻿using ClearDashboard.Collaboration.DifferenceModel;
+﻿using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Merge;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.DAL.Alignment.Corpora;
@@ -9,6 +10,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,14 +59,12 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
                 {
                     projectInDatabase.LastMergedCommitSha = request.CommitShaToMerge;
                 }
-                else
-                {
-                    var backupPath = Path.Combine(FilePathTemplates.ProjectBaseDirectory, CollaborationManager.BackupsFolder);
-                    projectDifferences.Serialize(backupPath);
-                }
+
+                BuilderContext builderContext = new(ProjectDbContext);
+                var currentProjectSnapshot = GetProjectSnapshotQueryHandler.LoadSnapshot(builderContext);
 
                 var merger = new Merger(new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior));
-                await merger.MergeAsync(projectDifferences, request.ProjectSnapshotLastMerged, request.ProjectSnapshotToMerge, cancellationToken);
+                await merger.MergeAsync(projectDifferences, currentProjectSnapshot, request.ProjectSnapshotToMerge, cancellationToken);
 
                 await mergeBehavior.MergeEndAsync(cancellationToken);
                 // FIXME:  temporary, for testing:
@@ -73,6 +73,7 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
             catch (Exception ex)
             {
                 await mergeBehavior.MergeErrorAsync(cancellationToken);
+                Logger.LogInformation($"Exception of type '{ex.GetType().ShortDisplayName()}': {ex.Message}");
 
                 return new RequestResult<Unit>
                 (

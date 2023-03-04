@@ -93,6 +93,8 @@ public class ProjectSnapshotFilesFactory
             {
                 SaveGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(parentPath, modelSnapshot);
             });
+
+        SaveTopLevelEntities(_path, projectSnapshot.GetGeneralModelList<Models.User>(), null);
     }
 
     private void SaveTopLevelEntities<T>(

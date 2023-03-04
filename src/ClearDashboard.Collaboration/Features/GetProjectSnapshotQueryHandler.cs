@@ -61,27 +61,7 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
         try
         {
             BuilderContext builderContext = new (ProjectDbContext);
-
-            var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(builderContext));
-
-            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Corpus>().BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TokenizedCorpus>().BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.ParallelCorpus>().BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.AlignmentSet>().BuildModelSnapshots(builderContext));
-            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TranslationSet>().BuildModelSnapshots(builderContext));
-
-            // Notes has to come after any other model type
-            // it might reference:
-            var notes = new List<GeneralModel<Models.Note>>();
-            var noteBuilder = (NoteBuilder)GeneralModelBuilder.GetModelBuilder<Models.Note>();
-
-            NoteBuilder.GetNotes(ProjectDbContext).ToList().ForEach(n =>
-            {
-                notes.Add(noteBuilder.BuildModelSnapshot(n, builderContext));
-            });
-
-            projectSnapshot.AddGeneralModelList(notes);
-            projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Label>().BuildModelSnapshots(builderContext));
+            var projectSnapshot = LoadSnapshot(builderContext);
 
             return new RequestResult<ProjectSnapshot>(projectSnapshot);
 
@@ -93,5 +73,32 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
                 message: ex.Message
             );
         }
+    }
+
+    internal static ProjectSnapshot LoadSnapshot(BuilderContext builderContext)
+    {
+        var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(builderContext));
+
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Corpus>().BuildModelSnapshots(builderContext));
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TokenizedCorpus>().BuildModelSnapshots(builderContext));
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.ParallelCorpus>().BuildModelSnapshots(builderContext));
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.AlignmentSet>().BuildModelSnapshots(builderContext));
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TranslationSet>().BuildModelSnapshots(builderContext));
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.User>().BuildModelSnapshots(builderContext));
+
+        // Notes has to come after any other model type
+        // it might reference:
+        var notes = new List<GeneralModel<Models.Note>>();
+        var noteBuilder = (NoteBuilder)GeneralModelBuilder.GetModelBuilder<Models.Note>();
+
+        NoteBuilder.GetNotes(builderContext.ProjectDbContext).ToList().ForEach(n =>
+        {
+            notes.Add(noteBuilder.BuildModelSnapshot(n, builderContext));
+        });
+
+        projectSnapshot.AddGeneralModelList(notes);
+        projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Label>().BuildModelSnapshots(builderContext));
+
+        return projectSnapshot;
     }
 }

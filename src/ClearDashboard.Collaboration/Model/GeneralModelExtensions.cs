@@ -8,6 +8,8 @@ using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.Collaboration.Exceptions;
 using SIL.Machine.Tokenization;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Model;
 
@@ -34,6 +36,15 @@ internal static class GeneralModelExtensions
             .ToList();
     }
 
+    internal static IEnumerable<PropertyInfo> GetMappedPrimitiveProperties(this Type entityType)
+    {
+        return entityType.GetProperties()
+            .Where(p => p.GetCustomAttribute(typeof(NotMappedAttribute), true) == null)
+            .Where(p => IsDatabasePrimitiveType(p.PropertyType))
+            .Where(p => p != null)
+            .ToList();
+    }
+
     internal static bool IsDatabasePrimitiveType(this Type type)
     {
         // Leaving out ancillary Dictionary database columns like 'Metadata'
@@ -41,9 +52,9 @@ internal static class GeneralModelExtensions
         // add support in GeneralModel as well as determining differences.
         return
             type.IsValueType ||
-            type == typeof(string) /* ||
+            type == typeof(string) ||
             type == typeof(Dictionary<string, object>) ||
-            type == typeof(Dictionary<string, object?>)*/;
+            type == typeof(Dictionary<string, object?>);
     }
 
     internal static GeneralModel ToGeneralModel(

@@ -6,6 +6,7 @@ namespace ClearDashboard.Collaboration.Merge;
 public class MergeCache
 {
     private readonly Dictionary<(Type EntityType, string key), Dictionary<string, object?>> _cache = new();
+    //private readonly Dictionary<(Type EntityType, (string key1, string key2)), Dictionary<string, object?>> _cache = new();
 
     public void AddCacheEntry((Type EntityType, string key) key, string name, object? value)
     {
@@ -26,6 +27,18 @@ public class MergeCache
         }
     }
 
+    public void AddCacheEntrySet((Type EntityType, string key) key, Dictionary<string, object?> value)
+    {
+        if (_cache.ContainsKey(key))
+        {
+            _cache[key] = value;
+        }
+        else
+        {
+            _cache.Add(key, value);
+        }
+    }
+
     public bool TryLookupCacheEntry((Type EntityType, string key) key, string name, out object? value)
     {
         value = null;
@@ -35,6 +48,11 @@ public class MergeCache
         }
 
         return false;
+    }
+
+    public bool ContainsKey((Type EntityType, string key) key)
+    {
+        return _cache.ContainsKey(key);
     }
 }
 

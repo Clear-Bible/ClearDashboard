@@ -21,6 +21,7 @@ namespace ClearDashboard.Collaboration;
 public class ProjectDifferences
 {
     public IModelDifference<IModelSnapshot<Models.Project>> Project { get; private set; }
+    public IListDifference<IModelSnapshot<Models.User>> Users { get; private set; }
     public IListDifference<IModelSnapshot<Models.Corpus>> Corpora { get; private set; }
     public IListDifference<IModelSnapshot<Models.TokenizedCorpus>> TokenizedCorpora { get; private set; }
     public IListDifference<IModelSnapshot<Models.ParallelCorpus>> ParallelCorpora { get; private set; }
@@ -32,6 +33,7 @@ public class ProjectDifferences
     public ProjectDifferences(ProjectSnapshot snapshot1, ProjectSnapshot snapshot2) {
 
         Project = ((IModelDistinguishable<IModelSnapshot<Models.Project>>)snapshot1.Project).GetModelDifference(snapshot2.Project);
+        Users = snapshot1.Users.GetListDifference(snapshot2.Users);
         Corpora = snapshot1.Corpora.GetListDifference(snapshot2.Corpora);
         TokenizedCorpora = snapshot1.TokenizedCorpora.GetListDifference(snapshot2.TokenizedCorpora);
         ParallelCorpora = snapshot1.ParallelCorpora.GetListDifference(snapshot2.ParallelCorpora);
@@ -65,6 +67,9 @@ public class ProjectDifferences
 
         var serializedProjectDifferences = JsonSerializer.Serialize(Project, jsonSerializerOptions);
         File.WriteAllText(Path.Combine(path, "_ProjectDiffs"), serializedProjectDifferences);
+
+        var serializedUserDifferences = JsonSerializer.Serialize(Users, jsonSerializerOptions);
+        File.WriteAllText(Path.Combine(path, "_UserDiffs"), serializedUserDifferences);
 
         var serializedCorporaDifferences = JsonSerializer.Serialize(Corpora, jsonSerializerOptions);
         File.WriteAllText(Path.Combine(path, "_CorporaDiffs"), serializedCorporaDifferences);

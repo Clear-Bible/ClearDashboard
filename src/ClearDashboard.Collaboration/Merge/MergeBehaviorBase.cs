@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Common;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Reflection;
+using System.Text.Json;
 using ClearBible.Engine.Utils;
 using ClearDashboard.Collaboration.Builder;
 using ClearDashboard.Collaboration.DifferenceModel;
@@ -17,11 +19,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using SIL.EventsAndDelegates;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public delegate Task ProjectDbContextMergeQueryAsync(ProjectDbContext projectDbContext, ILogger logger, CancellationToken cancellationToken = default);
+public delegate Task ProjectDbContextMergeQueryAsync(ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken = default);
 public delegate object? EntityValueResolver(IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger);
 
 public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
@@ -30,6 +33,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
     protected readonly ILogger _logger;
     protected readonly DateTimeOffsetToBinaryConverter _dateTimeOffsetToBinary;
+    protected readonly NullabilityInfoContext _nullabilityContext;
 
     protected readonly Dictionary<
         Type,
@@ -45,6 +49,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         MergeCache = mergeCache;
         _logger = logger;
         _dateTimeOffsetToBinary = new DateTimeOffsetToBinaryConverter();
+        _nullabilityContext = new NullabilityInfoContext();
     }
 
     public void AddEntityTypeDiscriminatorMapping(
@@ -86,8 +91,9 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
     protected DbCommand CreateModelSnapshotInsertCommandNoParameters(DbConnection connection, IModelSnapshot modelSnapshot)
     {
-        var columns = modelSnapshot.EntityType.GetProperties()
-            .Where(p => p.PropertyType.IsDatabasePrimitiveType())
+        var entityProperties = modelSnapshot.EntityType.GetMappedPrimitiveProperties().ToDictionary(p => p.Name, p => p);
+
+        var columns = entityProperties.Values
             .Select(p => p.Name)
             .ToList();
 
@@ -102,6 +108,15 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         var command = connection.CreateCommand();
         DataUtil.ApplyColumnsToInsertCommand(command, tableType, columns.ToArray());
         command.Prepare();
+
+        foreach (DbParameter p in command.Parameters)
+        {
+            var propertyName = p.ParameterName.Substring(1);  // Skip the @ at the start of each ParameterName
+            if (entityProperties.TryGetValue(propertyName, out var property))
+            {
+                p.Value = property.ToDefaultDatabaseCommandParameterValue();
+            }
+        }
 
         return command;
     }
@@ -146,7 +161,7 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
             if (discriminator.colName == propertyName)
             {
-                command.Parameters[discriminator.colName].Value = discriminator.colValue;
+                command.Parameters[p.ParameterName].Value = discriminator.colValue;
                 continue;
             }
 
@@ -158,7 +173,8 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 continue;
             }
 
-            throw new InvalidModelStateException($"No property or property converter found for property '{propertyName}' of entity type '{entityType.ShortDisplayName()}'");
+            //_logger.LogInformation($"No property or property converter found for property '{propertyName}' of entity type '{entityType.ShortDisplayName()}', setting to null during insert");
+            //throw new InvalidModelStateException($"No property or property converter found for property '{propertyName}' of entity type '{entityType.ShortDisplayName()}'");
         }
 
         return identityPropertyValue;
@@ -387,7 +403,9 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 
 public static class DbCommandExtensions
 {
-    public static string GetGeneratedQuery(this DbCommand dbCommand)
+    private static readonly NullabilityInfoContext _nullabilityContext = new();
+
+    internal static string GetGeneratedQuery(this DbCommand dbCommand)
     {
         var query = dbCommand.CommandText;
         foreach (DbParameter parameter in dbCommand.Parameters)
@@ -398,7 +416,38 @@ public static class DbCommandExtensions
         return query;
     }
 
-    public static object ToDatabaseCommandParameterValue(this object? value, DateTimeOffsetToBinaryConverter dateTimeOffsetToBinary)
+    internal static object? ToDefaultDatabaseCommandParameterValue(this PropertyInfo property)
+    {
+        var nullabilityInfo = _nullabilityContext.Create(property);
+
+        if (property.PropertyType.IsAssignableTo(typeof(Dictionary<string, object?>)))
+        {
+            var columnAttribute = (ColumnAttribute?)property.GetCustomAttribute(typeof(ColumnAttribute), true);
+            if (columnAttribute?.TypeName == "jsonb")
+            {
+                if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
+                {
+                    return JsonSerializer.Serialize(new Dictionary<string, object?>());
+                }
+            }
+        }
+
+        if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
+        {
+            if (property.PropertyType.IsValueType)
+            {
+                return Activator.CreateInstance(property.PropertyType);
+            }
+            else
+            {
+                throw new NotImplementedException($"Default value generator for non-nullable property of type '{property.PropertyType.ShortDisplayName()}' not implemented.");
+            }
+        }
+
+        return DBNull.Value;
+    }
+
+    internal static object ToDatabaseCommandParameterValue(this object? value, DateTimeOffsetToBinaryConverter dateTimeOffsetToBinary)
     {
         if (value is DateTimeOffset)
         {
@@ -408,7 +457,7 @@ public static class DbCommandExtensions
         return value != null ? value : DBNull.Value;
     }
 
-    public static Type ToDomainEntityIdType(this string domainEntityTypeName)
+    internal static Type ToDomainEntityIdType(this string domainEntityTypeName)
     {
         Type entityIdType = typeof(EntityId<>);
         Type[] typeArgs = { Type.GetType(domainEntityTypeName)! };

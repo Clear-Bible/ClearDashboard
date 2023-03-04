@@ -64,7 +64,8 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
 
         var identityPropertyValue = (
             alignment.alignment.AlignmentSetId.ToString() +
-            modelProperties[SOURCE_TOKEN_LOCATION]
+            modelProperties[SOURCE_TOKEN_LOCATION] +
+            modelProperties[TARGET_TOKEN_LOCATION]
         ).ToMD5String();
 
         var alignmentModelSnapshot = new GeneralModel<Models.Alignment>(BuildPropertyRefName(), $"Alignment_{identityPropertyValue}");

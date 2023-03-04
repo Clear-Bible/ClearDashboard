@@ -19,14 +19,14 @@ namespace ClearDashboard.Collaboration.Services;
 
 public class CollaborationManager
 {
-	private readonly ILogger<CollaborationManager> _logger;
-	private readonly IMediator _mediator;
-	private readonly IUserProvider _userProvider;
-	private readonly IProjectProvider _projectProvider;
-	private readonly string _repositoryPath = FilePathTemplates.ProjectBaseDirectory;
+    private readonly ILogger<CollaborationManager> _logger;
+    private readonly IMediator _mediator;
+    private readonly IUserProvider _userProvider;
+    private readonly IProjectProvider _projectProvider;
+    private readonly string _repositoryPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
 
     private readonly CollaborationConfiguration _configuration;
-    private readonly bool _logMergeOnly = true;
+    private readonly bool _logMergeOnly = false;
 
     public const string RemoteOrigin = "origin";
     public const string BackupsFolder = "Backups";
@@ -45,6 +45,8 @@ public class CollaborationManager
 
         _configuration = configuration;
     }
+
+    public string RepositoryPath => _repositoryPath;
 
     private Models.Project EnsureCurrentProject()
     {
@@ -83,6 +85,25 @@ public class CollaborationManager
                 Remote remote = repo.Network.Remotes[RemoteOrigin];
 
                 var refSpec = repo.Config.Get<string>("remote", remote.Name, "fetch");
+            }
+        }
+    }
+
+    public async Task InitializeProjectDatabaseAsync(Guid projectId, CancellationToken cancellationToken)
+    {
+        using (var repo = new Repository(_repositoryPath))
+        {
+            // FIXME:  if no commits, don't run mediatr command
+            var headCommitSha = repo.Commits.Select(c => c.Sha).FirstOrDefault();
+
+            if (headCommitSha is not null)
+            {
+                var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId);
+                var result = await _mediator.Send(command, cancellationToken);
+            }
+            else
+            {
+                throw new CommitNotFoundException($"No commits found for project Id '{projectId}' with which to initialize project database");
             }
         }
     }
@@ -179,13 +200,16 @@ public class CollaborationManager
         var factory = new ProjectSnapshotFromGitFactory(_repositoryPath, _logger);
 
         var projectSnapshotLastMerged = (lastMergedCommitShaIndex == -1)
-            ? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(project)
+            ? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(project.Id)
             : factory.LoadSnapshot(project.LastMergedCommitSha!, project.Id);
 
         var projectSnapshotToMerge = factory.LoadSnapshot(headCommitSha, project.Id);
 
         // Create a backup snapshot of the current database:
-        await CreateBackupAsync(cancellationToken);
+        if (lastMergedCommitShaIndex > 0)
+        {
+            await CreateBackupAsync(cancellationToken);
+        }
 
         // Merge into the project database:
         var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, _logMergeOnly);
@@ -271,7 +295,7 @@ public class CollaborationManager
 
         //GitHelper.RetrieveStatus(path, Logger, LibGit2Sharp.FileStatus.NewInIndex, LibGit2Sharp.FileStatus.ModifiedInIndex, LibGit2Sharp.FileStatus.RenamedInIndex, LibGit2Sharp.FileStatus.DeletedFromIndex);
 
-        _ = EnsureCurrentProject();
+        //_ = EnsureCurrentProject();
 
         // FIXME:  check to see if there are any changes to commit
 

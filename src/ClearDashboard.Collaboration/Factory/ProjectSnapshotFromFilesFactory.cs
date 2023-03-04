@@ -30,11 +30,36 @@ public class ProjectSnapshotFromFilesFactory
         _jsonDeserializerOptions = ProjectSnapshotFactoryCommon.JsonDeserializerOptions;
     }
 
+    public GeneralModel<Models.Project> LoadProject(string commitSha, Guid projectId)
+    {
+        var topLevelEntries = Directory.EnumerateFileSystemEntries(_path).OrderBy(n => n);
+        var projectModelSnapshot = LoadProjectProperties(topLevelEntries);
+
+        return projectModelSnapshot;
+    }
+
+    public IEnumerable<GeneralModel<Models.User>> LoadUsers(string commitSha, Guid projectId)
+    {
+        var topLevelEntries = Directory.EnumerateFileSystemEntries(_path).OrderBy(n => n);
+
+        var topLevelEntry = topLevelEntries
+            .Where(s => Path.GetFileName(s).Equals(topLevelEntityFolderNameMappings[typeof(Models.User)]))
+            .SingleOrDefault();
+
+        if (topLevelEntry is null)
+        {
+            throw new SerializedDataException($"No '{topLevelEntityFolderNameMappings[typeof(Models.User)]}' entry found in top level project entries");
+        }
+
+        return LoadTopLevelEntities<Models.User>(topLevelEntry, null);
+    }
+
     public ProjectSnapshot LoadSnapshot()
     {
         var topLevelEntries = Directory.EnumerateFileSystemEntries(_path).OrderBy(n => n);
 
-        var projectSnapshot = LoadProjectIntoSnapshot(topLevelEntries);
+        var projectModelSnapshot = LoadProjectProperties(topLevelEntries);
+        var projectSnapshot = new ProjectSnapshot(projectModelSnapshot);
 
         foreach (var topLevelEntry in topLevelEntries)
         {
@@ -102,12 +127,16 @@ public class ProjectSnapshotFromFilesFactory
                     }));
 
             }
+            else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.User)])
+            {
+                projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.User>(topLevelEntry, null));
+            }
         }
 
         return projectSnapshot;
     }
 
-    private ProjectSnapshot LoadProjectIntoSnapshot(IEnumerable<string> topLevelEntries)
+    private GeneralModel<Models.Project> LoadProjectProperties(IEnumerable<string> topLevelEntries)
     {
         var projectPropertiesEntry = topLevelEntries.Where(s => Path.GetFileName(s).Equals(ProjectSnapshotFactoryCommon.PROPERTIES_FILE)).Single();
 
@@ -122,8 +151,7 @@ public class ProjectSnapshotFromFilesFactory
             throw new SerializedDataException($"Unable to deserialize type 'GeneralModel<Models.Project>' properties at path {projectPropertiesEntry}");
         }
 
-        var projectSnapshot = new ProjectSnapshot(projectModelSnapshot!);
-        return projectSnapshot;
+        return projectModelSnapshot;
     }
 
     private IEnumerable<GeneralModel<T>> LoadTopLevelEntities<T>(

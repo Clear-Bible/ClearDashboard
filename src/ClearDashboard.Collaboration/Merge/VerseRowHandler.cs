@@ -16,7 +16,7 @@ namespace ClearDashboard.Collaboration.Merge;
 public class VerseRowHandler : DefaultMergeHandler
 {
     public List<(string bookChapterVerse, string text, bool isSentenceStart)> VerseRowsForTokenization = new();
-    public Dictionary<(string bookChapterVerse, Guid tokenizedCorpusId), Guid> VerseRowLookup = new();
+    public Dictionary<(string bookChapterVerse, Guid tokenizedCorpusId), (Guid verseRowId, Guid userId)> VerseRowLookup = new();
 
     public VerseRowHandler(MergeContext mergeContext): base(mergeContext)
     {
@@ -38,7 +38,7 @@ public class VerseRowHandler : DefaultMergeHandler
                         .Select(e => e.Id)
                         .FirstOrDefault();
 
-                    logger.LogInformation($"Converted VerseRow having TokenizedCorpusId ('{tokenizedCorpusId}') / BookChapterVerse ('{bookChapterVerse}') to VerseRowId ('{verseRowId}')");
+                    logger.LogDebug($"Converted VerseRow having TokenizedCorpusId ('{tokenizedCorpusId}') / BookChapterVerse ('{bookChapterVerse}') to VerseRowId ('{verseRowId}')");
                     return verseRowId;
                 }
                 else
@@ -55,6 +55,7 @@ public class VerseRowHandler : DefaultMergeHandler
     protected void AddVerseRowForTokenization(Guid id, IModelSnapshot<Models.VerseRow> modelSnapshot, IModelDifference<IModelSnapshot<Models.VerseRow>>? modelDifference)
     {
         Guid tokenizedCorpusId = (Guid)modelSnapshot.PropertyValues[nameof(Models.VerseRow.TokenizedCorpusId)]!;
+        Guid userId = (Guid)modelSnapshot.PropertyValues[nameof(Models.VerseRow.UserId)]!;
         string bookChapterVerse = (string)modelSnapshot.PropertyValues[nameof(Models.VerseRow.BookChapterVerse)]!;
         string? originalText = (string?)modelSnapshot.PropertyValues[nameof(Models.VerseRow.OriginalText)];
         bool isSentenceStart = (bool)modelSnapshot.PropertyValues[nameof(Models.VerseRow.IsSentenceStart)]!;
@@ -86,7 +87,7 @@ public class VerseRowHandler : DefaultMergeHandler
         }
 
         VerseRowsForTokenization.Add((bookChapterVerse, originalText!, isSentenceStart));
-        VerseRowLookup.Add((bookChapterVerse, tokenizedCorpusId), id);
+        VerseRowLookup.Add((bookChapterVerse, tokenizedCorpusId), (id, userId));
     }
 
     protected override async Task HandleDeleteAsync<T>(T itemToDelete, CancellationToken cancellationToken)

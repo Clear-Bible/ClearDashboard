@@ -37,25 +37,45 @@ public class ProjectSnapshotFromGitFactory
         _jsonDeserializerOptions = ProjectSnapshotFactoryCommon.JsonDeserializerOptions;
     }
 
+    public GeneralModel<Models.Project> LoadProject(string commitSha, Guid projectId)
+    {
+        using (var repo = new Repository(_repositoryPath))
+        {
+            var topLevelEntries = Initialize(commitSha, projectId, repo);
+            var projectModelSnapshot = LoadProjectProperties(topLevelEntries);
+
+            return projectModelSnapshot;
+        }
+    }
+
+    public IEnumerable<GeneralModel<Models.User>> LoadUsers(string commitSha, Guid projectId)
+    {
+        using (var repo = new Repository(_repositoryPath))
+        {
+            var topLevelEntries = Initialize(commitSha, projectId, repo);
+
+            var topLevelEntry = topLevelEntries
+                .Where(te => te.TargetType == TreeEntryTargetType.Tree)
+                .Where(te => te.Name == topLevelEntityFolderNameMappings[typeof(Models.User)])
+                .SingleOrDefault();
+
+            if (topLevelEntry is null)
+            {
+                throw new SerializedDataException($"No '{topLevelEntityFolderNameMappings[typeof(Models.User)]}' entry found in top level project entries");
+            }
+
+            return LoadTopLevelEntities<Models.User>(topLevelEntry, repo, commitSha, null);
+        }
+    }
+
     public ProjectSnapshot LoadSnapshot(string commitSha, Guid projectId)
 	{
         using (var repo = new Repository(_repositoryPath))
         {
-            var commit = repo.Commits.Where(c => c.Id.StartsWith(commitSha)).SingleOrDefault();
-            if (commit is null)
-            {
-                throw new CommitNotFoundException(commitSha);
-            }
+            var topLevelEntries = Initialize(commitSha, projectId, repo);
+            var projectModelSnapshot = LoadProjectProperties(topLevelEntries);
 
-            var projectFolderName = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, projectId);
-
-            var topLevelEntries = repo.Lookup<Tree>($"{commitSha}:{projectFolderName}");
-            if (topLevelEntries is null)
-            {
-                throw new CommitObjectNotFoundException($"{commitSha}:{projectFolderName}");
-            }
-
-            var projectSnapshot = LoadProjectIntoSnapshot(topLevelEntries);
+            var projectSnapshot = new ProjectSnapshot(projectModelSnapshot);
 
             foreach (var topLevelEntry in topLevelEntries.Where(te => te.TargetType == TreeEntryTargetType.Tree).OrderBy(te => te.Name))
             {
@@ -134,13 +154,36 @@ public class ProjectSnapshotFromGitFactory
                         }));
 
                 }
+                else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.User)])
+                {
+                    projectSnapshot.AddGeneralModelList(LoadTopLevelEntities<Models.User>(topLevelEntry, repo, commitSha, null));
+                }
             }
 
             return projectSnapshot;
         }
     }
 
-    private ProjectSnapshot LoadProjectIntoSnapshot(IEnumerable<TreeEntry> topLevelEntries)
+    private static Tree Initialize(string commitSha, Guid projectId, Repository repo)
+    {
+        var commit = repo.Commits.Where(c => c.Id.StartsWith(commitSha)).SingleOrDefault();
+        if (commit is null)
+        {
+            throw new CommitNotFoundException(commitSha);
+        }
+
+        var projectFolderName = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, projectId);
+
+        var topLevelEntries = repo.Lookup<Tree>($"{commitSha}:{projectFolderName}");
+        if (topLevelEntries is null)
+        {
+            throw new CommitObjectNotFoundException($"{commitSha}:{projectFolderName}");
+        }
+
+        return topLevelEntries;
+    }
+
+    private GeneralModel<Models.Project> LoadProjectProperties(IEnumerable<TreeEntry> topLevelEntries)
     {
         var projectPropertiesEntry = topLevelEntries
             .Where(te => te.TargetType == TreeEntryTargetType.Blob && te.Name == ProjectSnapshotFactoryCommon.PROPERTIES_FILE)
@@ -157,8 +200,7 @@ public class ProjectSnapshotFromGitFactory
             throw new SerializedDataException($"Unable to deserialize type 'GeneralModel<Models.Project>' properties at path {projectPropertiesEntry.Path}");
         }
 
-        var projectSnapshot = new ProjectSnapshot(projectModelSnapshot!);
-        return projectSnapshot;
+        return projectModelSnapshot;
     }
 
     private IEnumerable<GeneralModel<T>> LoadTopLevelEntities<T>(

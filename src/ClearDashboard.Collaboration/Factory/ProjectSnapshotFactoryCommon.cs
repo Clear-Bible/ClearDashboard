@@ -30,7 +30,8 @@ public class ProjectSnapshotFactoryCommon
         { typeof(Models.Note), "Notes" },
         { typeof(Models.TokenizedCorpus), "TokenizedCorpora" },
         { typeof(Models.ParallelCorpus), "ParallelCorpora" },
-        { typeof(Models.TranslationSet), "TranslationSets" }
+        { typeof(Models.TranslationSet), "TranslationSets" },
+        { typeof(Models.User), "Users" }
     };
 
     public static readonly Dictionary<Type, (string folderName, string childName)> childFolderNameMappings = new() {
@@ -76,9 +77,20 @@ public class ProjectSnapshotFactoryCommon
                 }
     };
 
-    public static ProjectSnapshot BuildEmptySnapshot(Models.Project project)
+    public static ProjectSnapshot BuildEmptySnapshot(Guid projectId)
     {
-        return new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(project));
+        var modelSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(new Models.Project() { Id = projectId }));
+
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.User>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Corpus>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.TokenizedCorpus>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.ParallelCorpus>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.AlignmentSet>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.TranslationSet>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Note>>());
+        modelSnapshot.AddGeneralModelList(Enumerable.Empty<GeneralModel<Models.Label>>());
+
+        return modelSnapshot;
     }
 }
 

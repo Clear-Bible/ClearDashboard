@@ -73,18 +73,18 @@ public class AlignmentHandler : DefaultMergeHandler
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Alignment>");
                 }
 
-                if (modelSnapshot.EntityPropertyValues.TryGetValue("SourceTokenComponentLocation", out var sourceTokenComponentLocation) &&
-                    modelSnapshot.EntityPropertyValues.TryGetValue(nameof(Models.Alignment.AlignmentSetId), out var alignmentSetId))
+                if (modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation) &&
+                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Alignment.AlignmentSetId), out var alignmentSetId))
                 {
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)sourceTokenComponentLocation!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
 
-                    logger.LogInformation($"Converted Alignment having SourceTokenComponentLocation ('{sourceTokenComponentLocation}') / AlignmentSetId ('{alignmentSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
+                    logger.LogDebug($"Converted Alignment having SourceTokenLocation ('{SourceTokenLocation}') / AlignmentSetId ('{alignmentSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
                     return sourceTokenComponentId;
                 }
                 else
                 {
-                    throw new PropertyResolutionException($"Alignment snapshot does not have both AlignmentSetId+SourceTokenComponentLocation, which are required for SourceTokenComponentId resolution.");
+                    throw new PropertyResolutionException($"Alignment snapshot does not have both AlignmentSetId+SourceTokenLocation, which are required for SourceTokenComponentId resolution.");
                 }
             });
 
@@ -97,18 +97,18 @@ public class AlignmentHandler : DefaultMergeHandler
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Alignment>");
                 }
 
-                if (modelSnapshot.EntityPropertyValues.TryGetValue("TargetTokenComponentLocation", out var targetTokenComponentLocation) &&
-                    modelSnapshot.EntityPropertyValues.TryGetValue(nameof(Models.Alignment.AlignmentSetId), out var alignmentSetId))
+                if (modelSnapshot.PropertyValues.TryGetValue("TargetTokenLocation", out var TargetTokenLocation) &&
+                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Alignment.AlignmentSetId), out var alignmentSetId))
                 {
                     var targetTokenizedCorpusId = LookupTargetTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
-                    var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)targetTokenComponentLocation!, cache);
+                    var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, cache);
 
-                    logger.LogInformation($"Converted Alignment having TargetTokenComponentLocation ('{targetTokenComponentLocation}') / AlignmentSetId ('{alignmentSetId}') to TargetTokenComponentId ('{targetTokenComponentId}')");
+                    logger.LogDebug($"Converted Alignment having TargetTokenLocation ('{TargetTokenLocation}') / AlignmentSetId ('{alignmentSetId}') to TargetTokenComponentId ('{targetTokenComponentId}')");
                     return targetTokenComponentId;
                 }
                 else
                 {
-                    throw new PropertyResolutionException($"Alignment snapshot does not have both AlignmentSetId+TargetTokenComponentLocation, which are required for TargetTokenComponentId resolution.");
+                    throw new PropertyResolutionException($"Alignment snapshot does not have both AlignmentSetId+TargetTokenLocation, which are required for TargetTokenComponentId resolution.");
                 }
             });
 
@@ -121,22 +121,26 @@ public class AlignmentHandler : DefaultMergeHandler
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Alignment>");
                 }
 
-                if (modelSnapshot.EntityPropertyValues.TryGetValue("AlignmentSetId", out var alignmentSetId) &&
-                    modelSnapshot.EntityPropertyValues.TryGetValue("SourceTokenComponentLocation", out var sourceTokenComponentLocation))
+                if (modelSnapshot.PropertyValues.TryGetValue("AlignmentSetId", out var alignmentSetId) &&
+                    modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation) &&
+                    modelSnapshot.PropertyValues.TryGetValue("TargetTokenLocation", out var TargetTokenLocation))
                 {
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)sourceTokenComponentLocation!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
+                    var targetTokenizedCorpusId = LookupTargetTokenizedCorpusId(projectDbContext, (Guid)alignmentSetId!, cache);
+                    var targetTokenComponentId = LookupTokenComponent(projectDbContext, targetTokenizedCorpusId, (string)TargetTokenLocation!, cache);
 
                     var alignmentId = projectDbContext.Alignments
                         .Where(e => e.AlignmentSetId == (Guid)alignmentSetId!)
                         .Where(e => e.SourceTokenComponentId == sourceTokenComponentId)
+                        .Where(e => e.TargetTokenComponentId == targetTokenComponentId)
                         .Select(e => e.Id)
                         .FirstOrDefault();
 
                     if (alignmentId == default)
                         throw new PropertyResolutionException($"AlignmentSetId '{alignmentSetId}' and SourceTokenComponentId '{sourceTokenComponentId}' cannot be resolved to a Alignment");
 
-                    logger.LogInformation($"Resolved AlignmentSetId ('{alignmentSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') to Id ('{alignmentId}')");
+                    logger.LogDebug($"Resolved AlignmentSetId ('{alignmentSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') to Id ('{alignmentId}')");
                     return alignmentId;
                 }
                 else
@@ -154,11 +158,11 @@ public class AlignmentHandler : DefaultMergeHandler
             new[] { nameof(Models.Alignment.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), "SourceTokenComponentLocation"),
+            (typeof(Models.Alignment), "SourceTokenLocation"),
             new[] { nameof(Models.Alignment.SourceTokenComponentId) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Alignment), "TargetTokenComponentLocation"),
+            (typeof(Models.Alignment), "TargetTokenLocation"),
             new[] { nameof(Models.Alignment.TargetTokenComponentId) });
 
         // By mapping Location to an empty property name string, we effectively

@@ -31,9 +31,11 @@ public class Merger
         await handler.DeleteListDifferencesAsync(differencesToApply.ParallelCorpora, currentSnapshot.ParallelCorpora, cancellationToken);
         await handler.DeleteListDifferencesAsync(differencesToApply.TokenizedCorpora, currentSnapshot.TokenizedCorpora, cancellationToken);
         await handler.DeleteListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, cancellationToken);
+        await handler.DeleteListDifferencesAsync(differencesToApply.Users, currentSnapshot.Users, cancellationToken);
 
         // Order these are done is important since later model types
         // are dependent upon earlier model types:
+        await handler.CreateListDifferencesAsync(differencesToApply.Users, currentSnapshot.Users, cancellationToken);
         await handler.CreateListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, cancellationToken);
         await handler.CreateListDifferencesAsync(differencesToApply.TokenizedCorpora, currentSnapshot.TokenizedCorpora, cancellationToken);
         await handler.CreateListDifferencesAsync(differencesToApply.ParallelCorpora, currentSnapshot.ParallelCorpora, cancellationToken);
@@ -44,6 +46,7 @@ public class Merger
 
         // Order these are done is important since later model types
         // are dependent upon earlier model types:
+        await handler.ModifyListDifferencesAsync(differencesToApply.Users, currentSnapshot.Users, targetCommitSnapshot.Users, cancellationToken);
         await handler.ModifyListDifferencesAsync(differencesToApply.Corpora, currentSnapshot.Corpora, targetCommitSnapshot.Corpora, cancellationToken);
         await handler.ModifyListDifferencesAsync(differencesToApply.TokenizedCorpora, currentSnapshot.TokenizedCorpora, targetCommitSnapshot.TokenizedCorpora, cancellationToken);
         await handler.ModifyListDifferencesAsync(differencesToApply.ParallelCorpora, currentSnapshot.ParallelCorpora, targetCommitSnapshot.ParallelCorpora, cancellationToken);

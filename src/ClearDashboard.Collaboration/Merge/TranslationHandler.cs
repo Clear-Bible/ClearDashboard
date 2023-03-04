@@ -51,18 +51,18 @@ public class TranslationHandler : DefaultMergeHandler
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Translation>");
                 }
 
-                if (modelSnapshot.EntityPropertyValues.TryGetValue("SourceTokenComponentLocation", out var sourceTokenComponentLocation) &&
-                    modelSnapshot.EntityPropertyValues.TryGetValue(nameof(Models.Translation.TranslationSetId), out var translationSetId))
+                if (modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation) &&
+                    modelSnapshot.PropertyValues.TryGetValue(nameof(Models.Translation.TranslationSetId), out var translationSetId))
                 {
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)translationSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)sourceTokenComponentLocation!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
 
-                    logger.LogInformation($"Converted Translation having SourceTokenComponentLocation ('{sourceTokenComponentLocation}') / TranslationSetId ('{translationSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
+                    logger.LogDebug($"Converted Translation having SourceTokenLocation ('{SourceTokenLocation}') / TranslationSetId ('{translationSetId}') to SourceTokenComponentId ('{sourceTokenComponentId}')");
                     return sourceTokenComponentId;
                 }
                 else
                 {
-                    throw new PropertyResolutionException($"Translation snapshot does not have both TranslationSetId+SourceTokenComponentLocation, which are required for SourceTokenComponentId resolution.");
+                    throw new PropertyResolutionException($"Translation snapshot does not have both TranslationSetId+SourceTokenLocation, which are required for SourceTokenComponentId resolution.");
                 }
             });
 
@@ -75,11 +75,11 @@ public class TranslationHandler : DefaultMergeHandler
                     throw new ArgumentException($"modelSnapshot must be an instance of IModelSnapshot<Models.Translation>");
                 }
 
-                if (modelSnapshot.EntityPropertyValues.TryGetValue("TranslationSetId", out var translationSetId) &&
-                    modelSnapshot.EntityPropertyValues.TryGetValue("SourceTokenComponentLocation", out var sourceTokenComponentLocation))
+                if (modelSnapshot.PropertyValues.TryGetValue("TranslationSetId", out var translationSetId) &&
+                    modelSnapshot.PropertyValues.TryGetValue("SourceTokenLocation", out var SourceTokenLocation))
                 {
                     var sourceTokenizedCorpusId = LookupSourceTokenizedCorpusId(projectDbContext, (Guid)translationSetId!, cache);
-                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)sourceTokenComponentLocation!, cache);
+                    var sourceTokenComponentId = LookupTokenComponent(projectDbContext, sourceTokenizedCorpusId, (string)SourceTokenLocation!, cache);
 
                     var translationId = projectDbContext.Translations
                         .Where(e => e.TranslationSetId == (Guid)translationSetId!)
@@ -90,7 +90,7 @@ public class TranslationHandler : DefaultMergeHandler
                     if (translationId == default)
                         throw new PropertyResolutionException($"TranslationSetId '{translationSetId}' and SourceTokenComponentId '{sourceTokenComponentId}' cannot be resolved to a Translation");
 
-                    logger.LogInformation($"Resolved TranslationSetId ('{translationSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') to Id ('{translationId}')");
+                    logger.LogDebug($"Resolved TranslationSetId ('{translationSetId}') / SourceTokenComponentId ('{sourceTokenComponentId}') to Id ('{translationId}')");
                     return translationId;
                 }
                 else
@@ -108,7 +108,7 @@ public class TranslationHandler : DefaultMergeHandler
             new[] { nameof(Models.Translation.Id) });
 
         mergeContext.MergeBehavior.AddPropertyNameMapping(
-            (typeof(Models.Translation), "SourceTokenComponentLocation"),
+            (typeof(Models.Translation), "SourceTokenLocation"),
             new[] { nameof(Models.Translation.SourceTokenComponentId) });
     }
 }

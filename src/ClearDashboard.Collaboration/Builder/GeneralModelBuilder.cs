@@ -62,7 +62,7 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
             modelProperties.Add(n!, (typeof(Guid?), modelInstance.GetType().GetProperty(n!)!.GetValue(modelInstance, null)));
         });
 
-        foreach (PropertyInfo property in modelInstance.GetType().GetProperties().OrderBy(p => p.Name))
+        foreach (PropertyInfo property in modelInstance.GetType().GetMappedPrimitiveProperties().OrderBy(p => p.Name))
         {
             if ((ignorePropertyNames?.Contains(property.Name) ?? false) ||
                 property.Name == identityProperty?.Name ||
@@ -71,10 +71,7 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
                 continue;
             }
 
-            if (property.PropertyType.IsDatabasePrimitiveType())
-            {
-                modelProperties.Add(property.Name, (property.PropertyType, property.GetValue(modelInstance, null)));
-            }
+            modelProperties.Add(property.Name, (property.PropertyType, property.GetValue(modelInstance, null)));
         }
 
         var generalModel = new GeneralModel<T>(identityPropertyName, identityPropertyValue);
@@ -133,7 +130,7 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
             }
         });
 
-        foreach (PropertyInfo property in modelInstance.GetType().GetProperties().OrderBy(p => p.Name))
+        foreach (PropertyInfo property in modelInstance.GetType().GetMappedPrimitiveProperties().OrderBy(p => p.Name))
         {
             if ((ignorePropertyNames?.Contains(property.Name) ?? false) ||
                 foreignKeyPropertyNames.Contains(property.Name))
@@ -141,20 +138,17 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
                 continue;
             }
 
-            if (property.PropertyType.IsDatabasePrimitiveType())
+            if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
             {
-                if (property.PropertyType == typeof(Guid) || property.PropertyType == typeof(Guid?))
+                var guidValue = property.GetValue(modelInstance, null);
+                if (guidValue is not null && property.Name == identityProperty?.Name)
                 {
-                    var guidValue = property.GetValue(modelInstance, null);
-                    if (guidValue is not null && property.Name == identityProperty?.Name)
-                    {
-                        builderContext.UpsertIdToIndexValue(modelInstanceTypeName, (Guid)guidValue);
-                        continue;
-                    }
+                    builderContext.UpsertIdToIndexValue(modelInstanceTypeName, (Guid)guidValue);
+                    continue;
                 }
-
-                modelProperties.Add(property.Name, (property.PropertyType, property.GetValue(modelInstance, null)));
             }
+
+            modelProperties.Add(property.Name, (property.PropertyType, property.GetValue(modelInstance, null)));
         }
 
         return modelProperties;

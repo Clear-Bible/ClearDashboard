@@ -28,6 +28,7 @@ public sealed class MergeContext
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenizedCorpus>), new TokenizedCorpusHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.VerseRow>), new VerseRowHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenComposite>), new TokenCompositeHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.AlignmentSet>), new AlignmentSetHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Alignment>), new AlignmentHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Translation>), new TranslationHandler(this));
         _mergeHandlerRegistry.Add(typeof(NoteModelRef), new NoteModelRefHandler(this));
@@ -36,6 +37,16 @@ public sealed class MergeContext
     public DefaultMergeHandler FindMergeHandler<T>()
     {
         if (_mergeHandlerRegistry.TryGetValue(typeof(T), out var mergeHandler))
+        {
+            return mergeHandler;
+        }
+
+        return DefaultMergeHandler;
+    }
+
+    public DefaultMergeHandler FindMergeHandler(Type type)
+    {
+        if (_mergeHandlerRegistry.TryGetValue(type, out var mergeHandler))
         {
             return mergeHandler;
         }
