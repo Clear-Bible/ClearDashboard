@@ -96,7 +96,7 @@ public class DefaultMergeHandler
         var modelMergeResult = ModelMergeResult.Unset;
         if (modelDifference.HasDifferences)
         {
-            _mergeContext.Logger.LogInformation($"Checking merge of: '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
+            _mergeContext.Logger.LogDebug($"Checking merge of: '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
 
             foreach (var pd in modelDifference.PropertyDifferences
                 .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference))))
@@ -240,6 +240,8 @@ public class DefaultMergeHandler
                     await handler.HandleCreateAsync(onlyIn2, cancellationToken);
                     handler.HandleCreateComplete(onlyIn2);
 
+                    _mergeContext.Logger.LogInformation($"Inserted {onlyIn2.EntityType.ShortDisplayName()} having id '{onlyIn2.GetId()}'");
+
                     await handler.CreateChildrenAsync(onlyIn2, cancellationToken);
                 }
                 else
@@ -276,10 +278,12 @@ public class DefaultMergeHandler
                     if (itemInTargetCommitSnapshot is not null)
                     {
                         // FIXME:  does this mean it got deleted locally but in the commits it
-                        // was never deleted but modified instead?  
+                        // was never deleted but modified instead?
                         handler.HandleCreateStart(itemInTargetCommitSnapshot);
                         await handler.HandleCreateAsync(itemInTargetCommitSnapshot, cancellationToken);
                         handler.HandleCreateComplete(itemInTargetCommitSnapshot);
+
+                        _mergeContext.Logger.LogInformation($"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having id '{itemInTargetCommitSnapshot.GetId()}'");
                     }
                     else
                     {
@@ -401,6 +405,8 @@ public class DefaultMergeHandler
     {
         foreach (var childName in parentSnapshot.Children.Keys)
         {
+            _mergeContext.Logger.LogInformation($"Inserting {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'");
+
             Type childType = parentSnapshot.Children[childName].GetType().GetGenericArguments()[0];
             if (childType.IsAssignableToGenericType(typeof(IModelSnapshot<>)) && childType.GetGenericArguments().Any())
             {
@@ -411,7 +417,9 @@ public class DefaultMergeHandler
             MethodInfo createMethod = typeof(DefaultMergeHandler).GetMethod(nameof(DefaultMergeHandler.CreateListItemsAsync), BindingFlags.Instance | BindingFlags.Public)!;
             MethodInfo createMethodGeneric = createMethod.MakeGenericMethod(childType);
             dynamic createAwaitable = createMethodGeneric.Invoke(this, new object?[] { parentSnapshot.Children[childName], cancellationToken })!;
-            await createAwaitable;
+            var insertCount = await createAwaitable;
+
+            _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'");
         }
     }
 

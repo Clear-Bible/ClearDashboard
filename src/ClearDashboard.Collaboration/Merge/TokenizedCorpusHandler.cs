@@ -68,7 +68,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             {
                 _mergeContext.Logger.LogInformation($"Inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
                 await ImportManuscriptVerseRowsTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot!, cancellationToken);
-                _mergeContext.Logger.LogInformation($"Inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
+                _mergeContext.Logger.LogInformation($"Completed inserting tokens for manuscript tokenized corpus '{parentSnapshot.GetId()}'");
             }
         }
 
