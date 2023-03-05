@@ -13,6 +13,11 @@ namespace ClearDashboard.DAL.Alignment.Features
 {
     public static class ModelHelper
     {
+        public static readonly IReadOnlyDictionary<string, int> BookAbbreviationsToNumbers =
+            FileGetBookIds.BookIds.ToDictionary(
+                x => x.silCannonBookAbbrev,
+                x => int.Parse(x.silCannonBookNum), StringComparer.OrdinalIgnoreCase);
+
         public static CompositeToken BuildCompositeToken(Models.TokenComposite tokenComposite, IEnumerable<Models.Token> tokens, IEnumerable<Models.Token>? otherTokens = null)
         {
             var ct = new CompositeToken(

@@ -14,6 +14,10 @@ using ClearDashboard.Collaboration.Merge;
 using System.Configuration;
 using System.Security.Policy;
 using Microsoft.VisualBasic;
+using ClearDashboard.Collaboration.Builder;
+using ClearDashboard.Collaboration.Model;
+using System.Text.Json;
+using Paratext.PluginInterfaces;
 
 namespace ClearDashboard.Collaboration.Services;
 
@@ -89,11 +93,59 @@ public class CollaborationManager
         }
     }
 
+    private IReadOnlyDictionary<Guid, GeneralModel<Models.Project>> GetAllProjectModelSnapshotsById()
+    {
+        var projects = new Dictionary<Guid, GeneralModel<Models.Project>>();
+        foreach (var d in Directory.GetDirectories(RepositoryPath, "Project_*"))
+        {
+            var projectPropertiesFilePath = d + Path.DirectorySeparatorChar + "_Properties";
+            if (File.Exists(projectPropertiesFilePath))
+            {
+                var serializedProjectModelSnapshot = File.ReadAllText(projectPropertiesFilePath);
+
+                var projectModelSnapshot = JsonSerializer.Deserialize<GeneralModel<Models.Project>>(
+                    serializedProjectModelSnapshot,
+                    ProjectSnapshotFactoryCommon.JsonDeserializerOptions);
+
+                if (projectModelSnapshot is null)
+                {
+                    throw new SerializedDataException($"Serialized project data invalid at path: {projectPropertiesFilePath}");
+                }
+
+                projects.Add((Guid)projectModelSnapshot.GetId(), projectModelSnapshot);
+            }
+        }
+
+        return projects;
+    }
+
+    public IEnumerable<Guid> GetAllProjectIds()
+    {
+        return GetAllProjectModelSnapshotsById().Keys;
+    }
+
+    public bool LoadIntoProjectProvider(Guid projectId)
+    {
+        var projectModelSnapshot = GetAllProjectModelSnapshotsById()
+            .Where(e => e.Key == projectId)
+            .Select(e => e.Value)
+            .FirstOrDefault();
+
+        if (projectModelSnapshot is null)
+        {
+            return false;
+        }
+
+        var project = ProjectBuilder.BuildModel(projectModelSnapshot);
+        _projectProvider.CurrentProject = project;
+
+        return true;
+    }
+
     public async Task InitializeProjectDatabaseAsync(Guid projectId, CancellationToken cancellationToken)
     {
         using (var repo = new Repository(_repositoryPath))
         {
-            // FIXME:  if no commits, don't run mediatr command
             var headCommitSha = repo.Commits.Select(c => c.Sha).FirstOrDefault();
 
             if (headCommitSha is not null)
@@ -160,7 +212,7 @@ public class CollaborationManager
         }
     }
 
-    public async Task MergeLatestChangesAsync(CancellationToken cancellationToken)
+    public async Task MergeProjectLatestChangesAsync(CancellationToken cancellationToken)
     {
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
@@ -208,7 +260,7 @@ public class CollaborationManager
         // Create a backup snapshot of the current database:
         if (lastMergedCommitShaIndex > 0)
         {
-            await CreateBackupAsync(cancellationToken);
+            await CreateProjectBackupAsync(cancellationToken);
         }
 
         // Merge into the project database:
@@ -217,7 +269,7 @@ public class CollaborationManager
         result.ThrowIfCanceledOrFailed();
     }
 
-    public async Task CreateBackupAsync(CancellationToken cancellationToken)
+    public async Task CreateProjectBackupAsync(CancellationToken cancellationToken)
     {
         var project = EnsureCurrentProject();
 
@@ -236,7 +288,7 @@ public class CollaborationManager
         factory.SaveSnapshot(result.Data!);
     }
 
-    public async Task StageChangesAsync(CancellationToken cancellationToken)
+    public async Task StageProjectChangesAsync(CancellationToken cancellationToken)
     {
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
@@ -259,11 +311,20 @@ public class CollaborationManager
         }
     }
 
-    public IEnumerable<string> RetrieveProjectStatus()
+    public IEnumerable<string> RetrieveFileStatuses(Guid? projectIdFilter = default)
     {
         EnsureValidRepository(_repositoryPath);
 
+        var statusOptions = new LibGit2Sharp.StatusOptions();
+        if (projectIdFilter != default)
+        {
+            var projectFolderName = ProjectSnapshotFactoryCommon.ToProjectFolderName((Guid)projectIdFilter!);
+            statusOptions.PathSpec = new[] { $"{projectFolderName}{Path.DirectorySeparatorChar}" }; 
+        }
+
         FileStatus[] fileStatuses = {
+            LibGit2Sharp.FileStatus.NewInWorkdir,
+            LibGit2Sharp.FileStatus.ModifiedInWorkdir,
             LibGit2Sharp.FileStatus.NewInIndex,
             LibGit2Sharp.FileStatus.ModifiedInIndex,
             LibGit2Sharp.FileStatus.RenamedInIndex,
@@ -274,7 +335,7 @@ public class CollaborationManager
 
         using (var repo = new Repository(_repositoryPath))
         {
-            foreach (var item in repo.RetrieveStatus(new LibGit2Sharp.StatusOptions()))
+            foreach (var item in repo.RetrieveStatus(statusOptions))
             {
                 if (fileStatuses.Where(fs => item.State.HasFlag(fs)).Any())
                 {
