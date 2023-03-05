@@ -161,9 +161,9 @@ DELETE FROM TokenComponent WHERE Id IN
             });
     }
 
-    public override async Task HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
     {
-        await base.HandleModifyPropertiesAsync<T>(modelDifference, itemToModify, cancellationToken);
+        var modified = await base.HandleModifyPropertiesAsync<T>(modelDifference, itemToModify, cancellationToken);
 
         if (!typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
         {
@@ -181,7 +181,7 @@ DELETE FROM TokenComponent WHERE Id IN
             .FirstOrDefault();
         if (tokenLocationDifference is null)
         {
-            return;
+            return modified;
         }
 
         var snapshot = (IModelSnapshot<Models.TokenComposite>)itemToModify;
@@ -239,6 +239,8 @@ DELETE FROM TokenComponent WHERE Id IN
                 projectDbContext.TokenCompositeTokenAssociations.AddRange(tokenAssocationsToAdd);
                 await Task.CompletedTask;
             });
+
+        return modified;
     }
 
     public Expression<Func<Models.TokenComposite, bool>> BuildTokenChildWhereExpression(IModelSnapshot<Models.TokenComposite> snapshot, Guid tokenizedCorpusId, IEnumerable<string> tokenLocations)

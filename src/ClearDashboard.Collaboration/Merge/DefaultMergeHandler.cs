@@ -160,7 +160,7 @@ public class DefaultMergeHandler
         return modelMergeResult;
     }
 
-    public virtual async Task HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public virtual async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
         where T : IModelDistinguishable
     {
         if (typeof(T).IsAssignableTo(typeof(IModelSnapshot)))
@@ -177,12 +177,16 @@ public class DefaultMergeHandler
 
                 var where = new Dictionary<string, object>() { { modelSnapshotToModify.IdentityKey, modelSnapshotToModify.EntityPropertyValues[modelSnapshotToModify.IdentityKey]! } };
                 await _mergeContext.MergeBehavior.ModifyModelAsync(modelDifference, modelSnapshotToModify, where, cancellationToken);
+
+                return true;
             }
         }
         else
         {
             throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
         }
+
+        return false;
     }
 
     public async Task DeleteListDifferencesAsync<T>(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, CancellationToken cancellationToken = default)
@@ -246,7 +250,7 @@ public class DefaultMergeHandler
                 }
                 else
                 {
-                    var modelDifference = (IModelDifference<T>)onlyIn2.GetModelDifference((IModelDistinguishable<T>)itemInCurrentSnapshot);
+                    var modelDifference = (IModelDifference<T>)itemInCurrentSnapshot.GetModelDifference((IModelDistinguishable<T>)onlyIn2);
                     await handler.HandleModifyPropertiesAsync<T>(modelDifference, itemInCurrentSnapshot, cancellationToken);
                 }
             }

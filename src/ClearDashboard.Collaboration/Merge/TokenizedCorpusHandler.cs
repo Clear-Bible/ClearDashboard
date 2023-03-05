@@ -30,12 +30,25 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
     {
     }
 
-    public override async Task HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
     {
-        await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
+        var modified = await base.HandleModifyPropertiesAsync(modelDifference, itemToModify, cancellationToken);
 
-        // FIXME:  if the last tokenized date is greater than in this db,
-        // and the tokenizer function is different, tokenize?  
+        if (modified)
+        {
+            var tokenizationDifference = modelDifference.PropertyDifferences
+                .Where(pd => pd.PropertyName == nameof(Models.TokenizedCorpus.TokenizationFunction))
+                .Select(pd => (ValueDifference<string>)pd.PropertyValueDifference)
+                .FirstOrDefault();
+
+            if (tokenizationDifference is not null)
+            {
+                // FIXME:  delete all existing tokens for this tokenized corpus and retokenize?
+
+            }
+        }
+
+        return modified;
     }
 
     protected override async Task CreateChildrenAsync<T>(T parentSnapshot, CancellationToken cancellationToken)

@@ -24,12 +24,12 @@ public class CollaborationManager
     private readonly IUserProvider _userProvider;
     private readonly IProjectProvider _projectProvider;
     private readonly string _repositoryPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Collaboration";
+    private readonly string _backupsPath = FilePathTemplates.ProjectBaseDirectory + Path.DirectorySeparatorChar + "Backups";
 
     private readonly CollaborationConfiguration _configuration;
     private readonly bool _logMergeOnly = false;
 
     public const string RemoteOrigin = "origin";
-    public const string BackupsFolder = "Backups";
 
     public CollaborationManager(
 		ILogger<CollaborationManager> logger,
@@ -221,8 +221,7 @@ public class CollaborationManager
     {
         var project = EnsureCurrentProject();
 
-        var backupsPath = Path.Combine(_repositoryPath, BackupsFolder);
-        Directory.CreateDirectory(backupsPath);
+        Directory.CreateDirectory(_backupsPath);
 
         var folderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id) +
             DateTimeOffset.UtcNow.ToString("__yyyy-MM-dd_HH-mm-ss");
@@ -233,7 +232,7 @@ public class CollaborationManager
         result.ThrowIfCanceledOrFailed();
 
         // Save it to the local backup directory:
-        var factory = new ProjectSnapshotFilesFactory(Path.Combine(backupsPath, folderName), _logger);
+        var factory = new ProjectSnapshotFilesFactory(Path.Combine(_backupsPath, folderName), _logger);
         factory.SaveSnapshot(result.Data!);
     }
 

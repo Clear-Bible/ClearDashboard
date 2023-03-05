@@ -123,7 +123,7 @@ public class VerseRowHandler : DefaultMergeHandler
         return id;
     }
 
-    public override async Task HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
+    public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
     {
         if (typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.VerseRow>)))
         {
@@ -153,6 +153,8 @@ public class VerseRowHandler : DefaultMergeHandler
 
                     AddVerseRowForTokenization(verseRowId, modelSnapshotToModify, modelSnapshotDifference);
                 }
+
+                return true;
             }
         }
         else
@@ -160,6 +162,7 @@ public class VerseRowHandler : DefaultMergeHandler
             throw new NotImplementedException($"Derived merge handler with '{typeof(T).ShortDisplayName()}' model-specific HandleModifyProperties functionality");
         }
 
+        return false;
     }
 
     public Expression<Func<Models.VerseRow, bool>> BuildVerseRowLookupWhereExpression(IModelSnapshot<Models.VerseRow> snapshot)
