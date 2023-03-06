@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace ClearDashboard.DataAccessLayer.Threading;
 
-public class LongRunningTask : IDisposable
+public class LongRunningTask : IDisposable, IEquatable<LongRunningTask>
 {
     public LongRunningTask(string name, CancellationTokenSource cancellationTokenSource, LongRunningTaskStatus status = LongRunningTaskStatus.NotStarted)
     {
@@ -33,5 +33,22 @@ public class LongRunningTask : IDisposable
     {
         CancellationTokenSource?.Dispose();
         CancellationTokenSource = null;
+    }
+
+    public bool Equals(LongRunningTask? other)
+    {
+        return Equals((object?)other);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj?.GetType() == typeof(LongRunningTask) && 
+           obj is LongRunningTask longRunningTask &&
+           Name == longRunningTask.Name;
+
+    }
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
     }
 }

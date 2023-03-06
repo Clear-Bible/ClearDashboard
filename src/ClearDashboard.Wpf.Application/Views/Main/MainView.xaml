@@ -18,7 +18,8 @@
     xmlns:panes="clr-namespace:ClearDashboard.Wpf.Application.Views.Panes"
     xmlns:paratextViews="clr-namespace:ClearDashboard.Wpf.Application.Views.ParatextViews"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime" 
+    xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.Views.Notes"
     Title="WorkSpaceView"
     d:DataContext="{d:DesignInstance Type=main:MainViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -192,6 +193,11 @@
                                 <paratextViews:TextCollectionsView />
                             </DataTemplate>
                         </panes:PanesTemplateSelector.TextCollectionViewTemplate>
+                        <panes:PanesTemplateSelector.NotesViewTemplate>
+                            <DataTemplate>
+                                <notes:NotesView />
+                            </DataTemplate>
+                        </panes:PanesTemplateSelector.NotesViewTemplate>
 
                     </panes:PanesTemplateSelector>
                 </DockingManager.LayoutItemTemplateSelector>

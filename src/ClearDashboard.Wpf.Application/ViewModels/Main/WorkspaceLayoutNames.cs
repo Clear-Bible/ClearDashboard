@@ -9,4 +9,5 @@ public static class WorkspaceLayoutNames
     public const string TextCollection = "TEXTCOLLECTION";
     //public const string WordMeanings = "WORDMEANINGS";
     public const string Marble = "MARBLE";
+    public const string Notes = "NOTES";
 }
