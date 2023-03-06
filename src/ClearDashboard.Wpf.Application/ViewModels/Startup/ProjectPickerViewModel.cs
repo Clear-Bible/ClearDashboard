@@ -240,18 +240,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             IsParatextInstalled = _paratextProxy.IsParatextInstalled();
             if (IsParatextRunning)
             {
-                if (!Connected)
-                {
-                    ParatextUserName = "unavailable.  Paratext is running but not connected.";
-                }
-                else
+                if (Connected)
                 {
                     ParatextUserName = ProjectManager.CurrentUser.ParatextUserName ?? ProjectManager.CurrentUser.FullName;
                 }
             }
             else
             {
-                ParatextUserName = "unavailable.  Paratext is not running.";
+                ListenForParatextStart();
             }
             if (!IsParatextInstalled)
             {
@@ -314,6 +310,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
+
+        private async void ListenForParatextStart()
+        {
+            while (!IsParatextRunning)
+            {
+                IsParatextRunning = await Task.Run(()=>_paratextProxy.IsParatextRunning()).ConfigureAwait(false);
+                Thread.Sleep(1000);
+            }
+        }
+
         public ObservableCollection<DashboardProject>? CopyDashboardProjectsToAnother(ObservableCollection<DashboardProject> original, ObservableCollection<DashboardProject>? copy)
         {
             copy.Clear();
