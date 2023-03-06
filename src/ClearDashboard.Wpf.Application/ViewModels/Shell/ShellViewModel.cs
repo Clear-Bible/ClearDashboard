@@ -501,7 +501,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
         private async Task SendUiLanguageChangeMessage(string language)
         {
-            await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+            if (!SettingLanguage)
+            {
+                await EventAggregator.PublishOnUIThreadAsync(new UiLanguageChangedMessage(language)).ConfigureAwait(false);
+            }
         }
 
         public void CopyText(BackgroundTaskStatus status)
