@@ -50,13 +50,9 @@
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Height" Value="Auto" />
-
+                    <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
                     <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" Value="LightGreen" />
-                            <Setter Property="IsSelected" Value="True" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="true">
+                        <Trigger Property="ListViewItem.IsSelected" Value="true">
                             <Setter Property="Background" Value="LightCoral" />
                         </Trigger>
                     </Style.Triggers>
@@ -69,7 +65,7 @@
                     <userControls:VerseDisplay
                         x:Name="VerseDisplay"
                         Title=""
-                        Width="{Binding ActualWidth, ElementName=Border3, Converter={converters:WidthSubtraction}, ConverterParameter='40'}"
+                        HorizontalAlignment="Stretch"
                         HorizontalSpacing="{Binding DataContext.SourceHorizontalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         IsEnabled="True"
                         NoteIndicatorHeight="{Binding DataContext.NoteIndicatorsSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"

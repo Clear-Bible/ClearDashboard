@@ -46,6 +46,16 @@ namespace ClearDashboard.DAL.Alignment.Tests
         protected virtual void SetupDependencyInjection()
         {
             var services = new ServiceCollection();
+            AddServices(services);
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            Container = builder.Build();
+        }
+
+        protected virtual void AddServices(ServiceCollection services)
+        {
             services.AddScoped<ProjectDbContext>();
             services.AddScoped<ProjectDbContextFactory>();
             services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
@@ -54,11 +64,6 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IProjectProvider, ProjectProvider>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
-
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-
-            Container = builder.Build();
         }
 
         private async void SetupTests()

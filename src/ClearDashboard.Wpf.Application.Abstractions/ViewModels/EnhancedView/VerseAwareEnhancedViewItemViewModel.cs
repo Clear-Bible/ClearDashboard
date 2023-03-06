@@ -195,7 +195,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             await GetData(ReloadType.Refresh, cancellationToken);
         }
 
-        public async Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
+        public async virtual Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
             await GetData(reloadType, cancellationToken);
         }
@@ -463,7 +463,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-      private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
+        private string CreateParallelCorpusItemTitle(ParallelCorpusEnhancedViewItemMetadatum metadatum, string localizationKey, int rowCount)
         {
             var title = $"{metadatum.ParallelCorpusDisplayName ?? string.Empty} {LocalizationService.Get(localizationKey)}";
 

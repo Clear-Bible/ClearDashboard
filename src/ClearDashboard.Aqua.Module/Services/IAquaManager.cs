@@ -10,6 +10,9 @@ namespace ClearDashboard.Aqua.Module.Services
     public interface IAquaManager
     {
         public const string AquaDialogMenuId = "AquaDialogMenuId";
+        public const string Status_Finished = "finished";
+
+        //Version endpoint
 
         /// <summary>
         /// 
@@ -26,45 +29,52 @@ namespace ClearDashboard.Aqua.Module.Services
         /// <param name="backTranslationToVersionId">identifies this version as a 
         /// backtranslation of another version in our database.</param>
         public record Version(
-            string name,
-            string isoLanguage,
-            string isoScript,
-            string abbreviation,
+            int? id,
+            string? name,
+            string? isoLanguage,
+            string? isoScript,
+            string? abbreviation,
             string? rights = null,
             int? forwardTranslationToVersionId = null,
             int? backTranslationToVersionId = null,
-            bool machineTranslation = false 
+            bool machineTranslation = false
         );
-        public Task<string> AddVersion(
-            TokenizedTextCorpusId tokenizedTextCorpusId,
-            Version versionInfo,
+
+        public Task<Version?> GetVersion(
+            int id,
+            CancellationToken cancellationToken = default);
+        public Task<Version?> AddVersion(
+            Version version,
             CancellationToken cancellationToken = default);
         public Task<IEnumerable<Version>?> ListVersions(
             CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="versionId">version.abbreviation</param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public Task DeleteVersion(
-            string versionId,
+        
+        // to obtain valid values for isoLanguage and isoString
+        public record Language(string iso693, string name);
+        public Task<IEnumerable<Language>?> ListLanguages(
             CancellationToken cancellationToken = default);
 
-        public record Revision(string info);
+        public record Script(string iso15924, string name);
+        public Task<IEnumerable<Script>?> ListScripts(
+            CancellationToken cancellationToken = default);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="tokenizedTextCorpusId"></param>
-        /// <param name="versionId">version.abbreviation</param>
-        /// <param name="cancellationToken"></param>
-        /// <param name="progressReporter"></param>
-        /// <returns></returns>
-        public Task<string> AddRevision(
+        public Task DeleteVersion(
+            int id,
+            CancellationToken cancellationToken = default);
+
+
+
+        // Revision endpoint
+        public record Revision(
+            int? id, 
+            int? version_id,
+            string? name,
+            string? date,
+            bool published = false);
+
+        public Task<Revision?> AddRevision(
             TokenizedTextCorpusId tokenizedTextCorpusId,
-            string versionId, 
+            Revision revision, 
             CancellationToken cancellationToken = default,
             IProgress<ProgressStatus>? progressReporter = null);
 
@@ -75,42 +85,72 @@ namespace ClearDashboard.Aqua.Module.Services
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public Task<IEnumerable<Revision>?> ListRevisions(
-            string versionId,
+            int? versionId,
             CancellationToken cancellationToken = default);
+
         public Task DeleteRevision(
             int revisionId,
             CancellationToken cancellationToken = default);
 
+
+
+        // Assessment endpoint
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="revision_id"></param>
+        /// <param name="reference_id"></param>
+        /// <param name="type">Valid types: "word-alignment", "sentence-length", "semantic-similarity", "missing-words", and "dummy"</param>
+        /// <param name="modal_suffix"></param>
+        /// <param name="requested_time"></param>
+        /// <param name="start_time"></param>
+        /// <param name="end_time"></param>
+        /// <param name="status"></param>
         public record Assessment(
-            string id, string? type, string? Revision, string? Version, string? status, //used in Create
-            string? reference, string? metric) // additional properties provided in List
-        {
-            public static class Type
-            {
-                public const string WordAlignment = "word-alignment";
-                public const string SentenceLength = "sentence-length";
-                public const string SemanticSimilarity = "semantic-similarity";
-                public const string Dummy = "dummy";
-            }
-        }
-        public Task<string> AddAssessment(
+            int? id, 
+            int? revision_id, 
+            int? reference_id,
+            string? type, 
+            string? modal_suffix,
+            string? requested_time,
+            string? start_time,
+            string? end_time,
+            string? status //used in Create
+            ); 
+
+        public Task<Assessment?> AddAssessment(
             Assessment assessment,
             CancellationToken cancellationToken = default);
         public Task<IEnumerable<Assessment>?> ListAssessments(
-            //string revisionId, 
+            int revisionId, 
             CancellationToken cancellationToken = default);
+
+        public Task<Assessment?> GetAssessment(
+            int assessmentId,
+        CancellationToken cancellationToken = default);
+
         public Task DeleteAssessment(
             int assessmentId,
             CancellationToken cancellationToken = default);
 
 
-        public record Result(string revision, string Book, string Chapter, IEnumerable<Verse> verses);
-        public record Verse (string vref,string text, IEnumerable<AssessmentResult> assessment_results);
-        public record AssessmentResult(string id, string? type, string? reference, string? score, string? flag, string? note);
-        public Task<Result?> GetResult(
+        // Result endpoint
+        public record Result(
+            int? id,
+            int? assessment_id,
+            string? vref,
+            string? source,
+            string? target,
+            double? score,
+            bool? flag,
+            string? type,
+            string? note);
+
+        public Task<IEnumerable<Result>?> ListResults(
             int assessmentId,
-            string bookAbbreviation,
-            int chapterNumber,
             CancellationToken cancellationToken = default );
 
     }

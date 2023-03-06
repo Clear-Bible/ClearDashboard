@@ -38,6 +38,12 @@ namespace ClearDashboard.DAL.Alignment.Notes
             return true;
         }
         public override int GetHashCode() => HashCode.Combine(Id, Created, Modified, UserId);
+
+        public override string? ToString()
+        {
+            return Id.ToString();
+        }
+
         public static bool operator ==(NoteId? e1, NoteId? e2) => object.Equals(e1, e2);
         public static bool operator !=(NoteId? e1, NoteId? e2) => !(e1 == e2);
     }

@@ -1,6 +1,7 @@
 ﻿using ClearDashboard.Wpf.Application.ViewModels;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.Marble;
+using ClearDashboard.Wpf.Application.ViewModels.Notes;
 using ClearDashboard.Wpf.Application.ViewModels.ParatextViews;
 using System.Windows;
 using System.Windows.Controls;
@@ -58,6 +59,11 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             set;
         }
 
+        public DataTemplate NotesViewTemplate
+        {
+            get;
+            set;
+        }
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             // ====================
@@ -94,6 +100,11 @@ namespace ClearDashboard.Wpf.Application.Views.Panes
             if (item is TextCollectionsViewModel)
             {
                 return TextCollectionViewTemplate;
+            }
+
+            if (item is NotesViewModel)
+            {
+                return NotesViewTemplate;
             }
 
             return base.SelectTemplate(item, container);

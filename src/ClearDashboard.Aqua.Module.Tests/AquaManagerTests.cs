@@ -1,8 +1,11 @@
+using Autofac;
+using Caliburn.Micro;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Utils;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.DAL.Alignment.Corpora;
 using ClearDashboard.DAL.Alignment.Tests;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
@@ -19,6 +22,11 @@ namespace ClearDashboard.Aqua.Module.Tests
 {
     public class AquaManagerTests : TestBase
     {
+        protected override void AddServices(ServiceCollection services)
+        {
+            base.AddServices(services);
+            services.AddSingleton<IAquaManager, AquaManager>();
+        }
         public AquaManagerTests(ITestOutputHelper output) : base(output)
         {
         }
@@ -104,17 +112,17 @@ namespace ClearDashboard.Aqua.Module.Tests
             var foo = AquaManager.CorpusInBibleNLPFormatInVrefsOrder(sourceCorpus);
         }
 
-        [Fact]
-        public async void Foo()
-        {
-            var versionInfo = new IAquaManager.Version("name1", "language1", "isoscript1", "abbreviation1", "rights1", 2, 4, true);
-            var versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
+        //[Fact]
+        //public async void Foo()
+        //{
+        //    var versionInfo = new IAquaManager.Version(null, "name1", "language1", "isoscript1", "abbreviation1", "rights1", 2, 4, true);
+        //    var versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+        //    var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
 
-            versionInfo = new IAquaManager.Version("name1", "language1", "isoscript1", "abbreviation1");
-            versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore});
-            dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
-        }
+        //    versionInfo = new IAquaManager.Version(null, "name1", "language1", "isoscript1", "abbreviation1");
+        //    versionInfoJson = JsonConvert.SerializeObject(versionInfo, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
+        //    dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(versionInfoJson);
+        //}
 
         [Fact]
         public async void PostFileEndpoint__BufferingAndProgress()
@@ -129,10 +137,10 @@ namespace ClearDashboard.Aqua.Module.Tests
 
             EventWaitHandle startedWaitHandle = new AutoResetEvent(false);
             var startTask = webServer.Start(startedWaitHandle);
-            
+
             startedWaitHandle.WaitOne();
 
-            var returnString = await AquaManager.PostStringAsFile(
+            var returnString = await AquaManager.PostStringAsFile<string>(
                 httpClient,
                 "",
                 content,
@@ -164,7 +172,82 @@ namespace ClearDashboard.Aqua.Module.Tests
 
             Assert.Equal(returnString.Length, nonBufferedResponseAsPostString.Length);
             //trim off about 45 characters at beginning and also at end to remove unique boundary guids.
-            Assert.Equal(returnString.Substring(45, returnString.Length-90), nonBufferedResponseAsPostString.Substring(45, returnString.Length - 90));
+            Assert.Equal(returnString.Substring(45, returnString.Length - 90), nonBufferedResponseAsPostString.Substring(45, returnString.Length - 90));
         }
+        /*
+        [Fact]
+        public async void PostVersion()
+        {
+            var aquaManager = Container!.Resolve<IAquaManager>();
+
+            var version = await aquaManager.AddVersion(new IAquaManager.Version(
+                null,
+                "dw-testversion3",
+                "eng",
+                "Latn",
+                "dwtv7"));
+
+        }
+
+        [Fact]
+        public async void ListVersions()
+        {
+            try
+            {
+                var aquaManager = Container!.Resolve<IAquaManager>();
+
+                var versions = await aquaManager.ListVersions();
+            }
+            catch (Exception ex)
+            {
+            }
+
+        }
+
+        [Fact]
+        public async void GetVersion()
+        {
+            var aquaManager = Container!.Resolve<IAquaManager>();
+
+            var version = await aquaManager.GetVersion(14);
+
+        }
+
+        [Fact]
+        public async void DeleteVersion()
+        {
+            var aquaManager = Container!.Resolve<IAquaManager>();
+
+            await aquaManager.DeleteVersion(2345);
+
+        }
+
+        [Fact]
+        public async void GetRevisions()
+        {
+            var aquaManager = Container!.Resolve<IAquaManager>();
+
+            var revisions = await aquaManager.ListRevisions(1234);
+
+        }
+
+        [Fact]
+        public async void GetLanguages()
+        {
+            var aquaManager = Container!.Resolve<IAquaManager>();
+
+            var languages = await aquaManager.ListLanguages();
+
+        }
+
+        [Fact]
+        public async void GetAssessments()
+        {
+            var aquaManager = Container!.Resolve<IAquaManager>();
+
+            var languages = await aquaManager.ListAssessments(2388);
+
+        }
+        */
     }
 }

@@ -88,14 +88,14 @@ namespace ClearDashboard.Wpf.Application.Services
         /// </remarks>
         /// <param name="entityIds">A collection of entity IDs for which to retrieve note IDs.</param>
         /// <returns>A <see cref="EntityNoteIdDictionary"/> containing the note IDs.</returns>
-        public async Task<EntityNoteIdDictionary> GetNoteIdsAsync(IEnumerable<IId> entityIds)
+        public async Task<EntityNoteIdDictionary> GetNoteIdsAsync(IEnumerable<IId>? entityIds = null, CancellationToken cancellationToken = default)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                var notes = await Note.GetDomainEntityNoteIds(Mediator, entityIds);
+                var notes = await Note.GetDomainEntityNoteIds(Mediator, entityIds, cancellationToken);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Retrieved domain entity note IDs in {stopwatch.ElapsedMilliseconds}ms");
@@ -280,6 +280,9 @@ namespace ClearDashboard.Wpf.Application.Services
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteUpdatedMessage(note.NoteId!));
+
             }
             catch (Exception e)
             {
@@ -367,12 +370,13 @@ namespace ClearDashboard.Wpf.Application.Services
                     var newLabel = await note.Entity.CreateAssociateLabel(Mediator, labelText);
                     LabelSuggestions.Add(newLabel);
                     LabelSuggestions = new LabelCollection(LabelSuggestions.OrderBy(l => l.Text));
-
+                    await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, newLabel!));
                 }
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(CreateAssociateLabel);
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Created label {labelText} and associated it with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
 #endif
             }
             catch (Exception e)
@@ -405,6 +409,8 @@ namespace ClearDashboard.Wpf.Application.Services
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Associated label {label.Text} with note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteLabelAttachedMessage(note.NoteId!, label));
 #endif
             }
             catch (Exception e)
@@ -437,6 +443,8 @@ namespace ClearDashboard.Wpf.Application.Services
 #if DEBUG
                 stopwatch.Stop();
                 Logger?.LogInformation($"Detached label {label.Text} from note {note.NoteId?.Id} in {stopwatch.ElapsedMilliseconds} ms");
+
+                await EventAggregator.PublishOnUIThreadAsync(new NoteLabelDetachedMessage(note.NoteId!, label));
 #endif
             }
             catch (Exception e)
