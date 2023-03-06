@@ -144,6 +144,9 @@
   <data name="Aqua_EnhancedView_VisualizationSelection_CartesianChart" xml:space="preserve">
     <value>Graph</value>
   </data>
+  <data name="Aqua_EnhancedView_VisualizationSelection_HeatMap" xml:space="preserve">
+    <value>Heat map</value>
+  </data>
   <data name="Aqua_EnhancedView_VisualizationSelection_MissingWords" xml:space="preserve">
     <value>Missing Words</value>
   </data>
