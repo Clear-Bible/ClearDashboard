@@ -6,11 +6,11 @@
     xmlns:cm="http://caliburnmicro.com"
     xmlns:converters="clr-namespace:ClearDashboard.Wpf.Application.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:foundation="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.Views.EnhancedView"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
-    xmlns:enhancedView="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.EnhancedView;assembly=ClearDashboard.Wpf.Application.Abstractions"
-    xmlns:foundation="clr-namespace:ClearApplicationFoundation.Framework.Input;assembly=ClearApplicationFoundation"
     d:DataContext="{d:DesignInstance Type=enhancedView:VerseAwareEnhancedViewItemViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -19,7 +19,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
 
-           
+
             <converters:BoolOrientationConverter x:Key="BoolOrientationConverter" />
             <!--<converters:BoolFlowDirectionConverter x:Key="BoolFlowDirectionConverter" />-->
             <converters:BoolHorizontalAlignmentConverter x:Key="BoolHorizontalAlignmentConverter" />
@@ -28,29 +28,29 @@
 
     <Grid>
 
-        <!-- Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}" -->
+        <!--  Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}"  -->
         <ListView
             x:Name="InnerListView"
             Width="{Binding ActualWidth, ElementName=FirstColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
             cm:Message.Attach="[Event SelectionChanged] = [Action VerseSelected($this, $eventArgs)]"
+            foundation:EnhancedFocusScope.IsEnhancedFocusScope="True"
             ItemsSource="{Binding Verses}"
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             ScrollViewer.IsDeferredScrollingEnabled="True"
             VirtualizingStackPanel.IsVirtualizing="True"
-            VirtualizingStackPanel.VirtualizationMode="Recycling"
-            foundation:EnhancedFocusScope.IsEnhancedFocusScope="True">
+            VirtualizingStackPanel.VirtualizationMode="Recycling">
             <b:Interaction.Triggers>
                 <b:EventTrigger EventName="MouseDown">
-                    <cm:ActionMessage MethodName="SetFocus"></cm:ActionMessage>
+                    <cm:ActionMessage MethodName="SetFocus" />
                 </b:EventTrigger>
             </b:Interaction.Triggers>
 
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Height" Value="Auto" />
-                    <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Style.Triggers>
                         <Trigger Property="ListViewItem.IsSelected" Value="true">
                             <Setter Property="Background" Value="LightCoral" />
@@ -85,7 +85,7 @@
                         TranslationFontSize="{Binding DataContext.TranslationsFontSizeValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         TranslationVerticalSpacing="{Binding DataContext.SourceVerticalValue, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:EnhancedView}}"
                         Wrap="{Binding ElementName=WrapCheckbox, Path=IsChecked, UpdateSourceTrigger=PropertyChanged}">
-                        <!--cm:Message.Attach="[Key Enter] = [EnterPressed]; [Gesture Ctrl+Enter] = [CtrlEnterPressed]; [Gesture Alt+Enter] = [AltEnterPressed]">-->
+                        <!--  cm:Message.Attach="[Key Enter] = [EnterPressed]; [Gesture Ctrl+Enter] = [CtrlEnterPressed]; [Gesture Alt+Enter] = [AltEnterPressed]">  -->
                         <!--  cm:Message.Attach="[Event TranslationClicked] = [Action TranslationClicked($this, $eventArgs)]"  -->
                         <b:Interaction.Triggers>
                             <b:EventTrigger EventName="TokenDeleteAlignment">
