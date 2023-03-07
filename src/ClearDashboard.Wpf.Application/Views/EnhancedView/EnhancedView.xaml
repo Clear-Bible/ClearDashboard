@@ -446,7 +446,7 @@
         </materialDesign:DrawerHost>
 
 
-        <Grid Grid.Row="1" ShowGridLines="True">
+        <Grid Grid.Row="1" ShowGridLines="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
