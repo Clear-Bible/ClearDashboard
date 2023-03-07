@@ -101,12 +101,12 @@
                 materialDesign:TextFieldAssist.HasClearButton="True"
                 Margin="15,0,0,0"
                 Text="{Binding FilterString, UpdateSourceTrigger=PropertyChanged}" />
-            <Button
+            <!--<Button
                 Margin="10,5,0,5"
                 Command="{Binding DataContext.ClearFilterCommand, ElementName=PinsViewWindow}"
                 CommandParameter="{Binding}"
                 Content="{helpers:Localization Pins_ClearFilter}"
-                Style="{StaticResource TransparentStyle}" />
+                Style="{StaticResource TransparentStyle}" />-->
             <!--  x:Name="ClearFilter"  -->
             <!--  cm:Message.Attach="[Event Click] = [Action ClearFilter]"  -->
 
