@@ -171,6 +171,7 @@
                                 x:Name="SearchTextBox"
                                 Margin="5,0,5,0"
                                 VerticalAlignment="Center"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
                                 Style="{StaticResource MaterialDesignFilledTextBox}"
                                 Text="{Binding Path=SearchSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <Border
@@ -214,6 +215,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 AcceptsReturn="True"
+                                materialDesign:TextFieldAssist.HasClearButton="True"
                                 Style="{StaticResource MaterialDesignFilledTextBox}"
                                 Text="{Binding SearchEnglish, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
