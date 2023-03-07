@@ -132,10 +132,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             get => _searchText;
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
+
                 _searchText = value;
                 NotifyOfPropertyChange(() => SearchText);
 
-                if (SearchText == string.Empty)
+                if (SearchText == string.Empty || SearchText is null)
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
                     SearchBlankVisibility = Visibility.Collapsed;

@@ -81,6 +81,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             get => filterAssociationsDescriptionText_;
             set
             {
+                value ??= string.Empty;
+
                 filterAssociationsDescriptionText_ = value;
                 //NotifyOfPropertyChange(() => FilterAssociationsDescriptionText);
                 NotesCollectionView.Refresh();
@@ -93,6 +95,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Notes
             get => filterNoteText_;
             set
             {
+                value ??= string.Empty;
+
                 filterNoteText_ = value;
                 //NotifyOfPropertyChange(() => FilterAssociationsDescriptionText);
                 NotesCollectionView.Refresh();
