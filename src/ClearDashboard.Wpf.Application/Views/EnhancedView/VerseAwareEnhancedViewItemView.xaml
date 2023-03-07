@@ -28,10 +28,10 @@
 
     <Grid>
 
-
+        <!-- Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}" -->
         <ListView
             x:Name="InnerListView"
-            Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
+            Width="{Binding ActualWidth, ElementName=FirstColumn, Converter={converters:WidthSubtraction}, ConverterParameter='130'}"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
             cm:Message.Attach="[Event SelectionChanged] = [Action VerseSelected($this, $eventArgs)]"
@@ -139,7 +139,7 @@
             </ListView.ItemTemplate>
         </ListView>
 
-       <ProgressBar
+        <ProgressBar
             Width="76"
             Height="75"
             HorizontalAlignment="Center"

@@ -37,15 +37,14 @@
             Key="N"
             Command="{Binding InsertNoteCommand}"
             Modifiers="Control+Shift" />
-      
+
     </UserControl.InputBindings>
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="FocusableStyle" TargetType="{x:Type enhancedViews:VerseAwareEnhancedViewItemView}">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsFocused}" Value="True">
-                        <Setter Property="FocusManager.FocusedElement" 
-                                Value="{Binding RelativeSource={RelativeSource Self}}" />
+                        <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -447,23 +446,21 @@
         </materialDesign:DrawerHost>
 
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="19*" />
-                <ColumnDefinition Width="106*" />
+                <ColumnDefinition x:Name="FirstColumn" Width="*" />
                 <ColumnDefinition
                     x:Name="NotesColumn"
                     Width="Auto"
                     MinWidth="24"
                     MaxWidth="300" />
             </Grid.ColumnDefinitions>
-            <ListView 
+
+            <ListView
                 x:Name="ItemsListView"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Stretch"
                 Margin="0,0,5,0"
                 ItemsSource="{Binding Items}"
                 ScrollViewer.CanContentScroll="False"
@@ -476,20 +473,20 @@
                     <Style TargetType="ListViewItem">
                         <Style.Resources>
                             <LinearGradientBrush x:Key="MouseOverBrush" StartPoint="0.5, 0" EndPoint="0.5, 1">
-                                <GradientStop Color="#22000000" Offset="0" />
-                                <GradientStop Color="#44000000" Offset="0.4" />
-                                <GradientStop Color="#55000000" Offset="0.6" />
-                                <GradientStop Color="#33000000" Offset="0.9" />
-                                <GradientStop Color="#22000000" Offset="1" />
+                                <GradientStop Offset="0" Color="#22000000" />
+                                <GradientStop Offset="0.4" Color="#44000000" />
+                                <GradientStop Offset="0.6" Color="#55000000" />
+                                <GradientStop Offset="0.9" Color="#33000000" />
+                                <GradientStop Offset="1" Color="#22000000" />
                             </LinearGradientBrush>
                         </Style.Resources>
                         <Setter Property="Height" Value="Auto" />
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                        <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
                         <!--<Setter Property="BorderBrush" Value="{Binding BorderColor}" />-->
                         <Setter Property="BorderBrush" Value="{DynamicResource AttentionToActionBrush}" />
-                        <Setter Property="BorderThickness" Value="0 0 0 1"></Setter>
-                        <Setter Property="Margin" Value="5 5"></Setter>
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        <Setter Property="Margin" Value="5,5" />
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="true">
                                 <Setter Property="Background" Value="LightCoral" />
@@ -498,23 +495,22 @@
                                 <Setter Property="Background" Value="{StaticResource MouseOverBrush}" />
                                 <Setter Property="IsSelected" Value="True" />
                             </Trigger>
-                          
+
                             <DataTrigger Binding="{Binding HasFocus}" Value="True">
-                                <Setter Property="FocusManager.FocusedElement" 
-                                        Value="{Binding RelativeSource={RelativeSource Self}}" />
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch" >
+                        <Grid HorizontalAlignment="Stretch">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition x:Name="DisplayColumn" Width="Auto" />
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition x:Name="DisplayColumn" Width="{Binding ActualWidth, ElementName=DisplayColumn, Converter={converters:WidthSubtraction}, ConverterParameter='10'}" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel 
+                            <StackPanel
                                 Margin="0,0,3,0"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
@@ -523,8 +519,8 @@
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="3" />
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Setter Property="BorderThickness" Value="0"></Setter>
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="0" />
                                         </Style>
                                     </Button.Style>
                                     <materialDesign:PackIcon
@@ -538,8 +534,8 @@
                                     <Button.Style>
                                         <Style BasedOn="{StaticResource MaterialDesignFlatDarkBgButton}" TargetType="{x:Type Button}">
                                             <Setter Property="Padding" Value="0" />
-                                            <Setter Property="Background" Value="Transparent"/>
-                                            <Setter Property="BorderThickness" Value="0"></Setter>
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="0" />
                                         </Style>
                                     </Button.Style>
                                     <materialDesign:PackIcon
@@ -551,13 +547,9 @@
                             </StackPanel>
 
 
-                            <Border
-                                Grid.Column="1"
-                                BorderThickness="0"
-                               >
-                                <StackPanel Orientation="Vertical"
-                                    HorizontalAlignment="Stretch">
-                                 
+                            <Border Grid.Column="1" BorderThickness="0">
+                                <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
+
                                     <StackPanel Orientation="Horizontal">
                                         <Button
                                             Width="20"
@@ -569,7 +561,7 @@
                                             <Button.Style>
                                                 <Style BasedOn="{StaticResource MaterialDesignIconButton}" TargetType="{x:Type Button}">
                                                     <Setter Property="Padding" Value="0" />
-                                                   
+
                                                 </Style>
                                             </Button.Style>
                                             <materialDesign:PackIcon
