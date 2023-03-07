@@ -596,7 +596,7 @@
 
             <GridSplitter
                 x:Name="NotesSplitter"
-                Grid.Column="1"
+                Grid.Column="0"
                 Width="5"
                 DragDelta="ProjectDesignSurfaceSplitter_OnDragDelta" />
 
