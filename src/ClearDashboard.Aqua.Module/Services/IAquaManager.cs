@@ -50,7 +50,7 @@ namespace ClearDashboard.Aqua.Module.Services
             CancellationToken cancellationToken = default);
         
         // to obtain valid values for isoLanguage and isoString
-        public record Language(string iso693, string name);
+        public record Language(string iso639, string name);
         public Task<IEnumerable<Language>?> ListLanguages(
             CancellationToken cancellationToken = default);
 
@@ -70,8 +70,13 @@ namespace ClearDashboard.Aqua.Module.Services
             int? version_id,
             string? name,
             string? date,
-            bool published = false);
-
+            bool published = false)
+        {
+            public override string ToString()
+            {
+                return name ?? "";
+            }
+        }
         public Task<Revision?> AddRevision(
             TokenizedTextCorpusId tokenizedTextCorpusId,
             Revision revision, 
