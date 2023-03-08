@@ -281,7 +281,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var tasks = BackgroundTaskStatuses.Where(x =>
             {
-                if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
+                if (x.Name == "Macula Hebrew" && nodeName == "Macula Hebrew")
                 {
                     if (x.Description!.Contains("Macula Hebrew"))
                     {
@@ -291,7 +291,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     return false;
                 }
                 
-                if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
+                if (x.Name == "Macula Greek" && nodeName == "Macula Greek")
                 {
                     if (x.Description!.Contains("Macula Greek"))
                     {
@@ -317,7 +317,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var tasks = BackgroundTaskStatuses.Where(x =>
             {
-                if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
+                if (x.Name == "Macula Hebrew" && nodeName == "Macula Hebrew")
                 {
                     if (x.Description!.Contains("Macula Hebrew") && 
                         (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&
@@ -330,7 +330,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     return false;
                 }
 
-                if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
+                if (x.Name == "Macula Greek" && nodeName == "Macula Greek")
                 {
                     if (x.Description!.Contains("Macula Greek") &&
                         (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&

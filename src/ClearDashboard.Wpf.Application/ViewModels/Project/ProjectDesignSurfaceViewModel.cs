@@ -448,7 +448,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             Logger!.LogInformation("AddManuscriptHebrewCorpus called.");
 
-            var taskName = "HebrewCorpus";
+            var taskName = "Macula Hebrew";
 
             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = false;
 
@@ -596,7 +596,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = false;
 
-            var taskName = "GreekCorpus";
+            var taskName = "Macula Greek";
             var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = task.CancellationTokenSource!.Token;
 
