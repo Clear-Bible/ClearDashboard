@@ -6,6 +6,7 @@ namespace ClearDashboard.Collaboration.DifferenceModel;
 public interface IDifference
 {
     public bool HasDifferences { get; }
+    public bool HasMergeConflict { get; }
 }
 
 public static class DifferenceExtensions

@@ -45,6 +45,5 @@ public interface IModelDifference : IDifference
     object? Id { get; }
     IEnumerable<PropertyDifference> PropertyDifferences { get; }
     IReadOnlyDictionary<string, IListDifference> ChildListDifferences { get; }
-    ModelMergeResult ModelMergeResult { get; set; }
 }
 

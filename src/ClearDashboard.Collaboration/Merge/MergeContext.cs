@@ -10,7 +10,7 @@ namespace ClearDashboard.Collaboration.Merge;
 
 public sealed class MergeContext
 {
-    public bool RemoteOverridesLocal => true;
+    public bool RemoteOverridesLocal { get; private set; }
     public MergeBehaviorBase MergeBehavior { get; private set; }
 
     public IUserProvider UserProvider { get; private set; }
@@ -18,11 +18,12 @@ public sealed class MergeContext
     public DefaultMergeHandler DefaultMergeHandler { get; private set; }
     private readonly Dictionary<Type, DefaultMergeHandler> _mergeHandlerRegistry = new();
 
-    public MergeContext(IUserProvider userProvider, ILogger logger, MergeBehaviorBase mergeBehavior)
+    public MergeContext(IUserProvider userProvider, ILogger logger, MergeBehaviorBase mergeBehavior, bool remoteOverridesLocal)
 	{
         UserProvider = userProvider;
         Logger = logger;
         MergeBehavior = mergeBehavior;
+        RemoteOverridesLocal = remoteOverridesLocal;
 
         DefaultMergeHandler = new DefaultMergeHandler(this);
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.TokenizedCorpus>), new TokenizedCorpusHandler(this));

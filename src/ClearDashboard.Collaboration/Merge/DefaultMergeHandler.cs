@@ -90,9 +90,9 @@ public class DefaultMergeHandler
         _mergeContext.MergeBehavior.CompleteInsertModelCommand(itemToCreate.EntityType);
     }
 
-    protected ModelMergeResult CheckMergePropertyDifferences(IModelDifference modelDifference, IReadOnlyDictionary<string, object?> propertyValues, bool strict)
+    protected bool CheckMergePropertyValueDifferences(IModelDifference modelDifference, IReadOnlyDictionary<string, object?> propertyValues)
     {
-        var modelMergeResult = ModelMergeResult.Unset;
+        var hasChange = false;
 
         foreach (var pd in modelDifference.PropertyDifferences
             .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference))))
@@ -103,18 +103,14 @@ public class DefaultMergeHandler
                 if (vd.EqualsValue1(currentValue))
                 {
                     _mergeContext.Logger.LogInformation($"Updating property '{pd.PropertyName}' current value '{currentValue}' to new value '{vd.Value2AsObject}'");
-                    modelMergeResult = ModelMergeResult.ShouldMerge;
+                    hasChange = true;
                 }
                 else if (!vd.EqualsValue2(currentValue))
                 {
                     _mergeContext.Logger.LogInformation($"Conflict with property {pd.PropertyName} current value '{currentValue}' not matching last merge value '{vd.Value1AsObject}' or new value '{vd.Value2AsObject}'");
-                    modelMergeResult = ModelMergeResult.Conflict;
-                    break;  // FIXME:  maybe throw a ModelMergeConflictException so the caller has details
+                    hasChange = true;
+                    vd.ConflictValue = currentValue;
                 }
-            }
-            else if (!strict)
-            {
-                modelMergeResult = ModelMergeResult.ShouldMerge;
             }
             else
             {
@@ -122,12 +118,12 @@ public class DefaultMergeHandler
             }
         }
 
-        return modelMergeResult;
+        return hasChange;
     }
 
-    protected ModelMergeResult CheckMergeModelDifferences(IModelDifference modelDifference, IModelDistinguishable itemToModify)
+    protected bool CheckMergePropertyModelDifferences(IModelDifference modelDifference, IModelDistinguishable itemToModify)
     {
-        var modelMergeResult = ModelMergeResult.Unset;
+        var hasChange = false;
 
         foreach (var pd in modelDifference.PropertyDifferences
             .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ModelDifference))))
@@ -138,22 +134,17 @@ public class DefaultMergeHandler
 
                 if (v is IModelDistinguishable)
                 {
-                    modelMergeResult = CheckMerge(md, (IModelDistinguishable)v);
+                    hasChange =  CheckMergePropertyModelDifferences(md, (IModelDistinguishable)v) || hasChange;
                 }
                 else if (v is IDictionary<string, object>)
                 {
                     var propertyValues = ((IDictionary<string, object>)v)
                         .ToDictionary(e => e.Key, e => (object?)e.Value).AsReadOnly();
-                    modelMergeResult = CheckMergePropertyDifferences(md, propertyValues, false);
+                    hasChange = CheckMergePropertyValueDifferences(md, propertyValues) || hasChange;
                 }
                 else
                 {
                     throw new InvalidDifferenceStateException($"Unable to CheckMerge for property '{pd.PropertyName}' having item type {v?.GetType()?.ShortDisplayName()}");
-                }
-
-                if (modelMergeResult == ModelMergeResult.Conflict)
-                {
-                    break;
                 }
             }
             else
@@ -162,31 +153,38 @@ public class DefaultMergeHandler
             }
         }
 
-        return modelMergeResult;
+        return hasChange;
     }
 
     protected virtual ModelMergeResult CheckMerge<T>(IModelDifference modelDifference, T itemToModify)
         where T : IModelDistinguishable
     {
-        var modelMergeResult = ModelMergeResult.Unset;
+        var hasChange = false;
         if (modelDifference.HasDifferences)
         {
             _mergeContext.Logger.LogDebug($"Checking merge of: '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
 
-            modelMergeResult = CheckMergePropertyDifferences(modelDifference, itemToModify.PropertyValues, true);
-            if (modelMergeResult != ModelMergeResult.Conflict)
-            {
-                modelMergeResult = CheckMergeModelDifferences(modelDifference, itemToModify);
-            }
+            hasChange = CheckMergePropertyValueDifferences(modelDifference, itemToModify.PropertyValues);
+            hasChange = CheckMergePropertyModelDifferences(modelDifference, itemToModify) || hasChange;
         }
 
-        if (modelMergeResult == ModelMergeResult.Unset)
+        if (modelDifference.HasMergeConflict)
         {
-            _mergeContext.Logger.LogInformation($"No change:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
-            modelMergeResult = ModelMergeResult.NoChange;
+            _mergeContext.Logger.LogInformation($"Merge conflict(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
+            if (!_mergeContext.RemoteOverridesLocal)
+            {
+                throw new MergeConflictException(modelDifference);
+            }
+            return ModelMergeResult.ShouldMerge;
         }
-
-        return modelMergeResult;
+        else if (hasChange)
+        {
+            _mergeContext.Logger.LogInformation($"Change(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
+            return ModelMergeResult.ShouldMerge;
+        }
+        
+        _mergeContext.Logger.LogInformation($"No change:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
+        return ModelMergeResult.NoChange;
     }
 
     public virtual async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)

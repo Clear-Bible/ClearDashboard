@@ -44,6 +44,12 @@ public class ListDifference<T> : ListDifference, IListDifference<T>
         get => ListMemberModelDifferences.Any();
     }
 
+    [JsonIgnore]
+    public override bool HasMergeConflict
+    {
+        get => ListMemberModelDifferences.Where(e => e.HasMergeConflict).Any();
+    }
+
     public override string ToString()
     {
         return $"ListDifference for type {typeof(T).ShortDisplayName()} (has membership " +
@@ -63,7 +69,9 @@ public abstract class ListDifference : IListDifference, IDifference
     [JsonIgnore]
     public abstract bool HasListMemberModelDifferences { get; }
     [JsonIgnore]
-    public bool HasDifferences { get => HasMembershipDifferences || HasListMemberModelDifferences; }
+    public bool HasDifferences => HasMembershipDifferences || HasListMemberModelDifferences;
+    [JsonIgnore]
+    public abstract bool HasMergeConflict { get; }
 }
 
 public class ListMembershipDifference<T> : IDifference where T : notnull
@@ -78,6 +86,8 @@ public class ListMembershipDifference<T> : IDifference where T : notnull
     public IEnumerable<T> OnlyIn2 { get; private set; }
 
     public bool HasDifferences => OnlyIn1.Any() || OnlyIn2.Any();
+
+    public bool HasMergeConflict => false;
 
     public override string ToString()
     {

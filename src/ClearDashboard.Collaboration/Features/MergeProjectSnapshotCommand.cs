@@ -15,4 +15,5 @@ public record MergeProjectSnapshotCommand(
     string CommitShaToMerge,
     ProjectSnapshot ProjectSnapshotLastMerged,
     ProjectSnapshot ProjectSnapshotToMerge,
+    bool RemoteOverridesLocal,
     bool UseLogOnlyMergeBehavior) : ProjectRequestCommand<Unit>;

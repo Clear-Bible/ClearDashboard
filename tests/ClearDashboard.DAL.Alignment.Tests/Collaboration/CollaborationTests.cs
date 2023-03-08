@@ -27,6 +27,11 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer;
 using Microsoft.Extensions.Configuration;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.Collaboration.Factory;
+using ClearDashboard.DAL.Interfaces;
+using ClearDashboard.DataAccessLayer.Data;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -50,5 +55,134 @@ public class CollaborationTests : TestBase
         {
             await DeleteDatabaseContext();
         }
+    }
+
+    //[Fact]
+    protected async Task HardResetLocalChanges()
+    {
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
+        collaborationManager.HardResetChanges();
+
+        await Task.CompletedTask;
+    }
+
+    //[Fact]
+    protected async Task ListProjectFileStatuses()
+    {
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
+
+        var projectIds = collaborationManager.GetAllProjectIds();
+
+        if (projectIds.Any())
+        {
+            foreach (var status in collaborationManager.RetrieveFileStatuses(projectIds.First()))
+            {
+                Output.WriteLine(status);
+            }
+        }
+
+        await Task.CompletedTask;
+    }
+
+    //[Fact]
+    protected async Task GetProjectsFromServer()
+    {
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
+        collaborationManager.InitializeRepository();
+        collaborationManager.FetchMergeRemote();
+
+        // Just to get project Ids and names:
+        var projectIdsNames = ProjectSnapshotFromFilesFactory.FindProjectIdsNames(collaborationManager.RepositoryPath);
+
+        foreach (var (projectId, projectName) in projectIdsNames)
+        {
+            // Run initialize to create each project database (with project and
+            // user entities)
+            await collaborationManager.InitializeProjectDatabaseAsync(projectId, default);
+        }
+
+        var projectProvider = Container!.Resolve<IProjectProvider>();
+        var dbContextFactory = Container!.Resolve<ProjectDbContextFactory>();
+
+        foreach (var (projectId, projectName) in projectIdsNames)
+        {
+            // Merge changes from local git repository into each of them.
+            await using (var requestScope = dbContextFactory.ServiceScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
+            {
+                // Is there a general utility for doing this sort of stuff outside of this text fixture?
+                // Or do we need a command/handler for this?
+
+                ProjectDbContext = await dbContextFactory!.GetDatabaseContext(
+                    projectName,
+                    true).ConfigureAwait(false);
+                var project = ProjectDbContext.Projects.FirstOrDefault();
+                projectProvider!.CurrentProject = project;
+
+                await collaborationManager.MergeProjectLatestChangesAsync(true, false, default);
+            }
+        }
+    }
+
+    //[Fact]
+    protected async Task InitializeServerWithCurrentProject()
+    {
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
+        collaborationManager.InitializeRepository();
+        collaborationManager.FetchMergeRemote();
+
+        await collaborationManager.StageProjectChangesAsync(default);
+
+        collaborationManager.CommitChanges("[some commit message]");
+        collaborationManager.PushChangesToRemote();
+    }
+
+    //[Fact]
+    protected async Task GetProjectsChangesFromServer()
+    {
+        bool remoteOverridesLocal = false;  // Configuration?  User choice?
+
+        var projectProvider = Container!.Resolve<IProjectProvider>();
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
+
+        // Pull down and merge HEAD into local git repository:
+        collaborationManager.FetchMergeRemote();
+
+        // Just to get project Ids and names:
+        var projectIdsNames = ProjectSnapshotFromFilesFactory.FindProjectIdsNames(collaborationManager.RepositoryPath);
+
+        var previousProject = projectProvider.CurrentProject;
+        var dbContextFactory = Container!.Resolve<ProjectDbContextFactory>();
+
+        foreach (var (projectId, projectName) in projectIdsNames)
+        {
+            await using (var requestScope = dbContextFactory.ServiceScope
+                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
+            {
+                // Is there a general utility for doing this sort of stuff outside of this text fixture?
+                // Or do we need a command/handler for this?
+
+                ProjectDbContext = await dbContextFactory!.GetDatabaseContext(
+                    projectName,
+                    true).ConfigureAwait(false);
+                var project = ProjectDbContext.Projects.FirstOrDefault();
+                projectProvider!.CurrentProject = project;
+
+                await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default);
+            }
+        }
+
+        projectProvider.CurrentProject = previousProject;
+    }
+
+    //[Fact]
+    protected async Task CommitCurrentProjectChangesToServer()
+    {
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
+
+        await collaborationManager.StageProjectChangesAsync(default);
+
+        collaborationManager.CommitChanges("[some commit message]");
+        collaborationManager.PushChangesToRemote();
     }
 }

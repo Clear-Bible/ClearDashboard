@@ -38,8 +38,6 @@ public abstract class ModelDifference : IModelDifference
         Id = id;
     }
 
-    public ModelMergeResult ModelMergeResult { get; set; } = ModelMergeResult.Unset;
-
     public Type ModelType { get; private set; }
     public object? Id { get; private set; }
 
@@ -54,6 +52,9 @@ public abstract class ModelDifference : IModelDifference
 
     [JsonIgnore]
     public bool HasDifferences { get => _propertyDifferences.Any() || _childListDifferences.Any(); }
+
+    [JsonIgnore]
+    public bool HasMergeConflict => PropertyDifferences.Where(e => e.HasMergeConflict).Any();
 
     public bool TryGetChildListDifference(string childName, out IListDifference? listDifference)
     {

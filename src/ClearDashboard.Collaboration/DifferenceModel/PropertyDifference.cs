@@ -20,6 +20,7 @@ public class PropertyDifference : IDifference
     public IDifference PropertyValueDifference { get; private set; }
 
     public bool HasDifferences => true;
+    public bool HasMergeConflict => PropertyValueDifference.HasMergeConflict;
 
     public override string ToString()
     {
@@ -69,10 +70,13 @@ public abstract class ValueDifference : IDifference
 {
     // Otherwise this instance wouldn't have been created
     public bool HasDifferences => true;
+    public bool HasMergeConflict => (ConflictValue is not null);
 
     public abstract bool EqualsValue1(object? compareValue1);
     public abstract bool EqualsValue2(object? compareValue1);
 
     public abstract object? Value1AsObject { get; }
     public abstract object? Value2AsObject { get; }
+
+    public object? ConflictValue { get; set; }
 }

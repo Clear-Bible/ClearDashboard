@@ -218,7 +218,7 @@ public class CollaborationManager
         }
     }
 
-    public async Task MergeProjectLatestChangesAsync(bool createBackupSnapshot, CancellationToken cancellationToken)
+    public async Task MergeProjectLatestChangesAsync(bool remoteOverridesLocal, bool createBackupSnapshot, CancellationToken cancellationToken)
     {
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
@@ -270,7 +270,7 @@ public class CollaborationManager
         }
 
         // Merge into the project database:
-        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, _logMergeOnly);
+        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, remoteOverridesLocal, _logMergeOnly);
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
     }
@@ -393,6 +393,19 @@ public class CollaborationManager
         }
     }
 
+    public void PushChangesToRemote()
+    {
+        using (var repo = new Repository(_repositoryPath))
+        {
+            Remote remote = repo.Network.Remotes[RemoteOrigin];
+            var options = new PushOptions();
+            options.CredentialsProvider = (_url, _user, _cred) =>
+                new UsernamePasswordCredentials { Username = _configuration.RemoteUserName, Password = _configuration.RemotePassword };
+            repo.Network.Push(remote, @"refs/heads/master", options);
+        }
+
+    }
+
     /// <summary>
     /// Determine which projects in repository contributed changes to the
     /// given commit.  Like doing the following git command and determining
@@ -461,19 +474,6 @@ public class CollaborationManager
         }
 
         return projectIds;
-    }
-
-    public void PushChangesToRemote()
-    {
-        using (var repo = new Repository(_repositoryPath))
-        {
-            Remote remote = repo.Network.Remotes[RemoteOrigin];
-            var options = new PushOptions();
-            options.CredentialsProvider = (_url, _user, _cred) =>
-                new UsernamePasswordCredentials { Username = _configuration.RemoteUserName, Password = _configuration.RemotePassword };
-            repo.Network.Push(remote, @"refs/heads/master", options);
-        }
-
     }
 }
 
