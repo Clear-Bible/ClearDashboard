@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Features;
 public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
@@ -65,6 +66,20 @@ public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
                         mergeBehavior.StartInsertModelCommand(projectModelSnapshot);
                         await mergeBehavior.RunInsertModelCommand(projectModelSnapshot, cancellationToken);
                         mergeBehavior.CompleteInsertModelCommand(projectModelSnapshot.EntityType);
+
+                        if (request.includeMerge)
+                        {
+                            var project = ProjectDbContext!.Projects.Where(e => e.Id == (Guid)projectModelSnapshot.GetId()).First();
+
+                            var projectSnapshotLastMerged = GetProjectSnapshotQueryHandler.LoadSnapshot(new Builder.BuilderContext(ProjectDbContext!));
+                            var projectSnapshotToMerge = factory.LoadSnapshot(request.commitSha, project.Id);
+                            var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotToMerge);
+
+                            var merger = new Merger(new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, true));
+                            await merger.MergeAsync(projectDifferences, projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
+
+                            project.LastMergedCommitSha = request.commitSha;
+                        }
 
                         await mergeBehavior.MergeEndAsync(cancellationToken);
                     }

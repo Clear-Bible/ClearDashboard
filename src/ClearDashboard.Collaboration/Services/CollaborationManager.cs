@@ -148,7 +148,7 @@ public class CollaborationManager
         return project.ProjectName ?? "Unnamed-Project";
     }
 
-    public async Task InitializeProjectDatabaseAsync(Guid projectId, CancellationToken cancellationToken)
+    public async Task InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge, CancellationToken cancellationToken)
     {
         using (var repo = new Repository(_repositoryPath))
         {
@@ -156,7 +156,7 @@ public class CollaborationManager
 
             if (headCommitSha is not null)
             {
-                var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId);
+                var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId, includeMerge);
                 var result = await _mediator.Send(command, cancellationToken);
             }
             else

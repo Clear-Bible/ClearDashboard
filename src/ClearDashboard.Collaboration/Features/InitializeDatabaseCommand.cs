@@ -14,4 +14,5 @@ namespace ClearDashboard.Collaboration.Features;
 public record InitializeDatabaseCommand(
     string repositoryPath,
     string commitSha,
-    Guid projectId) : ProjectRequestCommand<Unit>;
+    Guid projectId,
+    bool includeMerge) : ProjectRequestCommand<Unit>;

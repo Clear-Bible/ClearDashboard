@@ -98,29 +98,7 @@ public class CollaborationTests : TestBase
         {
             // Run initialize to create each project database (with project and
             // user entities)
-            await collaborationManager.InitializeProjectDatabaseAsync(projectId, default);
-        }
-
-        var projectProvider = Container!.Resolve<IProjectProvider>();
-        var dbContextFactory = Container!.Resolve<ProjectDbContextFactory>();
-
-        foreach (var (projectId, projectName) in projectIdsNames)
-        {
-            // Merge changes from local git repository into each of them.
-            await using (var requestScope = dbContextFactory.ServiceScope
-                .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
-            {
-                // Is there a general utility for doing this sort of stuff outside of this text fixture?
-                // Or do we need a command/handler for this?
-
-                ProjectDbContext = await dbContextFactory!.GetDatabaseContext(
-                    projectName,
-                    true).ConfigureAwait(false);
-                var project = ProjectDbContext.Projects.FirstOrDefault();
-                projectProvider!.CurrentProject = project;
-
-                await collaborationManager.MergeProjectLatestChangesAsync(true, false, default);
-            }
+            await collaborationManager.InitializeProjectDatabaseAsync(projectId, true, default);
         }
     }
 
@@ -130,6 +108,31 @@ public class CollaborationTests : TestBase
         var collaborationManager = Container!.Resolve<CollaborationManager>();
         collaborationManager.InitializeRepository();
         collaborationManager.FetchMergeRemote();
+
+        await collaborationManager.StageProjectChangesAsync(default);
+
+        collaborationManager.CommitChanges("[some commit message]");
+        collaborationManager.PushChangesToRemote();
+    }
+
+    //[Fact]
+    protected async Task GetCurrentProjectChangesFromServer()
+    {
+        bool remoteOverridesLocal = false;  // Configuration?  User choice?
+
+        var projectProvider = Container!.Resolve<IProjectProvider>();
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
+
+        // Pull down and merge HEAD into local git repository:
+        collaborationManager.FetchMergeRemote();
+
+        await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default);
+    }
+
+    //[Fact]
+    protected async Task CommitCurrentProjectChangesToServer()
+    {
+        var collaborationManager = Container!.Resolve<CollaborationManager>();
 
         await collaborationManager.StageProjectChangesAsync(default);
 
@@ -173,16 +176,5 @@ public class CollaborationTests : TestBase
         }
 
         projectProvider.CurrentProject = previousProject;
-    }
-
-    //[Fact]
-    protected async Task CommitCurrentProjectChangesToServer()
-    {
-        var collaborationManager = Container!.Resolve<CollaborationManager>();
-
-        await collaborationManager.StageProjectChangesAsync(default);
-
-        collaborationManager.CommitChanges("[some commit message]");
-        collaborationManager.PushChangesToRemote();
     }
 }
