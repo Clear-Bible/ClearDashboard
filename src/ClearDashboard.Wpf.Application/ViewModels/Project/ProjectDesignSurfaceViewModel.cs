@@ -1410,6 +1410,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var isCorpusProcessing = _backgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
             {
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = node.Name,
+                    Description = "Tokenization Cancelled",
+                    StartTime = DateTime.Now,
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.CancellationRequested
+                }));
                 return;
             }
 

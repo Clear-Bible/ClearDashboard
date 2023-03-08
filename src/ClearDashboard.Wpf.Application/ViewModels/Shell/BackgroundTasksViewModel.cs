@@ -179,6 +179,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                         }
                         ShowPopup = true;
                     }
+
+                    if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
+                    { 
+                        CancelTask(backgroundTaskStatus);
+                        backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Cancelled;
+                    }
                     status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
 
                     NotifyOfPropertyChange(() => BackgroundTaskStatuses);
