@@ -35,13 +35,13 @@ public interface IModelDistinguishable
     void ApplyPropertyDifference(PropertyDifference propertyDifference);
 }
 
-public interface IModelDifference<out T> : IModelDifference where T : notnull
+public interface IModelDifference<out T> : IModelDifference// where T : notnull
 {
 }
 
 public interface IModelDifference : IDifference
 {
-    //    Type ModelType { get; }
+    Type ModelType { get; }
     object? Id { get; }
     IEnumerable<PropertyDifference> PropertyDifferences { get; }
     IReadOnlyDictionary<string, IListDifference> ChildListDifferences { get; }

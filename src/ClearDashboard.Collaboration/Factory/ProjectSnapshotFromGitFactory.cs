@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Text.Json;
 using ClearDashboard.Collaboration.Model;
-using ClearDashboard.DataAccessLayer.Models;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using LibGit2Sharp;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.Collaboration.Exceptions;
-using Paratext.PluginInterfaces;
-using SIL.Extensions;
 
 namespace ClearDashboard.Collaboration.Factory;
 
@@ -37,22 +32,29 @@ public class ProjectSnapshotFromGitFactory
         _jsonDeserializerOptions = ProjectSnapshotFactoryCommon.JsonDeserializerOptions;
     }
 
-    public GeneralModel<Models.Project> LoadProject(string commitSha, Guid projectId)
+    public GeneralModel<Models.Project> LoadProject(string commitSha, string projectFolderName)
     {
         using (var repo = new Repository(_repositoryPath))
         {
-            var topLevelEntries = Initialize(commitSha, projectId, repo);
+            var topLevelEntries = Initialize(commitSha, projectFolderName, repo);
             var projectModelSnapshot = LoadProjectProperties(topLevelEntries);
 
             return projectModelSnapshot;
         }
     }
 
+    public GeneralModel<Models.Project> LoadProject(string commitSha, Guid projectId)
+    {
+        var projectFolderName = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, projectId);
+        return LoadProject(commitSha, projectFolderName);
+    }
+
     public IEnumerable<GeneralModel<Models.User>> LoadUsers(string commitSha, Guid projectId)
     {
         using (var repo = new Repository(_repositoryPath))
         {
-            var topLevelEntries = Initialize(commitSha, projectId, repo);
+            var projectFolderName = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, projectId);
+            var topLevelEntries = Initialize(commitSha, projectFolderName, repo);
 
             var topLevelEntry = topLevelEntries
                 .Where(te => te.TargetType == TreeEntryTargetType.Tree)
@@ -72,7 +74,9 @@ public class ProjectSnapshotFromGitFactory
 	{
         using (var repo = new Repository(_repositoryPath))
         {
-            var topLevelEntries = Initialize(commitSha, projectId, repo);
+            var projectFolderName = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, projectId);
+
+            var topLevelEntries = Initialize(commitSha, projectFolderName, repo);
             var projectModelSnapshot = LoadProjectProperties(topLevelEntries);
 
             var projectSnapshot = new ProjectSnapshot(projectModelSnapshot);
@@ -164,15 +168,13 @@ public class ProjectSnapshotFromGitFactory
         }
     }
 
-    private static Tree Initialize(string commitSha, Guid projectId, Repository repo)
+    private static Tree Initialize(string commitSha, string projectFolderName, Repository repo)
     {
         var commit = repo.Commits.Where(c => c.Id.StartsWith(commitSha)).SingleOrDefault();
         if (commit is null)
         {
             throw new CommitNotFoundException(commitSha);
         }
-
-        var projectFolderName = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, projectId);
 
         var topLevelEntries = repo.Lookup<Tree>($"{commitSha}:{projectFolderName}");
         if (topLevelEntries is null)

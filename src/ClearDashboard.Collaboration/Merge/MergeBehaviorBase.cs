@@ -309,8 +309,10 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
         // property (e.g. NoteModelRef.ModelRef), which has to have converter(s) in
         // order to apply to simple database column(s).
         foreach (var propertyModelDifference in modelDifference.PropertyDifferences
-            .Where(d => d.PropertyValueDifference.GetType().IsAssignableTo(typeof(ModelDifference))))
+            .Where(d => d.PropertyValueDifference.GetType().IsAssignableTo(typeof(IModelDifference))))
         {
+            var modelValueDifference = (IModelDifference)propertyModelDifference.PropertyValueDifference;
+
             // First apply the property difference to modelSnapshot (this
             // may have to traverse down a hierarachy), and then run the
             // converter(s) to get the DbCommand database value(s):
@@ -334,6 +336,11 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
                 {
                     var propertyValue = RunEntityValueResolver(modelSnapshot, ep, resolver);
                     command.Parameters[$"@{ep}"].Value = propertyValue;
+                }
+                else if (modelValueDifference.ModelType.IsAssignableTo(typeof(IDictionary<string, object>)))
+                {
+                    command.Parameters[$"@{ep}"].Value = modelSnapshot.PropertyValues[propertyModelDifference.PropertyName]
+                        .ToDatabaseCommandParameterValue(_dateTimeOffsetToBinary);
                 }
                 else
                 {
@@ -420,14 +427,14 @@ public static class DbCommandExtensions
     {
         var nullabilityInfo = _nullabilityContext.Create(property);
 
-        if (property.PropertyType.IsAssignableTo(typeof(Dictionary<string, object?>)))
+        if (property.PropertyType.IsAssignableTo(typeof(IDictionary<string, object>)))
         {
             var columnAttribute = (ColumnAttribute?)property.GetCustomAttribute(typeof(ColumnAttribute), true);
             if (columnAttribute?.TypeName == "jsonb")
             {
                 if (nullabilityInfo.WriteState is not NullabilityState.Nullable)
                 {
-                    return JsonSerializer.Serialize(new Dictionary<string, object?>());
+                    return JsonSerializer.Serialize(new Dictionary<string, object>());
                 }
             }
         }
@@ -452,6 +459,10 @@ public static class DbCommandExtensions
         if (value is DateTimeOffset)
         {
             value = dateTimeOffsetToBinary.ConvertToProvider(value);
+        }
+        else if (value is IDictionary<string, object>)
+        {
+            value = JsonSerializer.Serialize((IDictionary<string, object>)value);
         }
 
         return value != null ? value : DBNull.Value;

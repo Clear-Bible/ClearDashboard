@@ -93,6 +93,22 @@ public class CollaborationManager
         }
     }
 
+    private GeneralModel<Models.Project> LoadProjectModelSnapshot(string projectPropertiesFilePath)
+    {
+        var serializedProjectModelSnapshot = File.ReadAllText(projectPropertiesFilePath);
+
+        var projectModelSnapshot = JsonSerializer.Deserialize<GeneralModel<Models.Project>>(
+            serializedProjectModelSnapshot,
+            ProjectSnapshotFactoryCommon.JsonDeserializerOptions);
+
+        if (projectModelSnapshot is null)
+        {
+            throw new SerializedDataException($"Serialized project data invalid at path: {projectPropertiesFilePath}");
+        }
+
+        return projectModelSnapshot;
+    }
+
     private IReadOnlyDictionary<Guid, GeneralModel<Models.Project>> GetAllProjectModelSnapshotsById()
     {
         var projects = new Dictionary<Guid, GeneralModel<Models.Project>>();
@@ -101,17 +117,7 @@ public class CollaborationManager
             var projectPropertiesFilePath = d + Path.DirectorySeparatorChar + "_Properties";
             if (File.Exists(projectPropertiesFilePath))
             {
-                var serializedProjectModelSnapshot = File.ReadAllText(projectPropertiesFilePath);
-
-                var projectModelSnapshot = JsonSerializer.Deserialize<GeneralModel<Models.Project>>(
-                    serializedProjectModelSnapshot,
-                    ProjectSnapshotFactoryCommon.JsonDeserializerOptions);
-
-                if (projectModelSnapshot is null)
-                {
-                    throw new SerializedDataException($"Serialized project data invalid at path: {projectPropertiesFilePath}");
-                }
-
+                var projectModelSnapshot = LoadProjectModelSnapshot(projectPropertiesFilePath);
                 projects.Add((Guid)projectModelSnapshot.GetId(), projectModelSnapshot);
             }
         }
@@ -124,7 +130,7 @@ public class CollaborationManager
         return GetAllProjectModelSnapshotsById().Keys;
     }
 
-    public bool LoadIntoProjectProvider(Guid projectId)
+    public string? LoadIntoProjectProvider(Guid projectId)
     {
         var projectModelSnapshot = GetAllProjectModelSnapshotsById()
             .Where(e => e.Key == projectId)
@@ -133,13 +139,13 @@ public class CollaborationManager
 
         if (projectModelSnapshot is null)
         {
-            return false;
+            return null;
         }
 
         var project = ProjectBuilder.BuildModel(projectModelSnapshot);
         _projectProvider.CurrentProject = project;
 
-        return true;
+        return project.ProjectName ?? "Unnamed-Project";
     }
 
     public async Task InitializeProjectDatabaseAsync(Guid projectId, CancellationToken cancellationToken)
@@ -212,7 +218,7 @@ public class CollaborationManager
         }
     }
 
-    public async Task MergeProjectLatestChangesAsync(CancellationToken cancellationToken)
+    public async Task MergeProjectLatestChangesAsync(bool createBackupSnapshot, CancellationToken cancellationToken)
     {
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
@@ -258,7 +264,7 @@ public class CollaborationManager
         var projectSnapshotToMerge = factory.LoadSnapshot(headCommitSha, project.Id);
 
         // Create a backup snapshot of the current database:
-        if (lastMergedCommitShaIndex > 0)
+        if (createBackupSnapshot)
         {
             await CreateProjectBackupAsync(cancellationToken);
         }
@@ -311,6 +317,20 @@ public class CollaborationManager
         }
     }
 
+    public void HardResetChanges()
+    {
+        EnsureValidRepository(_repositoryPath);
+        var project = EnsureCurrentProject();
+
+        var projectFolderName = ProjectSnapshotFactoryCommon.ToProjectFolderName(project.Id);
+
+        using (var repo = new Repository(_repositoryPath))
+        {
+            Branch originMaster = repo.Branches["origin/master"];
+            repo.Reset(ResetMode.Hard, originMaster.Tip);
+        }
+    }
+
     public IEnumerable<string> RetrieveFileStatuses(Guid? projectIdFilter = default)
     {
         EnsureValidRepository(_repositoryPath);
@@ -349,15 +369,13 @@ public class CollaborationManager
         return statuses;
     }
 
-    public void CommitPushChanges(string commitMessage)
+    public void CommitChanges(string commitMessage)
 	{
         EnsureValidRepository(_repositoryPath);
 
         //GitHelper.RetrieveStatus(path, Logger, LibGit2Sharp.FileStatus.NewInIndex, LibGit2Sharp.FileStatus.ModifiedInIndex, LibGit2Sharp.FileStatus.RenamedInIndex, LibGit2Sharp.FileStatus.DeletedFromIndex);
 
         //_ = EnsureCurrentProject();
-
-        // FIXME:  check to see if there are any changes to commit
 
         var userSignature = new Signature(
             _configuration.RemoteUserName,
@@ -367,14 +385,116 @@ public class CollaborationManager
 
         using (var repo = new Repository(_repositoryPath))
         {
-            repo.Commit(commitMessage, userSignature, userSignature);
+            RepositoryStatus status = repo.RetrieveStatus();
+            if (status.IsDirty)
+            {
+                var commit = repo.Commit(commitMessage, userSignature, userSignature);
+            }
+        }
+    }
 
+    /// <summary>
+    /// Determine which projects in repository contributed changes to the
+    /// given commit.  Like doing the following git command and determining
+    /// which project(s) the affected files are in:
+    /// git diff-tree --no-commit-id --name-only [commitSha] -r
+    /// </summary>
+    /// <param name="commitSha">If null, use HEAD</param>
+    public IEnumerable<Guid> FindProjectIdsInCommit(string? commitSha = null)
+    {
+        var projectIds = new List<Guid>();
+
+        using (var repo = new Repository(_repositoryPath))
+        {
+            // From latest to earliest:
+            var commits = repo.Commits.ToList();
+
+            var commitShaIndex = 0;
+            if (commitSha is not null)
+            {
+                commitShaIndex = commits.Select(e => e.Sha).ToList().FindIndex(c => c.StartsWith(commitSha));
+                if (commitShaIndex < 0)
+                {
+                    throw new ArgumentException($"CommitSha '{commitSha}' not found");
+                }
+            }
+
+            var newTree = commits.ElementAtOrDefault(commitShaIndex)?.Tree;
+            var oldTree = commits.ElementAtOrDefault(commitShaIndex + 1)?.Tree;
+
+            var projectIdsInCommit = new List<Guid>();
+            if (newTree is not null)
+            {
+                var projectPaths = Enumerable.Empty<string>();
+                if (oldTree is not null)
+                {
+                    projectPaths = repo.Diff.Compare<TreeChanges>(oldTree, newTree)
+                        .Select(e => e.Path).ToTopLevelPropertiesPaths();
+                }
+                else
+                {
+                    projectPaths = newTree
+                        .Select(e => e.Path).ToTopLevelPropertiesPaths();
+                }
+
+                foreach (var path in projectPaths)
+                {
+                    var projectPropertiesEntry = repo.Lookup<Blob>($"{commitSha}:{path}");
+                    var serializedProjectModelSnapshot = projectPropertiesEntry.GetContentText();
+
+                    try
+                    {
+                        var projectModelSnapshot = JsonSerializer.Deserialize<GeneralModel<Models.Project>>(
+                            serializedProjectModelSnapshot,
+                            ProjectSnapshotFactoryCommon.JsonDeserializerOptions);
+
+                        if (projectModelSnapshot is null)
+                        {
+                            throw new SerializedDataException($"Serialized project data invalid at path: {path}");
+                        }
+
+                        projectIds.Add((Guid)projectModelSnapshot.GetId());
+                    }
+                    catch (Exception) { }
+                }
+            }
+        }
+
+        return projectIds;
+    }
+
+    public void PushChangesToRemote()
+    {
+        using (var repo = new Repository(_repositoryPath))
+        {
             Remote remote = repo.Network.Remotes[RemoteOrigin];
             var options = new PushOptions();
             options.CredentialsProvider = (_url, _user, _cred) =>
                 new UsernamePasswordCredentials { Username = _configuration.RemoteUserName, Password = _configuration.RemotePassword };
             repo.Network.Push(remote, @"refs/heads/master", options);
         }
+
     }
 }
 
+internal static class RepositoryExtensions
+{
+    internal static IEnumerable<string> ToTopLevelPropertiesPaths(this IEnumerable<string> paths)
+    {
+        return  paths.Select(e => e.Split(Path.DirectorySeparatorChar)[0])
+            .Distinct()
+            .Select(e => $"{e}{Path.DirectorySeparatorChar}_Properties")
+            .ToList();
+    }
+
+    internal static IEnumerable<Guid> ToProjectIds(this IEnumerable<string> paths)
+    {
+        return paths
+            .Select(e => e.Split(Path.DirectorySeparatorChar)[0].Substring("Project_".Length))
+            .Distinct()
+            .Select(e => (success: Guid.TryParse(e, out var id), id: id))
+            .Where(parsed => parsed.success)
+            .Select(parsed => parsed.id)
+            .ToList();
+    }
+}

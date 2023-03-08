@@ -7,7 +7,7 @@ using ClearDashboard.Collaboration.Model;
 
 namespace ClearDashboard.Collaboration.DifferenceModel;
 
-public class ModelDifference<T> : ModelDifference, IModelDifference<T> where T : notnull
+public class ModelDifference<T> : ModelDifference, IModelDifference<T>// where T : notnull
 {
     public ModelDifference(Type modelType) : base(modelType)
     {

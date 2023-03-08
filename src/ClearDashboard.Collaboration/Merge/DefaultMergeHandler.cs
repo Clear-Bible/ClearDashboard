@@ -90,6 +90,81 @@ public class DefaultMergeHandler
         _mergeContext.MergeBehavior.CompleteInsertModelCommand(itemToCreate.EntityType);
     }
 
+    protected ModelMergeResult CheckMergePropertyDifferences(IModelDifference modelDifference, IReadOnlyDictionary<string, object?> propertyValues, bool strict)
+    {
+        var modelMergeResult = ModelMergeResult.Unset;
+
+        foreach (var pd in modelDifference.PropertyDifferences
+            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference))))
+        {
+            if (propertyValues.TryGetValue(pd.PropertyName, out var currentValue))
+            {
+                var vd = (ValueDifference)pd.PropertyValueDifference;
+                if (vd.EqualsValue1(currentValue))
+                {
+                    _mergeContext.Logger.LogInformation($"Updating property '{pd.PropertyName}' current value '{currentValue}' to new value '{vd.Value2AsObject}'");
+                    modelMergeResult = ModelMergeResult.ShouldMerge;
+                }
+                else if (!vd.EqualsValue2(currentValue))
+                {
+                    _mergeContext.Logger.LogInformation($"Conflict with property {pd.PropertyName} current value '{currentValue}' not matching last merge value '{vd.Value1AsObject}' or new value '{vd.Value2AsObject}'");
+                    modelMergeResult = ModelMergeResult.Conflict;
+                    break;  // FIXME:  maybe throw a ModelMergeConflictException so the caller has details
+                }
+            }
+            else if (!strict)
+            {
+                modelMergeResult = ModelMergeResult.ShouldMerge;
+            }
+            else
+            {
+                throw new InvalidDifferenceStateException($"Property name '{pd.PropertyName}' from PropertyDifferences does not exist in the current snapshot");
+            }
+        }
+
+        return modelMergeResult;
+    }
+
+    protected ModelMergeResult CheckMergeModelDifferences(IModelDifference modelDifference, IModelDistinguishable itemToModify)
+    {
+        var modelMergeResult = ModelMergeResult.Unset;
+
+        foreach (var pd in modelDifference.PropertyDifferences
+            .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ModelDifference))))
+        {
+            if (itemToModify.PropertyValues.TryGetValue(pd.PropertyName, out var v))
+            {
+                var md = (IModelDifference)pd.PropertyValueDifference;
+
+                if (v is IModelDistinguishable)
+                {
+                    modelMergeResult = CheckMerge(md, (IModelDistinguishable)v);
+                }
+                else if (v is IDictionary<string, object>)
+                {
+                    var propertyValues = ((IDictionary<string, object>)v)
+                        .ToDictionary(e => e.Key, e => (object?)e.Value).AsReadOnly();
+                    modelMergeResult = CheckMergePropertyDifferences(md, propertyValues, false);
+                }
+                else
+                {
+                    throw new InvalidDifferenceStateException($"Unable to CheckMerge for property '{pd.PropertyName}' having item type {v?.GetType()?.ShortDisplayName()}");
+                }
+
+                if (modelMergeResult == ModelMergeResult.Conflict)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                throw new InvalidDifferenceStateException($"Property name '{pd.PropertyName}' from ProjectDifferences snapshots does not exist in the current snapshot");
+            }
+        }
+
+        return modelMergeResult;
+    }
+
     protected virtual ModelMergeResult CheckMerge<T>(IModelDifference modelDifference, T itemToModify)
         where T : IModelDistinguishable
     {
@@ -98,56 +173,10 @@ public class DefaultMergeHandler
         {
             _mergeContext.Logger.LogDebug($"Checking merge of: '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
 
-            foreach (var pd in modelDifference.PropertyDifferences
-                .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ValueDifference))))
+            modelMergeResult = CheckMergePropertyDifferences(modelDifference, itemToModify.PropertyValues, true);
+            if (modelMergeResult != ModelMergeResult.Conflict)
             {
-                if (itemToModify.PropertyValues.TryGetValue(pd.PropertyName, out var currentValue))
-                {
-                    var vd = (ValueDifference)pd.PropertyValueDifference;
-                    if (vd.EqualsValue1(currentValue))
-                    {
-                        _mergeContext.Logger.LogInformation($"Updating property '{pd.PropertyName}' current value '{currentValue}' to new value '{vd.Value2AsObject}'");
-                        modelMergeResult = ModelMergeResult.ShouldMerge;
-                    }
-                    else if (!vd.EqualsValue2(currentValue))
-                    {
-                        _mergeContext.Logger.LogInformation($"Conflict with property {pd.PropertyName} current value '{currentValue}' not matching last merge value '{vd.Value1AsObject}' or new value '{vd.Value2AsObject}'");
-                        modelMergeResult = ModelMergeResult.Conflict;
-                        break;  // FIXME:  maybe throw a ModelMergeConflictException so the caller has details
-                    }
-                }
-                else
-                {
-                    throw new InvalidDifferenceStateException($"Property name '{pd.PropertyName}' from PropertyDifferences does not exist in the current snapshot");
-                }
-            }
-
-            foreach (var pd in modelDifference.PropertyDifferences
-                .Where(pd => pd.PropertyValueDifference.GetType().IsAssignableTo(typeof(ModelDifference))))
-            {
-                if (itemToModify.PropertyValues.TryGetValue(pd.PropertyName, out var v))
-                {
-                    if (v is IModelDistinguishable)
-                    {
-                        var md = (IModelDifference)pd.PropertyValueDifference;
-                        var currentValue = (IModelDistinguishable)v;
-
-                        var mergeResult = CheckMerge(md, currentValue);
-
-                        if (mergeResult == ModelMergeResult.Conflict || mergeResult == ModelMergeResult.ShouldMerge)
-                        {
-                            modelMergeResult = mergeResult;
-                        }
-                    }
-                    else
-                    {
-                        throw new InvalidDifferenceStateException($"Unable to CheckMerge for property '{pd.PropertyName}' having item type {v?.GetType()?.ShortDisplayName()}");
-                    }
-                }
-                else
-                {
-                    throw new InvalidDifferenceStateException($"Property name '{pd.PropertyName}' from ProjectDifferences snapshots does not exist in the current snapshot");
-                }
+                modelMergeResult = CheckMergeModelDifferences(modelDifference, itemToModify);
             }
         }
 

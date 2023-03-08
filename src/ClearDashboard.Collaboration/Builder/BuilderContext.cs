@@ -7,7 +7,7 @@ namespace ClearDashboard.Collaboration.Builder;
 
 public class BuilderContext
 {
-    public readonly List<string> CommonIgnoreProperties = new List<string>() { "Metadata" };
+    public readonly List<string> CommonIgnoreProperties = new List<string>() { /* "Metadata" */ };
 
     public ProjectDbContext ProjectDbContext { get; }
 

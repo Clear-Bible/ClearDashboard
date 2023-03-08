@@ -178,6 +178,10 @@ public class GeneralModelBuilder<T> : GeneralModelBuilder, IModelBuilder<T> wher
             {
                 generalModel.Add(kvp.Key, (IEnumerable<string>)kvp.Value.value!);
             }
+            else if (kvp.Value.type.IsAssignableTo(typeof(IDictionary<string, object>)))
+            {
+                generalModel.Add(kvp.Key, (IDictionary<string, object>)kvp.Value.value!);
+            }
             else
             {
                 // Should never get here if caller already checked IsDatabasePrimitiveType

@@ -4,12 +4,10 @@ using System.Text;
 using ClearDashboard.Collaboration.DifferenceModel;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.Collaboration.Exceptions;
 using SIL.Machine.Tokenization;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
-using ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Model;
 
@@ -47,9 +45,6 @@ internal static class GeneralModelExtensions
 
     internal static bool IsDatabasePrimitiveType(this Type type)
     {
-        // Leaving out ancillary Dictionary database columns like 'Metadata'
-        // If at some point we need to include Dictionaries, we'll have to
-        // add support in GeneralModel as well as determining differences.
         return
             type.IsValueType ||
             type == typeof(string) ||
@@ -222,6 +217,14 @@ internal static class GeneralModelExtensions
                     propertyDifference = new PropertyDifference(propertyName, diff);
                 }
             }
+            else if (propertyType.IsAssignableTo(typeof(IDictionary<string, object>)))
+            {
+                var diff = ((IDictionary<string, object>)value).FindMetadataModelDifference((IDictionary<string, object>)valueOther);
+                if (diff.HasDifferences)
+                {
+                    propertyDifference = new PropertyDifference(propertyName, diff);
+                }
+            }
             else if (propertyType.IsValueType || propertyType == typeof(string))
             {
                 propertyDifference = new PropertyDifference(propertyName, propertyType.ToValueDifference(value, valueOther));
@@ -233,6 +236,79 @@ internal static class GeneralModelExtensions
         }
 
         return propertyDifference;
+    }
+
+    /// <summary>
+    /// Finds differences in a dictionary (e.g. Metadata entity property), treating
+    /// each key / value pair as though it is a model object property name / value.
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    internal static IModelDifference<IDictionary<string, object>> FindMetadataModelDifference(
+        this IDictionary<string, object> source,
+        IDictionary<string, object> other)
+    {
+        var difference = new ModelDifference<IDictionary<string, object>>(typeof(IDictionary<string, object>));
+
+        source.ExceptBy(other.Select(e => e.Key), e => e.Key).ToList().ForEach(e =>
+        {
+            if (e.Value is not null)
+            {
+                difference.AddPropertyDifference(new PropertyDifference(
+                    e.Key.ToString()!,
+                    new ValueDifference<object>(e.Value, null)));
+            }
+        });
+
+        other.ExceptBy(source.Select(e => e.Key), e => e.Key).ToList().ForEach(e =>
+        {
+            if (e.Value is not null)
+            {
+                difference.AddPropertyDifference(new PropertyDifference(
+                    e.Key.ToString()!,
+                    new ValueDifference<object>(null, e.Value)));
+            }
+        });
+
+        source.IntersectBy(other.Select(e => e.Key), e => e.Key).ToList().ForEach(e =>
+        {
+            if (object.ReferenceEquals(e.Value, other[e.Key]))
+                return;
+            if (e.Value is null || other[e.Key] is null ||
+                e.Value.GetType() != other[e.Key].GetType())
+            {
+                difference.AddPropertyDifference(new PropertyDifference(
+                    e.Key.ToString()!,
+                    new ValueDifference<object>(e.Value, other[e.Key])));
+                return;
+            }
+            if (e.Value is JsonElement)
+            {
+                var element = (JsonElement)e.Value;
+                var otherElement = (JsonElement)other[e.Key];
+
+                var valueToCompare = ((JsonElement)e.Value).GetRawText();
+                var otherValueToCompare = ((JsonElement)other[e.Key]).GetRawText();
+
+                if (element.ValueKind != otherElement.ValueKind ||
+                    element.GetRawText() != otherElement.GetRawText())
+                {
+                    difference.AddPropertyDifference(new PropertyDifference(
+                        e.Key.ToString()!,
+                        new ValueDifference<object>(e.Value, other[e.Key])));
+                }
+                return;
+            }
+            if (!e.Value.Equals(other[e.Key]))
+            {
+                difference.AddPropertyDifference(new PropertyDifference(
+                    e.Key.ToString()!,
+                    new ValueDifference<object>(e.Value, other[e.Key])));
+            }
+        });
+
+        return difference;
     }
 
     internal static ListDifference? FindChildListDifference<T>(this IModelSnapshot<T> modelSnapshot, string childName, IModelSnapshot<T> otherModelSnapshot)

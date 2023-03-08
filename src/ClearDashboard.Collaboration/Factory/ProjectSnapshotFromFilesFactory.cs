@@ -3,7 +3,6 @@ using ClearDashboard.Collaboration.Model;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using ClearDashboard.Collaboration.Serializer;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearDashboard.Collaboration.Exceptions;
 
@@ -22,6 +21,11 @@ public class ProjectSnapshotFromFilesFactory
     private readonly Dictionary<Type, string> topLevelEntityFolderNameMappings = ProjectSnapshotFactoryCommon.topLevelEntityFolderNameMappings;
     private readonly Dictionary<Type, (string folderName, string childName)> childFolderNameMappings = ProjectSnapshotFactoryCommon.childFolderNameMappings;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="path">Full path of a specific project.  Likely ending in something like 'Project_aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'</param>
+    /// <param name="logger"></param>
     public ProjectSnapshotFromFilesFactory(string path, ILogger logger)
 	{
         _path = path;
@@ -30,7 +34,29 @@ public class ProjectSnapshotFromFilesFactory
         _jsonDeserializerOptions = ProjectSnapshotFactoryCommon.JsonDeserializerOptions;
     }
 
-    public GeneralModel<Models.Project> LoadProject(string commitSha, Guid projectId)
+    public static IEnumerable<(Guid projectId, string projectName)> FindProjectIdsNames(string repositoryPath)
+    {
+        var projectIdNames = new List<(Guid projectId, string projectName)>();
+
+        var searchPattern = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, "*");
+        foreach (var d in Directory.GetDirectories(repositoryPath, searchPattern))
+        {
+            var projectPropertiesFilePath = d + Path.DirectorySeparatorChar + ProjectSnapshotFactoryCommon.PROPERTIES_FILE;
+            if (File.Exists(projectPropertiesFilePath))
+            {
+                var serializedProjectModelSnapshot = File.ReadAllText(projectPropertiesFilePath);
+                var projectModelSnapshot = JsonSerializer.Deserialize<GeneralModel<Models.Project>>(
+                    serializedProjectModelSnapshot,
+                    ProjectSnapshotFactoryCommon.JsonDeserializerOptions);
+
+                projectIdNames.Add(((Guid)projectModelSnapshot!.GetId(), (string)projectModelSnapshot[nameof(Models.Project.ProjectName)]!));
+            }
+        }
+
+        return projectIdNames;
+    }
+
+    public GeneralModel<Models.Project> LoadProject()
     {
         var topLevelEntries = Directory.EnumerateFileSystemEntries(_path).OrderBy(n => n);
         var projectModelSnapshot = LoadProjectProperties(topLevelEntries);
@@ -38,7 +64,7 @@ public class ProjectSnapshotFromFilesFactory
         return projectModelSnapshot;
     }
 
-    public IEnumerable<GeneralModel<Models.User>> LoadUsers(string commitSha, Guid projectId)
+    public IEnumerable<GeneralModel<Models.User>> LoadUsers()
     {
         var topLevelEntries = Directory.EnumerateFileSystemEntries(_path).OrderBy(n => n);
 

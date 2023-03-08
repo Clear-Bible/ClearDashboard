@@ -11,6 +11,7 @@ using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.DataAccessLayer.Models;
 using ClearDashboard.Collaboration.Serializer;
 using ClearDashboard.Collaboration.Exceptions;
+using Newtonsoft.Json.Linq;
 
 namespace ClearDashboard.Collaboration.Model;
 
@@ -209,7 +210,7 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
     public void Add(string key, ModelRef value) { AddProperty(key, value); }
     public void Add(string key, ModelExtra value) { AddProperty(key, value); }
     public void Add(string key, IEnumerable<string> value) { AddProperty(key, value); }
-    //public void Add(string key, GeneralDictionaryModel<string, object> value) { AddProperty(key, value); }
+    public void Add(string key, IDictionary<string, object> value) { AddProperty(key, value); }
 
     public bool TryGetPropertyValue(string key, out object? value) => _properties.TryGetValue(key, out value);
     public object? this[string key] => _properties[key];
@@ -241,9 +242,26 @@ public abstract class GeneralModel : IModelSnapshot, IModelDistinguishable<IMode
                     ((ModelRef)propertyValue).ApplyPropertyDifference(pd);
                 }
             }
+            else if (propertyValue is not null && propertyValue.GetType().IsAssignableTo(typeof(IDictionary<string, object>)))
+            {
+                foreach (var pd in ((IModelDifference)propertyDifference.PropertyValueDifference).PropertyDifferences)
+                {
+                    var dictionaryProperty = (IDictionary<string, object>)propertyValue;
+                    var value = ((ValueDifference)pd.PropertyValueDifference).Value2AsObject;
+
+                    if (value is null)
+                    {
+                        dictionaryProperty.Remove(pd.PropertyName);
+                    }
+                    else
+                    {
+                        dictionaryProperty[pd.PropertyName] = value;
+                    }
+                }
+            }
             else
             {
-                throw new InvalidDifferenceStateException($"Attempt in GeneralModel to ApplyPropertyDifferences to property name '{propertyName}' but value is either null or not of type ModelRef");
+                throw new InvalidDifferenceStateException($"Attempt in GeneralModel to ApplyPropertyDifferences to property name '{propertyName}' but value is either null or not of type ModelRef or IEnumerable<KeyValuePair<string, object?>>");
             }
         }
         else
