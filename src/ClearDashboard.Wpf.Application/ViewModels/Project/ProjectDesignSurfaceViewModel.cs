@@ -448,7 +448,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             Logger!.LogInformation("AddManuscriptHebrewCorpus called.");
 
-            var taskName = "Macula Hebrew";
+            var taskName = MaculaCorporaNames.HebrewCorpusName;
 
             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = false;
 
@@ -474,7 +474,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 Id = ManuscriptIds.HebrewManuscriptId,
                 CorpusType = CorpusType.ManuscriptHebrew,
-                Name = "Macula Hebrew",
+                Name = MaculaCorporaNames.HebrewCorpusName,
                 AvailableBooks = books,
             };
 
@@ -496,7 +496,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
                         IsRtl: true,
-                        Name: "Macula Hebrew",
+                        Name: MaculaCorporaNames.HebrewCorpusName,
                         Language: "Hebrew",
                         CorpusType: CorpusType.ManuscriptHebrew.ToString(),
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
@@ -513,7 +513,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
-                        "Macula Hebrew",
+                        MaculaCorporaNames.HebrewCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken,
                         true);
@@ -596,7 +596,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = false;
 
-            var taskName = "Macula Greek";
+            var taskName = MaculaCorporaNames.GreekCorpusName;
             var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = task.CancellationTokenSource!.Token;
 
@@ -621,7 +621,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 Id = ManuscriptIds.GreekManuscriptId,
                 CorpusType = CorpusType.ManuscriptGreek,
-                Name = "Macula Greek",
+                Name = MaculaCorporaNames.GreekCorpusName,
                 AvailableBooks = books,
             };
 
@@ -641,7 +641,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
                         IsRtl: false,
-                        Name: "Macula Greek",
+                        Name: MaculaCorporaNames.GreekCorpusName,
                         Language: "Greek",
                         CorpusType: CorpusType.ManuscriptGreek.ToString(),
                         ParatextId: ManuscriptIds.GreekManuscriptId,
@@ -655,7 +655,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
-                        "Macula Greek",
+                        MaculaCorporaNames.GreekCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken,
                         true);
