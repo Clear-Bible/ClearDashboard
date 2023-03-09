@@ -85,9 +85,10 @@ public class DefaultMergeHandler
         var id = await _mergeContext.MergeBehavior.RunInsertModelCommand(itemToCreate, cancellationToken);
         return id;
     }
-    protected virtual void HandleCreateComplete<T>(T itemToCreate) where T : IModelSnapshot
+    protected virtual async Task HandleCreateComplete<T>(T itemToCreate, CancellationToken cancellationToken) where T : IModelSnapshot
     {
         _mergeContext.MergeBehavior.CompleteInsertModelCommand(itemToCreate.EntityType);
+        await Task.CompletedTask;
     }
 
     protected bool CheckMergePropertyValueDifferences(IModelDifference modelDifference, IReadOnlyDictionary<string, object?> propertyValues)
@@ -269,7 +270,7 @@ public class DefaultMergeHandler
                     // FIXME:  should we call something like currentSnapshotList.AddById()?
                     handler.HandleCreateStart(onlyIn2);
                     await handler.HandleCreateAsync(onlyIn2, cancellationToken);
-                    handler.HandleCreateComplete(onlyIn2);
+                    await handler.HandleCreateComplete(onlyIn2, cancellationToken);
 
                     _mergeContext.Logger.LogInformation($"Inserted {onlyIn2.EntityType.ShortDisplayName()} having id '{onlyIn2.GetId()}'");
 
@@ -312,7 +313,7 @@ public class DefaultMergeHandler
                         // was never deleted but modified instead?
                         handler.HandleCreateStart(itemInTargetCommitSnapshot);
                         await handler.HandleCreateAsync(itemInTargetCommitSnapshot, cancellationToken);
-                        handler.HandleCreateComplete(itemInTargetCommitSnapshot);
+                        await handler.HandleCreateComplete(itemInTargetCommitSnapshot, cancellationToken);
 
                         _mergeContext.Logger.LogInformation($"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having id '{itemInTargetCommitSnapshot.GetId()}'");
                     }
@@ -346,7 +347,7 @@ public class DefaultMergeHandler
                 await handler.HandleCreateAsync(modelSnapshot, cancellationToken);
                 insertCount++;
             }
-            handler.HandleCreateComplete(firstChild);
+            await handler.HandleCreateComplete(firstChild, cancellationToken);
         }
 
         return insertCount;

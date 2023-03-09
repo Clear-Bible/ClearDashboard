@@ -106,9 +106,9 @@ DELETE FROM TokenComponent WHERE Id IN
         await base.HandleDeleteAsync(itemToDelete, cancellationToken);
     }
 
-    protected override async void HandleCreateComplete<T>(T itemToCreate)
+    protected override async Task HandleCreateComplete<T>(T itemToCreate, CancellationToken cancellationToken)
     {
-        base.HandleCreateComplete(itemToCreate);
+        await base.HandleCreateComplete(itemToCreate, cancellationToken);
 
         if (!typeof(T).IsAssignableTo(typeof(IModelSnapshot<Models.TokenComposite>)))
         {
@@ -158,7 +158,8 @@ DELETE FROM TokenComponent WHERE Id IN
 
                 projectDbContext.TokenCompositeTokenAssociations.AddRange(tokenAssocationsToAdd);
                 await Task.CompletedTask;
-            });
+            },
+            cancellationToken);
     }
 
     public override async Task<bool> HandleModifyPropertiesAsync<T>(IModelDifference<T> modelDifference, T itemToModify, CancellationToken cancellationToken = default)
@@ -238,7 +239,8 @@ DELETE FROM TokenComponent WHERE Id IN
 
                 projectDbContext.TokenCompositeTokenAssociations.AddRange(tokenAssocationsToAdd);
                 await Task.CompletedTask;
-            });
+            },
+            cancellationToken);
 
         return modified;
     }

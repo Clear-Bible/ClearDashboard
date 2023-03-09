@@ -37,7 +37,8 @@ public class TranslationSetHandler : DefaultMergeHandler
                 LoadTokenizedCorpusLocationsIntoCache(projectDbContext, translationSets.ParallelCorpus!.SourceTokenizedCorpusId, cache);
 
                 await Task.CompletedTask;
-            });
+            },
+            cancellationToken);
 
         _mergeContext.Logger.LogInformation("Starting create Translations");
 

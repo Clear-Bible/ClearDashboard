@@ -158,6 +158,7 @@ public class CollaborationManager
             {
                 var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId, includeMerge);
                 var result = await _mediator.Send(command, cancellationToken);
+                result.ThrowIfCanceledOrFailed();
             }
             else
             {

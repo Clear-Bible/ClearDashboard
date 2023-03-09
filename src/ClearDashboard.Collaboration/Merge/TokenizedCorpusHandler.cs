@@ -72,7 +72,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             _mergeContext.Logger.LogInformation($"Completed inserting {insertCount} verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
 
             _mergeContext.Logger.LogInformation($"Inserting tokens for imported verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
-            await InsertTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot, verseRowHandler);
+            await InsertTokens((IModelSnapshot<Models.TokenizedCorpus>)parentSnapshot, verseRowHandler, cancellationToken);
             _mergeContext.Logger.LogInformation($"Completed inserting tokens for imported verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
         }
         else
@@ -122,7 +122,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             if (parentItemInCurrentSnapshot is not null)
             {
                 _mergeContext.Logger.LogInformation($"Inserting tokens for list difference verse row children for tokenized corpus '{parentItemInCurrentSnapshot.GetId()}'");
-                await InsertTokens((IModelSnapshot<Models.TokenizedCorpus>)parentItemInCurrentSnapshot, verseRowHandler);
+                await InsertTokens((IModelSnapshot<Models.TokenizedCorpus>)parentItemInCurrentSnapshot, verseRowHandler, cancellationToken);
                 _mergeContext.Logger.LogInformation($"Compelted inserting tokens for list difference verse row children for tokenized corpus '{parentItemInCurrentSnapshot.GetId()}'");
             }
         }
@@ -140,7 +140,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
         }
     }
 
-    private async Task InsertTokens(IModelSnapshot<Models.TokenizedCorpus> tokenizedCorpusSnapshot, VerseRowHandler verseRowHandler)
+    private async Task InsertTokens(IModelSnapshot<Models.TokenizedCorpus> tokenizedCorpusSnapshot, VerseRowHandler verseRowHandler, CancellationToken cancellationToken)
     {
         if (!verseRowHandler.VerseRowsForTokenization.Any())
         {
@@ -148,7 +148,12 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
         }
 
         var tokenizedCorpusId = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
-        var textCorpus = ExtractITextCorpus(tokenizedCorpusSnapshot, verseRowHandler);
+        int scrVersType = (int)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.ScrVersType)]!;
+        string? customVersData = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.CustomVersData)];
+        string? tokenizationFunction = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.TokenizationFunction)];
+
+        var versification = ExtractVersification(scrVersType, customVersData);
+        var textCorpus = ExtractITextCorpus(tokenizedCorpusId, tokenizationFunction, versification, verseRowHandler.VerseRowsForTokenization);
         var bookIds = textCorpus.Texts.Select(t => t.Id).ToList();
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
@@ -205,17 +210,14 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                 }
 
                 logger.LogInformation($"Inserted {tokenInsertCount} tokens");
-            });
+            },
+            cancellationToken);
 
     }
 
-    private ITextCorpus ExtractITextCorpus(IModelSnapshot<Models.TokenizedCorpus> tokenizedCorpusSnapshot, VerseRowHandler verseRowHandler)
+    public static ScrVers ExtractVersification(int scrVersType, string? customVersData)
     {
-        int srcVersType = (int)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.ScrVersType)]!;
-        string? customVersData = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.CustomVersData)];
-        string? tokenizationFunction = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.TokenizationFunction)];
-
-        ScrVers versification = new ScrVers((ScrVersType)srcVersType);
+        ScrVers versification = new ScrVers((ScrVersType)scrVersType);
         if (!string.IsNullOrEmpty(customVersData))
         {
             using (var reader = new StringReader(customVersData))
@@ -224,16 +226,25 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             }
         }
 
+        return versification;
+    }
+
+    public static ITextCorpus ExtractITextCorpus(
+        Guid tokenizedCorpusId,
+        string? tokenizationFunction,
+        ScrVers versification,
+        IEnumerable<(string bookChapterVerse, string text, bool isSentenceStart)> verseRowsForTokenization)
+    {
         if (string.IsNullOrEmpty(tokenizationFunction))
         {
-            throw new InvalidModelStateException($"TokenizedCorpus model snaphot having Id '{tokenizedCorpusSnapshot.GetId()}' has a null or empty TokenizationFunction.  Is this valid?");
+            throw new InvalidModelStateException($"TokenizedCorpus model snaphot having Id '{tokenizedCorpusId}' has a null or empty TokenizationFunction.  Is this valid?");
         }
 
         var bookNumbersToAbbreviations =
             FileGetBookIds.BookIds.ToDictionary(x => int.Parse(x.silCannonBookNum),
                 x => x.silCannonBookAbbrev);
 
-        IEnumerable<VerseRowText> verseRowTexts = verseRowHandler.VerseRowsForTokenization
+        IEnumerable<VerseRowText> verseRowTexts = verseRowsForTokenization
             .OrderBy(v => v.bookChapterVerse)
             .GroupBy(v => v.bookChapterVerse.Substring(0, 3))
             .Select(g =>
@@ -251,7 +262,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                 }
                 else
                 {
-                    throw new InvalidModelStateException($"Invalid book number '{g.Key}' contained in VerseRow BCV for TokenizedCorpusId '{tokenizedCorpusSnapshot.GetId()}' ");
+                    throw new InvalidModelStateException($"Invalid book number '{g.Key}' contained in VerseRow BCV for TokenizedCorpusId '{tokenizedCorpusId}' ");
                 }
             })
             .ToList();
@@ -333,9 +344,8 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                 }
 
                 logger.LogInformation($"Inserted {tokenInsertCount} tokens");
-            });
-
-
+            },
+            cancellationToken);
     }
 
     private ITextCorpus GetMaculaCorpus(Models.CorpusType corpusType)

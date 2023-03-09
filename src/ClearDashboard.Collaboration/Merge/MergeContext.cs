@@ -3,6 +3,7 @@ using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.Collaboration.Model;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
@@ -34,6 +35,7 @@ public sealed class MergeContext
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.AlignmentSet>), new AlignmentSetHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Alignment>), new AlignmentHandler(this));
         _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.Translation>), new TranslationHandler(this));
+        _mergeHandlerRegistry.Add(typeof(IModelSnapshot<Models.ParallelCorpus>), new ParallelCorpusHandler(this));
         _mergeHandlerRegistry.Add(typeof(NoteModelRef), new NoteModelRefHandler(this));
     }
 

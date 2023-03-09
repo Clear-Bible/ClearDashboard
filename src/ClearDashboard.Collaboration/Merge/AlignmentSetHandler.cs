@@ -40,7 +40,8 @@ public class AlignmentSetHandler : DefaultMergeHandler
                 LoadTokenizedCorpusLocationsIntoCache(projectDbContext, alignmentSet.ParallelCorpus!.TargetTokenizedCorpusId, cache);
 
                 await Task.CompletedTask;
-            });
+            },
+            cancellationToken);
 
         _mergeContext.Logger.LogInformation("Starting create Alignments");
 

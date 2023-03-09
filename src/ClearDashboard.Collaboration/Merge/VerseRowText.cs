@@ -1,4 +1,6 @@
-﻿using ClearDashboard.DAL.Alignment.Exceptions;
+﻿using ClearBible.Engine.Corpora;
+using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DAL.Alignment.Exceptions;
 using ClearDashboard.DAL.Alignment.Features.Corpora;
 using MediatR;
 using SIL.Machine.Corpora;
@@ -19,7 +21,7 @@ internal class VerseRowText : ScriptureText
     protected override IEnumerable<TextRow> GetVersesInDocOrder()
     {
         var verses = _verseRows
-            .SelectMany(vr => CreateRows(vr.chapter, vr.verse, vr.text, vr.isSentenceStart));
+            .SelectMany(vr => CreateRows(new VerseRef(Id, vr.chapter, vr.verse, Versification), vr.text, vr.isSentenceStart));
 
         return verses;
     }
