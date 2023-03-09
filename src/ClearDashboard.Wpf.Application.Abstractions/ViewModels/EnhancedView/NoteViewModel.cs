@@ -38,7 +38,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             get => Entity.NoteStatus;
             set
             {
-                if (Equals(value, Entity.NoteStatus)) return;
+                if (Equals(value, Entity.NoteStatus)) 
+                    return;
                 Entity.NoteStatus = value;
                 NotifyOfPropertyChange();
             }

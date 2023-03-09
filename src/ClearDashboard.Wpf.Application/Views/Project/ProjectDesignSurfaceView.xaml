@@ -629,11 +629,13 @@
                     <!--  Slider to change the current zoom level.  -->
                     <Slider
                         Width="120"
-                        Margin="3"
-                        VerticalAlignment="Center"
+                        Height="40"
+                        Margin="1"
+                        VerticalAlignment="Bottom"  
                         LargeChange="20"
                         Maximum="200"
                         Minimum="1"
+                        
                         SmallChange="10"
                         TickFrequency="10"
                         TickPlacement="TopLeft"

@@ -51,14 +51,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
         protected virtual void SetupDependencyInjection()
         {
             var services = new ServiceCollection();
-            services.AddScoped<ProjectDbContext>();
-            services.AddScoped<ProjectDbContextFactory>();
-            services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
-            services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
-            services.AddLogging();
-            services.AddSingleton<IUserProvider, UserProvider>();
-            services.AddSingleton<IProjectProvider, ProjectProvider>();
-            services.AddSingleton<IEventAggregator, EventAggregator>();
+            AddServices(services);
 
             var configBuilder = new ConfigurationBuilder();
             configBuilder.AddJsonFile("appsettings.json");
@@ -86,6 +79,18 @@ namespace ClearDashboard.DAL.Alignment.Tests
             builder.RegisterType<CollaborationManager>().AsSelf().SingleInstance();
 
             Container = builder.Build();
+        }
+
+        protected virtual void AddServices(ServiceCollection services)
+        {
+            services.AddScoped<ProjectDbContext>();
+            services.AddScoped<ProjectDbContextFactory>();
+            services.AddScoped<DbContextOptionsBuilder<ProjectDbContext>, SqliteProjectDbContextOptionsBuilder<ProjectDbContext>>();
+            services.AddMediatR(typeof(CreateParallelCorpusCommandHandler), typeof(ClearDashboard.DataAccessLayer.Features.Versification.GetVersificationAndBookIdByDalParatextProjectIdQueryHandler));
+            services.AddLogging();
+            services.AddSingleton<IUserProvider, UserProvider>();
+            services.AddSingleton<IProjectProvider, ProjectProvider>();
+            services.AddSingleton<IEventAggregator, EventAggregator>();
         }
 
         private async void SetupTests()
