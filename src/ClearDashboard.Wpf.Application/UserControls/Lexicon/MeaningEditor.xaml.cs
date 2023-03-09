@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,7 +14,6 @@ using ClearDashboard.Wpf.Application.Collections.Lexicon;
 using ClearDashboard.Wpf.Application.Events.Lexicon;
 using ClearDashboard.Wpf.Application.Messages.Lexicon;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Lexicon;
-using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
 using Brushes = System.Windows.Media.Brushes;
 using FontFamily = System.Windows.Media.FontFamily;
 
@@ -24,7 +22,9 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
     /// <summary>
     /// A control that displays and edits the details of a particular meaning within a <see cref="LexemeViewModel"/>.
     /// </summary>
-    public partial class MeaningEditor : INotifyPropertyChanged, IHandle<LexiconTranslationMovedMessage>
+    public partial class MeaningEditor : INotifyPropertyChanged, 
+        IHandle<LexiconTranslationAddedMessage>,
+        IHandle<LexiconTranslationMovedMessage>
     {
         #region Static Routed Events
 
@@ -57,6 +57,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         /// </summary>
         public static readonly RoutedEvent MeaningUpdatedEvent = EventManager.RegisterRoutedEvent
             (nameof(MeaningUpdated), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
+
+        /// <summary>
+        /// Identifies the TranslationAddedEvent routed event.
+        /// </summary>
+        public static readonly RoutedEvent TranslationAddedEvent = EventManager.RegisterRoutedEvent
+            (nameof(TranslationAdded), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MeaningEditor));
 
         /// <summary>
         /// Identifies the TranslationDeletedEvent routed event.
@@ -219,27 +225,27 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         #region Private Properties
         private string? OriginalMeaningText { get; set; } = string.Empty;
 
-        private bool _isEditing;
-        private bool IsEditing
+        private bool _isEditingMeaning;
+        private bool IsEditingMeaning
         {
-            get => _isEditing;
+            get => _isEditingMeaning;
             set
             {
-                _isEditing = value;
+                _isEditingMeaning = value;
                 OnPropertyChanged(nameof(MeaningTextBlockVisibility));
                 OnPropertyChanged(nameof(MeaningTextBoxVisibility));
             }
         }
 
-        public Visibility MeaningTextBlockVisibility => IsEditing ? Visibility.Hidden : Visibility.Visible;
-        public Visibility MeaningTextBoxVisibility => IsEditing ? Visibility.Visible : Visibility.Hidden;
+        public Visibility MeaningTextBlockVisibility => IsEditingMeaning ? Visibility.Hidden : Visibility.Visible;
+        public Visibility MeaningTextBoxVisibility => IsEditingMeaning ? Visibility.Visible : Visibility.Hidden;
 
         #endregion
         #region Private Methods
 
-        private void BeginEdit()
+        private void BeginMeaningEdit()
         {
-            IsEditing = true;
+            IsEditingMeaning = true;
 
             MeaningTextBox.SelectAll();
             MeaningTextBox.Focus();
@@ -247,7 +253,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             OriginalMeaningText = Meaning.Text;
         }
 
-        private void CommitEdit()
+        private void CommitMeaningEdit()
         {
             if (MeaningTextBox.Text != OriginalMeaningText)
             {
@@ -255,13 +261,30 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
                 RaiseMeaningEvent(MeaningUpdatedEvent);
             }
 
-            IsEditing = false;
+            IsEditingMeaning = false;
         }
 
-        private void UndoEdit()
+        private void UndoMeaningEdit()
         {
             MeaningTextBox.Text = OriginalMeaningText;
-            IsEditing = false;
+            IsEditingMeaning = false;
+        }        
+        
+        private void CommitTranslationAdd()
+        {
+            if (!string.IsNullOrWhiteSpace(NewTranslationTextBox.Text))
+            {
+                var newTranslation = new LexiconTranslationViewModel(new Translation { Text = NewTranslationTextBox.Text }, Meaning) {IsSelected = true};
+                //Meaning.Translations.Add(newTranslation);
+                RaiseLexicalTranslationEvent(TranslationAddedEvent, newTranslation);
+
+                NewTranslationTextBox.Text = string.Empty;
+            }
+        }
+
+        private void UndoTranslationAdd()
+        {
+            NewTranslationTextBox.Text = string.Empty;
         }
 
         private void RaiseMeaningEvent(RoutedEvent routedEvent)
@@ -300,25 +323,25 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
 
         private void OnMeaningLabelClick(object sender, MouseButtonEventArgs e)
         {
-            BeginEdit();
+            BeginMeaningEdit();
         }
 
         private void OnMeaningTextBoxKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                CommitEdit();
+                CommitMeaningEdit();
             }
 
             if (e.Key == Key.Escape)
             {
-                UndoEdit();
+                UndoMeaningEdit();
             }
         }
 
         private void OnMeaningTextBoxLostFocus(object sender, RoutedEventArgs routedEventArgs)
         {
-            CommitEdit();
+            CommitMeaningEdit();
         }
 
         private void OnSemanticDomainAdded(object sender, RoutedEventArgs e)
@@ -348,6 +371,37 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             }
         }
 
+        private void OnNewTranslationTextBoxKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                CommitTranslationAdd();
+            }
+
+            if (e.Key == Key.Escape)
+            {
+                UndoTranslationAdd();
+            }
+        }
+
+        private void OnNewTranslationChanged(object sender, RoutedEventArgs e)
+        {
+            //RaiseTranslationEntryEvent(NewTranslationChangedEvent, new LexiconTranslationViewModel { Text = NewTranslationTextBox.Text });
+        }
+
+        private void OnNewTranslationChecked(object sender, RoutedEventArgs e)
+        {
+            NewTranslationTextBoxIsEnabled = true;
+            OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
+            NewTranslationTextBox.Focus();
+        }
+
+        private void OnNewTranslationUnchecked(object sender, RoutedEventArgs e)
+        {
+            NewTranslationTextBoxIsEnabled = false;
+            OnPropertyChanged(nameof(NewTranslationTextBoxIsEnabled));
+        }
+
         private void ConfirmMeaningDeletion(object sender, RoutedEventArgs e)
         {
             ConfirmDeletePopup.IsOpen = true;
@@ -368,7 +422,7 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             if (Meaning.Text == "New Meaning")
             {
-                BeginEdit();
+                BeginMeaningEdit();
                 MeaningTextBox.SelectAll();
                 MeaningTextBox.Focus();
             }
@@ -411,6 +465,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
             }
         }
 
+        public async Task HandleAsync(LexiconTranslationAddedMessage message, CancellationToken cancellationToken)
+        {
+            if (Meaning.MeaningId != null && Meaning.MeaningId.IdEquals(message.Meaning.MeaningId))
+            {
+                Meaning.Translations.Add(message.Translation);
+            }
+            await Task.CompletedTask;
+        }        
+        
         public async Task HandleAsync(LexiconTranslationMovedMessage message, CancellationToken cancellationToken)
         {
             if (message.SourceMeaning != null)
@@ -442,6 +505,12 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         }
 
         #endregion Private event handlers
+        #region Private Properties
+
+        public bool NewTranslationTextBoxIsEnabled { get; set; }
+
+
+        #endregion
         #region Public Properties
 
         public static IEventAggregator? EventAggregator { get; set; }
@@ -698,6 +767,15 @@ namespace ClearDashboard.Wpf.Application.UserControls.Lexicon
         {
             add => AddHandler(MeaningUpdatedEvent, value);
             remove => RemoveHandler(MeaningUpdatedEvent, value);
+        }
+
+        /// <summary>
+        /// Occurs when a new translation is added.
+        /// </summary>
+        public event RoutedEventHandler TranslationAdded
+        {
+            add => AddHandler(TranslationAddedEvent, value);
+            remove => RemoveHandler(TranslationAddedEvent, value);
         }
 
         /// <summary>

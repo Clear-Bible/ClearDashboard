@@ -78,6 +78,9 @@
                 <b:EventTrigger EventName="SemanticDomainRemoved">
                     <b:CallMethodAction MethodName="OnSemanticDomainRemoved" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                 </b:EventTrigger>
+                <b:EventTrigger EventName="TranslationAdded">
+                    <b:CallMethodAction MethodName="OnMeaningTranslationAdded" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
+                </b:EventTrigger>
                 <b:EventTrigger EventName="TranslationDeleted">
                     <b:CallMethodAction MethodName="OnTranslationDeleted" TargetObject="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type lexiconViews:LexiconDialogView}}, Path=DataContext}" />
                 </b:EventTrigger>
