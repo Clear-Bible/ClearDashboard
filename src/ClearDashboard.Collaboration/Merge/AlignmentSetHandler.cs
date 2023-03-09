@@ -8,6 +8,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ClearDashboard.Collaboration.Builder;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -53,13 +54,54 @@ public class AlignmentSetHandler : DefaultMergeHandler
                 var firstAlignment = (IModelSnapshot)firstChild;
                 var handler = _mergeContext.FindMergeHandler<IModelSnapshot<Models.Alignment>>();
 
+                var denormalizationTexts = new HashSet<string>();
+
                 _mergeContext.MergeBehavior.StartInsertModelCommand(firstAlignment);
                 foreach (var child in parentSnapshot.Children[alignmentsChildName])
                 {
                     var id = await _mergeContext.MergeBehavior.RunInsertModelCommand((IModelSnapshot)child, cancellationToken);
+
+                    var sourceTokenLocation = (string)child.PropertyValues[AlignmentBuilder.SOURCE_TOKEN_LOCATION]!;
+                    _mergeContext.MergeBehavior.MergeCache.TryLookupCacheEntry((typeof(Models.AlignmentSet), alignmentSetId.ToString()!),
+                        nameof(Models.ParallelCorpus.SourceTokenizedCorpusId), out var sourceTokenizedCorpusId);
+                    _mergeContext.MergeBehavior.MergeCache.TryLookupCacheEntry(
+                        (typeof(Models.AlignmentSetDenormalizationTask), sourceTokenizedCorpusId!.ToString()!), sourceTokenLocation, out var trainingText);
+
+                    denormalizationTexts.Add((string)trainingText!);
                     count++;
                 }
                 _mergeContext.MergeBehavior.CompleteInsertModelCommand(firstAlignment.EntityType);
+
+                // Add denormalization data here so it is part of the surrounding transaction:
+                List<GeneralModel<Models.AlignmentSetDenormalizationTask>> alignmentSetDenormalizationTasks = new();
+                if (denormalizationTexts.Count() <= 10000)
+                {
+                    denormalizationTexts.ToList().ForEach(e =>
+                    {
+                        var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
+                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), alignmentSetId);
+                        t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), e);
+
+                        alignmentSetDenormalizationTasks.Add(t);
+                    });
+                }
+                else
+                {
+                    var t = new GeneralModel<Models.AlignmentSetDenormalizationTask>(nameof(Models.AlignmentSetDenormalizationTask.Id), Guid.NewGuid());
+                    t.Add(nameof(Models.AlignmentSetDenormalizationTask.AlignmentSetId), alignmentSetId);
+                    t.Add(nameof(Models.AlignmentSetDenormalizationTask.SourceText), (string?)null);
+
+                    alignmentSetDenormalizationTasks.Add(t);
+                }
+
+                _mergeContext.MergeBehavior.StartInsertModelCommand(alignmentSetDenormalizationTasks.First());
+                foreach (var child in alignmentSetDenormalizationTasks)
+                {
+                    _ = await _mergeContext.MergeBehavior.RunInsertModelCommand((IModelSnapshot)child, cancellationToken);
+                }
+                _mergeContext.MergeBehavior.CompleteInsertModelCommand(typeof(Models.AlignmentSetDenormalizationTask));
+
+                _mergeContext.FireAlignmentDenormalizationEvent = true;
             }
         }
 

@@ -110,8 +110,8 @@ public class ProjectSnapshot
         }
         else
         {
-            throw new ArgumentException($"ProjectSnapshot does not contain a GeneralModel of type {typeof(T).ShortDisplayName()}");
-            //return Enumerable.Empty<GeneralModel<T>>();
+            //throw new ArgumentException($"ProjectSnapshot does not contain a GeneralModel of type {typeof(T).ShortDisplayName()}");
+            return Enumerable.Empty<GeneralModel<T>>();
         }
     }
 }

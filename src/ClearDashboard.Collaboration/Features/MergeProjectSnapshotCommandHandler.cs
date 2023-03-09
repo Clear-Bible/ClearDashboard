@@ -7,7 +7,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
-using ClearDashboard.DataAccessLayer.Models;
+using Models = ClearDashboard.DataAccessLayer.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -17,6 +17,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClearDashboard.DAL.Alignment.Features.Events;
 
 namespace ClearDashboard.Collaboration.Features;
 public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler<
@@ -24,10 +25,14 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
     RequestResult<Unit>,
     Unit>
 {
-    public MergeProjectSnapshotCommandHandler(ProjectDbContextFactory projectNameDbContextFactory,
+    private readonly IMediator _mediator;
+
+    public MergeProjectSnapshotCommandHandler(IMediator mediator,
+        ProjectDbContextFactory projectNameDbContextFactory,
         IProjectProvider projectProvider,
         ILogger<MergeProjectSnapshotCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
     {
+        _mediator = mediator;
     }
 
     protected override async Task<RequestResult<Unit>> SaveDataAsync(
@@ -63,12 +68,18 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
                 BuilderContext builderContext = new(ProjectDbContext);
                 var currentProjectSnapshot = GetProjectSnapshotQueryHandler.LoadSnapshot(builderContext);
 
-                var merger = new Merger(new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, request.RemoteOverridesLocal));
+                var mergeContext = new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, request.RemoteOverridesLocal);
+                var merger = new Merger(mergeContext);
                 await merger.MergeAsync(projectDifferences, currentProjectSnapshot, request.ProjectSnapshotToMerge, cancellationToken);
 
                 await mergeBehavior.MergeEndAsync(cancellationToken);
                 // FIXME:  temporary, for testing:
                 //await MergeContext.MergeBehavior.MergeErrorAsync(cancellationToken);
+
+                if (mergeContext.FireAlignmentDenormalizationEvent)
+                {
+                    await _mediator.Publish(new AlignmentAddedRemovedEvent(Enumerable.Empty<Models.Alignment>(), null), cancellationToken);
+                }
             }
             catch (Exception ex)
             {

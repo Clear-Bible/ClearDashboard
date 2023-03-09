@@ -476,12 +476,16 @@ public class DefaultMergeHandler
     {
         if (!cache.ContainsKey((typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString())))
         {
-            var tokenLocationIds = projectDbContext.TokenComponents
+            var tokenComponentsByLocationId = projectDbContext.TokenComponents
                 .Where(e => e.TokenizedCorpusId == tokenizedCorpusId)
                 .Where(e => e.EngineTokenId != null)
-                .ToDictionary(e => e.EngineTokenId!, e => (object?)e.Id);
+                .ToDictionary(e => e.EngineTokenId!, e => e);
+
+            var tokenLocationIds = tokenComponentsByLocationId.ToDictionary(e => e.Key, e => (object?)e.Value.Id);
+            var tokenLocationTrainingTexts = tokenComponentsByLocationId.ToDictionary(e => e.Key, e => (object?)e.Value.TrainingText);
 
             cache.AddCacheEntrySet((typeof(Models.TokenizedCorpus), tokenizedCorpusId.ToString()), tokenLocationIds);
+            cache.AddCacheEntrySet((typeof(Models.AlignmentSetDenormalizationTask), tokenizedCorpusId.ToString()), tokenLocationTrainingTexts);
         }
     }
 }
