@@ -51,6 +51,7 @@ using DockingManager = AvalonDock.DockingManager;
 using Point = System.Drawing.Point;
 using MahApps.Metro.Controls;
 using ClearDashboard.Collaboration.Services;
+using ClearDashboard.Collaboration.Factory;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -200,25 +201,43 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     ShowAboutWindow();
                 }
+                else if (value == "CollaborationCloneID")
+                {
+                    _collaborationManager.InitializeRepository();
+                    _collaborationManager.FetchMergeRemote();
+
+                    // Just to get project Ids and names:
+                    var projectIdsNames = ProjectSnapshotFromFilesFactory.FindProjectIdsNames(_collaborationManager.RepositoryPath);
+
+                    foreach (var (projectId, projectName) in projectIdsNames)
+                    {
+                        // Run initialize to create each project database (with project and
+                        // user entities)
+                        _collaborationManager.InitializeProjectDatabaseAsync(projectId, true, CancellationToken.None).Wait();
+                    }
+                }
                 else if (value == "CollaborationInitializeID")
                 {
                     _collaborationManager.InitializeRepository();
+                    _collaborationManager.FetchMergeRemote();
+                    _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
+                    _collaborationManager.CommitChanges($"Initial commit");
+                    _collaborationManager.PushChangesToRemote();
                 }
-                else if (value == "CollaborationPullID")
+                else if (value == "CollaborationGetLatestID")
                 {
                     _collaborationManager.FetchMergeRemote();
-                }
-                else if (value == "CollaborationMergeID")
-                {
-                    _collaborationManager.MergeLatestChangesAsync(CancellationToken.None).Wait();
-                }
-                else if (value == "CollaborationStageID")
-                {
-                    _collaborationManager.StageChangesAsync(CancellationToken.None).Wait();
+                    _collaborationManager.MergeProjectLatestChangesAsync(true, false, CancellationToken.None).Wait();
                 }
                 else if (value == "CollaborationCommitID")
                 {
-                    _collaborationManager.CommitPushChanges("Boy Howdy!");
+                    _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
+                    _collaborationManager.CommitChanges($"Fake commit message {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}");
+                    _collaborationManager.PushChangesToRemote();
+                }
+                else if (value == "CollaborationHardResetID")
+                {
+                    _collaborationManager.HardResetChanges();
                 }
                 else
                 {
@@ -1148,29 +1167,29 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // Save Current Layout
                 new MenuItemViewModel
                 {
-                    Header = "Initialize", Id = "CollaborationInitializeID",
+                    Header = "Clone Repository from Server", Id = "CollaborationCloneID",
                     ViewModel = this
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Pull", Id = "CollaborationPullID",
+                    Header = "Initialize Server with Project", Id = "CollaborationInitializeID",
                     ViewModel = this
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Merge", Id = "CollaborationMergeID",
+                    Header = "Get Latest from Server", Id = "CollaborationGetLatestID",
                     ViewModel = this
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Stage", Id = "CollaborationStageID",
+                    Header = "Commit Changes to Server", Id = "CollaborationCommitID",
                     ViewModel = this
                 },
                 new MenuItemViewModel
                 {
-                    Header = "Commit", Id = "CollaborationCommitID",
+                    Header = "Git Hard Reset", Id = "CollaborationHardResetID",
                     ViewModel = this
-                }
+                },
             };
             BindableCollection<MenuItemViewModel> layouts = new()
             {

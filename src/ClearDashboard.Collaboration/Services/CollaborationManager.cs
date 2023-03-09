@@ -190,7 +190,10 @@ public class CollaborationManager
             var signature = new LibGit2Sharp.Signature(
                 new Identity(_configuration.RemoteUserName, _configuration.RemoteEmail), DateTimeOffset.Now);
 
-            repo.Merge(repo.Branches.First().Tip, signature);
+            foreach (var b in repo.Branches)
+            {
+                repo.Merge(b.Tip, signature);
+            }
         }
         Console.WriteLine(logMessage);
     }

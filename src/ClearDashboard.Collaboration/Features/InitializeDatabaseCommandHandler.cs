@@ -49,6 +49,12 @@ public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
                     true,
                     requestScope).ConfigureAwait(false);
 
+                if (projectContext.Projects.Any())
+                {
+                    // Already initialized
+                    return new RequestResult<Unit>(Unit.Value);
+                }
+
                 await using (MergeBehaviorBase mergeBehavior = new MergeBehaviorApply(Logger, projectContext, new MergeCache()))
                 {
                     await mergeBehavior.MergeStartAsync(cancellationToken);
@@ -69,13 +75,13 @@ public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
 
                         if (request.includeMerge)
                         {
-                            var project = ProjectDbContext!.Projects.Where(e => e.Id == (Guid)projectModelSnapshot.GetId()).First();
+                            var project = projectContext.Projects.Where(e => e.Id == (Guid)projectModelSnapshot.GetId()).First();
 
-                            var projectSnapshotLastMerged = GetProjectSnapshotQueryHandler.LoadSnapshot(new Builder.BuilderContext(ProjectDbContext!));
+                            var projectSnapshotLastMerged = GetProjectSnapshotQueryHandler.LoadSnapshot(new Builder.BuilderContext(projectContext));
                             var projectSnapshotToMerge = factory.LoadSnapshot(request.commitSha, project.Id);
                             var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotToMerge);
 
-                            var merger = new Merger(new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, true));
+                            var merger = new Merger(new MergeContext(projectContext.UserProvider, Logger, mergeBehavior, true));
                             await merger.MergeAsync(projectDifferences, projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
 
                             project.LastMergedCommitSha = request.commitSha;
