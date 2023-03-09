@@ -560,7 +560,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
                     }
@@ -698,7 +698,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode);
                         DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -896,7 +896,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             _busyState.Remove(taskName);
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                                DeleteCorpusNode(node);
                             }
                             else
                             {
@@ -1456,6 +1456,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if (corpusId is not null)
                 {
                     await Corpus.Delete(Mediator!, corpusId);
+                }
+                else
+                {
+                    var id = new CorpusId(node.CorpusId);
+                    await Corpus.Delete(Mediator!, id);
                 }
             });
             
