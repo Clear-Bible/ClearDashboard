@@ -202,6 +202,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             get => _searchEnglish;
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
+
                 _searchEnglish = value;
                 NotifyOfPropertyChange(() => SearchEnglish);
 
@@ -222,9 +227,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             get => _searchSource;
             set
             {
+                if (value is null)
+                {
+                    value = string.Empty;
+                }
                 _searchSource = value;
                 NotifyOfPropertyChange(() => SearchSource);
 
+
+                
                 if (_searchSource.Length > 1)
                 {
                     _ = SearchSourceDatabase(_searchSource);

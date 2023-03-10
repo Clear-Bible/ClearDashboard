@@ -263,6 +263,7 @@
                 HorizontalAlignment="Left"
                 VerticalContentAlignment="Center"
                 materialDesign:HintAssist.Hint="{helpers:Localization ProjectPicker_SearchRecent}"
+                materialDesign:TextFieldAssist.HasClearButton="True"
                 BorderBrush="DarkGray"
                 BorderThickness="1"
                 IsEnabled="{Binding Connected}">

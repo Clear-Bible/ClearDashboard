@@ -18,7 +18,7 @@ namespace ClearDashboard.Aqua.Module.Converters
                     .Count() > 0)
                     return Visibility.Visible;
             }
-            return Visibility.Hidden;
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
