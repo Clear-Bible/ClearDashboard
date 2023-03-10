@@ -4,6 +4,7 @@ using ClearBible.Engine.Exceptions;
 using ClearDashboard.Aqua.Module.Models;
 using ClearDashboard.Aqua.Module.Services;
 using ClearDashboard.DAL.Alignment.Exceptions;
+using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer.Threading;
 using ClearDashboard.Wpf.Application;
 using ClearDashboard.Wpf.Application.Messages;
@@ -12,6 +13,7 @@ using ClearDashboard.Wpf.Application.Services;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 using ClearDashboard.Wpf.Application.ViewModels.EnhancedView.Messages;
 using LiveChartsCore;
+using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using MediatR;
@@ -45,7 +47,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         {
             CartesianChart,
             BarChart,
-            MissingWords
+            MissingWords,
+            HeatMap
         }
 
         public readonly List<string> Types = new()
@@ -65,7 +68,9 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             { "semantic-similarity", new TypeAnalysisConfiguration(
                 "semantic-similarity",
                 new List<VisualizationEnum>(){
-                    VisualizationEnum.MissingWords },
+                    VisualizationEnum.HeatMap,
+                    VisualizationEnum.BarChart,
+                    VisualizationEnum.CartesianChart },
                 0,
                 0M,
                 1M) },
@@ -85,7 +90,8 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                 "word-alignment",
                 new List<VisualizationEnum>(){
                     VisualizationEnum.BarChart,
-                    VisualizationEnum.CartesianChart },
+                    VisualizationEnum.CartesianChart,
+                    VisualizationEnum.HeatMap},
                 0,
                 0.0M,
                 0.9M) },
@@ -181,8 +187,16 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         public BindableCollection<Axis> YAxis
         {
             get => yAxis_;
-            //set => Set(ref yAxis_, value);
-            set => yAxis_ = value;
+            set => Set(ref yAxis_, value);
+            //set => yAxis_ = value;
+        }
+
+        private BindableCollection<Axis> xAxis_ = new();
+        public BindableCollection<Axis> XAxis
+        {
+            get => xAxis_;
+            set => Set(ref xAxis_, value);
+            //set => xAxis_ = value;
         }
 
         private IEnumerable<Result> sortedResultsForChapter_ = new List<Result>();
@@ -242,6 +256,10 @@ namespace ClearDashboard.Aqua.Module.ViewModels
         {
             if (visualization == VisualizationEnum.CartesianChart)
             {
+                var min = sortedResultsForChapter_.Min(r => r.score) -
+                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
+                var max = sortedResultsForChapter_.Max(r => r.score) +
+                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
                 SeriesCollection.Clear();
                 SeriesCollection.AddRange(new ISeries[]
                 {
@@ -255,9 +273,33 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                         }
                     }
                 });
+                XAxis.Clear();
+                YAxis.Clear();
+                var labels = new List<string>() { "" };
+                labels.AddRange(results
+                            .Select(r => r.vref ?? "")
+                            .ToArray());
+                XAxis.AddRange(new Axis[]
+                {
+                    new Axis
+                    {
+                        Labels = labels,
+                        LabelsRotation = 90
+                    }
+                });
+                YAxis.AddRange(new Axis[] { new Axis {
+                    MinLimit = min,//(double) (typeAnalysis.lowLimit ?? 0M), 
+                    MaxLimit = max //(double) (typeAnalysis.highLimit ?? 1M)
+                }});
+                XAxis.NotifyOfPropertyChange(nameof(XAxis));
+                YAxis.NotifyOfPropertyChange(nameof(YAxis));
             }
-            else //if (visualization == VisualizationEnum.BarChart)
+            else if (visualization == VisualizationEnum.BarChart)
             {
+                var min = sortedResultsForChapter_.Min(r => r.score) -
+                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
+                var max = sortedResultsForChapter_.Max(r => r.score) +
+                    (sortedResultsForChapter_.Max(r => r.score) - sortedResultsForChapter_.Min(r => r.score)) * 0.2;
                 SeriesCollection.Clear();
                 SeriesCollection.AddRange(new ISeries[]
                 {
@@ -282,12 +324,83 @@ namespace ClearDashboard.Aqua.Module.ViewModels
                         }
                     }
                 });
+                XAxis.Clear();
                 YAxis.Clear();
-                YAxis.AddRange(new Axis[]{ new Axis { MinLimit = 0, MaxLimit = 1 }});
+                var labels = new List<string>() { "" };
+                labels.AddRange(results
+                            .Select(r => r.vref ?? "")
+                            .ToArray());
+                XAxis.AddRange(new Axis[]
+                {
+                    new Axis
+                    {
+                        Labels = labels,
+                        LabelsRotation = 90
+                    }
+                });
+                YAxis.AddRange(new Axis[] { new Axis {
+                    MinLimit = min,//(double) (typeAnalysis.lowLimit ?? 0M),
+                    MaxLimit = max //(double) (typeAnalysis.highLimit ?? 1M)
+                }});
+                XAxis.NotifyOfPropertyChange(nameof(XAxis));
+                YAxis.NotifyOfPropertyChange(nameof(YAxis));
+            }
+            else if (visualization == VisualizationEnum.MissingWords)
+            {
+
+            }
+            else if (visualization == VisualizationEnum.HeatMap)
+            {
+                var values = new BindableCollection<WeightedPoint>();
+                values.AddRange(
+                    results
+                        .Select(r =>
+                            new WeightedPoint((new VerseRef(r.vref)).VerseNum, 0, r.score))
+                );
+
+
+                SeriesCollection.Clear();
+                SeriesCollection.AddRange(new ISeries[]
+                {
+                    new HeatSeries<WeightedPoint>
+                    {
+                        HeatMap = new[]
+                        {
+                            SKColors.Red.AsLvcColor(), // the first element is the "coldest"
+                            SKColors.DarkSlateGray.AsLvcColor(),
+                            SKColors.Green.AsLvcColor() // the last element is the "hottest"
+                        },
+                        Values = values
+                    }
+                }); ;
+                XAxis.Clear(); 
+                YAxis.Clear();
+                var labels = new List<string>() { "" };
+                labels.AddRange(results
+                            .Select(r => r.vref ?? "")
+                            .ToArray());
+                XAxis.AddRange(new Axis[]
+                {
+                    new Axis 
+                    {
+                        Labels = labels,
+                        LabelsRotation = 90
+                    }
+                });
+                YAxis.AddRange(new Axis[] { new Axis 
+                {
+                    Labels = new List<string>() {""}    
+                }
+                });
+                XAxis.NotifyOfPropertyChange(nameof(XAxis));
+                YAxis.NotifyOfPropertyChange(nameof(YAxis));
             }
         }
         public override Task RefreshData(ReloadType reloadType = ReloadType.Refresh, CancellationToken cancellationToken = default)
         {
+            if (ParentViewModel == null)
+                return Task.CompletedTask;
+
             var currentVerseRef = new VerseRef(ParentViewModel.CurrentBcv.GetBBBCCCVVV());
             var chapterNum = currentVerseRef.ChapterNum;
             offset_ = ParentViewModel.VerseOffsetRange;

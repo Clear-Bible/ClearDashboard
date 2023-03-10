@@ -302,7 +302,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
             {
                 Name = version.name;
                 IsoLanguage = IsoLanguages
-                    .Where(l => l.iso693 == version.isoLanguage)
+                    .Where(l => l.iso639 == version.isoLanguage)
                     .FirstOrDefault();
                 IsoScript = IsoScripts
                     .Where(s => s.iso15924 == ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript)
@@ -345,7 +345,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                     null,
                     Name 
                         ?? throw new InvalidStateEngineException(name: "Name", value: "null"),
-                    IsoLanguage?.iso693 
+                    IsoLanguage?.iso639
                         ?? throw new InvalidStateEngineException(name: "IsoLanguage", value: "null"),
                     IsoScript?.iso15924
                         ?? throw new InvalidStateEngineException(name: "IsoScript", value: "null"),
@@ -366,7 +366,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
                 // only saves state server not providing back, otherwise version state saved on server.
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.id = version!.id;
                 //ParentViewModel!.AquaTokenizedTextCorpusMetadata.name = Name;
-                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoLanguage = IsoLanguage?.iso693
+                ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoLanguage = IsoLanguage?.iso639
                     ?? throw new InvalidStateEngineException(name: "IsoLanguage", value: "null");
                 ParentViewModel!.AquaTokenizedTextCorpusMetadata.isoScript = IsoScript?.iso15924
                     ?? throw new InvalidStateEngineException(name: "IsoScript", value: "null");
@@ -480,7 +480,7 @@ public class AquaVersionStepViewModel : DashboardApplicationValidatingWorkflowSt
             {
                 IsoLanguages.Clear();
                 languages?
-                    .OrderBy(language => language.iso693)
+                    .OrderBy(language => language.iso639)
                     .Select(language =>
                     {
                         IsoLanguages.Add(language);
