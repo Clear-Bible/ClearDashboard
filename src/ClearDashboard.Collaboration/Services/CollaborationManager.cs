@@ -77,13 +77,25 @@ public class CollaborationManager
         }
     }
 
+    public bool HasRemoteConfigured()
+    {
+        return 
+            !string.IsNullOrEmpty(_configuration.RemoteUrl) &&
+            !string.IsNullOrEmpty(_configuration.RemoteEmail) &&
+            !string.IsNullOrEmpty(_configuration.RemoteUserName) &&
+            !string.IsNullOrEmpty(_configuration.RemotePassword);
+    }
+
     public void InitializeRepository()
     {
         if (!Repository.IsValid(_repositoryPath))
         {
             Repository.Init(_repositoryPath);
+        }
 
-            using (var repo = new Repository(_repositoryPath))
+        using (var repo = new Repository(_repositoryPath))
+        { 
+            if (!repo.Network.Remotes.Any() && HasRemoteConfigured())
             {
                 repo.Network.Remotes.Add(RemoteOrigin, _configuration.RemoteUrl);
                 Remote remote = repo.Network.Remotes[RemoteOrigin];
