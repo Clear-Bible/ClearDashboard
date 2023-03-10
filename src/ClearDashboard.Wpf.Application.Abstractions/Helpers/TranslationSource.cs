@@ -26,6 +26,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             get
             {
+                if (Thread.CurrentThread.CurrentUICulture.Name != language)
+                {
+                    Language = language;
+                }
+
                 var tuple = SplitName(key);
                 string translation = null;
                 if (resourceManagerDictionary.ContainsKey(tuple.Item1))
