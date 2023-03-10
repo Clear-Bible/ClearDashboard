@@ -71,11 +71,11 @@ public class CollaborationTests : TestBase
     {
         var collaborationManager = Container!.Resolve<CollaborationManager>();
 
-        var projectIds = collaborationManager.GetAllProjectIds();
+        var projects = collaborationManager.GetAllProjects();
 
-        if (projectIds.Any())
+        if (projects.Any())
         {
-            foreach (var status in collaborationManager.RetrieveFileStatuses(projectIds.First()))
+            foreach (var status in collaborationManager.RetrieveFileStatuses(projects.First().projectId))
             {
                 Output.WriteLine(status);
             }

@@ -86,6 +86,11 @@ public class CollaborationManager
             !string.IsNullOrEmpty(_configuration.RemotePassword);
     }
 
+    public bool IsRepositoryInitialized()
+    {
+        return Repository.IsValid(_repositoryPath);
+    }
+
     public void InitializeRepository()
     {
         if (!Repository.IsValid(_repositoryPath))
@@ -137,9 +142,14 @@ public class CollaborationManager
         return projects;
     }
 
-    public IEnumerable<Guid> GetAllProjectIds()
+    public IEnumerable<(Guid projectId, string projectName, string appVersion, DateTimeOffset created)> GetAllProjects()
     {
-        return GetAllProjectModelSnapshotsById().Keys;
+        return GetAllProjectModelSnapshotsById().Select(kvp => (
+            kvp.Key, 
+            (string)kvp.Value.PropertyValues[nameof(Models.Project.ProjectName)]!,
+            (string)kvp.Value.PropertyValues[nameof(Models.Project.AppVersion)]!,
+            (DateTimeOffset)kvp.Value.PropertyValues[nameof(Models.Project.Created)]!)
+        );
     }
 
     public string? LoadIntoProjectProvider(Guid projectId)

@@ -17,34 +17,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
+using Microsoft.AspNet.SignalR.Client.Http;
+using ClearDashboard.DAL.CQRS.Features.Features;
 
 namespace ClearDashboard.Collaboration.Features;
-public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
-    InitializeDatabaseCommand,
-    RequestResult<Unit>,
-    Unit>
+public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDatabaseCommand, RequestResult<Unit>>
 {
+    private ProjectDbContextFactory _projectNameDbContextFactory { get; init; }
+    private ILogger _logger { get; init; }
     public InitializeDatabaseCommandHandler(ProjectDbContextFactory projectNameDbContextFactory,
-        IProjectProvider projectProvider,
-        ILogger<InitializeDatabaseCommandHandler> logger) : base(projectNameDbContextFactory, projectProvider, logger)
+        ILogger<InitializeDatabaseCommandHandler> logger)
     {
+        _projectNameDbContextFactory = projectNameDbContextFactory;
+        _logger = logger;
     }
 
-    protected override async Task<RequestResult<Unit>> SaveDataAsync(
-    InitializeDatabaseCommand request,
-        CancellationToken cancellationToken)
+    public async Task<RequestResult<Unit>> Handle(InitializeDatabaseCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var factory = new ProjectSnapshotFromGitFactory(request.repositoryPath, Logger);
+            var factory = new ProjectSnapshotFromGitFactory(request.repositoryPath, _logger);
 
             var projectModelSnapshot = factory.LoadProject(request.commitSha, request.projectId);
             var userModelSnapshots = factory.LoadUsers(request.commitSha, request.projectId);
 
-            await using (var requestScope = ProjectNameDbContextFactory!.ServiceScope
+            await using (var requestScope = _projectNameDbContextFactory!.ServiceScope
                 .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
             {
-                var projectContext = await ProjectNameDbContextFactory!.GetDatabaseContext(
+                var projectContext = await _projectNameDbContextFactory!.GetDatabaseContext(
                     (string)projectModelSnapshot[nameof(Models.Project.ProjectName)]!,
                     true,
                     requestScope).ConfigureAwait(false);
@@ -55,7 +55,7 @@ public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
                     return new RequestResult<Unit>(Unit.Value);
                 }
 
-                await using (MergeBehaviorBase mergeBehavior = new MergeBehaviorApply(Logger, projectContext, new MergeCache()))
+                await using (MergeBehaviorBase mergeBehavior = new MergeBehaviorApply(_logger, projectContext, new MergeCache()))
                 {
                     await mergeBehavior.MergeStartAsync(cancellationToken);
                     try
@@ -81,7 +81,7 @@ public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
                             var projectSnapshotToMerge = factory.LoadSnapshot(request.commitSha, project.Id);
                             var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotToMerge);
 
-                            var merger = new Merger(new MergeContext(projectContext.UserProvider, Logger, mergeBehavior, true));
+                            var merger = new Merger(new MergeContext(projectContext.UserProvider, _logger, mergeBehavior, true));
                             await merger.MergeAsync(projectDifferences, projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
 
                             project.LastMergedCommitSha = request.commitSha;
@@ -104,13 +104,25 @@ public class InitializeDatabaseCommandHandler : ProjectDbContextCommandHandler<
 
             return new RequestResult<Unit>(Unit.Value);
         }
-        catch (Exception ex)
+        catch (OperationCanceledException)
         {
             return new RequestResult<Unit>
-            (
-                success: false,
-                message: $"Unable to initialize database for project '{request.projectId}', commit '{request.commitSha}':  {ex.Message}"
-            );
+            {
+                Message = "Operation Canceled",
+                Success = false,
+                Canceled = true
+            };
+        }
+        catch (Exception ex)
+        {
+            var innerExceptionMessage = (ex.InnerException is not null) ?
+                $" (inner exception message: {ex.InnerException.Message})" :
+                "";
+            return new RequestResult<Unit>
+            {
+                Message = $"Unable to initialize database for project '{request.projectId}', commit '{request.commitSha}':  exception type: {ex.GetType().Name}, having message: {ex.Message}{innerExceptionMessage}",
+                Success = false
+            };
         }
     }
 }
