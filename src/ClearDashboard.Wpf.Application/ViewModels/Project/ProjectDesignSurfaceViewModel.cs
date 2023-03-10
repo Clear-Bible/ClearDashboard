@@ -63,7 +63,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         //public record TokenizedTextCorpusLoadedMessage(TokenizedTextCorpus TokenizedTextCorpus, string TokenizationName, ParatextProjectMetadata? ProjectMetadata);
 
         private readonly IWindowManager? _windowManager;
-        private readonly BackgroundTasksViewModel _backgroundTasksViewModel;
+        public readonly BackgroundTasksViewModel BackgroundTasksViewModel;
         private readonly LongRunningTaskManager? _longRunningTaskManager;
         private readonly SystemPowerModes _systemPowerModes;
         #endregion //Member Variables
@@ -158,7 +158,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             EnhancedViewManager = enhancedViewManager;
             _systemPowerModes = systemPowerModes;
             _windowManager = windowManager;
-            _backgroundTasksViewModel = backgroundTasksViewModel;
+            BackgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
 
             EventAggregator.SubscribeOnUIThread(this);
@@ -570,7 +570,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
 
                     // check to see if there are still High Performance Tasks still out there
-                    var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                    var numTasks = BackgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
                     if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                     {
                         // shut down high performance mode
@@ -707,7 +707,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     }
 
                     // check to see if there are still High Performance Tasks still out there
-                    var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                    var numTasks = BackgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
                     if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                     {
                         // shut down high performance mode
@@ -906,7 +906,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             }
 
                             // check to see if there are still High Performance Tasks still out there
-                            var numTasks = _backgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
+                            var numTasks = BackgroundTasksViewModel.GetNumberOfPerformanceTasksRemaining();
                             if (numTasks == 0 && _systemPowerModes.IsHighPerformanceEnabled)
                             {
                                 // shut down high performance mode
@@ -1407,7 +1407,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
         public async void DeleteCorpusNode(CorpusNodeViewModel node)
         {
             // check to see if is in the middle of working or not by tokenizing
-            var isCorpusProcessing = _backgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
+            var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
             {
                 return;
@@ -1416,7 +1416,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
-                Name = "Deleting Corpus Node",
+                Name = node.Name,
                 Description = "Deleting parallel corpus connections and the node itself...",
                 StartTime = DateTime.Now,
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Running
@@ -1454,7 +1454,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             
             await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
             {
-                Name = "Deleting Corpus Node",
+                Name = node.Name,
                 Description = "Delete Complete",
                 StartTime = DateTime.Now,
                 TaskLongRunningProcessStatus = LongRunningTaskStatus.Completed
