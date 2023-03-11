@@ -32,6 +32,31 @@ public class ProjectSnapshotFromGitFactory
         _jsonDeserializerOptions = ProjectSnapshotFactoryCommon.JsonDeserializerOptions;
     }
 
+    public static bool IsProjectInRepository(Guid projectId, string repositoryPath)
+    {
+        if (!Repository.IsValid(repositoryPath))
+            return false;
+
+        using (var repo = new Repository(repositoryPath))
+        {
+            var commit = repo.Commits.FirstOrDefault();
+            if (commit is null)
+            {
+                return false;
+            }
+
+            var projectFolderName = string.Format(ProjectSnapshotFactoryCommon.ProjectFolderNameTemplate, projectId);
+
+            var topLevelEntries = repo.Lookup<Tree>($"{commit.Sha}:{projectFolderName}");
+            if (topLevelEntries is null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
     public GeneralModel<Models.Project> LoadProject(string commitSha, string projectFolderName)
     {
         using (var repo = new Repository(_repositoryPath))

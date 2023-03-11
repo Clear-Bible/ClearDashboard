@@ -110,6 +110,17 @@ public class CollaborationManager
         }
     }
 
+    public bool IsCurrentProjectInRepository()
+    {
+        if (IsRepositoryInitialized() && _projectProvider.HasCurrentProject)
+        {
+            var currentProjectId = _projectProvider.CurrentProject!.Id;
+            return ProjectSnapshotFromGitFactory.IsProjectInRepository(currentProjectId, _repositoryPath);
+        }
+
+        return false;
+    }
+
     private GeneralModel<Models.Project> LoadProjectModelSnapshot(string projectPropertiesFilePath)
     {
         var serializedProjectModelSnapshot = File.ReadAllText(projectPropertiesFilePath);

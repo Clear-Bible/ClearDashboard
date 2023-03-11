@@ -201,43 +201,40 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     ShowAboutWindow();
                 }
-                else if (value == "CollaborationCloneID")
-                {
-                    _collaborationManager.InitializeRepository();
-                    _collaborationManager.FetchMergeRemote();
-
-                    // Just to get project Ids and names:
-                    var projectIdsNames = ProjectSnapshotFromFilesFactory.FindProjectIdsNames(_collaborationManager.RepositoryPath);
-
-                    foreach (var (projectId, projectName) in projectIdsNames)
-                    {
-                        // Run initialize to create each project database (with project and
-                        // user entities)
-                        _collaborationManager.InitializeProjectDatabaseAsync(projectId, true, CancellationToken.None).Wait();
-                    }
-                }
                 else if (value == "CollaborationInitializeID")
                 {
-                    _collaborationManager.InitializeRepository();
-                    _collaborationManager.FetchMergeRemote();
-                    _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
-                    _collaborationManager.CommitChanges($"Initial commit");
-                    _collaborationManager.PushChangesToRemote();
+                    if (_collaborationManager.HasRemoteConfigured())
+                    {
+                        _collaborationManager.InitializeRepository();
+                        _collaborationManager.FetchMergeRemote();
+                        _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
+                        _collaborationManager.CommitChanges($"Initial commit");
+                        _collaborationManager.PushChangesToRemote();
+                    }
                 }
                 else if (value == "CollaborationGetLatestID")
                 {
-                    _collaborationManager.FetchMergeRemote();
-                    _collaborationManager.MergeProjectLatestChangesAsync(true, false, CancellationToken.None).Wait();
+                    if (_collaborationManager.IsRepositoryInitialized())
+                    {
+                        _collaborationManager.FetchMergeRemote();
+                        _collaborationManager.MergeProjectLatestChangesAsync(true, false, CancellationToken.None).Wait();
+                    }
                 }
                 else if (value == "CollaborationCommitID")
                 {
-                    _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
-                    _collaborationManager.CommitChanges($"Fake commit message {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}");
-                    _collaborationManager.PushChangesToRemote();
+                    if (_collaborationManager.IsCurrentProjectInRepository())
+                    {
+                        _collaborationManager.StageProjectChangesAsync(CancellationToken.None).Wait();
+                        _collaborationManager.CommitChanges($"Fake commit message {DateTimeOffset.UtcNow:yyyy-MM-dd HH:mm:ss}");
+                        _collaborationManager.PushChangesToRemote();
+                    }
                 }
                 else if (value == "CollaborationHardResetID")
                 {
-                    _collaborationManager.HardResetChanges();
+                    if (_collaborationManager.IsRepositoryInitialized())
+                    {
+                        _collaborationManager.HardResetChanges();
+                    }
                 }
                 else
                 {
@@ -1167,28 +1164,27 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 // Save Current Layout
                 new MenuItemViewModel
                 {
-                    Header = "Clone Repository from Server", Id = "CollaborationCloneID",
-                    ViewModel = this
-                },
-                new MenuItemViewModel
-                {
                     Header = "Initialize Server with Project", Id = "CollaborationInitializeID",
-                    ViewModel = this
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.HasRemoteConfigured()
                 },
                 new MenuItemViewModel
                 {
                     Header = "Get Latest from Server", Id = "CollaborationGetLatestID",
-                    ViewModel = this
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized()
                 },
                 new MenuItemViewModel
                 {
                     Header = "Commit Changes to Server", Id = "CollaborationCommitID",
-                    ViewModel = this
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsCurrentProjectInRepository()
                 },
                 new MenuItemViewModel
                 {
                     Header = "Git Hard Reset", Id = "CollaborationHardResetID",
-                    ViewModel = this
+                    ViewModel = this,
+                    IsEnabled = _collaborationManager.IsRepositoryInitialized()
                 },
             };
             BindableCollection<MenuItemViewModel> layouts = new()
