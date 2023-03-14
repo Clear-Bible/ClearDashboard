@@ -11,14 +11,20 @@ using SIL.Machine.Translation;
 using SIL.Machine.Translation.Thot;
 using SIL.Machine.Utils;
 using static ClearDashboard.DAL.Alignment.Translation.ITranslationCommandable;
-
+using System.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Caliburn.Micro;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
     public class TranslationCommands : ITranslationCommandable
     {
+        private readonly ILogger<TranslationCommands> _logger;
+
         public TranslationCommands()
         {
+            _logger = IoC.Get<ILogger<TranslationCommands>>();
+
         }
 
         public IEnumerable<AlignedTokenPairs> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)
@@ -48,7 +54,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
             IProgress<ProgressStatus>? progress = null, 
             SymmetrizationHeuristic? symmetrizationHeuristic = null)
         {
-            if (symmetrizationHeuristic != null)
+            var sw = Stopwatch.StartNew();
+            sw.Start();
+
+            if (symmetrizationHeuristic != SymmetrizationHeuristic.None)
             {
                 if (smtModelType == SmtModelType.FastAlign)
                 {
@@ -63,6 +72,11 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     using var trainer = symmetrizedModel.CreateTrainer(parallelCorpus);
                     trainer.Train(progress);
                     await trainer.SaveAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
 
                     return symmetrizedModel;
                 }
@@ -80,6 +94,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     trainer.Train(progress);
                     await trainer.SaveAsync();
 
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
                     return symmetrizedModel;
                 }
                 else if (smtModelType == SmtModelType.IBM4)
@@ -96,10 +114,16 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     trainer.Train(progress);
                     await trainer.SaveAsync();
 
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+
                     return symmetrizedModel;
                 }
                 else
                 {
+                    sw.Stop();
                     throw new InvalidConfigurationEngineException(message: "Selected smt model type is not implemented.");
                 }
             }
@@ -113,6 +137,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     trainer.Train(progress);
                     await trainer.SaveAsync();
 
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
                     return srcTrgModel;
                 }
                 else if (smtModelType == SmtModelType.Hmm)
@@ -122,6 +150,10 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     using var trainer = srcTrgModel.CreateTrainer(parallelCorpus);
                     trainer.Train(progress);
                     await trainer.SaveAsync();
+
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
 
                     return srcTrgModel;
                 }
@@ -133,13 +165,20 @@ namespace ClearDashboard.DAL.Alignment.Translation
                     trainer.Train(progress);
                     await trainer.SaveAsync();
 
+                    sw.Stop();
+                    _logger.LogInformation(
+                        $"Ran SMT [{smtModelType}] with SymmetrizationHeuristic: [{symmetrizationHeuristic}] in {sw.ElapsedMilliseconds.ToString()} ms");
+
+
                     return srcTrgModel;
                 }
                 else
                 {
+                    sw.Stop();
                     throw new InvalidConfigurationEngineException(message: "Selected smt model type is not implemented.");
                 }
             }
+
         }
 
         /// <summary>

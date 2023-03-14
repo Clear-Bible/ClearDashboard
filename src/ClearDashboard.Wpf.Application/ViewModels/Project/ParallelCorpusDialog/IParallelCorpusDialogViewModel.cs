@@ -30,7 +30,7 @@ public interface IParallelCorpusDialogViewModel
     string? CurrentProject { get; set; }
     bool UseDefaults { get; set; }
     Task<LongRunningTaskStatus> AddParallelCorpus(string parallelCorpusDisplayName);
-    Task<LongRunningTaskStatus> TrainSmtModel();
+    Task<LongRunningTaskStatus> TrainSmtModel(bool? isTrainedSymmetrizedModel);
     Task<LongRunningTaskStatus> AddTranslationSet(string translationSetDisplayName);
     Task<LongRunningTaskStatus> AddAlignmentSet(string alignmentSetDisplayName);
 
