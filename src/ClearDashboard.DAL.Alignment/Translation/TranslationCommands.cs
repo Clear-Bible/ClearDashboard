@@ -68,11 +68,35 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 }
                 else if (smtModelType == SmtModelType.Hmm)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotHmmWordAlignmentModel();
+                    var trgSrcModel = new ThotHmmWordAlignmentModel();
+
+                    var symmetrizedModel = new SymmetrizedWordAlignmentModel(srcTrgModel, trgSrcModel)
+                    {
+                        Heuristic = symmetrizationHeuristic ?? SymmetrizationHeuristic.None // should never be null
+                    };
+
+                    using var trainer = symmetrizedModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    return symmetrizedModel;
                 }
                 else if (smtModelType == SmtModelType.IBM4)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotIbm4WordAlignmentModel();
+                    var trgSrcModel = new ThotIbm4WordAlignmentModel();
+
+                    var symmetrizedModel = new SymmetrizedWordAlignmentModel(srcTrgModel, trgSrcModel)
+                    {
+                        Heuristic = symmetrizationHeuristic ?? SymmetrizationHeuristic.None // should never be null
+                    };
+
+                    using var trainer = symmetrizedModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    return symmetrizedModel;
                 }
                 else
                 {
@@ -83,15 +107,33 @@ namespace ClearDashboard.DAL.Alignment.Translation
             {
                 if (smtModelType == SmtModelType.FastAlign)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotFastAlignWordAlignmentModel();
+
+                    using var trainer = srcTrgModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    return srcTrgModel;
                 }
                 else if (smtModelType == SmtModelType.Hmm)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotHmmWordAlignmentModel();
+
+                    using var trainer = srcTrgModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    return srcTrgModel;
                 }
                 else if (smtModelType == SmtModelType.IBM4)
                 {
-                    throw new NotImplementedException();
+                    var srcTrgModel = new ThotIbm4WordAlignmentModel();
+
+                    using var trainer = srcTrgModel.CreateTrainer(parallelCorpus);
+                    trainer.Train(progress);
+                    await trainer.SaveAsync();
+
+                    return srcTrgModel;
                 }
                 else
                 {
