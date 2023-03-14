@@ -50,7 +50,8 @@
                 materialDesign:HintAssist.FloatingScale="0.60"
                 materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
                 materialDesign:HintAssist.Hint="{helpers:Localization DisplayName}"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0">
+                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
+                IsEnabled="{Binding CanCreate}">
                 <TextBox.Text>
                     <Binding
                         Mode="TwoWay"
@@ -217,6 +218,7 @@
                 x:Name="UseDefaults"
                 Content="{helpers:Localization UseDefaults}"
                 IsDefault="True"
+                IsEnabled="{Binding CanCreate}"
                 Style="{StaticResource TransparentStyle}" />
 
             <Button
@@ -224,6 +226,7 @@
                 Margin="10,0,0,0"
                 Content="{helpers:Localization Create}"
                 IsDefault="True"
+                IsEnabled="{Binding CanCreate}"
                 Style="{StaticResource TransparentStyle}" />
 
         </StackPanel>
