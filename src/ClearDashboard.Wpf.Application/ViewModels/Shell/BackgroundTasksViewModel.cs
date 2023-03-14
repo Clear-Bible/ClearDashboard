@@ -357,5 +357,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
 
             return false;
         }
+
+        public void CopyText(BackgroundTaskStatus status)
+        {
+            Clipboard.SetText(status.Name + ": " + status.Description);
+        }
     }
 }
