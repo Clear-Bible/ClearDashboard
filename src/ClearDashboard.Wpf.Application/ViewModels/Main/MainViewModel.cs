@@ -203,7 +203,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 }
                 else if (value == "CollaborationInitializeID")
                 {
-                    if (_collaborationManager.HasRemoteConfigured())
+                    if (_collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository())
                     {
                         _collaborationManager.InitializeRepository();
                         _collaborationManager.FetchMergeRemote();
@@ -1166,7 +1166,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     Header = "Initialize Server with Project", Id = "CollaborationInitializeID",
                     ViewModel = this,
-                    IsEnabled = _collaborationManager.HasRemoteConfigured()
+                    IsEnabled = _collaborationManager.HasRemoteConfigured() && !_collaborationManager.IsCurrentProjectInRepository()
                 },
                 new MenuItemViewModel
                 {
