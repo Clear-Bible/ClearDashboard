@@ -17,6 +17,7 @@ namespace ClearDashboard.Wpf.Application.Services
         private IEventAggregator EventAggregator { get; }
         private ILogger<VerseManager> Logger { get; }
         private IMediator Mediator { get; }
+        public SelectionManager SelectionManager { get; }
 
         /// <summary>
         /// Joins a sequence of tokens into a new <see cref="CompositeToken"/> instance.
@@ -38,6 +39,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger.LogInformation($"Joined {tokens.Count} tokens into composite token {compositeToken.TokenId.Id} in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new TokensJoinedMessage(compositeToken, tokens));
+                SelectionManager.SelectionUpdated();
             }
             catch (Exception e)
             {
@@ -73,6 +75,7 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger.LogInformation($"Unjoined composite token {compositeToken.TokenId.Id} into {tokens.Count} in {stopwatch.ElapsedMilliseconds} ms");
 
                 await EventAggregator.PublishOnUIThreadAsync(new TokenUnjoinedMessage(compositeToken, tokens));
+                SelectionManager.SelectionUpdated();
             }
             catch (Exception e)
             {
@@ -81,11 +84,15 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        public VerseManager(IEventAggregator eventAggregator, ILogger<VerseManager> logger, IMediator mediator)
+        public VerseManager(IEventAggregator eventAggregator, 
+            ILogger<VerseManager> logger, 
+            IMediator mediator,
+            SelectionManager selectionManager)
         {
             EventAggregator = eventAggregator;
             Logger = logger;
             Mediator = mediator;
+            SelectionManager = selectionManager;
         }
     }
 }
