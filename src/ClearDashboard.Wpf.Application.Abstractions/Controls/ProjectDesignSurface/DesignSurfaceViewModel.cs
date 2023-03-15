@@ -469,7 +469,8 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 IconKind = PackIconPicolIconsKind.BookTextAdd.ToString(),
                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                 ConnectionId = parallelCorpusConnection.Id,
-                Enabled = (alignmentSetCount > 0)
+                Enabled = (alignmentSetCount > 0),
+                ParallelCorpusId = parallelCorpusConnection.Id.ToString(),
             });
 
 

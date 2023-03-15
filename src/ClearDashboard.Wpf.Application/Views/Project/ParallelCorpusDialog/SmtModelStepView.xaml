@@ -68,7 +68,10 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <CheckBox IsChecked="{Binding IsTrainedSymmetrizedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="20 5 2 5" Content="Train Symmetrized Model?"/>
+            <CheckBox
+                Margin="20,5,2,5"
+                Content="Train Symmetrized Model?"
+                IsChecked="{Binding IsTrainedSymmetrizedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </StackPanel>
 
         <StackPanel
