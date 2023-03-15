@@ -51,6 +51,7 @@
                 materialDesign:HintAssist.Hint="{helpers:Localization ParallelCorpusDialog_SmtAlgorithm}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 Foreground="{DynamicResource MaterialDesignBody}"
+                IsEnabled="{Binding CanAdd}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
@@ -83,6 +84,7 @@
                 materialDesign:HintAssist.Hint="{helpers:Localization DisplayName}"
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 Foreground="{DynamicResource MaterialDesignBody}"
+                IsEnabled="{Binding CanAdd}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}">
                 <TextBox.Text>
                     <Binding
@@ -115,6 +117,7 @@
                 materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
                 AcceptsReturn="True"
                 Foreground="{DynamicResource MaterialDesignBody}"
+                IsEnabled="{Binding CanAdd}"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                 TextWrapping="Wrap"
                 VerticalScrollBarVisibility="Visible">

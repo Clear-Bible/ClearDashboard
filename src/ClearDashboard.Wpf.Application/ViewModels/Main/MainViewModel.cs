@@ -1926,7 +1926,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
         public Task HandleAsync(BackgroundTaskChangedMessage message, CancellationToken cancellationToken)
         {
             bool enable;
-            if (_longRunningTaskManager.Tasks.Count<=1 && message.Status.TaskLongRunningProcessStatus == LongRunningTaskStatus.Completed)
+            if (_longRunningTaskManager.Tasks.Count<=1 && message.Status.TaskLongRunningProcessStatus != LongRunningTaskStatus.Running)
             {
                 enable = true;
             }
