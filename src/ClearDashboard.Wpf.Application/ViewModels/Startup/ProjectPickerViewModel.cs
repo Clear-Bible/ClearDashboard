@@ -132,10 +132,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             get => _searchText;
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 _searchText = value;
                 NotifyOfPropertyChange(() => SearchText);
