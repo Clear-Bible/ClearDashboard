@@ -557,7 +557,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             return CurrentTask.Status;
         }
 
-        public async Task<LongRunningTaskStatus> TrainSmtModel()
+        public async Task<LongRunningTaskStatus> TrainSmtModel(bool? isTrainedSymmetrizedModel)
         {
             IsBusy = true;
 
@@ -585,6 +585,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 TranslationCommandable = new TranslationCommands();
 
+                var symmetrizationHeuristic = new SymmetrizationHeuristic();
+                if (isTrainedSymmetrizedModel == true)
+                {
+                    symmetrizationHeuristic = SymmetrizationHeuristic.GrowDiagFinalAnd;
+                }
+                else
+                {
+                    symmetrizationHeuristic = SymmetrizationHeuristic.None;
+                }
+                
                 WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
                     SelectedSmtAlgorithm,
                     ParallelTextCorpus,
@@ -597,7 +607,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                         Logger!.LogInformation(message);
 
                     }
-                    ), SymmetrizationHeuristic.GrowDiagFinalAnd);
+                    ), symmetrizationHeuristic);
 
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
