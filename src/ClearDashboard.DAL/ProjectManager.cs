@@ -19,7 +19,8 @@ namespace ClearDashboard.DataAccessLayer
     {
 #nullable disable
         #region Properties
-       
+
+        public Guid Id = Guid.NewGuid();
         protected ILogger Logger { get; }
         protected ParatextProxy ParatextProxy { get; }
         protected ILifetimeScope LifetimeScope { get; }

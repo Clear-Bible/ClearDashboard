@@ -1,11 +1,18 @@
 ﻿using ClearDashboard.Wpf.Application.Properties;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.Json;
+using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {
     public static class OpenProjectManager
     {
+        private static string _folderPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}";
+        private static string _fileName = "CurrentlyOpenProjects.txt";
+        private static string _filePath = Path.Combine(_folderPath, _fileName);
+
         public static void AddProjectToOpenProjectList(DashboardProjectManager projectManager)
         {
             var currentlyOpenProjectsList = DeserializeOpenProjectList();
@@ -45,8 +52,12 @@ namespace ClearDashboard.Wpf.Application.Helpers
 
         public static List<string> DeserializeOpenProjectList()
         {
+            var currentlyOpenProjectsJson = string.Empty;
             List<string> currentlyOpenProjectsList = new();
-            var currentlyOpenProjectsJson = Settings.Default.CurrentlyOpenProjects;
+            if(File.Exists(_filePath))
+            {
+                currentlyOpenProjectsJson = File.ReadAllText(_filePath);
+            }
 
             if (currentlyOpenProjectsJson != string.Empty)
             {
@@ -60,8 +71,7 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             var currentlyOpenProjectsJson = JsonSerializer.Serialize<List<string>>(currentlyOpenProjectsList);
 
-            Settings.Default.CurrentlyOpenProjects = currentlyOpenProjectsJson;
-            Settings.Default.Save();
+            File.WriteAllText(_filePath, currentlyOpenProjectsJson);
         }
     }
 }
