@@ -203,17 +203,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             {
                 var projectDesignSurface = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>();
                 
-                var ids = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
+                var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
 
                 List<string> currentNodeIds = new();
 
-                foreach (var id in ids)
+                foreach (var corpusId in corpusIds)
                 {
                     var currentlyRunning = projectDesignSurface.BackgroundTasksViewModel
-                        .CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(id.Name);
+                        .CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(corpusId.Name);
                     if (currentlyRunning)
                     {
-                        currentNodeIds.Add(id.ParatextGuid);
+                        currentNodeIds.Add(corpusId.ParatextGuid);
                     }
                 }
 
