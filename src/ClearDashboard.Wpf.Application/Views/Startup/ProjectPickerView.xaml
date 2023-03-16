@@ -326,6 +326,7 @@
                     <DataTemplate>
                         <!--  This was changed from a card to a border to handle Jira DI 96  -->
                         <Border
+                            IsEnabled="{Binding IsClosed}"
                             Width="532"
                             Height="64"
                             cal:Message.Attach="[Event MouseDown]=[Action NavigateToMainViewModel($dataContext, $eventArgs)]"

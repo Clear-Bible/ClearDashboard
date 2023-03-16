@@ -401,7 +401,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
             await RebuildMainMenu();
             await ActivateDockedWindowViewModels(cancellationToken);
             await LoadAvalonDockLayout();
-            await LoadEnhancedViewTabs(cancellationToken);
+            LoadEnhancedViewTabs(cancellationToken);
             await base.OnInitializeAsync(cancellationToken);
         }
 

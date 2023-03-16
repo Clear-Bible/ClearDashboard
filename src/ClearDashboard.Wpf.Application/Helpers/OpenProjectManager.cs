@@ -13,7 +13,8 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (projectManager.CurrentDashboardProject != null && projectManager.CurrentDashboardProject.ShortFilePath != null 
                                                                && projectManager.CurrentDashboardProject.ShortFilePath != string.Empty)
             {
-                currentlyOpenProjectsList.Add(projectManager.CurrentDashboardProject.ShortFilePath.Replace(' ','_').Remove(projectManager.CurrentDashboardProject.ShortFilePath.Length-7));
+                currentlyOpenProjectsList.Add(projectManager.CurrentDashboardProject.ShortFilePath
+                        .Replace(' ','_').Remove(projectManager.CurrentDashboardProject.ShortFilePath.Length-7));
 
                 SaveOpenProjectList(currentlyOpenProjectsList);
             }
@@ -26,7 +27,8 @@ namespace ClearDashboard.Wpf.Application.Helpers
             if (projectManager.CurrentDashboardProject != null && projectManager.CurrentDashboardProject.ShortFilePath != null
                                                                && projectManager.CurrentDashboardProject.ShortFilePath != string.Empty)
             {
-                currentlyOpenProjectsList!.Remove(projectManager.CurrentDashboardProject.ShortFilePath.Replace(' ', '_').Remove(projectManager.CurrentDashboardProject.ShortFilePath.Length-7));
+                currentlyOpenProjectsList!.Remove(projectManager.CurrentDashboardProject.ShortFilePath
+                    .Replace(' ', '_').Remove(projectManager.CurrentDashboardProject.ShortFilePath.Length-7));
 
                 SaveOpenProjectList(currentlyOpenProjectsList);
             }

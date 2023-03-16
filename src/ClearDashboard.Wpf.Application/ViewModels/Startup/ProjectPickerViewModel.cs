@@ -279,37 +279,42 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             foreach (var directoryName in directories)
             {
                 var directoryInfo = new DirectoryInfo(directoryName);
-                if (!currentlyOpenProjectsList.Contains(directoryInfo.Name))
+                
+                // find the Alignment JSONs
+                var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName),
+                    "*.sqlite");
+                foreach (var file in files)
                 {
-                    // find the Alignment JSONs
-                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName),
-                        "*.sqlite");
-                    foreach (var file in files)
+                    var fileInfo = new FileInfo(file);
+
+                    string version = "unavailable";
+
+
+                    var results =
+                        await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
+                    if (results.Success && results.HasData)
                     {
-                        var fileInfo = new FileInfo(file);
-                        
-                        string version = "unavailable";
-
-
-                        var results =
-                            await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
-                        if (results.Success && results.HasData)
-                        {
-                            version = results.Data;
-                        }
-
-                        // add as ListItem
-                        var dashboardProject = new DashboardProject
-                        {
-                            Modified = fileInfo.LastWriteTime,
-                            ProjectName = directoryInfo.Name,
-                            ShortFilePath = fileInfo.Name,
-                            FullFilePath = fileInfo.FullName,
-                            Version = version
-                        };
-
-                        DashboardProjects.Add(dashboardProject);
+                        version = results.Data;
                     }
+
+                    bool isClosed = true;
+                    if (currentlyOpenProjectsList.Contains(directoryInfo.Name))
+                    {
+                        isClosed = false;
+                    }
+
+                    // add as ListItem
+                    var dashboardProject = new DashboardProject
+                    {
+                        Modified = fileInfo.LastWriteTime,
+                        ProjectName = directoryInfo.Name,
+                        ShortFilePath = fileInfo.Name,
+                        FullFilePath = fileInfo.FullName,
+                        Version = version,
+                        IsClosed = isClosed
+                    };
+
+                    DashboardProjects.Add(dashboardProject);
                 }
             }
 
