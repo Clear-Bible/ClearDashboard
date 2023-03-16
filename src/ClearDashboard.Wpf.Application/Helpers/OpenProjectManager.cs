@@ -1,9 +1,7 @@
-﻿using ClearDashboard.Wpf.Application.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using SIL.Extensions;
 
 namespace ClearDashboard.Wpf.Application.Helpers
 {

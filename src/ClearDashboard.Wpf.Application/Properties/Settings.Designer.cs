@@ -297,17 +297,5 @@ namespace ClearDashboard.Wpf.Application.Properties {
                 this["EnablePowerModes"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CurrentlyOpenProjects {
-            get {
-                return ((string)(this["CurrentlyOpenProjects"]));
-            }
-            set {
-                this["CurrentlyOpenProjects"] = value;
-            }
-        }
     }
 }
