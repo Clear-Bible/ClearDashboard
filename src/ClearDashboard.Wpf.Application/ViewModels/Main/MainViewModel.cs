@@ -466,8 +466,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
             // Clear the items in the event the user is switching projects.
             Items.Clear();
-
-            //remove from OpenProject json string
+            
             OpenProjectManager.RemoveProjectToOpenProjectList(ProjectManager);
 
             return base.OnDeactivateAsync(close, cancellationToken);
