@@ -24,11 +24,11 @@ namespace ClearDashboard.Wpf.Application.Helpers
         {
             var currentlyOpenProjectsList = DeserializeOpenProjectList();
 
-            if (projectManager.CurrentDashboardProject != null && projectManager.CurrentDashboardProject.ShortFilePath != null
-                                                               && projectManager.CurrentDashboardProject.ShortFilePath != string.Empty)
+            if (projectManager.CurrentDashboardProject != null && projectManager.CurrentProject.ProjectName != null
+                                                               && projectManager.CurrentProject.ProjectName != string.Empty)
             {
-                currentlyOpenProjectsList!.Remove(projectManager.CurrentDashboardProject.ShortFilePath
-                    .Replace(' ', '_').Remove(projectManager.CurrentDashboardProject.ShortFilePath.Length-7));
+                currentlyOpenProjectsList!.Remove(projectManager.CurrentProject.ProjectName
+                    .Replace(' ', '_'));
 
                 SaveOpenProjectList(currentlyOpenProjectsList);
             }
