@@ -21,6 +21,7 @@ using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using System.Diagnostics;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -266,37 +267,49 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             // check for Projects subfolder
             var directories = Directory.GetDirectories(FilePathTemplates.ProjectBaseDirectory);
 
+            if (!IsDashboardRunningAlready())
+            {
+                OpenProjectManager.ClearOpenProjectList();
+
+                OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+            }
+
+            var currentlyOpenProjectsList = OpenProjectManager.DeserializeOpenProjectList();
+
             foreach (var directoryName in directories)
             {
-                // find the Alignment JSONs
-                var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName),
-                    "*.sqlite");
-                foreach (var file in files)
+                var directoryInfo = new DirectoryInfo(directoryName);
+                if (!currentlyOpenProjectsList.Contains(directoryInfo.Name))
                 {
-                    var fileInfo = new FileInfo(file);
-                    var directoryInfo = new DirectoryInfo(directoryName);
-
-                    string version = "unavailable";
-
-
-                    var results =
-                        await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
-                    if (results.Success && results.HasData)
+                    // find the Alignment JSONs
+                    var files = Directory.GetFiles(Path.Combine(FilePathTemplates.ProjectBaseDirectory, directoryName),
+                        "*.sqlite");
+                    foreach (var file in files)
                     {
-                        version = results.Data;
+                        var fileInfo = new FileInfo(file);
+                        
+                        string version = "unavailable";
+
+
+                        var results =
+                            await ExecuteRequest(new GetProjectVersionQuery(fileInfo.FullName), CancellationToken.None);
+                        if (results.Success && results.HasData)
+                        {
+                            version = results.Data;
+                        }
+
+                        // add as ListItem
+                        var dashboardProject = new DashboardProject
+                        {
+                            Modified = fileInfo.LastWriteTime,
+                            ProjectName = directoryInfo.Name,
+                            ShortFilePath = fileInfo.Name,
+                            FullFilePath = fileInfo.FullName,
+                            Version = version
+                        };
+
+                        DashboardProjects.Add(dashboardProject);
                     }
-
-                    // add as ListItem
-                    var dashboardProject = new DashboardProject
-                    {
-                        Modified = fileInfo.LastWriteTime,
-                        ProjectName = directoryInfo.Name,
-                        ShortFilePath = fileInfo.Name,
-                        FullFilePath = fileInfo.FullName,
-                        Version = version
-                    };
-
-                    DashboardProjects.Add(dashboardProject);
                 }
             }
 
@@ -312,6 +325,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #endregion Constructor
 
         #region Methods
+        private bool IsDashboardRunningAlready()
+        {
+            var process = Process.GetProcessesByName("ClearDashboard.Wpf.Application");
+            return process.Length > 1;
+        }
 
         private async void ListenForParatextStart()
         {
@@ -352,7 +370,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             }
 
             ProjectManager!.CurrentDashboardProject = project;
-           
+            
+            OpenProjectManager.AddProjectToOpenProjectList(ProjectManager);
+
             ParentViewModel!.ExtraData = project;
             ParentViewModel.Ok();
         }
