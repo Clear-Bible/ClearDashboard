@@ -19,6 +19,7 @@ using SIL.Machine.Translation;
 using SIL.Machine.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -27,6 +28,9 @@ using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
 using AlignmentSet = ClearDashboard.DAL.Alignment.Translation.AlignmentSet;
 using TranslationSet = ClearDashboard.DAL.Alignment.Translation.TranslationSet;
+using ClearDashboard.Wpf.Application.Enums;
+using ClearDashboard.DAL.Alignment;
+using ClearDashboard.Wpf.Application.Models;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 {
@@ -51,11 +55,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
         private CorpusNodeViewModel _sourceCorpusNodeViewModel;
         private CorpusNodeViewModel _targetCorpusNodeViewModel;
         private ParallelCorpusConnectionViewModel _parallelCorpusConnectionViewModel;
-
+        public TopLevelProjectIds TopLevelProjectIds { get; set; }
         #endregion //Member Variables
 
 
         #region Public Properties
+
+        public ParallelProjectType ProjectType { get; set; }
 
         public LongRunningTask CurrentLongRunningTask { get; set; }
         public IWordAlignmentModel WordAlignmentModel { get; set; }
@@ -97,8 +103,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
         #region Observable Properties
 
-        private SmtModelType _selectedSmtAlgorithm;
-        public SmtModelType SelectedSmtAlgorithm
+        private SMTs _selectedSmtAlgorithm;
+        public SMTs SelectedSmtAlgorithm
         {
             get => _selectedSmtAlgorithm;
             set => Set(ref _selectedSmtAlgorithm, value);
@@ -127,6 +133,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             CorpusNodeViewModel sourceCorpusNodeViewModel,
             CorpusNodeViewModel targetCorpusNodeViewModel,
             IEnumerable<TokenizedTextCorpusId> tokenizedCorpora,
+            ParallelProjectType parallelProjectType,
             DashboardProjectManager? projectManager,
             INavigationService navigationService,
             ILogger<ParallelCorpusDialogViewModel> logger,
@@ -136,10 +143,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             IMediator mediator,
             ILifetimeScope lifetimeScope, LongRunningTaskManager longRunningTaskManager,
             ILocalizationService localizationService)
-            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope,localizationService)
+            : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             _systemPowerModes = systemPowerModes;
             _tokenizedCorpora = tokenizedCorpora;
+            ProjectType = parallelProjectType;
             _backgroundTasksViewModel = backgroundTasksViewModel;
             _longRunningTaskManager = longRunningTaskManager;
             CanOk = true;
@@ -150,12 +158,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             ParallelCorpusConnectionViewModel = parallelCorpusConnectionViewModel;
             SourceCorpusNodeViewModel = sourceCorpusNodeViewModel;
             TargetCorpusNodeViewModel = targetCorpusNodeViewModel;
-            SelectedSmtAlgorithm = SmtModelType.FastAlign;
         }
 
         protected override async Task OnInitializeAsync(CancellationToken cancellationToken)
         {
-
             var parameters = new List<Autofac.Core.Parameter> { new NamedParameter("dialogMode", DialogMode) };
             var views = LifetimeScope?.ResolveKeyedOrdered<IWorkflowStepViewModel>("ParallelCorpusDialog", parameters, "Order").ToArray();
 
@@ -176,6 +182,31 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             EnableControls = true;
             await ActivateItemAsync(Steps[0], cancellationToken);
 
+
+
+            TopLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+
+            //var parallelCorpa = _topLevelProjectIds.ParallelCorpusIds.Where(x =>
+            //    x.SourceTokenizedCorpusId.CorpusId.Id == SourceCorpusNodeViewModel.CorpusId
+            //           && x.TargetTokenizedCorpusId.CorpusId.Id == TargetCorpusNodeViewModel.CorpusId
+            //).ToList();
+
+            //List<string> smts = new();
+            //foreach (var parallelCorpusId in parallelCorpa)
+            //{
+            //    var alignment = _topLevelProjectIds.AlignmentSetIds.FirstOrDefault(x => x.ParallelCorpusId.Id == parallelCorpusId.Id);
+            //    smts.Add(alignment.SmtModel);
+            //}
+
+            //if (smts.Contains("FastAlign"))
+            //{
+            //    SelectedSmtAlgorithm = SmtModelType.Hmm;
+            //}
+            //else
+            //{
+            //    SelectedSmtAlgorithm = SmtModelType.FastAlign;
+            //}
+            
             await base.OnInitializeAsync(cancellationToken);
 
         }
@@ -594,9 +625,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 {
                     symmetrizationHeuristic = SymmetrizationHeuristic.None;
                 }
-                
+
+                SmtModelType tmp = SmtModelType.FastAlign;
+
+                Enum.TryParse<SmtModelType>(SelectedSmtAlgorithm.SmtName, out tmp);
+
                 WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
-                    SelectedSmtAlgorithm,
+                    tmp,
                     ParallelTextCorpus,
                     new DelegateProgress(async status =>
                     {

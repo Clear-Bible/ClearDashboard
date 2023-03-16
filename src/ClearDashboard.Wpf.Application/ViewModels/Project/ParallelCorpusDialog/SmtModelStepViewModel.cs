@@ -6,9 +6,15 @@ using ClearDashboard.Wpf.Application.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using ClearDashboard.Wpf.Application.Services;
+using ClearDashboard.Wpf.Application.Models;
+using System.Linq;
+using ClearDashboard.DAL.Alignment;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog;
 
@@ -25,6 +31,18 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
 
 
     #region Observable Properties
+
+    
+    private ObservableCollection<SMTs> _smtList = new();
+    public ObservableCollection<SMTs> SmtList
+    {
+        get => _smtList;
+        set
+        {
+            _smtList = value; 
+            NotifyOfPropertyChange(() => SmtList);  
+        }
+    }
 
 
     private DialogMode _dialogMode;
@@ -86,6 +104,56 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         if (ParentViewModel.UseDefaults)
         {
             await Train(true);
+        }
+
+
+        var parallelCorpa = ParentViewModel.TopLevelProjectIds.ParallelCorpusIds.Where(x =>
+            x.SourceTokenizedCorpusId.CorpusId.Id == ParentViewModel.SourceCorpusNodeViewModel.CorpusId
+            && x.TargetTokenizedCorpusId.CorpusId.Id == ParentViewModel.TargetCorpusNodeViewModel.CorpusId
+        ).ToList();
+
+        List<string> smts = new();
+        foreach (var parallelCorpusId in parallelCorpa)
+        {
+            var alignment =
+                ParentViewModel.TopLevelProjectIds.AlignmentSetIds.FirstOrDefault(x =>
+                    x.ParallelCorpusId.Id == parallelCorpusId.Id);
+            smts.Add(alignment.SmtModel);
+        }
+
+        // create a new list for the SMT enums
+        OnUIThread(() =>
+        {
+            SmtList.Clear();
+        });
+
+        var list = Enum.GetNames(typeof(SmtModelType)).ToList();
+        foreach (var smt in list)
+        {
+            if (smts.Contains(smt))
+            {
+                OnUIThread(() =>
+                {
+                    SmtList.Add(new SMTs
+                    {
+                        SmtName = smt,
+                        IsEnabled = false,
+                    });
+                });
+            }
+            else
+            {
+                var newSMT = new SMTs
+                {
+                    SmtName = smt,
+                    IsEnabled = true,
+                };
+                ParentViewModel.SelectedSmtAlgorithm = newSMT;
+                OnUIThread(() =>
+                {
+                    SmtList.Add(newSMT);
+                });
+            }
         }
 
         base.OnActivateAsync(cancellationToken);

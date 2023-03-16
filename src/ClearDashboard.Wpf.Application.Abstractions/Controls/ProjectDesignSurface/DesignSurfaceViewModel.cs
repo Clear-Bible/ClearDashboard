@@ -1140,7 +1140,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                 newParallelCorpusConnection.SourceFontFamily = await GetFontFamily(newParallelCorpusConnection.SourceConnector.ParentNode.ParatextProjectId);
                 newParallelCorpusConnection.TargetFontFamily = await GetFontFamily(newParallelCorpusConnection.DestinationConnector.ParentNode.ParatextProjectId);
 
-                await ProjectDesignSurfaceViewModel.AddParallelCorpus(newParallelCorpusConnection);
+                await ProjectDesignSurfaceViewModel.AddParallelCorpus(newParallelCorpusConnection, Enums.ParallelProjectType.WholeProcess);
             }
 
             await ProjectDesignSurfaceViewModel.SaveDesignSurfaceData();

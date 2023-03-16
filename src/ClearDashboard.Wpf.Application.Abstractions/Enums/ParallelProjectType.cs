@@ -9,7 +9,6 @@ namespace ClearDashboard.Wpf.Application.Enums
     public enum ParallelProjectType
     {
         WholeProcess,
-        AlignmentOnly,
-        InterlinearOnly
+        AlignmentOnly
     }
 }

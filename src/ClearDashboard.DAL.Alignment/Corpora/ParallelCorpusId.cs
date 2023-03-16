@@ -10,7 +10,9 @@ namespace ClearDashboard.DAL.Alignment.Corpora
             Metadata = new Dictionary<string, object>();
         }
 
-        public ParallelCorpusId(Guid id, TokenizedTextCorpusId sourceTokenizedCorpusId, TokenizedTextCorpusId targetTokenizedCorpusId, string? displayName, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
+        public ParallelCorpusId(Guid id, TokenizedTextCorpusId sourceTokenizedCorpusId,
+            TokenizedTextCorpusId targetTokenizedCorpusId, string? displayName, Dictionary<string, object> metadata,
+            DateTimeOffset created, UserId userId)
         {
             Id = id;
             SourceTokenizedCorpusId = sourceTokenizedCorpusId;

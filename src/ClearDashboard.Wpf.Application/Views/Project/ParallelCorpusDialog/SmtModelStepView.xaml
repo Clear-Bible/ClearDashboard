@@ -57,8 +57,15 @@
                 Margin="30,0,30,0"
                 VerticalAlignment="Top"
                 IsEnabled="{Binding CanTrain}"
-                ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type translation:SmtModelType}}}"
+                ItemsSource="{Binding SmtList}"
                 SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter
+                            Property="IsEnabled"
+                            Value="{Binding IsEnabled}" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">

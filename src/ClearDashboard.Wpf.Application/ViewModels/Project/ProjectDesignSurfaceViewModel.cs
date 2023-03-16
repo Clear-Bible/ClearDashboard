@@ -259,6 +259,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         #region Methods
 
+
         public async Task SaveDesignSurfaceData()
         {
             _ = await Task.Factory.StartNew(async () =>
@@ -729,7 +730,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             await AddParatextCorpus("");
         }
 
-        public async Task AddParatextCorpus(string selectedParatextProjectId)
+        public async Task AddParatextCorpus(string selectedParatextProjectId, ParallelProjectType parallelProjectType = ParallelProjectType.WholeProcess)
         {
             Logger!.LogInformation("AddParatextCorpus called.");
 
@@ -925,6 +926,131 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             finally
             {
                 await SaveDesignSurfaceData();
+            }
+        }
+
+        public async Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection,
+            ParallelProjectType parallelProjectType = ParallelProjectType.WholeProcess)
+        {
+            var sourceCorpusNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.SourceConnector!.ParentNode!.Id);
+            if (sourceCorpusNode == null)
+            {
+                throw new MissingCorpusNodeException(
+                    $"Cannot find the source Corpus node for the Corpus with Id '{newParallelCorpusConnection.SourceConnector!.ParentNode!.CorpusId}'.");
+            }
+            var targetCorpusNode = DesignSurfaceViewModel.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.DestinationConnector!.ParentNode!.Id);
+            if (targetCorpusNode == null)
+            {
+                throw new MissingCorpusNodeException(
+                    $"Cannot find the target Corpus node for the Corpus with Id '{newParallelCorpusConnection.DestinationConnector!.ParentNode!.CorpusId}'.");
+            }
+
+            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+            var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds;
+            var parameters = new List<Autofac.Core.Parameter>
+            {
+                new NamedParameter("dialogMode", DialogMode.Add),
+                new NamedParameter("connectionViewModel", newParallelCorpusConnection),
+                new NamedParameter("sourceCorpusNodeViewModel", sourceCorpusNode),
+                new NamedParameter("targetCorpusNodeViewModel", targetCorpusNode),
+                new NamedParameter("tokenizedCorpora", tokenizedCorpora),
+                new NamedParameter("parallelProjectType", parallelProjectType)
+            };
+
+            var dialogViewModel = LifetimeScope?.Resolve<ParallelCorpusDialogViewModel>(parameters);
+
+            try
+            {
+                var success =
+                    await _windowManager!.ShowDialogAsync(dialogViewModel, null,
+                        DialogSettings.NewProjectDialogSettings);
+
+                PlaySound.PlaySoundFromResource();
+
+                if (success)
+                {
+                    // get TranslationSet , etc from the dialogViewModel
+                    var translationSet = dialogViewModel!.TranslationSet;
+
+
+                    newParallelCorpusConnection.ParallelCorpusId =
+                        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
+                    newParallelCorpusConnection.ParallelCorpusDisplayName =
+                        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
+
+                    topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(newParallelCorpusConnection,
+                        topLevelProjectIds);
+
+                }
+                else
+                {
+                    DesignSurfaceViewModel!.DeleteParallelCorpusConnection(newParallelCorpusConnection);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                await SaveDesignSurfaceData();
+            }
+        }
+
+        private async Task AddNewAlignment(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
+            AddParallelCorpus(connection, ParallelProjectType.AlignmentOnly);
+        }
+
+        private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var connection = DesignSurfaceViewModel.ParallelCorpusConnections.FirstOrDefault(x => x.Id == connectionMenuItem.ConnectionId);
+
+            ParallelCorpusId parallelCorpusId;
+            try
+            {
+                parallelCorpusId = new ParallelCorpusId(connection.ParallelCorpusId.Id!,
+                    new TokenizedTextCorpusId(connection.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.Id),
+                    new TokenizedTextCorpusId(connection.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.Id), DisplayName,
+                    new Dictionary<string, object>(), new DateTimeOffset(), connection.ParallelCorpusId.UserId);
+
+
+                var parameters = new List<Autofac.Core.Parameter>
+                {
+                    new NamedParameter("parallelCorpusId", parallelCorpusId),
+                };
+
+
+                var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
+
+                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.NewProjectDialogSettings);
+
+                if (result)
+                {
+                    try
+                    {
+                        var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet!,
+                            dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
+                            dialogViewModel.SelectedAlignmentSet!.ParallelCorpusId!, Mediator!);
+
+                        var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                        DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
+                        await SaveDesignSurfaceData();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger!.LogError(ex, $"An unexpected error occurred while adding the interlinear for {connectionMenuItem.ParallelCorpusId!}");
+                    }
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 
@@ -1259,128 +1385,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
-        private async Task AddNewAlignment(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
-        {
-            var parameters = new List<Autofac.Core.Parameter>
-            {
-                new NamedParameter("modeType", ParallelProjectType.AlignmentOnly),
-                new NamedParameter("parallelCorpusId", connectionMenuItem.ParallelCorpusId!)
-            };
 
-            var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
-            var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.NewProjectDialogSettings);
-
-        }
-
-
-        private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
-        {
-            var connection = DesignSurfaceViewModel.ParallelCorpusConnections.FirstOrDefault(x => x.Id == connectionMenuItem.ConnectionId);
-
-            ParallelCorpusId parallelCorpusId;
-            try
-            {
-                parallelCorpusId = new ParallelCorpusId(connection.ParallelCorpusId.Id!,
-                    new TokenizedTextCorpusId(connection.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.Id),
-                    new TokenizedTextCorpusId(connection.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.Id), DisplayName,
-                    new Dictionary<string, object>(), new DateTimeOffset(), connection.ParallelCorpusId.UserId);
-
-
-                var parameters = new List<Autofac.Core.Parameter>
-                {
-                    new NamedParameter("parallelCorpusId", parallelCorpusId),
-                };
-
-
-                var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
-
-                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.NewProjectDialogSettings);
-
-                if (result)
-                {
-                    try
-                    {
-                        var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet!,
-                            dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
-                            dialogViewModel.SelectedAlignmentSet!.ParallelCorpusId!, Mediator!);
-
-                        var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                        DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
-                        await SaveDesignSurfaceData();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger!.LogError(ex, $"An unexpected error occurred while adding the interlinear for {connectionMenuItem.ParallelCorpusId!}");
-                    }
-
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-
-        public async Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection)
-        {
-            var sourceCorpusNode = DesignSurfaceViewModel!.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.SourceConnector!.ParentNode!.Id);
-            if (sourceCorpusNode == null)
-            {
-                throw new MissingCorpusNodeException(
-                    $"Cannot find the source Corpus node for the Corpus with Id '{newParallelCorpusConnection.SourceConnector!.ParentNode!.CorpusId}'.");
-            }
-            var targetCorpusNode = DesignSurfaceViewModel.CorpusNodes.FirstOrDefault(b => b.Id == newParallelCorpusConnection.DestinationConnector!.ParentNode!.Id);
-            if (targetCorpusNode == null)
-            {
-                throw new MissingCorpusNodeException(
-                    $"Cannot find the target Corpus node for the Corpus with Id '{newParallelCorpusConnection.DestinationConnector!.ParentNode!.CorpusId}'.");
-            }
-
-            var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-            var tokenizedCorpora = topLevelProjectIds.TokenizedTextCorpusIds;
-            var parameters = new List<Autofac.Core.Parameter>
-            {
-                new NamedParameter("dialogMode", DialogMode.Add),
-                new NamedParameter("connectionViewModel", newParallelCorpusConnection),
-                new NamedParameter("sourceCorpusNodeViewModel", sourceCorpusNode),
-                new NamedParameter("targetCorpusNodeViewModel", targetCorpusNode),
-                new NamedParameter("tokenizedCorpora", tokenizedCorpora)
-            };
-
-            var dialogViewModel = LifetimeScope?.Resolve<ParallelCorpusDialogViewModel>(parameters);
-
-            try
-            {
-                var success = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.NewProjectDialogSettings);
-
-                PlaySound.PlaySoundFromResource();
-
-                if (success)
-                {
-                    // get TranslationSet , etc from the dialogViewModel
-                    var translationSet = dialogViewModel!.TranslationSet;
-
-
-                    newParallelCorpusConnection.ParallelCorpusId = dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
-                    newParallelCorpusConnection.ParallelCorpusDisplayName =
-                        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
-
-                    topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                    DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(newParallelCorpusConnection, topLevelProjectIds);
-
-                }
-                else
-                {
-                    DesignSurfaceViewModel!.DeleteParallelCorpusConnection(newParallelCorpusConnection);
-                }
-            }
-            finally
-            {
-                await SaveDesignSurfaceData();
-            }
-        }
         public void ShowCorpusProperties(CorpusNodeViewModel corpus)
         {
             SelectedDesignSurfaceComponent = corpus;
@@ -1482,6 +1487,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }));
         }
 
+        #region IHandle
+
         public async Task HandleAsync(UiLanguageChangedMessage message, CancellationToken cancellationToken)
         {
             if (LoadingDesignSurface && !DesignSurfaceLoaded)
@@ -1505,6 +1512,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
 
         }
+
+        #endregion
 
         #endregion // Methods
     }

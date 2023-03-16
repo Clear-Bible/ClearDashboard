@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
+using ClearDashboard.Wpf.Application.Enums;
 using System.Threading.Tasks;
-using ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Project
 {
@@ -12,8 +9,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
         Task ExecuteCorpusNodeMenuCommand(CorpusNodeMenuItemViewModel corpusNodeMenuItem);
         Task ExecuteConnectionMenuCommand(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem);
-        Task AddParatextCorpus(string selectedParatextProjectId);
-        Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection);
+        Task AddParatextCorpus(string selectedParatextProjectId, ParallelProjectType parallelProjectType);
+        Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection, ParallelProjectType parallelProjectType);
         Task SaveDesignSurfaceData();
 
         bool IsBusy { get; }
