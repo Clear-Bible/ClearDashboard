@@ -29,10 +29,11 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         protected override async Task<RequestResult<IEnumerable<Note>>> GetDataAsync(GetNotesByDomainEntityIIdsQuery request, CancellationToken cancellationToken)
         {
             var dbNotes = ModelHelper.AddIdIncludesNotesQuery(ProjectDbContext)
-                    .Include(n => n.NoteDomainEntityAssociations)
-                    .Include(n => n.LabelNoteAssociations)
-                        .ThenInclude(ln => ln.Label)
-                    .AsQueryable();
+                .Include(n => n.NoteDomainEntityAssociations)
+                .Include(n => n.LabelNoteAssociations)
+                    .ThenInclude(ln => ln.Label)
+                .Include(n => n.NoteUserSeenAssociations)
+                .AsQueryable();
 
             if (request.DomainEntityIIds is not null && request.DomainEntityIIds.Any())
             {
