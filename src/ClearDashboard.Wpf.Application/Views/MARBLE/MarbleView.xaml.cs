@@ -32,7 +32,7 @@ namespace ClearDashboard.Wpf.Application.Views.Marble
             {
                 e.Handled = false;
             }
-            else if (e.Source is ListBox relatedLemmas && relatedLemmas == RelatedLemmas)
+            else if (e.Source is ListBox relatedLemmas && relatedLemmas == RelatedLemmas && relatedLemmas.ActualHeight >= 300)
             {
                 e.Handled = false;
             }

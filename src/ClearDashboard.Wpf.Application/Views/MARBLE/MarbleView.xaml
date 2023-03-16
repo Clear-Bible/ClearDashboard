@@ -474,7 +474,7 @@
                                     </Grid.ColumnDefinitions>
 
 
-                                    <Expander Grid.Column="0" Header="Strong Codes   ">
+                                    <Expander Grid.Column="0" Header="Strong Codes   " VerticalAlignment="Top">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -564,7 +564,7 @@
                                         </StackPanel>
                                     </Expander>
 
-                                    <Expander Grid.Column="1" Header="Parts of Speech   ">
+                                    <Expander Grid.Column="1" Header="Parts of Speech   " VerticalAlignment="Top">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />
@@ -641,7 +641,7 @@
                                         </StackPanel>
                                     </Expander>
 
-                                    <Expander Grid.Column="2" Header="Related Lemmas   ">
+                                    <Expander Grid.Column="2" Header="Related Lemmas   " VerticalAlignment="Top">
                                         <Expander.Style>
                                             <Style BasedOn="{StaticResource ExpanderStyle}" TargetType="Expander">
                                                 <Setter Property="Visibility" Value="Visible" />

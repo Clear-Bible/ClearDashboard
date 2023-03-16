@@ -179,6 +179,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                         }
                         ShowPopup = true;
                     }
+
+                    if (backgroundTaskStatus.TaskLongRunningProcessStatus == LongRunningTaskStatus.CancellationRequested)
+                    { 
+                        CancelTask(backgroundTaskStatus);
+                        backgroundTaskStatus.TaskLongRunningProcessStatus = LongRunningTaskStatus.Cancelled;
+                    }
                     status.TaskLongRunningProcessStatus = backgroundTaskStatus.TaskLongRunningProcessStatus;
 
                     NotifyOfPropertyChange(() => BackgroundTaskStatuses);
@@ -275,9 +281,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var tasks = BackgroundTaskStatuses.Where(x =>
             {
-                if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
+                if (x.Name == MaculaCorporaNames.HebrewCorpusName && nodeName == MaculaCorporaNames.HebrewCorpusName)
                 {
-                    if (x.Description!.Contains("Macula Hebrew"))
+                    if (x.Description!.Contains(MaculaCorporaNames.HebrewCorpusName))
                     {
                         return true;
                     }
@@ -285,9 +291,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     return false;
                 }
                 
-                if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
+                if (x.Name == MaculaCorporaNames.GreekCorpusName && nodeName == MaculaCorporaNames.GreekCorpusName)
                 {
-                    if (x.Description!.Contains("Macula Greek"))
+                    if (x.Description!.Contains(MaculaCorporaNames.GreekCorpusName))
                     {
                         return true;
                     }
@@ -311,9 +317,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
         {
             var tasks = BackgroundTaskStatuses.Where(x =>
             {
-                if (x.Name == "HebrewCorpus" && nodeName == "Macula Hebrew")
+                if (x.Name == MaculaCorporaNames.HebrewCorpusName && nodeName == MaculaCorporaNames.HebrewCorpusName)
                 {
-                    if (x.Description!.Contains("Macula Hebrew") && 
+                    if (x.Description!.Contains(MaculaCorporaNames.HebrewCorpusName) && 
                         (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&
                          x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Failed &&
                          x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Cancelled))
@@ -324,9 +330,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
                     return false;
                 }
 
-                if (x.Name == "GreekCorpus" && nodeName == "Macula Greek")
+                if (x.Name == MaculaCorporaNames.GreekCorpusName && nodeName == MaculaCorporaNames.GreekCorpusName)
                 {
-                    if (x.Description!.Contains("Macula Greek") &&
+                    if (x.Description!.Contains(MaculaCorporaNames.GreekCorpusName) &&
                         (x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Completed &&
                          x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Failed &&
                          x.TaskLongRunningProcessStatus != LongRunningTaskStatus.Cancelled))
@@ -350,6 +356,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Shell
             }
 
             return false;
+        }
+
+        public void CopyText(BackgroundTaskStatus status)
+        {
+            Clipboard.SetText(status.Name + ": " + status.Description);
         }
     }
 }

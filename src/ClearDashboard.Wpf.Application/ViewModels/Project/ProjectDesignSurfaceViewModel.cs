@@ -448,7 +448,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             Logger!.LogInformation("AddManuscriptHebrewCorpus called.");
 
-            var taskName = "HebrewCorpus";
+            var taskName = MaculaCorporaNames.HebrewCorpusName;
 
             DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = false;
 
@@ -474,7 +474,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 Id = ManuscriptIds.HebrewManuscriptId,
                 CorpusType = CorpusType.ManuscriptHebrew,
-                Name = "Macula Hebrew",
+                Name = MaculaCorporaNames.HebrewCorpusName,
                 AvailableBooks = books,
             };
 
@@ -496,7 +496,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
                         IsRtl: true,
-                        Name: "Macula Hebrew",
+                        Name: MaculaCorporaNames.HebrewCorpusName,
                         Language: "Hebrew",
                         CorpusType: CorpusType.ManuscriptHebrew.ToString(),
                         ParatextId: ManuscriptIds.HebrewManuscriptId,
@@ -513,7 +513,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
-                        "Macula Hebrew",
+                        MaculaCorporaNames.HebrewCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken,
                         true);
@@ -560,7 +560,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode);
                         // What other work needs to be done?  how do we know which steps have been executed?
                         DesignSurfaceViewModel!.AddManuscriptHebrewEnabled = true;
                     }
@@ -596,7 +596,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
             DesignSurfaceViewModel!.AddManuscriptGreekEnabled = false;
 
-            var taskName = "GreekCorpus";
+            var taskName = MaculaCorporaNames.GreekCorpusName;
             var task = _longRunningTaskManager!.Create(taskName, LongRunningTaskStatus.Running);
             var cancellationToken = task.CancellationTokenSource!.Token;
 
@@ -621,7 +621,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             {
                 Id = ManuscriptIds.GreekManuscriptId,
                 CorpusType = CorpusType.ManuscriptGreek,
-                Name = "Macula Greek",
+                Name = MaculaCorporaNames.GreekCorpusName,
                 AvailableBooks = books,
             };
 
@@ -641,7 +641,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     var corpus = await Corpus.Create(
                         mediator: Mediator!,
                         IsRtl: false,
-                        Name: "Macula Greek",
+                        Name: MaculaCorporaNames.GreekCorpusName,
                         Language: "Greek",
                         CorpusType: CorpusType.ManuscriptGreek.ToString(),
                         ParatextId: ManuscriptIds.GreekManuscriptId,
@@ -655,7 +655,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
 
                     // ReSharper disable once UnusedVariable
                     var tokenizedTextCorpus = await sourceCorpus.Create(Mediator!, corpus.CorpusId,
-                        "Macula Greek",
+                        MaculaCorporaNames.GreekCorpusName,
                         Tokenizers.WhitespaceTokenizer.ToString(),
                         cancellationToken,
                         true);
@@ -698,7 +698,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                     _busyState.Remove(taskName);
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        DesignSurfaceViewModel!.DeleteCorpusNode(corpusNode);
+                        DeleteCorpusNode(corpusNode);
                         DesignSurfaceViewModel!.AddManuscriptGreekEnabled = true;
                     }
                     else
@@ -896,7 +896,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             _busyState.Remove(taskName);
                             if (cancellationToken.IsCancellationRequested)
                             {
-                                DesignSurfaceViewModel!.DeleteCorpusNode(node);
+                                DeleteCorpusNode(node);
                             }
                             else
                             {
@@ -1410,6 +1410,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             var isCorpusProcessing = BackgroundTasksViewModel.CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(node.Name);
             if (isCorpusProcessing)
             {
+                await EventAggregator.PublishOnUIThreadAsync(new BackgroundTaskChangedMessage(new BackgroundTaskStatus
+                {
+                    Name = node.Name,
+                    Description = "Tokenization Cancelled",
+                    StartTime = DateTime.Now,
+                    TaskLongRunningProcessStatus = LongRunningTaskStatus.CancellationRequested
+                }));
                 return;
             }
 
@@ -1449,6 +1456,11 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if (corpusId is not null)
                 {
                     await Corpus.Delete(Mediator!, corpusId);
+                }
+                else
+                {
+                    var id = new CorpusId(node.CorpusId);
+                    await Corpus.Delete(Mediator!, id);
                 }
             });
             

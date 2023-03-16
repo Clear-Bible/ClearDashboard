@@ -56,6 +56,7 @@
             <ComboBox
                 Margin="30,0,30,0"
                 VerticalAlignment="Top"
+                IsEnabled="{Binding CanTrain}"
                 ItemsSource="{Binding Source={helpers:EnumBindingSource {x:Type translation:SmtModelType}}}"
                 SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
                 <ComboBox.ItemTemplate>
@@ -66,6 +67,8 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+
+            <CheckBox IsChecked="{Binding IsTrainedSymmetrizedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="20 5 2 5" Content="Train Symmetrized Model?"/>
         </StackPanel>
 
         <StackPanel

@@ -24,7 +24,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using ClearDashboard.Wpf.Application.Collections;
+using SIL.Linq;
 using Uri = System.Uri;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
@@ -855,9 +856,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         {
             if (e.Note.NoteId != null)
             {
+                EntityIdCollection associationIds= new();
+                e.Note.Associations.ForEach(a => associationIds.Add(a.AssociatedEntityId));
+
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    await NoteManager.DeleteNoteAsync(e.Note, e.EntityIds);
+                    await NoteManager.DeleteNoteAsync(e.Note, associationIds);
                     NotifyOfPropertyChange(() => Items);
                 });
             }

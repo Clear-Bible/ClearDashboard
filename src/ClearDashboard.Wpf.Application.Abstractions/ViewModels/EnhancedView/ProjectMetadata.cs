@@ -1,5 +1,6 @@
 ﻿using ClearDashboard.DataAccessLayer;
 using ClearDashboard.DataAccessLayer.Models;
+using ClearDashboard.Wpf.Application.Helpers;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView;
 
@@ -9,7 +10,7 @@ public static class ProjectMetadata
     {
         Id = ManuscriptIds.HebrewManuscriptId,
         CorpusType = CorpusType.ManuscriptHebrew,
-        Name = "Macula Hebrew",
+        Name = MaculaCorporaNames.HebrewCorpusName,
         AvailableBooks = BookInfo.GenerateScriptureBookList(),
     };
 
@@ -17,7 +18,7 @@ public static class ProjectMetadata
     {
         Id = ManuscriptIds.GreekManuscriptId,
         CorpusType = CorpusType.ManuscriptGreek,
-        Name = "Macula Greek",
+        Name = MaculaCorporaNames.GreekCorpusName,
         AvailableBooks = BookInfo.GenerateScriptureBookList(),
     };
 }

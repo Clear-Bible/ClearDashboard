@@ -3,6 +3,7 @@ using ClearDashboard.Wpf.Application.Helpers;
 using PowerManagerAPI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using PowerModes = ClearDashboard.Wpf.Application.Models.PowerModes;
@@ -145,6 +146,13 @@ namespace ClearDashboard.Wpf.Application.Services
                 // set as the active plan
                 PowerManager.SetActivePlan(highPerformancePlan.PowerModeGuid);
             }
+
+            // kick up our process to high
+            using (Process p = Process.GetCurrentProcess())
+            {
+                p.PriorityClass = ProcessPriorityClass.High;
+            }
+
             IsHighPerformanceEnabled = true;
             await _eventAggregator.PublishOnUIThreadAsync(new PerformanceModeMessage(true));
         }
@@ -153,6 +161,13 @@ namespace ClearDashboard.Wpf.Application.Services
         {
             // set as the active plan
             PowerManager.SetActivePlan(_activePlanGuid);
+
+            // kick up our process back to normal
+            using (Process p = Process.GetCurrentProcess())
+            {
+                p.PriorityClass = ProcessPriorityClass.Normal;
+            }
+
             IsHighPerformanceEnabled = false;
 
             await _eventAggregator.PublishOnUIThreadAsync(new PerformanceModeMessage(false));
