@@ -147,7 +147,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 else
                 {
                     _dashboardProjectsDisplay = CopyDashboardProjectsToAnother(DashboardProjects, _dashboardProjectsDisplay);
-                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower()));
+                    _dashboardProjectsDisplay.RemoveAll(project => !project.ProjectName.ToLower().Contains(SearchText.ToLower().Replace(' ','_')));
                 }
 
                 if (_dashboardProjectsDisplay.Count <= 0 && DashboardProjects.Count>0)
