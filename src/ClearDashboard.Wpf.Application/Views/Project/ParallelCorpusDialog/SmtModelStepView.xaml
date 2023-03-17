@@ -61,9 +61,7 @@
                 SelectedItem="{Binding ParentViewModel.SelectedSmtAlgorithm}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
-                        <Setter
-                            Property="IsEnabled"
-                            Value="{Binding IsEnabled}" />
+                        <Setter Property="IsEnabled" Value="{Binding IsEnabled}" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBox.ItemTemplate>

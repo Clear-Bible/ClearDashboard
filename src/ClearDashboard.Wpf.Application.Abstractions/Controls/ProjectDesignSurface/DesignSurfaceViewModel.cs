@@ -593,7 +593,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
                                 AlignmentSetId = alignmentSetInfo.Id.ToString(),
-                                DisplayName = alignmentSetInfo.DisplayName,
+                                DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
                                 ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
                                 ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
                                 IsEnabled = true,
@@ -601,16 +601,17 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 IsTargetRTL = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
                                 SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
                                 TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                                SmtModel = alignmentSetInfo.SmtModel,
                             },
                             new()
                             {
-                                // Add Verses to focused enhanced view
+                                // Add Verses to new enhanced view
                                 Header = LocalizationService.Get("Pds_AddConnectionToNewEnhancedViewMenu"),
                                 Id = DesignSurfaceMenuIds.AddAlignmentSetToNewEnhancedView,
                                 ProjectDesignSurfaceViewModel = projectDesignSurfaceViewModel,
                                 IconKind = PackIconPicolIconsKind.DocumentTextAdd.ToString(),
                                 AlignmentSetId = alignmentSetInfo.Id.ToString(),
-                                DisplayName = alignmentSetInfo.DisplayName,
+                                DisplayName = $"{alignmentSetInfo.DisplayName} [{alignmentSetInfo.SmtModel}]",
                                 ParallelCorpusId = alignmentSetInfo.ParallelCorpusId!.Id.ToString(),
                                 ParallelCorpusDisplayName = alignmentSetInfo.ParallelCorpusId.DisplayName,
                                 IsEnabled = true,
@@ -618,6 +619,7 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
                                 IsTargetRTL = parallelCorpusConnection.DestinationConnector!.ParentNode!.IsRtl,
                                 SourceParatextId = parallelCorpusConnection.SourceConnector.ParatextId,
                                 TargetParatextId = parallelCorpusConnection.DestinationConnector.ParatextId,
+                                SmtModel = alignmentSetInfo.SmtModel,
                             }
                         }
                     });

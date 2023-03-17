@@ -1275,7 +1275,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                             ParallelCorpusId = connectionMenuItem.ParallelCorpusId ??
                                                throw new InvalidDataEngineException(name: "ParallelCorpusId",
                                                    value: "null"),
-                            ParallelCorpusDisplayName = connectionMenuItem.ParallelCorpusDisplayName,
+                            ParallelCorpusDisplayName = $"{connectionMenuItem.ParallelCorpusDisplayName} [{connectionMenuItem.SmtModel}]",
                             //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),
                             IsRtl = connectionMenuItem.IsRtl,
                             //FIXME:surface serialization new EngineStringDetokenizer(new LatinWordDetokenizer()),

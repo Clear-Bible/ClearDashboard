@@ -659,6 +659,22 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
           
         }
 
+        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item=> item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.HighlightTokensAsync(message, cancellationToken);
+            }
+        }
+
+        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
+        {
+            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
+            {
+                await enhancedViewItemViewModel.UnhighlightTokensAsync(message, cancellationToken);
+            }
+        }
+
         #endregion
 
         #endregion // Methods
@@ -959,21 +975,5 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
         }
 
         #endregion
-
-        public async Task HandleAsync(HighlightTokensMessage message, CancellationToken cancellationToken)
-        {
-            foreach (var enhancedViewItemViewModel in Items.Where(item=> item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
-            {
-                await enhancedViewItemViewModel.HighlightTokensAsync(message, cancellationToken);
-            }
-        }
-
-        public async Task HandleAsync(UnhighlightTokensMessage message, CancellationToken cancellationToken)
-        {
-            foreach (var enhancedViewItemViewModel in Items.Where(item => item is VerseAwareEnhancedViewItemViewModel).Cast<VerseAwareEnhancedViewItemViewModel>())
-            {
-                await enhancedViewItemViewModel.UnhighlightTokensAsync(message, cancellationToken);
-            }
-        }
     }
 }
