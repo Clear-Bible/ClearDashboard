@@ -198,9 +198,9 @@ public class MergeBehaviorApply : MergeBehaviorBase
                 _logger.LogInformation($"Closing connection");
 
                 _projectDbContext.Database.CloseConnection();
-                _projectDbContext.Dispose();
                _connectionOpen = false;
             }
+            _projectDbContext.Dispose();
         }
     }
 
@@ -233,9 +233,9 @@ public class MergeBehaviorApply : MergeBehaviorBase
             _logger.LogInformation($"Closing connection (async)");
 
             await _projectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
-            await _projectDbContext.DisposeAsync().ConfigureAwait(false);
             _connectionOpen = false;
         }
+        await _projectDbContext.DisposeAsync().ConfigureAwait(false);
     }
 }
 

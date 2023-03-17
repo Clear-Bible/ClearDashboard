@@ -8,6 +8,8 @@ using ClearDashboard.DAL.Alignment.Notes;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearDashboard.Collaboration.DifferenceModel;
 using ClearDashboard.DAL.Alignment.Translation;
+using Newtonsoft.Json.Linq;
+using System.Linq.Expressions;
 
 namespace ClearDashboard.Collaboration.Model;
 
@@ -150,6 +152,32 @@ public abstract class NoteModelRef : IModelSnapshot<Models.NoteDomainEntityAssoc
         { nameof(NoteModelRef.NoteId), typeof(Guid) },
         { nameof(NoteModelRef.ModelRef), typeof(ModelRef) }
     }.AsReadOnly();
+
+    public bool TryGetPropertyValue(string key, out object? value)
+    {
+        bool found = false;
+        value = null;
+
+        switch (key)
+        {
+            case nameof(NoteDomainEntityAssociationId):
+                value = this.NoteDomainEntityAssociationId;
+                found = true;
+                break;
+
+            case nameof(NoteId):
+                value = this.NoteId;
+                found = true;
+                break;
+
+            case nameof(ModelRef):
+                value = this.ModelRef;
+                found = true;
+                break;
+        }
+
+        return found;
+    }
 
     public abstract IModelDifference<NoteModelRef> GetModelDifference(NoteModelRef other);
     public abstract void ApplyPropertyDifference(PropertyDifference propertyDifference);

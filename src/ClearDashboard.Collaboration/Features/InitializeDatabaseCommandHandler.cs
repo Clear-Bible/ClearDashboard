@@ -22,6 +22,7 @@ using ClearDashboard.DAL.CQRS.Features.Features;
 using ClearDashboard.DAL.Alignment.Features.Denormalization;
 using SIL.Machine.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 
 namespace ClearDashboard.Collaboration.Features;
 public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDatabaseCommand, RequestResult<Unit>>
@@ -37,7 +38,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
 
     public async Task<RequestResult<Unit>> Handle(InitializeDatabaseCommand request, CancellationToken cancellationToken)
     {
-        string? deleteDatabasePath = null;
+        Action<ILogger>? errorCleanupAction = null;
         try
         {
             var factory = new ProjectSnapshotFromGitFactory(request.RepositoryPath, _logger);
@@ -57,7 +58,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    deleteDatabasePath = GetDatabasePath(projectContext);
+                    errorCleanupAction = GetErrorCleanupAction(projectContext, _logger);
                     cancellationToken.ThrowIfCancellationRequested();
                 }
 
@@ -115,7 +116,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
                 catch (Exception)
                 {
                     await mergeBehavior.MergeErrorAsync(CancellationToken.None);
-                    deleteDatabasePath = GetDatabasePath(projectContext);
+                    errorCleanupAction = GetErrorCleanupAction(projectContext, _logger);
                     throw;
                 }
             }
@@ -137,6 +138,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
             var innerExceptionMessage = (ex.InnerException is not null) ?
                 $" (inner exception message: {ex.InnerException.Message})" :
                 "";
+            request.Progress.Report(new SIL.Machine.Utils.ProgressStatus(0, $"Unable to initialize database for project '{request.ProjectId}', commit '{request.CommitSha}':  exception type: {ex.GetType().Name}, having message: {ex.Message}{innerExceptionMessage}"));
             return new RequestResult<Unit>
             {
                 Message = $"Unable to initialize database for project '{request.ProjectId}', commit '{request.CommitSha}':  exception type: {ex.GetType().Name}, having message: {ex.Message}{innerExceptionMessage}",
@@ -145,20 +147,44 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
         }
         finally
         {
-            if (!string.IsNullOrEmpty(deleteDatabasePath))
+            if (errorCleanupAction is not null)
             {
-                Directory.Delete(deleteDatabasePath, true);
+                errorCleanupAction(_logger);
             }
         }
     }
 
-    private static string? GetDatabasePath(ProjectDbContext? projectContext)
+    private static Action<ILogger>? GetErrorCleanupAction(ProjectDbContext? projectContext, ILogger logger)
     {
         if (projectContext is not null)
         {
-            if (projectContext.OptionsBuilder is SqliteProjectDbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
+            var dbConnection = projectContext.Database.GetDbConnection();
+            if (dbConnection is SqliteConnection && 
+                projectContext.OptionsBuilder is SqliteProjectDbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
             {
-                return optionsBuilder.DatabaseDirectory;
+                var deleteDatabasePath = optionsBuilder.DatabaseDirectory;
+                return (logger) =>
+                {
+                    try
+                    {
+                        // Deleting the database directory without first doing this will
+                        // fail with "file in use".  Notice that is isn't connection specific -
+                        // this should never be run except when no project is currently 
+                        // open.
+                        SqliteConnection.ClearAllPools();
+                        Directory.Delete(deleteDatabasePath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        logger.LogError($"Error attempting to clean up SqliteDatabase at path '{deleteDatabasePath}':  {ex.Message}");
+                    }
+                };
+            }
+            else
+            {
+                // Could throw a NotImplementedException, but could hide the original
+                // exception that was the trigger for calling this method
+                logger.LogError($"Unable to clean up database after InitializeDatabaseCommandHandler error - not a Sqlite database?");
             }
         }
 

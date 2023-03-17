@@ -29,8 +29,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 {
     public class MergeServerProjectDialogViewModel : DashboardApplicationScreen
     {
-        private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly CollaborationManager _collaborationManager;
+        private CancellationTokenSource _cancellationTokenSource;
         private Task? _runningTask;
 
         private bool _isImportAction = true;
@@ -55,7 +55,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             {
                 Set(ref _projectName, value);
                 ProjectManager!.CurrentDashboardProject.ProjectName = value;
-                CanAction = !string.IsNullOrEmpty(value);
+                CanOkAction = !string.IsNullOrEmpty(value);
                 NotifyOfPropertyChange(nameof(Project));
             }
         }
@@ -91,23 +91,30 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
             try
             {
+                CanOkAction = false;
+                CancelAction = "Cancel";
                 ProgressBarVisibility = Visibility.Visible;
+
+                MergeProgressUpdates.Clear();
+                if (!_cancellationTokenSource.TryReset())
+                {
+                    _cancellationTokenSource = new CancellationTokenSource();
+                }
 
                 _runningTask = Task.Run(() => _collaborationManager.InitializeProjectDatabaseAsync(ProjectId, true, _cancellationTokenSource.Token, new Progress<ProgressStatus>(Report)));
                 await _runningTask;
 
-                await TryCloseAsync(true);
+                // If Import succeeds, don't set CanAction back to true
             }
-            catch (OperationCanceledException)
+            catch (Exception)
             {
-            }
-            catch (Exception ex)
-            {
-                // FIXME:  log exception?  throw?  some other type of close?
-                await TryCloseAsync(false);
+                CanOkAction = true;
             }
             finally
             {
+                _runningTask = null;
+
+                CancelAction = "Close";
                 ProgressBarVisibility = Visibility.Hidden;
             }
         }
@@ -126,23 +133,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
 
             try
             {
+                CanOkAction = false;
+                CancelAction = "Cancel";
                 ProgressBarVisibility = Visibility.Visible;
+
+                MergeProgressUpdates.Clear();
+                if (!_cancellationTokenSource.TryReset())
+                {
+                    _cancellationTokenSource = new CancellationTokenSource();
+                }
 
                 _runningTask = Task.Run(() => _collaborationManager.MergeProjectLatestChangesAsync(true, false, _cancellationTokenSource.Token, new Progress<ProgressStatus>(Report)));
                 await _runningTask;
-
-                await TryCloseAsync(true);
-            }
-            catch (OperationCanceledException)
-            {
-            }
-            catch (Exception)
-            {
-                // FIXME:  log exception?  throw?  some other type of close?
-                await TryCloseAsync(false);
             }
             finally
             {
+
+                _runningTask = null;
+
+                CanOkAction = true;
+                CancelAction = "Close";
                 ProgressBarVisibility = Visibility.Hidden;
             }
         }
@@ -155,7 +165,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
             return true;
         }
-        public string DialogTitle => $"{Action} Server Project: {ProjectName}";
+        public string DialogTitle => $"{OkAction} Server Project: {ProjectName}";
 
         public dynamic DialogSettings()
         {
@@ -177,15 +187,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
         {
             if (_runningTask is not null)
             {
-                _cancellationTokenSource.Cancel();
-                await Task.WhenAny(tasks: new Task[] { _runningTask, Task.Delay(30000) });
+                CanCancelAction = false;
+                try
+                {
+                    _cancellationTokenSource.Cancel();
+                    await Task.WhenAny(tasks: new Task[] { _runningTask, Task.Delay(30000) });
+                }
+                finally
+                {
+                    CanCancelAction = true;
+                }
             }
-
-            await TryCloseAsync(false);
+            else
+            {
+                await TryCloseAsync(false);
+            }
         }
 
-        public string Action => IsImportAction ? "Import" : "Merge";
-        public string ProgressLabel => $"{Action} Progress";
         public async Task Ok()
         {
             if (IsImportAction)
@@ -198,11 +216,28 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Collaboration
             }
          }
 
-        private bool _canAction;
-        public bool CanAction
+        public string ProgressLabel => $"{OkAction} Progress";
+        public string OkAction => IsImportAction ? "Import" : "Merge";
+
+        private bool _canOkAction;
+        public bool CanOkAction
         {
-            get => _canAction;
-            set => Set(ref _canAction, value);
+            get => _canOkAction;
+            set => Set(ref _canOkAction, value);
+        }
+
+        private bool _canCancelAction = true;
+        public bool CanCancelAction
+        {
+            get => _canCancelAction;
+            set => Set(ref _canCancelAction, value);
+        }
+
+        private string _cancelAction = "Close";
+        public string CancelAction
+        {
+            get => _cancelAction;
+            set => Set(ref _cancelAction, value);
         }
 
         public void Report(ProgressStatus status)

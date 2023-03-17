@@ -67,42 +67,44 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Orientation="Vertical">
-            <ListView
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Width="800">
+                <ListView
                 x:Name="ProgressMessages"
                 Height="400"
+                Width="2000"
                 Margin="15,0,15,5"
                 VerticalAlignment="Top"
                 ItemsSource="{Binding MergeProgressUpdates}">
-                <ListView.Style>
-                    <Style TargetType="{x:Type ListView}">
-                        <Setter Property="Visibility" Value="Visible" />
-                    </Style>
-                </ListView.Style>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="BorderBrush" Value="LightGray" />
-                        <Setter Property="BorderThickness" Value="0,0,0,1" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.View>
-                    <GridView>
-                        <GridView.ColumnHeaderContainerStyle>
-                            <Style TargetType="{x:Type GridViewColumnHeader}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </Style>
-                        </GridView.ColumnHeaderContainerStyle>
+                    <ListView.Style>
+                        <Style TargetType="{x:Type ListView}">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </Style>
+                    </ListView.Style>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="BorderBrush" Value="LightGray" />
+                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.View>
+                        <GridView>
+                            <GridView.ColumnHeaderContainerStyle>
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Style>
+                            </GridView.ColumnHeaderContainerStyle>
 
-                        <GridViewColumn Width="800">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-
+                            <GridViewColumn Width="2000">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </ScrollViewer>
         </StackPanel>
 
         <StackPanel
@@ -116,15 +118,15 @@
                 x:Name="Cancel"
                 Margin="5,5,5,5"
                 cal:Message.Attach="Cancel"
-                Content="{helpers:Localization Cancel}"
-                IsEnabled="{Binding EnableControls}"
+                Content="{Binding CancelAction}"
+                IsEnabled="{Binding CanCancelAction}"
                 Style="{StaticResource TransparentStyle}" />
             <Button
                 x:Name="Ok"
                 cal:Message.Attach="Ok"
-                Content="{Binding Action}"
+                Content="{Binding OkAction}"
                 IsDefault="True"
-                IsEnabled="{Binding CanAction}"
+                IsEnabled="{Binding CanOkAction}"
                 Style="{StaticResource TransparentStyle}" />
         </StackPanel>
         <ProgressBar Grid.Row="2"

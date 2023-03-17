@@ -274,6 +274,7 @@ public class CollaborationManager
             if (!commitShas.Any())
             {
                 // We are already at the latest
+                progress.Report(new ProgressStatus(0, $"Repository has no commits yet"));
                 _logger.LogInformation($"MergeLastestChangesAsync called, but repository has no commits yet");
                 return;
             }
@@ -291,6 +292,7 @@ public class CollaborationManager
         if (lastMergedCommitShaIndex == 0)
         {
             // We are already at the latest
+            progress.Report(new ProgressStatus(0, $"Already at latest commit '{project.LastMergedCommitSha}'"));
             _logger.LogInformation($"MergeLastestChangesAsync called, but already at latest commit '{project.LastMergedCommitSha}'");
             return;
         }

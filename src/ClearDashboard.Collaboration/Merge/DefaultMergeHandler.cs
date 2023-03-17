@@ -292,20 +292,15 @@ public class DefaultMergeHandler
         }
     }
 
-    private string GetModelSnapshotDisplayName(IModelSnapshot modelSnapshot)
+    protected string GetModelSnapshotDisplayName(IModelSnapshot modelSnapshot)
     {
-        var displayName = "Unknown";
-
-        if (modelSnapshot.PropertyValues.ContainsKey("DisplayName"))
+        modelSnapshot.TryGetPropertyValue("DisplayName", out object? displayName);
+        if (string.IsNullOrEmpty((string?)displayName))
         {
-            displayName = (string)modelSnapshot.PropertyValues["DisplayName"]!;
-        }
-        else if (modelSnapshot.PropertyValues.ContainsKey("Name"))
-        {
-            displayName = (string)modelSnapshot.PropertyValues["Name"]!;
+            modelSnapshot.TryGetPropertyValue("Name", out displayName);
         }
 
-        return displayName;
+        return string.IsNullOrEmpty((string?)displayName) ? "Unknown" : (string)displayName;
     }
 
     public async Task ModifyListDifferencesAsync<T>(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, CancellationToken cancellationToken = default)

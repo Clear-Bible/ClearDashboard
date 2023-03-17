@@ -149,7 +149,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
         }
 
         var tokenizedCorpusId = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
-        var tokenizedCorpusName = (string)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.DisplayName)]!;
+        var tokenizedCorpusName = GetModelSnapshotDisplayName(tokenizedCorpusSnapshot);
         int scrVersType = (int)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.ScrVersType)]!;
         string? customVersData = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.CustomVersData)];
         string? tokenizationFunction = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.TokenizationFunction)];
@@ -175,7 +175,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                     var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(
                         textCorpus,
                         bookId,
-                        (string)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.DisplayName)]!);
+                        GetModelSnapshotDisplayName(tokenizedCorpusSnapshot));
 
                     // This method currently doesn't have any way to use the real
                     // VerseRowIds when building VerseRows.  So we correct each
@@ -286,7 +286,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
     private async Task ImportManuscriptVerseRowsTokens(IModelSnapshot<Models.TokenizedCorpus> tokenizedCorpusSnapshot, CancellationToken cancellationToken)
     {
         var tokenizedCorpusId = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
-        var tokenizedCorpusName = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.DisplayName)]!;
+        var tokenizedCorpusName = GetModelSnapshotDisplayName(tokenizedCorpusSnapshot);
         var userId = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.UserId)]!;
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
@@ -322,7 +322,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                     var tokensTextRows = TokenizedCorpusDataUtil.ExtractValidateBook(
                         textCorpus,
                         bookId,
-                        (string)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.DisplayName)]!);
+                        GetModelSnapshotDisplayName(tokenizedCorpusSnapshot));
 
                     // This method currently doesn't have any way to use the real
                     // VerseRowIds when building VerseRows.  So we correct each

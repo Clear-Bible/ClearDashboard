@@ -54,6 +54,9 @@ public interface IModelSnapshot : IModelDistinguishable<IModelSnapshot> // IMode
     /// serialization / deserialization.
     /// </summary>
     IReadOnlyDictionary<string, string>? AddedPropertyTypeNames { get; }
+
+    bool TryGetPropertyValue(string key, out object? value);
+
 }
 
 //public interface IModelIdentifiable : IModelDistinguishable<IModelIdentifiable>
