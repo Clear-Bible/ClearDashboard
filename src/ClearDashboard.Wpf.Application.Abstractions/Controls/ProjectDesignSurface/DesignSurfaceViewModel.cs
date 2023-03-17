@@ -549,7 +549,6 @@ namespace ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface
             BindableCollection<ParallelCorpusConnectionMenuItemViewModel> connectionMenuItems)
         {
 
-            // Add new alignment set
             connectionMenuItems.Add(new ParallelCorpusConnectionMenuItemViewModel
             {
                 Header =LocalizationService.Get("Pds_CreateNewAlignmentSetMenu"),
