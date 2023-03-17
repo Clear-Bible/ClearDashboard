@@ -21,6 +21,7 @@ using ClearBible.Engine.Persistence;
 using ClearDashboard.Collaboration.Factory;
 using MediatR;
 using System.Threading;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -65,7 +66,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
             verseRowHandler.VerseRowsForTokenization.Clear();
             verseRowHandler.VerseRowLookup.Clear();
 
-            _mergeContext.Logger.LogInformation($"Inserting verse row children for tokenized corpus '{parentSnapshot.GetId()}'");
+            _mergeContext.Logger.LogInformation($"Inserting verse row children for tokenized corpus  '{parentSnapshot.GetId()}'");
             var insertCount = await CreateListItemsAsync<IModelSnapshot<Models.VerseRow>>(
                 (IEnumerable<IModelSnapshot<Models.VerseRow>>)parentSnapshot.Children[verseRowChildName],
                 cancellationToken);
@@ -148,6 +149,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
         }
 
         var tokenizedCorpusId = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
+        var tokenizedCorpusName = (string)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.DisplayName)]!;
         int scrVersType = (int)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.ScrVersType)]!;
         string? customVersData = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.CustomVersData)];
         string? tokenizationFunction = (string?)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.TokenizationFunction)];
@@ -158,7 +160,9 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Inserting VerseRow TokenComponents for TokenizedCorpusId '{tokenizedCorpusId}'",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
+
+                progress.Report(new ProgressStatus(0, $"Inserting VerseRow tokens for tokenized corpus '{tokenizedCorpusName}' '{tokenizedCorpusId}'"));
 
                 var tokenInsertCount = 0;
                 var connection = projectDbContext.Database.GetDbConnection();
@@ -199,16 +203,17 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
 
                             tokenInsertCount += tokenComponents.Count;
 
-                            logger.LogDebug($"Inserted {tokenComponents.Count} TokenComponents for VerseRow '{verseRowUser.verseRowId}'");
+                            //logger.LogDebug($"Inserted {tokenComponents.Count} TokenComponents for VerseRow '{verseRowUser.verseRowId}'");
 
                         }
                         else
                         {
-                            throw new InvalidModelStateException($"VerseRowId lookup failed for bookChapterVerse '{verseRow.BookChapterVerse}' and tokenizedCorpusId '{verseRow.TokenizedCorpusId}'");
+                            throw new InvalidModelStateException($"VerseRowId lookup failed for bookChapterVerse '{verseRow.BookChapterVerse}' and tokenizedCorpus '{verseRow.TokenizedCorpusId}'");
                         }
                     }
                 }
 
+                progress.Report(new ProgressStatus(0, $"Inserted {tokenInsertCount} tokens"));
                 logger.LogInformation($"Inserted {tokenInsertCount} tokens");
             },
             cancellationToken);
@@ -281,11 +286,14 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
     private async Task ImportManuscriptVerseRowsTokens(IModelSnapshot<Models.TokenizedCorpus> tokenizedCorpusSnapshot, CancellationToken cancellationToken)
     {
         var tokenizedCorpusId = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.Id)]!;
+        var tokenizedCorpusName = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.DisplayName)]!;
         var userId = (Guid)tokenizedCorpusSnapshot.PropertyValues[nameof(Models.TokenizedCorpus.UserId)]!;
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
-            $"Inserting VerseRows and TokenComponents for TokenizedCorpusId '{tokenizedCorpusId}'",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            $"Inserting VerseRows and TokenComponents for manuscript TokenizedCorpusId '{tokenizedCorpusId}'",
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
+
+                progress.Report(new ProgressStatus(0, $"Inserting VerseRows and tokens for manuscript tokenized corpus '{tokenizedCorpusName}' '{tokenizedCorpusId}'"));
 
                 var tokenInsertCount = 0;
                 var connection = projectDbContext.Database.GetDbConnection();
@@ -343,6 +351,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                     }
                 }
 
+                progress.Report(new ProgressStatus(0, $"Inserted {tokenInsertCount} tokens"));
                 logger.LogInformation($"Inserted {tokenInsertCount} tokens");
             },
             cancellationToken);

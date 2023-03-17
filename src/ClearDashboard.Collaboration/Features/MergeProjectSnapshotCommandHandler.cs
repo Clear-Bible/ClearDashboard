@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClearDashboard.DAL.Alignment.Features.Events;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Features;
 public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler<
@@ -52,13 +53,15 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
         }
 
         await using (MergeBehaviorBase mergeBehavior = request.UseLogOnlyMergeBehavior
-            ? new MergeBehaviorLogOnly(Logger!, new MergeCache())
-            : new MergeBehaviorApply(Logger, ProjectDbContext!, new MergeCache()))
+            ? new MergeBehaviorLogOnly(Logger!, new MergeCache(), request.Progress)
+            : new MergeBehaviorApply(Logger, ProjectDbContext!, new MergeCache(), request.Progress))
         {
             await mergeBehavior.MergeStartAsync(cancellationToken);
             try
             {
-                var projectDifferences = new ProjectDifferences(request.ProjectSnapshotLastMerged, request.ProjectSnapshotToMerge);
+                request.Progress.Report(new ProgressStatus(0, "Calculating differences between last merged and latest commit"));
+
+                var projectDifferences = new ProjectDifferences(request.ProjectSnapshotLastMerged, request.ProjectSnapshotToMerge, cancellationToken);
 
                 if (!request.UseLogOnlyMergeBehavior)
                 {
@@ -66,7 +69,9 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
                 }
 
                 BuilderContext builderContext = new(ProjectDbContext);
-                var currentProjectSnapshot = GetProjectSnapshotQueryHandler.LoadSnapshot(builderContext);
+                var currentProjectSnapshot = GetProjectSnapshotQueryHandler.LoadSnapshot(builderContext, cancellationToken);
+
+                request.Progress.Report(new ProgressStatus(0, "Starting merge..."));
 
                 var mergeContext = new MergeContext(ProjectDbContext!.UserProvider, Logger, mergeBehavior, request.RemoteOverridesLocal);
                 var merger = new Merger(mergeContext);
@@ -76,14 +81,27 @@ public class MergeProjectSnapshotCommandHandler : ProjectDbContextCommandHandler
                 // FIXME:  temporary, for testing:
                 //await MergeContext.MergeBehavior.MergeErrorAsync(cancellationToken);
 
+                request.Progress.Report(new ProgressStatus(0, "Merge complete!"));
+
                 if (mergeContext.FireAlignmentDenormalizationEvent)
                 {
                     await _mediator.Publish(new AlignmentAddedRemovedEvent(Enumerable.Empty<Models.Alignment>(), null), cancellationToken);
                 }
             }
+            catch (OperationCanceledException)
+            {
+                await mergeBehavior.MergeErrorAsync(CancellationToken.None);
+                request.Progress.Report(new SIL.Machine.Utils.ProgressStatus(0, "Operation Canceled"));
+                return new RequestResult<Unit>
+                {
+                    Message = "Operation Canceled",
+                    Success = false,
+                    Canceled = true
+                };
+            }
             catch (Exception ex)
             {
-                await mergeBehavior.MergeErrorAsync(cancellationToken);
+                await mergeBehavior.MergeErrorAsync(CancellationToken.None);
                 Logger.LogInformation($"Exception of type '{ex.GetType().ShortDisplayName()}': {ex.Message}");
 
                 return new RequestResult<Unit>

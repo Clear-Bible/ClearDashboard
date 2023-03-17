@@ -56,7 +56,7 @@ public class VerseRowBuilder : GeneralModelBuilder<Models.VerseRow>
             .ToList();
     }
 
-    public static void SaveVerseRows(GeneralListModel<GeneralModel<Models.VerseRow>> verseRowSnapshots, string childPath, JsonSerializerOptions options)
+    public static void SaveVerseRows(GeneralListModel<GeneralModel<Models.VerseRow>> verseRowSnapshots, string childPath, JsonSerializerOptions options, CancellationToken cancellationToken)
     {
         var verseRowsByBook = verseRowSnapshots
             .GroupBy(vr => ((string)vr[nameof(Models.VerseRow.BookChapterVerse)]!).Substring(0, 3))
@@ -68,6 +68,8 @@ public class VerseRowBuilder : GeneralModelBuilder<Models.VerseRow>
 
         foreach (var verseRowsForBook in verseRowsByBook)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // Instead of the more general GeneralModelJsonConverter, this will use the
             // more specific VerseRowModelJsonConverter:
             var serializedChildModelSnapshot = JsonSerializer.Serialize<GeneralListModel<GeneralModel<Models.VerseRow>>>(

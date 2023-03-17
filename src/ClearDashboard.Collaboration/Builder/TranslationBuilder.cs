@@ -92,7 +92,8 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
         GeneralModel translationSet,
         GeneralListModel<GeneralModel<Models.Translation>> translationSnapshots,
         string childPath,
-        JsonSerializerOptions options)
+        JsonSerializerOptions options,
+        CancellationToken cancellationToken)
     {
         var translationsByLocation = translationSnapshots
             .GroupBy(e => (string)e[TranslationBuilder.BOOK_CHAPTER_LOCATION]!)
@@ -104,6 +105,8 @@ public class TranslationBuilder : GeneralModelBuilder<Models.Translation>
 
         foreach (var translationsForLocation in translationsByLocation)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // Instead of the more general GeneralModelJsonConverter, this will use the
             // more specific TranslationGroupJsonConverter:
             var translationGroup = new TranslationGroup()

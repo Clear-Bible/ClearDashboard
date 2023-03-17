@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
@@ -24,7 +25,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
     private readonly Dictionary<Type, DbCommand> _insertCommandsByType = new();
     private bool _connectionOpen = false;
 
-    public MergeBehaviorApply(/* pass in configuration */ILogger logger, ProjectDbContext projectDbContext, MergeCache mergeCache) : base(logger, mergeCache)
+    public MergeBehaviorApply(/* pass in configuration */ILogger logger, ProjectDbContext projectDbContext, MergeCache mergeCache, IProgress<ProgressStatus> progress) : base(logger, mergeCache, progress)
     {
         _projectDbContext = projectDbContext;
     }
@@ -158,7 +159,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
     public override async Task RunProjectDbContextQueryAsync(string description, ProjectDbContextMergeQueryAsync query, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug($"Running handler '{GetType().Name}' specific query:  '{description}'");
-        await query.Invoke(_projectDbContext, MergeCache, _logger, cancellationToken);
+        await query.Invoke(_projectDbContext, MergeCache, _logger, Progress, cancellationToken);
     }
 
     public override object? RunEntityValueResolver(IModelSnapshot modelSnapshot, string propertyName, EntityValueResolver propertyValueConverter)
@@ -197,7 +198,8 @@ public class MergeBehaviorApply : MergeBehaviorBase
                 _logger.LogInformation($"Closing connection");
 
                 _projectDbContext.Database.CloseConnection();
-                _connectionOpen = false;
+                _projectDbContext.Dispose();
+               _connectionOpen = false;
             }
         }
     }
@@ -231,6 +233,7 @@ public class MergeBehaviorApply : MergeBehaviorBase
             _logger.LogInformation($"Closing connection (async)");
 
             await _projectDbContext.Database.CloseConnectionAsync().ConfigureAwait(false);
+            await _projectDbContext.DisposeAsync().ConfigureAwait(false);
             _connectionOpen = false;
         }
     }

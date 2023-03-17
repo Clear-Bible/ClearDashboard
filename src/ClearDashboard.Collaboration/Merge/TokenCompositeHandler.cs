@@ -12,6 +12,7 @@ using ClearDashboard.Collaboration.Exceptions;
 using ClearDashboard.DAL.CQRS;
 using MediatR;
 using ClearDashboard.DAL.Alignment.Corpora;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -75,7 +76,7 @@ DELETE FROM TokenComponent WHERE Id IN
 )
          */
         return
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
                 await projectDbContext.TokenComposites
                     .Where(tc => tc.TokenCompositeTokenAssociations
@@ -88,7 +89,7 @@ DELETE FROM TokenComponent WHERE Id IN
     public static ProjectDbContextMergeQueryAsync GetDeleteTokenComponentsByVerseRowIdQueryAsync(Guid verseRowId)
     {
         return
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
                 await projectDbContext.TokenComponents
                     .Where(tc => tc.VerseRowId == verseRowId)
@@ -121,7 +122,7 @@ DELETE FROM TokenComponent WHERE Id IN
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"In HandleCreateAsync associating new TokenComposite with child Tokens",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
                 var tokenCompositeId = (Guid)itemToCreate.PropertyValues["Id"]!;
                 var tokenizedCorpusId = (Guid)itemToCreate.PropertyValues["TokenizedCorpusId"]!;
@@ -192,7 +193,7 @@ DELETE FROM TokenComponent WHERE Id IN
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Applying TokenComposite 'TokenLocations' property ListMembershipDifference (OnlyIn1: {string.Join(", ", tokenLocationsOnlyIn1)}, OnlyIn2: {string.Join(", ", tokenLocationsOnlyIn2)})", 
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
                 var tokenCompositeId = (Guid)snapshot.PropertyValues["Id"]!;
                 var tokenizedCorpusId = (Guid)snapshot.PropertyValues["TokenizedCorpusId"]!;

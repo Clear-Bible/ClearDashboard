@@ -6,12 +6,13 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using ClearDashboard.DataAccessLayer.Data;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
 public class MergeBehaviorLogOnly : MergeBehaviorBase
 {
-	public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger, MergeCache mergeCache) : base(logger, mergeCache)
+	public MergeBehaviorLogOnly(/* pass in configuration */ILogger logger, MergeCache mergeCache, IProgress<ProgressStatus> progress) : base(logger, mergeCache, progress)
 	{
 	}
 

@@ -3,6 +3,7 @@ using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DAL.CQRS.Features;
 using ClearDashboard.DataAccessLayer.Models;
 using MediatR;
+using SIL.Machine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,4 +17,5 @@ public record MergeProjectSnapshotCommand(
     ProjectSnapshot ProjectSnapshotLastMerged,
     ProjectSnapshot ProjectSnapshotToMerge,
     bool RemoteOverridesLocal,
-    bool UseLogOnlyMergeBehavior) : ProjectRequestCommand<Unit>;
+    bool UseLogOnlyMergeBehavior,
+    IProgress<ProgressStatus> Progress) : ProjectRequestCommand<Unit>;

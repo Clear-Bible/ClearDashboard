@@ -24,6 +24,9 @@ using ClearDashboard.Wpf.Application.Messages;
 using ClearDashboard.Wpf.Application.Services;
 using static ClearDashboard.DataAccessLayer.Features.DashboardProjects.GetProjectVersionSlice;
 using Resources = ClearDashboard.Wpf.Application.Strings.Resources;
+using ClearDashboard.Wpf.Application.UserControls;
+using ClearDashboard.Wpf.Application.ViewModels.Lexicon;
+using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 {
@@ -33,6 +36,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         private readonly ParatextProxy _paratextProxy;
         private readonly IMediator _mediator;
         private readonly TranslationSource? _translationSource;
+        private readonly IWindowManager _windowManager;
         private readonly CollaborationManager _collaborationManager;
 
         private string _ProjectDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),"ClearDashboard_Projects");
@@ -247,14 +251,15 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
         #region Constructor
         public ProjectPickerViewModel(TranslationSource translationSource, DashboardProjectManager projectManager, ParatextProxy paratextProxy, 
             INavigationService navigationService, ILogger<ProjectPickerViewModel> logger, IEventAggregator eventAggregator,
-            IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService, 
-            CollaborationManager collaborationManager)
+            IMediator mediator, ILifetimeScope? lifetimeScope, ILocalizationService localizationService,
+            IWindowManager windowManager, CollaborationManager collaborationManager)
             : base(projectManager, navigationService, logger, eventAggregator, mediator, lifetimeScope, localizationService)
         {
             Logger?.LogInformation("Project Picker constructor called.");
             //_windowManager = windowManager;
             _paratextProxy = paratextProxy;
             _mediator = mediator;
+            _windowManager = windowManager;
             _collaborationManager = collaborationManager;
             AlertVisibility = Visibility.Collapsed;
             _translationSource = translationSource;
@@ -515,27 +520,17 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                 return;
             }
 
-            try
+            var importServerProjectViewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+            if (importServerProjectViewModel != null)
             {
-                // FIXME:  Long running process / busy indicator
-                Connected = false; // HACK
-                await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
+                importServerProjectViewModel.ProjectId = project.ProjectId;
+                importServerProjectViewModel.ProjectName = project.ProjectName;
+                importServerProjectViewModel.IsImportAction = true;
+                var result = await _windowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
 
-                // FIXME:  pop up a dialog indicating "long running operation" and "are you sure?"
-
-                await _collaborationManager.InitializeProjectDatabaseAsync(project.ProjectId, true, CancellationToken.None);
+                await GetProjectsVersion().ConfigureAwait(false);
+                await GetCollabProjects().ConfigureAwait(false);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                Connected = true; // HACK
-            }
-
-            await GetProjectsVersion().ConfigureAwait(false);
-            await GetCollabProjects().ConfigureAwait(false);
         }
 
         private async Task SendUiLanguageChangeMessage(string language)

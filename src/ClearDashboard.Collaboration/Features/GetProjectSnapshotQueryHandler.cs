@@ -61,7 +61,7 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
         try
         {
             BuilderContext builderContext = new (ProjectDbContext);
-            var projectSnapshot = LoadSnapshot(builderContext);
+            var projectSnapshot = LoadSnapshot(builderContext, cancellationToken);
 
             return new RequestResult<ProjectSnapshot>(projectSnapshot);
 
@@ -75,16 +75,27 @@ public class GetProjectSnapshotQueryHandler : ProjectDbContextQueryHandler<
         }
     }
 
-    internal static ProjectSnapshot LoadSnapshot(BuilderContext builderContext)
+    internal static ProjectSnapshot LoadSnapshot(BuilderContext builderContext, CancellationToken cancellationToken = default)
     {
         var projectSnapshot = new ProjectSnapshot(ProjectBuilder.BuildModelSnapshot(builderContext));
 
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.Corpus>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TokenizedCorpus>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.ParallelCorpus>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.AlignmentSet>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.TranslationSet>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
+
         projectSnapshot.AddGeneralModelList(GeneralModelBuilder.GetModelBuilder<Models.User>().BuildModelSnapshots(builderContext));
+        cancellationToken.ThrowIfCancellationRequested();
 
         // Notes has to come after any other model type
         // it might reference:

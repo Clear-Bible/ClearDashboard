@@ -20,16 +20,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using SIL.EventsAndDelegates;
+using SIL.Machine.Utils;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
 
-public delegate Task ProjectDbContextMergeQueryAsync(ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken = default);
+public delegate Task ProjectDbContextMergeQueryAsync(ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken = default);
 public delegate object? EntityValueResolver(IModelSnapshot modelSnapshot, ProjectDbContext projectDbContext, MergeCache cache, ILogger logger);
 
 public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
 {
     public MergeCache MergeCache { get; private set; }
+    public IProgress<ProgressStatus> Progress { get; private set; }
 
     protected readonly ILogger _logger;
     protected readonly DateTimeOffsetToBinaryConverter _dateTimeOffsetToBinary;
@@ -44,9 +46,10 @@ public abstract class MergeBehaviorBase : IDisposable, IAsyncDisposable
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _propertyNameMap = new();
     protected readonly Dictionary<(Type EntityType, string PropertyName), IEnumerable<string>> _idPropertyNameMap = new();
 
-    public MergeBehaviorBase(ILogger logger, MergeCache mergeCache)
+    public MergeBehaviorBase(ILogger logger, MergeCache mergeCache, IProgress<ProgressStatus> progress)
     {
         MergeCache = mergeCache;
+        Progress = progress;
         _logger = logger;
         _dateTimeOffsetToBinary = new DateTimeOffsetToBinaryConverter();
         _nullabilityContext = new NullabilityInfoContext();

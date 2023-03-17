@@ -7,6 +7,7 @@ using ClearDashboard.DataAccessLayer.Data;
 using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -24,7 +25,7 @@ public class TranslationSetHandler : DefaultMergeHandler
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Loading token locations into cache",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
                 var translationSets = projectDbContext.TranslationSets
                     .Include(e => e.ParallelCorpus)

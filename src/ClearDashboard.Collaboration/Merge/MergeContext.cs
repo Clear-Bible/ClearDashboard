@@ -5,6 +5,7 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using SIL.Machine.Utils;
 using Models = ClearDashboard.DataAccessLayer.Models;
 
 namespace ClearDashboard.Collaboration.Merge;
@@ -13,6 +14,7 @@ public sealed class MergeContext
 {
     public bool RemoteOverridesLocal { get; private set; }
     public MergeBehaviorBase MergeBehavior { get; private set; }
+    public IProgress<ProgressStatus> Progress { get => MergeBehavior.Progress; }
 
     public IUserProvider UserProvider { get; private set; }
     public ILogger Logger { get; private set; }

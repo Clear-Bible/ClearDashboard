@@ -9,6 +9,7 @@ using Models = ClearDashboard.DataAccessLayer.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ClearDashboard.Collaboration.Builder;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -26,7 +27,7 @@ public class AlignmentSetHandler : DefaultMergeHandler
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Loading token locations into cache",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
                 var alignmentSet = projectDbContext.AlignmentSets
                     .Include(e => e.ParallelCorpus)
@@ -43,6 +44,7 @@ public class AlignmentSetHandler : DefaultMergeHandler
             },
             cancellationToken);
 
+        _mergeContext.Progress.Report(new ProgressStatus(0, "Creating Alignments"));
         _mergeContext.Logger.LogInformation("Starting create Alignments");
 
         var count = 0;
@@ -72,6 +74,8 @@ public class AlignmentSetHandler : DefaultMergeHandler
                     count++;
                 }
                 _mergeContext.MergeBehavior.CompleteInsertModelCommand(firstAlignment.EntityType);
+
+                _mergeContext.Progress.Report(new ProgressStatus(0, "Creating Alignment Denormalization Tasks"));
 
                 // Add denormalization data here so it is part of the surrounding transaction:
                 List<GeneralModel<Models.AlignmentSetDenormalizationTask>> alignmentSetDenormalizationTasks = new();
@@ -106,6 +110,7 @@ public class AlignmentSetHandler : DefaultMergeHandler
             }
         }
 
+        _mergeContext.Progress.Report(new ProgressStatus(0, $"Completed Creating Alignments (count: {count})"));
         _mergeContext.Logger.LogInformation($"Completed create Alignments (count: {count})");
     }
 }

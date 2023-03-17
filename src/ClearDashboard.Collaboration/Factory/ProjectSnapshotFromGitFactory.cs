@@ -95,7 +95,7 @@ public class ProjectSnapshotFromGitFactory
         }
     }
 
-    public ProjectSnapshot LoadSnapshot(string commitSha, Guid projectId)
+    public ProjectSnapshot LoadSnapshot(string commitSha, Guid projectId, CancellationToken cancellationToken = default)
 	{
         using (var repo = new Repository(_repositoryPath))
         {
@@ -108,6 +108,7 @@ public class ProjectSnapshotFromGitFactory
 
             foreach (var topLevelEntry in topLevelEntries.Where(te => te.TargetType == TreeEntryTargetType.Tree).OrderBy(te => te.Name))
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 // topLevelEntry:  first level under project:  "AlignmentSets", "Corpora", etc.
 
                 if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.AlignmentSet)])
@@ -118,7 +119,7 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.AlignmentSet, Models.Alignment>(entityItems, modelSnapshot, repo, commitSha);
+                            AddGeneralModelChild<Models.AlignmentSet, Models.Alignment>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
                         }));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
@@ -133,7 +134,7 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(entityItems, modelSnapshot, repo, commitSha);
+                            AddGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
                         }));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.Note)])
@@ -144,8 +145,8 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, repo, commitSha);
-                            AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, repo, commitSha);
+                            AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
+                            AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
                         }));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.TokenizedCorpus)])
@@ -156,8 +157,8 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha);
-                            AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, repo, commitSha);
+                            AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
+                            AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
                         }));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.ParallelCorpus)])
@@ -168,7 +169,7 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha);
+                            AddGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
                         }));
                 }
                 else if (topLevelEntry.Name == topLevelEntityFolderNameMappings[typeof(Models.TranslationSet)])
@@ -179,7 +180,7 @@ public class ProjectSnapshotFromGitFactory
                         Repository repo,
                         string commitSha) =>
                         {
-                            AddGeneralModelChild<Models.TranslationSet, Models.Translation>(entityItems, modelSnapshot, repo, commitSha);
+                            AddGeneralModelChild<Models.TranslationSet, Models.Translation>(entityItems, modelSnapshot, repo, commitSha, cancellationToken);
                         }));
 
                 }
@@ -284,7 +285,7 @@ public class ProjectSnapshotFromGitFactory
         return modelSnapshot;
     }
 
-    private void AddGeneralModelChild<P,C>(IEnumerable<TreeEntry> entityEntries, GeneralModel<P> modelSnapshot, Repository repo, string commitSha)
+    private void AddGeneralModelChild<P,C>(IEnumerable<TreeEntry> entityEntries, GeneralModel<P> modelSnapshot, Repository repo, string commitSha, CancellationToken cancellationToken)
         where P : notnull
         where C : notnull
     {
@@ -300,7 +301,7 @@ public class ProjectSnapshotFromGitFactory
             if (typeof(C).IsAssignableTo(typeof(NoteModelRef)))
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildren<NoteModelRef>(childEntityEntry, repo, commitSha);
+                var childModelShapshots = LoadChildren<NoteModelRef>(childEntityEntry, repo, commitSha, cancellationToken);
                 modelSnapshot.AddChild<NoteModelRef>(childName, childModelShapshots);
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.VerseRow)))
@@ -315,6 +316,8 @@ public class ProjectSnapshotFromGitFactory
 
                 foreach (var item in items.Where(te => te.TargetType == TreeEntryTargetType.Blob).OrderBy(te => te.Name))
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var serializedChildModelSnapshot = ((Blob)item.Target).GetContentText();
 
                     var childModelSnapshot = JsonSerializer.Deserialize<GeneralListModel<GeneralModel<C>>>(
@@ -335,25 +338,25 @@ public class ProjectSnapshotFromGitFactory
             else if (typeof(C).IsAssignableTo(typeof(Models.Alignment)))
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildrenByGroup<Models.Alignment, AlignmentGroup>(childEntityEntry, repo, commitSha);
+                var childModelShapshots = LoadChildrenByGroup<Models.Alignment, AlignmentGroup>(childEntityEntry, repo, commitSha, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.Translation)))
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry, repo, commitSha);
+                var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry, repo, commitSha, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildren<GeneralModel<C>>(childEntityEntry, repo, commitSha);
+                var childModelShapshots = LoadChildren<GeneralModel<C>>(childEntityEntry, repo, commitSha, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
         }
     }
 
-    private GeneralListModel<GeneralModel<M>> LoadChildrenByGroup<M, G>(TreeEntry childEntry, Repository repo, string commitSha)
+    private GeneralListModel<GeneralModel<M>> LoadChildrenByGroup<M, G>(TreeEntry childEntry, Repository repo, string commitSha, CancellationToken cancellationToken)
         where M : notnull
         where G : ModelGroup<M>
     {
@@ -367,6 +370,8 @@ public class ProjectSnapshotFromGitFactory
 
         foreach (var item in items.Where(te => te.TargetType == TreeEntryTargetType.Blob).OrderBy(te => te.Name))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var serializedChildModelSnapshot = ((Blob)item.Target).GetContentText();
 
             var childModelSnapshotGroup = JsonSerializer.Deserialize<G>(
@@ -384,7 +389,7 @@ public class ProjectSnapshotFromGitFactory
         return childModelShapshots;
     }
 
-    private IEnumerable<T> LoadChildren<T>(TreeEntry childEntry, Repository repo, string commitSha)
+    private IEnumerable<T> LoadChildren<T>(TreeEntry childEntry, Repository repo, string commitSha, CancellationToken cancellationToken)
         where T : notnull
     {
         var childModelShapshots = new GeneralListModel<T>();
@@ -397,6 +402,8 @@ public class ProjectSnapshotFromGitFactory
 
         foreach (var item in items.Where(te => te.TargetType == TreeEntryTargetType.Blob).OrderBy(te => te.Name))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var serializedChildModelSnapshot = ((Blob)item.Target).GetContentText();
 
             var childModelSnapshot = JsonSerializer.Deserialize<T>(

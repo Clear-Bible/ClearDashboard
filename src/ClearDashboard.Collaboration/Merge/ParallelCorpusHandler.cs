@@ -20,6 +20,7 @@ using ClearDashboard.DAL.Alignment.Features.Corpora;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -44,7 +45,7 @@ public class ParallelCorpusHandler : DefaultMergeHandler
 
         await _mergeContext.MergeBehavior.RunProjectDbContextQueryAsync(
             $"Inserting ParallelCorpus named '{displayName}'",
-            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, CancellationToken cancellationToken) => {
+            async (ProjectDbContext projectDbContext, MergeCache cache, ILogger logger, IProgress<ProgressStatus> progress, CancellationToken cancellationToken) => {
 
                 var sourceTokenizedCorpus = projectDbContext.TokenizedCorpora.First(tc => tc.Id == sourceTokenizedCorpusId);
                 var targetTokenizedCorpus = projectDbContext.TokenizedCorpora.First(tc => tc.Id == targetTokenizedCorpusId);
@@ -78,10 +79,12 @@ public class ParallelCorpusHandler : DefaultMergeHandler
                 //var sourceTokenizedTextCorpus = await TokenizedTextCorpus.Get(_mergeContext.Mediator, new TokenizedTextCorpusId(sourceTokenizedCorpusId));
                 //var targetTokenizedTextCorpus = await TokenizedTextCorpus.Get(_mergeContext.Mediator, new TokenizedTextCorpusId(targetTokenizedCorpusId));
 
+                progress.Report(new ProgressStatus(0, $"Starting EngineAlignRows for Parallel Corpus '{displayName}'"));
                 logger.LogInformation($"Starting EngineAlignRows for Parallel Corpus '{displayName}'");
                 var engineParallelTextCorpus =
                     await Task.Run(() => sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus,
                         new List<ClearBible.Engine.Corpora.VerseMapping>()), cancellationToken);
+                progress.Report(new ProgressStatus(0, $"Completed EngineAlignRows for Parallel Corpus '{displayName}'"));
                 logger.LogInformation($"Completed EngineAlignRows for Parallel Corpus '{displayName}'");
 
                 var parallelCorpusModel = ParallelCorpusDataUtil.BuildParallelCorpus(
@@ -105,6 +108,7 @@ public class ParallelCorpusHandler : DefaultMergeHandler
 
                 projectDbContext.VerseMappings.AddRange(parallelCorpusModel.VerseMappings);
 
+                progress.Report(new ProgressStatus(0, $"Inserted {engineParallelTextCorpus.VerseMappingList.Count} verse mappings along with parallel corpus '{displayName}'"));
                 logger.LogInformation($"Inserted {engineParallelTextCorpus.VerseMappingList.Count} verse mappings along with parallel corpus '{displayName}'");
             },
             cancellationToken

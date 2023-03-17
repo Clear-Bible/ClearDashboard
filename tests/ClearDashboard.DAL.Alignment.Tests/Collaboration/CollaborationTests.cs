@@ -32,6 +32,7 @@ using ClearDashboard.DAL.Interfaces;
 using ClearDashboard.DataAccessLayer.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Internal;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -98,7 +99,7 @@ public class CollaborationTests : TestBase
         {
             // Run initialize to create each project database (with project and
             // user entities)
-            await collaborationManager.InitializeProjectDatabaseAsync(projectId, true, default);
+            await collaborationManager.InitializeProjectDatabaseAsync(projectId, true, default, new Progress<ProgressStatus>());
         }
     }
 
@@ -126,7 +127,7 @@ public class CollaborationTests : TestBase
         // Pull down and merge HEAD into local git repository:
         collaborationManager.FetchMergeRemote();
 
-        await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default);
+        await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default, new Progress<ProgressStatus>());
     }
 
     //[Fact]
@@ -171,7 +172,7 @@ public class CollaborationTests : TestBase
                 var project = ProjectDbContext.Projects.FirstOrDefault();
                 projectProvider!.CurrentProject = project;
 
-                await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default);
+                await collaborationManager.MergeProjectLatestChangesAsync(remoteOverridesLocal, false, default, new Progress<ProgressStatus>());
             }
         }
 

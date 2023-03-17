@@ -30,18 +30,34 @@ public class ProjectDifferences
     public IListDifference<IModelSnapshot<Models.Note>> Notes { get; private set; }
     public IListDifference<IModelSnapshot<Models.Label>> Labels { get; private set; }
 
-    public ProjectDifferences(ProjectSnapshot snapshot1, ProjectSnapshot snapshot2) {
+    public ProjectDifferences(ProjectSnapshot snapshot1, ProjectSnapshot snapshot2, CancellationToken cancellationToken = default) {
 
         Project = ((IModelDistinguishable<IModelSnapshot<Models.Project>>)snapshot1.Project).GetModelDifference(snapshot2.Project);
-        Users = snapshot1.Users.GetListDifference(snapshot2.Users);
-        Corpora = snapshot1.Corpora.GetListDifference(snapshot2.Corpora);
-        TokenizedCorpora = snapshot1.TokenizedCorpora.GetListDifference(snapshot2.TokenizedCorpora);
-        ParallelCorpora = snapshot1.ParallelCorpora.GetListDifference(snapshot2.ParallelCorpora);
-        AlignmentSets = snapshot1.AlignmentSets.GetListDifference(snapshot2.AlignmentSets);
-        TranslationSets = snapshot1.TranslationSets.GetListDifference(snapshot2.TranslationSets);
-        Notes = snapshot1.Notes.GetListDifference(snapshot2.Notes);
-        Labels = snapshot1.Labels.GetListDifference(snapshot2.Labels);
+        cancellationToken.ThrowIfCancellationRequested();
 
+        Users = snapshot1.Users.GetListDifference(snapshot2.Users);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Corpora = snapshot1.Corpora.GetListDifference(snapshot2.Corpora);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        TokenizedCorpora = snapshot1.TokenizedCorpora.GetListDifference(snapshot2.TokenizedCorpora);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        ParallelCorpora = snapshot1.ParallelCorpora.GetListDifference(snapshot2.ParallelCorpora);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        AlignmentSets = snapshot1.AlignmentSets.GetListDifference(snapshot2.AlignmentSets);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        TranslationSets = snapshot1.TranslationSets.GetListDifference(snapshot2.TranslationSets);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Notes = snapshot1.Notes.GetListDifference(snapshot2.Notes);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Labels = snapshot1.Labels.GetListDifference(snapshot2.Labels);
+        cancellationToken.ThrowIfCancellationRequested();
     }
 
     // For diagnostics:

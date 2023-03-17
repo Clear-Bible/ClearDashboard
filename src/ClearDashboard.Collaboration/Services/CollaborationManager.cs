@@ -18,6 +18,7 @@ using ClearDashboard.Collaboration.Builder;
 using ClearDashboard.Collaboration.Model;
 using System.Text.Json;
 using Paratext.PluginInterfaces;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Services;
 
@@ -181,7 +182,7 @@ public class CollaborationManager
         return project.ProjectName ?? "Unnamed-Project";
     }
 
-    public async Task InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge, CancellationToken cancellationToken)
+    public async Task InitializeProjectDatabaseAsync(Guid projectId, bool includeMerge, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
         using (var repo = new Repository(_repositoryPath))
         {
@@ -189,7 +190,7 @@ public class CollaborationManager
 
             if (headCommitSha is not null)
             {
-                var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId, includeMerge);
+                var command = new InitializeDatabaseCommand(_repositoryPath, headCommitSha, projectId, includeMerge, progress);
                 var result = await _mediator.Send(command, cancellationToken);
                 result.ThrowIfCanceledOrFailed();
             }
@@ -255,8 +256,10 @@ public class CollaborationManager
         }
     }
 
-    public async Task MergeProjectLatestChangesAsync(bool remoteOverridesLocal, bool createBackupSnapshot, CancellationToken cancellationToken)
+    public async Task MergeProjectLatestChangesAsync(bool remoteOverridesLocal, bool createBackupSnapshot, CancellationToken cancellationToken, IProgress<ProgressStatus> progress)
     {
+        progress.Report(new ProgressStatus(0, "Finding latest commit"));
+
         EnsureValidRepository(_repositoryPath);
         var project = EnsureCurrentProject();
 
@@ -294,20 +297,26 @@ public class CollaborationManager
 
         var factory = new ProjectSnapshotFromGitFactory(_repositoryPath, _logger);
 
+        progress.Report(new ProgressStatus(0, "Creating project snapshots for merge"));
+
         var projectSnapshotLastMerged = (lastMergedCommitShaIndex == -1)
             ? ProjectSnapshotFactoryCommon.BuildEmptySnapshot(project.Id)
             : factory.LoadSnapshot(project.LastMergedCommitSha!, project.Id);
+        cancellationToken.ThrowIfCancellationRequested();
 
         var projectSnapshotToMerge = factory.LoadSnapshot(headCommitSha, project.Id);
+        cancellationToken.ThrowIfCancellationRequested();
 
         // Create a backup snapshot of the current database:
         if (createBackupSnapshot)
         {
+            progress.Report(new ProgressStatus(0, "Creating backup snapshot of current database state"));
             await CreateProjectBackupAsync(cancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
         }
 
         // Merge into the project database:
-        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, remoteOverridesLocal, _logMergeOnly);
+        var command = new MergeProjectSnapshotCommand(headCommitSha, projectSnapshotLastMerged, projectSnapshotToMerge, remoteOverridesLocal, _logMergeOnly, progress);
         var result = await _mediator.Send(command, cancellationToken);
         result.ThrowIfCanceledOrFailed();
     }

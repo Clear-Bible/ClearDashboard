@@ -13,6 +13,7 @@ using ClearDashboard.DataAccessLayer.Models;
 using System.Threading;
 using ClearDashboard.DAL.Alignment.Translation;
 using static ClearDashboard.DAL.Alignment.Notes.EntityContextKeys;
+using SIL.Machine.Utils;
 
 namespace ClearDashboard.Collaboration.Merge;
 
@@ -135,7 +136,7 @@ public class DefaultMergeHandler
 
                 if (v is IModelDistinguishable)
                 {
-                    hasChange =  CheckMergePropertyModelDifferences(md, (IModelDistinguishable)v) || hasChange;
+                    hasChange = CheckMergePropertyModelDifferences(md, (IModelDistinguishable)v) || hasChange;
                 }
                 else if (v is IDictionary<string, object>)
                 {
@@ -171,6 +172,7 @@ public class DefaultMergeHandler
 
         if (modelDifference.HasMergeConflict)
         {
+            _mergeContext.Progress.Report(new ProgressStatus(0, $"Merge conflict(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'"));
             _mergeContext.Logger.LogInformation($"Merge conflict(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
             if (!_mergeContext.RemoteOverridesLocal)
             {
@@ -180,10 +182,11 @@ public class DefaultMergeHandler
         }
         else if (hasChange)
         {
+            _mergeContext.Progress.Report(new ProgressStatus(0, $"Change(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'"));
             _mergeContext.Logger.LogInformation($"Change(s) detected:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
             return ModelMergeResult.ShouldMerge;
         }
-        
+
         _mergeContext.Logger.LogInformation($"No change:  '{itemToModify.GetType().ShortDisplayName()}' item '{itemToModify}'");
         return ModelMergeResult.NoChange;
     }
@@ -238,6 +241,7 @@ public class DefaultMergeHandler
                 }
                 else
                 {
+                    _mergeContext.Progress.Report(new ProgressStatus(0, $"Unable to delete - model item of type '{typeof(T).ShortDisplayName()}' having id '{onlyIn1}' not found in current snapshot"));
                     _mergeContext.Logger.LogInformation($"Unable to delete - model item of type '{typeof(T).ShortDisplayName()}' having id '{onlyIn1}' not found in current snapshot");
                 }
             }
@@ -272,6 +276,9 @@ public class DefaultMergeHandler
                     await handler.HandleCreateAsync(onlyIn2, cancellationToken);
                     await handler.HandleCreateComplete(onlyIn2, cancellationToken);
 
+                    var name = GetModelSnapshotDisplayName(onlyIn2);
+
+                    _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserted {onlyIn2.EntityType.ShortDisplayName()} having name '{name}' and id '{onlyIn2.GetId()}'"));
                     _mergeContext.Logger.LogInformation($"Inserted {onlyIn2.EntityType.ShortDisplayName()} having id '{onlyIn2.GetId()}'");
 
                     await handler.CreateChildrenAsync(onlyIn2, cancellationToken);
@@ -283,6 +290,22 @@ public class DefaultMergeHandler
                 }
             }
         }
+    }
+
+    private string GetModelSnapshotDisplayName(IModelSnapshot modelSnapshot)
+    {
+        var displayName = "Unknown";
+
+        if (modelSnapshot.PropertyValues.ContainsKey("DisplayName"))
+        {
+            displayName = (string)modelSnapshot.PropertyValues["DisplayName"]!;
+        }
+        else if (modelSnapshot.PropertyValues.ContainsKey("Name"))
+        {
+            displayName = (string)modelSnapshot.PropertyValues["Name"]!;
+        }
+
+        return displayName;
     }
 
     public async Task ModifyListDifferencesAsync<T>(IListDifference<T> listDifference, IEnumerable<T>? currentSnapshotList, IEnumerable<T>? targetCommitSnapshotList, CancellationToken cancellationToken = default)
@@ -315,6 +338,9 @@ public class DefaultMergeHandler
                         await handler.HandleCreateAsync(itemInTargetCommitSnapshot, cancellationToken);
                         await handler.HandleCreateComplete(itemInTargetCommitSnapshot, cancellationToken);
 
+                        var name = GetModelSnapshotDisplayName(itemInTargetCommitSnapshot);
+
+                        _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having name '{name}' and id '{itemInTargetCommitSnapshot.GetId()}'"));
                         _mergeContext.Logger.LogInformation($"Inserted {itemInTargetCommitSnapshot.EntityType.ShortDisplayName()} having id '{itemInTargetCommitSnapshot.GetId()}'");
                     }
                     else
@@ -437,6 +463,7 @@ public class DefaultMergeHandler
     {
         foreach (var childName in parentSnapshot.Children.Keys)
         {
+            _mergeContext.Progress.Report(new ProgressStatus(0, $"Inserting {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'"));
             _mergeContext.Logger.LogInformation($"Inserting {childName} children for {parentSnapshot.EntityType.ShortDisplayName()} '{parentSnapshot.GetId()}'");
 
             Type childType = parentSnapshot.Children[childName].GetType().GetGenericArguments()[0];

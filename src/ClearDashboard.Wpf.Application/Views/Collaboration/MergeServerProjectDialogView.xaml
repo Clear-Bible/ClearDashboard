@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="ClearDashboard.Wpf.Application.Views.Startup.ImportServerProjectView"
+    x:Class="ClearDashboard.Wpf.Application.Views.Collaboration.MergeServerProjectDialogView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cal="http://www.caliburnproject.org"
@@ -17,7 +17,7 @@
     FlowDirection="{Binding WindowFlowDirection}"
     FontFamily="{DynamicResource MaterialDesignFont}"
     mc:Ignorable="d"
-    Loaded="ImportServerProjectView_OnLoaded">
+    Loaded="MergeServerProjectDialogView_OnLoaded">
     <UserControl.Resources>
 
         <Style BasedOn="{StaticResource MaterialDesignTextBox}" TargetType="{x:Type TextBox}">
@@ -41,7 +41,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-      
+
 
         <StackPanel Orientation="Horizontal"
                     Grid.Row="0"
@@ -59,49 +59,49 @@
                 Text="{helpers:Localization ProjectPicker_AppName}" />
 
         </StackPanel>
-        <Label Grid.Row="1" Content="Import Server Project" />
+        <Label Grid.Row="1" Content="{Binding ProgressLabel}" />
         <StackPanel
             Grid.Row="2"
             Grid.Column="0"
-            Margin="24,10"
-            HorizontalAlignment="Left"
+            Margin="10,10"
+            HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Orientation="Vertical">
-            <TextBox
-                x:Name="ProjectName"
-                MinWidth="400"
-                VerticalAlignment="Center"
-                materialDesign:HintAssist.FloatingScale="0.60"
-                materialDesign:HintAssist.Foreground="{DynamicResource MaterialDesignBody}"
-                materialDesign:HintAssist.Hint="{helpers:Localization NewProjectDialogView_EnterName}"
-                materialDesign:TextFieldAssist.TextBoxViewMargin="1 0 1 0"
-                FontSize="20"
-                Foreground="{DynamicResource MaterialDesignBody}"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                IsEnabled="false">
-                <TextBox.Text>
-                    <Binding
-                        Mode="TwoWay"
-                        Path="ProjectName"
-                        UpdateSourceTrigger="PropertyChanged"
-                        ValidatesOnDataErrors="True" />
-                </TextBox.Text>
-                <Validation.ErrorTemplate>
-                    <ControlTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <AdornedElementPlaceholder />
-                            <TextBlock
-                                MaxWidth="400"
-                                Margin="10"
-                                FontSize="16"
-                                Foreground="{DynamicResource MaterialDesignValidationErrorBrush}"
-                                Text="{Binding [0].ErrorContent}"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                    </ControlTemplate>
-                </Validation.ErrorTemplate>
+            <ListView
+                x:Name="ProgressMessages"
+                Height="400"
+                Margin="15,0,15,5"
+                VerticalAlignment="Top"
+                ItemsSource="{Binding MergeProgressUpdates}">
+                <ListView.Style>
+                    <Style TargetType="{x:Type ListView}">
+                        <Setter Property="Visibility" Value="Visible" />
+                    </Style>
+                </ListView.Style>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="BorderBrush" Value="LightGray" />
+                        <Setter Property="BorderThickness" Value="0,0,0,1" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
 
-            </TextBox>
+                        <GridViewColumn Width="800">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
         </StackPanel>
 
@@ -113,18 +113,30 @@
             Orientation="Horizontal">
 
             <Button
-                x:Name="MoveBackwards"
+                x:Name="Cancel"
                 Margin="5,5,5,5"
-                cal:Message.Attach="MoveBackwards"
-                Content="{helpers:Localization Back}"
+                cal:Message.Attach="Cancel"
+                Content="{helpers:Localization Cancel}"
                 IsEnabled="{Binding EnableControls}"
                 Style="{StaticResource TransparentStyle}" />
             <Button
-                x:Name="Create"
-                Content="{helpers:Localization Create}"
+                x:Name="Ok"
+                cal:Message.Attach="Ok"
+                Content="{Binding Action}"
                 IsDefault="True"
+                IsEnabled="{Binding CanAction}"
                 Style="{StaticResource TransparentStyle}" />
         </StackPanel>
+        <ProgressBar Grid.Row="2"
+            Width="76"
+            Height="75"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource SecondaryHueMidBrush}"
+            IsIndeterminate="True"
+            Style="{StaticResource MaterialDesignCircularProgressBar}"
+            Visibility="{Binding ProgressBarVisibility}"
+            Value="0" />
 
     </Grid>
 

@@ -100,7 +100,8 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
         GeneralModel alignmentSet,
         GeneralListModel<GeneralModel<Models.Alignment>> alignmentSnapshots,
         string childPath,
-        JsonSerializerOptions options)
+        JsonSerializerOptions options,
+        CancellationToken cancellationToken)
     {
         var alignmentsByLocation = alignmentSnapshots
             .GroupBy(e => (string)e[AlignmentBuilder.BOOK_CHAPTER_LOCATION]!)
@@ -112,6 +113,8 @@ public class AlignmentBuilder : GeneralModelBuilder<Models.Alignment>
 
         foreach (var alignmentsForLocation in alignmentsByLocation)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // Instead of the more general GeneralModelJsonConverter, this will use the
             // more specific AlignmentGroupJsonConverter:
             var alignmentGroup = new AlignmentGroup()

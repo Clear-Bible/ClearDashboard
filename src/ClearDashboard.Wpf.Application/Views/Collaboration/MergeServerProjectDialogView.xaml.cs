@@ -13,21 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ClearDashboard.Wpf.Application.Views.Startup
+namespace ClearDashboard.Wpf.Application.Views.Collaboration
 {
     /// <summary>
-    /// Interaction logic for ProjectSetupView.xaml
+    /// Interaction logic for MergeServerProjectDialogView.xaml
     /// </summary>
-    public partial class ImportServerProjectView : UserControl
+    public partial class MergeServerProjectDialogView : UserControl
     {
-        public ImportServerProjectView()
+        public MergeServerProjectDialogView()
         {
             InitializeComponent();
         }
 
-        private void ImportServerProjectView_OnLoaded(object sender, RoutedEventArgs e)
+        private void MergeServerProjectDialogView_OnLoaded(object sender, RoutedEventArgs e)
         {
-            ProjectName.Focus();
+            ProgressMessages.Focus();
         }
     }
 }

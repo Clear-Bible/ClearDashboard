@@ -80,7 +80,7 @@ public class ProjectSnapshotFromFilesFactory
         return LoadTopLevelEntities<Models.User>(topLevelEntry, null);
     }
 
-    public ProjectSnapshot LoadSnapshot()
+    public ProjectSnapshot LoadSnapshot(CancellationToken cancellationToken = default)
     {
         var topLevelEntries = Directory.EnumerateFileSystemEntries(_path).OrderBy(n => n);
 
@@ -89,6 +89,7 @@ public class ProjectSnapshotFromFilesFactory
 
         foreach (var topLevelEntry in topLevelEntries)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             // topLevelEntry:  first level under project:  "AlignmentSets", "Corpora", etc.
             var topLevelEntryName = Path.GetFileName(topLevelEntry);
 
@@ -98,7 +99,7 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.AlignmentSet> modelSnapshot) =>
                     {
-                        AddGeneralModelChild<Models.AlignmentSet, Models.Alignment>(entityItems, modelSnapshot);
+                        AddGeneralModelChild<Models.AlignmentSet, Models.Alignment>(entityItems, modelSnapshot, cancellationToken);
                     }));
             }
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Corpus)])
@@ -111,7 +112,7 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.Label> modelSnapshot) =>
                     {
-                        AddGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(entityItems, modelSnapshot);
+                        AddGeneralModelChild<Models.Label, Models.LabelNoteAssociation>(entityItems, modelSnapshot, cancellationToken);
                     }));
             }
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.Note)])
@@ -120,8 +121,8 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.Note> modelSnapshot) =>
                     {
-                        AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot);
-                        AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot);
+                        AddGeneralModelChild<Models.Note, Models.Note>(entityItems, modelSnapshot, cancellationToken);
+                        AddGeneralModelChild<Models.Note, NoteModelRef>(entityItems, modelSnapshot, cancellationToken);
                     }));
             }
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.TokenizedCorpus)])
@@ -130,8 +131,8 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.TokenizedCorpus> modelSnapshot) =>
                     {
-                        AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot);
-                        AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot);
+                        AddGeneralModelChild<Models.TokenizedCorpus, Models.TokenComposite>(entityItems, modelSnapshot, cancellationToken);
+                        AddGeneralModelChild<Models.TokenizedCorpus, Models.VerseRow>(entityItems, modelSnapshot, cancellationToken);
                     }));
             }
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.ParallelCorpus)])
@@ -140,7 +141,7 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.ParallelCorpus> modelSnapshot) =>
                     {
-                        AddGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(entityItems, modelSnapshot);
+                        AddGeneralModelChild<Models.ParallelCorpus, Models.TokenComposite>(entityItems, modelSnapshot, cancellationToken);
                     }));
             }
             else if (topLevelEntryName == topLevelEntityFolderNameMappings[typeof(Models.TranslationSet)])
@@ -149,7 +150,7 @@ public class ProjectSnapshotFromFilesFactory
                     (IEnumerable<string> entityItems,
                     GeneralModel<Models.TranslationSet> modelSnapshot) =>
                     {
-                        AddGeneralModelChild<Models.TranslationSet, Models.Translation>(entityItems, modelSnapshot);
+                        AddGeneralModelChild<Models.TranslationSet, Models.Translation>(entityItems, modelSnapshot, cancellationToken);
                     }));
 
             }
@@ -224,7 +225,7 @@ public class ProjectSnapshotFromFilesFactory
         return modelSnapshot;
     }
 
-    private void AddGeneralModelChild<P,C>(IEnumerable<string> entityEntries, GeneralModel<P> modelSnapshot)
+    private void AddGeneralModelChild<P,C>(IEnumerable<string> entityEntries, GeneralModel<P> modelSnapshot, CancellationToken cancellationToken)
         where P : notnull
         where C : notnull
     {
@@ -237,7 +238,7 @@ public class ProjectSnapshotFromFilesFactory
             if (typeof(C).IsAssignableTo(typeof(NoteModelRef)))
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildren<NoteModelRef>(childEntityEntry);
+                var childModelShapshots = LoadChildren<NoteModelRef>(childEntityEntry, cancellationToken);
                 modelSnapshot.AddChild<NoteModelRef>(childName, childModelShapshots);
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.VerseRow)))
@@ -246,6 +247,8 @@ public class ProjectSnapshotFromFilesFactory
 
                 foreach (var item in Directory.GetFiles(childEntityEntry).OrderBy(n => n))
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var serializedChildModelSnapshot = File.ReadAllText(item);
 
                     var childModelSnapshot = JsonSerializer.Deserialize<GeneralListModel<GeneralModel<C>>>(
@@ -266,25 +269,25 @@ public class ProjectSnapshotFromFilesFactory
             else if (typeof(C).IsAssignableTo(typeof(Models.Alignment)))
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildrenByGroup<Models.Alignment, AlignmentGroup>(childEntityEntry);
+                var childModelShapshots = LoadChildrenByGroup<Models.Alignment, AlignmentGroup>(childEntityEntry, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else if (typeof(C).IsAssignableTo(typeof(Models.Translation)))
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry);
+                var childModelShapshots = LoadChildrenByGroup<Models.Translation, TranslationGroup>(childEntityEntry, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
             else
             {
                 var childName = childFolderNameMappings[typeof(C)].childName;
-                var childModelShapshots = LoadChildren<GeneralModel<C>>(childEntityEntry);
+                var childModelShapshots = LoadChildren<GeneralModel<C>>(childEntityEntry, cancellationToken);
                 modelSnapshot.AddChild(childName, childModelShapshots.AsModelSnapshotChildrenList());
             }
         }
     }
 
-    private GeneralListModel<GeneralModel<M>> LoadChildrenByGroup<M,G>(string childEntry)
+    private GeneralListModel<GeneralModel<M>> LoadChildrenByGroup<M,G>(string childEntry, CancellationToken cancellationToken)
         where M:notnull
         where G:ModelGroup<M>
     {
@@ -292,6 +295,8 @@ public class ProjectSnapshotFromFilesFactory
 
         foreach (var item in Directory.GetFiles(childEntry).OrderBy(n => n))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var serializedChildModelSnapshot = File.ReadAllText(item);
 
             var childModelSnapshotGroup = JsonSerializer.Deserialize<G>(
@@ -309,7 +314,7 @@ public class ProjectSnapshotFromFilesFactory
         return childModelShapshots;
     }
 
-    private IEnumerable<T> LoadChildren<T>(string childEntry)
+    private IEnumerable<T> LoadChildren<T>(string childEntry, CancellationToken cancellationToken)
         where T : notnull
     {
         var childModelShapshots = new GeneralListModel<T>();
@@ -323,6 +328,8 @@ public class ProjectSnapshotFromFilesFactory
 
         foreach (var item in filtered)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var serializedChildModelSnapshot = File.ReadAllText(item);
 
             var childModelSnapshot = JsonSerializer.Deserialize<T>(

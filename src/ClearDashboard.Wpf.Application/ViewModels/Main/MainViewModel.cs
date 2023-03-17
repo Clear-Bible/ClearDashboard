@@ -52,6 +52,9 @@ using Point = System.Drawing.Point;
 using MahApps.Metro.Controls;
 using ClearDashboard.Collaboration.Services;
 using ClearDashboard.Collaboration.Factory;
+using SIL.Machine.Utils;
+using ClearDashboard.Wpf.Application.ViewModels.Collaboration;
+using ClearDashboard.DAL.Interfaces;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.Main
 {
@@ -217,7 +220,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                     if (_collaborationManager.IsRepositoryInitialized())
                     {
                         _collaborationManager.FetchMergeRemote();
-                        _collaborationManager.MergeProjectLatestChangesAsync(true, false, CancellationToken.None).Wait();
+
+                        var projectProvider = LifetimeScope?.Resolve<IProjectProvider>();
+                        var importServerProjectViewModel = LifetimeScope?.Resolve<MergeServerProjectDialogViewModel>();
+                        if (projectProvider is not null && importServerProjectViewModel is not null)
+                        {
+                            importServerProjectViewModel.ProjectId = projectProvider.CurrentProject.Id;
+                            importServerProjectViewModel.ProjectName = projectProvider.CurrentProject.ProjectName;
+                            importServerProjectViewModel.IsImportAction = false;
+                            this.WindowManager.ShowDialogAsync(importServerProjectViewModel, null, importServerProjectViewModel.DialogSettings());
+                        }
                     }
                 }
                 else if (value == "CollaborationCommitID")

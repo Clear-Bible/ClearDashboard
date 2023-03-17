@@ -19,6 +19,9 @@ using System.Threading.Tasks;
 using ClearDashboard.DataAccessLayer.Models;
 using Microsoft.AspNet.SignalR.Client.Http;
 using ClearDashboard.DAL.CQRS.Features.Features;
+using ClearDashboard.DAL.Alignment.Features.Denormalization;
+using SIL.Machine.Utils;
+using Microsoft.EntityFrameworkCore;
 
 namespace ClearDashboard.Collaboration.Features;
 public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDatabaseCommand, RequestResult<Unit>>
@@ -34,12 +37,15 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
 
     public async Task<RequestResult<Unit>> Handle(InitializeDatabaseCommand request, CancellationToken cancellationToken)
     {
+        string? deleteDatabasePath = null;
         try
         {
-            var factory = new ProjectSnapshotFromGitFactory(request.repositoryPath, _logger);
+            var factory = new ProjectSnapshotFromGitFactory(request.RepositoryPath, _logger);
 
-            var projectModelSnapshot = factory.LoadProject(request.commitSha, request.projectId);
-            var userModelSnapshots = factory.LoadUsers(request.commitSha, request.projectId);
+            var projectModelSnapshot = factory.LoadProject(request.CommitSha, request.ProjectId);
+            var userModelSnapshots = factory.LoadUsers(request.CommitSha, request.ProjectId);
+
+            request.Progress.Report(new ProgressStatus(0, "Creating database..."));
 
             await using (var requestScope = _projectNameDbContextFactory!.ServiceScope
                 .BeginLifetimeScope(Autofac.Core.Lifetime.MatchingScopeLifetimeTags.RequestLifetimeScopeTag))
@@ -49,56 +55,68 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
                     true,
                     requestScope).ConfigureAwait(false);
 
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    deleteDatabasePath = GetDatabasePath(projectContext);
+                    cancellationToken.ThrowIfCancellationRequested();
+                }
+
                 if (projectContext.Projects.Any())
                 {
                     // Already initialized
                     return new RequestResult<Unit>(Unit.Value);
                 }
 
-                await using (MergeBehaviorBase mergeBehavior = new MergeBehaviorApply(_logger, projectContext, new MergeCache()))
+                request.Progress.Report(new ProgressStatus(0, "Adding users and project to database"));
+
+                await using MergeBehaviorBase mergeBehavior = new MergeBehaviorApply(_logger, projectContext, new MergeCache(), request.Progress);
+                await mergeBehavior.MergeStartAsync(cancellationToken);
+                try
                 {
-                    await mergeBehavior.MergeStartAsync(cancellationToken);
-                    try
+                    // Insert user(s) first because Project will have a foreign
+                    // key reference to one of them:
+                    mergeBehavior.StartInsertModelCommand(userModelSnapshots.First());
+                    foreach (var u in userModelSnapshots)
                     {
-                        // Insert user(s) first because Project will have a foreign
-                        // key reference to one of them:
-                        mergeBehavior.StartInsertModelCommand(userModelSnapshots.First());
-                        foreach (var u in userModelSnapshots)
-                        {
-                            await mergeBehavior.RunInsertModelCommand(u, cancellationToken);
-                        }
-                        mergeBehavior.CompleteInsertModelCommand(userModelSnapshots.First().EntityType);
-
-                        mergeBehavior.StartInsertModelCommand(projectModelSnapshot);
-                        await mergeBehavior.RunInsertModelCommand(projectModelSnapshot, cancellationToken);
-                        mergeBehavior.CompleteInsertModelCommand(projectModelSnapshot.EntityType);
-
-                        if (request.includeMerge)
-                        {
-                            var project = projectContext.Projects.Where(e => e.Id == (Guid)projectModelSnapshot.GetId()).First();
-
-                            var projectSnapshotLastMerged = GetProjectSnapshotQueryHandler.LoadSnapshot(new Builder.BuilderContext(projectContext));
-                            var projectSnapshotToMerge = factory.LoadSnapshot(request.commitSha, project.Id);
-                            var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotToMerge);
-
-                            var merger = new Merger(new MergeContext(projectContext.UserProvider, _logger, mergeBehavior, true));
-                            await merger.MergeAsync(projectDifferences, projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
-
-                            project.LastMergedCommitSha = request.commitSha;
-                        }
-
-                        await mergeBehavior.MergeEndAsync(cancellationToken);
+                        await mergeBehavior.RunInsertModelCommand(u, cancellationToken);
                     }
-                    catch (Exception ex)
+                    mergeBehavior.CompleteInsertModelCommand(userModelSnapshots.First().EntityType);
+
+                    mergeBehavior.StartInsertModelCommand(projectModelSnapshot);
+                    await mergeBehavior.RunInsertModelCommand(projectModelSnapshot, cancellationToken);
+                    mergeBehavior.CompleteInsertModelCommand(projectModelSnapshot.EntityType);
+
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    if (request.IncludeMerge)
                     {
-                        await mergeBehavior.MergeErrorAsync(cancellationToken);
+                        request.Progress.Report(new ProgressStatus(0, "Creating/loading project snapshots for merge"));
 
-                        return new RequestResult<Unit>
-                        (
-                            success: false,
-                            message: $"Unable to add project + user data to newly initialized database:  {ex.Message}"
-                        );
+                        var project = projectContext.Projects.Where(e => e.Id == (Guid)projectModelSnapshot.GetId()).First();
+
+                        var projectSnapshotLastMerged = GetProjectSnapshotQueryHandler.LoadSnapshot(new Builder.BuilderContext(projectContext), cancellationToken);
+                        var projectSnapshotToMerge = factory.LoadSnapshot(request.CommitSha, project.Id, cancellationToken);
+
+                        request.Progress.Report(new ProgressStatus(0, "Calculating differences in latest commit"));
+                        var projectDifferences = new ProjectDifferences(projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
+
+                        request.Progress.Report(new ProgressStatus(0, "Starting merge..."));
+
+                        var merger = new Merger(new MergeContext(projectContext.UserProvider, _logger, mergeBehavior, true));
+                        await merger.MergeAsync(projectDifferences, projectSnapshotLastMerged, projectSnapshotToMerge, cancellationToken);
+
+                        request.Progress.Report(new ProgressStatus(0, "Merge complete!"));
+
+                        project.LastMergedCommitSha = request.CommitSha;
                     }
+
+                    await mergeBehavior.MergeEndAsync(cancellationToken);
+                }
+                catch (Exception)
+                {
+                    await mergeBehavior.MergeErrorAsync(CancellationToken.None);
+                    deleteDatabasePath = GetDatabasePath(projectContext);
+                    throw;
                 }
             }
 
@@ -106,6 +124,7 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
         }
         catch (OperationCanceledException)
         {
+            request.Progress.Report(new SIL.Machine.Utils.ProgressStatus(0, "Operation Canceled"));
             return new RequestResult<Unit>
             {
                 Message = "Operation Canceled",
@@ -120,9 +139,29 @@ public class InitializeDatabaseCommandHandler : IRequestHandler<InitializeDataba
                 "";
             return new RequestResult<Unit>
             {
-                Message = $"Unable to initialize database for project '{request.projectId}', commit '{request.commitSha}':  exception type: {ex.GetType().Name}, having message: {ex.Message}{innerExceptionMessage}",
+                Message = $"Unable to initialize database for project '{request.ProjectId}', commit '{request.CommitSha}':  exception type: {ex.GetType().Name}, having message: {ex.Message}{innerExceptionMessage}",
                 Success = false
             };
         }
+        finally
+        {
+            if (!string.IsNullOrEmpty(deleteDatabasePath))
+            {
+                Directory.Delete(deleteDatabasePath, true);
+            }
+        }
+    }
+
+    private static string? GetDatabasePath(ProjectDbContext? projectContext)
+    {
+        if (projectContext is not null)
+        {
+            if (projectContext.OptionsBuilder is SqliteProjectDbContextOptionsBuilder<ProjectDbContext> optionsBuilder)
+            {
+                return optionsBuilder.DatabaseDirectory;
+            }
+        }
+
+        return null;
     }
 }
