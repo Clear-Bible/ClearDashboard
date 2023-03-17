@@ -69,7 +69,7 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock FontSize="18" Text="{Binding .}" />
+                            <TextBlock FontSize="18" Text="{Binding SmtName}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

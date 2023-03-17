@@ -107,54 +107,74 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         }
 
 
-        var parallelCorpa = ParentViewModel.TopLevelProjectIds.ParallelCorpusIds.Where(x =>
-            x.SourceTokenizedCorpusId.CorpusId.Id == ParentViewModel.SourceCorpusNodeViewModel.CorpusId
-            && x.TargetTokenizedCorpusId.CorpusId.Id == ParentViewModel.TargetCorpusNodeViewModel.CorpusId
-        ).ToList();
 
-        List<string> smts = new();
-        foreach (var parallelCorpusId in parallelCorpa)
+        try
         {
-            var alignment =
-                ParentViewModel.TopLevelProjectIds.AlignmentSetIds.FirstOrDefault(x =>
-                    x.ParallelCorpusId.Id == parallelCorpusId.Id);
-            smts.Add(alignment.SmtModel);
-        }
+            var parallelCorpa = ParentViewModel.TopLevelProjectIds.ParallelCorpusIds.Where(x =>
+                x.SourceTokenizedCorpusId.CorpusId.Id == ParentViewModel.SourceCorpusNodeViewModel.CorpusId
+                && x.TargetTokenizedCorpusId.CorpusId.Id == ParentViewModel.TargetCorpusNodeViewModel.CorpusId
+            ).ToList();
 
-        // create a new list for the SMT enums
-        OnUIThread(() =>
-        {
-            SmtList.Clear();
-        });
-
-        var list = Enum.GetNames(typeof(SmtModelType)).ToList();
-        foreach (var smt in list)
-        {
-            if (smts.Contains(smt))
+            List<string> smts = new();
+            foreach (var parallelCorpusId in parallelCorpa)
             {
-                OnUIThread(() =>
+                var alignment =
+                    ParentViewModel.TopLevelProjectIds.AlignmentSetIds.FirstOrDefault(x =>
+                        x.ParallelCorpusId.Id == parallelCorpusId.Id);
+                smts.Add(alignment.SmtModel);
+            }
+
+            // create a new list for the SMT enums
+            OnUIThread(() =>
+            {
+                SmtList.Clear();
+            });
+
+            var list = Enum.GetNames(typeof(SmtModelType)).ToList();
+            foreach (var smt in list)
+            {
+                if (smts.Contains(smt))
                 {
-                    SmtList.Add(new SMTs
+                    OnUIThread(() =>
+                    {
+                        SmtList.Add(new SMTs
+                        {
+                            SmtName = smt,
+                            IsEnabled = false,
+                        });
+                    });
+                }
+                else
+                {
+                    var newSMT = new SMTs
                     {
                         SmtName = smt,
-                        IsEnabled = false,
+                        IsEnabled = true,
+                    };
+                
+                    OnUIThread(() =>
+                    {
+                        SmtList.Add(newSMT);
                     });
-                });
+                }
             }
-            else
+
+            // select next available smt that is enabled
+            foreach (var smt in SmtList)
             {
-                var newSMT = new SMTs
+                if (smt.IsEnabled)
                 {
-                    SmtName = smt,
-                    IsEnabled = true,
-                };
-                ParentViewModel.SelectedSmtAlgorithm = newSMT;
-                OnUIThread(() =>
-                {
-                    SmtList.Add(newSMT);
-                });
+                    ParentViewModel.SelectedSmtAlgorithm = smt;
+                    break;
+                }
             }
         }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
 
         base.OnActivateAsync(cancellationToken);
     }

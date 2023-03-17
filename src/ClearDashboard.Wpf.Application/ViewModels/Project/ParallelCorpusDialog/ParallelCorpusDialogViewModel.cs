@@ -515,7 +515,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.ToString(),
+                AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.SmtName,
                     false, new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
@@ -626,17 +626,26 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     symmetrizationHeuristic = SymmetrizationHeuristic.None;
                 }
 
-                SmtModelType tmp = SmtModelType.FastAlign;
+                if (SelectedSmtAlgorithm is null)
+                {
+                    SelectedSmtAlgorithm = new SMTs
+                    {
+                        SmtName = "FastAlign",
+                        IsEnabled = true
+                    };
+                }
 
-                Enum.TryParse<SmtModelType>(SelectedSmtAlgorithm.SmtName, out tmp);
+                SmtModelType modelType = SmtModelType.FastAlign;
+
+                Enum.TryParse<SmtModelType>(SelectedSmtAlgorithm.SmtName, out modelType);
 
                 WordAlignmentModel = await TranslationCommandable.TrainSmtModel(
-                    tmp,
+                    modelType,
                     ParallelTextCorpus,
                     new DelegateProgress(async status =>
                     {
                         var message =
-                            $"Training symmetrized {SelectedSmtAlgorithm} model: {status.PercentCompleted:P}";
+                            $"Training symmetrized {SelectedSmtAlgorithm.SmtName} model: {status.PercentCompleted:P}";
                         await SendBackgroundStatus(taskName, LongRunningTaskStatus.Running, cancellationToken,
                             message);
                         Logger!.LogInformation(message);
@@ -647,9 +656,9 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
                     cancellationToken,
-                    $"Completed SMT Model '{SelectedSmtAlgorithm}'.");
+                    $"Completed SMT Model '{SelectedSmtAlgorithm.SmtName}'.");
 
-                Logger!.LogInformation($"Completed SMT Model '{SelectedSmtAlgorithm}'.");
+                Logger!.LogInformation($"Completed SMT Model '{SelectedSmtAlgorithm.SmtName}'.");
 
 
             }
@@ -692,7 +701,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                     await SendBackgroundStatus(taskName,
                         LongRunningTaskStatus.Completed,
                         cancellationToken,
-                        $"Training the SMT Model was canceled.'{SelectedSmtAlgorithm}'.");
+                        $"Training the SMT Model was canceled.'{SelectedSmtAlgorithm.SmtName}'.");
                 }
                 IsBusy = false;
                 Message = string.Empty;

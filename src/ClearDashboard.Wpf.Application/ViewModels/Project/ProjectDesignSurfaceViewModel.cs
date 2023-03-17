@@ -985,7 +985,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 }
                 else
                 {
-                    DesignSurfaceViewModel!.DeleteParallelCorpusConnection(newParallelCorpusConnection);
+                    if (dialogViewModel.ProjectType == ParallelProjectType.WholeProcess)
+                    {
+                        DesignSurfaceViewModel!.DeleteParallelCorpusConnection(newParallelCorpusConnection);
+                    }
                 }
             }
             catch (Exception ex)
