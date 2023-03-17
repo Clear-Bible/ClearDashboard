@@ -155,7 +155,7 @@
                     x:Name="NotConnectedText"
                     Margin="0,0,5,0"
                     VerticalAlignment="Center"
-                    Text="Paratext is running but not connected."
+                    Text="{helpers:Localization ProjectPicker_ParatextOnNotConnected}"
                     TextWrapping="Wrap"
                     Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}" />
                 <TextBlock
@@ -167,12 +167,12 @@
                     <Run Text="{helpers:Localization ShellView_User}" />
                 </TextBlock>
                 <TextBlock
-                    TextWrapping="Wrap"
                     x:Name="ParatextUserName"
                     Margin="0,0,5,0"
                     VerticalAlignment="Center"
                     d:Text="Joe Schmoe"
-                    Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}"/>
+                    TextWrapping="Wrap"
+                    Visibility="{Binding Connected, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource False}}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Visibility="{Binding IsParatextRunning, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter={StaticResource True}}">
                 <!--<TextBlock
@@ -397,7 +397,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>
-                                        <Run FontSize="11" Text="Version: " />
+                                        <Run FontSize="11" Text="{helpers:Localization ProjectPicker_Version}" />
                                         <Run FontSize="11" Text="{Binding Version}" />
                                     </TextBlock>
                                 </Grid>

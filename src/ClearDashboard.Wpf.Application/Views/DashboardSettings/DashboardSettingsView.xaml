@@ -151,7 +151,7 @@
             Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Right"
-            Content="Close" />
+            Content="{helpers1:Localization Close}" />
 
 
     </Grid>

@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -28,7 +29,7 @@
                         Background="Transparent"
                         BorderThickness="0"
                         Click="OnRemoveLexemeForm"
-                        ToolTip="Remove this form">
+                        ToolTip="{helpers:Localization Lexicon_RemoveForm}">
                         X
                     </Button>
                 </StackPanel>
