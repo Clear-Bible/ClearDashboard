@@ -110,6 +110,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
             return base.OnActivateAsync(cancellationToken);
         }
 
+        protected override async void OnViewReady(object view)
+        {
+            // skip this step if we are doing only creating a new alignment
+            if (ParentViewModel.ProjectType == ParallelProjectType.AlignmentOnly)
+            {
+                await MoveForwards();
+            }
+
+            base.OnViewReady(view);
+
+        }
+
         #endregion //Constructor
 
 

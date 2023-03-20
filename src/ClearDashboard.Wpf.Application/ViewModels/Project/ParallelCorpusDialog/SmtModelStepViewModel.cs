@@ -90,12 +90,6 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         CanTrain = true;
     }
 
-    protected override Task OnInitializeAsync(CancellationToken cancellationToken)
-    {
-
-        return base.OnInitializeAsync(cancellationToken);
-    }
-
     protected override async Task OnActivateAsync(CancellationToken cancellationToken)
     {
         ParentViewModel.CurrentStepTitle =
@@ -105,9 +99,7 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
         {
             await Train(true);
         }
-
-
-
+        
         try
         {
             var parallelCorpa = ParentViewModel.TopLevelProjectIds.ParallelCorpusIds.Where(x =>
@@ -118,10 +110,13 @@ public class SmtModelStepViewModel : DashboardApplicationWorkflowStepViewModel<I
             List<string> smts = new();
             foreach (var parallelCorpusId in parallelCorpa)
             {
-                var alignment =
-                    ParentViewModel.TopLevelProjectIds.AlignmentSetIds.FirstOrDefault(x =>
+                var alignments =
+                    ParentViewModel.TopLevelProjectIds.AlignmentSetIds.Where(x =>
                         x.ParallelCorpusId.Id == parallelCorpusId.Id);
-                smts.Add(alignment.SmtModel);
+                foreach (var alignment in alignments)
+                {
+                    smts.Add(alignment.SmtModel);
+                }
             }
 
             // create a new list for the SMT enums

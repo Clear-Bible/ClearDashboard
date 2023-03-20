@@ -970,13 +970,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
                 if (success)
                 {
                     // get TranslationSet , etc from the dialogViewModel
-                    var translationSet = dialogViewModel!.TranslationSet;
+                    //var translationSet = dialogViewModel!.TranslationSet;
 
 
-                    newParallelCorpusConnection.ParallelCorpusId =
-                        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
-                    newParallelCorpusConnection.ParallelCorpusDisplayName =
-                        dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
+                    if (parallelProjectType == ParallelProjectType.WholeProcess)
+                    {
+                        newParallelCorpusConnection.ParallelCorpusId =
+                            dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId;
+                        newParallelCorpusConnection.ParallelCorpusDisplayName =
+                            dialogViewModel.ParallelTokenizedCorpus.ParallelCorpusId.DisplayName;
+                    }
 
                     topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
                     DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(newParallelCorpusConnection,
