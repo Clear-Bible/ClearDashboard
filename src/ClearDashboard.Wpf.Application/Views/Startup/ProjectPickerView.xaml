@@ -306,7 +306,8 @@
                 Style="{StaticResource TransparentStyle}"
                 Visibility="{Binding SearchBlankVisibility}">
                 <TextBlock HorizontalAlignment="Left" TextAlignment="Left">
-                    <Run Text="Create Project: '" />
+                    <Run Text="{helpers:Localization ProjectPicker_CreateProject}" />
+                    <Run Text="'" />
                     <Run Text="{Binding SearchText}" />
                     <Run Text="'" />
                 </TextBlock>
