@@ -201,8 +201,23 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.AddParatextCorpusDia
             var result = await ProjectManager.ExecuteRequest(new GetProjectMetadataQuery(), cancellationToken);
             if (result.Success)
             {
-                var currentNodes = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>().DesignSurfaceViewModel.CorpusNodes; ;
+                var projectDesignSurface = LifetimeScope.Resolve<ProjectDesignSurfaceViewModel>();
+                
+                var corpusIds = await DAL.Alignment.Corpora.Corpus.GetAllCorpusIds(Mediator);
+
                 List<string> currentNodeIds = new();
+
+                foreach (var corpusId in corpusIds)
+                {
+                    var currentlyRunning = projectDesignSurface.BackgroundTasksViewModel
+                        .CheckBackgroundProcessForTokenizationInProgressIgnoreCompletedOrFailedOrCancelled(corpusId.Name);
+                    if (currentlyRunning)
+                    {
+                        currentNodeIds.Add(corpusId.ParatextGuid);
+                    }
+                }
+
+                var currentNodes = projectDesignSurface.DesignSurfaceViewModel.CorpusNodes;
                 currentNodes.ToList().ForEach(n => currentNodeIds.Add(n.ParatextProjectId));
 
                 Projects = result.Data.Where(c=>!currentNodeIds.Contains(c.Id)).OrderBy(p => p.Name).ToList();

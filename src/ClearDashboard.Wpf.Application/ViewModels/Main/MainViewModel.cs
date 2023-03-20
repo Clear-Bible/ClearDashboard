@@ -1412,12 +1412,13 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                                 _documents.Add((PaneViewModel)t);
                                 break;
 
-                            case BiblicalTermsViewModel:
-                            case ParatextViews.PinsViewModel:
-                            case TextCollectionsViewModel:
+
                             //case WordMeaningsViewModel:
                             case MarbleViewModel:
                             case NotesViewModel:
+                            case BiblicalTermsViewModel:
+                            case ParatextViews.PinsViewModel:
+                            case TextCollectionsViewModel:
                                 _tools.Add((ToolViewModel)t);
                                 break;
 
@@ -1492,10 +1493,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 {
                     switch (type)
                     {
+                        //case WordMeaningsViewModel:
                         case BiblicalTermsViewModel:
                         case ParatextViews.PinsViewModel:
                         case TextCollectionsViewModel:
-                        //case WordMeaningsViewModel:
                         case MarbleViewModel:
                         case NotesViewModel:
                             return (ToolViewModel)t;
