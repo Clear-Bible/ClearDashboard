@@ -142,7 +142,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             // use any Token children from the TokenComposite(s) that are in 
             // the VerseRow:
             var tokensToCheckForContiguousness = associatedTokenComposites
-                .SelectMany(e => e.Tokens.Where(e => e.VerseRowId == verseRowId))
+                .SelectMany(e => e.Tokens)
                 .ToList();
 
             // As well as all Note-associated Tokens:
