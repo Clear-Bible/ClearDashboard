@@ -282,7 +282,7 @@
                         Click="ConfirmParatextSend"
                         FontSize="12"
                         FontWeight="SemiBold"
-                        ToolTip="Send this note to Paratext">
+                        ToolTip="{helpers:Localization Notes_SendToParatext}">
                         <Image Height="18" Source="/Resources/Paratext_Send32.png" />
                     </Button>
                     <Popup

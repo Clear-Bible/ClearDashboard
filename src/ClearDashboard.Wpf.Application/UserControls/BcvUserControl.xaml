@@ -195,7 +195,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="SYNC" />
+            Text="{helpers:Localization Bcv_Sync}" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="2"
@@ -203,7 +203,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="BOOK" />
+            Text="{helpers:Localization Bcv_Book}" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="5"
@@ -211,7 +211,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="CHAPTER" />
+            Text="{helpers:Localization Bcv_Chapter}" />
         <TextBlock
             Grid.Row="0"
             Grid.Column="8"
@@ -219,7 +219,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="VERSE" />
+            Text="{helpers:Localization Bcv_Verse}" />
 
         <TextBlock
             Grid.Row="0"
@@ -228,7 +228,7 @@
             VerticalAlignment="Center"
             FontSize="12"
             Foreground="{StaticResource PrimaryHueDarkForegroundBrush}"
-            Text="OFFSET" />
+            Text="{helpers:Localization Bcv_Offset}" />
 
         <ComboBox
             x:Name="CboBook"

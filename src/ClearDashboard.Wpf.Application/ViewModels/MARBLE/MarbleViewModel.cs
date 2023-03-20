@@ -70,6 +70,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
         private readonly DashboardProjectManager? _projectManager;
         private readonly IEventAggregator? _eventAggregator;
         private readonly TranslationSource _translationSource;
+        private readonly ILocalizationService _localizationService;
 
         private enum FiterReference
         {
@@ -438,9 +439,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
             _projectManager = projectManager;
             _eventAggregator = eventAggregator;
             _translationSource = translationSource;
+            _localizationService = localizationService;
 
 
-            Title = "◕ " + "MARBLE";
+            Title = "◕ " + _localizationService!.Get("MainView_WindowsMarble");
             ContentId = "MARBLE";
             DockSide = DockSide.Bottom;
 

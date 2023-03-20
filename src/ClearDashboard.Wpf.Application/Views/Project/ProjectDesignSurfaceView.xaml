@@ -12,9 +12,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:ClearDashboard.DataAccessLayer.Models;assembly=ClearDashboard.DAL.Models"
     xmlns:project="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Project"
+    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    xmlns:projectDesignSurface="clr-namespace:ClearDashboard.Wpf.Application.Controls.ProjectDesignSurface;assembly=ClearDashboard.Wpf.Application.Abstractions"
     Width="500"
     d:DataContext="{d:DesignInstance Type=project:ProjectDesignSurfaceViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -315,7 +315,7 @@
                                 HorizontalAlignment="Right"
                                 Content="{Binding Path=TokenizationCount, UpdateSourceTrigger=PropertyChanged}"
                                 IsHitTestVisible="False"
-                                ToolTip="Number of different tokenizations">
+                                ToolTip="{helpers:Localization Pds_NumberOfDifferentTokenizations}">
                                 <materialDesign:Chip.Style>
                                     <Style TargetType="materialDesign:Chip">
                                         <Setter Property="Padding" Value="0" />
@@ -431,7 +431,7 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                
+
                 <Label
                     Name="PdsLabelWide"
                     Grid.Row="0"
@@ -453,13 +453,13 @@
 
                 <!--</WrapPanel>-->
                 <WrapPanel
-                    Visibility="Collapsed"
                     Name="LabelsNarrow"
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Width="{Binding ActualWidth, ElementName=MainGrid, Converter={converters:WidthSubtraction}, ConverterParameter='10'}"
-                    Margin="5,5,0,5">
+                    Margin="5,5,0,5"
+                    Visibility="Collapsed">
                     <Label
                         Content="{helpers:Localization Pds_AddCorpora}"
                         FontSize="16"
@@ -561,7 +561,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.FitContent}"
                     Style="{StaticResource SmallTransparentStyle}"
-                    ToolTip="Fit all nodes to the viewport">
+                    ToolTip="{helpers:Localization Pds_FitNodesToViewport}">
                     <materialDesign:PackIcon Kind="FitToScreenOutline" />
                 </Button>
 
@@ -574,7 +574,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.Fill}"
                     Style="{StaticResource SmallTransparentStyle}"
-                    ToolTip="Fit the entire content area to the viewport">
+                    ToolTip="{helpers:Localization Pds_FitContentToViewport}">
                     <materialDesign:PackIcon Kind="FitToPageOutline" />
                 </Button>
 
@@ -587,7 +587,7 @@
                     Padding="0"
                     Command="{StaticResource Commands.OneHundredPercent}"
                     Style="{StaticResource SmallTransparentStyle}"
-                    ToolTip="Scale the content to 100%">
+                    ToolTip="{helpers:Localization Pds_ScaleToOneHundered}">
                     100%
                 </Button>
 
@@ -622,7 +622,7 @@
                         Command="{StaticResource Commands.ZoomOut}"
                         FontSize="25"
                         Style="{StaticResource SmallTransparentStyle}"
-                        ToolTip="Zoom out from the content">
+                        ToolTip="{helpers:Localization Pds_ZoomOut}">
                         -
                     </Button>
 
@@ -631,15 +631,14 @@
                         Width="120"
                         Height="40"
                         Margin="1"
-                        VerticalAlignment="Bottom"  
+                        VerticalAlignment="Bottom"
                         LargeChange="20"
                         Maximum="200"
                         Minimum="1"
-                        
                         SmallChange="10"
                         TickFrequency="10"
                         TickPlacement="TopLeft"
-                        ToolTip="Change the zoom level of the content"
+                        ToolTip="{helpers:Localization Pds_ChangeZoom}"
                         Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource ScaleToPercentConverter}}" />
 
                     <!--
@@ -652,7 +651,7 @@
                         Command="{StaticResource Commands.ZoomIn}"
                         FontSize="20"
                         Style="{StaticResource SmallTransparentStyle}"
-                        ToolTip="Zoom in on the content">
+                        ToolTip="{helpers:Localization Pds_ZoomIn}">
                         +
                     </Button>
                 </StackPanel>
