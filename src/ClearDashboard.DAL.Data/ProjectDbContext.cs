@@ -49,6 +49,7 @@ namespace ClearDashboard.DataAccessLayer.Data
         public virtual DbSet<Label> Labels => Set<Label>();
         public virtual DbSet<LabelNoteAssociation> LabelNoteAssociations => Set<LabelNoteAssociation>();
         public virtual DbSet<NoteDomainEntityAssociation> NoteDomainEntityAssociations => Set<NoteDomainEntityAssociation>();
+        public virtual DbSet<NoteUserSeenAssociation> NoteUserSeenAssociations => Set<NoteUserSeenAssociation>();
         public virtual DbSet<ParallelCorpus> ParallelCorpa => Set<ParallelCorpus>();
         public virtual DbSet<ParallelCorpusHistory> ParallelCorpaHistory => Set<ParallelCorpusHistory>();
         public virtual DbSet<Project> Projects => Set<Project>();

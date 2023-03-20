@@ -91,6 +91,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IProjectProvider, ProjectProvider>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
+            services.AddSingleton<TranslationCommands>();
         }
 
         private async void SetupTests()

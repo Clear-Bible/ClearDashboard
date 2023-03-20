@@ -11,6 +11,7 @@ namespace ClearDashboard.DataAccessLayer.Models
             Labels = new HashSet<Label>();
             LabelNoteAssociations = new HashSet<LabelNoteAssociation>();
             NoteDomainEntityAssociations = new HashSet<NoteDomainEntityAssociation>();
+            NoteUserSeenAssociations = new HashSet<NoteUserSeenAssociation>();
             ContentCollection = new HashSet<RawContent>();
             //NoteAssociations = new HashSet<NoteAssociation>();
             NoteRecipients = new HashSet<NoteRecipient>();
@@ -25,7 +26,8 @@ namespace ClearDashboard.DataAccessLayer.Models
         public ICollection<Label> Labels { get; set; }
         public ICollection<LabelNoteAssociation> LabelNoteAssociations { get; set; }
         public ICollection<NoteDomainEntityAssociation> NoteDomainEntityAssociations { get; set; }
-        
+        public ICollection<NoteUserSeenAssociation> NoteUserSeenAssociations { get; set; }
+
         public virtual ICollection<RawContent> ContentCollection { get; set; }
         //public virtual ICollection<NoteAssociation> NoteAssociations { get; set; }
         public virtual ICollection<NoteRecipient> NoteRecipients { get; set; }
