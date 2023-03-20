@@ -33,7 +33,10 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
             Models.Note? note = null;
             if (request.NoteId != null)
             {
-                note = ProjectDbContext!.Notes.Include(n => n.User).FirstOrDefault(c => c.Id == request.NoteId.Id);
+                note = ProjectDbContext!.Notes
+                    .Include(n => n.User)
+                    .Include(n => n.NoteUserSeenAssociations)
+                    .FirstOrDefault(c => c.Id == request.NoteId.Id);
                 if (note == null)
                 {
                     return new RequestResult<NoteId>
@@ -47,6 +50,19 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 note.AbbreviatedText = request.AbbreviatedText;
                 note.Modified = DateTimeOffset.UtcNow;
                 note.NoteStatus = request.NoteStatus;
+
+                var seenByUserIdsToAdd = request.SeenByUserIds.Except(note.NoteUserSeenAssociations.Select(e => e.UserId)).Distinct();
+                foreach (var userId in seenByUserIdsToAdd)
+                {
+                    ProjectDbContext.NoteUserSeenAssociations.Add(new Models.NoteUserSeenAssociation
+                    {
+                        UserId = userId,
+                        NoteId = request.NoteId.Id
+                    });
+                }
+
+                var noteSeenUserAssociationsToRemove = note.NoteUserSeenAssociations.ExceptBy(request.SeenByUserIds, n => n.UserId);
+                ProjectDbContext.RemoveRange(noteSeenUserAssociationsToRemove);
 
                 // DO NOT MODIFY note.ThreadId once it is set during note creation
             }
@@ -85,6 +101,15 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 }
 
                 ProjectDbContext.Notes.Add(note);
+
+                foreach (var userId in request.SeenByUserIds)
+                {
+                    ProjectDbContext.NoteUserSeenAssociations.Add(new Models.NoteUserSeenAssociation
+                    {
+                        UserId = userId,
+                        NoteId = note.Id
+                    });
+                }
             }
 
             _ = await ProjectDbContext!.SaveChangesAsync(cancellationToken);

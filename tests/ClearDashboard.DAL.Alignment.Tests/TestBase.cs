@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
 
 namespace ClearDashboard.DAL.Alignment.Tests
 {
@@ -64,6 +65,7 @@ namespace ClearDashboard.DAL.Alignment.Tests
             services.AddSingleton<IUserProvider, UserProvider>();
             services.AddSingleton<IProjectProvider, ProjectProvider>();
             services.AddSingleton<IEventAggregator, EventAggregator>();
+            services.AddSingleton<TranslationCommands>();
         }
 
         private async void SetupTests()

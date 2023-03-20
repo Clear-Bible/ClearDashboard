@@ -35,6 +35,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
                 .Include(n => n.NoteDomainEntityAssociations)
                 .Include(n => n.LabelNoteAssociations)
                     .ThenInclude(ln => ln.Label)
+                .Include(n => n.NoteUserSeenAssociations) 
                 .FirstOrDefault(pc => pc.Id == request.NoteId.Id);
             if (note == null)
             {
