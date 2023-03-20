@@ -343,7 +343,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
             var engineParallelTextCorpus = await BuildSampleManuscriptToZZSurEngineParallelTextCorpus();
             var parallelCorpus = await engineParallelTextCorpus.Create("test pc", Mediator!);
 
-            var translationCommandable = new TranslationCommands();
+            var translationCommandable = Container!.Resolve<TranslationCommands>();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
@@ -1002,7 +1002,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
     {
         try
         {
-            var translationCommandable = new TranslationCommands();
+            var translationCommandable = Container!.Resolve<TranslationCommands>();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
@@ -1023,7 +1023,7 @@ public class CreateTranslationSetCommandHandlerTests : TestBase
     {
         try
         {
-            var translationCommandable = new TranslationCommands();
+            var translationCommandable = Container!.Resolve<TranslationCommands>();
 
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,

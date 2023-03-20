@@ -25,6 +25,7 @@ using System.Threading;
 using static ClearBible.Engine.Persistence.FileGetBookIds;
 using ClearDashboard.DAL.CQRS;
 using ClearDashboard.DataAccessLayer;
+using MediatR;
 
 namespace ClearDashboard.DAL.Alignment.Tests.Corpora.HandlerTests;
 
@@ -61,6 +62,30 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             sw.Start();
             #endregion
+            
+            var user1 = new Models.User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "User1 First Name",
+                LastName = "User1 Last Name",
+            };
+            var user2 = new Models.User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "User2 First Name",
+                LastName = "User2 Last Name",
+            };
+            var user3 = new Models.User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = "User3 First Name",
+                LastName = "User3 Last Name",
+            };
+
+            ProjectDbContext!.Users.Add(user1);
+            ProjectDbContext!.Users.Add(user2);
+            ProjectDbContext!.Users.Add(user3);
+            await ProjectDbContext.SaveChangesAsync();
 
             var sourceCorpus = await Corpus.Create(Mediator!, false,
                 "New Testament 1",
@@ -117,13 +142,21 @@ public class CreateNotesCommandHandlerTests : TestBase
 
             var label = await new Label { Text = "boo label full of label-ness" }.CreateOrUpdate(Mediator!);
 
-            var note = await new Note { Text = "a boo note", AbbreviatedText = "not sure", NoteStatus = "Resolved" }.CreateOrUpdate(Mediator!);
+            var note = new Note { Text = "a boo note", AbbreviatedText = "not sure", NoteStatus = "Resolved" };
+            note.SeenByUserIds.Add(user3.Id);
+            await note.CreateOrUpdate(Mediator!);
+
             var resolvedNoteId = note.NoteId;
             await note.AssociateLabel(Mediator!, label);
             var label2 = await note.CreateAssociateLabel(Mediator!, "boo label created in context of boo note");
 
             Assert.Equal(2, note.Labels.Count());
             Assert.Equal(Models.NoteStatus.Resolved.ToString(), note.NoteStatus);
+            Assert.Equal(1, note.SeenByUserIds.Count);
+
+            note.SeenByUserIds.Add(user2.Id);
+            await note.CreateOrUpdate(Mediator!);
+            Assert.Equal(2, note.SeenByUserIds.Count);
 
             #region Stopwatch
             sw.Stop();
@@ -224,6 +257,20 @@ public class CreateNotesCommandHandlerTests : TestBase
             Assert.Equal(note.AbbreviatedText, resolvedNote.AbbreviatedText);
             Assert.Equal(note.NoteStatus, resolvedNote.NoteStatus);
             Assert.Equal(note.ThreadId, resolvedNote.ThreadId);
+
+            Assert.False(resolvedNote.SeenByUserIds.Contains(user1.Id));
+            Assert.True(resolvedNote.SeenByUserIds.Contains(user2.Id));
+            Assert.True(resolvedNote.SeenByUserIds.Contains(user3.Id));
+
+            resolvedNote.SeenByUserIds.Remove(user2.Id);
+            await resolvedNote.CreateOrUpdate(Mediator!);
+
+            ProjectDbContext!.ChangeTracker.Clear();
+            resolvedNote = await Note.Get(Mediator!, resolvedNoteId!);
+
+            Assert.False(resolvedNote.SeenByUserIds.Contains(user1.Id));
+            Assert.False(resolvedNote.SeenByUserIds.Contains(user2.Id));
+            Assert.True(resolvedNote.SeenByUserIds.Contains(user3.Id));
 
             var openNote = await Note.Get(Mediator!, openNoteId!);
             Assert.Equal(note2.Text, openNote.Text);
@@ -496,6 +543,8 @@ public class CreateNotesCommandHandlerTests : TestBase
     {
         try
         {
+            var translationCommandable = Container!.Resolve<TranslationCommands>();
+
             var sourceCorpus = await Corpus.Create(Mediator!, false,
                 "New Testament 1",
                 "grc",
@@ -510,7 +559,6 @@ public class CreateNotesCommandHandlerTests : TestBase
                 .Create(Mediator!, targetCorpus.CorpusId, "test", "tokenization");
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
             var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
-            var translationCommandable = new TranslationCommands();
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
                 parallelTextCorpus,
@@ -574,6 +622,8 @@ public class CreateNotesCommandHandlerTests : TestBase
     {
         try
         {
+            var translationCommandable = Container!.Resolve<TranslationCommands>();
+
             var sourceCorpus = await Corpus.Create(Mediator!, false,
                 "New Testament 1",
                 "grc",
@@ -588,7 +638,6 @@ public class CreateNotesCommandHandlerTests : TestBase
                 .Create(Mediator!, targetCorpus.CorpusId, "test", "tokenization");
             var parallelTextCorpus = sourceTokenizedTextCorpus.EngineAlignRows(targetTokenizedTextCorpus, new());
             var parallelCorpus = await parallelTextCorpus.Create("notes test pc", Mediator!);
-            var translationCommandable = new TranslationCommands();
             using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                 SmtModelType.FastAlign,
                 parallelTextCorpus,
