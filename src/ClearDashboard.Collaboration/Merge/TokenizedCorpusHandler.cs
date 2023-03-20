@@ -190,7 +190,6 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                         {
                             var tokenComponents = verseRow.TokenComponents.Select(t => {
                                 t.VerseRowId = verseRowUser.verseRowId;
-                                t.UserId = verseRowUser.userId;
                                 return t;
                             }).ToList();
 
@@ -198,7 +197,6 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                                 tokenComponents,
                                 tokenComponentInsertCommand,
                                 tokenCompositeTokenAssociationInsertCommand,
-                                projectDbContext.UserProvider!,
                                 cancellationToken);
 
                             tokenInsertCount += tokenComponents.Count;
@@ -334,10 +332,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                         cancellationToken.ThrowIfCancellationRequested();
 
                         verseRow.UserId = userId;
-                        var tokenComponents = verseRow.TokenComponents.Select(t => {
-                            t.UserId = userId;
-                            return t;
-                        }).ToList();
+                        var tokenComponents = verseRow.TokenComponents.ToList();
 
                         await TokenizedCorpusDataUtil.InsertVerseRowAsync(
                             verseRow, verseRowInsertCommand,
@@ -345,7 +340,7 @@ public class TokenizedCorpusHandler : DefaultMergeHandler
                         await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(
                             tokenComponents, tokenComponentInsertCommand,
                             tokenCompositeTokenAssociationInsertCommand,
-                            projectDbContext.UserProvider!, cancellationToken);
+                            cancellationToken);
 
                         tokenInsertCount += tokenComponents.Count;
                     }

@@ -68,7 +68,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                             cancellationToken.ThrowIfCancellationRequested();
 
                             await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
+                            await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                         }
                     }
                 }
@@ -173,13 +173,13 @@ namespace ClearDashboard.DAL.Alignment.Features.Corpora
                                     }
 
                                     await TokenizedCorpusDataUtil.UpdateVerseRowAsync(verseRow, verseRowUpdate, cancellationToken);
-                                    await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
+                                    await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                                 }
                             }
                             else
                             {
                                 await TokenizedCorpusDataUtil.InsertVerseRowAsync(verseRow, verseRowInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
-                                await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, ProjectDbContext.UserProvider!, cancellationToken);
+                                await TokenizedCorpusDataUtil.InsertTokenComponentsAsync(verseRow.TokenComponents, tokenComponentInsertCommand, tokenCompositeTokenAssociationInsertCommand, cancellationToken);
                             }
                         }
                     }

@@ -15,7 +15,7 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
 
             modelBuilder.Entity("ClearDashboard.DataAccessLayer.Models.Adornment", b =>
                 {
@@ -649,9 +649,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<bool>("IsRtl")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("LastMergedCommitSha")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("ProjectName")
                         .HasColumnType("TEXT");
 
@@ -701,9 +698,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<long>("Created")
-                        .HasColumnType("INTEGER");
-
                     b.Property<long?>("Deleted")
                         .HasColumnType("INTEGER");
 
@@ -723,9 +717,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.Property<string>("TrainingText")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.Property<Guid?>("VerseRowId")
                         .HasColumnType("TEXT");
 
@@ -734,8 +725,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                     b.HasIndex("EngineTokenId");
 
                     b.HasIndex("TokenizedCorpusId");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("VerseRowId");
 
@@ -825,9 +814,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
-
-                    b.Property<long?>("LastTokenized")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Metadata")
                         .IsRequired()
@@ -1588,20 +1574,11 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ClearDashboard.DataAccessLayer.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ClearDashboard.DataAccessLayer.Models.VerseRow", "VerseRow")
                         .WithMany("TokenComponents")
-                        .HasForeignKey("VerseRowId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("VerseRowId");
 
                     b.Navigation("TokenizedCorpus");
-
-                    b.Navigation("User");
 
                     b.Navigation("VerseRow");
                 });

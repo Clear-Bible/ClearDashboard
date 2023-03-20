@@ -190,7 +190,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
         public static DbCommand CreateTokenComponentInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties", "UserId", "Created" };
+            var columns = new string[] { "Id", "EngineTokenId", "TrainingText", "VerseRowId", "TokenizedCorpusId", "Discriminator", "BookNumber", "ChapterNumber", "VerseNumber", "WordNumber", "SubwordNumber", "SurfaceText", "ExtendedProperties" };
 
             DataUtil.ApplyColumnsToInsertCommand(command, typeof(Models.TokenComponent), columns);
 
@@ -211,7 +211,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             return command;
         }
 
-        public static async Task InsertTokenComponentsAsync(IEnumerable<Models.TokenComponent> tokenComponents, DbCommand componentCmd, DbCommand assocCmd, IUserProvider userProvider, CancellationToken cancellationToken)
+        public static async Task InsertTokenComponentsAsync(IEnumerable<Models.TokenComponent> tokenComponents, DbCommand componentCmd, DbCommand assocCmd, CancellationToken cancellationToken)
         {
             foreach (var tokenComponent in tokenComponents)
             {
@@ -220,23 +220,23 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
                 if (tokenComponent is Models.TokenComposite)
                 {
                     var tokenComposite = (tokenComponent as Models.TokenComposite)!;
-                    await InsertTokenCompositeAsync(tokenComposite, componentCmd, userProvider, cancellationToken);
+                    await InsertTokenCompositeAsync(tokenComposite, componentCmd, cancellationToken);
 
                     foreach (var token in tokenComposite.Tokens)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
-                        await InsertTokenAsync(token, tokenComposite.Id, componentCmd, userProvider, cancellationToken);
+                        await InsertTokenAsync(token, tokenComposite.Id, componentCmd, cancellationToken);
                         await InsertTokenCompositeTokenAssociationAsync(token.Id, tokenComposite.Id, assocCmd, cancellationToken);
                     }
                 }
                 else
                 {
-                    await InsertTokenAsync((tokenComponent as Models.Token)!, null, componentCmd, userProvider, cancellationToken);
+                    await InsertTokenAsync((tokenComponent as Models.Token)!, null, componentCmd, cancellationToken);
                 }
 
             }
         }
-        public static async Task InsertTokenAsync(Models.Token token, Guid? tokenCompositeId, DbCommand componentCmd, IUserProvider userProvider, CancellationToken cancellationToken)
+        public static async Task InsertTokenAsync(Models.Token token, Guid? tokenCompositeId, DbCommand componentCmd, CancellationToken cancellationToken)
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 
@@ -253,11 +253,9 @@ namespace ClearDashboard.DAL.Alignment.Features.Common
             componentCmd.Parameters["@SubwordNumber"].Value = token.SubwordNumber;
             componentCmd.Parameters["@SurfaceText"].Value = token.SurfaceText;
             componentCmd.Parameters["@ExtendedProperties"].Value = token.ExtendedProperties != null ? token.ExtendedProperties : DBNull.Value;
-            componentCmd.Parameters["@UserId"].Value = Guid.Empty != token.UserId ? token.UserId : userProvider!.CurrentUser!.Id;
-            componentCmd.Parameters["@Created"].Value = converter.ConvertToProvider(token.Created);
             _ = await componentCmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
         }
-        public static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand componentCmd, IUserProvider userProvider, CancellationToken cancellationToken)
+        public static async Task InsertTokenCompositeAsync(Models.TokenComposite tokenComposite, DbCommand componentCmd, CancellationToken cancellationToken)
         {
             var converter = new DateTimeOffsetToBinaryConverter();
 
