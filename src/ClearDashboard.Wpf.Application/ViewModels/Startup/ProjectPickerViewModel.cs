@@ -407,6 +407,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
 
         private void SetCollabVisibility()
         {
+#if COLLAB_RELEASE || COLLAB_DEBUG
             if (!_collaborationManager.HasRemoteConfigured())
             {
                 CollabProjectVisibility = Visibility.Collapsed;
@@ -425,6 +426,10 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
                     InitializeCollaborationVisibility = Visibility.Collapsed;
                 }
             }
+#else
+            CollabProjectVisibility = Visibility.Collapsed;
+            InitializeCollaborationVisibility = Visibility.Collapsed;
+#endif
         }
 
         #endregion Constructor
@@ -625,7 +630,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Startup
             EventAggregator.PublishOnUIThreadAsync(new CreateProjectMessage(SearchText));
         }
 
-        #endregion  Methods
+#endregion  Methods
 
         public async Task HandleAsync(ParatextConnectedMessage message, CancellationToken cancellationToken)
         {

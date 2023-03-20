@@ -1333,7 +1333,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                         new() { Header = _localizationService!.Get("MainView_About"), Id = "AboutID", ViewModel = this, },
                     }
                 }
-#if DEBUG
+#if COLLAB_RELEASE || COLLAB_DEBUG
                 ,
                 new()
                 {
