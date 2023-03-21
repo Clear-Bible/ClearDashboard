@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Caliburn.Micro;
 using ClearBible.Engine.Corpora;
 using ClearBible.Engine.Exceptions;
 using ClearBible.Engine.SyntaxTree.Aligner.Persistence;
@@ -10,8 +13,11 @@ using ClearBible.Engine.SyntaxTree.Corpora;
 using ClearBible.Engine.Tokenization;
 using ClearBible.Engine.Translation;
 using ClearDashboard.DAL.Alignment.Tests.Corpora.Handlers;
+using ClearDashboard.DAL.Alignment.Tests.Mocks;
 using ClearDashboard.DAL.Alignment.Translation;
+using ClearDashboard.DAL.Interfaces;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using SIL.Machine.Corpora;
 using SIL.Machine.Tokenization;
 using SIL.Machine.Translation;
@@ -29,11 +35,23 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
 
         private readonly ITestOutputHelper output_;
         protected readonly IMediator mediator_;
+        protected readonly IContainer container_;
 
         public TranslationTests(ITestOutputHelper output)
         {
             output_ = output;
             mediator_ = new MediatorMock(); //FIXME: inject mediator
+
+            var services = new ServiceCollection();
+
+            services.AddLogging();
+            services.AddSingleton<TranslationCommands>();
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+
+            container_ = builder.Build();
+
         }
         [Fact]
         [Trait("Category", "Example")]
@@ -56,7 +74,7 @@ namespace ClearDashboard.DAL.Alignment.Tests.Translation
                     .Transform<FunctionWordTextRowProcessor>();
 
                 {
-                    var translationCommandable = new TranslationCommands();
+                    var translationCommandable = container_.Resolve<TranslationCommands>();
 
                     using var smtWordAlignmentModel = await translationCommandable.TrainSmtModel(
                         SmtModelType.FastAlign,

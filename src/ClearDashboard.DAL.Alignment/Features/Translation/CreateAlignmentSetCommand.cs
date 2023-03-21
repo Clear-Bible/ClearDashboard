@@ -9,6 +9,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         string? DisplayName,
         string SmtModel,
         bool IsSyntaxTreeAlignerRefined,
+        bool IsSymmetrized,
         Dictionary<string, object> Metadata,
         ParallelCorpusId ParallelCorpusId) : ProjectRequestCommand<AlignmentSet>;
 }

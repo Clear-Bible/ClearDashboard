@@ -21,10 +21,18 @@ namespace ClearDashboard.DAL.Alignment.Translation
     {
         private readonly ILogger<TranslationCommands> _logger;
 
+        // FIXME:  remove this constructor
         public TranslationCommands()
         {
+            // FIXME:  use constructor injection (i.e. the other constructor)
+            // instead of relying on Caliburn Micro (the unit tests are not set
+            // up to use Caliburn Micro).  
             _logger = IoC.Get<ILogger<TranslationCommands>>();
+        }
 
+        public TranslationCommands(ILogger<TranslationCommands> logger)
+        {
+            _logger = logger;
         }
 
         public IEnumerable<AlignedTokenPairs> PredictAllAlignedTokenIdPairs(IWordAligner wordAligner, EngineParallelTextCorpus parallelCorpus)

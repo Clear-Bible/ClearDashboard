@@ -12,5 +12,6 @@ namespace ClearDashboard.DAL.Alignment.Features.Notes
         string Text,
         string? AbbreviatedText,
         Models.NoteStatus NoteStatus,
-        EntityId<NoteId>? ThreadId) : ProjectRequestCommand<NoteId>;
+        EntityId<NoteId>? ThreadId,
+        ICollection<Guid> SeenByUserIds) : ProjectRequestCommand<NoteId>;
 }

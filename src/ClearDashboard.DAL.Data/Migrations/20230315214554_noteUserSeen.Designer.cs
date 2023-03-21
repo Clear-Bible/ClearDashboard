@@ -3,6 +3,7 @@ using System;
 using ClearDashboard.DataAccessLayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClearDashboard.DataAccessLayer.Data.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230315214554_noteUserSeen")]
+    partial class noteUserSeen
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.2");
@@ -111,9 +114,6 @@ namespace ClearDashboard.DataAccessLayer.Data.Migrations
 
                     b.Property<string>("DisplayName")
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsSymmetrized")
-                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsSyntaxTreeAlignerRefined")
                         .HasColumnType("INTEGER");

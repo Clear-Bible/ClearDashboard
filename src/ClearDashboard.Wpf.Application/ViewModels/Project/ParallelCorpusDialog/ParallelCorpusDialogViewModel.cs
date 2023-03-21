@@ -485,7 +485,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project.ParallelCorpusDialog
                 cancellationToken.ThrowIfCancellationRequested();
 
                 AlignmentSet = await AlignedTokenPairs.Create(alignmentSetDisplayName, SelectedSmtAlgorithm.ToString(),
-                    false, new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
+                    false, false, new(), ParallelTokenizedCorpus.ParallelCorpusId, Mediator, cancellationToken);
                 await SendBackgroundStatus(taskName,
                     LongRunningTaskStatus.Completed,
                     cancellationToken,
