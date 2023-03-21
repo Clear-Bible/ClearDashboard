@@ -48,6 +48,8 @@ using System.Xml.Linq;
 using ClearDashboard.Wpf.Application.Properties;
 using static ClearDashboard.DataAccessLayer.Threading.BackgroundTaskStatus;
 using ClearDashboard.Wpf.Application.Enums;
+using ClearDashboard.Wpf.Application.ViewModels.PopUps;
+using System.Dynamic;
 
 
 // ReSharper disable once CheckNamespace
@@ -929,6 +931,60 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             }
         }
 
+        private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var connection = DesignSurfaceViewModel.ParallelCorpusConnections.FirstOrDefault(x => x.Id == connectionMenuItem.ConnectionId);
+
+            ParallelCorpusId parallelCorpusId;
+            try
+            {
+                parallelCorpusId = new ParallelCorpusId(connection.ParallelCorpusId.Id!,
+                    new TokenizedTextCorpusId(connection.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.Id),
+                    new TokenizedTextCorpusId(connection.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.Id), DisplayName,
+                    new Dictionary<string, object>(), new DateTimeOffset(), connection.ParallelCorpusId.UserId);
+
+                var parameters = new List<Autofac.Core.Parameter>
+                {
+                    new NamedParameter("parallelCorpusId", parallelCorpusId),
+                };
+
+                var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
+
+                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.AddNewInterlinearDialogSettings);
+
+                if (result)
+                {
+                    try
+                    {
+                        var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet!,
+                            dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
+                            dialogViewModel.SelectedAlignmentSet!.ParallelCorpusId!, Mediator!);
+
+                        var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
+                        DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
+                        await SaveDesignSurfaceData();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger!.LogError(ex, $"An unexpected error occurred while adding the interlinear for {connectionMenuItem.ParallelCorpusId!}");
+                    }
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        private async Task AddNewAlignment(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
+        {
+            var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
+            AddParallelCorpus(connection, ParallelProjectType.AlignmentOnly);
+        }
+
         public async Task AddParallelCorpus(ParallelCorpusConnectionViewModel newParallelCorpusConnection,
             ParallelProjectType parallelProjectType = ParallelProjectType.WholeProcess)
         {
@@ -1001,62 +1057,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Project
             finally
             {
                 await SaveDesignSurfaceData();
-            }
-        }
-
-        private async Task AddNewAlignment(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
-        {
-            var connection = DesignSurfaceViewModel!.ParallelCorpusConnections.FirstOrDefault(c => c.Id == connectionMenuItem.ConnectionId);
-            AddParallelCorpus(connection, ParallelProjectType.AlignmentOnly);
-        }
-
-        private async Task AddNewInterlinear(ParallelCorpusConnectionMenuItemViewModel connectionMenuItem)
-        {
-            var connection = DesignSurfaceViewModel.ParallelCorpusConnections.FirstOrDefault(x => x.Id == connectionMenuItem.ConnectionId);
-
-            ParallelCorpusId parallelCorpusId;
-            try
-            {
-                parallelCorpusId = new ParallelCorpusId(connection.ParallelCorpusId.Id!,
-                    new TokenizedTextCorpusId(connection.ParallelCorpusId.SourceTokenizedCorpusId.CorpusId.Id),
-                    new TokenizedTextCorpusId(connection.ParallelCorpusId.TargetTokenizedCorpusId.CorpusId.Id), DisplayName,
-                    new Dictionary<string, object>(), new DateTimeOffset(), connection.ParallelCorpusId.UserId);
-
-
-                var parameters = new List<Autofac.Core.Parameter>
-                {
-                    new NamedParameter("parallelCorpusId", parallelCorpusId),
-                };
-
-
-                var dialogViewModel = LifetimeScope!.Resolve<InterlinearDialogViewModel>(parameters);
-
-                var result = await _windowManager!.ShowDialogAsync(dialogViewModel, null, DialogSettings.NewProjectDialogSettings);
-
-                if (result)
-                {
-                    try
-                    {
-                        var translationSet = await TranslationSet.Create(null, dialogViewModel.SelectedAlignmentSet!,
-                            dialogViewModel.TranslationSetDisplayName, new Dictionary<string, object>(),
-                            dialogViewModel.SelectedAlignmentSet!.ParallelCorpusId!, Mediator!);
-
-                        var topLevelProjectIds = await TopLevelProjectIds.GetTopLevelProjectIds(Mediator!);
-                        DesignSurfaceViewModel!.CreateParallelCorpusConnectionMenu(connectionMenuItem.ConnectionViewModel, topLevelProjectIds);
-                        await SaveDesignSurfaceData();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger!.LogError(ex, $"An unexpected error occurred while adding the interlinear for {connectionMenuItem.ParallelCorpusId!}");
-                    }
-
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
             }
         }
 
