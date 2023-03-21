@@ -843,7 +843,7 @@
                 Style="{StaticResource TransparentStyle}" />
 
             <Button
-                Width="120"
+                MinWidth="120"
                 Margin="10,0,0,15"
                 Command="{Binding AllCommand}"
                 Content="{helpers:Localization AddParatextCorpusDialog_SelectAll}"
@@ -851,7 +851,7 @@
                 Style="{StaticResource TransparentStyle}" />
 
             <Button
-                Width="120"
+                MinWidth="120"
                 Margin="10,0,0,15"
                 Command="{Binding NoneCommand}"
                 Content="{helpers:Localization AddParatextCorpusDialog_UnSelectAll}"
