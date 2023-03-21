@@ -20,7 +20,8 @@
         BorderThickness="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderThickness}"
         CornerRadius="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=NoteBorderCornerRadius}"
         MouseEnter="OnMouseEnter"
-        MouseLeave="OnMouseLeave">
+        MouseLeave="OnMouseLeave"
+        MouseLeftButtonUp="NoteDisplayBorder_OnMouseLeftButtonUp">
         <Border.Style>
             <Style TargetType="{x:Type Border}">
                 <Setter Property="Background" Value="Transparent" />
@@ -298,12 +299,11 @@
                                 <TextBlock
                                     Padding="10"
                                     HorizontalAlignment="Center"
-                                    FontWeight="Bold">
-                                    Send this note to Paratext?
+                                    FontWeight="Bold" Text="{helpers:Localization Marble_SendConfirmation}">
                                 </TextBlock>
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Button Margin="5" Click="ParatextSendConfirmed">Yes</Button>
-                                    <Button Margin="5" Click="ParatextSendCancelled">No</Button>
+                                    <Button Margin="5" Click="ParatextSendConfirmed" Content="{helpers:Localization Yes}"/>
+                                    <Button Margin="5" Click="ParatextSendCancelled" Content="{helpers:Localization No}"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
