@@ -264,19 +264,14 @@ namespace ClearDashboard.Wpf.Application.Services
             }
         }
 
-        /// <summary>
-        /// Updates a note.
-        /// </summary>
-        /// <param name="note">The <see cref="NoteViewModel"/> to update.</param>
-        /// <returns>An awaitable <see cref="Task"/>.</returns>
-        public async Task UpdateNoteAsync(NoteViewModel note)
+        public async Task UpdateNoteAsync(Note note)
         {
             try
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                await note.Entity.CreateOrUpdate(Mediator);
+                await note.CreateOrUpdate(Mediator);
 
                 stopwatch.Stop();
                 Logger?.LogInformation($"Updated note \"{note.Text}\" ({note.NoteId?.Id}) in {stopwatch.ElapsedMilliseconds} ms");
@@ -289,6 +284,16 @@ namespace ClearDashboard.Wpf.Application.Services
                 Logger?.LogCritical(e.ToString());
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Updates a note.
+        /// </summary>
+        /// <param name="noteViewModel">The <see cref="NoteViewModel"/> to update.</param>
+        /// <returns>An awaitable <see cref="Task"/>.</returns>
+        public async Task UpdateNoteAsync(NoteViewModel noteViewModel)
+        {
+            await UpdateNoteAsync(noteViewModel.Entity);
         }
 
         /// <summary>

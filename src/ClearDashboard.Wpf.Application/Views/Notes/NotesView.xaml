@@ -13,6 +13,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:notes="clr-namespace:ClearDashboard.Wpf.Application.ViewModels.Notes"
     xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime" 
     x:Name="NotesViewWindow"
     d:DataContext="{d:DesignInstance Type=notes:NotesViewModel}"
     helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
@@ -26,8 +28,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <converters:GuidInGuidsToBooleanConverter x:Key="GuidInGuidsToBooleanConverter" />
             <converters:StringToBoolConverter x:Key="StringToBoolConverter" />
             <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+            <system:Boolean x:Key="True">True</system:Boolean>
             <SolidColorBrush
                 x:Key="GridBrush"
                 Opacity="0.25"
@@ -286,6 +290,22 @@
             </DataGrid.ColumnHeaderStyle>
 
             <DataGrid.Columns>
+                <DataGridTemplateColumn Width="1*" Header="{helpers:Localization Notes_HasUnread}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox
+                                VerticalAlignment="Center"
+                                IsEnabled="False">
+                                <CheckBox.IsChecked>
+                                    <MultiBinding Converter="{StaticResource GuidInGuidsToBooleanConverter}" Mode="OneWay" ConverterParameter="{StaticResource True}">
+                                        <Binding Path="SeenByUserIds"/>
+                                        <Binding Path="DataContext.UserId" RelativeSource="{RelativeSource AncestorType={x:Type UserControl}}"/>
+                                    </MultiBinding>                                
+                                </CheckBox.IsChecked>
+                            </CheckBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="8*" Header="{helpers:Localization Notes_NoteText}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -478,37 +498,13 @@
                             Margin="10,5,5,5"
                             VerticalAlignment="Center"
                             Content="{helpers:Localization Notes_NoteReplies}" />
-                        <ListBox
-                            x:Name="SelectedNotesRepliesNoteViewModels"
-                            Margin="5"
-                            VerticalAlignment="Top"
-                            materialDesign:ListBoxItemAssist.ShowSelection="False"
-                            ItemsSource="{Binding SelectedNoteRepliesNoteViewModels}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="0,2">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="3*" />
-                                            <ColumnDefinition Width="1*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock
-                                            Grid.Column="1"
-                                            Text="{Binding Text}"
-                                            TextWrapping="Wrap" />
-                                        <TextBlock
-                                            Grid.Column="2"
-                                            Text="{Binding ModifiedBy}"
-                                            TextWrapping="Wrap" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="ListBoxItem">
-                                    <Setter Property="FontFamily" Value="{Binding ElementName=MainGrid, Path=DataContext.FontFamily}" />
-                                    <Setter Property="FontSize" Value="{Binding ElementName=MainGrid, Path=DataContext.FontSize}" />
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
+                        <userControls:NoteRepliesDisplay
+                            NoteViewModelWithReplies="{Binding Path=SelectedNoteViewModel}"
+                            NoteReplyAdd="OnNoteReplyAdd"
+                            NoteSeen="OnNoteSeen"
+                        >
+                            
+                        </userControls:NoteRepliesDisplay>
                     </StackPanel>
                 </Border>
             </StackPanel>
