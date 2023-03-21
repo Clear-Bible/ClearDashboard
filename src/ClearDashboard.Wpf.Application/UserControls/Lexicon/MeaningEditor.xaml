@@ -5,6 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:lexiconControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls.Lexicon"
+    xmlns:helpers="clr-namespace:ClearDashboard.Wpf.Application.Helpers;assembly=ClearDashboard.Wpf.Application.Abstractions"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontSize="16"
@@ -105,7 +108,7 @@
                 Background="Transparent"
                 BorderThickness="0"
                 Click="ConfirmMeaningDeletion"
-                ToolTip="Delete This Meaning"
+                ToolTip="{helpers:Localization Lexicon_DeleteMeaning}"
                 FontSize="12"
                 FontWeight="SemiBold">
                 X

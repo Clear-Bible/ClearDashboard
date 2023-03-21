@@ -53,7 +53,7 @@
         <TextBlock
             FontSize="20"
             FontWeight="Bold"
-            Text="{Binding Path=(local:PieChartLayout.PlottedProperty), RelativeSource={RelativeSource AncestorType={x:Type local:Legend}}}"
+            Text="{Binding Path=(local:PieChartLayout.TitleProperty), RelativeSource={RelativeSource AncestorType={x:Type local:Legend}}}"
             TextAlignment="Center" />
 
         <ListBox
