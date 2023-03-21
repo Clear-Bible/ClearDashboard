@@ -839,11 +839,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Marble
                     languageCode = "fr";
                     break;
                 case "zh-CN":
-                    languageCode = "zhs";
+                    languageCode = "zhS";
                     break;
                 case "zh-TW":
-                    languageCode = "zht";
+                    languageCode = "zhT";
                     break;
+                case "pt":
+                    languageCode = "pt";
+                    break;
+                case "hi":
+                    languageCode = "hi";
+                    break;
+
                 default:
                     // default to English for everyone else
                     languageCode = "en";
