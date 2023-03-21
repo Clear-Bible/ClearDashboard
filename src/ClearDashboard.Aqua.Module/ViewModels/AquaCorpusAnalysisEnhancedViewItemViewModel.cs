@@ -220,10 +220,17 @@ namespace ClearDashboard.Aqua.Module.ViewModels
             longRunningTaskManager_ = longRunningTaskManager;
         }
 
-        public override Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        //public override Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        //{
+        //    assessmentId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)metadatum)?.AssessmentId;
+        //    versionId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)metadatum)?.VersionId;
+        //    return Task.CompletedTask; //return base.GetData(metadatum, cancellationToken);
+        //}
+
+        public override Task GetData(CancellationToken cancellationToken)
         {
-            assessmentId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)metadatum)?.AssessmentId;
-            versionId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)metadatum)?.VersionId;
+            assessmentId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)?.AssessmentId;
+            versionId_ = ((AquaCorpusAnalysisEnhancedViewItemMetadatum)EnhancedViewItemMetadatum)?.VersionId;
             return Task.CompletedTask; //return base.GetData(metadatum, cancellationToken);
         }
         protected override void OnViewReady(object view)

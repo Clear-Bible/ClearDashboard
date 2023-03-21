@@ -21,7 +21,7 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     private Brush _borderColor = Brushes.Blue;
 
-
+    
     public Brush BorderColor
     {
         get => _borderColor;
@@ -37,7 +37,19 @@ public abstract class EnhancedViewItemViewModel : DashboardApplicationScreen
 
     // public EnhancedViewModel ParentViewModel => (EnhancedViewModel)Parent;
 
-    public virtual Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+    private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
+    public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
+    {
+        get => _enhancedViewItemMetadatum;
+        set => Set(ref _enhancedViewItemMetadatum, value);
+    }
+
+    //public virtual Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+    //{
+    //    return Task.CompletedTask;
+    //}
+
+    public virtual Task GetData(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

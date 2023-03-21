@@ -655,8 +655,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
 
         private async Task LoadEnhancedViewData(List<EnhancedViewLayout> enhancedViews)
         {
-            await Parallel.ForEachAsync(enhancedViews, new ParallelOptions(), async (enhancedView, cancellationToken) =>
+            var orderedViews = enhancedViews.AsParallel().AsOrdered();
+            
+            await Parallel.ForEachAsync(orderedViews, new ParallelOptions(), async (enhancedView, cancellationToken) =>
+            //foreach (var enhancedView in enhancedViews)
             {
+
                 var enhancedViewModel = EnhancedViewModels.FirstOrDefault(item => item.Title == enhancedView.Title);
 
                 if (enhancedViewModel == null)
@@ -668,15 +672,16 @@ namespace ClearDashboard.Wpf.Application.ViewModels.Main
                 enhancedViewModel.EnableBcvControl = false;
                 try
                 {
-                    await enhancedViewModel.LoadData(cancellationToken);
+                    //await enhancedViewModel.LoadData(cancellationToken);
+                    await enhancedViewModel.LoadData(CancellationToken.None);
                 }
                 finally
                 {
                     enhancedViewModel.EnableBcvControl = true;
                 }
-              
 
-            });
+            //} 
+        });
         }
 
 

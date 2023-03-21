@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Caliburn.Micro;
 using ClearApplicationFoundation.Framework.Input;
+using ClearDashboard.Wpf.Application.Extensions;
 using ClearDashboard.DAL.ViewModels;
 using ClearDashboard.Wpf.Application.Events;
 using ClearDashboard.Wpf.Application.Helpers;
@@ -27,6 +28,9 @@ using System.Windows.Media;
 using ClearDashboard.Wpf.Application.Collections;
 using SIL.Linq;
 using Uri = System.Uri;
+using System.Collections.Concurrent;
+using Action = System.Action;
+using Enumerable = System.Linq.Enumerable;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
 {
@@ -403,7 +407,6 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
                 EnableBcvControl = true;
             }
         }
-
         protected override async Task OnActivateAsync(CancellationToken cancellationToken)
         {
             Logger?.LogInformation($"{nameof(EnhancedViewModel)} OnActivateAsync called.");
@@ -413,38 +416,35 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             {
                 Items[0].HasFocus = true;
             }
-           
         }
 
         public override async Task LoadData(CancellationToken token)
         {
-            await Parallel.ForEachAsync(EnhancedViewLayout!.EnhancedViewItems, new ParallelOptions(), async (enhancedViewItemMetadatum, cancellationToken) =>
+            await Task.Run(async () =>
             {
-                await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, cancellationToken);
+                // Activate (and draw the items on the EnhancedView) in the order they have been defined.
+                foreach (var enhancedViewItemMetadatum in EnhancedViewLayout!.EnhancedViewItems)
+                {
+                    await ActivateNewVerseAwareViewItem(enhancedViewItemMetadatum, CancellationToken.None);
+                }
 
-            });
+                // Then get the data in a parallel fashion
+                await Parallel.ForEachAsync(Items, new ParallelOptions(), async (item, cancellationToken) =>
+                {
+                    await item.GetData(cancellationToken);
+                });
+
+            }, token);
         }
-
-        //private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
-        //{
-        //    await Execute.OnUIThreadAsync(async () =>
-        //    {
-        //        var verseAwareEnhancedViewItemViewModel =
-        //            await ActivateItemAsync<VerseAwareEnhancedViewItemViewModel>(cancellationToken);
-        //        await verseAwareEnhancedViewItemViewModel!.GetData(enhancedViewItemMetadatum, cancellationToken);
-        //    });
-        //}
 
         private async Task ActivateNewVerseAwareViewItem(EnhancedViewItemMetadatum enhancedViewItemMetadatum, CancellationToken cancellationToken)
         {
             await Execute.OnUIThreadAsync(async () =>
             {
-                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken); 
+                var enhancedViewItemViewModel = await ActivateItemFromMetadatumAsync(enhancedViewItemMetadatum, cancellationToken);
+                enhancedViewItemViewModel.EnhancedViewItemMetadatum = enhancedViewItemMetadatum;
                 //EnableBcvControl = false;
-                await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
-
-                
-               
+                //await enhancedViewItemViewModel.GetData(enhancedViewItemMetadatum, cancellationToken);
             });
         }
 

@@ -88,12 +88,12 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             }
         }
 
-        private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
-        public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
-        {
-            get => _enhancedViewItemMetadatum;
-            set => Set(ref _enhancedViewItemMetadatum, value);
-        }
+        //private EnhancedViewItemMetadatum? _enhancedViewItemMetadatum;
+        //public EnhancedViewItemMetadatum? EnhancedViewItemMetadatum
+        //{
+        //    get => _enhancedViewItemMetadatum;
+        //    set => Set(ref _enhancedViewItemMetadatum, value);
+        //}
 
         #region FontFamily
 
@@ -189,9 +189,14 @@ namespace ClearDashboard.Wpf.Application.ViewModels.EnhancedView
             set => Set(ref _progressBarVisibility, value);
         }
 
-        public override async Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        //public override async Task GetData(EnhancedViewItemMetadatum metadatum, CancellationToken cancellationToken)
+        //{
+        //    EnhancedViewItemMetadatum = metadatum;
+        //    await GetData(ReloadType.Refresh, cancellationToken);
+        //}
+
+        public override async Task GetData(CancellationToken cancellationToken)
         {
-            EnhancedViewItemMetadatum = metadatum;
             await GetData(ReloadType.Refresh, cancellationToken);
         }
 
