@@ -282,6 +282,7 @@ namespace ClearDashboard.DAL.Alignment.Features
                 alignmentSet.DisplayName,
                 alignmentSet.SmtModel,
                 alignmentSet.IsSyntaxTreeAlignerRefined,
+                alignmentSet.IsSymmetrized,
                 alignmentSet.Metadata,
                 alignmentSet.Created,
                 BuildUserId(user));

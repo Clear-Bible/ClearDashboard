@@ -146,6 +146,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
                 DisplayName = request.DisplayName,
                 SmtModel = request.SmtModel,
                 IsSyntaxTreeAlignerRefined = request.IsSyntaxTreeAlignerRefined,
+                IsSymmetrized = request.IsSymmetrized,
                 Metadata = request.Metadata,
                 //DerivedFrom = ,
                 //EngineWordAlignment = ,
@@ -218,7 +219,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
         private DbCommand CreateAlignmentSetInsertCommand(DbConnection connection)
         {
             var command = connection.CreateCommand();
-            var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "Metadata", "UserId", "Created" };
+            var columns = new string[] { "Id", "ParallelCorpusId", "DisplayName", "SmtModel", "IsSyntaxTreeAlignerRefined", "IsSymmetrized", "Metadata", "UserId", "Created" };
 
             ApplyColumnsToCommand(command, typeof(Models.AlignmentSet), columns);
 
@@ -238,6 +239,7 @@ namespace ClearDashboard.DAL.Alignment.Features.Translation
             alignmentSetCommand.Parameters["@DisplayName"].Value = alignmentSet.DisplayName;
             alignmentSetCommand.Parameters["@SmtModel"].Value = alignmentSet.SmtModel;
             alignmentSetCommand.Parameters["@IsSyntaxTreeAlignerRefined"].Value = alignmentSet.IsSyntaxTreeAlignerRefined;
+            alignmentSetCommand.Parameters["@IsSymmetrized"].Value = alignmentSet.IsSymmetrized;
             alignmentSetCommand.Parameters["@Metadata"].Value = JsonSerializer.Serialize(alignmentSet.Metadata);
             alignmentSetCommand.Parameters["@UserId"].Value = Guid.Empty != alignmentSet.UserId ? alignmentSet.UserId : ProjectDbContext.UserProvider!.CurrentUser!.Id;
             alignmentSetCommand.Parameters["@Created"].Value = converter.ConvertToProvider(alignmentSet.Created);
