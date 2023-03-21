@@ -98,6 +98,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 string? displayName,
                 string smtModel,
                 bool isSyntaxTreeAlignerRefined,
+                bool isSymmetrized,
                 Dictionary<string, object> metadata,
                 ParallelCorpusId parallelCorpusId,
                 IMediator mediator,
@@ -108,6 +109,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 displayName,
                 smtModel,
                 isSyntaxTreeAlignerRefined,
+                isSymmetrized,
                 metadata,
             parallelCorpusId), token);
 

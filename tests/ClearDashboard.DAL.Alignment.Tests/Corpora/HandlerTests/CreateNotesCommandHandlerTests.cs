@@ -569,6 +569,7 @@ public class CreateNotesCommandHandlerTests : TestBase
                     "manuscript to zz_sur",
                     "fastalign",
                     false,
+                    false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,
                     Mediator!);
@@ -647,6 +648,7 @@ public class CreateNotesCommandHandlerTests : TestBase
             var alignmentSet = await alignmentModel.Create(
                     "manuscript to zz_sur",
                     "fastalign",
+                    false,
                     false,
                     new Dictionary<string, object>(), //metadata
                     parallelCorpus.ParallelCorpusId,

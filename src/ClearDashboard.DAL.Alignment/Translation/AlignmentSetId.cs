@@ -1,5 +1,6 @@
 ﻿using ClearBible.Engine.Utils;
 using ClearDashboard.DAL.Alignment.Corpora;
+using ClearDashboard.DataAccessLayer.Data.Migrations;
 
 namespace ClearDashboard.DAL.Alignment.Translation
 {
@@ -10,13 +11,14 @@ namespace ClearDashboard.DAL.Alignment.Translation
             Id = id;
             Metadata = new Dictionary<string, object>();
         }
-        public AlignmentSetId(Guid id, ParallelCorpusId parallelCorpusId, string? displayName, string? smtModel, bool isSyntaxTreeAlignerRefined, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
+        public AlignmentSetId(Guid id, ParallelCorpusId parallelCorpusId, string? displayName, string? smtModel, bool isSyntaxTreeAlignerRefined, bool isSymmetrized, Dictionary<string, object> metadata, DateTimeOffset created, UserId userId)
         {
             Id = id;
             ParallelCorpusId = parallelCorpusId;
             DisplayName = displayName;
             SmtModel = smtModel;
             IsSyntaxTreeAlignerRefined = isSyntaxTreeAlignerRefined;
+            IsSymmetrized = isSymmetrized;
             Metadata = metadata;
             Created = created;
             UserId = userId;
@@ -24,6 +26,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
         public string? DisplayName { get; set; }
         public string? SmtModel { get; }
         public bool IsSyntaxTreeAlignerRefined { get; }
+        public bool IsSymmetrized { get; }
         public Dictionary<string, object> Metadata { get; set; }
 
         public ParallelCorpusId? ParallelCorpusId { get; }
@@ -41,6 +44,7 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 DisplayName != other.DisplayName ||
                 SmtModel != other.SmtModel ||
                 IsSyntaxTreeAlignerRefined != other.IsSyntaxTreeAlignerRefined ||
+                IsSymmetrized != other.IsSymmetrized ||
                 Created != other.Created ||
                 UserId != other.UserId)
             {
@@ -57,7 +61,17 @@ namespace ClearDashboard.DAL.Alignment.Translation
                 mhc ^= (item.Key, item.Value).GetHashCode();
             }
 
-            return HashCode.Combine(Id, ParallelCorpusId, DisplayName, SmtModel, IsSyntaxTreeAlignerRefined, Created, UserId, mhc);
+            HashCode hash = new();
+            hash.Add(Id);
+            hash.Add(ParallelCorpusId);
+            hash.Add(DisplayName);
+            hash.Add(SmtModel);
+            hash.Add(IsSyntaxTreeAlignerRefined);
+            hash.Add(IsSymmetrized);
+            hash.Add(Created);
+            hash.Add(UserId);
+            hash.Add(mhc);
+            return hash.ToHashCode();
         }
         public static bool operator ==(AlignmentSetId? e1, AlignmentSetId? e2) => object.Equals(e1, e2);
         public static bool operator !=(AlignmentSetId? e1, AlignmentSetId? e2) => !(e1 == e2);
