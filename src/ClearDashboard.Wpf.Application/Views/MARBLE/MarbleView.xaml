@@ -17,6 +17,8 @@
     xmlns:pieChart="clr-namespace:ClearDashboard.Wpf.Controls.DonutGraph.PieChart;assembly=ClearDashboard.Wpf.Controls"
     xmlns:userControls="clr-namespace:ClearDashboard.Wpf.Application.UserControls"
     xmlns:wpfKeyBoard="clr-namespace:wpfKeyBoard;assembly=wpfKeyBoard"
+    xmlns:resx="clr-namespace:ClearDashboard.Wpf.Application.Strings"
+    helpers:Translation.ResourceManager="{x:Static resx:Resources.ResourceManager}"
     x:Name="MarbleViewControl"
     d:DataContext="{d:DesignInstance Type=marble:MarbleViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -390,7 +392,8 @@
                                 HorizontalAlignment="Stretch"
                                 Background="White"
                                 ManuscriptTextProperty="ManuscriptWord"
-                                PlottedProperty="{helpers:Localization Marble_VerseTotal}">
+                                TitleProperty="{helpers:Localization Marble_VerseTotal}"
+                                PlottedProperty="VerseTotal">
                                 <pieChart:PieChartLayout.DataContext>
                                     <Binding Path="Senses" />
                                 </pieChart:PieChartLayout.DataContext>
