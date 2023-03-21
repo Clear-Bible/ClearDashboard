@@ -65,7 +65,7 @@
                 <StackPanel Orientation="Vertical">
                     <GroupBox
                         Margin="16"
-                        Header="Power Modes"
+                        Header="{helpers:Localization Settings_PowerModes}"
                         IsEnabled="{Binding IsPowerModesBoxEnabled}">
                         <CheckBox
                             cm:Message.Attach="PowerModeCheckBox($datacontext)"
@@ -77,22 +77,28 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Width="auto" Height="auto">
-                        <iconPacks:PackIconUnicons
+                        <iconPacks:PackIconMaterial
                             Width="24"
                             Height="24"
                             HorizontalAlignment="Center"
-                            Kind="TrafficBarrier" />
+                            Kind="PowerPlugOutline" />
                         <TextBlock
                             HorizontalAlignment="Center"
-                            Text="{helpers:Localization Settings_Reserved}"
+                            Text="{helpers:Localization Settings_Plugins}"
                             TextWrapping="Wrap" />
                     </StackPanel>
                 </TabItem.Header>
-                <TextBlock TextWrapping="Wrap">
-                    <Run Text="{helpers:Localization Settings_ReservedCaption}" />
-                    <LineBreak />
-                    <LineBreak />
-                </TextBlock>
+                <StackPanel Orientation="Vertical">
+                    <Image Source="pack://application:,,,/Resources/CautionTape.bmp" Height="15" Stretch="Fill" StretchDirection="UpOnly" />
+                    <GroupBox Margin="16" Header="{helpers:Localization Settings_Plugins}">
+                        <CheckBox
+                            Foreground="{StaticResource OrangeDarkBrush}"
+                            cm:Message.Attach="AquaEnabledCheckBox($datacontext)"
+                            Content="{helpers:Localization Settings_AquaEnabled}"
+                            IsChecked="{Binding IsAquaEnabled}" />
+                    </GroupBox>
+
+                </StackPanel>
             </TabItem>
             <TabItem>
                 <TabItem.Header>

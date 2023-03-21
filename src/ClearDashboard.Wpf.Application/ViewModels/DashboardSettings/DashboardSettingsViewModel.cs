@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using Caliburn.Micro;
+using ClearDashboard.DAL.Alignment.Translation;
 using ClearDashboard.Wpf.Application.Properties;
 using ClearDashboard.Wpf.Application.Services;
+using Microsoft.Extensions.Logging;
 
 namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
 {
@@ -9,6 +12,8 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
     {
 
         #region Member Variables   
+
+        private readonly ILogger<DashboardSettingsViewModel> _logger;
 
         #endregion //Member Variables
 
@@ -44,6 +49,18 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
         }
 
+        private bool _isAquaEnabled;
+        public bool IsAquaEnabled
+        {
+            get => _isAquaEnabled;
+            set
+            {
+                _isAquaEnabled = value;
+                NotifyOfPropertyChange(() => IsAquaEnabled);
+            }
+        }
+
+
 
 
         #endregion //Observable Properties
@@ -55,6 +72,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
         public DashboardSettingsViewModel()
         {
             // for Caliburn Micro
+            _logger = IoC.Get<ILogger<DashboardSettingsViewModel>>();
         }
 
         protected override void OnViewReady(object view)
@@ -70,6 +88,7 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             }
 
             IsPowerModesEnabled = Settings.Default.EnablePowerModes;
+            IsAquaEnabled = Settings.Default.IsAquaEnabled;
 
             base.OnViewReady(view);
         }
@@ -90,6 +109,66 @@ namespace ClearDashboard.Wpf.Application.ViewModels.DashboardSettings
             Settings.Default.Save();
         }
 
+        public void AquaEnabledCheckBox(bool value)
+        {
+            Settings.Default.IsAquaEnabled = IsAquaEnabled;
+            Settings.Default.Save();
+
+            // copy files from install directory to the proper spots
+            if (IsAquaEnabled)
+            {
+                var appStartupPath = AppContext.BaseDirectory;
+                _logger.LogInformation($"Aqua Plugin File Copy from {appStartupPath}");
+                var fromPath = Path.Combine(appStartupPath, "Aqua");
+                if (Directory.Exists(fromPath))
+                {
+                    // install folder
+                    var files = Directory.EnumerateFiles(fromPath);
+                    foreach (var file in files)
+                    {
+                        try
+                        {
+                            File.Copy(file, appStartupPath, true);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError("Aqua Plugin File Copy", e);
+                        }
+                    }
+
+                    // en folder
+                    fromPath = Path.Combine(appStartupPath, "Aqua", "en");
+                    files = Directory.EnumerateFiles(fromPath);
+                    foreach (var file in files)
+                    {
+                        try
+                        {
+                            File.Copy(file, Path.Combine(appStartupPath, "en"), true);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError("Aqua Plugin File Copy", e);
+                        }
+                    }
+
+                    // Services folder
+                    fromPath = Path.Combine(appStartupPath, "Aqua", "Services");
+                    files = Directory.EnumerateFiles(fromPath);
+                    foreach (var file in files)
+                    {
+                        try
+                        {
+                            File.Copy(file, Path.Combine(appStartupPath, "Services"), true);
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogError("Aqua Plugin File Copy", e);
+                        }
+                    }
+                }
+
+            }
+        }
 
         #endregion // Methods
 
