@@ -814,7 +814,7 @@
 
                                         <GridViewColumn Width="100">
                                             <GridViewColumn.Header>
-                                                <TextBlock HorizontalAlignment="Left" Text="Verse Sense" />
+                                                <TextBlock HorizontalAlignment="Left" Text="{helpers:Localization Marble_VerseSense}" />
                                             </GridViewColumn.Header>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -839,7 +839,7 @@
 
                                         <GridViewColumn Width="300">
                                             <GridViewColumn.Header>
-                                                <TextBlock HorizontalAlignment="Left" Text="Sense" />
+                                                <TextBlock HorizontalAlignment="Left" Text="{helpers:Localization Marble_Sense}" />
                                             </GridViewColumn.Header>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -850,7 +850,7 @@
 
                                         <GridViewColumn Width="130">
                                             <GridViewColumn.Header>
-                                                <TextBlock HorizontalAlignment="Left" Text="Verse Total" />
+                                                <TextBlock HorizontalAlignment="Left" Text="{helpers:Localization Marble_VerseTotal}" />
                                             </GridViewColumn.Header>
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -951,7 +951,7 @@
 
 
 
-                                <Expander Header="Verses" Style="{StaticResource ExpanderStyle}">
+                                <Expander Header="{helpers:Localization Marble_Verses}" Style="{StaticResource ExpanderStyle}">
                                     <StackPanel
                                         Margin="3"
                                         Background="{StaticResource MaterialDesignPaper}"
